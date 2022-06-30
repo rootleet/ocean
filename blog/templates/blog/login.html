@@ -1,0 +1,46 @@
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static 'blog/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'blog/css/main.css' %}">
+    {% if page_title %}
+       <title> {{ page_title }} </title>
+    {% else %}
+        <title>Ocean | Power Of Sharing</title>
+    {% endif %}
+
+</head>
+<body class="bg-light">
+    <main class="d-flex flex-wrap align-content-center justify-content-center">
+        <form method="post" action="{% url 'login_process' %}" class="w-25 card p-2 py-5 border-0 rounded-0 shadow">
+
+            <div class="d-flex flex-wrap justify-content-center">
+                <h1 class="text-warning mr-1">L </h1>
+                <h1 class="text-info mr-1">O </h1>
+                <h1 class="text-danger mr-1">G </h1>
+                <h1 class="text-info mr-1">I </h1>
+                <h1 class="text-success mr-1">N </h1>
+            </div>
+
+            {% csrf_token %}
+            {% for f in form  %}
+{#                {{ f }}#}
+            {% endfor %}
+            <input type="text" required autofocus autocomplete="off" name="username" placeholder="Username" class="form-control rounded-0 mt-3 mb-3">
+            <input type="password" required autofocus autocomplete="off" name="password" placeholder="Password" class="form-control rounded-0 mb-2">
+            <input type="hidden" name="next" value="{% url 'blog-home' %}">
+
+            <div class="w-100 d-flex flex-wrap justify-content-between">
+                <button class="w-40 btn btn-success rounded-0">LOGIN</button>
+                <a class="w-40 btn btn-info rounded-0">REGISTER</a>
+            </div>
+
+
+        </form>
+    </main>
+</body>
+</html>

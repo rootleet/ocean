@@ -4,29 +4,33 @@
 
 {% block body %}
 
-
-    <div class="container mt-5" style="padding-top: 60px">
+    {% if result_count > 0 %}
+        <div class="container mt-5" style="padding-top: 60px">
         <div class="row d-flex flex-wrap justify-content-center no-gutters">
             <!-- ARTICLE -->
             <div class="col-sm-8 mb-5" style="font-size: large; min-height: 100vh">
+                {% for article in result %}
+                    <div class="w-100 search_result d-flex flex-wrap my-2 p-1">
 
-                <div class="w-100 search_result d-flex flex-wrap shadow p-1">
-                    <div class="w-20 h-100 overflow-hidden d-flex flex-wrap align-content-center justify-content-center">
-                        <img src="{% static 'blog/asssets/article/1default.jpg' %}" alt="" class="img-fluid">
+                        <div class="w-80 pl-2 h-100 overflow-hidden">
+                            <div class="w-100"><strong><a href="{% url 'article' article.title %}">{{ article.title }}</a></strong> <i class="badge alert-info font-weight-light h-fit">{{ article.meta }}</i></div>
+                            <small class="text-muted ellipsis_3">
+                                {{ article.intro }}
+                            </small>
+                        </div>
                     </div>
-                    <div class="w-80 pl-2 h-100 overflow-hidden">
-                        <div class="w-100"><strong><a href="{% url 'article' 'article title' %}">Heading</a></strong></div>
-                        <small class="text-muted ellipsis_3">
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab amet doloribus earum error expedita, fugiat impedit, in itaque optio praesentium sapiente tenetur totam voluptas. Aperiam facere hic voluptates voluptatum! Dolorum?
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam aliquid ipsa minus officiis vitae. Aut illo minus, quae repudiandae rerum sint veniam? Adipisci exercitationem fugiat harum hic, possimus soluta voluptates?
-                        </small>
-                    </div>
-                </div>
+                {% endfor %}
 
             </div>
 
 
         </div>
     </div>
-
+    {% else %}
+        <main>
+            <div class="w-100 h-100 d-flex flex-wrap align-content-center justify-content-center">
+                <p class="text-muted">No Result</p>
+            </div>
+        </main>
+    {% endif %}
 {% endblock %}

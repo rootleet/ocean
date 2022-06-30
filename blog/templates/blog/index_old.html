@@ -1,0 +1,54 @@
+
+{% extends 'blog/base.html' %}
+{% load static %}
+
+{% block body %}
+
+    <div class="jumbotron text-center bg-light"  style="margin-top:80px">
+      <h1>Welcome to Ocean</h1>
+      <p>A place to get and provide answers</p>
+    </div>
+
+    <hr>
+
+    <div class="container">
+        <div class="row d-flex flex-wrap justify-content-center no-gutters">
+            <!-- ARTICLE -->
+            <div class="col-sm-8">
+
+                <div class="row">
+
+                    {% for article in artcs %}
+
+                        <div class="col-sm-12 my-2">
+                            <div class="w-100 d-flex flex-wrap">
+                                <h5 class="mr-2"><a href="{% url 'article' article.title %}">{{ article.title }}</a> </h5>
+                                <i class="badge alert-info font-weight-light h-fit">{{ article.meta }}</i>
+                            </div>
+                            <span>
+                                {{ article.intro }}
+                            </span>
+{#                            <div class="card p-1">#}
+{#                                <img class="img-fluid w-100" src="{{   article.image }}" alt="Card image">#}
+{#                                <div class="card-body">#}
+{#                                    <kbd>{{ article.meta }}</kbd><br>#}
+{#                                  <small class="text-muted">{{ article.date_created }}</small>#}
+{#                                  <h4 class="card-title">{{ article.title }}</h4>#}
+{#                                  <p class="card-text ellipsis_3">{{ article.intro | safe }} </p><a href="{% url 'article' article.title %}">Read More</a>#}
+{#                                  #}
+{#                                </div>#}
+{#                            </div>#}
+                        </div>
+
+                    {% endfor %}
+
+
+                </div>
+
+            </div>
+
+
+        </div>
+    </div>
+
+{% endblock %}

@@ -2,7 +2,6 @@ from django.db import models
 from PIL import Image
 
 
-
 # Create your models here.
 class articles(models.Model):
     uni = models.CharField(max_length=200)
@@ -21,9 +20,8 @@ class articles(models.Model):
         return self.title + ' - ' + self.article
 
 
-
 class article_meta(models.Model):
-
+    id = models.IntegerField(primary_key=True)
     description = models.TextField()
     status = models.IntegerField(default=1)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -31,4 +29,13 @@ class article_meta(models.Model):
     owner = models.CharField(max_length=200, default='anton')
 
     def __str__(self):
-        return self.description + ' - ' + self.status
+        return str(self.id)
+
+
+class userAccounts(models.Model):
+    username = models.TextField(max_length=1000)
+    token = models.TextField(max_length=1000)
+    meta_words = models.TextField(max_length=1000)
+
+    def __str__(self):
+        return str(self.token)

@@ -17,15 +17,18 @@
 
     <div class="container-fluid py-5" style="min-height: 100vh">
         <!-- ARTICLE -->
-            <form action="{% url 'save_article' %}" method="post" enctype="multipart/form-data">
+            <form action="{% url 'edit_save' %}" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
+{#                {% for f in form %}#}
+{#                    {{ f }}#}
+{#                {% endfor %}#}
 
                 <div class="w-100 d-flex flex-wrap justify-content-between">
-                    <div class="input-group w-50 mb-2">
+                    <div class="input-group w-45 mb-2">
                         <div class="input-group-prepend bg-light border-0">
                             <span class="input-group-text bg-light border-0 text-danger">Post Title</span>
                         </div>
-                        <input type="text" autocomplete="off" required name="page_title" class="form-control rounded-0 border-danger">
+                        <input type="text" value="{{ article.title }}" autocomplete="off" required name="page_title" class="form-control rounded-0 border-danger">
                     </div>
 
                     <div class="input-group w-25 mb-2">
@@ -34,22 +37,29 @@
                         </div>
                         <select name="meta" class="form-control rounded-0 border-danger" id="">
                             {% for meta in meta_dat %}
-                                <option value="{{ meta.description }}">{{ meta.description }}</option>
+                                {% if article.meta == meta.description %}
+                                    <option selected value="{{ meta.description }}">{{ meta.description }}</option>
+                                {% else %}
+                                    <option value="{{ meta.description }}">{{ meta.description }}</option>
+                                {% endif %}
                             {% endfor %}
-                        <option value="0" selected>Others</option>
+
                         </select>
                     </div>
 
-                    <input type="file" accept="image/jpeg" name="post_img">
+{#                    <input type="file" accept="image/jpeg" name="post_img">#}
+                    <input type="hidden" name="uni" value="{{ article.uni }}">
 
-                    <button type="submit" class="btn btn-success rounded-0 h-fit">Publish</button>
+
 
                 </div>
 
-                 <textarea name="article_desc" style="height: 50vh" class="form-control" id="update_details"></textarea>
+                 <textarea name="article_desc" style="height: 50vh" class="form-control" id="update_details">{{ article.article }}</textarea>
                     <script src="{% static 'blog/js/htmeditor.min.js' %}"      htmeditor_textarea="update_details"      full_screen="no"      editor_height="500"     run_local="no">
                     </script>
-
+                <div class="m-2 text-center">
+                    <button type="submit" class="btn btn-success rounded-0 h-fit">SAVE CHANGES</button>
+                </div>
 
             </form>
     </div>

@@ -1,0 +1,27 @@
+{% extends 'blog/base.html' %}
+{% load static %}
+
+{% block body %}
+    <div class="container" style="padding-top: 65px">
+        <div class="row">
+
+                    {% for article in artcs %}
+
+                        <div class="col-sm-4 my-2">
+                            <div class="card p-1">
+                                <img class="img-fluid w-100" src="../../{{   article.image }}" alt="Card image">
+                                <div class="card-body">
+                                  <small class="text-muted">{{ article.date_created }}</small>
+                                  <h4 class="card-title">{{ article.title }}</h4>
+                                  <p class="card-text">{{ article.intro | safe }}</p>
+                                  <a href="{% url 'article' article.title %}" class="btn btn-primary">Read More</a>
+                                </div>
+                            </div>
+                        </div>
+
+                    {% endfor %}
+
+
+                </div>
+    </div>
+{% endblock %}
