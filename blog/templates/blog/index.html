@@ -1,0 +1,59 @@
+
+{% extends 'blog/base.html' %}
+{% load static %}
+
+{% block body %}
+
+    <div class="jumbotron text-center bg-light"  style="margin-top:80px">
+      <h1>Welcome to Ocean</h1>
+      <p>A place to get and provide answers</p>
+    </div>
+
+    <hr>
+
+    <div class="container">
+        <div class="row d-flex flex-wrap justify-content-center no-gutters">
+            <!-- ARTICLE -->
+            <div class="col-sm-8">
+                <div class="card">
+                    <div style="height: 350px; overflow: hidden !important">
+                        <img class="img-fluid w-100" src="{% static 'blog/asssets/article/1default.jpg' %}" alt="Card image">
+                    </div>
+                    <div class="card-body">
+                      <small class="text-muted">January 1, 2022</small>
+                      <h4 class="card-title">Title</h4>
+                      <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis aliquid atque,
+                          nulla? Quos cum ex quis soluta, a laboriosam. Dicta expedita corporis animi vero voluptate
+                          voluptatibus possimus, veniam magni quis!</p>
+                      <a href="#" class="btn btn-primary">Read More</a>
+                    </div>
+                </div>
+
+                <div class="row">
+
+                    {% for article in artcs %}
+
+                        <div class="col-sm-6 my-2">
+                        <div class="card">
+                            <img class="img-fluid w-100" src="{{   article.image }}" alt="Card image">
+                            <div class="card-body">
+                              <small class="text-muted">{{ article.date_created }}</small>
+                              <h4 class="card-title">{{ article.title }}</h4>
+                              <p class="card-text">{{ article.intro | safe }}</p>
+                              <a href="{% url 'article' article.title %}" class="btn btn-primary">Read More</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    {% endfor %}
+
+
+                </div>
+
+            </div>
+
+
+        </div>
+    </div>
+
+{% endblock %}

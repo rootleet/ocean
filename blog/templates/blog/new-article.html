@@ -1,0 +1,58 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static 'blog/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'blog/css/main.css' %}">
+    {% if page_title %}
+       <title> {{ page_title }} </title>
+    {% else %}
+        <title>Ocean | Power Of Sharing</title>
+    {% endif %}
+
+</head>
+<body class="bg-light">
+
+    <div class="container-fluid py-5" style="min-height: 100vh">
+        <!-- ARTICLE -->
+            <form action="{% url 'save_article' %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <div class="w-100 d-flex flex-wrap justify-content-between">
+                    <div class="input-group w-50 mb-2">
+                        <div class="input-group-prepend bg-light border-0">
+                            <span class="input-group-text bg-light border-0 text-danger">Post Title</span>
+                        </div>
+                        <input type="text" autocomplete="off" required name="page_title" class="form-control rounded-0 border-danger">
+                    </div>
+
+                    <div class="input-group w-25 mb-2">
+                        <div class="input-group-prepend bg-light border-0">
+                            <span class="input-group-text bg-light border-0 text-danger">Meta</span>
+                        </div>
+                        <select name="meta" class="form-control rounded-0 border-danger" id="">
+                            {% for meta in meta_dat %}
+                                <option value="{{ meta.pk }}">{{ meta.description }}</option>
+                            {% endfor %}
+                        <option value="0" selected>Others</option>
+                        </select>
+                    </div>
+
+                    <input type="file" accept="image/jpeg" name="post_img">
+
+                    <button type="submit" class="btn btn-success rounded-0 h-fit">Publish</button>
+
+                </div>
+
+                 <textarea name="article_desc" style="height: 50vh" class="form-control" id="update_details"></textarea>
+                    <script src="{% static 'blog/js/htmeditor.min.js' %}"      htmeditor_textarea="update_details"      full_screen="no"      editor_height="500"     run_local="no">
+                    </script>
+
+
+            </form>
+    </div>
+
+</body>
+</html>
