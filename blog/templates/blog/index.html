@@ -40,7 +40,7 @@
             {% else %}
                 <div class="w-100p mx-auto d-flex flex-wrap justify-center">
                     {% for met in groups %}
-                        <span href="{% url 'load-meta' %}{{ met.id }}" class="badge badge-info m-1">{{ met.description }}</span>
+                        <a href="{% url 'load-meta' met.description %}" class="badge badge-info m-1">{{ met.description }}</a>
                     {% endfor %}
                 </div>
             {% endif %}

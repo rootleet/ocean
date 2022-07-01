@@ -161,7 +161,7 @@ def save_article(request):
 
 
 def load_meta(request, meta):
-    artcs = articles.objects.filter(meta=meta)[:10]
+    artcs = articles.objects.filter(meta=meta)
     context = {
         'page_title': 'Ocean | Search | ' + str(meta[0:20]),
         'artcs': artcs, 'meta': all_meta
