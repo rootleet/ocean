@@ -14,6 +14,7 @@ all_meta = article_meta.objects.all()
 # Create your views here.
 def index(request):
     artcs = articles.objects.all().order_by('-id')[:10]
+    groups = article_meta.objects.all()
     if 'login' not in request.session:
         logedin = False
         activeUser = False
@@ -26,7 +27,8 @@ def index(request):
         'page_title': 'Ocean | The Power In Sharing',
         'search_form': search_form,
         'artcs': artcs,
-        'meta': all_meta,
+        'groups':groups,
+        'meta':  article_meta.objects.all(),
         'login': {
             'status': logedin, 'myname': activeUser
         }
@@ -260,7 +262,8 @@ def edit_save(request):
             owner = 'anton'
             meta = form.cleaned_data['meta']
 
-            articles.objects.filter(uni=uni).update(title=page_title, intro=article_into, article=article_desc_raw_htm, meta=meta)
+            articles.objects.filter(uni=uni).update(title=page_title, intro=article_into, article=article_desc_raw_htm,
+                                                    meta=meta)
             return redirect('article', page_title)
             # return HttpResponse('Form Valid')
 

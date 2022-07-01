@@ -29,5 +29,6 @@ urlpatterns = [
     path('category/<meta>', views.load_meta, name='load-meta'),
     path('login', views.login, name='login'),
     path('logout', views.logout, name='logout'),
-    path('login-process', views.login_process, name='login_process')
+    path('login-process', views.login_process, name='login_process'),
+
 ]

@@ -37,6 +37,12 @@
             <p class="text-center">
                 <a href="{% url 'login' %}">Login </a> to expand search scope
             </p>
+            {% else %}
+                <div class="w-100p mx-auto d-flex flex-wrap justify-center">
+                    {% for met in groups %}
+                        <span href="{% url 'load-meta' %}{{ met.id }}" class="badge badge-info m-1">{{ met.description }}</span>
+                    {% endfor %}
+                </div>
             {% endif %}
 
         </form>
