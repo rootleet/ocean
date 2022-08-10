@@ -1,0 +1,55 @@
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static 'blog/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'blog/css/main.css' %}">
+    {% if page_title %}
+       <title> {{ page_title }} </title>
+    {% else %}
+        <title>Ocean | Power Of Sharing</title>
+    {% endif %}
+
+</head>
+<body class="bg-light">
+    <main class="d-flex flex-wrap align-content-center justify-content-center">
+        <form method="post" action="{% url 'search-article' %}" class="w-30">
+
+            <div class="d-flex flex-wrap justify-content-center">
+                <h1 class="text-warning ocean_text mr-1">O </h1>
+                <h1 class="text-info ocean_text mr-1">C </h1>
+                <h1 class="text-danger ocean_text mr-1">E </h1>
+                <h1 class="text-info ocean_text mr-1">A </h1>
+                <h1 class="text-success ocean_text mr-1">N </h1>
+            </div>
+            <p class="text-muted text-center">The power of sharing..</p>
+
+            {% csrf_token %}
+            <div class="input-group mb-2">
+                <input autocomplete="off" autofocus type="search" placeholder="Search" name="query" class="form-control rounded_c_m">
+                <button type="submit" style="display: none"></button>
+            </div>
+
+            {% if user.is_authenticated %}
+                <p class="text-center">
+
+                    <div class="w-100p mx-auto  d-flex flex-wrap justify-content-center">
+                            <div class="w-100"><hr></div>
+                            {% for met in groups %}
+                                <a href="{% url 'load-meta' met.description %}" class="badge badge-info m-1">{{ met.description }}</a>
+                            {% endfor %}
+                        </div>
+                </p>
+            {% else %}
+                <div class="text-center w-100">
+                <a href="{% url 'login' %}">Login </a> to expand search scope
+                </div>
+            {% endif %}
+
+        </form>
+    </main>
+</body>
+</html>

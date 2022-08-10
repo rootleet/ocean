@@ -19,7 +19,7 @@ from . import views
 
 urlpatterns = [
     path('', views.index, name='blog-home'),
-    path('/article/<title>', views.article, name='article'),
+    path('article/<title>', views.article, name='article'),
     path('search/<query>', views.search_result, name='search-result'),
     path('search/', views.search, name='search-article'),
     path('new-article',views.new_article, name='new-article'),
@@ -30,5 +30,8 @@ urlpatterns = [
     path('login', views.login, name='login'),
     path('logout', views.logout, name='logout'),
     path('login-process', views.login_process, name='login_process'),
+    path('finder',views.finder,name='finder')
+
+
 
 ]

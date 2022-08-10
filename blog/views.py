@@ -1,3 +1,7 @@
+from django.contrib import messages
+from django.contrib.auth import authenticate, login as auth_login, logout
+from django.contrib.sites import requests
+
 import blog.urls
 from django.contrib.messages.storage import session
 from django.http import HttpResponseRedirect
@@ -15,23 +19,13 @@ all_meta = article_meta.objects.all()
 def index(request):
     artcs = articles.objects.all().order_by('-id')[:10]
     groups = article_meta.objects.all()
-    if 'login' not in request.session:
-        logedin = False
-        activeUser = False
-
-    else:
-        logedin = request.session['login']
-        activeUser = request.session['user']
 
     context = {
         'page_title': 'Ocean | The Power In Sharing',
         'search_form': search_form,
         'artcs': artcs,
-        'groups':groups,
-        'meta':  article_meta.objects.all(),
-        'login': {
-            'status': logedin, 'myname': activeUser
-        }
+        'groups': groups,
+        'meta': article_meta.objects.all(),
     }
     return render(request, 'blog/index.html', context)
 
@@ -187,30 +181,15 @@ def login_process(request):
             next = request.POST.get('next', '/')
 
             # check if user exist
-            if userAccounts.objects.filter(username=username).count() == 1:
-                # check password
-                import hashlib
-                md5_token = hashlib.md5(password.encode('utf-8')).hexdigest()
+            user = authenticate(request, username=username, password=password)
 
-                user_details = userAccounts.objects.get(username=username)
-                token = user_details.token
-
-                if token == md5_token:
-                    # set login sessions
-                    request.session['login'] = True
-                    request.session['user'] = username
-                    redirect('blog-home')
-                    return HttpResponseRedirect(next)
-                    # return HttpResponse("Login Successful " + request.session['user'])
-                else:
-                    return HttpResponse("Wronk Key ")
-
-
-
-
+            if user is not None:
+                auth_login(request, user)
+                # Redirect to a success page.
+                return redirect('blog-home')
             else:
-                return HttpResponse("No User Account")
-
+                messages.success(request, "There was an error")
+                return redirect('login')
 
         else:
             return HttpResponse("Invalid Form")
@@ -275,3 +254,7 @@ def edit_save(request):
             # throw error
     else:
         return HttpResponse("Not Posted Form")
+
+
+def finder(request):
+    return render(request, 'blog/finder.html')

@@ -7,11 +7,13 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="{% static 'blog/css/bootstrap.min.css' %}">
-    <link rel="stylesheet" href="{% static 'blog/css/main.css' %}">
+    <link rel="stylesheet" href="{% static 'general/css/main.css' %}">
+<link rel="stylesheet" href="{% static 'general/css/all.css' %}">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/fontawesome.min.css" integrity="sha384-jLKHWM3JRmfMU0A5x5AkjWkw/EYfGUAGagvnfryNV3F9VqM98XiIH7VBGVoxVSc7" crossorigin="anonymous">
     <script src="{% static 'blog/js/jquery.min.js' %}"></script>
     <script src="{% static 'blog/js/popper.min.js' %}"></script>
     <script src="{% static 'blog/js/bootstrap.min.js' %}"></script>
+<script src="{% static 'general/js/all.js' %}"></script>
     {% if page_title %}
        <title> {{ page_title }} </title>
     {% else %}
@@ -19,9 +21,9 @@
     {% endif %}
 
 </head>
-<body class="bg-light">
+<body style="height: 100vh; overflow: hidden" class="bg_default">
 
-    <header class="fixed-top bg-light border-bottom shadow">
+    <header class="bg-light border-bottom custom_shadow">
         <nav class="navbar navbar-expand-sm bg-light navbar-light">
           <div class="container text-dark">
               <a class="navbar-link text-dark" href="{% url 'blog-home' %}"><strong>Ocean</strong></a>
@@ -29,32 +31,39 @@
 
 
                 <li>
-                    <form class="form-inline" method="post" action="{% url 'search-article' %}">
-                        {% csrf_token %}
-                          <input style="width: 400px" value="{{ query_str }}" type="search" class="form-control rounded_c_m" autocomplete="off" name="query" placeholder="Search Query" id="email">
-                          <button style="display: none" type="submit" class="btn rounded-0 btn-info">GO</button>
-                        </form>
+{#                    <form class="form-inline" method="post" action="{% url 'search-article' %}">#}
+{#                        {% csrf_token %}#}
+{#                          <input style="width: 400px" value="{{ query_str }}" type="search" class="form-control rounded_c_m" autocomplete="off" name="query" placeholder="Search Query" id="email">#}
+{#                          <button style="display: none" type="submit" class="btn rounded-0 btn-info">GO</button>#}
+{#                        </form>#}
                 </li>
 
               </ul>
 
-              <ul class="navbar-nav ml-auto ml-5 d-flex flex-wrap">
+              <ul class="navbar-nav ml-auto ml-5 d-flex flex-wrap align-content-center">
 
-                    <div class="dropdown">
-                      <button type="button" class="btn btn-primary rounded-0 dropdown-toggle" data-toggle="dropdown">
-                        My Account
-                      </button>
-                      <div class="dropdown-menu">
-                          {% if login.status == True %}
-                            <a class="dropdown-item text-danger" href="{% url 'logout' %}">Logout </a>
-                          {% else %}
-                              <a class="dropdown-item text-info" href="{% url 'login' %}">Login</a>
-                          {% endif %}
+                    {% if user.is_authenticated %}
+                        <div class="h-100 d-flex flex-wrap align-content-center">
 
-                      </div>
-                    </div>
-                    {% if login.mymeta == '*' %}
-                        <button onclick="location.href='{% url 'new-article' %}'" class="btn btn-success rounded-0 ml-2">New Article</button>
+                            <div class="dropdown dropleft">
+                              <button type="button" data-toggle="dropdown" class="btn btn-sm btn-outline-dark p-0 user_profile">
+                                  <img src="{% static 'blog/asssets/users/user.png' %}" alt="" class="img-fluid">
+                              </button>
+                              <div class="dropdown-menu">
+                                <a class="dropdown-item" href="#">Profile</a>
+                                <a class="dropdown-item" href="#">Logout</a>
+                                <a class="dropdown-item" href="#">Link 3</a>
+                              </div>
+                            </div>
+                        </div>
+                        {% if user.is_superuser %}
+
+                            <a href="{% url 'admin_panel' %}" class="btn btn-sm ml-2 btn-outline-dark p-0 user_profile">
+                                  <img src="{% static 'blog/asssets/icons/admin_panel.png' %}" alt="" class="img-fluid">
+                              </a>
+
+                        {% endif %}
+{#                        <button onclick="location.href='{% url 'new-article' %}'" class="btn btn-success rounded-0 ml-2">New Article</button>#}
                     {% endif %}
 
               </ul>
@@ -65,9 +74,11 @@
 
 
 
-    {% block body %}
+    <article class="overflow-auto">
+        {% block body %}
 
-    {% endblock %}
+        {% endblock %}
+    </article>
 
 {#    <footer class="w-100 bg-primary p-5">#}
 {#        <div class="container">#}

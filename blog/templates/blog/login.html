@@ -7,6 +7,9 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="{% static 'blog/css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'blog/css/main.css' %}">
+    <script src="{% static 'blog/js/jquery.min.js' %}"></script>
+    <script src="{% static 'blog/js/popper.min.js' %}"></script>
+    <script src="{% static 'blog/js/bootstrap.min.js' %}"></script>
     {% if page_title %}
        <title> {{ page_title }} </title>
     {% else %}
@@ -25,6 +28,17 @@
                 <h1 class="text-info mr-1">I </h1>
                 <h1 class="text-success mr-1">N </h1>
             </div>
+
+            {% if messages %}
+                {% for message in messages %}
+
+                    <div class="alert alert-danger alert-dismissible">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    <strong>Error!</strong> {{ message }}
+                  </div>
+
+                {% endfor %}
+            {% endif %}
 
             {% csrf_token %}
             {% for f in form  %}

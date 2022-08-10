@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block admin_tool %}
+    <div class="w-100 h-100 overflow-hidden p-2">
+        <div class="card w-100 h-100 custom_shadow">
+            <div class="card-header">
+                <strong class="card-title text-info">All Issues</strong>
+            </div>
+            <div class="card-body p-2 overflow-auto">
+                <div class="table table-responsive h-100 mb-0">
+                    <table class="table table-sm table-striped table-bordered table-hover">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>Application</th>
+                                <th>User</th>
+                                <th>Title</th>
+                                <th>Date</th>
+                                <th>Options</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="pointer"><td>Application</td><td>User</td><td>Title</td><td>Date</td><td>
+                                <div class="w-100 h-100 d-flex flex-wrap align-content-center justify-content-center">
+                                    <a href="{% url 'view-issue' 'issue_id' %}" class="badge badge-pill" title="View Issues"><i class="fa text-info fa-eye mx-2" aria-hidden="true"></i></a>
+                                    <span data-toggle="modal" data-target="#markAsDone1" class="badge badge-pill" title="Mark As Done">
+                                        <i class="fa text-success fa-check-square" aria-hidden="true"></i>
+                                    </span>
+                                    <span class="badge badge-pill" title="Log Issue"><i class="fa text-danger fa-exclamation-triangle text-danger mx-2" aria-hidden="true"></i></span>
+                                </div>
+                                </td>
+                            </tr>
+                            <div class="modal fade" id="markAsDone1">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <strong class="modal-title">Issue Fixed Report</strong>
+                                        </div>
+                                        <div class="modal-body p-2">
+                                            <textarea placeholder="Final Report" class="form-control text_lg form-control-sm rounded_c custom_shadow" rows="5"></textarea>
+                                        </div>
+
+                                        <div class="modal-footer">
+                                            <button class="btn btn-success rounded_c">COMMIT</button>
+                                            <button type="button" class="btn btn-warning rounded_c" data-dismiss="modal">CANCEL</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -3,21 +3,18 @@
 
 {% block body %}
     <div class="container" style="padding-top: 65px">
-        <div class="row">
+        <div class="w-75 mx-auto search_result d-flex flex-wrap my-2 p-1">
 
                     {% for article in artcs %}
 
-                        <div class="col-sm-4 my-2">
-                            <div class="card p-1">
-                                <img class="img-fluid w-100" src="../../{{   article.image }}" alt="Card image">
-                                <div class="card-body">
-                                  <small class="text-muted">{{ article.date_created }}</small>
-                                  <h4 class="card-title">{{ article.title }}</h4>
-                                  <p class="card-text">{{ article.intro | safe }}</p>
-                                  <a href="{% url 'article' article.title %}" class="btn btn-primary">Read More</a>
-                                </div>
-                            </div>
+                        <div class="w-80 pl-2 h-100 overflow-hidden">
+                            <div class="w-100"><strong><a href="{% url 'article' article.title %}">{{ article.title }}</a></strong> <i class="badge alert-info font-weight-light h-fit">{{ article.meta }}</i></div>
+                            <small class="text-muted ellipsis_3">
+                                {{ article.intro }}
+                            </small>
                         </div>
+
+
 
                     {% endfor %}
 

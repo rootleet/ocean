@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block admin_tool %}
+    <div class="w-100 h-100 container-fluid overflow-hidden p-2">
+        <div class="row h-100 overflow-hidden no-gutters">
+            <div class="col-sm-9 h-100 card custom_shadow rounded-0">
+                <div class="card-header">
+                    <div class="w-100 h-100 d-flex flex-wrap">
+                        <div class="w-50 h-100 d-flex flex-wrap align-content-center">
+                            <strong class="card-title text-info m-0">Issue Title</strong>
+                        </div>
+                        <div class="w-50 h-100 d-flex flex-wrap align-content-center justify-content-end">
+                            <a href="{% url 'all-issues' %}" class="btn btn-sm btn-primary mr-2">All Documents</a>
+                            <a href="" class="btn btn-sm btn-info mr-2"><i class="fa fa-edit"></i> Edit</a>
+                            <button type="button" onclick="delete_document('1234')" class="btn btn-sm btn-danger"><i class="fa fa-recycle"></i> Delete</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body overflow-auto text-muted">
+                    <h1>Heading</h1>
+                    <p>
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab, dolorum fugiat maiores perspiciatis
+                        placeat recusandae? Aut blanditiis consequatur cumque debitis doloribus eveniet explicabo facere
+                        fugit hic, nisi placeat possimus sit!
+                    </p>
+                    <p>
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Commodi consectetur consequatur
+                        consequuntur et exercitationem harum illum in iste minima placeat praesentium quasi quidem quisquam,
+                        ratione sequi sint tempore totam ullam?
+                    </p>
+                    <h2>Heading 2</h2>
+                    <p>
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Deserunt dicta illum minus nostrum obcaecati
+                        pariatur praesentium quia quidem sequi voluptatum. Doloremque enim maxime quis reiciendis repellendus sint velit veniam, voluptates.
+                    </p>
+                    <ol>
+                        <li>Ordered List 1</li>
+                        <li>Ordered List 1</li>
+                        <li>Ordered List 1</li>
+                        <li>Ordered List 1</li>
+                        <li>Ordered List 1</li>
+                    </ol>
+
+                </div>
+
+            </div>
+
+            <!-- MEDIA -->
+            <div class="col-sm-3 h-100 custom_shadow pl-2">
+                <div class="w-100 h-50 card rounded-0">
+                    <div class="card-header">
+                        <p class="card-title m-0 text-muted"><i class="fa fa-paperclip"></i> Attachments</p>
+                    </div>
+                    <div class="card-body overflow-auto">
+                        <ul class="list-group list-group-flush">
+                          <li class="list-group-item p-1"><a href="#"><i class="text-danger">file_name</i></a></li>
+                            <li class="list-group-item p-1"><a href="#"><i class="text-danger">file_name</i></a></li>
+                            <li class="list-group-item p-1"><a href="#"><i class="text-danger">file_name</i></a></li>
+                            <li class="list-group-item p-1"><a href="#"><i class="text-danger">file_name</i></a></li>
+                            <li class="list-group-item p-1"><a href="#"><i class="text-danger">file_name</i></a></li>
+                            <li class="list-group-item p-1"><a href="#"><i class="text-danger">file_name</i></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+{% endblock %}
