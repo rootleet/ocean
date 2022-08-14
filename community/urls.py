@@ -18,9 +18,10 @@ from django.urls import path, include
 from . import views
 
 urlpatterns = [
-    path('', views.index, name='admin_panel'),
-    path('issues',views.all_issues, name='all-issues'),
-    path('view/<issue_id>',views.view_issue, name='view-issue')
-
-
+    path('', views.index, name='community'),
+    path('questions', views.index, name='questions'),
+    path('question/<question_id>', views.view_question, name='view_question'),
+    path('questions/ask',views.ask_question,name='ask_questions'),
+    path('submit_question/',views.submit_question,name='submit_question'),
+    path('new_comment/',views.new_comment, name='new_comment')
 ]

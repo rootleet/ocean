@@ -22,16 +22,16 @@ urlpatterns = [
     path('article/<title>', views.article, name='article'),
     path('search/<query>', views.search_result, name='search-result'),
     path('search/', views.search, name='search-article'),
-    path('new-article',views.new_article, name='new-article'),
-    path('edit_article/<uni>',views.edit_article, name='edit_article'),
-    path('edit_save/',views.edit_save, name='edit_save'),
+    path('new-article/', views.new_article, name='new-article'),
+    path('edit_article/<uni>', views.edit_article, name='edit_article'),
+    path('edit_save/', views.edit_save, name='edit_save'),
     path('save-article', views.save_article, name='save_article'),
     path('category/<meta>', views.load_meta, name='load-meta'),
-    path('login', views.login, name='login'),
-    path('logout', views.logout, name='logout'),
+    path('login/', views.login, name='login'),
+    path('register/', views.new_user, name='new-user'),
+    path('sign_up/', views.sign_up, name='sign_up'),
+    path('logout_view/', views.logout_view, name='logout'),
     path('login-process', views.login_process, name='login_process'),
-    path('finder',views.finder,name='finder')
-
-
+    path('finder/', views.finder, name='finder'),
 
 ]

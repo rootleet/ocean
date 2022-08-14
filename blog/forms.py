@@ -19,8 +19,14 @@ class EdArticle(forms.Form):
     uni = forms.CharField(max_length=100)
 
 
-
-
 class LogIn(forms.Form):
     username = forms.CharField(max_length=200)
+    password = forms.CharField(max_length=200)
+    next = forms.CharField(max_length=200)
+
+
+class SignUp(forms.Form):
+    first_name = forms.CharField(max_length=200)
+    last_name = forms.CharField(max_length=200)
+    email = forms.EmailField()
     password = forms.CharField(max_length=200)

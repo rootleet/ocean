@@ -39,3 +39,8 @@ class userAccounts(models.Model):
 
     def __str__(self):
         return str(self.token)
+
+
+class ArticleView(models.Model):
+    article = models.TextField()
+    user = models.IntegerField(default=0)

@@ -29,6 +29,7 @@ DEBUG = True
 ALLOWED_HOSTS = ['*']
 
 
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -39,7 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'admin_panel.apps.AdminPanelConfig'
+    'admin_panel.apps.AdminPanelConfig',
+    'community.apps.CommunityConfig'
 ]
 
 MIDDLEWARE = [
@@ -139,3 +141,15 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# email config
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'henrychase411@gmail.com'
+EMAIL_HOST_PASSWORD = 'ldthggpiaisgfwdg'
+EMAIL_PORT = 587
+
+
+#email config

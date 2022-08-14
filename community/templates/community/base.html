@@ -8,14 +8,17 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="{% static 'blog/css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'general/css/main.css' %}">
-<link rel="stylesheet" href="{% static 'general/css/all.css' %}">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/fontawesome.min.css" integrity="sha384-jLKHWM3JRmfMU0A5x5AkjWkw/EYfGUAGagvnfryNV3F9VqM98XiIH7VBGVoxVSc7" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'general/css/all.css' %}">
+    <link rel="stylesheet" href="{% static 'general/css/sweetalert.min.css' %}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/fontawesome.min.css" integrity="sha384-jLKHWM3JRmfMU0A5x5AkjWkw/EYfGUAGagvnfryNV3F9VqM98XiIH7VBGVoxVSc7" crossorigin="anonymous">
     <script src="{% static 'blog/js/jquery.min.js' %}"></script>
     <script src="{% static 'blog/js/popper.min.js' %}"></script>
-    <script src="{% static 'blog/js/bootstrap.min.js' %}"></script>
-<script src="{% static 'general/js/all.js' %}"></script>
+    <script src="{% static 'general/js/sweetalert2@11' %}"></script>
+    <script src="{% static 'general/js/all.js' %}"></script>
+    <script src="{% static 'community/forms.js' %}"></script>
+    <script src="{% static 'general/js/error_handler.js' %}"></script>
     {% if page_title %}
-       <title> Ocean | Power Of Sharing | {{ page_title }} </title>
+       <title> Ocean | Power Of Sharing |  {{ page_title }} </title>
     {% else %}
         <title>Ocean | Power Of Sharing</title>
     {% endif %}
@@ -24,9 +27,12 @@
 <body style="height: 100vh; overflow: hidden" class="bg_default">
 
     <header class="bg-light border-bottom custom_shadow">
-        <nav class="navbar navbar-expand-sm bg-light h-100 navbar-light">
+        <nav style="border-top: 5px solid orange" class="navbar navbar-expand-sm bg-light h-100 navbar-light">
           <div class="container text-dark">
-              <a class="navbar-link text-dark" href="{% url 'blog-home' %}"><strong>Ocean</strong></a>
+              <ol class="breadcrumb m-0 bg-light">
+                <li class="breadcrumb-item"><a href="{% url 'blog-home' %}">Ocean</a></li>
+                <li class="breadcrumb-item active">Community</li>
+              </ol>
               <ul class="navbar-nav mr-auto ml-5">
 
 
@@ -45,19 +51,17 @@
                     {% if user.is_authenticated %}
                         <div class="h-100 d-flex flex-wrap align-content-center">
 
+                        <div class="text-right mr-2">
+                            <a href="{% url 'ask_questions' %}" class="btn btn-info rounded-0">Ask Question</a>
+                        </div>
+
                             <div class="dropdown dropleft">
-                              <button type="button" data-toggle="dropdown" class="btn btn-sm btn-outline-dark p-0 user_profile">
+                              <button title="{{ user.username }}" type="button" data-toggle="dropdown" class="btn btn-sm btn-outline-dark p-0 user_profile">
                                   <img src="{% static 'blog/asssets/users/user.png' %}" alt="" class="img-fluid">
                               </button>
                               <div class="dropdown-menu">
-                                  {% if user.is_superuser %}
-
-                                      <a class="dropdown-item text-success" href="{% url 'new-article' %}"><i class="fa fa-newspaper"></i> New Article</a>
-
-                                  {% endif %}
-                                <a class="dropdown-item text-primary" href="#"><i class="fa fa-user-circle"></i> Profile</a>
-                              <a class="dropdown-item text-info" href="{% url 'ask_questions' %}"><i class="fa fa-question-circle"></i> Ask Support</a>
-                                <a class="dropdown-item text-danger" href="{% url 'logout' %}"><i class="fa fa-power-off"></i> Logout</a>
+                                <a class="dropdown-item" href="#">Profile</a>
+                                <a class="dropdown-item" href="#">Logout</a>
                                 <a class="dropdown-item" href="#">Link 3</a>
                               </div>
                             </div>

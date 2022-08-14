@@ -10,6 +10,8 @@
     <script src="{% static 'blog/js/jquery.min.js' %}"></script>
     <script src="{% static 'blog/js/popper.min.js' %}"></script>
     <script src="{% static 'blog/js/bootstrap.min.js' %}"></script>
+<link rel="stylesheet" href="{% static 'general/css/all.css' %}">
+    <script src="{% static 'general/js/all.js' %}"></script>
     {% if page_title %}
        <title> {{ page_title }} </title>
     {% else %}
@@ -17,44 +19,67 @@
     {% endif %}
 
 </head>
-<body class="bg-light">
-    <main class="d-flex flex-wrap align-content-center justify-content-center">
-        <form method="post" action="{% url 'login_process' %}" class="w-25 card p-2 py-5 border-0 rounded-0 shadow">
+<body style="height: 100vh">
+    <form id="regular_form" method="post" action="{% url 'login_process' %}" class="container login_form h-100 overflow-hidden">
+      <div class="row h-100 d-flex justify-content-center align-items-center">
+          {% csrf_token %}
+          <div id='intro' class="col-sm-7 d-flex flex-wrap align-content-center h-100">
+              <div class="">
+                <h1 class="display-4 font-weight-bolder">OCEAN <i class="fa fa-share-alt"></i></h1>
+                <p>The power of collaboration and sharing</p>
+              </div>
+          </div>
 
-            <div class="d-flex flex-wrap justify-content-center">
-                <h1 class="text-warning mr-1">L </h1>
-                <h1 class="text-info mr-1">O </h1>
-                <h1 class="text-danger mr-1">G </h1>
-                <h1 class="text-info mr-1">I </h1>
-                <h1 class="text-success mr-1">N </h1>
+        <div class="col-sm-5">
+          <div class="card custom_shadow" style="border-radius: 1rem;">
+
+              <div class="card-body text-center">
+
+              <div class="">
+
+                <div class="form-outline form-white mb-4">
+                  <input required name="username" autocomplete="off" id="inputEmail" type="text" placeholder="username" class="form-control form-control-lg" />
+                </div>
+
+
+                <div class="form-outline form-white mb-4">
+                  <input required name="password" id="inputPassword" type="password" placeholder="Password" class="form-control form-control-lg" />
+                </div>
+                  <input type="hidden" name="next" value="{{ next }}">
+                  {% if messages %}
+                    {% for message in messages %}
+                
+                        <div class="alert alert-danger alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+                        <strong>Error!</strong> {{ message }}
+                      </div>
+
+                    {% endfor %}
+                {% endif %}
+                <button class="btn btn-primary w-100 btn-lg px-5 mb-4" type="submit">Login</button>
+                <p class="small"><a class="" href="#!">Forgot password?</a></p> <hr>
+
+
+
+                <!-- <div class="d-flex justify-content-center text-center m-4 pt-1">
+                  <a href="#!" class="text-white"><i class="fab fa-facebook-f fa-lg"></i></a>
+                  <a href="#!" class="text-white"><i class="fab fa-twitter fa-lg mx-4 px-2"></i></a>
+                  <a href="#!" class="text-white"><i class="fab fa-google fa-lg"></i></a>
+                </div> -->
+
+              </div><br>
+
+              <div>
+                <a href="{% url 'new-user' %}" id="new_user" class="btn btn-success btn-lg mb-4">Create a new account</a>
+              </div>
+
             </div>
+        </div>
+        </div>
 
-            {% if messages %}
-                {% for message in messages %}
-
-                    <div class="alert alert-danger alert-dismissible">
-                    <button type="button" class="close" data-dismiss="alert">&times;</button>
-                    <strong>Error!</strong> {{ message }}
-                  </div>
-
-                {% endfor %}
-            {% endif %}
-
-            {% csrf_token %}
-            {% for f in form  %}
-{#                {{ f }}#}
-            {% endfor %}
-            <input type="text" required autofocus autocomplete="off" name="username" placeholder="Username" class="form-control rounded-0 mt-3 mb-3">
-            <input type="password" required autofocus autocomplete="off" name="password" placeholder="Password" class="form-control rounded-0 mb-2">
-            <input type="hidden" name="next" value="{% url 'blog-home' %}">
-
-            <div class="w-100 d-flex flex-wrap justify-content-between">
-                <button class="w-40 btn btn-success rounded-0">LOGIN</button>
-                <a class="w-40 btn btn-info rounded-0">REGISTER</a>
-            </div>
+      </div>
 
 
-        </form>
-    </main>
+    </form>
 </body>
 </html>

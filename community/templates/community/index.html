@@ -1,0 +1,57 @@
+
+{% extends 'community/base.html' %}
+{% load static %}
+
+{% block body %}
+
+    <div class="container pt-5">
+        <div class="row">
+            <div class="col-sm-2"></div>
+
+            <div class="col-sm-8">
+                {% for quest in quests %}
+
+                    <div class="card mb-2">
+                        <div class="card-body">
+                            <div class="w-100 mb-2">
+                                <a href="{% url 'view_question' quest.title %}" class="">{{ quest.title }}</a>
+                            </div>
+                            <div class="text-muted">
+                                {{ quest.body | safe | slice:':250' }} ...
+                            </div>
+                            <div class="w-100 d-flex flex-wrap">
+                                <div class="w-50 d-flex flex-wrap">
+{#                                    <span class="badge badge-secondary mr-1"><i class="fa fa-comment"></i> 20</span>#}
+                                    <span class="badge badge-primary mr-1"> <i class="fa fa-eye"></i> {{ quest.readers }}</span>
+                                    {% for tag in quest.tags  %}
+                                        <span class="badge pointer alert-info mr-2 font-weight-lighter">{{ tag }}</span>
+                                    {% endfor %}
+                                </div>
+
+                                <div class="w-50 d-flex flex-wrap justify-content-end text_sm">
+                                    <span class="text-muted"><i class="fa fa-user mr-2"></i> {{ quest.owner }}</span>
+                                    <span class="text-muted"><i class="fa fa-clock ml-3"></i> asked {{ quest.created_at }}</span>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+            <div class="col-sm-2"></div>
+        </div>
+    </div>
+
+    
+    
+    <!-- SCRIPT -->
+    <script>
+        function get_questions() {
+            
+        }
+    </script>
+{% endblock %}
+
