@@ -1,0 +1,8 @@
+#!/home/stuffs/Development/pythonProjects/ocean/venv/bin/python
+
+
+from wafw00f import main
+
+
+if __name__ == '__main__':
+    main.main()

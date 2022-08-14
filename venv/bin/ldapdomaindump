@@ -1,0 +1,3 @@
+#!/home/stuffs/Development/pythonProjects/ocean/venv/bin/python
+import ldapdomaindump
+ldapdomaindump.main()

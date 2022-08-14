@@ -1,0 +1,75 @@
+Metadata-Version: 2.1
+Name: syslog-rfc5424-formatter
+Version: 1.2.2
+Summary: Logging formatter which produces well-formatted RFC5424 Syslog Protocol messages
+Home-page: https://github.com/easypost/syslog-rfc5424-formatter
+Author: EasyPost
+Author-email: oss@easypost.com
+License: ISC
+Project-URL: Issue Tracker, https://github.com/easypost/syslog-rfc5424-formatter/issues
+Project-URL: Documentation, https://syslog-rfc5424-formatter.readthedocs.io/en/latest/
+Keywords: logging
+Platform: UNKNOWN
+Classifier: Development Status :: 3 - Alpha
+Classifier: Environment :: Console
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3.4
+Classifier: Programming Language :: Python :: 3.5
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Operating System :: POSIX
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: ISC License (ISCL)
+Classifier: Topic :: System :: Logging
+Description-Content-Type: text/markdown
+
+This module implements a python `logging` formatter which produces well-formed RFC5424-compatible Syslog messages to a given socket.
+
+[![Build Status](https://travis-ci.org/EasyPost/syslog-rfc5424-formatter.svg?branch=master)](https://travis-ci.org/EasyPost/syslog-rfc5424-formatter)
+[![PyPI version](https://badge.fury.io/py/syslog-rfc5424-formatter.svg)](https://badge.fury.io/py/syslog-rfc5424-formatter)
+[![Documentation Status](https://readthedocs.org/projects/syslog-rfc5424-formatter/badge/?version=latest)](https://syslog-rfc5424-formatter.readthedocs.io/en/latest/?badge=latest)
+
+
+## Usage
+
+If you're configuring your loggers from code, you should use this formatter as below:
+
+```python
+import logging
+import logging.handlers
+from syslog_rfc5424_formatter import RFC5424Formatter
+
+
+def set_up_logging():
+    h = logging.handlers.SysLogHandler('/path/to/syslog_socket')
+    h.setFormatter(RFC5424Formatter())
+    logging.getLogger('').addHandler(h)
+```
+
+
+If you're using a more modern combination of a JSON/YAML config file and `logging.config.dictConfig`, your config file should look like the following (assuming YAML concrete syntax):
+
+```yaml
+formatters:
+    syslog:
+        (): syslog_rfc5424_formatter.RFC5424Formatter
+
+handlers:
+    syslog:
+        formatter: syslog
+        class: logging.handlers.SysLogHandler
+        address: "/path/to/syslog/socket"
+        facility: "ext://logging.handlers.SysLogHandler.LOG_USER"
+
+root:
+    level: INFO
+    handlers:
+        - syslog
+```
+
+## License
+
+This work is licensed under the ISC license, the text of which can be found at [LICENSE.txt](LICENSE.txt).
+
+
