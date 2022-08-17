@@ -44,3 +44,12 @@ class userAccounts(models.Model):
 class ArticleView(models.Model):
     article = models.TextField()
     user = models.IntegerField(default=0)
+
+
+class Notofication(models.Model):
+    sent_from = models.IntegerField(default=0)
+    sent_to = models.IntegerField(default=0)
+    title = models.TextField()
+    message = models.TextField()
+    sent_on = models.DateTimeField(auto_now_add=True)
+    read = models.IntegerField(default=0)

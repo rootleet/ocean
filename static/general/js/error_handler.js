@@ -60,3 +60,21 @@ function error_handler(response)
 
     }
 }
+
+function str_len(str) {
+    if(str.length > 0)
+    {
+        return true
+    } else
+    {
+        return false
+    }
+}
+
+function ctable(str){
+    console.table(str)
+}
+
+function clog(str) {
+    console.log(str)
+}

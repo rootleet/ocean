@@ -6,7 +6,9 @@
         <div class="card w-100 h-100 custom_shadow">
             <div class="card-header">
                 <strong class="card-title text-info">All Issues</strong>
+                <a href="{% url 'log-issue' %}">xx</a>
             </div>
+            <input type="hidden" id="issues_url" value="{% url 'log-issue' %}">
             <div class="card-body p-2 overflow-auto">
                 <div class="table table-responsive h-100 mb-0">
                     <table class="table table-sm table-striped table-bordered table-hover">
@@ -20,33 +22,67 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr class="pointer"><td>Application</td><td>User</td><td>Title</td><td>Date</td><td>
-                                <div class="w-100 h-100 d-flex flex-wrap align-content-center justify-content-center">
-                                    <a href="{% url 'view-issue' 'issue_id' %}" class="badge badge-pill" title="View Issues"><i class="fa text-info fa-eye mx-2" aria-hidden="true"></i></a>
-                                    <span data-toggle="modal" data-target="#markAsDone1" class="badge badge-pill" title="Mark As Done">
-                                        <i class="fa text-success fa-check-square" aria-hidden="true"></i>
-                                    </span>
-                                    <span class="badge badge-pill" title="Log Issue"><i class="fa text-danger fa-exclamation-triangle text-danger mx-2" aria-hidden="true"></i></span>
-                                </div>
-                                </td>
-                            </tr>
-                            <div class="modal fade" id="markAsDone1">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <strong class="modal-title">Issue Fixed Report</strong>
+                            {% for issue in issues %}
+                                {% if issue.quest_logged == 0 %}
+                                <tr class="pointer">
+                                    <td>
+                                        {% for tag in issue.tags  %}
+                                            <span class="badge pointer alert-danger mr-2 font-weight-lighter">{{ tag }}</span>
+                                        {% endfor %} {{ issue.quest_logged }}
+                                    </td>
+                                    <td>{{ issue.owner_name }}</td>
+                                    <td>{{ issue.title }}</td>
+                                    <td>{{ issue.created_at }}</td>
+                                    <td>
+                                        <div class="w-100 h-100 d-flex flex-wrap align-content-center justify-content-center">
+                                            <a href="{% url 'view-issue' issue.uni %}" class="badge badge-pill" title="View Issues"><i class="fa text-info fa-eye mx-2" aria-hidden="true"></i></a>
+                                            <span data-toggle="modal" data-target="#markAsDone{{ issue.uni }}" class="badge badge-pill" title="Mark As Done">
+                                                <i class="fa text-success fa-check-square" aria-hidden="true"></i>
+                                            </span>
+                                            <span data-toggle="modal" data-target="#logIssue{{ issue.uni }}"  class="badge badge-pill" title="Log Issue"><i class="fa text-danger fa-exclamation-triangle text-danger mx-2" aria-hidden="true"></i></span>
                                         </div>
-                                        <div class="modal-body p-2">
-                                            <textarea placeholder="Final Report" class="form-control text_lg form-control-sm rounded_c custom_shadow" rows="5"></textarea>
-                                        </div>
+                                    </td>
+                                </tr>
+                                <!-- FIXED MODEL -->
+                                <div class="modal fade" id="markAsDone1{{ issue.uni }}">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <strong class="modal-title">Issue Fixed Report</strong>
+                                            </div>
+                                            <div class="modal-body p-2">
+                                                <textarea placeholder="Final Report" class="form-control text_lg form-control-sm rounded_c custom_shadow" rows="5"></textarea>
+                                            </div>
 
-                                        <div class="modal-footer">
-                                            <button class="btn btn-success rounded_c">COMMIT</button>
-                                            <button type="button" class="btn btn-warning rounded_c" data-dismiss="modal">CANCEL</button>
+                                            <div class="modal-footer">
+                                                <button class="btn btn-success rounded_c">COMMIT</button>
+                                                <button type="button" class="btn btn-warning rounded_c" data-dismiss="modal">CANCEL</button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                                <!-- LOG ISSUE MODAL -->
+                                <div class="modal fade" id="logIssue{{ issue.uni }}">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content bg-danger">
+                                            <div class="modal-header">
+                                                <strong class="modal-title">Log Issue : {{ issue.title }}</strong>
+                                            </div>
+                                            <div class="modal-body p-2">
+                                                <input type="text" id="log_title_{{ issue.uni }}" placeholder="Log Title" name="log_title" required class="form-control mb-2">
+
+                                                <textarea name="log_body" id="log_body_{{ issue.uni }}" required placeholder="Log Details" class="form-control text_lg form-control-sm rounded_c custom_shadow" rows="5"></textarea>
+                                            </div>
+
+                                            <div class="modal-footer">
+                                                <button type="button" onclick="log_issue('{{ issue.uni }}')" class="btn btn-success rounded_c">LOG ISSUE</button>
+                                                <button type="button" class="btn btn-warning rounded_c" data-dismiss="modal">CANCEL</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endif %}
+                            {% endfor %}
                         </tbody>
                     </table>
                 </div>

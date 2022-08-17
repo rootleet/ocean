@@ -3,6 +3,7 @@ import datetime
 from django.db import models
 from django.contrib.auth.models import User
 from datetime import datetime
+from admin_panel.models import *
 
 
 # Create your models here.
@@ -24,7 +25,7 @@ class QuestionTags(models.Model):
 
 # questions model
 class questions(models.Model):
-    uni = models.TextField(unique=True)
+    uni = models.CharField(unique=True,max_length=100)
     title = models.TextField()
     body = models.TextField()
     owner = models.IntegerField()
@@ -33,11 +34,19 @@ class questions(models.Model):
     status = models.IntegerField(default=0)
     views = models.IntegerField(default=0)
 
+    def quest_logged(self):
+        from admin_panel.models import LoggedIssue
+        return LoggedIssue.objects.filter(issue=self.uni).count()
+
+    def owner_name(self):
+        return User.objects.get(pk=self.owner)
+
     def tags(self):
         return QuestionTags.objects.filter(question=self.uni)
 
     def readers(self):
         return QuestionViews.objects.filter(question=self.uni).count()
+
 
 # answer
 class answers(models.Model):

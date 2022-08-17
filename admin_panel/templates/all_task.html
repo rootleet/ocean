@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block admin_tool %}
+    <div class="w-100 h-100 overflow-hidden p-2">
+        <div class="card w-100 h-100 custom_shadow">
+            <div class="card-header">
+                <strong class="card-title text-info">All Issues</strong>
+                <a href="{% url 'log-issue' %}">xx</a>
+            </div>
+            <input type="hidden" id="issues_url" value="{% url 'log-issue' %}">
+            <div class="card-body p-2 overflow-auto">
+                <div class="table table-responsive h-100 mb-0">
+                    <table class="table table-sm table-striped table-bordered table-hover">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>Application</th>
+                                <th>User</th>
+                                <th>Title</th>
+                                <th>Date</th>
+                                <th>Options</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- TODO load logged issues -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

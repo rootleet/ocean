@@ -20,7 +20,9 @@ from . import views
 urlpatterns = [
     path('', views.index, name='admin_panel'),
     path('issues',views.all_issues, name='all-issues'),
-    path('view/<issue_id>',views.view_issue, name='view-issue')
+    path('view/<issue_id>',views.view_issue, name='view-issue'),
+    path('log-issue',views.log_issue,name='log-issue'),
+    path('all_task/',views.all_task,name='all_task')
 
 
 ]

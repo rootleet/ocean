@@ -17,6 +17,8 @@
 
     <script src="{% static 'general/js/sweetalert2@11' %}"></script>
     <script src="{% static 'general/js/general.js' %}"></script>
+    <script src="{% static 'general/js/error_handler.js' %}"></script>
+    <script src="{% static 'general/js/admin.js' %}"></script>
     <link rel="stylesheet" href="{% static 'general/css/sweetalert.min.css' %}">
 
     {% if page_title %}
@@ -36,7 +38,7 @@
                     </header>
                     <articl>
                         <a href="{% url 'all-issues' %}" class="btn btn-sm text-left w-100 btn-outline-primary mb-2 border-0 text-light font-weight-bolder rounded-0">Issues</a>
-                        <a class="btn btn-sm text-left w-100 btn-outline-primary mb-2 border-0 text-light font-weight-bolder rounded-0">Task</a>
+                        <a href="{% url 'all_task' %}" class="btn btn-sm text-left w-100 btn-outline-primary mb-2 border-0 text-light font-weight-bolder rounded-0">Task</a>
                     </articl>
                 </div>
 
