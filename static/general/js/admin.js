@@ -28,3 +28,51 @@ function log_issue(uni) {
 
 
 }
+
+function mark_for_escalation(issue) {
+    let url = $('#url').val()
+    let form_date = {
+        'issue':issue
+    }
+    $.ajax({
+            url:url,
+            type:'GET',
+            data:form_date,
+            success: function (response) {
+                error_handler(response)
+            }
+        })
+}
+
+async function escalate(provider_code) {
+    const {value: text} = await Swal.fire({
+        input: 'textarea',
+        inputLabel: 'Message',
+        inputPlaceholder: 'Type your message here...',
+        inputAttributes: {
+            'aria-label': 'Type your message here'
+        },
+        showCancelButton: true
+    })
+
+    if (text) {
+        var form_date = {
+        'x_provider':provider_code,
+            'email':$('#Email').html(),
+            'subject':text
+        }
+        var url = $('#send_url').val()
+        $.ajax({
+            url:url,
+            type:'GET',
+            data:form_date,
+            success: function (response) {
+                swal_success(response)
+            }
+        })
+        //Swal.fire(text)
+
+    } else {
+        await escalate(provider_code)
+    }
+}

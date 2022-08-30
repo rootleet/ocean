@@ -22,7 +22,12 @@ urlpatterns = [
     path('issues',views.all_issues, name='all-issues'),
     path('view/<issue_id>',views.view_issue, name='view-issue'),
     path('log-issue',views.log_issue,name='log-issue'),
-    path('all_task/',views.all_task,name='all_task')
+    path('all_task/',views.all_task,name='all_task'),
+    path('mark_esc/',views.mark_esc,name='mark-esc'),
+    path('escalate/',views.to_scalate,name='to_escalate'),
+    path('escalate/<provider>',views.escalate_detail,name='escalate_detail'),
+    path('send-to-provider/',views.send_to_provider,name='send-to-provider')
+
 
 
 ]

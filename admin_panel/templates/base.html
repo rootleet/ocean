@@ -39,6 +39,19 @@
                     <articl>
                         <a href="{% url 'all-issues' %}" class="btn btn-sm text-left w-100 btn-outline-primary mb-2 border-0 text-light font-weight-bolder rounded-0">Issues</a>
                         <a href="{% url 'all_task' %}" class="btn btn-sm text-left w-100 btn-outline-primary mb-2 border-0 text-light font-weight-bolder rounded-0">Task</a>
+
+                        <a data-toggle="collapse" class="btn r_nav text-light text-left w-100" data-target="#inventory_collapse">
+                        <span class="fa fa-boxes-stacked"></span> Escalation
+                        </a>
+
+                        <div id="inventory_collapse" class="collapse pl-4">
+                            <a href="{% url 'to_escalate' %}" class="r_child pointer"><span class="fa fa-check-square"></span> Marked</a>
+                            <hr class="m-1">
+                            <a href="#" class="r_child pointer"><span class="fa fa-envelope-open"></span> Sent</a>
+                            <hr class="m-1">
+
+                        </div>
+
                     </articl>
                 </div>
 

@@ -5,7 +5,6 @@ from django.contrib.auth.models import User
 from datetime import datetime
 from admin_panel.models import *
 
-
 # Create your models here.
 from django.db.models import Count
 
@@ -13,6 +12,7 @@ from django.db.models import Count
 class tags(models.Model):
     tag_code = models.CharField(max_length=3)
     tag_dec = models.TextField()
+    provider = models.IntegerField(default=0)
 
 
 class QuestionTags(models.Model):
@@ -25,7 +25,7 @@ class QuestionTags(models.Model):
 
 # questions model
 class questions(models.Model):
-    uni = models.CharField(unique=True,max_length=100)
+    uni = models.CharField(unique=True, max_length=100)
     title = models.TextField()
     body = models.TextField()
     owner = models.IntegerField()
@@ -33,6 +33,7 @@ class questions(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     status = models.IntegerField(default=0)
     views = models.IntegerField(default=0)
+    domain = models.TextField(default='OTH')
 
     def quest_logged(self):
         from admin_panel.models import LoggedIssue
@@ -41,8 +42,10 @@ class questions(models.Model):
     def owner_name(self):
         return User.objects.get(pk=self.owner)
 
-    def tags(self):
-        return QuestionTags.objects.filter(question=self.uni)
+    def provider(self):
+        from blog.models import Providers
+        tag_detail = tags.objects.get(tag_code=self.domain)
+        return "Hello World Love Is Wicked"
 
     def readers(self):
         return QuestionViews.objects.filter(question=self.uni).count()

@@ -53,3 +53,10 @@ class Notofication(models.Model):
     message = models.TextField()
     sent_on = models.DateTimeField(auto_now_add=True)
     read = models.IntegerField(default=0)
+
+
+class Providers(models.Model):
+    provider_code = models.CharField(max_length=3)
+    descr = models.TextField()
+    mobile = models.TextField()
+    email = models.TextField()

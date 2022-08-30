@@ -910,3 +910,60 @@ article{
 .admin_body{
     background: #F4F6F9 !important;
 }
+
+.r_nav:hover
+{
+    background: #1c2024 !important;
+    border-left: 2px solid #017afe !important;
+    /*border-top-right-radius: 15px;*/
+    /*border-bottom-right-radius:  15px;*/
+}
+
+.r_nav:focus
+{
+    background: #1c2024 !important;
+    border-left: 2px solid #017afe !important;
+    /*border-top-right-radius: 15px;*/
+    /*border-bottom-right-radius:  15px;*/
+}
+
+.h-90{
+    height: 90% !important;
+}
+
+.h-95{
+    height: 95% !important;
+}
+.r_child
+{
+    color: #017afe;
+}
+.r_child:hover
+{
+    color: #0461c7;
+}
+
+.r_nav:active
+{
+    background: #1c2024 !important;
+    border-left: 2px solid #017afe !important;
+    /*border-top-right-radius: 15px;*/
+    /*border-bottom-right-radius:  15px;*/
+}
+.r_nav:focus
+{
+    background: #1c2024 !important;
+    border-left: 2px solid #017afe !important;
+    /*border-top-right-radius: 15px;*/
+    /*border-bottom-right-radius:  15px;*/
+}
+
+.r_nav_active
+{
+    background: #1c2024 !important;
+    border-left: 2px solid #017afe !important;
+
+    /*border-top-right-radius: 15px;*/
+    /*border-bottom-right-radius:  15px;*/
+}
+

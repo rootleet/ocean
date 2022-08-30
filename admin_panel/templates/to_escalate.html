@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block admin_tool %}
+    <div class="w-100 h-100 overflow-hidden p-2">
+        <div class="card w-100 h-100 custom_shadow">
+            <div class="card-header">
+                <strong class="card-title text-info">{{ request.get_full_path }}</strong>
+
+            </div>
+            <input type="hidden" id="url" value="{% url 'mark-esc' %}">
+            <div class="card-body p-2 overflow-auto">
+                <div class="w-100 h-100 container">
+                    <div class="row no-gutters">
+
+                        {% for count in x_count %}
+                            <div class="col-sm-3 p-1" style="height: 200px">
+                            <div class="card custom_shadow h-100">
+                                <div class="card-header">
+                                    <strong class="card-title">{{ count.provider }}</strong>
+                                </div>
+                                <div class="card-body">
+                                    <div class="h-100 w-100 d-flex flex-wrap align-content-center justify-content-center">
+                                        <span class="display-4 text-info">{{ count.total }}</span>
+                                    </div>
+                                </div>
+                                <div class="card-footer d-flex flex-wrap justify-content-between">
+                                    <!-- TODO VIEW AND SEND -->
+                                    <a href="{% url 'escalate_detail' count.provider %}" class="btn btn-sm w-100 btn-info">VIEW</a>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

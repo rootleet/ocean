@@ -8,21 +8,55 @@
                 <strong class="card-title text-info">All Issues</strong>
                 <a href="{% url 'log-issue' %}">xx</a>
             </div>
-            <input type="hidden" id="issues_url" value="{% url 'log-issue' %}">
+            <input type="hidden" id="url" value="{% url 'mark-esc' %}">
             <div class="card-body p-2 overflow-auto">
                 <div class="table table-responsive h-100 mb-0">
                     <table class="table table-sm table-striped table-bordered table-hover">
                         <thead class="thead-dark">
                             <tr>
+                                <th>Status</th>
                                 <th>Application</th>
-                                <th>User</th>
+                                <th>Owner</th>
                                 <th>Title</th>
                                 <th>Date</th>
-                                <th>Options</th>
+                                <th>OPT</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <!-- TODO load logged issues -->
+                            {% for task in tasks %}
+                                <tr>
+                                        <td>
+                                            {{ task.str_status }}
+                                        </td>
+
+                                        <td>
+                                            <span class="badge pointer alert-danger mr-2 font-weight-lighter">{{ task.domain }}</span>
+                                        </td>
+                                        <td>{{ task.owner }}</td>
+                                        <td>{{ task.title }}</td>
+                                        <td>
+                                            <span class="badge alert-danger">
+                                                {{ task.date_reported }}
+                                            </span> / <span class="badge alert-info">
+                                                {{ task.created_on }}
+                                            </span>
+                                        </td>
+                                        <td>
+
+                                            <div class="dropdown dropleft">
+                                                <i class="fa fa-ellipsis-v pointer" data-toggle="dropdown"></i>
+                                              <div class="dropdown-menu">
+                                                <a class="dropdown-item text-success" href="#"><i class="fa fa-check-square"></i> Done</a>
+                                                <a class="dropdown-item text-info" href="{% url 'view-issue' task.issue %}"><i class="fa fa-eye"></i> View</a>
+                                                <a class="dropdown-item text-danger pointer" onclick="mark_for_escalation('{{ task.issue }}')"><i class="fa fa-sticky-note"></i> Mark For Escalate</a>
+                                              </div>
+                                            </div>
+                                        </td>
+
+
+                                </tr>
+                            {% endfor %}
+
                         </tbody>
                     </table>
                 </div>
