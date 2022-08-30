@@ -89,7 +89,7 @@ DATABASES = {
         'NAME': 'ocean',
         'USER': 'root',
         'PASSWORD': 'Sunderland@411',
-        'HOST': '172.17.0.2',
+        'HOST': 'localhost',
         'PORT': '3306'
     }
 }
