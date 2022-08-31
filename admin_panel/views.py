@@ -13,7 +13,11 @@ from ocean import settings
 
 
 def index(request):
-    return render(request, 'index.html')
+    current_user = request.user
+    if current_user.is_active:
+        return render(request, 'index.html')
+    else:
+        return redirect('login')
 
 
 def all_issues(request):
