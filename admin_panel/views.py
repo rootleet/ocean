@@ -170,3 +170,5 @@ def new_tag(request):
             save = tags(tag_code=code, tag_dec=description, provider=provider)
             save.save()
             return redirect('accessories')
+        else:
+            return HttpResponse(f"{code} EXIST")
