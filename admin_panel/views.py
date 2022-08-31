@@ -19,6 +19,7 @@ def index(request):
 def all_issues(request):
     issues = questions.objects.all()
     context = {
+        'page-title': 'ALL ISSUES',
         'issues': issues
     }
     return render(request, 'all_issues.html', context=context)

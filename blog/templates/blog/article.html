@@ -14,7 +14,7 @@
 
                 </h1>
 
-                <p class="text-muted font-italic">Posted on {{ article.date_created }} by {{ article.owner }} {% if login.mymeta == '*' %}
+                <p class="text-muted font-italic">Posted on {{ article.date_created }} by {{ article.owner }} {% if user.is_superuser %}
                         <a class="" href="{% url 'edit_article' article.uni %}">Edit</a>
                     {% endif %}</p>
 

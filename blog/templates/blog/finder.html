@@ -28,7 +28,7 @@
 
             {% for article in articles %}
                 <div style="height: 350px;" class="col-sm-4 p-2">
-                <div class="w-100 h-100 img_bg_nc hover_shadow" style="background: url('{{ article.image }}') ">
+                <div class="w-100 h-100 img_bg_nc hover_shadow" style="background: url('../{{ article.image }}') ">
                     <div onclick="location.href='{% url 'article' article.title  %}'" class="w-100 h-100 custom_shadow d-flex flex-wrap pointer align-content-end justify-content-start">
                         <div class="w-100 bg_default p-2">
                             <h2 class="text-muted font-weight-bolder ellipsis_2">

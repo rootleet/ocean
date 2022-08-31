@@ -30,7 +30,7 @@ class LoggedIssue(models.Model):
     def date_reported(self):
         return questions.objects.get(uni=self.issue).created_at
 
-    def str_status(self):
+    def stat(self):
         if self.status == 0:
             return "PENDING"
         elif self.status == 1:

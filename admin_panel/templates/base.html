@@ -1,118 +1,461 @@
 {% load static %}
 
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="{% static 'blog/css/bootstrap.min.css' %}">
-    <link rel="stylesheet" href="{% static 'general/css/main.css' %}">
-    <link rel="stylesheet" href="{% static 'general/css/all.css' %}">
+    <meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Website Manager | Dashboard</title>
+		<meta name="description" content="Cloud Admin Panel" />
+		<meta name="keywords" content="Admin, Dashboard, Bootstrap3, Sass, transform, CSS3, HTML5, Web design, UI Design, Responsive Dashboard, Responsive Admin, Admin Theme, Best Admin UI, Bootstrap Theme, Bootstrap, Light weight Admin Dashboard,Light weight, Light weight Admin, Light weight Dashboard" />
+		<meta name="author" content="Bootstrap Gallery" />
+		<link rel="shortcut icon" href="{% static 'dashboard/img/favicon.html' %}">
 
-    <script src="{% static 'blog/js/jquery.min.js' %}"></script>
-    <script src="{% static 'blog/js/popper.min.js' %}"></script>
-    <script src="{% static 'blog/js/bootstrap.min.js' %}"></script>
-    <script src="{% static 'general/js/all.js' %}"></script>
+		<!-- Bootstrap CSS -->
+		<link href="{% static 'general/css/bootstrap.min.css' %}" rel="stylesheet" media="screen">
 
-    <script src="{% static 'general/js/sweetalert2@11' %}"></script>
-    <script src="{% static 'general/js/general.js' %}"></script>
-    <script src="{% static 'general/js/error_handler.js' %}"></script>
-    <script src="{% static 'general/js/admin.js' %}"></script>
-    <link rel="stylesheet" href="{% static 'general/css/sweetalert.min.css' %}">
+		<!-- Animate CSS -->
+		<link href="{% static 'general/css/animate.css' %}" rel="stylesheet" media="screen">
 
-    {% if page_title %}
-       <title> {{ page_title }} </title>
-    {% else %}
-        <title>Ocean | Power Of Sharing</title>
-    {% endif %}
+		<!-- date range -->
+		<link rel="stylesheet" type="text/css" href="{% static 'general/css/daterange.css' %}">
+
+		<!-- Main CSS -->
+		<link href="{% static 'general/css/main_template.css' %}" rel="stylesheet" media="screen">
+
+		<!-- Slidebar CSS -->
+		<link rel="stylesheet" type="text/css" href="{% static 'general/css/slidebars.css' %}">
+
+		<!-- Font Awesome -->
+		<link href="{% static 'general/fonts/font-awesome.min.css' %}" rel="stylesheet">
+
+		<!-- Metrize Fonts -->
+		<link href="{% static 'general/fonts/metrize.css' %}" rel="stylesheet">
+
 
 </head>
-    <body style="height: 100vh; overflow: hidden !important" class="bg_default">
-    
-        <div class="container-fluid h-100 overflow-hidden">
-            <div class="row h-100 overflow-hidden">
-                <div class="col-sm-2 p-0 h-100 bg-dark">
-                    <header class="d-flex flex-wrap align-content-center justify-content-center">
-                        <h3 class="text-light font-weight-bolder">ADMIN</h3>
-                    </header>
-                    <articl>
-                        <a href="{% url 'all-issues' %}" class="btn btn-sm text-left w-100 btn-outline-primary mb-2 border-0 text-light font-weight-bolder rounded-0">Issues</a>
-                        <a href="{% url 'all_task' %}" class="btn btn-sm text-left w-100 btn-outline-primary mb-2 border-0 text-light font-weight-bolder rounded-0">Task</a>
+<body>
 
-                        <a data-toggle="collapse" class="btn r_nav text-light text-left w-100" data-target="#inventory_collapse">
-                        <span class="fa fa-boxes-stacked"></span> Escalation
-                        </a>
+	{% if user.is_authenticated %}
+		<!-- Left sidebar start -->
+		<aside id="sidebar">
 
-                        <div id="inventory_collapse" class="collapse pl-4">
-                            <a href="{% url 'to_escalate' %}" class="r_child pointer"><span class="fa fa-check-square"></span> Marked</a>
-                            <hr class="m-1">
-                            <a href="#" class="r_child pointer"><span class="fa fa-envelope-open"></span> Sent</a>
-                            <hr class="m-1">
+			<!-- Logo starts -->
+			<a href="#" class="logo">
+				<img src="{% static 'general/img/logo.png' %}" alt="logo">
+			</a>
+			<!-- Logo ends -->
 
-                        </div>
+			<!-- Menu start -->
+			<div id='menu'>
+				<ul>
+					<li class='highlight'>
+						<a href='index-2.html'>
+							<div class="fs1" aria-hidden="true" data-icon="&#xe007;"></div>
+							<span>Dashboard</span>
+						</a>
+					</li>
 
-                    </articl>
+                    <li class='has-sub'>
+						<a href=''>
+							<div class="fs1" aria-hidden="true" data-icon="&#xe052;"></div>
+							<span>Community</span>
+						</a>
+						<ul>
+							<li>
+								<a href='{% url 'all-issues' %}'>
+									<span>Questions</span> <kbd class="float-right">20</kbd>
+								</a>
+							</li>
+						</ul>
+					</li>
+
+					<li class='has-sub'>
+						<a href='#'>
+							<div class="fs1" aria-hidden="true" data-icon="&#xe052;"></div>
+							<span>Task Manager</span>
+						</a>
+						<ul>
+							<li>
+								<a href='buttons.html'>
+									<span>Pending 2GO</span>
+								</a>
+							</li>
+							<li>
+								<a href='grid.html'>
+									<span>Reported</span>
+								</a>
+							</li>
+							<li>
+								<a href='ui-elements.html'>
+									<span>More</span>
+								</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+			<!-- Menu End -->
+
+		</aside>
+		<!-- Left sidebar end -->
+
+		<!-- Dashboard Wrapper Start -->
+		<div class="dashboard-wrapper">
+
+			<!-- Header start -->
+			<header>
+				<ul class="pull-left" id="left-nav">
+					<li class="hidden-lg hidden-md hidden-sm">
+						<div class="logo-mob clearfix">
+							<h2><div class="fs1" aria-hidden="true" data-icon="&#xe0db;"></div><span>Cloud Admin</span></h2>
+						</div>
+					</li>
+					<li>
+						<div class="custom-search hidden-sm hidden-xs pull-left">
+							<input type="text" class="search-query" placeholder="Search here">
+							<i class="fa fa-search"></i>
+						</div>
+					</li>
+				</ul>
+				<div class="pull-right">
+					<ul id="mini-nav" class="clearfix">
+						<li class="list-box hidden-xs">
+							<a id="drop1" href="#" role="button" class="dropdown-toggle" data-toggle="dropdown">
+								<div class="fs1" aria-hidden="true" data-icon="&#xe129;"></div>
+							</a>
+							<span class="info-label red-bg animated rubberBand">7</span>
+							<ul class="dropdown-menu flipInX animated messages">
+								<li class="dropdown-header">You have 7 messages</li>
+								<li>
+									<div class="icon">
+										<img src="img/admin10.png" alt="Browser">
+									</div>
+									<div class="details">
+										<strong class="text-danger">Willams</strong>
+										<span>Firefox is a free, open-source web browser from Mozilla.</span>
+									</div>
+								</li>
+								<li>
+									<div class="icon">
+										<img src="img/admin6.png" alt="Browser">
+									</div>
+									<div class="details">
+										<strong class="text-info">Sunny</strong>
+										<span>Internet Explorer is a free web browser from Microsoft.</span>
+									</div>
+								</li>
+								<li>
+									<div class="icon">
+										<img src="img/admin3.png" alt="Browser">
+									</div>
+									<div class="details">
+										<strong class="text-info">James</strong>
+										<span>Safari is known for its sleek design and ease of use.</span>
+									</div>
+								</li>
+							</ul>
+						</li>
+						<li class="list-box hidden-xs">
+							<a id="drop2" href="#" role="button" class="dropdown-toggle" data-toggle="dropdown">
+								<div class="fs1" aria-hidden="true" data-icon="&#xe0e3;"></div>
+							</a>
+							<span class="info-label blue-bg animated rubberBand">3</span>
+							<ul class="dropdown-menu fadeInUp animated messages">
+								<li class="dropdown-header">Recent Chat</li>
+								<div class="chats clearfix">
+									<p class="chat them">
+									James, I'm going to be a little late.
+									</p>
+									<p class="chat me">
+									S'Okay, Dude. You know your lines...?
+									</p>
+									<p class="chat them">
+									I know em, I don't know what order they come in...
+									</p>
+									<p class="chat me">
+									We'll work it out...
+									</p>
+								</div>
+							</ul>
+						</li>
+						<li class="list-box hidden-xs dropdown">
+							<a id="drop3" href="#" role="button" class="dropdown-toggle" data-toggle="dropdown">
+								<div class="fs1" aria-hidden="true" data-icon="&#xe0ca;"></div>
+							</a>
+							<span class="info-label green-bg animated rubberBand">6</span>
+							<ul class="flipInX animated dropdown-menu stats-widget clearfix">
+							<li>
+								<h5 class="text-success">$37895</h5>
+								<p>Revenue <span class="text-success">+2%</span></p>
+								<div class="progress progress-xs">
+									<div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
+										<span class="sr-only">40% Complete (success)</span>
+									</div>
+								</div>
+							</li>
+							<li>
+								<h5 class="text-info">47,892</h5>
+								<p>Downloads <span class="text-info">+39%</span></p>
+								<div class="progress progress-xs">
+									<div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
+										<span class="sr-only">40% Complete (info)</span>
+									</div>
+								</div>
+							</li>
+							<li>
+								<h5 class="text-danger">28214</h5>
+								<p>Uploads <span class="text-danger">-7%</span></p>
+								<div class="progress progress-xs">
+									<div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
+										<span class="sr-only">40% Complete (danger)</span>
+									</div>
+								</div>
+							</li>
+						</ul>
+						</li>
+						<li class="list-box hidden-xs dropdown">
+							<a id="drop1" href="#" role="button" class="dropdown-toggle current-user" data-toggle="dropdown">
+								Sandy <b class="caret"></b>
+							</a>
+							<ul class="dropdown-menu sm fadeInUp animated messages">
+								<li class="dropdown-content">
+									<a href="#">Edit Profile</a>
+									<a href="#">Change Password</a>
+									<a href="#">Settings</a>
+									<a href="login.html">Logout</a>
+								</li>
+							</ul>
+						</li>
+						<li class="list-box hidden-lg hidden-md hidden-sm" id="mob-nav">
+							<a href="#">
+								<i class="fa fa-reorder"></i>
+							</a>
+						</li>
+					</ul>
+				</div>
+			</header>
+			<!-- Header ends -->
+
+			<!-- Right sidebar start -->
+			<div class="sb-slidebar sb-right sb-close">
+
+				<!-- User Profile Start -->
+				<section class="user-profile">
+				  <div class="profile-container">
+					<img src="img/admin1.png" class="user-img" alt="User Image">
+					<div class="desc">
+					  <h4>John Doe</h4>
+					  <p class="text-info">UX Designer</p>
+					</div>
+				  </div>
+				  <ul class="ftr-link">
+					<li>
+					  <a href="javascript:;">
+						<div class="fs1" aria-hidden="true" data-icon="&#xe033;"></div>985
+					  </a>
+					</li>
+					<li>
+					  <a href="javascript:;">
+						<div class="fs1" aria-hidden="true" data-icon="&#xe0b9;"></div> 999
+					  </a>
+					</li>
+					<li>
+					  <a href="javascript:;">
+						<div class="fs1" aria-hidden="true" data-icon="&#xe0e3;"></div> 143
+					  </a>
+					</li>
+				  </ul>
+				</section>
+				<!-- User Profile End -->
+
+				<!-- Online Users start -->
+				<div class="block">
+				  <div class="heading">Users Online</div>
+				  <div class="wrapper">
+					<!-- Online Users Start -->
+					<ul class="online-users">
+					  <li>
+						<a href="#" data-lastname="Sandhya" data-status="online" data-original-title="">
+						  <span>Sunny</span>
+						  <div class="user-status online"></div>
+						</a>
+					  </li>
+					  <li>
+						<a href="#" data-lastname="Sandhya" data-status="online" data-original-title="">
+						  <span>Henrik</span>
+						  <div class="user-status online"></div>
+						</a>
+					  </li>
+					  <li>
+						<a href="#" data-lastname="Sandhya" data-status="online" data-original-title="">
+						  <span>John Doe</span>
+						  <div class="user-status busy"></div>
+						</a>
+					  </li>
+					  <li>
+						<a href="#" data-lastname="Sandhya" data-status="online" data-original-title="">
+						  <span>Fleming</span>
+						  <div class="user-status away"></div>
+						</a>
+					  </li>
+					  <li>
+						<a href="#" data-lastname="Sandhya" data-status="online" data-original-title="">
+						  <span>Wills</span>
+						  <div class="user-status"></div>
+						</a>
+					  </li>
+					</ul>
+					<!-- Online Users End -->
+				  </div>
+				</div>
+				<!-- Online Users end -->
+
+				<!-- Checkout start -->
+				<div class="block">
+				  <div class="heading">Checkout</div>
+				  <ul class="cart">
+					<li class="cart-item">
+					  <span class="cart-item-pic">
+						<img src="{% static 'general/img/admin2.png' %}" alt="EarthSquare">
+					  </span>
+					  Item #1
+					  <span class="cart-item-desc">Description</span>
+					  <span class="cart-item-price">$16.80</span>
+					</li>
+					<li class="cart-item">
+					  <span class="cart-item-pic">
+						<img src="img/admin4.png" alt="EarthSquare">
+					  </span>
+					  Item #2
+					  <span class="cart-item-desc">Description</span>
+					  <span class="cart-item-price">$15.00</span>
+					</li>
+					<li class="cart-item">
+					  <span class="cart-item-pic">
+						<img src="img/admin8.png" alt="EarthSquare">
+					  </span>
+					  Item #3
+					  <span class="cart-item-desc">Description</span>
+					  <span class="cart-item-price">$23.00</span>
+					</li>
+				  </ul>
+				  <div class="cart-bottom">
+					Total: $54.80
+					<a href="#" class="cart-button">Continue</a>
+				  </div>
+				</div>
+				<!-- Checkout end -->
+
+				<!-- Notifications Start -->
+				<div class="block">
+				  <div class="heading">Notifications</div>
+				  <!-- Notifications -->
+				  <ul class="infos">
+					<li>
+					  <span class="label label-success pull-left">
+						<div class="fs1" aria-hidden="true" data-icon="&#xe128;"></div>
+					  </span>
+					  <div class="info">
+						<h6>Guru Tweeted</h6>
+						<p class="designation">Few seconds ago</p>
+					  </div>
+					</li>
+					<li>
+					  <span class="label label-danger pull-left">
+						<div class="fs1" aria-hidden="true" data-icon="&#xe0e9;"></div>
+					  </span>
+					  <div class="info">
+						<h6>Server #999 Crashed</h6>
+						<p class="designation">2 minutes ago</p>
+					  </div>
+					</li>
+					<li>
+					  <span class="label label-info pull-left">
+						<div class="fs1" aria-hidden="true" data-icon="&#xe0e3;"></div>
+					  </span>
+					  <div class="info">
+						<h6>Kiri's account was created</h6>
+						<p class="designation">5 days ago</p>
+					  </div>
+					</li>
+				  </ul>
+				</div>
+				<!-- Notifications End -->
+
+			</div>
+			<!-- Right sidebar end -->
+
+			<!-- Main Container Start -->
+			<div class="main-container">
+				<!-- Top Bar Starts -->
+				<div class="top-bar clearfix">
+									<div class="page-title">
+										<h4><div class="fs1" aria-hidden="true" data-icon="&#xe007;"></div>{{ page_title }}</h4>
+									</div>
+									<ul class="right-stats hidden-xs" id="mini-nav-right">
+										<li class="reportrange btn btn-success">
+											<i class="fa fa-calendar"></i>
+											<span></span> <b class="caret"></b>
+										</li>
+										<li>
+											<a href="#" class="btn btn-info sb-open-right  sb-close">
+												<div class="fs1" aria-hidden="true" data-icon="&#xe06a;"></div>
+											</a>
+										</li>
+									</ul>
+								</div>
+                <div class="container-fluid">
+                    <!-- Top Bar Ends -->
+				{% block body %}
+
+				{% endblock %}
                 </div>
 
-                <!-- WORK SPACE -->
-                <div class="col-sm-10 p-0 h-100">
-                    <header class="d-flex flex-wrap align-content-center">
-                        <nav class="navbar navbar-expand-sm w-100 h-100 bg-light navbar-light">
-                          <div class="container text-dark">
-                              <a class="navbar-link text-dark" href=""><strong>Heading</strong></a>
-                              <ul class="navbar-nav mr-auto ml-5">
+
+			</div>
+			<!-- Main Container Start -->
 
 
-                                <li>
-                {#                    <form class="form-inline" method="post" action="{% url 'search-article' %}">#}
-                {#                        {% csrf_token %}#}
-                {#                          <input style="width: 400px" value="{{ query_str }}" type="search" class="form-control rounded_c_m" autocomplete="off" name="query" placeholder="Search Query" id="email">#}
-                {#                          <button style="display: none" type="submit" class="btn rounded-0 btn-info">GO</button>#}
-                {#                        </form>#}
-                                </li>
+		</div>
+		<!-- Dashboard Wrapper End -->
 
-                              </ul>
+	{% endif %}
 
-                              <ul class="navbar-nav ml-auto ml-5 d-flex flex-wrap align-content-center">
 
-                                    {% if user.is_authenticated %}
-                                        <div class="h-100 d-flex flex-wrap align-content-center">
 
-                                            <div class="dropdown dropleft">
-                                              <button type="button" data-toggle="dropdown" class="btn btn-sm btn-outline-dark p-0 user_profile">
-                                                  <img src="{% static 'blog/asssets/users/user.png' %}" alt="" class="img-fluid">
-                                              </button>
-                                              <div class="dropdown-menu">
-                                                <a class="dropdown-item" href="#">Profile</a>
-                                                <a class="dropdown-item" href="#">Logout</a>
-                                                <a class="dropdown-item" href="#">Link 3</a>
-                                              </div>
-                                            </div>
-                                        </div>
-                                        {% if user.is_superuser %}
+<!-- Dashboard Wrapper End -->
 
-                                            <a href="{% url 'blog-home' %}" class="btn btn-sm ml-2 btn-outline-dark p-0 user_profile">
-                                                  <img src="{% static 'blog/asssets/icons/admin_panel.png' %}" alt="" class="img-fluid">
-                                              </a>
+		<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+		<script src="{% static 'general/js/jquery.js' %}"></script>
 
-                                        {% endif %}
-                {#                        <button onclick="location.href='{% url 'new-article' %}'" class="btn btn-success rounded-0 ml-2">New Article</button>#}
-                                    {% endif %}
+		<!-- Include all compiled plugins (below), or include individual files as needed -->
+		<script src="{% static 'general/js/bootstrap.min.js' %}"></script>
 
-                              </ul>
-                          </div>
-                        </nav>
-                    </header>
-                    <article class="overflow-hidden">
-                        {% block admin_tool %}
+		<!-- Flot Charts -->
+<!--		<script src="{% static 'general/js/flot/jquery.flot.js' %}"></script>-->
+<!--		<script src="{% static 'general/js/flot/jquery.flot.time.js' %}"></script>-->
+<!--		<script src="{% static 'general/js/flot/jquery.flot.selection.js' %}"></script>-->
+<!--		<script src="{% static 'general/js/flot/jquery.flot.resize.js' %}"></script>-->
+<!--		<script src="{% static 'general/js/flot/jquery.flot.tooltip.js' %}"></script>-->
+<!--		<script src="{% static 'general/js/flot/flot.excanvas.min.js' %}"></script>-->
 
-                        {% endblock %}
-                    </article>
-                </div>
+		<!-- Custom flot JS -->
+<!--		<script src="{% static 'general/js/flot/custom/combine-chart.js' %}"></script>-->
 
-            </div>
-        </div>
-    
-    </body>
+		<!-- Animated Right Sidebar -->
+		<script src="{% static 'general/js/slidebars.js' %}"></script>
+
+		<!-- Tyny Scrollbar -->
+		<script src="{% static 'general/js/tiny-scrollbar.js' %}"></script>
+
+		<!-- Date Range -->
+		<script src="{% static 'general/js/daterange/moment.js' %}"></script>
+		<script src="{% static 'general/js/daterange/daterangepicker.js' %}"></script>
+
+		<!-- Custom JS -->
+		<script src="{% static 'general/js/custom.js' %}"></script>
+		<script src="{% static 'general/js/custom-index.js' %}"></script>
+
+</body>
 </html>
