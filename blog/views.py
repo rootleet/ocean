@@ -229,14 +229,12 @@ def edit_article(request, uni):
         meta_kword = user_details.meta_words
 
     this_article = articles.objects.get(uni=uni)
-    meta_data = article_meta.objects.all()
+    meta_data = tags.objects.all()
     context = {
         'page_title': 'Ocean | Article | Edit',
         'search_form': search_form, 'form': form,
         'article': this_article, 'meta_dat': meta_data,
-        'login': {
-            'status': logedin, 'myname': username, 'mymeta': meta_kword
-        }
+
     }
     return render(request, 'blog/edit_article.html', context)
 
