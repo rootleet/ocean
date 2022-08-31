@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body %}
+
+    <div class="w-100 h-100">
+
+        <!-- TAGS -->
+        <button class="btn btn-info" data-toggle="modal" data-target="#tags">TAGS</button>
+        <div s class="modal" id="tags" data-backdrop="false">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <strong class="modal-title">Tags</strong>
+                        <button class="close" data-dismiss="modal">&times</button>
+                    </div>
+                    <form method="post" action="{% url 'save-tag' %}" class="modal-body">
+                    {% csrf_token %}
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>CODE</th><th>DESCRIPTION</th><th>Provider</th><th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th><input type="text" required name="code" maxlength="3" class="form-control form-control-sm"></th>
+                                    <th><input type="text" required name="description" class="form-control form-control-sm"></th>
+                                    <th>
+                                        <select required name="provider" class="form-control form-control-sm" id="">
+                                            {% for provider in providers %}
+
+                                                <option value="{{ provider.pk }}">{{ provider.descr }}</option>
+
+                                            {% endfor %}
+                                        </select>
+                                    </th>
+                                    <th><button class="btn btn-success rounded-0">SAVE</button></th>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- PROVIDER -->
+        <button class="btn btn-info" data-toggle="modal" data-target="#providers">PROVIDERS</button>
+        <div s class="modal" id="providers" data-backdrop="false">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <strong class="modal-title">Tags</strong>
+                        <button class="close" data-dismiss="modal">&times</button>
+                    </div>
+                    <form method="post" action="{% url 'save-provider' %}" class="modal-body">
+                        {% csrf_token %}
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>CODE</th><th>DESCRIPTION</th><th>Mobile</th><th>Email</th><th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th><input type="text" name="code" maxlength="3" required class="form-control form-control-sm"></th>
+                                    <th><input type="text" name="description" required class="form-control form-control-sm"></th>
+                                    <th><input type="tel" name="mobile" required class="form-control form-control-sm"></th>
+                                    <th><input type="email" name="email" required class="form-control form-control-sm"></th>
+                                    <th><button class="btn btn-success rounded-0">SAVE</button></th>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+{% endblock %}

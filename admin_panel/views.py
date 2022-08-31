@@ -5,7 +5,7 @@ from django.contrib.sites import requests
 # Create your views here.
 from django.core.mail import send_mail
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from community.models import *
 from admin_panel.models import *
 from blog.models import *
@@ -132,3 +132,41 @@ def send_to_provider(request):
                   fail_silently=False)
 
         return HttpResponse(f"done%%Issue Sent To {c_provider}")
+
+
+def accessories(request):
+    all_tags = tags.objects.all()
+    context = {
+        'tags': all_tags,
+        'providers': Providers.objects.all()
+    }
+    return render(request, 'accessories.html', context=context)
+
+
+def new_provider(request):
+    if request.method == 'POST':
+        form = request.POST
+        code = form['code']
+        description = form['description']
+        mobile = form['mobile']
+        email = form['email']
+
+        if Providers.objects.filter(provider_code=code).count() < 1:
+            # save
+            save_provider = Providers(provider_code=code, descr=description, mobile=mobile, email=email)
+            save_provider.save()
+            return redirect('accessories')
+
+
+def new_tag(request):
+    if request.method == 'POST':
+        form = request.POST
+        code = form['code']
+        description = form['description']
+        provider = form['provider']
+
+        if tags.objects.filter(tag_code=code).count() < 1:
+            # save
+            save = tags(tag_code=code, tag_dec=description, provider=provider)
+            save.save()
+            return redirect('accessories')

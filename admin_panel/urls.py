@@ -26,7 +26,10 @@ urlpatterns = [
     path('mark_esc/',views.mark_esc,name='mark-esc'),
     path('escalate/',views.to_scalate,name='to_escalate'),
     path('escalate/<provider>',views.escalate_detail,name='escalate_detail'),
-    path('send-to-provider/',views.send_to_provider,name='send-to-provider')
+    path('send-to-provider/',views.send_to_provider,name='send-to-provider'),
+    path('accessories/',views.accessories, name='accessories'),
+    path('save-provider',views.new_provider,name='save-provider'),
+    path('save-tag',views.new_tag,name='save-tag'),
 
 
 
