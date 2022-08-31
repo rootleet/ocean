@@ -37,11 +37,7 @@
                         </div>
                         <select name="meta" class="form-control rounded-0 border-danger" id="">
                             {% for meta in meta_dat %}
-                                {% if article.meta == meta.description %}
-                                    <option selected value="{{ meta.description }}">{{ meta.description }}</option>
-                                {% else %}
-                                    <option value="{{ meta.description }}">{{ meta.description }}</option>
-                                {% endif %}
+                                <option value="{{ meta.tag_code }}">{{ meta.tag_code }}</option>
                             {% endfor %}
 
                         </select>
