@@ -175,7 +175,7 @@ def login(request):
     context = {
         'page_title': 'Ocean | Login',
         'form': LogIn(),
-        'next':next_page
+        'next': next_page
     }
     return render(request, 'blog/login.html', context=context)
 
@@ -198,7 +198,8 @@ def login_process(request):
                     # Redirect to a success page.
                     return redirect(next)
                 else:
-                    messages.error(request, f"There is an error logging in, please check your credentials again or contact Administrator")
+                    messages.error(request,
+                                   f"There is an error logging in, please check your credentials again or contact Administrator")
                     return redirect('login')
 
             except Exception as e:
@@ -320,3 +321,54 @@ def sign_up(request):
             return HttpResponse("Invalid Form")
     else:
         return HttpResponse("Unaccepted Form Method")
+
+
+def article_convo(request):
+    if request.method == 'POST':
+        form = request.POST
+        convo_message = form['convo_message']
+        post = form['article']
+        current_user = request.user
+        try:
+            ArticleChat(sent_from=current_user.pk, message=convo_message, article=post).save()
+            return HttpResponse('done%%msg_sent')
+        except Exception as e:
+            return HttpResponse(f'error%%{e}')
+
+
+def load_convo(request):
+    if request.method == 'GET':
+        form = request.GET
+        article_pk = form['article_pk']
+        msgs = ArticleChat.objects.filter(article=article_pk)
+        current_user = request.user
+        row = ''
+        if ArticleChat.objects.filter(article=article_pk).count() > 0:
+            # loop through
+            for msg in msgs:
+                user = User.objects.get(pk=msg.sent_from)
+                float_class = ''
+                text = ''
+                header = f'<span class="badge badge-info {float_class}">@{user.username}</span><br>'
+                if current_user.pk == msg.sent_from:
+                    float_class = 'float-right'
+                    text = 'text-right'
+                    header = f''
+                else:
+                    header = f'<span class="badge badge-info {float_class}">@{user.username}</span><br>'
+
+                row += f'<div class="w-100 message-box">\
+                            <div class="w-100 p-2 rounded">\
+                                {header}\
+                                <div class="bg-animate {text}"><small>{msg.message} </small></div>\
+                            </div>\
+                        </div>'
+
+
+        else:
+            row += "<div class='w-100 h-100 d-flex flex-wrap align-content-center justify-content-center'>NO " \
+                   "MESSAGE</div> "
+            # no article
+        return HttpResponse(row)
+    else:
+        return HttpResponse('error%%Unknown Method')

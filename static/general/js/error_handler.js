@@ -44,13 +44,23 @@ function error_handler(response)
         let response_split = response.split('%%');
         let response_type = response_split[0];
         let response_message = response_split[1];
+        console.log(response)
         // $('#gen_modal').modal('hide')
         // switching response type
         switch (response_type)
         {
             case 'done':
-                swal_response('success','PROCEDURE COMPLETED',response_message)
-                break;
+                switch (response_message){
+                    case 'msg_sent':
+                        $('#convo_message').val('')
+                        load_convo_message()
+                        break;
+                    default:
+                        console.table(response_message)
+                        break;
+                }
+                break
+
             case 'error':
                 swal_response('error','PROCEDURE ERROR',response_message)
                 break;

@@ -6,18 +6,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('blog', '0001_initial'),
+        ('blog', '0002_providers'),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Providers',
+            name='ArticleChat',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('provider_code', models.CharField(max_length=3)),
-                ('descr', models.TextField()),
-                ('mobile', models.TextField()),
-                ('email', models.TextField()),
+                ('article', models.IntegerField()),
+                ('sent_from', models.IntegerField()),
+                ('message', models.TextField()),
+                ('sent_on', models.DateTimeField(auto_now=True)),
             ],
         ),
     ]

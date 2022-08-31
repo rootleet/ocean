@@ -33,5 +33,7 @@ urlpatterns = [
     path('logout_view/', views.logout_view, name='logout'),
     path('login-process', views.login_process, name='login_process'),
     path('finder/', views.finder, name='finder'),
+    path('article_convo',views.article_convo, name='article_convo'),
+    path('load_convo',views.load_convo,name='load_convo')
 
 ]

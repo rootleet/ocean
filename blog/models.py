@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db import models
 from PIL import Image
 
@@ -60,3 +61,13 @@ class Providers(models.Model):
     descr = models.TextField()
     mobile = models.TextField()
     email = models.TextField()
+
+
+class ArticleChat(models.Model):
+    article = models.IntegerField()
+    sent_from = models.IntegerField()
+    message = models.TextField()
+    sent_on = models.DateTimeField(auto_now=True)
+
+    def owner_name(self):
+        return User.objects.get(pk=self.sent_from)

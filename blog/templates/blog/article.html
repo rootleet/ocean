@@ -5,74 +5,62 @@
 {% block body %}
 
 
-    <div class="container mt-5" style="padding-top: 60px">
-        <div class="row d-flex flex-wrap justify-content-center no-gutters">
-            <!-- ARTICLE -->
-            <div class="col-sm-8" style="font-size: large">
-
-                <h1 class="font-weight-bolder">{{ article.title }}
-
-                </h1>
-
-                <p class="text-muted font-italic">Posted on {{ article.date_created }} by {{ article.owner }} {% if user.is_superuser %}
-                        <a class="" href="{% url 'edit_article' article.uni %}">Edit</a>
-                    {% endif %}</p>
-
-                <p class="d-flex flex-wrap w-100">
-
-                    <span class="badge badge-dark mr-1">Meta</span>
-                    <span class="badge badge-dark mr-1">Meta</span>
-                </p>
-
-                <img class="img-fluid" src="../{{ article.image }}" alt="Card image">
-
-                {{ article.article | safe }}
-
-                <!-- COMMENTS -->
-                <hr>
-{#                <div class="card">#}
-{#                    <div class="card-body">#}
-{#                        <textarea name="" id="" class="form-control" placeholder="Join the discussion and leave a comment" rows="3"></textarea>#}
-{#                        <hr>#}
-{##}
-{#                        <div class="row mb-2 border-bottom">#}
-{#                            <div class="col-sm-1">#}
-{#                                <div style="width: 50px; height: 50px" class="bg-dark rounded-circle">#}
-{##}
-{#                                </div>#}
-{#                            </div>#}
-{#                            <div class="col-sm-11">#}
-{#                                <strong>Commenter Name</strong>#}
-{#                                <p>#}
-{#                                    If you're going to lead a space frontier, it has to be government; it'll never be private enterprise. Because the space frontier is dangerous, and it's expensive, and it has unquantified risks.#}
-{#                                </p>#}
-{#                            </div>#}
-{#                        </div>#}
-{##}
-{#                        <div class="row mb-2 border-bottom">#}
-{#                            <div class="col-sm-1">#}
-{#                                <div style="width: 50px; height: 50px" class="bg-dark rounded-circle">#}
-{##}
-{#                                </div>#}
-{#                            </div>#}
-{#                            <div class="col-sm-11">#}
-{#                                <strong>Commenter Name</strong>#}
-{#                                <p>#}
-{#                                    If you're going to lead a space frontier, it has to be government; it'll never be private enterprise. Because the space frontier is dangerous, and it's expensive, and it has unquantified risks.#}
-{#                                </p>#}
-{#                            </div>#}
-{#                        </div>#}
-{##}
-{#                    </div>#}
-{##}
-{##}
-{##}
-{#                </div>#}
-
+    <div class="container" style="padding-top: 50px">
+        <div class="article-header mb-5 text-light" style="background: url('../{{ article.image }}')">
+            <div class="w-100 h-100 bg_trans_30 d-flex flex-wrap align-content-center justify-content-center">
+                <h1 class="font-weight-bolder">{{ article.title }}</h1>
             </div>
+        </div>
+        <div class="row d-flex flex-wrap justify-content-between no-gutters">
+            <!-- ARTICLE -->
+            <section class="col-sm-8 text-justify" style="font-size: large">
+
+                {{ article.article | safe }} {% if user.is_superuser %}
+                        <a class="" href="{% url 'edit_article' article.uni %}">Edit</a>
+                    {% endif %}
+
+            </section>
+
+            <!-- ASIDE -->
+            <aside class="col-sm-3">
+                <div class="card custom_shadow">
+                    <div class="card-header">
+                        <strong class="card-title">Conversation Box</strong>
+                        <i onclick="var d = $('#messages');d.scrollTop(d.prop('scrollHeight'))" class="float-right text-danger post" id="new" style="display: none">new!!</i>
+                    </div>
+                    <div id="messages" class="card-body overflow-auto" style="height: 250px">
+
+
+
+                    </div>
+                    <input type="hidden" value="{% url 'load_convo' %}" id="load_convo_url">
+                    <div class="card-footer">
+                        {% if user.is_active %}
+                            <form action="{% url 'article_convo' %}" method="post" id="general_form">
+                            {% csrf_token %}
+                                <input type="hidden" value="{{ article.pk }}" id="article_pk" name="article">
+                                <input type="text" class="form-control rounded-0" placeholder="Type...." autocomplete="off" required id="convo_message" name="convo_message">
+                            </form>
+                        {% else %}
+                            <a href="{% url 'login' %}?next={{ request.get_full_path }}" class="btn w-100 btn-info">JOIN CONVERSATION</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </aside>
 
 
         </div>
     </div>
+
+    <script>
+        load_convo_message()
+        setInterval(function() {
+           load_convo_message()
+         }, 1000);
+
+        var d = $('#messages');
+        d.scrollTop(d.prop("scrollHeight"));
+
+    </script>
 
 {% endblock %}

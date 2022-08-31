@@ -228,6 +228,20 @@ a:hover
     box-shadow: 0 2px 5px 0 rgb(0 0 0 / 16%), 0 2px 10px 0 rgb(0 0 0 / 12%);
 }
 
+.article-header
+{
+    height: 50vh;
+    width: 100%;
+    background-size: cover;
+    background-position: bottom;
+    background-repeat: no-repeat;
+}
+
+.message-box
+{
+    border-bottom: 1px dotted #ccc;
+}
+
 .hover_shadow:hover
 {
     box-shadow: 0 2px 5px 0 rgb(0 0 0 / 16%), 0 2px 10px 0 rgb(0 0 0 / 12%);
