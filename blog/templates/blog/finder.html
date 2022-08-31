@@ -28,20 +28,35 @@
 
             {% for article in articles %}
                 <div style="height: 350px;" class="col-sm-4 p-2">
-                <div class="w-100 h-100 img_bg_nc hover_shadow" style="background: url('../{{ article.image }}') ">
-                    <div onclick="location.href='{% url 'article' article.title  %}'" class="w-100 h-100 custom_shadow d-flex flex-wrap pointer align-content-end justify-content-start">
-                        <div class="w-100 bg_default p-2">
-                            <h2 class="text-muted font-weight-bolder ellipsis_2">
-                            {{ article.title }}
-                        </h2>
-                        <div class="w-100">
-                            <p class="m-0 ellipsis_2 w-100">{{ article.article | safe | slice:':100' }}</p>
-                        </div>
-                        </div>
-                    </div>
-                </div>
 
-            </div>
+                    <!-- Card -->
+                    <div class="card p-2 shadow">
+
+                      <!-- Card image -->
+                      <div class="view overlay">
+                        <img class="card-img-top custom_shadow" src="../{{ article.image }}"
+                          alt="Card image cap">
+                        <a href="#!">
+                          <div class="mask rgba-white-slight"></div>
+                        </a>
+                      </div>
+
+                      <!-- Card content -->
+                      <div class="card-body">
+
+                        <!-- Title -->
+                        <h4 class="card-title">{{ article.title }}</h4>
+                        <!-- Text -->
+                        <p class="card-text font-weight-lighter">{{ article.article | safe | slice:':50' }}</p>
+                        <!-- Button -->
+                        <a href="{% url 'article' article.title  %}" class="btn btn-primary rounded-0">READ</a>
+
+                      </div>
+
+                    </div>
+                    <!-- Card -->
+
+                </div>
             {% endfor %}
 
         </div>
