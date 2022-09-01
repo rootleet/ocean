@@ -1,6 +1,12 @@
+from datetime import datetime
+
 from django.contrib.auth.models import User
+from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.db import models
-from PIL import Image
+from PIL import Image as Img
+import urllib
+import numpy as np
+from io import StringIO
 
 
 # Create your models here.
@@ -15,7 +21,7 @@ class articles(models.Model):
     tag = models.CharField(max_length=200)
     intro = models.TextField(default='none')
     meta = models.CharField(max_length=200, default='none')
-    image = models.ImageField(upload_to='static/blog/asssets/article/', default='1.jpg')
+    image = models.ImageField(upload_to=f'static/blog/asssets/article/{datetime.now().strftime("%Y-%m-%d")}/', default='1.jpg')
 
     def __str__(self):
         return self.title + ' - ' + self.article

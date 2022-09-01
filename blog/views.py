@@ -127,6 +127,7 @@ def save_article(request):
             uni = make_md5(page_title + str(article_desc_raw_htm))
             owner = 'anton'
             post_img = form.cleaned_data['post_img']
+
             meta = form.cleaned_data['meta']
 
             if articles.objects.filter(uni=uni):
