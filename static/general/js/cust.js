@@ -63,7 +63,7 @@ function visibility_hide(id)
     }
 }
 
-console.log('hello');
+
 
 function set_session(data)
 {
@@ -259,7 +259,7 @@ $(function() {
                             // show error
                             break;
                         default:
-                            // reload()
+                            reload()
                         // reload
                     }
                 }
