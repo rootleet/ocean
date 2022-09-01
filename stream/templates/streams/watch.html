@@ -1,0 +1,44 @@
+{% extends 'blog/base.html' %}
+{% load static %}
+
+{% block body %}
+
+    <div class="container pt-5">
+
+        <div class="row d-flex flex-wrap justify-content-between no-gutters">
+            <div class="w-100 col-sm-8">
+                <div class="card custom_shadow p-2">
+                    <video
+                    id="my-video"
+                    class="video-js"
+                    controls
+                    preload="auto"
+                    style="width: 100%"
+                    height="400"
+                    poster="{% static 'general/videos/' %}{{ video.key }}.jpg"
+                    data-setup="{}"
+                  >
+                    <source src="/{{ video.file }}" type="video/mp4" />
+                    <source src="MY_VIDEO.webm" type="video/webm" />
+                    <p class="vjs-no-js">
+                      To view this video please enable JavaScript, and consider upgrading to a
+                      web browser that
+                      <a href="https://videojs.com/html5-video-support/" target="_blank"
+                        >supports HTML5 video</a
+                      >
+                    </p>
+                  </video>
+                    <div class="card-body">
+                        <strong>Title</strong>
+                        <p class="text-muted">Description</p>
+{#                        <span class="text-muted"><i class="fa fa-eye"></i> 0</span>#}
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3">
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

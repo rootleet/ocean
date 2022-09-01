@@ -33,6 +33,7 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+    'stream.apps.StreamConfig',
     'blog.apps.BlogConfig',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -41,7 +42,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'admin_panel.apps.AdminPanelConfig',
-    'community.apps.CommunityConfig'
+    'community.apps.CommunityConfig',
+
 ]
 
 MIDDLEWARE = [

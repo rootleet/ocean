@@ -20,5 +20,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('blog.urls')),
     path('admin_panel/', include('admin_panel.urls')),
-    path('community/', include('community.urls'))
+    path('community/', include('community.urls')),
+    path('stream/',include('stream.urls'))
 ]

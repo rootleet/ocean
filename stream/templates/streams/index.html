@@ -1,0 +1,106 @@
+{% extends 'blog/base.html' %}
+{% load static %}
+
+{% block body %}
+
+    <div class="container pt-5">
+        <div class="row">
+            {% for video in videos %}
+                <div  class="col-sm-3 col-md-6 col-lg-4 p-2 mb-2">
+
+                    <!-- Card -->
+                    <div class="card p-2 mb-5 shadow">
+
+                      <!-- Card image -->
+                      <div class="view overlay">
+                        <img class="card-img-top custom_shadow" src="{% static 'general/videos/' %}{{ video.key }}.jpg"
+                          alt="Card image cap">
+
+                      </div>
+
+                      <!-- Card content -->
+                      <div class="card-body">
+
+                        <!-- Title -->
+                        <h4 class="card-title ellipsis">{{ video.title }}</h4>
+                        <!-- Text -->
+                        <p class="card-text font-weight-lighter">{{ video.descr | safe | slice:':50' }}</p>
+                        <!-- Button -->
+                        <a href="{% url 'watch' video.key %}" class="btn btn-primary rounded-0 w-100">WATCH</a>
+
+                      </div>
+
+                    </div>
+                    <!-- Card -->
+
+                </div>
+            {% endfor %}
+
+        </div>
+        <div class="row d-flex flex-wrap justify-content-between no-gutters">
+            <div class="w-100 col-sm-8">
+                <div class="card custom_shadow p-2">
+                    <video
+                    id="my-video"
+                    class="video-js"
+                    controls
+                    preload="auto"
+                    style="width: 100%"
+                    height="400"
+                    poster="MY_VIDEO_POSTER.jpg"
+                    data-setup="{}"
+                  >
+                    <source src="{% static 'general/videos/test.mp4' %}" type="video/mp4" />
+                    <source src="MY_VIDEO.webm" type="video/webm" />
+                    <p class="vjs-no-js">
+                      To view this video please enable JavaScript, and consider upgrading to a
+                      web browser that
+                      <a href="https://videojs.com/html5-video-support/" target="_blank"
+                        >supports HTML5 video</a
+                      >
+                    </p>
+                  </video>
+                    <div class="card-body">
+                        <strong>Title</strong>
+                        <p class="text-muted">Description</p>
+                        <span class="text-muted"><i class="fa fa-eye"></i> 0</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <button data-toggle="modal" data-target="#uploadVideo" class="btn btn-info rounded-0 w-100">UPLOAD VIDEO</button>
+                <div class="modal fade" id="uploadVideo">
+                    <div class="modal-dialog">
+                        <form method="post" action="{% url 'upload_video' %}" enctype="multipart/form-data" id="upload_file_form" class="modal-content">
+                            <div class="modal-body">
+                                {% csrf_token %}
+                                <progress class="progress">
+
+                                </progress>
+                                <br>
+                                <input type="text" name="title" placeholder="Video Title" required class="form-control rounded-o mb-3">
+                                <textarea name="description" required placeholder="Video Description" class="form-control mb-3" id="" cols="30" rows="5"></textarea>
+                                 <div class="custom-file">
+                                    <input accept="video/mp4" type="file" class="custom-file-input" name="video_file" id="customFile">
+                                    <label class="custom-file-label" for="customFile">Choose file</label>
+                                  </div>
+                                <script>
+                                    $(".custom-file-input").on("change", function() {
+                                      var fileName = $(this).val().split("\\").pop();
+                                      $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+                                    });
+                                </script>
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-success">UPLOAD</button>
+                                <button class="btn btn-warning" type="button" data-dismiss="modal">CANCEL</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
