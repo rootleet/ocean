@@ -52,7 +52,7 @@ def upload_video(request):
 
             os.system(command)
 
-            return HttpResponse("Done")
+            return HttpResponse("done%%")
         except Exception as e:
             return HttpResponse(f"Could Not Add {e} {video_file}")
 
