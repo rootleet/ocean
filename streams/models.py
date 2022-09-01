@@ -8,5 +8,6 @@ class Videos(models.Model):
     key = models.TextField()
     title = models.TextField()
     descr = models.TextField()
-    file = models.FileField(upload_to=f'static/general/videos/{datetime.now().strftime("%Y-%m-%d")}/')
+    file = models.FileField(upload_to=f'static/general/videos/')
+    uploaded_on = models.DateField(auto_now=True)
 

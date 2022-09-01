@@ -19,7 +19,8 @@ from . import views
 
 urlpatterns = [
     path('', views.index, name='streams'),
-    path('upload-video',views.upload_video,name='upload_video')
+    path('upload-video',views.upload_video,name='upload_video'),
+    path('watch/<key>/', views.watch, name='watch')
 
 
 ]
