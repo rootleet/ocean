@@ -259,7 +259,7 @@ $(function() {
                             // show error
                             break;
                         default:
-                            reload()
+                            // reload()
                         // reload
                     }
                 }

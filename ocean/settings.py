@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'admin_panel.apps.AdminPanelConfig',
-    'community.apps.CommunityConfig'
+    'community.apps.CommunityConfig',
+    'streams.apps.StreamsConfig'
 ]
 
 MIDDLEWARE = [
