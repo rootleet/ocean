@@ -57,6 +57,37 @@
                                   {% if user.is_superuser %}
 
                                       <a class="dropdown-item text-success" href="{% url 'new-article' %}"><i class="fa fa-newspaper"></i> New Article</a>
+                                      <a  data-toggle="modal" data-target="#uploadVideo"><i class="fa fa-newspaper"></i> New Article</a>
+                                      <div class="modal fade" id="uploadVideo">
+                                        <div class="modal-dialog">
+                                            <form method="post" action="{% url 'upload_video' %}" enctype="multipart/form-data" id="upload_file_form" class="modal-content">
+                                                <div class="modal-body">
+                                                    {% csrf_token %}
+                                                    <progress class="progress">
+
+                                                    </progress>
+                                                    <br>
+                                                    <input type="text" name="title" placeholder="Video Title" required class="form-control rounded-o mb-3">
+                                                    <textarea name="description" required placeholder="Video Description" class="form-control mb-3" id="" cols="30" rows="5"></textarea>
+                                                     <div class="custom-file">
+                                                        <input accept="video/mp4" type="file" class="custom-file-input" name="video_file" id="customFile">
+                                                        <label class="custom-file-label" for="customFile">Choose file</label>
+                                                      </div>
+                                                    <script>
+                                                        $(".custom-file-input").on("change", function() {
+                                                          var fileName = $(this).val().split("\\").pop();
+                                                          $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+                                                        });
+                                                    </script>
+
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="submit" class="btn btn-success">UPLOAD</button>
+                                                    <button class="btn btn-warning" type="button" data-dismiss="modal">CANCEL</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
 
                                   {% endif %}
                                 <a class="dropdown-item text-primary" href="#"><i class="fa fa-user-circle"></i> Profile</a>
