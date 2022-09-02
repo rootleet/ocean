@@ -160,7 +160,7 @@ def save_article(request):
 
 def load_meta(request, meta):
 
-    all_articles = articles.objects.all(meta=meta)
+    all_articles = articles.objects.filter(meta=meta)
     cats = tags.objects.all()
     context = {
         'page_title': 'Articles',
