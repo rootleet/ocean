@@ -32,7 +32,9 @@
                         <strong class="card-title">Categories</strong>
                     </div>
                     <div class="card-body">
-                        <a href="" class="btn btn-info">Hello</a>
+                        {% for tag in tags %}
+                        <a href="" class="btn btn-info">{{ tag.tag_dec }}</a>
+                        {% endfor %}
                     </div>
                 </div>
             </div>
