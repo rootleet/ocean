@@ -12,27 +12,10 @@
                 {% endfor %}
             </div>
         </div>
+
         <div class="row h-100">
 
-            <!-- MOST READ -->
-            <div style="height: 50vh;" class="col-sm-12 p-2">
-                <div class="w-100 h-100 img_bg_nc hover_shadow" style="background: url('{% static 'general/article_images/test.jpg' %}') ">
-                    <div onclick="location.href='{% url 'article' 'hello_world' %}'" class="w-100 h-100 custom_shadow d-flex flex-wrap pointer align-content-end justify-content-start">
-                        <div class="w-100 bg_black p-2">
-                            <h2 class="text-warning font-weight-bolder">
-                            Hello World
-                        </h2>
-                        <div class="w-100">
-                            <p class="m-0 text-light w-75">
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequatur, eveniet rem. Amet cupiditate
-                            dolore eveniet inventore ipsam labore laborum laudantium maiores nihil officia quam quasi quidem, reprehenderit sunt ullam vel.
-                        </p>
-                        </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
+        
 
             {% for article in articles %}
                 <div  class="col-sm-3 col-md-6 col-lg-4 p-2 mb-2">
@@ -70,6 +53,7 @@
 
 
         </div>
+
     </div>
 
 {% endblock %}
