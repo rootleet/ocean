@@ -282,7 +282,7 @@ function book(package)
     $('#book').modal('show');
 }
 
-function load_convox_message() {
+function load_convo_message() {
     let pk = $('#article_pk').val()
     let ini_count = $('#messages div').length
     var form_date = {
@@ -315,6 +315,3 @@ function load_convox_message() {
     })
 }
 
-function load_convo_message() {
-
-}
