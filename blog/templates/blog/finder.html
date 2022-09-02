@@ -3,12 +3,14 @@
 
 {% block body %}
 
-    <div class="container-fluid pt-2 h-100">
-    
-        <div class="list-group list-group-horizontal mb-2">
-            {% for tag in tags %}
-                <a href="{% url 'load-meta' tag.tag_dec %}" class="list-group-item">{{ tag.tag_dec }}</a>
-            {% endfor %}
+    <div class="container pt-2 h-100">
+
+        <div class="w-100 mx-auto">
+            <div class="list-group list-group-horizontal mb-2">
+                {% for tag in tags %}
+                    <a href="{% url 'load-meta' tag.tag_dec %}" class="list-group-item">{{ tag.tag_dec }}</a>
+                {% endfor %}
+            </div>
         </div>
         <div class="row h-100">
 
@@ -32,24 +34,8 @@
 
             </div>
 
-            <div class="col-sm-3">
-                <div class="card">
-                    <div class="card-header">
-                        <strong class="card-title">Categories</strong>
-                    </div>
-                    <div class="card-body">
-                        {% for tag in tags %}
-                        <a href="{% url 'load-meta' tag.tag_dec %}" class="m-2"><kbd>{{ tag.tag_dec }}</kbd></a>
-                        {% endfor %}
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-sm-9">
-
-                <div class="row no-gutters">
-                    {% for article in articles %}
-                        <div  class="col-sm-3 col-md-6 col-lg-4 p-2 mb-2">
+            {% for article in articles %}
+                <div  class="col-sm-3 col-md-6 col-lg-4 p-2 mb-2">
 
                             <!-- Card -->
                             <div class="card p-2 mb-5 shadow">
@@ -79,10 +65,7 @@
                             <!-- Card -->
 
                         </div>
-                    {% endfor %}
-                </div>
-
-            </div>
+            {% endfor %}
 
 
 
