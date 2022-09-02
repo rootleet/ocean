@@ -272,9 +272,11 @@ def edit_save(request):
 
 def finder(request):
     all_articles = articles.objects.all()[:20]
+    cats  = tags.objects.all()
     context = {
         'page_title': 'Articles',
-        'articles': all_articles
+        'articles': all_articles,
+        'tags':cats
     }
     return render(request, 'blog/finder.html', context=context)
 
