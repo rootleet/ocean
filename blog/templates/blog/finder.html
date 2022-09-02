@@ -39,38 +39,40 @@
 
             <div class="col-sm-9">
 
-                {% for article in articles %}
-                <div  class="col-sm-3 col-md-6 col-lg-4 p-2 mb-2">
+                <div class="row no-gutters">
+                    {% for article in articles %}
+                        <div  class="col-sm-3 col-md-6 col-lg-4 p-2 mb-2">
 
-                    <!-- Card -->
-                    <div class="card p-2 mb-5 shadow">
+                            <!-- Card -->
+                            <div class="card p-2 mb-5 shadow">
 
-                      <!-- Card image -->
-                      <div class="view overlay">
-                        <img class="card-img-top custom_shadow" src="../{{ article.image }}"
-                          alt="Card image cap">
-                        <a href="#!">
-                          <div class="mask rgba-white-slight"></div>
-                        </a>
-                      </div>
+                              <!-- Card image -->
+                              <div class="view overlay">
+                                <img class="card-img-top custom_shadow" src="../{{ article.image }}"
+                                  alt="Card image cap">
+                                <a href="#!">
+                                  <div class="mask rgba-white-slight"></div>
+                                </a>
+                              </div>
 
-                      <!-- Card content -->
-                      <div class="card-body">
+                              <!-- Card content -->
+                              <div class="card-body">
 
-                        <!-- Title -->
-                        <h4 class="card-title ellipsis">{{ article.title }}</h4>
-                        <!-- Text -->
-                        <p class="card-text font-weight-lighter">{{ article.article | safe | slice:':50' }}</p>
-                        <!-- Button -->
-                        <a href="{% url 'article' article.title  %}" class="btn btn-primary rounded-0">READ</a>
+                                <!-- Title -->
+                                <h4 class="card-title ellipsis">{{ article.title }}</h4>
+                                <!-- Text -->
+                                <p class="card-text font-weight-lighter">{{ article.article | safe | slice:':50' }}</p>
+                                <!-- Button -->
+                                <a href="{% url 'article' article.title  %}" class="btn btn-primary rounded-0">READ</a>
 
-                      </div>
+                              </div>
 
-                    </div>
-                    <!-- Card -->
+                            </div>
+                            <!-- Card -->
 
+                        </div>
+                    {% endfor %}
                 </div>
-            {% endfor %}
 
             </div>
 
