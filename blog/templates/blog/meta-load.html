@@ -5,7 +5,7 @@
     <div class="container" style="padding-top: 65px">
         <div class="w-75 mx-auto search_result d-flex flex-wrap my-2 p-1">
 
-                    {% for article in artcs %}
+                    {% for article in articles %}
 
                         <div class="w-80 pl-2 h-100 overflow-hidden">
                             <div class="w-100"><strong><a href="{% url 'article' article.title %}">{{ article.title }}</a></strong> <i class="badge alert-info font-weight-light h-fit">{{ article.meta }}</i></div>

@@ -171,7 +171,6 @@ def load_meta(request, meta):
         'articles': all_articles,
         'tags': cats
     }
-    return render(request, 'blog/finder.html', context=context)
     return render(request, 'blog/meta-load.html', context=context)
 
 
