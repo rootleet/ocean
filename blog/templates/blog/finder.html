@@ -33,7 +33,7 @@
                     </div>
                     <div class="card-body">
                         {% for tag in tags %}
-                        <a href="" class="btn btn-info">{{ tag.tag_dec }}</a>
+                        <a href="{% url 'load-meta' tag.tag_dec %}" class="m-2"><kbd>{{ tag.tag_dec }}</kbd></a>
                         {% endfor %}
                     </div>
                 </div>
