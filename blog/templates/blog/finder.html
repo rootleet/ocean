@@ -1,6 +1,13 @@
 {% extends 'blog/base.html' %}
 {% load static %}
 
+<style>
+    body{
+        background: black;
+        color: #f3f3f3;
+    }
+</style>
+
 {% block body %}
 
     <div class="container pt-2 h-100">
@@ -15,7 +22,7 @@
 
         <div class="row h-100">
 
-        
+
 
             {% for article in articles %}
                 <div  class="col-sm-3 col-md-6 col-lg-4 p-2 mb-2">
