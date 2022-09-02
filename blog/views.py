@@ -340,7 +340,7 @@ def article_convo(request):
 def load_convo(request):
     if request.method == 'GET':
         form = request.GET
-        article_pk = 1
+        article_pk = form['article_pk']
         msgs = ArticleChat.objects.filter(article=article_pk)
         current_user = request.user
         row = ''
