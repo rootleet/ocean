@@ -56,3 +56,34 @@ class PendingEscalations(models.Model):
 
     def quest(self):
         return questions.objects.get(uni=self.issue)
+
+
+
+class TaskHD(models.Model): ## task model
+    entry_uni = models.TextField(unique=True)
+    type = models.TextField()
+    ref = models.TextField()
+    owner = models.IntegerField(default=0)
+    title = models.TextField()
+    description = models.TextField()
+    added_on = models.DateTimeField(auto_now=True)
+    edited_on = models.DateTimeField(auto_now=True)
+    status = models.IntegerField(default=0)
+
+    def owner_name(self):
+        return User.objects.get(pk=self.owner)
+
+    def question(self):
+        return questions.object.get(uni=self.ref)
+
+
+
+# task transactions
+class TaskTrans(models.Model):
+    entry_uni = models.TextField()
+    tran_title = models.TextField()
+    tran_descr = models.TextField()
+    created_on = models.DateTimeField(auto_now=True)
+    owner = models.IntegerField(default=0)
+    def owner_name(self):
+        return User.objects.get(pk=self.owner)

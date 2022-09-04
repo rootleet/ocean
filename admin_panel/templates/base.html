@@ -234,6 +234,7 @@
 							</a>
 							<ul class="dropdown-menu sm fadeInUp animated messages">
 								<li class="dropdown-content">
+                                    <a href="{% url 'blog-home' %}">Web</a>
 									<a href="#">Edit Profile</a>
 									<a href="#">Change Password</a>
 									<a href="#">Settings</a>
@@ -470,6 +471,12 @@
 		<!-- Custom JS -->
 		<script src="{% static 'general/js/custom.js' %}"></script>
 		<script src="{% static 'general/js/custom-index.js' %}"></script>
+
+        <!-- MY JS -->
+        <script src="{% static 'general/js/admin.js' %}"></script>
+        <script src="{% static 'general/js/error_handler.js' %}"></script>
+        <script src="{% static 'general/js/cust.js' %}"></script>
+        <script src="{% static 'general/js/sweetalert2@11' %}"></script>
 
 </body>
 </html>

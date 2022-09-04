@@ -20,7 +20,7 @@ from . import views
 urlpatterns = [
     path('', views.index, name='admin_panel'),
     path('issues',views.all_issues, name='all-issues'),
-    path('view/<issue_id>',views.view_issue, name='view-issue'),
+    path('view/<issue_id>',views.view_issue, name='view_issue'),
     path('log-issue',views.log_issue,name='log-issue'),
     path('all_task/',views.all_task,name='all_task'),
     path('mark_esc/',views.mark_esc,name='mark-esc'),
@@ -30,6 +30,7 @@ urlpatterns = [
     path('accessories/',views.accessories, name='accessories'),
     path('save-provider',views.new_provider,name='save-provider'),
     path('save-tag',views.new_tag,name='save-tag'),
+    path('add_to_task',views.add_to_task, name='add_to_task')
 
 
 

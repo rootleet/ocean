@@ -90,9 +90,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'ocean',
-        'USER': 'root',
-        'PASSWORD': 'Sunderland@411',
-        'HOST': 'localhost',
+        'USER': 'anton',
+        'PASSWORD': '258963',
+        'HOST': '192.168.1.6',
         'PORT': '3306'
     }
 }
