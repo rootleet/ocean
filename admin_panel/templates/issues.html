@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block  body %}
+    <div class="w-50 card">
+        <div class="panel panel-default no-margin">
+            <div class="panel-heading">
+                <h4>{{ taskHd.title }}</h4>
+                <ul class="links">
+                    <li>
+                        <a title="Update" href="{% url 'update_task' taskHd.entry_uni %}">
+                            <i class="fa fa-list"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div style="text-align: left" class="panel-sub-heading">
+                <div style="width: 75%; margin: 0 auto">
+                    {{ taskHd.description | safe }}
+                </div>
+            </div>
+            <div class="panel-body">
+                <div class="card">
+                    <div style="width: 75%;margin: 0 auto">
+
+
+                        <ul class="chat mt-5">
+
+                            {% for tran in taskTran %}
+                                <li class="in">
+                                <img class="avatar" alt="" src="{% static 'general/img/admin11.png' %}">
+                                <div class="message">
+                                    <span class="arrow">
+                                    </span>
+                                    <a href="#" class="name">
+                                        {{ tran.owner_name }}
+                                    </a>
+                                    <span class="date-time">
+                                        at {{ tran.created_on }}
+                                    </span>
+
+                                    <span class="body body-grey">
+                                        <strong>{{ tran.tran_title }}</strong><br>
+                                        {{ tran.tran_descr | safe }}
+                                    </span>
+                                </div>
+                            </li>
+                            {% endfor %}
+
+                        </ul>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

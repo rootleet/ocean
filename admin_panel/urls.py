@@ -31,6 +31,11 @@ urlpatterns = [
     path('save-provider',views.new_provider,name='save-provider'),
     path('save-tag',views.new_tag,name='save-tag'),
     path('add_to_task',views.add_to_task, name='add_to_task'),
+    path('view_task/<task_id>/', views.view_task,name='view_task'),
+    path('add_task_update',views.add_task_update, name='add_task_update'),
+    path('new_task',views.new_task,name='new_task'),
+    path('update_task/<entry_uni>',views.update_task,name='update_task')
+
 
 
 

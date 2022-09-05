@@ -35,7 +35,7 @@ def view_issue(request, issue_id):
     task_count = TaskHD.objects.filter(ref=issue_id).count()
     context = {
         'issue': issue,
-        'task_count':task_count
+        'task_count': task_count
     }
     return render(request, 'view_issue.html', context=context)
 
@@ -75,10 +75,10 @@ def log_issue(request):
 
 
 def all_task(request):
-    tasks = LoggedIssue.objects.all()
+    tasks = TaskHD.objects.all()
     prov = Providers.objects.all()
     context = {
-        'tasks': tasks, 'providers': prov,'page_title': "All Tasks"
+        'tasks': tasks, 'providers': prov, 'page_title': "All Tasks"
     }
     return render(request, 'all_task.html', context=context)
 
@@ -90,13 +90,10 @@ def mark_esc(request):
         form = request.GET
         issue = form['issue']
 
-
         # MARK ISSIE
         # get question details
         target_question = questions.objects.get(uni=issue)
         tag = target_question.domain
-
-
 
         tag_details = tags.objects.get(tag_code=tag).provider
         return HttpResponse(f"{tag}")
@@ -202,12 +199,83 @@ def add_to_task(request):
         hash_object = hashlib.md5(md_mix.encode())
         md5_hash = hash_object.hexdigest()
 
-        comment = answers(user=user.pk,question=ref,ans="I have logged a task from your issue and it will be resolved soon")
-        task_hd = TaskHD(entry_uni=ref, type='from_questions', ref=ref, owner=user.pk, title=title,description=description)
+        comment = answers(user=user.pk, question=ref,
+                          ans="I have logged a task from your issue and it will be resolved soon")
+        task_hd = TaskHD(entry_uni=ref, type='from_questions', ref=ref, owner=user.pk, title=title,
+                         description=description)
 
         try:
             task_hd.save()
             comment.save()
             return HttpResponse(f'done%%reload')
-        except Exception as e :
+        except Exception as e:
             return HttpResponse(f'error%%{e}')
+
+
+def view_task(request, task_id):
+    context = {
+        'taskHd': TaskHD.objects.get(entry_uni=task_id),
+        'taskTran': TaskTrans.objects.filter(entry_uni=task_id)
+    }
+    return render(request, 'issues.html', context=context)
+
+
+def add_task_update(request):
+    if request.method == 'POST':
+        user = request.user
+        form = request.POST
+        title = form['title']
+        body = form['body']
+        entry = form['entry']
+
+        try:
+            TaskTrans(entry_uni=entry, tran_title=title, tran_descr=body, owner=user.pk).save()
+            return redirect('view_task', task_id=entry)
+        except Exception as e:
+            return HttpResponse(e)
+
+
+def new_task(request):
+    if request.method == 'POST':
+        form = request.POST
+        title = form['title']
+        body = form['body']
+        owner = request.user.pk
+
+        md_mix = f"{title} {owner} {body} {body}{request.user.pk}{request.user.username}"
+        hash_object = hashlib.md5(md_mix.encode())
+        md5_hash = hash_object.hexdigest()
+
+        if TaskHD.objects.filter(entry_uni=md5_hash).exists():
+            return redirect('all_task')
+        else:
+            try:
+                TaskHD(entry_uni=md5_hash, title=title, description=body, owner=owner, ref='direct',
+                       type='direct').save()
+                return redirect('view_task', task_id=md5_hash)
+            except Exception as e:
+                return HttpResponse(f'error%%{e}')
+
+    else:
+        return render(request, 'new_task.html')
+
+
+def update_task(request,entry_uni):
+    if request.method == 'POST':
+        form = request.POST
+        entry_uni = form['entry']
+        title = form['title']
+        body = form['body']
+        owner = request.user.pk
+
+        try:
+            TaskTrans(entry_uni=entry_uni,tran_title=title,tran_descr=body,owner=owner).save();
+            return redirect('view_task',task_id=entry_uni)
+        except Exception as e:
+            return HttpResponse(f"Error : {e}")
+
+    else:
+        context = {
+            'entry':TaskHD.objects.get(entry_uni=entry_uni),
+        }
+        return render(request, 'update_task.html',context=context)

@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block  body %}
+    <div class="w-50 card">
+        <div class="panel panel-default no-margin">
+            <div class="panel-heading">
+                <h4>New Task</h4>
+
+            </div>
+            <div class="panel-body">
+                <form method="post" id="" action="{% url 'new_task' %}" class="card">
+                {% csrf_token %}
+                    <div style="width: 75%;margin: 0 auto">
+
+
+                        <label style="width: 100%">Title :
+                            <input type="text" required name="title" class="form-control mb-3">
+                        </label>
+
+                        <textarea name="body" style="height: 75vh" class="form-control" id="update_details"></textarea>
+                        <script src="{% static 'blog/js/htmeditor.min.js' %}"      htmeditor_textarea="update_details"      full_screen="no"      editor_height="400"     run_local="no">
+                        </script>
+                        <hr>
+                        <div style="width: 100%; margin: auto 0" class="d-flex flex-wrap justify-content-end">
+                            <button class="btn btn-sm btn-warning rounded-0">CANCEL</button>
+                            <button class="btn btn-sm btn-success rounded-0">SAVE</button>
+                        </div>
+
+                        <ul class="chat mt-5">
+
+                            {% for tran in taskTran %}
+                                <li class="in">
+                                <img class="avatar" alt="" src="{% static 'general/img/admin11.png' %}">
+                                <div class="message">
+                                    <span class="arrow">
+                                    </span>
+                                    <a href="#" class="name">
+                                        {{ tran.owner_name }}
+                                    </a>
+                                    <span class="date-time">
+                                        at {{ tran.created_on }}
+                                    </span>
+
+                                    <span class="body body-grey">
+                                        <strong>{{ tran.tran_title }}</strong><br>
+                                        {{ tran.tran_descr | safe }}
+                                    </span>
+                                </div>
+                            </li>
+                            {% endfor %}
+
+                        </ul>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

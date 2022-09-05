@@ -33,52 +33,100 @@
                             </li>
                         </ul>
                     </div>
+                    <div style="text-align: left" class="panel-sub-heading">
+                        <div class="w-100 d-flex flex-wrap">
+                            <button onclick="location.href='{% url 'new_task' %}'" class="btn btn-sm btn-info">NEW TASK</button>
+                            <div class="modal fade" id="newTask" data-backdrop="false">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header"><strong class="modal-title">New Tax</strong></div>
+                                        <div class="modal-body">
+                                            <label style="width: 100%">Owner
+                                                <input type="text" name="owner" value="{{ user.username }}" required class="form-control">
+                                            </label>
+                                            <hr>
+                                            <label style="width: 100%">Title
+                                                <input type="text" name="title" required class="form-control">
+                                            </label>
+                                            <hr>
+
+                                            <textarea name="body" class="form-control" id="new_task_textarea"></textarea>
+                                            <script src="{% static 'blog/js/htmeditor.min.js' %}"      htmeditor_textarea="new_task_textarea"      full_screen="no"      editor_height="300"     run_local="yes">
+                                            </script>
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="panel-body">
                         <div class="table-responsive">
                             <table class="table table -bordered no-margin">
                                                     <thead>
                                                         <tr>
-                                                            <th style="width:5%">
-                                                                Domain
-                                                            </th>
-                                                            <th style="width:10%">
-                                                                User
-                                                            </th>
-                                                            <th style="width:30%">
-                                                                Title
-                                                            </th>
-                                                            <th style="width:30%">
-                                                                Timestamp
-                                                            </th>
-                                                            <th style="width:5%">
-                                                                Views
-                                                            </th>
-                                                            <th style="width:5%">
-                                                                Status
-                                                            </th>
-                                                            <th style="width:15%">
-                                                                Action
-                                                            </th>
+                                                            <th style="width: 10%">Owner</th>
+                                                            <th style="width: 15%">Title</th>
+                                                            <th style="width: 35%">Description</th>
+                                                            <th style="width: 5%">Status</th>
+                                                            <th style="width: 15%">Timestamp</th>
+                                                            <th style="width: 20%">Action</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        {% for issue in issues %}
-                                                            <tr>
-                                                            <td>{{ issue.domain }}</td>
-                                                            <td>{{ issue.owner_name }}</td>
-                                                            <td>{{ issue.title | slice:":25" }}</td>
-                                                            <td>{{ issue.created_at }}</td>
-                                                            <td>{{ issue.readers }}</td>
-                                                            <td>{{ issue.quest_logged }}</td>
+                                                        {% for task in tasks %}
+                                                        <tr>
+                                                            <td>Jane</td><td>{{ task.title }}</td><td>{{ task.description | safe | slice:":30" }}</td>
                                                             <td>
-                                                                <div class="w-100 d-flex flex-wrap justify-content-between align-content-center">
-                                                                    <a href="{% url 'view_issue' issue.uni %}" class="btn btn-sm btn-success rounded-0">VIEW</a>
-
-                                                                </div>
-    {#															<a href="#" class="label label-success">View</a>#}
+                                                                {% if task.status == 0 %}
+                                                                    <span class="badge badge-danger">OPEN</span>
+                                                                {% else %}
+                                                                    <span class="badge badge-success">CLOSE</span>
+                                                                {% endif %}
                                                             </td>
+                                                            <td>{{ task.added_on }}</td>
+                                                            <td><div class="w-100 d-flex flex-wrap align-content-center justify-content-between">
+                                                                <a href="{% url 'view_task' task.entry_uni %}" class="btn-info pointer btn-sm rounded-0 pointer mx-1">VIEW</a>
+
+                                                                <a href="{% url 'update_task' task.entry_uni %}" class="btn-success pointer btn-sm rounded-0 pointer mx-1">UPDATE</a>
+                                                                <div class="modal fade" data-backdrop="false" id="update{{ task.entry_uni }}">
+                                                                    <div class="modal-dialog">
+                                                                        <form action="{% url 'add_task_update' %}" method="post" class="modal-content">
+                                                                            {% csrf_token %}
+                                                                            <div class="modal-header">
+                                                                                <strong class="modal-title">Update {{ task.title }}</strong>
+                                                                            </div>
+
+                                                                            <div class="modal-body">
+                                                                                <div class="form-group mb-2">
+                                                                                    <input type="hidden" name="entry" value="{{ task.entry_uni }}">
+                                                                                    <label style="width: 100%">Title :
+                                                                                        <input type="text"
+                                                                                               class="form-control mb-3"
+                                                                                               name="title"
+                                                                                               required
+                                                                                        >
+                                                                                    </label>
+                                                                                    <hr>
+                                                                                    <textarea name="body" style="height: 50vh" class="form-control" id="update_details"></textarea>
+                                                                                    <script src="{% static 'blog/js/htmeditor.min.js' %}"      htmeditor_textarea="update_details"      full_screen="no"      editor_height="300"     run_local="no">
+                                                                                    </script>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="modal-footer">
+                                                                                <button class="btn btn-sm btn-warning rounded-0" data-dismiss="modal" type="button">CANCEL</button>
+                                                                                <button class="btn btn-success btn-sm rounded-0">SAVE</button>
+                                                                            </div>
+                                                                        </form>
+                                                                    </div>
+                                                                </div>
+
+                                                                <span class="btn-danger pointer btn-sm rounded-0 pointer mx-1">CLOSE</span>
+                                                            </div></td>
                                                         </tr>
                                                         {% endfor %}
+
                                                     </tbody>
                                                 </table>
                         </div>
