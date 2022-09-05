@@ -11,9 +11,9 @@
                             <a href="{% url 'all-issues' %}" class="btn btn-sm btn-primary mr-2">All Documents</a>
                             <a href="" class="btn btn-sm btn-warning mr-2"><i class="fa fa-edit"></i> Edit {{ issue.task }}</a>
                             <button type="button" onclick="delete_document('1234')" class="btn btn-sm btn-danger"><i class="fa fa-recycle"></i> Delete</button>
-                            {% if issue.task < 1 %}
+
                             <button type="button" data-target="#task" data-toggle="modal" class="btn btn-sm btn-info"><i class="fa fa-check"></i> Add TO Task</button>
-                            {% endif %}
+
                             <div class="modal fade" id="task" data-backdrop="false">
                                 <div class="modal-dialog">
                                     <form id="general_form" action="{% url 'add_to_task' %}" method="post" class="modal-content">
