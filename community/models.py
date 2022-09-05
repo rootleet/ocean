@@ -4,6 +4,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from datetime import datetime
 from admin_panel.models import *
+# todo import admin panel models
 
 # Create your models here.
 from django.db.models import Count
