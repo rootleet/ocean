@@ -11,36 +11,37 @@
                             <a href="{% url 'all-issues' %}" class="btn btn-sm btn-primary mr-2">All Documents</a>
                             <a href="" class="btn btn-sm btn-warning mr-2"><i class="fa fa-edit"></i> Edit {{ issue.task }}</a>
                             <button type="button" onclick="delete_document('1234')" class="btn btn-sm btn-danger"><i class="fa fa-recycle"></i> Delete</button>
-                            {% if task_count == 1 %}
-                            <button type="button" data-target="#task" data-toggle="modal" class="btn btn-sm btn-info"><i class="fa fa-check"></i> Add TO Task</button>
-                            {% endif %}
-                            <div class="modal fade" id="task" data-backdrop="false">
-                                <div class="modal-dialog">
-                                    <form id="general_form" action="{% url 'add_to_task' %}" method="post" class="modal-content">
-                                        {% csrf_token %}
-                                        <div class="modal-header">
-                                            <strong class="modal-title">CREAT TASK</strong>
-                                        </div>
+                            {% if task_count == 0 %}
+                                <button type="button" data-target="#task" data-toggle="modal" class="btn btn-sm btn-info"><i class="fa fa-check"></i> Add TO Task</button>
+                                <div class="modal fade" id="task" data-backdrop="false">
+                                    <div class="modal-dialog">
+                                        <form id="general_form" action="{% url 'add_to_task' %}" method="post" class="modal-content">
+                                            {% csrf_token %}
+                                            <div class="modal-header">
+                                                <strong class="modal-title">CREAT TASK</strong>
+                                            </div>
 
-                                        <div class="modal-body">
-                                            <input type="hidden" name="question" value="{{ issue.uni }}">
-                                            <label for="title">Owner:</label><input type="text" readonly required name="owner" id="owner" value="{{ issue.owner_name }}" class="form-control mb-2">
-                                            <hr>
-                                            <label for="title">Title:</label><input type="text" required name="title" id="title" value="{{ issue.title }}" class="form-control mb-2">
-                                            <hr>
-                                            <label for="description">Description</label><textarea name="description" id="description" cols="10" rows="10" class="form-control mb-2">{{ issue.body | safe }}</textarea>
-                                            <hr>
-                                            <label for="description">Tried?</label><textarea autofocus required name="tried" id="tried" cols="10" rows="10" class="form-control mb-2"></textarea>
-                                        </div>
+                                            <div class="modal-body">
+                                                <input type="hidden" name="question" value="{{ issue.uni }}">
+                                                <label for="title">Owner:</label><input type="text" readonly required name="owner" id="owner" value="{{ issue.owner_name }}" class="form-control mb-2">
+                                                <hr>
+                                                <label for="title">Title:</label><input type="text" required name="title" id="title" value="{{ issue.title }}" class="form-control mb-2">
+                                                <hr>
+                                                <label for="description">Description</label><textarea name="description" id="description" cols="10" rows="10" class="form-control mb-2">{{ issue.body | safe }}</textarea>
+                                                <hr>
+                                                <label for="description">Tried?</label><textarea autofocus required name="tried" id="tried" cols="10" rows="10" class="form-control mb-2"></textarea>
+                                            </div>
 
-                                        <div class="modal-footer">
-                                            <button type="button" data-dismiss="modal" class="btn btn-sm btn-warning rounded-0">CANCEL</button>
-                                            <button class="btn btn-sm btn-success rounded-0 ml-2">SAVE</button>
-                                        </div>
+                                            <div class="modal-footer">
+                                                <button type="button" data-dismiss="modal" class="btn btn-sm btn-warning rounded-0">CANCEL</button>
+                                                <button class="btn btn-sm btn-success rounded-0 ml-2">SAVE</button>
+                                            </div>
 
-                                    </form>
+                                        </form>
+                                    </div>
                                 </div>
-                            </div>
+                            {% endif %}
+
                         </div>
                         <div class="w-50 h-100 d-flex flex-wrap align-content-center">
 
