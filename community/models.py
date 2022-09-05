@@ -1,6 +1,6 @@
 import datetime
 
-from admin_panel.models import TaskHD
+
 from ocean import settings
 from django.db import models
 from django.contrib.auth.models import User
@@ -54,8 +54,7 @@ class questions(models.Model):
     def readers(self):
         return QuestionViews.objects.filter(question=self.uni).count()
 
-    def task(self):
-        return TaskHD.objects.filter(entry_uni=self.uni).count()
+
 
 
 # answer
