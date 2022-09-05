@@ -21,4 +21,71 @@
                         </li>
                     </ul>
                 </div>
+
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <h4>Community Issues</h4>
+                        <ul class="links">
+                            <li>
+                                <a href="#">
+                                    <i class="fa fa-navicon"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table -bordered no-margin">
+                                                    <thead>
+                                                        <tr>
+                                                            <th style="width:5%">
+                                                                Domain
+                                                            </th>
+                                                            <th style="width:10%">
+                                                                User
+                                                            </th>
+                                                            <th style="width:30%">
+                                                                Title
+                                                            </th>
+                                                            <th style="width:30%">
+                                                                Timestamp
+                                                            </th>
+                                                            <th style="width:5%">
+                                                                Views
+                                                            </th>
+                                                            <th style="width:5%">
+                                                                Status
+                                                            </th>
+                                                            <th style="width:15%">
+                                                                Action
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {% for issue in issues %}
+                                                            <tr>
+                                                            <td>{{ issue.domain }}</td>
+                                                            <td>{{ issue.owner_name }}</td>
+                                                            <td>{{ issue.title | slice:":25" }}</td>
+                                                            <td>{{ issue.created_at }}</td>
+                                                            <td>{{ issue.readers }}</td>
+                                                            <td>{{ issue.quest_logged }}</td>
+                                                            <td>
+                                                                <div class="w-100 d-flex flex-wrap justify-content-between align-content-center">
+                                                                    <a href="{% url 'view_issue' issue.uni %}" class="btn btn-sm btn-success rounded-0">VIEW</a>
+
+                                                                </div>
+    {#															<a href="#" class="label label-success">View</a>#}
+                                                            </td>
+                                                        </tr>
+                                                        {% endfor %}
+                                                    </tbody>
+                                                </table>
+                        </div>
+                    </div>
+
+
+                </div>
+
+            </div>
 {% endblock %}
