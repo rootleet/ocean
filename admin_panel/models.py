@@ -60,7 +60,7 @@ class PendingEscalations(models.Model):
 
 
 class TaskHD(models.Model): ## task model
-    entry_uni = models.TextField(unique=True)
+    entry_uni = models.TextField(unique=True,max_length=200)
     type = models.TextField()
     ref = models.TextField()
     owner = models.IntegerField(default=0)
