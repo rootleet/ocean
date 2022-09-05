@@ -1,66 +1,24 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block admin_tool %}
-    <div class="w-100 h-100 overflow-hidden p-2">
-        <div class="card w-100 h-100 custom_shadow">
-            <div class="card-header">
-                <strong class="card-title text-info">All Issues</strong>
-                <a href="{% url 'log-issue' %}">xx</a>
-            </div>
-            <input type="hidden" id="url" value="{% url 'mark-esc' %}">
-            <div class="card-body p-2 overflow-auto">
-                <div class="table table-responsive h-100 mb-0">
-                    <table class="table table-sm table-striped table-bordered table-hover">
-                        <thead class="thead-dark">
-                            <tr>
-                                <th>Status</th>
-                                <th>Application</th>
-                                <th>Owner</th>
-                                <th>Title</th>
-                                <th>Date</th>
-                                <th>OPT</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for task in tasks %}
-                                <tr>
-                                        <td>
-                                            {{ task.str_status }}
-                                        </td>
-
-                                        <td>
-                                            <span class="badge pointer alert-danger mr-2 font-weight-lighter">{{ task.domain }}</span>
-                                        </td>
-                                        <td>{{ task.owner }}</td>
-                                        <td>{{ task.title }}</td>
-                                        <td>
-                                            <span class="badge alert-danger">
-                                                {{ task.date_reported }}
-                                            </span> / <span class="badge alert-info">
-                                                {{ task.created_on }}
-                                            </span>
-                                        </td>
-                                        <td>
-
-                                            <div class="dropdown dropleft">
-                                                <i class="fa fa-ellipsis-v pointer" data-toggle="dropdown"></i>
-                                              <div class="dropdown-menu">
-                                                <a class="dropdown-item text-success" href="#"><i class="fa fa-check-square"></i> Done</a>
-                                                <a class="dropdown-item text-info" href="{% url 'view-issue' task.issue %}"><i class="fa fa-eye"></i> View</a>
-                                                <a class="dropdown-item text-danger pointer" onclick="mark_for_escalation('{{ task.issue }}')"><i class="fa fa-sticky-note"></i> Mark For Escalate</a>
-                                              </div>
-                                            </div>
-                                        </td>
-
-
-                                </tr>
-                            {% endfor %}
-
-                        </tbody>
-                    </table>
+{% block body %}
+    <!-- Main Container Start -->
+			<div class="main-container">
+				<!-- Top Bar Starts -->
+				<div class="top-bar clearfix">
+                    <div class="page-title">
+                        <h4><div class="fs1" aria-hidden="true" data-icon="&#xe007;"></div>{{ page_title }}</h4>
+                    </div>
+                    <ul class="right-stats hidden-xs" id="mini-nav-right">
+                        <li class="reportrange btn btn-success">
+                            <i class="fa fa-calendar"></i>
+                            <span></span> <b class="caret"></b>
+                        </li>
+                        <li>
+                            <a href="#" class="btn btn-info sb-open-right  sb-close">
+                                <div class="fs1" aria-hidden="true" data-icon="&#xe06a;"></div>
+                            </a>
+                        </li>
+                    </ul>
                 </div>
-            </div>
-        </div>
-    </div>
 {% endblock %}

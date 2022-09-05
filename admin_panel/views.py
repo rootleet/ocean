@@ -78,7 +78,7 @@ def all_task(request):
     tasks = LoggedIssue.objects.all()
     prov = Providers.objects.all()
     context = {
-        'tasks': tasks, 'providers': prov
+        'tasks': tasks, 'providers': prov,'page_title': "All Tasks"
     }
     return render(request, 'all_task.html', context=context)
 
