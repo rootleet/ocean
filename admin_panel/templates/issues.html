@@ -14,17 +14,18 @@
                     </li>
                 </ul>
             </div>
-            <div style="text-align: left" class="panel-sub-heading">
-                <div style="width: 75%; margin: 0 auto">
-                    {{ taskHd.description | safe }}
-                </div>
-            </div>
+
             <div class="panel-body">
                 <div class="card">
                     <div style="width: 75%;margin: 0 auto">
 
+                        <div style="margin-bottom: 10px !important">
+                            {{ taskHd.description | safe }}
+                        </div>
+                        <hr>
+                        <hr>
 
-                        <ul class="chat mt-5">
+                        <ul class="chat">
 
                             {% for tran in taskTran %}
                                 <li class="in">
