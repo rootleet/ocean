@@ -3,7 +3,8 @@ from ocean import settings
 from django.db import models
 from django.contrib.auth.models import User
 from datetime import datetime
-from admin_panel.models import * 
+
+from admin_panel.models import TaskHD
 # todo import admin panel models
 
 # Create your models here.
