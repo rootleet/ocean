@@ -32,7 +32,7 @@ def all_issues(request):
 
 def view_issue(request, issue_id):
     issue = questions.objects.get(uni=issue_id)
-    task_count = TaskHD.object.filter(ref=issue_id).count()
+    task_count = TaskHD.objects.filter(ref=issue_id).count()
     context = {
         'issue': issue,
         'task_count':task_count
