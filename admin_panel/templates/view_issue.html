@@ -9,9 +9,10 @@
                     <div class="w-100 h-100 d-flex flex-wrap">
                         <div class="w-50 h-100 d-flex flex-wrap align-content-center justify-content-end">
                             <a href="{% url 'all-issues' %}" class="btn btn-sm btn-primary mr-2">All Documents</a>
-                            <a href="" class="btn btn-sm btn-warning mr-2"><i class="fa fa-edit"></i> Edit {{ issue.task }}</a>
-                            <button type="button" onclick="delete_document('1234')" class="btn btn-sm btn-danger"><i class="fa fa-recycle"></i> Delete</button>
+
                             {% if task_count == 0 %}
+                                <a href="" class="btn btn-sm btn-warning mr-2"><i class="fa fa-edit"></i> Edit {{ issue.task }}</a>
+                                <button type="button" onclick="delete_document('1234')" class="btn btn-sm btn-danger"><i class="fa fa-recycle"></i> Delete</button>
                                 <button type="button" data-target="#task" data-toggle="modal" class="btn btn-sm btn-info"><i class="fa fa-check"></i> Add TO Task</button>
                                 <div class="modal fade" id="task" data-backdrop="false">
                                     <div class="modal-dialog">

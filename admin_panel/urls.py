@@ -30,7 +30,8 @@ urlpatterns = [
     path('accessories/',views.accessories, name='accessories'),
     path('save-provider',views.new_provider,name='save-provider'),
     path('save-tag',views.new_tag,name='save-tag'),
-    path('add_to_task',views.add_to_task, name='add_to_task')
+    path('add_to_task',views.add_to_task, name='add_to_task'),
+
 
 
 
