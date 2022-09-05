@@ -56,6 +56,7 @@ function error_handler(response)
                         load_convo_message()
                         break;
                     default:
+                        swal_reload("Process Completed")
                         console.table(response_message)
                         break;
                 }

@@ -208,6 +208,6 @@ def add_to_task(request):
         try:
             task_hd.save()
             comment.save()
-            return HttpResponse(f'done%%')
+            return HttpResponse(f'done%%reload')
         except Exception as e :
             return HttpResponse(f'error%%{e}')
