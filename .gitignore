@@ -1,2 +1,6 @@
 /static/blog/asssets/article/
 /static/general/videos/
+/community/migrations/
+/stream/migrations/
+/blog/migrations/
+/admin_panel/migrations/
