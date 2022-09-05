@@ -4,6 +4,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from datetime import datetime
 from admin_panel.models import *
+# todo import admin panel models
 
 # Create your models here.
 from django.db.models import Count
@@ -50,6 +51,9 @@ class questions(models.Model):
     def readers(self):
         return QuestionViews.objects.filter(question=self.uni).count()
 
+    def task(self):
+        return TaskHD.objects.filter(entry_uni=self.uni).count()
+
 
 # answer
 class answers(models.Model):
@@ -94,3 +98,4 @@ class answers(models.Model):
 class QuestionViews(models.Model):
     question = models.TextField()
     user = models.IntegerField(default=0)
+

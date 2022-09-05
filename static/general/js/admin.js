@@ -30,6 +30,7 @@ function log_issue(uni) {
 }
 
 function mark_for_escalation(issue) {
+
     let url = $('#url').val()
     let form_date = {
         'issue':issue
@@ -40,6 +41,7 @@ function mark_for_escalation(issue) {
             data:form_date,
             success: function (response) {
                 error_handler(response)
+                console.log(response)
             }
         })
 }

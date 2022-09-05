@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth import authenticate, login as auth_login, logout
 from django.contrib.sites import requests
+import hashlib
 
 # Create your views here.
 from django.core.mail import send_mail
@@ -87,11 +88,17 @@ def mark_esc(request):
         form = request.GET
         issue = form['issue']
 
+
         # MARK ISSIE
         # get question details
         target_question = questions.objects.get(uni=issue)
         tag = target_question.domain
+
+
+
         tag_details = tags.objects.get(tag_code=tag).provider
+        return HttpResponse(f"{tag}")
+
         provider_details = Providers.objects.get(pk=tag_details).provider_code
         try:
             PendingEscalations(provider=provider_details, issue=issue).save()
@@ -176,3 +183,29 @@ def new_tag(request):
             return redirect('accessories')
         else:
             return HttpResponse(f"{code} EXIST")
+
+
+def add_to_task(request):
+    if request.method == 'POST':
+        form = request.POST
+        user = request.user
+
+        owner = form['owner']
+        title = form['title']
+        description = form['description']
+        tried = form['tried']
+        ref = form['question']
+
+        md_mix = f"{title} {owner} {description} {tried}{user.pk}{user.username}"
+        hash_object = hashlib.md5(md_mix.encode())
+        md5_hash = hash_object.hexdigest()
+
+        comment = answers(user=user.pk,question=ref,ans="I have logged a task from your issue and it will be resolved soon")
+        task_hd = TaskHD(entry_uni=ref, type='from_questions', ref=ref, owner=user.pk, title=title,description=description)
+
+        try:
+            task_hd.save()
+            comment.save()
+            return HttpResponse(f'done%%')
+        except Exception as e :
+            return HttpResponse(f'error%%{e}')
