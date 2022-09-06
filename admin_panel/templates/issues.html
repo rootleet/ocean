@@ -3,16 +3,32 @@
 
 {% block  body %}
     <div class="w-50 card">
+    <input type="hidden" value="{% url 'mark-esc' %}" id="url">
         <div class="panel panel-default no-margin">
             <div class="panel-heading">
                 <h4>{{ taskHd.title }}</h4>
+
                 <ul class="links">
+                    {% if taskHd.status == 0  %}
                     <li>
                         <a title="Update" href="{% url 'update_task' taskHd.entry_uni %}">
                             <i class="fa fa-list"></i>
                         </a>
                     </li>
+                        <li>
+                        <a title="Close" onclick="close_issue('{{ taskHd.entry_uni }}')">
+                            <kbd style="cursor: pointer" class="btn-danger btn-sm">CLOSE ISSUE</kbd>
+                        </a>
+                    </li>
+                    {% else %}
+                        <li>
+                        <a class="disabled">
+                            <i class="">CLOSED</i>
+                        </a>
+                    </li>
+                    {% endif %}
                 </ul>
+
             </div>
 
             <div class="panel-body">

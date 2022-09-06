@@ -64,6 +64,7 @@
                     <div class="panel-body">
                         <div class="table-responsive">
                             <table class="table table -bordered no-margin">
+                                <input type="hidden" id="close_url" value="{% url 'close_task' %}">
                                                     <thead>
                                                         <tr>
                                                             <th style="width: 10%">Owner</th>
@@ -76,7 +77,7 @@
                                                     </thead>
                                                     <tbody>
                                                         {% for task in tasks %}
-                                                        <tr>
+                                                        <tr class="{% if task.status == 1 %}bg-success{% endif %}">
                                                             <td>Jane</td><td>{{ task.title }}</td><td>{{ task.description | safe | slice:":30" }}</td>
                                                             <td>
                                                                 {% if task.status == 0 %}
@@ -88,41 +89,11 @@
                                                             <td>{{ task.added_on }}</td>
                                                             <td><div class="w-100 d-flex flex-wrap align-content-center justify-content-between">
                                                                 <a href="{% url 'view_task' task.entry_uni %}" class="btn-info pointer btn-sm rounded-0 pointer mx-1">VIEW</a>
-
+                                                                {% if task.status == 0 %}
                                                                 <a href="{% url 'update_task' task.entry_uni %}" class="btn-success pointer btn-sm rounded-0 pointer mx-1">UPDATE</a>
-                                                                <div class="modal fade" data-backdrop="false" id="update{{ task.entry_uni }}">
-                                                                    <div class="modal-dialog">
-                                                                        <form action="{% url 'add_task_update' %}" method="post" class="modal-content">
-                                                                            {% csrf_token %}
-                                                                            <div class="modal-header">
-                                                                                <strong class="modal-title">Update {{ task.title }}</strong>
-                                                                            </div>
+                                                                <span onclick="close_issue('{{ task.entry_uni }}')" class="btn-danger pointer btn-sm rounded-0 pointer mx-1">CLOSE</span>
 
-                                                                            <div class="modal-body">
-                                                                                <div class="form-group mb-2">
-                                                                                    <input type="hidden" name="entry" value="{{ task.entry_uni }}">
-                                                                                    <label style="width: 100%">Title :
-                                                                                        <input type="text"
-                                                                                               class="form-control mb-3"
-                                                                                               name="title"
-                                                                                               required
-                                                                                        >
-                                                                                    </label>
-                                                                                    <hr>
-                                                                                    <textarea name="body" style="height: 50vh" class="form-control" id="update_details"></textarea>
-                                                                                    <script src="{% static 'blog/js/htmeditor.min.js' %}"      htmeditor_textarea="update_details"      full_screen="no"      editor_height="300"     run_local="no">
-                                                                                    </script>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="modal-footer">
-                                                                                <button class="btn btn-sm btn-warning rounded-0" data-dismiss="modal" type="button">CANCEL</button>
-                                                                                <button class="btn btn-success btn-sm rounded-0">SAVE</button>
-                                                                            </div>
-                                                                        </form>
-                                                                    </div>
-                                                                </div>
-
-                                                                <span class="btn-danger pointer btn-sm rounded-0 pointer mx-1">CLOSE</span>
+                                                                {% endif %}
                                                             </div></td>
                                                         </tr>
                                                         {% endfor %}

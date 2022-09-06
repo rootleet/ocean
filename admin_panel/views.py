@@ -260,7 +260,7 @@ def new_task(request):
         return render(request, 'new_task.html')
 
 
-def update_task(request,entry_uni):
+def update_task(request, entry_uni):
     if request.method == 'POST':
         form = request.POST
         entry_uni = form['entry']
@@ -269,13 +269,32 @@ def update_task(request,entry_uni):
         owner = request.user.pk
 
         try:
-            TaskTrans(entry_uni=entry_uni,tran_title=title,tran_descr=body,owner=owner).save();
-            return redirect('view_task',task_id=entry_uni)
+            TaskTrans(entry_uni=entry_uni, tran_title=title, tran_descr=body, owner=owner).save();
+            return redirect('view_task', task_id=entry_uni)
         except Exception as e:
             return HttpResponse(f"Error : {e}")
 
     else:
         context = {
-            'entry':TaskHD.objects.get(entry_uni=entry_uni),
+            'entry': TaskHD.objects.get(entry_uni=entry_uni),
         }
-        return render(request, 'update_task.html',context=context)
+        return render(request, 'update_task.html', context=context)
+
+
+def close_task(request):
+    if request.method == 'GET':
+        form = request.GET
+        entry = form['entry']
+        remarks = form['remarks']
+        task_detail = TaskHD.objects.get(entry_uni=entry)
+
+        try:
+            TaskHD.objects.filter(entry_uni=entry).update(status=1)
+            TaskTrans(entry_uni=entry, tran_title='Closing Remarks', tran_descr=remarks, owner=request.user.pk).save()
+            if task_detail.type == 'from_questions':
+                # comment in question
+                answers(user=request.user.pk, question=task_detail.ref, ans=remarks).save()
+            return HttpResponse(f'done%% task {entry} close')
+        except Exception as e:
+            TaskHD.objects.filter(entry_uni=entry).update(status=0)
+            return HttpResponse(f'error%%{e}')

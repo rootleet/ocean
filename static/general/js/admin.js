@@ -78,3 +78,38 @@ async function escalate(provider_code) {
         await escalate(provider_code)
     }
 }
+
+async function close_issue(issue_id) {
+    let url = $('#close_url').val()
+
+
+
+    const {value: text} = await Swal.fire({
+        input: 'textarea',
+        inputLabel: 'Closing Remarks',
+        inputPlaceholder: 'Type your message here...',
+        inputAttributes: {
+            'aria-label': 'Type your message here'
+        },
+        showCancelButton: true
+    })
+
+    if (text) {
+        let form_data = {
+        'entry': issue_id,'remarks':text
+    }
+        $.ajax({
+                url: url,
+                data: form_data,
+                type: "GET",
+                success: function (response) {
+                    error_handler(response)
+                }
+            })
+
+    }
+
+
+
+
+}
