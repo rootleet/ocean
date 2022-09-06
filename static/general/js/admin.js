@@ -113,3 +113,67 @@ async function close_issue(issue_id) {
 
 
 }
+
+
+async function task_export(document) {
+    const {value: doc_type} = await Swal.fire({
+        title: 'Select field validation',
+        input: 'select',
+        inputOptions: {
+            'csv': 'CSV'
+        },
+
+        inputPlaceholder: 'Document Type',
+        showCancelButton: true,
+        // inputValidator: (value) => {
+        //     return new Promise((resolve) => {
+        //         if (value === 'oranges') {
+        //             resolve()
+        //         } else {
+        //             resolve('You need to select oranges :)')
+        //         }
+        //     })
+        // }
+    })
+
+    if (doc_type) {
+        const inputOptions = new Promise((resolve) => {
+          setTimeout(() => {
+            resolve({
+              '0': 'Open',
+              '1': 'Closed',
+              '*': 'All'
+            })
+          }, 1000)
+        })
+
+        const { value: sort } = await Swal.fire({
+          title: 'Select Sort',
+          input: 'radio',
+          inputOptions: inputOptions,
+          inputValidator: (value) => {
+            if (!value) {
+              return 'You need to choose something!'
+            }
+          }
+        })
+
+        if (sort) {
+            let url = $('#export_url').val();
+            var form_date = {
+                'sort':sort,
+                'doc_type':doc_type
+            }
+            $.ajax({
+                url:url,
+                data:form_date,
+                type:'GET',
+                success: function (response) {
+                    error_handler(response)
+                    console.log(response)
+                }
+            })
+          Swal.fire({ html: `You selected: ${sort} Doc : ${doc_type}` })
+        }
+    }
+}

@@ -71,7 +71,7 @@ class TaskHD(models.Model): ## task model
     status = models.IntegerField(default=0)
 
     def owner_name(self):
-        return User.objects.get(pk=self.owner)
+        return User.objects.get(pk=self.owner).username
 
     def question(self):
         return questions.object.get(uni=self.ref)
