@@ -188,7 +188,9 @@ $(function() {
             'query':query
         }
 
-        $.ajax({
+        if(query.length > 0)
+        {
+            $.ajax({
             url:$('#search_url').val(),
             data:form_date,
             type: 'GET',
@@ -204,6 +206,9 @@ $(function() {
                 $('#searchRes').html(link_res)
             }
         })
+        }
+
+
 
     });
 });;
