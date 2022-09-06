@@ -177,3 +177,33 @@ async function task_export(document) {
         }
     }
 }
+
+
+$(function() {
+    $("#search_task").on("change paste keyup", function() {
+       let query = $(this).val()
+
+        let form_date = {
+           'for':'task',
+            'query':query
+        }
+
+        $.ajax({
+            url:$('#search_url').val(),
+            data:form_date,
+            type: 'GET',
+            success: function (response) {
+                console.log(response)
+                let res = response
+                let this_row;
+                let link_res = ""
+                for (let i = 0; i < res.length; i++) {
+                    this_row = res[i]['fields']
+                    link_res += `<a href="/admin_panel/view_task/${this_row.entry_uni}/" class="list-group-item">${this_row.title}</a>`
+                }
+                $('#searchRes').html(link_res)
+            }
+        })
+
+    });
+});;

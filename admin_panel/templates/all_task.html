@@ -10,6 +10,7 @@
                         <h4><div class="fs1" aria-hidden="true" data-icon="&#xe007;"></div>{{ page_title }}</h4>
                     </div>
                     <ul class="right-stats hidden-xs" id="mini-nav-right">
+
                         <li class="reportrange btn btn-success">
                             <i class="fa fa-calendar"></i>
                             <span></span> <b class="caret"></b>
@@ -39,30 +40,30 @@
                             <button onclick="task_export('csv')" type="button" class="btn  btn-sm btn-primary dropdown-toggle" data-toggle="dropdown">
                                 Export
                               </button>
+                            <button  type="button" class="btn  btn-sm btn-primary" data-toggle="modal" data-target="#search">
+                                Search
+                              </button>
+
                             <input type="hidden" name="export_url" id="export_url" value="{% url 'export_task' %}">
-                            <div class="modal fade" id="newTask" data-backdrop="false">
+                            <div class="modal fade" id="search" data-backdrop="false">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
-                                        <div class="modal-header"><strong class="modal-title">New Tax</strong></div>
+                                        <div class="modal-header"><strong class="modal-title">
+                                            <input type="search" class="form-control" placeholder="query" autocomplete="off" id="search_task">
+                                        </strong></div>
                                         <div class="modal-body">
-                                            <label style="width: 100%">Owner
-                                                <input type="text" name="owner" value="{{ user.username }}" required class="form-control">
-                                            </label>
-                                            <hr>
-                                            <label style="width: 100%">Title
-                                                <input type="text" name="title" required class="form-control">
-                                            </label>
-                                            <hr>
 
-                                            <textarea name="body" class="form-control" id="new_task_textarea"></textarea>
-                                            <script src="{% static 'blog/js/htmeditor.min.js' %}"      htmeditor_textarea="new_task_textarea"      full_screen="no"      editor_height="300"     run_local="yes">
-                                            </script>
+                                            <div style="height: 50vh; overflow: auto" id="search_result">
+                                                <div class="list-group" id="searchRes">
 
+                                                </div>
+                                            </div>
 
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                            
                         </div>
                     </div>
                     <div class="panel-body">

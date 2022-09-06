@@ -8,8 +8,9 @@ from django.contrib.sites import requests
 import hashlib
 
 # Create your views here.
+from django.core import serializers
 from django.core.mail import send_mail
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.templatetags.static import static
 from unicodecsv import writer
@@ -312,53 +313,62 @@ def export_issues(request):
 
 
 def export_task(request):
-   if request.method == 'GET':
-       import nltk
-       form = request.GET
-       sort = form['sort']
-       doc_type = form['doc_type']
+    if request.method == 'GET':
+        import nltk
+        form = request.GET
+        sort = form['sort']
+        doc_type = form['doc_type']
 
-       tasks = TaskHD.objects.filter(status__in=sort)
-       if tasks.count() < 1:
-           return HttpResponse('error%%There is no match for filter')
-       else:
-        if doc_type == 'csv':
-            import csv
-            # file = open(f"static/general/videos/export.csv")
+        tasks = TaskHD.objects.filter(status__in=sort)
+        if tasks.count() < 1:
+            return HttpResponse('error%%There is no match for filter')
+        else:
+            if doc_type == 'csv':
+                import csv
+                # file = open(f"static/general/videos/export.csv")
 
-            # field names
-            fields = ['Type', 'Reference', 'Tite','Description','Date Created','Transactions']
-            row = []
+                # field names
+                fields = ['Type', 'Reference', 'Tite', 'Description', 'Date Created', 'Transactions']
+                row = []
 
-            response = HttpResponse(
-                content_type='text/csv',
-                headers={'Content-Disposition': 'attachment; filename="somefilename.csv"'},
-            )
-            writer = csv.writer(response)
-            writer.writerow(fields)
+                response = HttpResponse(
+                    content_type='text/csv',
+                    headers={'Content-Disposition': 'attachment; filename="somefilename.csv"'},
+                )
+                writer = csv.writer(response)
+                writer.writerow(fields)
+
+                for task in tasks:
+                    type = task.type
+                    ref = task.ref
+                    title = task.title
+                    desc = task.description
+                    date_c = task.added_on,
+                    transactions = ""
+
+                    # get trans
+                    trans = TaskTrans.objects.filter(entry_uni=task.entry_uni)
+                    if trans.count() > 0:
+                        for tran in trans:
+                            transactions += f"{tran.created_on} \n{tran.tran_title}\n{tran.tran_descr}\n\n"
+                            soup = BeautifulSoup(transactions)
+                            raw = soup.getText()
+
+                            soup_desc = BeautifulSoup(desc)
+                            desc_raw = soup_desc.getText()
+
+                            writer.writerow([type, ref, title, desc_raw, date_c, raw])
+
+                return response
 
 
-            for task in tasks:
-                type = task.type
-                ref = task.ref
-                title = task.title
-                desc = task.description
-                date_c = task.added_on,
-                transactions = ""
+def finder(request):
+    if request.method == 'GET':
+        form = request.GET
+        target = form['for']
+        query = form['query']
 
-                # get trans
-                trans = TaskTrans.objects.filter(entry_uni=task.entry_uni)
-                if trans.count() > 0:
-                    for tran in trans:
-                        transactions += f"{tran.created_on} \n{tran.tran_title}\n{tran.tran_descr}\n\n"
-                        soup = BeautifulSoup(transactions)
-                        raw = soup.getText()
-
-                        soup_desc = BeautifulSoup(desc)
-                        desc_raw = soup_desc.getText()
-
-                        writer.writerow([type,ref,title,desc_raw,date_c,raw])
-
-
-
-            return response
+        if target == 'task':
+            data = TaskHD.objects.filter(title__icontains=query)
+            qs_json = serializers.serialize('json', data)
+            return HttpResponse(qs_json, content_type='application/json')

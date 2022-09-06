@@ -134,8 +134,12 @@
 						<div class="custom-search hidden-sm hidden-xs pull-left">
 							<input type="text" class="search-query" placeholder="Search here">
 							<i class="fa fa-search"></i>
+
 						</div>
+
+
 					</li>
+
 				</ul>
 				<div class="pull-right">
 					<ul id="mini-nav" class="clearfix">
@@ -408,6 +412,7 @@
 
 
                 <div class="container-fluid">
+                    <input type="hidden" id="search_url" value="{% url 'search' %}">
                     <!-- Top Bar Ends -->
 				{% block body %}
 
