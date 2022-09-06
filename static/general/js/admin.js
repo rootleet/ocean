@@ -206,8 +206,9 @@ $(function() {
                 $('#searchRes').html(link_res)
             }
         })
+        } else {
+            $('#searchRes').html('')
         }
-
 
 
     });
