@@ -101,3 +101,15 @@ class Emails(models.Model):
     email_type = models.TextField()
     ref = models.TextField()
     sent_on = models.DateTimeField(auto_now=True)
+
+
+class Sales(models.Model):
+    loc = models.CharField(max_length=3)
+    mech_no = models.TextField()
+    gross_sales = models.TextField()
+    tax = models.TextField()
+    discount = models.TextField()
+    net_sales = models.TextField()
+    day = models.TextField()
+    place = models.TextField()
+    loc_desc = models.TextField()

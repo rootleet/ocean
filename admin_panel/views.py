@@ -21,6 +21,7 @@ from blog.models import *
 from ocean import settings
 
 
+
 def index(request):
     current_user = request.user
     if current_user.is_active:
@@ -86,7 +87,7 @@ def all_task(request):
     tasks = TaskHD.objects.all()
     prov = Providers.objects.all()
     context = {
-        'tasks': tasks, 'providers': prov, 'page_title': "All Tasks"
+        'tasks': tasks, 'providers': prov, 'page_title': "All Tasks",'sales':'hello'
     }
     return render(request, 'all_task.html', context=context)
 
