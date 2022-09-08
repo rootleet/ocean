@@ -206,7 +206,7 @@
 							<a id="drop3" href="#" role="button" class="dropdown-toggle" data-toggle="dropdown">
 								<div class="fs1" aria-hidden="true" data-icon="&#xe0ca;"></div>
 							</a>
-							<span class="info-label green-bg animated rubberBand">6</span>
+							<span class="info-label green-bg animated rubberBand">{{ sales.total }}</span>
 							<ul class="flipInX animated dropdown-menu stats-widget clearfix">
                                 <li>
                                     <h5 class="text-info">{{ sales.gross_sales }}</h5>
@@ -214,6 +214,26 @@
                                     <div class="progress progress-xs">
                                         <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
                                             <span class="sr-only">40% Complete (info)</span>
+                                        </div>
+                                    </div>
+                                </li>
+
+                                <li>
+                                    <h5 class="text-danger">{{ sales.discount }}</h5>
+                                    <p>Discount <span class="text-danger">-7%</span></p>
+                                    <div class="progress progress-xs">
+                                        <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+                                            <span class="sr-only">40% Complete (danger)</span>
+                                        </div>
+                                    </div>
+                                </li>
+
+                                <li>
+                                    <h5 class="text-info">{{ sales.net_sales }}</h5>
+                                    <p>Net Sale <span class="text-info">+2%</span></p>
+                                    <div class="progress progress-xs">
+                                        <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+                                            <span class="sr-only">40% Complete (success)</span>
                                         </div>
                                     </div>
                                 </li>
@@ -230,24 +250,18 @@
                                 </li>
 
                                 <li>
-                                    <h5 class="text-danger">{{ sales.discount }}</h5>
-                                    <p>Discount <span class="text-danger">-7%</span></p>
+                                    <h5 class="text-primary">{{  sales.total }}</h5>
+                                    <p>Total Sales <span class="text-primary">-7%</span></p>
                                     <div class="progress progress-xs">
-                                        <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+                                        <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
                                             <span class="sr-only">40% Complete (danger)</span>
                                         </div>
                                     </div>
                                 </li>
 
-                                <li>
-								<h5 class="text-success">{{ sales.net_sales }}</h5>
-								<p>Net Sale <span class="text-success">+2%</span></p>
-								<div class="progress progress-xs">
-									<div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
-										<span class="sr-only">40% Complete (success)</span>
-									</div>
-								</div>
-							</li>
+
+
+
 
 						</ul>
 						</li>

@@ -52,16 +52,19 @@ if Sales.objects.filter(day=day).exists():
     taxes = 0
     discs = 0
     n_sales = 0
+    total_s = 0
     for s in Sales.objects.filter(day=day):
         g_sales += s.gross_sales
         taxes += s.tax
         discs += s.discount
         n_sales += s.net_sales
+
     sales = {
         'gross_sales': babel.numbers.format_currency(g_sales, "₵ ", locale='en_US'),
         'tax': babel.numbers.format_currency(taxes, "₵ ", locale='en_US'),
         'discount': babel.numbers.format_currency(discs, "₵ ", locale='en_US'),
-        'net_sales': babel.numbers.format_currency(n_sales, "₵ ", locale='en_US')
+        'net_sales': babel.numbers.format_currency(n_sales, "₵ ", locale='en_US'),
+        'total':babel.numbers.format_currency(n_sales - taxes, "₵ ", locale='en_US'),
     }
 
 else:
