@@ -73,19 +73,22 @@
                                                     <thead>
                                                         <tr>
                                                             <th style="width: 10%">Domain</th>
+                                                            <th style="width: 10%">Provider</th>
                                                             <th style="width: 15%">Title</th>
-                                                            <th style="width: 35%">Description</th>
+                                                            <th style="width: 20%">Description</th>
                                                             <th style="width: 5%">Status</th>
                                                             <th style="width: 15%">Timestamp</th>
-                                                            <th style="width: 20%">Action</th>
+                                                            <th style="width: 25%">Action</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
                                                         {% for task in tasks %}
                                                         <tr class="{% if task.status == 1 %}bg-success{% endif %}">
                                                             <td>
-                                                                <span class="badge">{{ task.domain.descr }}</span>
-                                                            </td><td>{{ task.title }}</td><td>{{ task.description | safe | slice:":30" }}</td>
+                                                                <span class="badge">{{ task.domain.tag_dec }}</span>
+                                                            </td>
+                                                            <td>{{ task.provider }}</td>
+                                                            <td>{{ task.title }}</td><td>{{ task.description | safe | slice:":30" }}</td>
                                                             <td>
                                                                 {% if task.status == 0 %}
                                                                     <span class="badge badge-danger">OPEN</span>

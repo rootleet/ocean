@@ -70,13 +70,16 @@ class TaskHD(models.Model): ## task model
     added_on = models.DateTimeField(auto_now=True)
     edited_on = models.DateTimeField(auto_now=True)
     status = models.IntegerField(default=0)
-    domain = models.ForeignKey('blog.Providers',on_delete=models.CASCADE)
+    domain = models.ForeignKey('community.tags', on_delete=models.CASCADE)
     def owner_name(self):
         return User.objects.get(pk=self.owner).username
 
     def question(self):
         return questions.object.get(uni=self.ref)
 
+    def provider(self):
+        domain =  self.domain.provider.descr
+        return domain
 
 
 # task transactions

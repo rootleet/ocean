@@ -16,7 +16,7 @@ from django.db.models import Count
 class tags(models.Model):
     tag_code = models.CharField(max_length=3)
     tag_dec = models.TextField()
-    provider = models.IntegerField(default=0)
+    provider = models.ForeignKey('blog.Providers', on_delete=models.CASCADE)
 
     def provider_name(self):
         return Providers.objects.get(pk=self.provider).descr
