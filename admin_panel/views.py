@@ -269,7 +269,7 @@ def new_task(request):
 
     else:
         context = {
-            'domain':Providers.objects.all()
+            'domain':tags.objects.all()
         }
         return render(request, 'new_task.html',context=context)
 

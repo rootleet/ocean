@@ -17,9 +17,9 @@
                             <div class="col-sm-3">
                                 <label style="width: 100%">Domain :
                                     <select name="domain" id="domain" class="form-control" required>
-                                        <option value="0">Select Domain</option>
+                                        <option value="0">Select Tag</option>
                                         {% for dom in domain %}
-                                            <option value="{{ dom.pk }}">{{ dom.descr }}</option>
+                                            <option value="{{ dom.pk }}">{{ dom.tag_dec }}</option>
                                         {% endfor %}
                                     </select>
                                 </label>
