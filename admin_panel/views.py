@@ -422,7 +422,7 @@ def test_suolution(request):
             send_mail(subject, body, 'robolog', recipient_list, html_message=body,fail_silently=False)
             # update transactions
             Emails(sent_from='henrychase411@gmail.com',sent_to=to,subject=subject,body=body,email_type='task',ref=task_uni).save()
-            TaskTrans(entry_uni=task_uni,tran_title='Testing',tran_descr=f"Send to {to} for testing \n {body}").save()
+            TaskTrans(entry_uni=task_uni,tran_title='Testing',tran_descr=f"Send to {to} for testing \nBody:\n {body}").save()
             return redirect('view_task',task_id=task_uni)
         except Exception as e:
             return HttpResponse(f"Could Not Send Email {e}")
