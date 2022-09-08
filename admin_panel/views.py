@@ -394,7 +394,7 @@ def change_domain(request):
         new_domain_detail = Providers.objects.get(id=new_domain)
         old_domain_detail = Providers.objects.get(id=curr_domain)
 
-        task_tran = TaskTrans(entry_uni=task_uni,tran_title=f'Domain Switch From {new_domain_detail.descr} To {old_domain_detail.descr}',tran_descr=reason,owner=request.user.pk)
+        task_tran = TaskTrans(entry_uni=task_uni,tran_title=f'Domain Switch From {old_domain_detail.descr} To {new_domain_detail.descr}',tran_descr=reason,owner=request.user.pk)
         task_hd = TaskHD.objects.get(entry_uni=task_uni)
         task_hd.domain = Providers.objects.get(pk=new_domain)
         try:
