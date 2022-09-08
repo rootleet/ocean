@@ -6,6 +6,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login as auth_login, logout
 from django.contrib.sites import requests
 import hashlib
+import babel.numbers
 
 # Create your views here.
 from django.core import serializers
@@ -57,10 +58,10 @@ if Sales.objects.filter(day=day).exists():
         discs += s.discount
         n_sales += s.net_sales
     sales = {
-        'gross_sales': g_sales,
-        'tax': 0.00,
-        'discount': 0.00,
-        'net_sales': 0.00
+        'gross_sales': babel.numbers.format_currency(g_sales, "₵ ", locale='en_US'),
+        'tax': babel.numbers.format_currency(taxes, "₵ ", locale='en_US'),
+        'discount': babel.numbers.format_currency(discs, "₵ ", locale='en_US'),
+        'net_sales': babel.numbers.format_currency(n_sales, "₵ ", locale='en_US')
     }
 
 else:
