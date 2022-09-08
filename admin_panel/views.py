@@ -52,11 +52,10 @@ if Sales.objects.filter(day=day).exists():
     discs = 0
     n_sales = 0
     for s in Sales.objects.filter(day=day):
-        pass
-        # g_sales += s.gross_sales
-        # taxes += s.tax
-        # discs += s.discount
-        # n_sales += s.net_sales
+        g_sales += s.gross_sales
+        taxes += s.tax
+        discs += s.discount
+        n_sales += s.net_sales
     sales = {
         'gross_sales': g_sales,
         'tax': 0.00,
