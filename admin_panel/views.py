@@ -262,7 +262,7 @@ def new_task(request):
         else:
             try:
                 TaskHD(entry_uni=md5_hash, title=title, description=body, owner=owner, ref='direct',
-                       type='direct',domain=Providers.objects.get(pk=domain)).save()
+                       type='direct',domain=tags.objects.get(pk=domain)).save()
                 return redirect('view_task', task_id=md5_hash)
             except Exception as e:
                 return HttpResponse(f'error%%{e}')
