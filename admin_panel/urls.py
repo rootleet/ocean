@@ -38,7 +38,8 @@ urlpatterns = [
     path('close_task/',views.close_task,name='close_task'),
     path('export_task/', views.export_task,name='export_task'),
     path('search/', views.finder,name='search'),
-    path('change_domain/',views.change_domain,name='change_domain')
+    path('change_domain/',views.change_domain,name='change_domain'),
+    path('test_suolution/',views.test_suolution,name='test_suolution')
 
 
 

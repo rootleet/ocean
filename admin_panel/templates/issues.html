@@ -64,6 +64,40 @@
                                 </form>
                             </div>
                      </li>
+                    <li>
+                        <a class="disabled">
+                            <kbd data-toggle="modal" data-target="#sendMail" style="cursor: pointer" class="btn-info btn-sm">Test</kbd>
+                        </a>
+
+                        <div class="modal" id="sendMail" data-backdrop="false">
+                                <form method="post"  action="{% url 'test_suolution' %}" class="modal-dialog modal-dialog-centered">
+                                    <input type="hidden" name="task_uni" value="{{ taskHd.entry_uni }}">
+                                    {% csrf_token %}
+                                    <div class="modal-content modal-lg">
+
+                                        <div class="modal-header">
+                                            <strong class="modal-title">Send Mail</strong>
+                                        </div>
+
+                                        <div class="modal-body">
+                                            <label for="">To : </label><input type="text" name="to" class="form-control"> <br>
+                                            <label for="update_details">Message:</label><textarea name="body" style="height: 75vh" class="form-control" id="update_details">
+                                            Issue <strong>{{ taskHd.title }}</strong> has been resolved and below are instructions to follow for confirmation: <br>
+                                        </textarea>
+                                            <script src="{% static 'blog/js/htmeditor.min.js' %}"      htmeditor_textarea="update_details"      full_screen="no"      editor_height="500"     run_local="no">
+                                            </script>
+                                        </div>
+
+                                        <div class="modal-footer">
+                                            <button class="btn btn-sm btn-warning rounded-0" type="button" data-dismiss="modal">CANCEL</button>
+                                            <button class="btn btn-success btn-sm rounded-0" type="submit">SEND</button>
+                                        </div>
+
+                                    </div>
+                                </form>
+                            </div>
+
+                    </li>
                 </ul>
 
             </div>

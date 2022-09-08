@@ -406,3 +406,25 @@ def change_domain(request):
 
     else:
         return HttpResponse("error%%Invalid Form")
+
+
+def test_suolution(request):
+    if request.method == 'POST':
+        form = request.POST
+        task_uni = form['task_uni']
+        to = form['to']
+        body = form['body']
+        recipient_list = [to]
+
+        subject = "Issue Resolving"
+
+        try:
+            send_mail(subject, body, 'robolog', recipient_list, html_message=body,fail_silently=False)
+            # update transactions
+            TaskTrans(entry_uni=task_uni,tran_title='Testing',tran_descr=f"Send to {to} for testing").save()
+            return redirect('view_task',task_id=task_uni)
+        except Exception as e:
+            return HttpResponse(f"Could Not Send Email {e}")
+
+
+
