@@ -106,10 +106,11 @@ class Emails(models.Model):
 class Sales(models.Model):
     loc = models.CharField(max_length=3)
     mech_no = models.TextField()
-    gross_sales = models.TextField()
-    tax = models.TextField()
-    discount = models.TextField()
-    net_sales = models.TextField()
+    gross_sales = models.DecimalField(max_digits=60, decimal_places=2)
+    tax = models.DecimalField(max_digits=60, decimal_places=2)
+    discount = models.DecimalField(max_digits=60, decimal_places=2)
+    net_sales = models.DecimalField(max_digits=60, decimal_places=2)
     day = models.TextField()
     place = models.TextField()
     loc_desc = models.TextField()
+

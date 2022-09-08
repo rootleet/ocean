@@ -46,8 +46,18 @@ def today(what='none'):  # get time
 day = f"{today('year')}-{today('month')}-{today('day')}"
 
 if Sales.objects.filter(day=day).exists():
+    Sales.objects.get(day=day)
+    g_sales = 0
+    taxes = 0
+    discs = 0
+    n_sales = 0
+    for s in Sales.objects.filter(day=day):
+        g_sales += s.gross_sales
+        taxes += s.tax
+        discs += s.discount
+        n_sales += s.net_sales
     sales = {
-        'gross_sales': Sales.objects.filter(day=day).aggregate(Sum('gross_sales')),
+        'gross_sales': g_sales,
         'tax': 0.00,
         'discount': 0.00,
         'net_sales': 0.00
