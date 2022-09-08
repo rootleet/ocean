@@ -14,12 +14,46 @@ from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.templatetags.static import static
 #from unicodecsv import writer
+import datetime
 
 from community.models import *
 from admin_panel.models import *
 from blog.models import *
 from ocean import settings
 
+
+def today(what='none'):  # get time
+    x = datetime.now()
+    if what == 'none':
+        return x
+    elif what == 'day':
+        if len(str(x.day)) < 2:
+            result = str('0') + str(x.day)
+        else:
+            result = x.day
+        return result
+    elif what == 'month':
+        if len(str(x.month)) < 2:
+            result = str('0') + str(x.month)
+        else:
+            result = x.month
+        return result
+    elif what == 'time':
+        return x.time()
+    elif what == 'year':
+        return x.year
+
+day = f"{today('year')}-{today('month')}-{today('day')}"
+
+if Sales.objects.filter(day=day).exists():
+    sales = Sales.objects.get(day=day)
+else:
+    sales = {
+        'gross_sales':0.00,
+        'tax':0.00,
+        'discount':0.00,
+        'net_sales':0.00
+    }
 
 
 def index(request):
@@ -87,7 +121,7 @@ def all_task(request):
     tasks = TaskHD.objects.all()
     prov = Providers.objects.all()
     context = {
-        'tasks': tasks, 'providers': prov, 'page_title': "All Tasks",'sales':'hello'
+        'tasks': tasks, 'providers': prov, 'page_title': "All Tasks",'sales':sales,'day':day
     }
     return render(request, 'all_task.html', context=context)
 
