@@ -80,7 +80,8 @@
                                         </div>
 
                                         <div class="modal-body">
-                                            <label for="">To : </label><input type="text" name="to" class="form-control"> <br>
+                                            <label for="">To : </label><input type="text" name="to" required class="form-control"> <br>
+                                            <label for="">Subject : </label><input type="text" name="subject" required class="form-control"> <br>
                                             <label for="update_details">Message:</label><textarea name="body" style="height: 75vh" class="form-control" id="update_details">
                                             Issue <strong>{{ taskHd.title }}</strong> has been resolved and below are instructions to follow for confirmation: <br>
                                         </textarea>

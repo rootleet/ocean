@@ -88,3 +88,13 @@ class TaskTrans(models.Model):
     owner = models.IntegerField(default=0)
     def owner_name(self):
         return User.objects.get(pk=self.owner)
+
+# email models
+class Emails(models.Model):
+    sent_from = models.TextField()
+    sent_to = models.TextField()
+    subject = models.TextField()
+    body = models.TextField()
+    email_type = models.TextField()
+    ref = models.TextField()
+    sent_on = models.DateTimeField(auto_now=True)
