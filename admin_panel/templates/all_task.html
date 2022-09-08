@@ -72,7 +72,7 @@
                                 <input type="hidden" id="close_url" value="{% url 'close_task' %}">
                                                     <thead>
                                                         <tr>
-                                                            <th style="width: 10%">Owner</th>
+                                                            <th style="width: 10%">Domain</th>
                                                             <th style="width: 15%">Title</th>
                                                             <th style="width: 35%">Description</th>
                                                             <th style="width: 5%">Status</th>
@@ -83,7 +83,9 @@
                                                     <tbody>
                                                         {% for task in tasks %}
                                                         <tr class="{% if task.status == 1 %}bg-success{% endif %}">
-                                                            <td>{{ task.owner_name }}</td><td>{{ task.title }}</td><td>{{ task.description | safe | slice:":30" }}</td>
+                                                            <td>
+                                                                <span class="badge">{{ task.domain.descr }}</span>
+                                                            </td><td>{{ task.title }}</td><td>{{ task.description | safe | slice:":30" }}</td>
                                                             <td>
                                                                 {% if task.status == 0 %}
                                                                     <span class="badge badge-danger">OPEN</span>

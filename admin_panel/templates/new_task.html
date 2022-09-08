@@ -13,10 +13,26 @@
                 {% csrf_token %}
                     <div style="width: 75%;margin: 0 auto">
 
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <label style="width: 100%">Domain :
+                                    <select name="domain" id="domain" class="form-control" required>
+                                        <option value="0">Select Domain</option>
+                                        {% for dom in domain %}
+                                            <option value="{{ dom.pk }}">{{ dom.descr }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </label>
+                            </div>
 
-                        <label style="width: 100%">Title :
-                            <input type="text" required name="title" class="form-control mb-3">
-                        </label>
+                            <div class="col-sm-9">
+                                <label style="width: 100%">Title :
+                                    <input type="text" required name="title" class="form-control mb-3">
+                                </label>
+                            </div>
+                        </div>
+
+
 
                         <textarea name="body" style="height: 75vh" class="form-control" id="update_details"></textarea>
                         <script src="{% static 'blog/js/htmeditor.min.js' %}"      htmeditor_textarea="update_details"      full_screen="no"      editor_height="400"     run_local="no">

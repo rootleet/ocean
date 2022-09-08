@@ -6,7 +6,7 @@
     <input type="hidden" value="{% url 'mark-esc' %}" id="url">
         <div class="panel panel-default no-margin">
             <div class="panel-heading">
-                <h4>{{ taskHd.title }}</h4>
+                <h4><span class="badge badge-info">{{ taskHd.domain.descr }}</span> {{ taskHd.title }}</h4>
 
                 <ul class="links">
                     {% if taskHd.status == 0  %}
@@ -22,11 +22,48 @@
                     </li>
                     {% else %}
                         <li>
-                        <a class="disabled">
-                            <i class="">CLOSED</i>
-                        </a>
-                    </li>
+                            <a class="disabled">
+                                <i class="">CLOSED</i>
+                            </a>
+                        </li>
                     {% endif %}
+                     <li>
+                            <a class="disabled">
+                                <kbd data-toggle="modal" data-target="#changeDomain" style="cursor: pointer" class="btn-info btn-sm">CHANGE DOMAIN</kbd>
+                            </a>
+                            <div class="modal" id="changeDomain" data-backdrop="false">
+                                <form method="post" id="general_form" action="{% url 'change_domain' %}" class="modal-dialog modal-dialog-centered">
+                                    <input type="hidden" name="task_uni" value="{{ taskHd.entry_uni }}">
+                                    {% csrf_token %}
+                                    <div class="modal-content">
+
+                                        <div class="modal-header">
+                                            <strong class="modal-title">Chaning Domain</strong>
+                                        </div>
+
+                                        <div class="modal-body">
+                                            <label for="">From : </label><select name="curr_domain" readonly id="" class="form-control">
+                                                <option value="{{ taskHd.domain.pk }}">{{ taskHd.domain.descr }}</option>
+                                            </select> <br>
+                                            <label for="">To : </label><select name="new_domain" id="" class="form-control">
+                                                {% for domain in domains %}
+                                                    {% if domain.pk != taskHd.domain.pk %}
+                                                        <option value="{{ domain.pk }}">{{ domain.descr }}</option>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </select> <br>
+                                            <textarea name="reason"  placeholder="Reason.." class="form-control" id="" cols="30" rows="5"></textarea>
+                                        </div>
+
+                                        <div class="modal-footer">
+                                            <button class="btn btn-sm btn-warning rounded-0" type="button" data-dismiss="modal">CANCEL</button>
+                                            <button class="btn btn-success btn-sm rounded-0" type="submit">SEND</button>
+                                        </div>
+
+                                    </div>
+                                </form>
+                            </div>
+                     </li>
                 </ul>
 
             </div>

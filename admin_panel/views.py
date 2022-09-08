@@ -1,7 +1,7 @@
 import os
 from pathlib import Path
 
-from bs4 import BeautifulSoup
+#from bs4 import BeautifulSoup
 from django.contrib import messages
 from django.contrib.auth import authenticate, login as auth_login, logout
 from django.contrib.sites import requests
@@ -13,7 +13,7 @@ from django.core.mail import send_mail
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.templatetags.static import static
-from unicodecsv import writer
+#from unicodecsv import writer
 
 from community.models import *
 from admin_panel.models import *
@@ -43,7 +43,7 @@ def view_issue(request, issue_id):
     task_count = TaskHD.objects.filter(ref=issue_id).count()
     context = {
         'issue': issue,
-        'task_count': task_count
+        'task_count': task_count,
     }
     return render(request, 'view_issue.html', context=context)
 
@@ -153,9 +153,10 @@ def send_to_provider(request):
 
 
 def accessories(request):
-    all_tags = tags.objects.all()
+
+
     context = {
-        'tags': all_tags,
+        'comm_tags': tags.objects.all(),
         'providers': Providers.objects.all()
     }
     return render(request, 'accessories.html', context=context)
@@ -223,7 +224,8 @@ def add_to_task(request):
 def view_task(request, task_id):
     context = {
         'taskHd': TaskHD.objects.get(entry_uni=task_id),
-        'taskTran': TaskTrans.objects.filter(entry_uni=task_id)
+        'taskTran': TaskTrans.objects.filter(entry_uni=task_id),
+        'domains':Providers.objects.all()
     }
     return render(request, 'issues.html', context=context)
 
@@ -248,6 +250,7 @@ def new_task(request):
         form = request.POST
         title = form['title']
         body = form['body']
+        domain = form['domain']
         owner = request.user.pk
 
         md_mix = f"{title} {owner} {body} {body}{request.user.pk}{request.user.username}"
@@ -259,13 +262,16 @@ def new_task(request):
         else:
             try:
                 TaskHD(entry_uni=md5_hash, title=title, description=body, owner=owner, ref='direct',
-                       type='direct').save()
+                       type='direct',domain=domain).save()
                 return redirect('view_task', task_id=md5_hash)
             except Exception as e:
                 return HttpResponse(f'error%%{e}')
 
     else:
-        return render(request, 'new_task.html')
+        context = {
+            'domain':Providers.objects.all()
+        }
+        return render(request, 'new_task.html',context=context)
 
 
 def update_task(request, entry_uni):
@@ -372,3 +378,23 @@ def finder(request):
             data = TaskHD.objects.filter(title__icontains=query)
             qs_json = serializers.serialize('json', data)
             return HttpResponse(qs_json, content_type='application/json')
+
+
+def change_domain(request):
+    if request.method == 'POST':
+
+        form = request.POST
+        curr_domain = form['curr_domain']
+        new_domain = form['new_domain']
+        reason = form['reason']
+        task_uni = form['task_uni']
+
+        task_tran = TaskTrans(entry_uni=task_uni,tran_title='Domain Switch',tran_descr=reason,owner=request.user.pk)
+        try:
+            task_tran.save()
+            return HttpResponse('done%%Task Send to new domain')
+        except Exception as e:
+            return HttpResponse(f"error%%Error : {e}")
+
+    else:
+        return HttpResponse("error%%Invalid Form")

@@ -24,9 +24,9 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <th><input type="text" required name="code" maxlength="3" class="form-control form-control-sm"></th>
-                                    <th><input type="text" required name="description" class="form-control form-control-sm"></th>
-                                    <th>
+                                    <td><input type="text" required name="code" maxlength="3" class="form-control form-control-sm"></td>
+                                    <td><input type="text" required name="description" class="form-control form-control-sm"></td>
+                                    <td>
                                         <select required name="provider" class="form-control form-control-sm" id="">
                                             {% for provider in providers %}
 
@@ -34,9 +34,16 @@
 
                                             {% endfor %}
                                         </select>
-                                    </th>
-                                    <th><button class="btn btn-success rounded-0">SAVE</button></th>
+                                    </td>
+                                    <td><button class="btn btn-success rounded-0">SAVE</button></td>
                                 </tr>
+                                {% for tag in comm_tags %}
+                                    <tr>
+                                        <td>{{ tag.tag_code }}</td>
+                                        <td>{{ tag.tag_dec }}</td>
+                                        <td colspan="2">{{ tag.provider_name }}</td>
+                                    </tr>
+                                {% endfor %}
                             </tbody>
                         </table>
                     </form>
@@ -63,12 +70,22 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <th><input type="text" name="code" maxlength="3" required class="form-control form-control-sm"></th>
-                                    <th><input type="text" name="description" required class="form-control form-control-sm"></th>
-                                    <th><input type="tel" name="mobile" required class="form-control form-control-sm"></th>
-                                    <th><input type="email" name="email" required class="form-control form-control-sm"></th>
-                                    <th><button class="btn btn-success rounded-0">SAVE</button></th>
+                                    <td><input type="text" name="code" maxlength="3" required class="form-control form-control-sm"></td>
+                                    <td><input type="text" name="description" required class="form-control form-control-sm"></td>
+                                    <td><input type="tel" name="mobile" required class="form-control form-control-sm"></td>
+                                    <td><input type="email" name="email" required class="form-control form-control-sm"></td>
+                                    <td><button class="btn btn-success rounded-0">SAVE</button></td>
                                 </tr>
+                                {% for procider in providers %}
+
+                                    <tr>
+                                        <th>{{ procider.provider_code }}</th>
+                                        <th>{{ procider.descr }}</th>
+                                        <th>{{ procider.mobile }}</th>
+                                        <th colspan="2">{{ procider.email }}</th>
+                                    </tr>
+
+                                {% endfor %}
                             </tbody>
                         </table>
                     </form>

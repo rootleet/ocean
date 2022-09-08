@@ -1,6 +1,6 @@
 import datetime
 
-
+from blog.models import Providers
 from ocean import settings
 from django.db import models
 from django.contrib.auth.models import User
@@ -18,6 +18,8 @@ class tags(models.Model):
     tag_dec = models.TextField()
     provider = models.IntegerField(default=0)
 
+    def provider_name(self):
+        return Providers.objects.get(pk=self.provider).descr
 
 class QuestionTags(models.Model):
     question = models.TextField()

@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.db import models
 from community.models import questions, QuestionTags
+from blog.models import Providers
 
 
 # Create your models here.
@@ -69,7 +70,7 @@ class TaskHD(models.Model): ## task model
     added_on = models.DateTimeField(auto_now=True)
     edited_on = models.DateTimeField(auto_now=True)
     status = models.IntegerField(default=0)
-
+    domain = models.ForeignKey('blog.Providers',on_delete=models.CASCADE)
     def owner_name(self):
         return User.objects.get(pk=self.owner).username
 
