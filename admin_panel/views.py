@@ -416,10 +416,14 @@ def test_suolution(request):
         body = form['body']
         recipient_list = [to]
 
+        recipients = []
+        rs = to.split(',')
+        recipients.extend(rs)
+
         subject = form['subject']
 
         try:
-            send_mail(subject, body, 'robolog', recipient_list, html_message=body,fail_silently=False)
+            send_mail(subject, body, 'robolog', recipients, html_message=body,fail_silently=False)
             # update transactions
             Emails(sent_from='henrychase411@gmail.com',sent_to=to,subject=subject,body=body,email_type='task',ref=task_uni).save()
             TaskTrans(entry_uni=task_uni,tran_title='Testing',tran_descr=f"Send to {to} for testing \nBody:\n {body}").save()
