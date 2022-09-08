@@ -44,6 +44,56 @@
                                 Search
                               </button>
 
+                            <button data-toggle="modal" data-target="#filter" class="btn btn-sm btn-primary">FILTER</button>
+                            <div class="modal fade" data-backdrop="false" id="filter">
+                                <div class="modal-dialog">
+                                    <form method="get" action="{% url 'task_filter' %}" class="modal-content">
+                                        <div class="modal-header">
+                                            <strong class="modal-title">Filter Option</strong>
+                                        </div>
+
+                                        <div class="modal-body">
+
+                                            <!-- DOMEIn -->
+                                            <div class="panel panel-default">
+                                                <div class="panel-heading">
+                                                    <h4>Domain</h4>
+                                                </div>
+                                                <div class="panel-body">
+                                                    {% for tag in domain %}
+                                                      <label class="radio-inline">
+                                                        <input required type="radio" name="domain" id="optionsRadios{{ tag.pk }}" value="{{ tag.pk }}"> {{ tag.tag_dec }}
+                                                      </label>
+                                                    {% endfor %}
+                                                </div>
+                                            </div>
+
+                                            <!-- STATUS -->
+                                            <div class="panel panel-default">
+                                                <div class="panel-heading">
+                                                    <h4>Status</h4>
+                                                </div>
+                                                <div class="panel-body">
+                                                    <label class="radio-inline">
+                                                        <input required type="radio" name="status" id="optionsRadios1" value="0"> OPEN
+                                                      </label>
+                                                    <label class="radio-inline">
+                                                        <input required type="radio" name="status" id="optionsRadios2" value="1"> CLOSE
+                                                      </label>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-warning btn-sm">CANCEL</button>
+                                            <button type="submit" class="btn btn-success">APPLY FILTER</button>
+                                        </div>
+
+                                    </form>
+                                </div>
+                            </div>
+
                             <input type="hidden" name="export_url" id="export_url" value="{% url 'export_task' %}">
                             <div class="modal fade" id="search" data-backdrop="false">
                                 <div class="modal-dialog">

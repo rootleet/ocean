@@ -140,8 +140,14 @@ def log_issue(request):
 def all_task(request):
     tasks = TaskHD.objects.all()
     prov = Providers.objects.all()
+
     context = {
-        'tasks': tasks, 'providers': prov, 'page_title': "All Tasks",'sales':sales,'day':day
+        'tasks': tasks,
+        'providers': prov,
+        'page_title': "All Tasks",
+        'sales':sales,
+        'day':day,
+        'domain': tags.objects.all()
     }
     return render(request, 'all_task.html', context=context)
 
@@ -487,4 +493,22 @@ def test_suolution(request):
             return HttpResponse(f"Could Not Send Email {e}")
 
 
+def task_filter(request):
+    if request.method == 'GET':
+        form = request.GET
+        domain = form['domain']
+        status = form['status']
 
+        tasks = TaskHD.objects.filter(domain=domain,status=status)
+        prov = Providers.objects.all()
+
+
+        context = {
+            'tasks': tasks,
+            'providers': prov,
+            'page_title': "All Tasks",
+            'sales': sales,
+            'day': day,
+            'domain': tags.objects.all()
+        }
+        return render(request, 'all_task.html', context=context)
