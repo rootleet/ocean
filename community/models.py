@@ -18,8 +18,8 @@ class tags(models.Model):
     tag_dec = models.TextField()
     provider = models.ForeignKey('blog.Providers', on_delete=models.CASCADE)
 
-    def provider_name(self):
-        return Providers.objects.get(pk=self.provider).descr
+    # def provider_name(self):
+    #     return Providers.objects.get(pk=self.provider).descr
 
 class QuestionTags(models.Model):
     question = models.TextField()
