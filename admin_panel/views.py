@@ -473,7 +473,7 @@ def change_domain(request):
     else:
         return HttpResponse("error%%Invalid Form")
 
-@login_required(login_url='/login/')
+
 def test_suolution(request):
     if request.method == 'POST':
         form = request.POST
