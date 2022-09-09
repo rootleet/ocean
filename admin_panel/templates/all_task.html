@@ -138,7 +138,7 @@
                                                             <td>
                                                                 <span class="badge">{{ task.domain.tag_dec }}</span>
                                                             </td>
-                                                            <td>{{ task.provider }}</td>
+                                                            <td>{{ task.provider.descr }}</td>
                                                             <td>{{ task.title }}</td><td>{{ task.description | safe | slice:":30" }}</td>
                                                             <td>
                                                                 {% if task.status == 0 %}

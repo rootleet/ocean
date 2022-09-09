@@ -291,7 +291,7 @@ def view_task(request, task_id):
     context = {
         'taskHd': TaskHD.objects.get(entry_uni=task_id),
         'taskTran': TaskTrans.objects.filter(entry_uni=task_id),
-        'domains':Providers.objects.all()
+        'domains':tags.objects.all()
     }
     return render(request, 'issues.html', context=context)
 
@@ -457,13 +457,15 @@ def change_domain(request):
 
 
 
-        new_domain_detail = Providers.objects.get(id=new_domain)
-        old_domain_detail = Providers.objects.get(id=curr_domain)
+        # new_domain_detail = tags.objects.get(id=new_domain)
+        # old_domain_detail = tags.objects.get(id=curr_domain)
 
-        task_tran = TaskTrans(entry_uni=task_uni,tran_title=f'Domain Switch From {old_domain_detail.descr} To {new_domain_detail.descr}',tran_descr=reason,owner=request.user.pk)
+        task_tran = TaskTrans(entry_uni=task_uni,tran_title=f'Domain Switch From {curr_domain} To {new_domain}',tran_descr=reason,owner=request.user.pk)
         task_hd = TaskHD.objects.get(entry_uni=task_uni)
-        task_hd.domain = Providers.objects.get(pk=new_domain)
+        # return HttpResponse(new_domain)
+        task_hd.domain = tags.objects.get(pk=new_domain)
         try:
+
             task_hd.save()
             task_tran.save()
             return HttpResponse('done%%Task Send to new domain')

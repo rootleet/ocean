@@ -43,12 +43,12 @@
 
                                         <div class="modal-body">
                                             <label for="">From : </label><select name="curr_domain" readonly id="" class="form-control">
-                                                <option value="{{ taskHd.domain.pk }}">{{ taskHd.domain.descr }}</option>
+                                                <option value="{{ taskHd.domain.pk }}">{{ taskHd.provider.descr }}</option>
                                             </select> <br>
                                             <label for="">To : </label><select name="new_domain" id="" class="form-control">
                                                 {% for domain in domains %}
                                                     {% if domain.pk != taskHd.domain.pk %}
-                                                        <option value="{{ domain.pk }}">{{ domain.descr }}</option>
+                                                        <option value="{{ domain.pk }}">{{ domain.tag_dec }}</option>
                                                     {% endif %}
                                                 {% endfor %}
                                             </select> <br>

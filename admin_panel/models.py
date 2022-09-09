@@ -78,7 +78,7 @@ class TaskHD(models.Model): ## task model
         return questions.object.get(uni=self.ref)
 
     def provider(self):
-        domain =  self.domain.provider.descr
+        domain =  self.domain.provider
         return domain
 
 
