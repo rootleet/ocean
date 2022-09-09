@@ -252,7 +252,7 @@ def new_tag(request):
 
         if tags.objects.filter(tag_code=code).count() < 1:
             # save
-            save = tags(tag_code=code, tag_dec=description, provider=provider)
+            save = tags(tag_code=code, tag_dec=description, provider=Providers.objects.get(pk=provider))
             save.save()
             return redirect('accessories')
         else:
