@@ -286,7 +286,7 @@ def add_to_task(request):
         except Exception as e:
             return HttpResponse(f'error%%{e}')
 
-@login_required(login_url='/login/')
+# @login_required(login_url='/login/')
 def view_task(request, task_id):
     context = {
         'taskHd': TaskHD.objects.get(entry_uni=task_id),
