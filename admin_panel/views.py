@@ -21,6 +21,8 @@ from community.models import *
 from admin_panel.models import *
 from blog.models import *
 from ocean import settings
+from django.contrib.auth.decorators import login_required
+
 
 
 def today(what='none'):  # get time
@@ -76,6 +78,8 @@ else:
     }
 
 
+
+@login_required(login_url='/login/')
 def index(request):
     current_user = request.user
     if current_user.is_active:
@@ -83,7 +87,7 @@ def index(request):
     else:
         return redirect('login')
 
-
+@login_required(login_url='/login/')
 def all_issues(request):
     issues = questions.objects.all()
     context = {
@@ -92,7 +96,7 @@ def all_issues(request):
     }
     return render(request, 'all_issues.html', context=context)
 
-
+@login_required(login_url='/login/')
 def view_issue(request, issue_id):
     issue = questions.objects.get(uni=issue_id)
     task_count = TaskHD.objects.filter(ref=issue_id).count()
@@ -102,7 +106,7 @@ def view_issue(request, issue_id):
     }
     return render(request, 'view_issue.html', context=context)
 
-
+@login_required(login_url='/login/')
 def log_issue(request):
     if request.method == 'GET':
         current_user = request.user
@@ -137,6 +141,7 @@ def log_issue(request):
         return HttpResponse('WRONG')
 
 
+@login_required(login_url='/login/')
 def all_task(request):
     tasks = TaskHD.objects.all()
     prov = Providers.objects.all()
@@ -151,7 +156,7 @@ def all_task(request):
     }
     return render(request, 'all_task.html', context=context)
 
-
+@login_required(login_url='/login/')
 def mark_esc(request):
     if request.method == 'GET':
         current_user = request.user
@@ -174,7 +179,7 @@ def mark_esc(request):
         except Exception as e:
             return HttpResponse(f"error%%{e} {provider_details}")
 
-
+@login_required(login_url='/login/')
 def to_scalate(request):
     x_counts = PendingEscalations.objects.all().values('provider').annotate(total=Count('provider')).order_by('total')
     context = {
@@ -182,7 +187,7 @@ def to_scalate(request):
     }
     return render(request, 'to_escalate.html', context=context)
 
-
+@login_required(login_url='/login/')
 def escalate_detail(request, provider):
     prov_det = Providers.objects.get(provider_code=provider)
     issues = PendingEscalations.objects.filter(provider=provider)
@@ -192,7 +197,7 @@ def escalate_detail(request, provider):
     }
     return render(request, 'escalate_detail.html', context=context)
 
-
+@login_required(login_url='/login/')
 def send_to_provider(request):
     if request.method == 'GET':
         current_user = request.user
@@ -212,7 +217,7 @@ def send_to_provider(request):
 
         return HttpResponse(f"done%%Issue Sent To {c_provider}")
 
-
+@login_required(login_url='/login/')
 def accessories(request):
 
 
@@ -222,7 +227,7 @@ def accessories(request):
     }
     return render(request, 'accessories.html', context=context)
 
-
+@login_required(login_url='/login/')
 def new_provider(request):
     if request.method == 'POST':
         form = request.POST
@@ -237,7 +242,7 @@ def new_provider(request):
             save_provider.save()
             return redirect('accessories')
 
-
+@login_required(login_url='/login/')
 def new_tag(request):
     if request.method == 'POST':
         form = request.POST
@@ -253,7 +258,7 @@ def new_tag(request):
         else:
             return HttpResponse(f"{code} EXIST")
 
-
+@login_required(login_url='/login/')
 def add_to_task(request):
     if request.method == 'POST':
         form = request.POST
@@ -281,7 +286,7 @@ def add_to_task(request):
         except Exception as e:
             return HttpResponse(f'error%%{e}')
 
-
+@login_required(login_url='/login/')
 def view_task(request, task_id):
     context = {
         'taskHd': TaskHD.objects.get(entry_uni=task_id),
@@ -290,7 +295,7 @@ def view_task(request, task_id):
     }
     return render(request, 'issues.html', context=context)
 
-
+@login_required(login_url='/login/')
 def add_task_update(request):
     if request.method == 'POST':
         user = request.user
@@ -305,7 +310,7 @@ def add_task_update(request):
         except Exception as e:
             return HttpResponse(e)
 
-
+@login_required(login_url='/login/')
 def new_task(request):
     if request.method == 'POST':
         form = request.POST
@@ -334,7 +339,7 @@ def new_task(request):
         }
         return render(request, 'new_task.html',context=context)
 
-
+@login_required(login_url='/login/')
 def update_task(request, entry_uni):
     if request.method == 'POST':
         form = request.POST
@@ -355,7 +360,7 @@ def update_task(request, entry_uni):
         }
         return render(request, 'update_task.html', context=context)
 
-
+@login_required(login_url='/login/')
 def close_task(request):
     if request.method == 'GET':
         form = request.GET
@@ -374,11 +379,11 @@ def close_task(request):
             TaskHD.objects.filter(entry_uni=entry).update(status=0)
             return HttpResponse(f'error%%{e}')
 
-
+@login_required(login_url='/login/')
 def export_issues(request):
     return None
 
-
+@login_required(login_url='/login/')
 def export_task(request):
     if request.method == 'GET':
         import nltk
@@ -428,7 +433,7 @@ def export_task(request):
 
                 return response
 
-
+@login_required(login_url='/login/')
 def finder(request):
     if request.method == 'GET':
         form = request.GET
@@ -440,7 +445,7 @@ def finder(request):
             qs_json = serializers.serialize('json', data)
             return HttpResponse(qs_json, content_type='application/json')
 
-
+@login_required(login_url='/login/')
 def change_domain(request):
     if request.method == 'POST':
 
@@ -468,7 +473,7 @@ def change_domain(request):
     else:
         return HttpResponse("error%%Invalid Form")
 
-
+@login_required(login_url='/login/')
 def test_suolution(request):
     if request.method == 'POST':
         form = request.POST
@@ -492,7 +497,7 @@ def test_suolution(request):
         except Exception as e:
             return HttpResponse(f"Could Not Send Email {e}")
 
-
+@login_required(login_url='/login/')
 def task_filter(request):
     if request.method == 'GET':
         form = request.GET
