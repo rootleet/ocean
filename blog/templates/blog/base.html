@@ -61,6 +61,43 @@
                                     </div>
 
     {% endif %}
+    <div class="modal fade" id="imageLink">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <strong class="modal-title">ImageLink</strong>
+                </div>
+
+                <div class="modal-body">
+
+                    <div class="custom-file mb-2">
+                        <input type="file" class="custom-file-input" id="imgInp">
+                        <label class="custom-file-label" for="customFile">Choose file</label>
+                    </div>
+
+                    <div class="w-50 mx-auto">
+                        <img id="blah" class="img-fluid" src="#" alt="your image" />
+                    </div>
+
+                </div>
+
+                <script>
+                // Add the following code if you want the name of the file appear on select
+                $(".custom-file-input").on("change", function() {
+                  var fileName = $(this).val().split("\\").pop();
+                  $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+                });
+                imgInp.onchange = evt => {
+                  const [file] = imgInp.files
+                  if (file) {
+                    blah.src = URL.createObjectURL(file)
+                  }
+}
+                </script>
+
+            </div>
+        </div>
+    </div>
 
     <header class="bg-light border-bottom custom_shadow">
         <nav class="navbar navbar-expand-sm bg-light h-100 navbar-light">
@@ -96,6 +133,10 @@
 
 
                                   {% endif %}
+                                <button  class="dropdown-item text-danger" data-toggle="modal" data-target="#imageLink"><i class="fa fa-image"></i> imageLink</button>
+
+
+
                                 <a class="dropdown-item text-primary" href="#"><i class="fa fa-user-circle"></i> Profile</a>
                               <a class="dropdown-item text-info" href="{% url 'ask_questions' %}"><i class="fa fa-question-circle"></i> Ask Support</a>
                                 <a class="dropdown-item text-danger" href="{% url 'logout' %}"><i class="fa fa-power-off"></i> Logout</a>

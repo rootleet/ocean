@@ -40,7 +40,11 @@ urlpatterns = [
     path('search/', views.finder,name='search'),
     path('change_domain/',views.change_domain,name='change_domain'),
     path('test_suolution/',views.test_suolution,name='test_suolution'),
-    path('task_filter/',views.task_filter, name='task_filter')
+    path('task_filter/',views.task_filter, name='task_filter'),
+    path('users/',views.users,name='users'),
+    path('add_notification_mem/',views.add_notification_mem,name='add_notification_mem'),
+    path('send_mail/<task_id>',views.send_mail,name='send_mail'),
+    path('autos/<tool>', views.auto, name='autos')
 
 
 

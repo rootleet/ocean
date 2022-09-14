@@ -100,6 +100,9 @@ class Emails(models.Model):
     body = models.TextField()
     email_type = models.TextField()
     ref = models.TextField()
+    scheduled_on = models.DateTimeField(auto_now_add=True)
+    status = models.IntegerField(default=0)
+    status_message = models.TextField(default='Scheduled')
     sent_on = models.DateTimeField(auto_now=True)
 
 
@@ -113,4 +116,13 @@ class Sales(models.Model):
     day = models.TextField()
     place = models.TextField()
     loc_desc = models.TextField()
+
+
+class NotificationGroups(models.Model):
+    full_name = models.TextField()
+    email_addr = models.TextField()
+    mobile_number = models.TextField()
+    domain = models.ForeignKey('community.tags', on_delete=models.CASCADE)
+
+
 

@@ -1,28 +1,18 @@
-import os
-from pathlib import Path
-
 #from bs4 import BeautifulSoup
-from django.contrib import messages
-from django.contrib.auth import authenticate, login as auth_login, logout
-from django.contrib.sites import requests
-import hashlib
 import babel.numbers
-
+# from unicodecsv import writer
+import datetime
+import hashlib
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 from django.core import serializers
 from django.core.mail import send_mail
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from django.templatetags.static import static
-#from unicodecsv import writer
-import datetime
 
-from community.models import *
 from admin_panel.models import *
 from blog.models import *
-from ocean import settings
-from django.contrib.auth.decorators import login_required
-
+from community.models import *
 
 
 def today(what='none'):  # get time
@@ -76,6 +66,9 @@ else:
         'discount':0.00,
         'net_sales':0.00
     }
+
+
+
 
 
 
@@ -223,7 +216,8 @@ def accessories(request):
 
     context = {
         'comm_tags': tags.objects.all(),
-        'providers': Providers.objects.all()
+        'providers': Providers.objects.all(),
+        'notomem': NotificationGroups.objects.all()
     }
     return render(request, 'accessories.html', context=context)
 
@@ -386,7 +380,6 @@ def export_issues(request):
 @login_required(login_url='/login/')
 def export_task(request):
     if request.method == 'GET':
-        import nltk
         form = request.GET
         sort = form['sort']
         doc_type = form['doc_type']
@@ -493,7 +486,7 @@ def test_suolution(request):
         try:
             send_mail(subject, body, 'robolog', recipients, html_message=body,fail_silently=False)
             # update transactions
-            Emails(sent_from='henrychase411@gmail.com',sent_to=to,subject=subject,body=body,email_type='task',ref=task_uni).save()
+            Emails(sent_from='henrychase411@gmail.com',sent_to=to,subject=subject,body=body,email_type='task',ref=task_uni,status=1).save()
             TaskTrans(entry_uni=task_uni,tran_title='Testing',tran_descr=f"Send to {to} for testing \nBody:\n {body}").save()
             return redirect('view_task',task_id=task_uni)
         except Exception as e:
@@ -519,3 +512,117 @@ def task_filter(request):
             'domain': tags.objects.all()
         }
         return render(request, 'all_task.html', context=context)
+
+
+def users(request):
+    from django.contrib.auth import get_user_model
+    User = get_user_model()
+    users = User.objects.all()
+    context={
+        'emails':Emails.objects.all()
+    }
+    return render(request, 'emails.html', context=context)
+
+
+def add_notification_mem(request):
+    if request.method == 'POST':
+        form = request.POST
+        full_name = form['full_name']
+        email = form['email']
+        phone = form['phone']
+        provider = form['provider']
+
+        try:
+            NotificationGroups(full_name=full_name,email_addr=email,mobile_number=phone,domain=tags.objects.get(pk=provider)).save()
+            return redirect('accessories')
+        except Exception as e:
+            return HttpResponse(f"There is an error {e}")
+
+
+def send_mail(request,task_id):
+    if request.method == 'POST':
+        form = request.POST
+        group = form['group']
+        entry = form['entry']
+        subject = form['subject']
+        body = form['body']
+
+        # get all group member
+        group_member = NotificationGroups.objects.filter(domain=tags.objects.get(pk=group))
+        group_email_addr = ''
+        if group_member.count() > 0:
+            for memeber in group_member:
+                email_address =  memeber.email_addr
+                try:
+                    group_email_addr += f" {email_address}"
+                    email_address = memeber.email_addr
+                    Emails(sent_from='Admin', sent_to=email_address, subject=subject, body=body, email_type='task',
+                           ref=entry).save()
+                except Exception as e:
+                    print(f"Could Not sent on {e}")
+
+            TaskTrans(entry_uni=entry,tran_title='Send Mail',tran_descr=f"Email has been send to {group_email_addr} with message {body}",owner=request.user.pk).save()
+        # insert into notification
+
+        return redirect('view_task',task_id=entry)
+
+
+    else:
+        context = {
+            'entry': TaskHD.objects.get(entry_uni=task_id),
+            'groups': tags.objects.all()
+        }
+        return render(request, 'send_task_mail.html', context=context)
+
+
+def auto(request,tool):
+    if tool == 'mail_sync':
+        from django.core import mail
+        from django.template.loader import render_to_string
+        from django.utils.html import strip_tags
+
+        errors = ''
+        passes = ''
+
+        if Emails.objects.filter(status=0).count() > 0:
+
+            for email in Emails.objects.filter(status=0):
+                recipient = email.sent_to
+                subject = email.subject
+                sent_from = email.sent_from
+                body = email.body
+                this_email = Emails.objects.filter(pk=email.pk)
+                email_type = email.email_type
+                email_ref = email.ref
+
+                html_message = render_to_string('mail_template.html', {'body': body})
+                plain_message = strip_tags(html_message)
+                from_email = sent_from
+                to = recipient
+                try:
+
+
+                    mail.send_mail(subject, body, from_email, [to], html_message=body)
+                    # update transactions
+                    q = Emails.objects.get(pk=email.pk)
+                    q.status = 1
+                    q.status_message = 'Email Sent'
+                    q.save()
+
+                    if email_type == 'task':
+                        TaskTrans(entry_uni=email_ref,tran_title='Send Mail',tran_descr=body,owner=0)
+
+
+
+                    passes += f"Email Sent to {request} \n"
+                except Exception as e:
+                    errors += f" Could not send email to {recipient} because {e}"
+
+            return HttpResponse(f"Passes : {passes} \n Failed : {errors}")
+        else:
+
+            return HttpResponse(f"No EMail To Send")
+
+
+
+

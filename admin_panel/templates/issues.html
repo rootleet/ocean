@@ -66,7 +66,7 @@
                      </li>
                     <li>
                         <a class="disabled">
-                            <kbd data-toggle="modal" data-target="#sendMail" style="cursor: pointer" class="btn-info btn-sm">Test</kbd>
+                            <kbd data-toggle="modal" data-target="#sendMail" style="cursor: pointer" class="btn-info btn-sm">Send Mail</kbd>
                         </a>
 
                         <div class="modal" id="sendMail" data-backdrop="false">
@@ -98,6 +98,11 @@
                                 </form>
                             </div>
 
+                    </li>
+                    <li>
+                        <a href="{% url 'send_mail' taskHd.entry_uni %}" class="">
+                            <kbd  style="cursor: pointer" class="btn-success btn-sm">Send Mail V2</kbd>
+                        </a>
                     </li>
                 </ul>
 

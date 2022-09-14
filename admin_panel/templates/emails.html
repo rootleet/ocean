@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body %}
+
+    <div class="w-100 h-100">
+
+         <div class="panel panel-danger">
+                    <div class="panel-heading">
+                        <h4>Community Issues</h4>
+                        <ul class="links">
+                            <li>
+                                <a href="#">
+                                    <i class="fa fa-navicon"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div style="text-align: left" class="panel-sub-heading">
+                        <div style="width: 100%;" class="d-flex flex-wrap">
+                            <span onclick="location.href=''" class="btn btn-sm btn-info">NEW USER</span>
+
+
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="table-responsive" style="height: 60vh; overflow: auto">
+                            <table class="table table -bordered no-margin">
+                                <input type="hidden" id="close_url" value="{% url 'close_task' %}">
+                                                    <thead>
+                                                        <tr>
+                                                            <th style="width: 10%">From</th>
+                                                            <th style="width: 10%">TO</th>
+                                                            <th style="width: 15%">Subject</th>
+                                                            <th style="width: 20%">Type</th>
+                                                            <th style="width: 5%">Reference</th>
+                                                            <th style="width: 15%">Status</th>
+                                                            <th style="width: 25%">Date</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {% for email in emails %}
+                                                            <tr>
+                                                                <td>{{ email.sent_from }}</td>
+                                                                <td>{{ email.sent_to }}</td>
+                                                                <td>{{ email.subject }}</td>
+                                                                <td>{{ email.email_type }}</td>
+                                                                <td>{{ email.ref }}</td>
+                                                                <td>{{ email.status }}</td>
+                                                                <td>{{ email.scheduled_on }}</td>
+                                                            </tr>
+
+                                                        {% endfor %}
+
+                                                    </tbody>
+                                                </table>
+                        </div>
+                    </div>
+
+
+                </div>
+
+
+    </div>
+
+{% endblock %}
