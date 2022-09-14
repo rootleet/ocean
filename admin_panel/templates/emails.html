@@ -42,7 +42,7 @@
                                                         {% for email in emails %}
                                                             <tr>
                                                                 <td>{{ email.sent_from }}</td>
-                                                                <td>{{ email.sent_to }}</td>
+                                                                <td>{{ email.sent_to | slice:":20" }}</td>
                                                                 <td>{{ email.subject }}</td>
                                                                 <td>{{ email.email_type }}</td>
                                                                 <td>{{ email.ref }}</td>
