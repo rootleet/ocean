@@ -514,7 +514,7 @@ def task_filter(request):
         return render(request, 'all_task.html', context=context)
 
 
-def users(request):
+def emails(request):
     from django.contrib.auth import get_user_model
     User = get_user_model()
     users = User.objects.all()
