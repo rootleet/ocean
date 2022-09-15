@@ -168,18 +168,18 @@
                                 <input type="hidden" id="close_url" value="{% url 'close_task' %}">
                                 <thead>
                                     <tr>
-                                        <th>Group</th>
-                                        <th>Name</th>
-                                        <th>Address</th>
-                                        <th>Action</th>
+                                        <th style="width: 20%">Group</th>
+                                        <th style="width: 20%">Name</th>
+                                        <th style="width: 30%">Address</th>
+                                        <th style="width: 20%">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {% for emg in email_address %}
                                         <tr>
-                                            <td>{{ emg.group.group_name }}</td>
-                                            <td>{{ emg.full_name }}</td>
-                                            <td>{{ emg.email_addr }}</td>
+                                            <td>{{ emg.group.group_name | slice:":10" }}</td>
+                                            <td>{{ emg.full_name | slice:":10" }}</td>
+                                            <td>{{ emg.email_addr  | slice:":10"}}</td>
                                             <td>
                                                 <div style="width: 100%" class="d-flex flex-wrap align-content-center justify-content-between">
                                                     <button class="badge btn-sm btn-warning"><i class="fa fa-pause"></i></button>
