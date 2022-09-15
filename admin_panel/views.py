@@ -571,7 +571,7 @@ def send_mail(request,task_id):
 
             TaskTrans(entry_uni=entry,tran_title='Send Mail',tran_descr=f"Email has been send to {group_email_addr} with message {body}",owner=request.user.pk).save()
         # insert into notification
-
+        messages.error(request, f"Email Sceduled to be sent to {group_email_addr}")
         return redirect('view_task',task_id=entry)
 
 
