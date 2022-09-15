@@ -162,7 +162,7 @@
 
                         </div>
                     </div>
-                    <div class="panel-body" style="height: 75%!important ;overflow: auto!important; padding: 0px !important">
+                    <div class="panel-body" style="height: 75%!important ;overflow: auto!important;">
                         <div class="table-responsive" style=" ; overflow: hidden">
                             <table class="table table-bordered table-warning no-margin">
                                 <input type="hidden" id="close_url" value="{% url 'close_task' %}">
@@ -182,8 +182,8 @@
                                             <td>{{ emg.email_addr }}</td>
                                             <td>
                                                 <div style="width: 100%" class="d-flex flex-wrap align-content-center justify-content-between">
-                                                    <button class="badge btn-sm btn-warning">suspend</button>
-                                                    <button class="badge btn-sm btn-danger">delete</button>
+                                                    <button class="badge btn-sm btn-warning"><i class="fa fa-pause"></i></button>
+                                                    <button class="badge btn-sm btn-danger">del</button>
                                                 </div>
                                             </td>
                                         </tr>
