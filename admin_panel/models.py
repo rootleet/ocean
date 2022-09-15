@@ -122,7 +122,17 @@ class NotificationGroups(models.Model):
     full_name = models.TextField()
     email_addr = models.TextField()
     mobile_number = models.TextField()
-    domain = models.ForeignKey('community.tags', on_delete=models.CASCADE)
+    group = models.ForeignKey('EmailGroup', on_delete=models.CASCADE,default=0)
 
+class EmailGroup(models.Model):
+    group_name = models.TextField()
+    def_domain = models.ForeignKey('community.tags', on_delete=models.CASCADE)
+    description = models.TextField()
+    created_by = models.IntegerField(default=0)
+    created_on = models.DateTimeField(auto_now_add=True)
+    edited_on = models.DateTimeField(auto_now=True)
+
+    def clients(self):
+        return NotificationGroups.objects.filter(group=self.pk).count()
 
 

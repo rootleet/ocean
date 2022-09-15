@@ -9,6 +9,7 @@ from django.core import serializers
 from django.core.mail import send_mail
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
+from django.contrib import messages
 
 from admin_panel.models import *
 from blog.models import *
@@ -519,7 +520,10 @@ def emails(request):
     User = get_user_model()
     users = User.objects.all()
     context={
-        'emails':Emails.objects.all()
+        'comm_tags': tags.objects.all(),
+        'email_groups':EmailGroup.objects.all(),
+        'emails':Emails.objects.all(),
+        'email_address':NotificationGroups.objects.all()
     }
     return render(request, 'emails.html', context=context)
 
@@ -530,13 +534,17 @@ def add_notification_mem(request):
         full_name = form['full_name']
         email = form['email']
         phone = form['phone']
-        provider = form['provider']
+        emg = form['email_group']
+        email_group = EmailGroup.objects.get(pk=emg)
 
         try:
-            NotificationGroups(full_name=full_name,email_addr=email,mobile_number=phone,domain=tags.objects.get(pk=provider)).save()
-            return redirect('accessories')
+            NotificationGroups(full_name=full_name,email_addr=email,mobile_number=phone,group=email_group).save()
+            messages.error(request, f"{email} Added to {email_group.group_name}")
+            return redirect('emails')
         except Exception as e:
-            return HttpResponse(f"There is an error {e}")
+            messages.error(request, f"There is an error adding email {e}")
+            return redirect('emails')
+
 
 
 def send_mail(request,task_id):
@@ -548,7 +556,7 @@ def send_mail(request,task_id):
         body = form['body']
 
         # get all group member
-        group_member = NotificationGroups.objects.filter(domain=tags.objects.get(pk=group))
+        group_member = NotificationGroups.objects.filter(group=tags.objects.get(pk=group))
         group_email_addr = ''
         if group_member.count() > 0:
             for memeber in group_member:
@@ -624,5 +632,22 @@ def auto(request,tool):
             return HttpResponse(f"No EMail To Send")
 
 
+def save_email_group(request):
+    if request.method == 'POST':
+        form = request.POST
+        name = form['name']
+        tag = form['tag']
+        description = form['description']
 
-
+        try:
+            EmailGroup(
+                group_name=name,
+                def_domain=tags.objects.get(pk=tag),
+                description = description,
+                created_by = request.user.pk
+            ).save()
+            messages.error(request, f"Group Saved")
+            return redirect('emails')
+        except Exception as e:
+            messages.error(request,f"Could Not Save Group {e}")
+            return redirect('emails')

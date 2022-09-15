@@ -141,9 +141,15 @@
 							<i class="fa fa-search"></i>
 
 						</div>
-
-
 					</li>
+                    <li>
+						<div class="custom-search hidden-sm hidden-xs pull-left">
+							<input type="text" class="search-query" placeholder="Search here">
+							<i class="fa fa-search"></i>
+
+						</div>
+					</li>
+
 
 				</ul>
 				<div class="pull-right">
@@ -506,6 +512,23 @@
         <script src="{% static 'general/js/error_handler.js' %}"></script>
         <script src="{% static 'general/js/cust.js' %}"></script>
         <script src="{% static 'general/js/sweetalert2@11' %}"></script>
+
+        {% if messages %}
+            <script>
+                let mess = ''
+            </script>
+            {% for message in messages %}
+
+                <script>
+                    mess += " {{ message }} \n"
+                </script>
+
+            {% endfor %}
+            <script>
+                swal_response('info','PROCEDURE RESPONSE',`${mess}`)
+            </script>
+
+        {% endif %}
 
 </body>
 </html>

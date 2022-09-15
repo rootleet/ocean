@@ -44,7 +44,8 @@ urlpatterns = [
     path('emails/',views.emails,name='emails'),
     path('add_notification_mem/',views.add_notification_mem,name='add_notification_mem'),
     path('send_mail/<task_id>',views.send_mail,name='send_mail'),
-    path('autos/<tool>', views.auto, name='autos')
+    path('autos/<tool>', views.auto, name='autos'),
+    path('save_email_group/',views.save_email_group,name='save_email_group')
 
 
 

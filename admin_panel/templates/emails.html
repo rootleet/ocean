@@ -5,9 +5,203 @@
 
     <div class="w-100 h-100">
 
-         <div class="panel panel-danger">
+        <div class="container-fluid">
+
+            <div class="row">
+
+                <!-- EMAIL GROUPS -->
+                <div class="col-sm-6">
+                    <div class="panel panel-danger" style="height: 40vh; overflow: hidden !important">
                     <div class="panel-heading">
-                        <h4>Community Issues</h4>
+                        <h4>Mailing Groups</h4>
+                        <ul class="links">
+                            <li>
+                                <a href="#">
+                                    <i class="fa fa-navicon"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div style="text-align: left" class="panel-sub-heading">
+                        <div style="width: 100%;" class="d-flex flex-wrap">
+                            <button data-toggle="modal" href="#addMailingGroup" class="btn btn-sm btn-info">New Email Group</button>
+                            <form method="post" action="{% url 'save_email_group' %}" class="modal fade" id="addMailingGroup" data-backdrop="false">
+                            {% csrf_token %}
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <strong class="modal-title">Adding Emailing Group</strong>
+                                        </div>
+                                        <div class="modal-body">
+                                            <label style="width: 100%">Grou Name
+                                                <input type="text" required autocomplete="off" name="name" class="form-control rounded-o">
+                                            </label>
+                                            <small class="text-info">Descriptive name of group i.e CMMS Accounts</small>
+                                            <hr>
+                                            <label for="">Associated Tag</label><select required name="tag" id="" class="form-control rounded-0">
+                                                <option disabled selected>Select Tag</option>
+                                                {% for mg_tags in comm_tags %}
+                                                    <option value="{{ mg_tags.pk }}">{{ mg_tags.tag_dec }}</option>
+                                                {% endfor %}
+                                            </select>
+                                            <small class="text-info">Tag to tie this group to auto emailing</small>
+                                            <hr>
+                                            <label for="">Group Description</label>
+                                            <textarea name="description" id="" required cols="30" rows="5"
+                                                      class="form-control rounded-0"></textarea>
+                                            <small class="text-info">Brief description of group</small>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button class="btn btn-warning btn-sm rounded-0" type="button" data-dismiss="modal">CANCEL</button>
+                                            <button class="btn btn-sm btn-success rounded-0" type="submit">SAVE</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+                    <div class="panel-body" style="height: 75%!important ;overflow: auto!important">
+                        <div class="table-responsive" style=" ; overflow: hidden">
+                            <table class="table table-bordered no-margin">
+                                <input type="hidden" id="close_url" value="{% url 'close_task' %}">
+                                <thead>
+                                    <tr>
+                                        <th>CL</th>
+                                        <th>Group Name</th>
+                                        <th>Default Domain</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for emg in email_groups %}
+                                        <tr>
+                                            <td>{{ emg.clients }}</td>
+                                            <td>{{ emg.group_name }}</td>
+                                            <td>{{ emg.def_domain.tag_dec }}</td>
+                                            <td>
+                                                <div style="width: 100%" class="d-flex flex-wrap align-content-center justify-content-between">
+                                                    <button class="badge btn-sm btn-warning">suspend</button>
+                                                    <button class="badge btn-sm btn-danger">delete</button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+
+                </div>
+                </div>
+
+                <!-- EMAIL ADDRESSES -->
+                <div class="col-sm-6">
+                    <div class="panel panel-warning" style="height: 40vh; overflow: hidden !important">
+                    <div class="panel-heading">
+                        <h4>Mailing Addresses</h4>
+                        <ul class="links">
+                            <li>
+                                <a href="#">
+                                    <i class="fa fa-navicon"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div style="text-align: left" class="panel-sub-heading">
+                        <div style="width: 100%;" class="d-flex flex-wrap">
+                            <button data-toggle="modal" href="#newEmailAddress" class="btn btn-sm btn-warning">New Address</button>
+                            <form method="post" action="{% url 'add_notification_mem' %}" class="modal fade" id="newEmailAddress" data-backdrop="false">
+                            {% csrf_token %}
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header bg-warning">
+                                            <strong class="modal-title">Adding Email Address</strong>
+                                        </div>
+                                        <div class="modal-body">
+                                            <!-- FULL NAME -->
+                                            <label style="width: 100%">Full Name
+                                                <input type="text" required autocomplete="off" name="full_name" class="form-control border-warning rounded-o">
+                                            </label>
+                                            <small class="text-warning">Full name of recipient</small>
+                                            <hr>
+
+                                            <!-- Email Address -->
+                                            <label style="width: 100%">Email address
+                                                <input type="email" required autocomplete="off" name="email" class="form-control border-warning rounded-o">
+                                            </label>
+                                            <small class="text-warning">Primary email address of recipient</small>
+                                            <hr>
+
+                                            <!-- MOBILE -->
+                                            <label style="width: 100%">Mobile Number
+                                                <input type="tel" required autocomplete="off" name="phone" class="form-control border-warning rounded-o">
+                                            </label>
+                                            <small class="text-warning">In future, there is a plan to send sms as well, this data is for that</small>
+                                            <hr>
+
+                                            <!-- GROUP -->
+                                            <label for="">Email Group</label>
+                                            <select name="email_group" id="" class="form-control">
+                                                <option disabled selected>Select Group</option>
+                                                {% for emg in email_groups %}
+                                                    <option value="{{ emg.pk }}">{{ emg.group_name }}</option>
+                                                {% endfor %}
+                                            </select>
+
+
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button class="btn btn-warning btn-sm rounded-0" type="button" data-dismiss="modal">CANCEL</button>
+                                            <button class="btn btn-sm btn-success rounded-0" type="submit">SAVE</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+                    <div class="panel-body" style="height: 75%!important ;overflow: auto!important">
+                        <div class="table-responsive" style=" ; overflow: hidden">
+                            <table class="table table-bordered table-warning no-margin">
+                                <input type="hidden" id="close_url" value="{% url 'close_task' %}">
+                                <thead>
+                                    <tr>
+                                        <th>Group</th>
+                                        <th>Name</th>
+                                        <th>Address</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for emg in email_address %}
+                                        <tr>
+                                            <td>{{ emg.group.group_name }}</td>
+                                            <td>{{ emg.full_name }}</td>
+                                            <td>{{ emg.email_addr }}</td>
+                                            <td>
+                                                <div style="width: 100%" class="d-flex flex-wrap align-content-center justify-content-between">
+                                                    <button class="badge btn-sm btn-warning">suspend</button>
+                                                    <button class="badge btn-sm btn-danger">delete</button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+
+                </div>
+                </div>
+
+                <!-- EMAIL LIST -->
+                <div class="col-sm-12">
+                    <div class="panel panel-success" style="height: 40vh">
+                    <div class="panel-heading">
+                        <h4>Email List</h4>
                         <ul class="links">
                             <li>
                                 <a href="#">
@@ -24,8 +218,8 @@
                         </div>
                     </div>
                     <div class="panel-body">
-                        <div class="table-responsive" style="height: 60vh; overflow: auto">
-                            <table class="table table -bordered no-margin">
+                        <div class="table-responsive" style=" overflow: auto">
+                            <table class="table table-bordered table-success no-margin">
                                 <input type="hidden" id="close_url" value="{% url 'close_task' %}">
                                                     <thead>
                                                         <tr>
@@ -59,6 +253,13 @@
 
 
                 </div>
+                </div>
+
+            </div>
+
+        </div>
+
+
 
 
     </div>
