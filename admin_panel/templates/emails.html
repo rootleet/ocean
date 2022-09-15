@@ -175,7 +175,7 @@
                                 </thead>
                                 <tbody>
                                     {% for emg in email_address %}
-                                        <tr title="Email Address : {{ emg.email_address }} Phone : {{ emg.phone }}">
+                                        <tr title="Email Address : {{ emg.email_addr }} Phone : {{ emg.mobile_number }}">
                                             <td>{{ emg.group.group_name  | slice:":10" }}</td>
                                             <td>{{ emg.full_name  }}</td>
                                             <td>
