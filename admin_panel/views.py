@@ -556,7 +556,7 @@ def send_mail(request,task_id):
         body = form['body']
 
         # get all group member
-        group_member = NotificationGroups.objects.filter(group=tags.objects.get(pk=group))
+        group_member = NotificationGroups.objects.filter(group=EmailGroup.objects.get(pk=group))
         group_email_addr = ''
         if group_member.count() > 0:
             for memeber in group_member:
