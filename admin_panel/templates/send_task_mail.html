@@ -18,7 +18,11 @@
 
                             <label for="">Group</label><select name="group" id="" class="form-control">
                                 {% for group in groups %}
-                                    <option value="{{ group.pk }}">{{ group.group_name }}</option>
+                                    {% if group.def_domain == entry.domain  %}
+                                        <option selected value="{{ group.pk }}">{{ group.group_name }}</option>
+                                    {% else %}
+                                        <option value="{{ group.pk }}">{{ group.group_name }}</option>
+                                    {% endif %}
                                 {% endfor %}
                             </select>
                             <hr>
