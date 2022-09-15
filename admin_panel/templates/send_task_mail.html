@@ -18,7 +18,7 @@
 
                             <label for="">Group</label><select name="group" id="" class="form-control">
                                 {% for group in groups %}
-                                    <option value="{{ group.pk }}">{{ group.tag_dec }}</option>
+                                    <option value="{{ group.pk }}">{{ group.group_name }}</option>
                                 {% endfor %}
                             </select>
                             <hr>

@@ -578,7 +578,7 @@ def send_mail(request,task_id):
     else:
         context = {
             'entry': TaskHD.objects.get(entry_uni=task_id),
-            'groups': tags.objects.all()
+            'groups': EmailGroup.objects.all()
         }
         return render(request, 'send_task_mail.html', context=context)
 
