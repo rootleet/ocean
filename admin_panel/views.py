@@ -898,7 +898,7 @@ def save_new_product(request):
                 ProductPacking(product=obj,packing_un=PackingMaster.objects.get(pk=purch_un),pack_qty=purch_qty,packing_type='P').save()
                 ProductPacking(product=obj, packing_un=PackingMaster.objects.get(pk=ass_un), pack_qty=ass_qty, packing_type='P').save()
 
-                messages.error('done%%Item Added')
+                messages.error(request,'done%%Item Added')
 
             return redirect('products')
 
