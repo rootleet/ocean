@@ -3,8 +3,11 @@
 
 {% block body %}
 
-    <div class="w-100 container-fluid" style="height: 75vh; overflow: auto">
-        <div class="h-100 container w-100">
+    <div class="w-100 panel container-fluid" style="height: 75vh; overflow: auto">
+        <div class="panel-sub-heading">
+            <a href="{% url 'new-product' %}" class="btn-info">NEW</a>
+        </div>
+        <div class="panel-body container w-100">
                     <div style="height: 8%; background: #0C0C0C; color:#f3f3f3;" class="row no-gutters">
                         <strong class="col-sm-2 pt-3 pb-2 h-100 border-right">IMAGE</strong>
                         <strong class="col-sm-2 pt-3 pb-2 h-100 border-right">BARCODE</strong>
