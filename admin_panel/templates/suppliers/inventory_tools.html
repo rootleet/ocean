@@ -1,0 +1,341 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body %}
+
+    <div class="w-100 h-100">
+
+        <div class="row">
+
+            <!-- SUPPLIERS -->
+            <div class="col-sm-6">
+                    <div class="panel panel-danger" style="height: 40vh; overflow: hidden !important">
+
+                        <div class="panel-heading">
+                            <h4>Suppliers</h4>
+                            <ul class="links">
+                                <li>
+                                    <a href="#">
+                                        <i class="fa fa-navicon"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div style="text-align: left" class="panel-sub-heading">
+                            <div style="width: 100%;" class="d-flex flex-wrap">
+                                <button data-toggle="modal" href="#newSupplier" class="btn btn-sm btn-info">New Supplier</button>
+                                <form method="post" action="{% url 'save-supplier' %}" class="modal fade" id="newSupplier" data-backdrop="false">
+                                {% csrf_token %}
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <strong class="modal-title">Adding Supplier</strong>
+                                            </div>
+                                            <div class="modal-body">
+                                                <label style="width: 100%">Company
+                                                    <input type="text" required autocomplete="off" name="company" class="form-control rounded-o">
+                                                </label>
+                                                <small class="text-info">Descriptive name of supplier</small>
+                                                <hr>
+
+                                                <label style="width: 100%">Contact Person
+                                                    <input type="text" required autocomplete="off" name="contact_person" class="form-control rounded-o">
+                                                </label>
+                                                <small class="text-info">Descriptive name of supplier</small>
+                                                <hr>
+
+                                                <!-- DOMAIN -->
+                                                <label for="">Domain</label><select name="domain" id="" class="form-control rounded-0">
+                                                    <option >LOCAL</option>
+                                                    <option >IMPORT</option>
+                                                </select>
+                                                <small class="text-info">The source of this supplier</small>
+                                                <hr>
+
+                                                <!-- COUNTRY OF ORIGIN -->
+                                                <label for="">Origin</label>
+                                                <select name="origin" id="" class="form-control rounded-0">
+                                                    <option >Ghana</option>
+                                                    <option >Dubai</option>
+                                                </select>
+                                                <small class="text-info">Country of Origin</small>
+                                                <hr>
+
+                                                <!-- CONTACT EMAIL -->
+                                                <div  class="row">
+                                                    <div class="col-sm-6">
+                                                        <label style="width: 100%">Email Address
+                                                            <input autocomplete="off" required name="email" type="email" class="form-control">
+                                                        </label>
+                                                    </div>
+                                                    <div class="col-sm-6">
+                                                        <label style="width: 100%">Mobile
+                                                            <input autocomplete="off" required type="tel" name="phone" class="form-control">
+                                                        </label>
+                                                    </div>
+                                                    <div class="col-sm-6">
+                                                        <label style="width: 100%">City
+                                                            <input required type="text" name="city" class="form-control">
+                                                        </label>
+                                                    </div>
+                                                    <div class="col-sm-6">
+                                                        <label style="width: 100%">Street
+                                                            <input autocomplete="off" required type="text" name="street" class="form-control">
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <hr>
+                                                <div class="row">
+                                                    <!-- TAXABLE -->
+                                                    <div class="col-sm-6">
+                                                        <label for="">Taxable</label>
+                                                        <select name="taxable" id="" class="form-control">
+                                                            <option value="1">YES</option>
+                                                            <option value="0">NO</option>
+                                                        </select>
+                                                    </div>
+
+                                                    <!-- Create Account -->
+                                                    <div class="col-sm-6">
+                                                        <label for="">Account</label>
+                                                        <select name="account" id="" class="form-control">
+                                                            {% for bank in banks %}
+                                                                <option value="{{ bank.pk }}">{{ bank.acct_name }} - {{ bank.acct_serial }}</option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button class="btn btn-warning btn-sm rounded-0" type="button" data-dismiss="modal">CANCEL</button>
+                                                <button class="btn btn-sm btn-success rounded-0" type="submit">SAVE</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+
+                            </div>
+                        </div>
+
+                        <div class="panel-body" style="height: 75%!important ;overflow: auto!important">
+                            <div class="table-responsive" style=" ; overflow: hidden">
+                                <table class="table table-bordered no-margin">
+                                    <input type="hidden" id="close_url" value="{% url 'close_task' %}">
+                                    <thead>
+                                        <tr>
+                                            <th>Company</th>
+                                            <th>Face</th>
+                                            <th>Telephone</th>
+                                            <th>Origin</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for supplier in suppliers %}
+                                            <tr>
+                                                <td>{{ supplier.company }}</td>
+                                                <td>{{ supplier.contact_person }}</td>
+                                                <td>{{ supplier.mobile }}</td>
+                                                <td>{{ supplier.origin }}</td>
+                                                <td>
+                                                    <div style="width: 100%" class="d-flex flex-wrap align-content-center justify-content-between">
+                                                        <button class="badge btn-sm btn-warning">suspend</button>
+                                                        <button class="badge btn-sm btn-danger">delete</button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+
+                    </div>
+            </div>
+
+            <!-- GROUPS -->
+            <div class="col-sm-6">
+                    <div class="panel panel-danger" style="height: 40vh; overflow: hidden !important">
+
+                        <div class="panel-heading">
+                            <h4>Groups</h4>
+                            <ul class="links">
+                                <li>
+                                    <a href="#">
+                                        <i class="fa fa-navicon"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div style="text-align: left" class="panel-sub-heading">
+                            <div style="width: 100%;" class="d-flex flex-wrap">
+                                <button data-toggle="modal" href="#newGroup" class="btn btn-sm btn-info">Create</button>
+                                <form method="post" action="{% url 'save-group' %}" class="modal fade" id="newGroup" data-backdrop="false">
+                                {% csrf_token %}
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <strong class="modal-title">Adding Group</strong>
+                                            </div>
+                                            <div class="modal-body">
+                                                <label style="width: 100%">Name
+                                                    <input type="text" required autocomplete="off" name="group_name" class="form-control rounded-o">
+                                                </label>
+                                                <small class="text-info">Descriptive name of group</small>
+                                                <hr>
+
+
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button class="btn btn-warning btn-sm rounded-0" type="button" data-dismiss="modal">CANCEL</button>
+                                                <button class="btn btn-sm btn-success rounded-0" type="submit">SAVE</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+
+                            </div>
+                        </div>
+
+                        <div class="panel-body" style="height: 75%!important ;overflow: auto!important">
+                            <div class="table-responsive" style=" ; overflow: hidden">
+                                <table class="table table-bordered no-margin">
+                                    <input type="hidden" id="close_url" value="{% url 'close_task' %}">
+                                    <thead>
+                                        <tr>
+                                            <th>Code</th>
+                                            <th>Description</th>
+                                            <th>Date Added</th>
+                                            <th>Origin</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for grp in groups %}
+                                            <tr>
+                                                <td>GRP00{{ grp.pk }}</td>
+                                                <td>{{ grp.descr }}</td>
+                                                <td>{{ grp.created_on }}</td>
+                                                <td>
+                                                    <div style="width: 100%" class="d-flex flex-wrap align-content-center justify-content-between">
+                                                        <button class="badge btn-sm btn-warning">suspend</button>
+                                                        <button class="badge btn-sm btn-info" data-toggle="modal" data-target="#subs{{ grp.pk }}">Subs</button>
+                                                        <div class="modal fade" id="subs{{ grp.pk }}" data-backdrop="false">
+                                                            <div class="modal-dialog">
+                                                                <div class="modal-content">
+
+                                                                    <div class="modal-header">
+                                                                        <strong class="modal-title">Subs for {{ grp.descr }}</strong>
+                                                                    </div>
+
+                                                                    <form method="post" action="{% url 'save-sub-group' %}" class="modal-body">
+                                                                        {% csrf_token %}
+                                                                        <table class="table">
+                                                                            <tbody>
+                                                                                <tr>
+                                                                                    <td>
+                                                                                        <input type="text" class="form-control" required autocomplete="off" name="descr" placeholder="New">
+                                                                                        <input type="hidden" name="group" value="{{ grp.pk }}">
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <button class="btn btn-success">SAVE</button>
+                                                                                    </td>
+                                                                                </tr>
+
+                                                                                {% for sub in grp.subgroups %}
+                                                                                    <tr>
+                                                                                        <td colspan="2">{{ sub.descr }}</td>
+                                                                                    </tr>
+                                                                                {% endfor %}
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </form>
+
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+
+                    </div>
+            </div>
+
+            <!-- PACKING -->
+            <div class="col-sm-6">
+                    <div class="panel panel-danger" style="height: 40vh; overflow: hidden !important">
+
+                        <div class="panel-heading">
+                            <h4>Product Packing</h4>
+                            <ul class="links">
+                                <li>
+                                    <a href="#">
+                                        <i class="fa fa-navicon"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div style="text-align: left" class="panel-sub-heading">
+                            <form method="post" action="{% url 'save-packing' %}" class="form-inline" role="form">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                  <input type="text" autocomplete="off" maxlength="3" class="form-control" name="code" placeholder="CODE">
+                                </div>
+                                <div class="form-group">
+                                  <input type="text" autocomplete="off" class="form-control" name="description" placeholder="Description">
+                                </div>
+                                <button type="submit" class="btn btn-info">Save</button>
+                            </form>
+                        </div>
+
+                        <div class="panel-body" style="height: 75%!important ;overflow: auto!important">
+                            <div class="table-responsive" style=" ; overflow: hidden">
+                                <table class="table table-bordered no-margin">
+                                    <input type="hidden" id="close_url" value="{% url 'close_task' %}">
+                                    <thead>
+                                        <tr>
+                                            <th>CODE</th>
+                                            <th>Description</th>
+                                            <th>Date Added</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for pack in packing %}
+                                            <tr>
+                                                <td>{{ pack.code }}</td>
+                                                <td>{{ pack.descr }}</td>
+                                                <td>{{ pack.created_on }}</td>
+                                                <td>
+                                                    <div style="width: 100%" class="d-flex flex-wrap align-content-center justify-content-between">
+                                                        <button class="badge btn-sm btn-warning">suspend</button>
+                                                        <button class="badge btn-sm btn-danger">delete</button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+
+                    </div>
+            </div>
+
+        </div>
+
+    </div>
+
+{% endblock %}

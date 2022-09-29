@@ -11,6 +11,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib import messages
 
+from admin_panel.form import NewProduct
 from admin_panel.models import *
 from blog.models import *
 from community.models import *
@@ -70,16 +71,20 @@ else:
 
 
 
+def is_logged_in(request):
 
+    if request.user.is_active:
+
+        pass
+    else:
+        print('hello')
+        return redirect('login')
 
 
 @login_required(login_url='/login/')
 def index(request):
-    current_user = request.user
-    if current_user.is_active:
-        return render(request, 'index.html')
-    else:
-        return redirect('login')
+    # is_logged_in(request)
+    return render(request, 'index.html')
 
 @login_required(login_url='/login/')
 def all_issues(request):
@@ -181,7 +186,8 @@ def to_scalate(request):
     }
     return render(request, 'to_escalate.html', context=context)
 
-@login_required(login_url='/login/')
+
+
 def escalate_detail(request, provider):
     prov_det = Providers.objects.get(provider_code=provider)
     issues = PendingEscalations.objects.filter(provider=provider)
@@ -631,6 +637,17 @@ def auto(request,tool):
 
             return HttpResponse(f"No EMail To Send")
 
+    elif tool == 'ajax':
+        if request.method == 'GET':
+            form = request.GET
+            function = form['function']
+
+            if function == 'prod_subs':
+                group = form['group']
+                # get sub groups of group
+                data = ProductGroupSub.objects.filter(group=ProductGroup.objects.get(pk=group))
+                qs_json = serializers.serialize('json', data)
+                return HttpResponse(qs_json, content_type='application/json')
 
 def save_email_group(request):
     if request.method == 'POST':
@@ -651,3 +668,264 @@ def save_email_group(request):
         except Exception as e:
             messages.error(request,f"Could Not Save Group {e}")
             return redirect('emails')
+
+
+def inventory_tools(request):
+    context = {
+        'page_title':'Inventory Tools',
+        'banks':BankAccounts.objects.filter(status=1),
+        'suppliers':SuppMaster.objects.filter(status=1),
+        'groups':ProductGroup.objects.filter(status=1),
+        'packing':PackingMaster.objects.filter(status=1)
+    }
+    return render(request,'suppliers/inventory_tools.html',context = context)
+
+
+def accounts(request):
+    context = {
+        'page_title': 'Accounts'
+    }
+    return render(request, 'accounts/acct_home.html', context=context)
+
+
+def tax_master(request):
+    # if posting a form
+    if request.method == 'POST':
+        form = request.POST
+        function = form['function'] # function decides what to do
+        if function == 'save_new_tax':
+            #save new tax component
+            tax_code = form['tax_code']
+            tax_description = form['tax_description']
+            rate = form['rate']
+            try:
+
+                if TaxMaster.objects.filter(tax_code=tax_code).count() == 0:
+                    TaxMaster(tax_code=tax_code,tax_description=tax_description,tax_rate=rate,created_by=request.user.pk).save()
+                    messages.success(request,'done%%New Tax Added')
+
+                else:
+                    messages.success(request, 'error%%Duplicate Tax Code')
+
+                return render(request,'accounts/tax_master.htm')
+
+            except Exception as e:
+
+                messages.success(request,f'error%%{e}')
+                return render(request,'accounts/tax_master.htm')
+
+        else:
+            # render tax master page
+            return render(request,'accounts/tax_master.htm')
+
+    else:
+        # show all tax
+        context = {
+            'page_title':'Tax Master',
+            'taxes':TaxMaster.objects.all().order_by('-pk')
+        }
+        return render(request,'accounts/tax_master.htm',context=context)
+
+
+def bank_master(request):
+
+    context={
+        'page_title':'Bank Master',
+        'accounts':BankAccounts.objects.all()
+    }
+    return render(request,'accounts/bank-master.html',context=context)
+
+
+def bank_posts(request):
+    if request.method == 'POST':
+        import random
+        import string
+        form = request.POST
+        function = form['function']
+
+        if function == 'new_account':
+            account_name = form['account_name']
+            description = form['description']
+            acct_serial = file_key = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(12))
+
+            try:
+                BankAccounts(acct_name=account_name, acct_serial=acct_serial, acct_descr=description).save()
+                messages.error(request, f"done%%Account created with serial {acct_serial}")
+            except Exception as e:
+                messages.error(request, f"error%%Could not create account : {e}")
+
+    # redirect after anything
+    return redirect('bank-master')
+
+def save_supplier(request):
+    if request.method == 'POST':
+        form = request.POST
+        company = form['company']
+        contact_person = form['contact_person']
+        purch_group = form['domain']
+        origin = form['origin']
+        email = form['email']
+        mobile = form['phone']
+        city = form['city']
+        street = form['street']
+        taxable = form['taxable']
+        bank_acct = form['account']
+
+        try:
+            SuppMaster(company=company,contact_person=contact_person,purch_group=purch_group,origin=origin,email=email,
+                       mobile=mobile,city=city,street=street,taxable=taxable,bank_acct=BankAccounts.objects.get(pk=bank_acct),created_by=request.user.pk).save()
+            messages.error(request,f"done%%Supplier {company} Added")
+            return redirect('suppliers')
+        except Exception as e:
+            messages.error(request,f"error%%Could not save supplier {e}")
+            return redirect('suppliers')
+
+@login_required(login_url='/login/')
+def products(request):
+    if ProductMaster.objects.filter().count() < 1:
+        # redirect to new products creation
+        messages.error(request,f"done%%Inventory is empty, Create an item")
+        return redirect('new-product')
+    context = {
+        'page_title':'Products Master | View','products':ProductMaster.objects.all()
+    }
+    return render(request,'products/view.html',context=context)
+
+@login_required(login_url='/login/')
+def new_products(request):
+    is_logged_in(request)
+    groups = ProductGroup.objects.filter(status=1)
+    taxes = TaxMaster.objects.filter(status=1)
+    packs = PackingMaster.objects.filter(status=1)
+    supps = SuppMaster.objects.filter(status=1)
+
+
+    if groups.count() < 1:
+        messages.error(request,"done%%Create groups before you can add products")
+        return redirect('inventory_tools')
+
+    if supps.count() < 1:
+        messages.error(request,"done%%Create or enable at least one supplier before you can add products")
+        return redirect('inventory_tools')
+
+    if ProductGroupSub.objects.filter(status=1).count() < 1:
+        messages.error(request, "done%%Create or enable at least one sub group before you can add products")
+        return redirect('inventory_tools')
+
+    if taxes.count() < 1:
+        messages.error(request, "done%%Create or enable at least one tax group before you can add products")
+        return redirect('inventory_tools')
+
+    if packs.count() < 1:
+        messages.error(request, "done%%Create or enable at least one packaging before you can add products")
+        return redirect('inventory_tools')
+
+    context = {
+        'page_title':'Products Master | New',
+        'groups':groups,'taxes':taxes,'packs':packs,'supps':supps
+    }
+    return render(request,'products/new.html',context=context)
+
+@login_required(login_url='/login/')
+def save_group(request):
+    if request.method == 'POST':
+        form = request.POST
+        group_name = form['group_name']
+
+        try:
+            ProductGroup(descr=group_name,created_by=request.user.pk).save()
+            messages.error(request,f"New Group {group_name} Saved")
+        except Exception as e:
+            messages.error(request,f"Error saving new group {group_name} : {e}")
+
+    return redirect('inventory_tools')
+
+@login_required(login_url='/login/')
+def save_sub_group(request):
+    if request.method == 'POST':
+        form = request.POST
+        descr = form['descr']
+        group = form['group']
+
+        try:
+            ProductGroupSub(group=ProductGroup.objects.get(pk=group),descr=descr,created_by=request.user.pk).save()
+            messages.error(request,f"News subgroup added")
+        except Exception as e:
+            messages.error(request, f"Failed adding sub group : {e}")
+
+    return redirect('inventory_tools')
+
+@login_required(login_url='/login/')
+def save_packing(request):
+    if request.method == 'POST':
+        form = request.POST
+        code = form['code']
+        description = form['description']
+
+        try:
+            PackingMaster(code=code,descr=description,created_by=request.user.pk).save()
+            messages.error(request, f"News Packing {description} added")
+        except Exception as e:
+                messages.error(request, f"Failed adding Packing: {e}")
+
+    return redirect('inventory_tools')
+
+
+@login_required(login_url='/login/')
+def suppliers(request):
+    context = {
+        'suppliers':SuppMaster.objects.all(),
+        'accounts':BankAccounts.objects.all()
+    }
+    return render(request,'accounts/suppiers.html',context=context)
+
+
+def save_new_product(request):
+    form = NewProduct(request.POST,request.FILES)
+    if form.is_valid():
+        if ProductMaster.objects.filter(barcode=form.cleaned_data['barcode']).count() > 1:
+            messages.error("Barcode Exist")
+            return redirect('products')
+        try:
+            if form.save():
+                # todo::validate packing for products creation
+                obj=ProductMaster.objects.latest('id')
+                purch_un = request.POST['purch_un']
+                purch_qty = request.POST['purch_qty']
+                ass_un = request.POST['ass_un']
+                ass_qty = request.POST['ass_qty']
+
+                ProductPacking(product=obj,packing_un=PackingMaster.objects.get(pk=purch_un),pack_qty=purch_qty,packing_type='P').save()
+                ProductPacking(product=obj, packing_un=PackingMaster.objects.get(pk=ass_un), pack_qty=ass_qty, packing_type='P').save()
+
+                messages.error('done%%Item Added')
+
+            return redirect('products')
+
+        except Exception as e:
+            messages.error(f'error%%{e}')
+            return HttpResponse(e)
+
+    else:
+        return HttpResponse(f'Invalid Form {form}')
+
+
+def adjust_product_qty(request,p):
+    if request.method == 'POST':
+        form = request.POST
+        pk = form['pk']
+        tran_qty = form['qty']
+        doc = form['type']
+        doc_ref = "ADJUSTMENT"
+
+        ProductTrans(doc=doc,doc_ref=doc_ref,tran_qty=tran_qty,product=ProductMaster.objects.get(pk=pk)).save()
+        messages.error(request,'done%%Product Received')
+
+        return redirect('products')
+
+    else:
+        product = ProductMaster.objects.get(pk=p)
+        context = {
+            'page_title': f'Received {product.descr}','product':product
+        }
+        return render(request,'products/adjust.html',context=context)

@@ -2,6 +2,8 @@ from django.contrib.auth.models import User
 from django.db import models
 from community.models import questions, QuestionTags
 from blog.models import Providers
+from django.db.models import Sum
+
 
 
 # Create your models here.
@@ -134,5 +136,116 @@ class EmailGroup(models.Model):
 
     def clients(self):
         return NotificationGroups.objects.filter(group=self.pk).count()
+
+
+
+# tax modal
+class TaxMaster(models.Model):
+    tax_code = models.CharField(unique=True,max_length=2)
+    tax_description = models.TextField()
+    tax_rate = models.DecimalField(max_digits=3, decimal_places=2)
+    created_by = models.IntegerField(default=0)
+    created_on = models.DateTimeField(auto_now_add=True)
+    edited_on = models.DateTimeField(auto_now=True)
+    status = models.IntegerField(default=1)
+
+class BankAccounts(models.Model):
+    acct_name = models.CharField(unique=True,max_length=20)
+    acct_serial = models.CharField(unique=True,max_length=12)
+    acct_descr = models.TextField()
+    created_by = models.IntegerField(default=0)
+    created_on = models.DateTimeField(auto_now_add=True)
+    edited_on = models.DateTimeField(auto_now=True)
+    status = models.IntegerField(default=1)
+
+class SuppMaster(models.Model):
+    company = models.TextField()
+    contact_person = models.TextField(default='NULL')
+    purch_group = models.TextField()
+    origin = models.TextField()
+    email = models.TextField()
+    mobile = models.TextField()
+    city = models.TextField()
+    street = models.TextField()
+    taxable = models.IntegerField(default=1)
+    bank_acct = models.ForeignKey('BankAccounts',on_delete=models.CASCADE)
+    created_by = models.IntegerField(default=0)
+    created_on = models.DateTimeField(auto_now_add=True)
+    edited_on = models.DateTimeField(auto_now=True)
+    status = models.IntegerField(default=1)
+
+    def location(self):
+        return f"{self.origin} - {self.city}"
+
+class ProductGroup(models.Model):
+    descr = models.TextField()
+
+    created_by = models.IntegerField(default=0)
+    created_on = models.DateTimeField(auto_now_add=True)
+    edited_on = models.DateTimeField(auto_now=True)
+    status = models.IntegerField(default=1)
+
+    def subgroups(self):
+        return ProductGroupSub.objects.filter(group=self)
+class ProductGroupSub(models.Model):
+    group = models.ForeignKey('ProductGroup',on_delete=models.CASCADE)
+    descr = models.TextField()
+
+    created_by = models.IntegerField(default=0)
+    created_on = models.DateTimeField(auto_now_add=True)
+    edited_on = models.DateTimeField(auto_now=True)
+    status = models.IntegerField(default=1)
+
+class ProductMaster(models.Model):
+    group = models.ForeignKey('ProductGroup', on_delete=models.CASCADE)
+    sub_group = models.ForeignKey('ProductGroupSub', on_delete=models.CASCADE)
+    tax = models.ForeignKey('TaxMaster',on_delete=models.CASCADE)
+    descr = models.TextField()
+    shrt_descr = models.TextField()
+    barcode = models.CharField(unique=True, max_length=255)
+    supplier = models.ForeignKey('SuppMaster',on_delete=models.CASCADE)
+    prod_img = models.FileField(upload_to=f'static/general/img/products/')
+
+
+    created_by = models.IntegerField(default=0)
+    created_on = models.DateTimeField(auto_now_add=True)
+    edited_on = models.DateTimeField(auto_now=True)
+    status = models.IntegerField(default=1)
+
+    def stock(self):
+        if ProductTrans.objects.filter(product=self).aggregate(Sum('tran_qty'))['tran_qty__sum'] is None:
+            return 0
+        else:
+            return ProductTrans.objects.filter(product=self).aggregate(Sum('tran_qty'))['tran_qty__sum']
+
+class PackingMaster(models.Model):
+    code = models.CharField(max_length=3,unique=True)
+    descr = models.TextField()
+
+    created_by = models.IntegerField(default=0)
+    created_on = models.DateTimeField(auto_now_add=True)
+    edited_on = models.DateTimeField(auto_now=True)
+    status = models.IntegerField(default=1)
+
+class ProductPacking(models.Model):
+    product = models.ForeignKey('ProductMaster',on_delete=models.CASCADE)
+    packing_un = models.ForeignKey('PackingMaster',on_delete=models.CASCADE)
+    pack_qty = models.DecimalField(max_digits=60, decimal_places=2)
+    packing_type = models.CharField(default='U',max_length=1)
+
+    created_by = models.IntegerField(default=0)
+    created_on = models.DateTimeField(auto_now_add=True)
+    edited_on = models.DateTimeField(auto_now=True)
+    status = models.IntegerField(default=1)
+
+class ProductTrans(models.Model):
+    doc = models.CharField(max_length=2)
+    doc_ref = models.TextField()
+    product = models.ForeignKey('ProductMaster',on_delete=models.CASCADE)
+    tran_qty = models.DecimalField(max_digits=65, decimal_places=2)
+
+    created_by = models.IntegerField(default=0)
+    created_on = models.DateTimeField(auto_now_add=True)
+
 
 

@@ -1,0 +1,97 @@
+{% extends 'accounts/main.html' %}
+{% load static %}
+
+{% block acc_screen %}
+
+    <div class="w-100 h-100">
+        <header>
+            <div class="w-100 d-flex flex-wrap">
+                <button class="btn btn-sm btn-info" data-toggle="modal" data-backdrop="false" href="#newTax">New Tax</button>
+                <form method="post" action="{% url 'tax_master' %}" class="modal fade" id="newTax">
+                    {% csrf_token %}
+                    <input type="hidden" name="function" value="save_new_tax">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+
+                            <div class="modal-header">
+                                <strong class="modal-title">Adding New Tax Component</strong>
+                            </div>
+
+                            
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="col-sm-2">
+                                        <label class="w-100">Code
+                                            <input type="text" name="tax_code" maxlength="2" required autocomplete="off" class="form-control">
+                                        </label>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label class="w-100">Description
+                                            <input type="text" name="tax_description" required autocomplete="off" class="form-control">
+                                        </label>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <label class="w-100">Rate
+                                            <input type="text" name="rate"  required autocomplete="off" class="form-control">
+                                            <small class="text-info">Without Percentage (%) Sign</small>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button class="btn btn-sm btn-warning rounded-0" data-dismiss="modal" type="button">CANCEL</button>
+                                <button class="btn btn-success btn-sm rounded-0">SAVE</button>
+                            </div>
+                            
+
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </header>
+        <article class="table-responsive">
+            <table class="table table-lg table-info h-fit">
+                <thead>
+                    <tr>
+                        <th>Tax Code</th>
+                        <th>Description</th>
+                        <th>Rate</th>
+                        <th>EN/DIS</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbdoy>
+                    {% for tax in taxes %}
+                        <tr>
+                            <td>{{ tax.tax_code }}</td>
+                            <td>{{ tax.tax_description }}</td>
+                            <td>{{ tax.tax_rate }}%</td>
+                            <td>
+                                {% if tax.status == 1 %}
+                                        <input checked disabled type="checkbox">
+                                    {% else %}
+                                        <input disabled type="checkbox">
+                                    {% endif %}
+
+                            </td>
+                            <td>
+                                <div class="d-flex flex-wrap">
+                                    {% if tax.status == 1 %}
+                                        <span class="btn-sm btn-danger pointer">Disable</span>
+                                    {% else %}
+                                        <span class="btn-sm btn-success pointer">Enable</span>
+                                    {% endif %}
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbdoy>
+            </table>
+        </article>
+
+    </div>
+
+
+
+{% endblock %}

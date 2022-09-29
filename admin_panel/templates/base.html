@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>Website Manager | Dashboard</title>
+		<title>Organization | {{ page_title }}</title>
 		<meta name="description" content="Cloud Admin Panel" />
 		<meta name="keywords" content="Admin, Dashboard, Bootstrap3, Sass, transform, CSS3, HTML5, Web design, UI Design, Responsive Dashboard, Responsive Admin, Admin Theme, Best Admin UI, Bootstrap Theme, Bootstrap, Light weight Admin Dashboard,Light weight, Light weight Admin, Light weight Dashboard" />
 		<meta name="author" content="Bootstrap Gallery" />
@@ -26,15 +26,79 @@
 		<!-- Slidebar CSS -->
 		<link rel="stylesheet" type="text/css" href="{% static 'general/css/slidebars.css' %}">
 
+        <!-- Easy Wizard -->
+		<link href="{% static 'general/css/easy-wizard/jquery.snippet.min.css' %}" rel="stylesheet">
+		<link href="{% static 'general/css/easy-wizard/styles.css' %}" rel="stylesheet" media="screen">
+
 		<!-- Font Awesome -->
 		<link href="{% static 'general/fonts/font-awesome.min.css' %}" rel="stylesheet">
 
 		<!-- Metrize Fonts -->
 		<link href="{% static 'general/fonts/metrize.css' %}" rel="stylesheet">
 
+        <!-- CUSTOM CSS -->
+    <link rel="stylesheet" href="{% static 'general/css/main.css' %}">
+
+     <script src="{% static 'blog/js/jquery.min.js' %}"></script>
+    <script src="{% static 'blog/js/popper.min.js' %}"></script>
+    <script src="{% static 'blog/js/bootstrap.min.js' %}"></script>
+ <script src="{% static 'general/js/cust.js' %}"></script>
+<script src="{% static 'general/js/error_handler.js' %}"></script>
+<script src="{% static 'general/js/sweetalert2@11' %}"></script>
+<script src="{% static 'general/js/all.js' %}"></script>
+
+    		<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+		<script src="{% static 'general/js/jquery.js' %}"></script>
+
+		<!-- Include all compiled plugins (below), or include individual files as needed -->
+		<script src="{% static 'general/js/bootstrap.min.js' %}"></script>
+
+		<!-- Flot Charts -->
+<!--		<script src="{% static 'general/js/flot/jquery.flot.js' %}"></script>-->
+<!--		<script src="{% static 'general/js/flot/jquery.flot.time.js' %}"></script>-->
+<!--		<script src="{% static 'general/js/flot/jquery.flot.selection.js' %}"></script>-->
+<!--		<script src="{% static 'general/js/flot/jquery.flot.resize.js' %}"></script>-->
+<!--		<script src="{% static 'general/js/flot/jquery.flot.tooltip.js' %}"></script>-->
+<!--		<script src="{% static 'general/js/flot/flot.excanvas.min.js' %}"></script>-->
+
+		<!-- Custom flot JS -->
+<!--		<script src="{% static 'general/js/flot/custom/combine-chart.js' %}"></script>-->
+
+		<!-- Animated Right Sidebar -->
+		<script src="{% static 'general/js/slidebars.js' %}"></script>
+
+		<!-- Tyny Scrollbar -->
+		<script src="{% static 'general/js/tiny-scrollbar.js' %}"></script>
+
+		<!-- Date Range -->
+		<script src="{% static 'general/js/daterange/moment.js' %}"></script>
+		<script src="{% static 'general/js/daterange/daterangepicker.js' %}"></script>
+
+		<!-- Custom JS -->
+		<script src="{% static 'general/js/custom.js' %}"></script>
+		<script src="{% static 'general/js/custom-index.js' %}"></script>
+
+        <!-- Custom Js -->
+		<script src="{% static 'general/js/wizard/bwizard.js' %}"></script>
+
+		<!-- Easy Wizard -->
+		<script src="{% static 'general/js/easy-wizard/jquery.snippet.min.js' %}"></script>
+		<script src="{% static 'general/js/easy-wizard/jquery.easyWizard.js' %}"></script>
+		<script src="{% static 'general/js/easy-wizard/scripts.js' %}"></script>
+
+
+
+        <!-- MY JS -->
+        <script src="{% static 'general/js/admin.js' %}"></script>
+        <script src="{% static 'general/js/error_handler.js' %}"></script>
+        <script src="{% static 'general/js/cust.js' %}"></script>
+        <script src="{% static 'general/js/sweetalert2@11' %}"></script>
+    <script src="{% static 'general/js/prod_master.js' %}"></script>
+
 
 </head>
 <body>
+<input type="" id="autos_url" value="{% url 'autos' 'ajax' %}">
 
 	{% if user.is_authenticated %}
 		<!-- Left sidebar start -->
@@ -54,6 +118,25 @@
 							<div class="fs1" aria-hidden="true" data-icon="&#xe007;"></div>
 							<span>Dashboard</span>
 						</a>
+					</li>
+
+                    <li class='has-sub'>
+						<a href=''>
+							<div class="fs1" aria-hidden="true" data-icon="&#xe052;"></div>
+							<span>Inventory</span>
+						</a>
+						<ul>
+							<li>
+								<a href='{% url 'inventory_tools' %}'>
+									<span>Tools</span>
+								</a>
+							</li>
+                            <li>
+								<a href='{% url 'products' %}'>
+									<span>Product Master</span>
+								</a>
+							</li>
+						</ul>
 					</li>
 
                     <li class='has-sub'>
@@ -105,6 +188,11 @@
 							<span>Company Setup</span>
 						</a>
 						<ul>
+                            <li>
+								<a href='{% url 'accounts' %}'>
+									<span>Accounts</span>
+								</a>
+							</li>
 							<li>
 								<a href='{% url 'accessories' %}'>
 									<span>Accessories</span> <kbd class="float-right">20</kbd>
@@ -125,7 +213,7 @@
 		<!-- Left sidebar end -->
 
 		<!-- Dashboard Wrapper Start -->
-		<div class="dashboard-wrapper">
+		<div class="dashboard-wrapper" style="height: 100vh; overflow: hidden !important">
 
 			<!-- Header start -->
 			<header>
@@ -304,166 +392,36 @@
 			</header>
 			<!-- Header ends -->
 
-			<!-- Right sidebar start -->
-			<div class="sb-slidebar sb-right sb-close">
-
-				<!-- User Profile Start -->
-				<section class="user-profile">
-				  <div class="profile-container">
-					<img src="img/admin1.png" class="user-img" alt="User Image">
-					<div class="desc">
-					  <h4>John Doe</h4>
-					  <p class="text-info">UX Designer</p>
-					</div>
-				  </div>
-				  <ul class="ftr-link">
-					<li>
-					  <a href="javascript:;">
-						<div class="fs1" aria-hidden="true" data-icon="&#xe033;"></div>985
-					  </a>
-					</li>
-					<li>
-					  <a href="javascript:;">
-						<div class="fs1" aria-hidden="true" data-icon="&#xe0b9;"></div> 999
-					  </a>
-					</li>
-					<li>
-					  <a href="javascript:;">
-						<div class="fs1" aria-hidden="true" data-icon="&#xe0e3;"></div> 143
-					  </a>
-					</li>
-				  </ul>
-				</section>
-				<!-- User Profile End -->
-
-				<!-- Online Users start -->
-				<div class="block">
-				  <div class="heading">Users Online</div>
-				  <div class="wrapper">
-					<!-- Online Users Start -->
-					<ul class="online-users">
-					  <li>
-						<a href="#" data-lastname="Sandhya" data-status="online" data-original-title="">
-						  <span>Sunny</span>
-						  <div class="user-status online"></div>
-						</a>
-					  </li>
-					  <li>
-						<a href="#" data-lastname="Sandhya" data-status="online" data-original-title="">
-						  <span>Henrik</span>
-						  <div class="user-status online"></div>
-						</a>
-					  </li>
-					  <li>
-						<a href="#" data-lastname="Sandhya" data-status="online" data-original-title="">
-						  <span>John Doe</span>
-						  <div class="user-status busy"></div>
-						</a>
-					  </li>
-					  <li>
-						<a href="#" data-lastname="Sandhya" data-status="online" data-original-title="">
-						  <span>Fleming</span>
-						  <div class="user-status away"></div>
-						</a>
-					  </li>
-					  <li>
-						<a href="#" data-lastname="Sandhya" data-status="online" data-original-title="">
-						  <span>Wills</span>
-						  <div class="user-status"></div>
-						</a>
-					  </li>
-					</ul>
-					<!-- Online Users End -->
-				  </div>
-				</div>
-				<!-- Online Users end -->
-
-				<!-- Checkout start -->
-				<div class="block">
-				  <div class="heading">Checkout</div>
-				  <ul class="cart">
-					<li class="cart-item">
-					  <span class="cart-item-pic">
-						<img src="{% static 'general/img/admin2.png' %}" alt="EarthSquare">
-					  </span>
-					  Item #1
-					  <span class="cart-item-desc">Description</span>
-					  <span class="cart-item-price">$16.80</span>
-					</li>
-					<li class="cart-item">
-					  <span class="cart-item-pic">
-						<img src="img/admin4.png" alt="EarthSquare">
-					  </span>
-					  Item #2
-					  <span class="cart-item-desc">Description</span>
-					  <span class="cart-item-price">$15.00</span>
-					</li>
-					<li class="cart-item">
-					  <span class="cart-item-pic">
-						<img src="img/admin8.png" alt="EarthSquare">
-					  </span>
-					  Item #3
-					  <span class="cart-item-desc">Description</span>
-					  <span class="cart-item-price">$23.00</span>
-					</li>
-				  </ul>
-				  <div class="cart-bottom">
-					Total: $54.80
-					<a href="#" class="cart-button">Continue</a>
-				  </div>
-				</div>
-				<!-- Checkout end -->
-
-				<!-- Notifications Start -->
-				<div class="block">
-				  <div class="heading">Notifications</div>
-				  <!-- Notifications -->
-				  <ul class="infos">
-					<li>
-					  <span class="label label-success pull-left">
-						<div class="fs1" aria-hidden="true" data-icon="&#xe128;"></div>
-					  </span>
-					  <div class="info">
-						<h6>Guru Tweeted</h6>
-						<p class="designation">Few seconds ago</p>
-					  </div>
-					</li>
-					<li>
-					  <span class="label label-danger pull-left">
-						<div class="fs1" aria-hidden="true" data-icon="&#xe0e9;"></div>
-					  </span>
-					  <div class="info">
-						<h6>Server #999 Crashed</h6>
-						<p class="designation">2 minutes ago</p>
-					  </div>
-					</li>
-					<li>
-					  <span class="label label-info pull-left">
-						<div class="fs1" aria-hidden="true" data-icon="&#xe0e3;"></div>
-					  </span>
-					  <div class="info">
-						<h6>Kiri's account was created</h6>
-						<p class="designation">5 days ago</p>
-					  </div>
-					</li>
-				  </ul>
-				</div>
-				<!-- Notifications End -->
-
-			</div>
-			<!-- Right sidebar end -->
 
 
                 <div class="container-fluid">
-                    <input type="hidden" id="search_url" value="{% url 'search' %}">
-                    <!-- Top Bar Ends -->
-				{% block body %}
+                    <!-- Top Bar Starts -->
+				    <div class="top-bar clearfix">
+                    <div class="page-title">
+                        <h4><div class="fs1" aria-hidden="true" data-icon="&#xe007;"></div>{{ page_title }}</h4>
+                    </div>
+                    <ul class="right-stats hidden-xs" id="mini-nav-right">
 
-				{% endblock %}
+                        <li class="reportrange btn btn-success">
+                            <i class="fa fa-calendar"></i>
+                            <span></span> <b class="caret"></b>
+                        </li>
+                        <li>
+                            <a href="#" class="btn btn-info sb-open-right  sb-close">
+                                <div class="fs1" aria-hidden="true" data-icon="&#xe06a;"></div>
+                            </a>
+                        </li>
+                    </ul>
+                    </div>
+                        <input type="hidden" id="search_url" value="{% url 'search' %}">
+                        <!-- Top Bar Ends -->
+                        {% block body %}
+
+                        {% endblock %}
+                    </div>
+
+
                 </div>
-
-
-			</div>
 			<!-- Main Container Start -->
 
 
@@ -476,42 +434,9 @@
 
 <!-- Dashboard Wrapper End -->
 
-		<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-		<script src="{% static 'general/js/jquery.js' %}"></script>
 
-		<!-- Include all compiled plugins (below), or include individual files as needed -->
-		<script src="{% static 'general/js/bootstrap.min.js' %}"></script>
 
-		<!-- Flot Charts -->
-<!--		<script src="{% static 'general/js/flot/jquery.flot.js' %}"></script>-->
-<!--		<script src="{% static 'general/js/flot/jquery.flot.time.js' %}"></script>-->
-<!--		<script src="{% static 'general/js/flot/jquery.flot.selection.js' %}"></script>-->
-<!--		<script src="{% static 'general/js/flot/jquery.flot.resize.js' %}"></script>-->
-<!--		<script src="{% static 'general/js/flot/jquery.flot.tooltip.js' %}"></script>-->
-<!--		<script src="{% static 'general/js/flot/flot.excanvas.min.js' %}"></script>-->
 
-		<!-- Custom flot JS -->
-<!--		<script src="{% static 'general/js/flot/custom/combine-chart.js' %}"></script>-->
-
-		<!-- Animated Right Sidebar -->
-		<script src="{% static 'general/js/slidebars.js' %}"></script>
-
-		<!-- Tyny Scrollbar -->
-		<script src="{% static 'general/js/tiny-scrollbar.js' %}"></script>
-
-		<!-- Date Range -->
-		<script src="{% static 'general/js/daterange/moment.js' %}"></script>
-		<script src="{% static 'general/js/daterange/daterangepicker.js' %}"></script>
-
-		<!-- Custom JS -->
-		<script src="{% static 'general/js/custom.js' %}"></script>
-		<script src="{% static 'general/js/custom-index.js' %}"></script>
-
-        <!-- MY JS -->
-        <script src="{% static 'general/js/admin.js' %}"></script>
-        <script src="{% static 'general/js/error_handler.js' %}"></script>
-        <script src="{% static 'general/js/cust.js' %}"></script>
-        <script src="{% static 'general/js/sweetalert2@11' %}"></script>
 
         {% if messages %}
             <script>
@@ -525,7 +450,7 @@
 
             {% endfor %}
             <script>
-                swal_response('info','PROCEDURE RESPONSE',`${mess}`)
+                error_handler(`${mess}`)
             </script>
 
         {% endif %}

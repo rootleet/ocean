@@ -1,0 +1,219 @@
+{% extends 'products/prod_base.html' %}
+{% load static %}
+
+
+
+{% block prod %}
+
+    <!-- PROD DETAILS -->
+
+        <!-- Row start -->
+        <div class="row no-gutter">
+            <div class="col-md-12 col-xs-12">
+                <div class="panel panel-default">
+
+                    <div class="panel-heading">
+                        <h4>Wizard</h4>
+                        <ul class="links">
+											<li>
+												<a href="#">
+													<i class="fa fa-list"></i>
+												</a>
+											</li>
+										</ul>
+                    </div>
+
+                    <div class="panel-sub-heading">
+										<a href="#">Wizard</a>
+									</div>
+
+                    <div class="panel-body">
+                        <form method="post" enctype="multipart/form-data" action="{% url 'save-new-product' %}" id="wizard">
+                            {% csrf_token %}
+											<ol>
+												<li>Product Info</li>
+												<li>Supplier and Packing</li>
+												<li>Media</li>
+											</ol>
+
+                                            <!-- PRODUCT INFO -->
+											<div>
+                                                <div class="row">
+                                                    <div class="col-sm-4">
+                                                        <!-- GROUP -->
+                                                        <div class="input-group">
+                                                            <span class="input-group-addon">Group</span>
+                                                            <select onchange="getty()" name="group"  id="prod_group" class="form-control">
+                                                                <option selected disabled>Select Group</option>
+                                                                {% for grp in groups %}
+                                                                    <option value="{{ grp.pk }}">{{ grp.descr }}</option>
+                                                                {% endfor %}
+                                                            </select>
+                                                        </div>
+
+                                                        <br>
+                                                        <!-- SUB GROUP -->
+                                                        <div class="input-group">
+                                                            <span class="input-group-addon">Group</span>
+                                                            <select disabled name="sub_group"  id="sub_group" class="form-control">
+                                                                <option selected disabled>Select Group</option>
+                                                            </select>
+                                                        </div>
+                                                        <br>
+
+                                                        <!-- BARCODE -->
+
+                                                    </div>
+
+                                                    <div class="col-sm-4">
+                                                        <!-- DESCRIPTION -->
+                                                        <div class="input-group">
+                                                            <span class="input-group-addon">Description</span>
+                                                            <input onkeyup="$('#shrt_descr').val(this.value)" type="text" autocomplete="off" class="form-control" name="descr" id="description">
+                                                        </div>
+                                                        <br>
+
+                                                        <!-- SHRT DESCR -->
+                                                        <div class="input-group">
+                                                            <span class="input-group-addon">Short Descr</span>
+                                                            <input autocomplete="off" maxlength="10" type="text" class="form-control" name="shrt_descr" id="shrt_descr">
+                                                        </div>
+                                                        <br>
+                                                    </div>
+
+                                                    <div class="col-sm-4">
+
+{#                                                        <div class="input-group">#}
+{##}
+{#                                                            <span class="input-group-addon">Tax</span>#}
+{#                                                            <select name="tax" class="form-control" id="">#}
+{#                                                                {% for tax in taxes %}#}
+{#                                                                    <option value="{{ tax.pk }}">{{ tax.tax_description }}</option>#}
+{#                                                                {% endfor %}#}
+{#                                                            </select>#}
+{##}
+{#                                                        </div>#}
+                                                        <br>
+
+                                                        <div class="input-group">
+                                                            <span class="input-group-addon">Barcode</span>
+                                                            <input autocomplete="off" type="text" required value="" class="form-control" name="barcode" id="barcode">
+                                                        </div>
+                                                        <br>
+
+                                                    </div>
+
+                                                </div>
+											</div>
+
+                                            <!-- SUPPLIER AND PACKING -->
+											<div>
+												<div class="row">
+                                                    <div class="col-sm-4">
+                                                        <h4>Supplier Details</h4>
+                                                        <div class="input-group">
+                                                            <div class="input-group-addon">Supplier</div>
+                                                            <select name="supplier" class="form-control" id="">
+                                                                {% for supp in supps %}
+                                                                    <option value="{{ supp.pk }}">{{ supp.company }} - {{ supp.contact_person }}</option>
+                                                                {% endfor %}
+                                                            </select>
+                                                        </div>
+                                                        <br>
+                                                        <div class="input-group">
+                                                            <div class="input-group-addon">Tax Group</div>
+                                                            <select name="tax" class="form-control" id="">
+                                                                {% for tax in taxes %}
+                                                                    <option value="{{ tax.pk }}">{{ tax.tax_description }}</option>
+                                                                {% endfor %}
+                                                            </select>
+                                                        </div>
+                                                        <br>
+
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        <h4>Purchasing unit</h4>
+                                                        <div class="input-group">
+                                                            <span class="input-group-addon">Packing Unit</span>
+                                                            <select name="purch_un" class="form-control" id="">
+                                                                {% for pur_pack in packs %}
+                                                                    <option value="{{ pur_pack.pk }}">{{ pur_pack.descr }}</option>
+                                                                {% endfor %}
+                                                            </select>
+                                                        </div>
+                                                        <br>
+                                                        <div class="input-group">
+                                                            <span class="input-group-addon">Pack QTY</span>
+                                                            <input type="number" name="purch_qty" required autocomplete="off" class="form-control">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        <h4>Issuing unit</h4>
+                                                        <div class="input-group">
+                                                            <span class="input-group-addon">Packing Unit</span>
+                                                            <select name="ass_un" class="form-control" id="">
+                                                                {% for iss_pack in packs %}
+                                                                    <option value="{{ iss_pack.pk }}">{{ iss_pack.descr }}</option>
+                                                                {% endfor %}
+                                                            </select>
+                                                        </div>
+                                                        <br>
+                                                        <div class="input-group">
+                                                            <span class="input-group-addon">Pack QTY</span>
+                                                            <input type="number" name="ass_qty" required autocomplete="off" class="form-control">
+                                                        </div>
+                                                    </div>
+                                                </div>
+											</div>
+
+                                            <!-- MEDIA -->
+											<div>
+												<div class="row">
+                                                    <div class="col-sm-4">
+                                                        <h4>Product Image 1:1</h4>
+                                                         <div class="custom-file mb-2">
+                                                            <input type="file" name="prod_img" class="custom-file-input" id="imgInp">
+                                                            <label class="custom-file-label" for="customFile">Choose file</label>
+                                                        </div>
+
+                                                        <div style="width: 50% !important" class="mx-auto">
+                                                            <img id="blah" class="img-fluid" src="#" alt="" />
+                                                        </div>
+
+                                                        <button class="btn btn-success btn-sm rounded-0">SAVE</button>
+
+                                                        <script>
+                                                            // Add the following code if you want the name of the file appear on select
+                                                            $(".custom-file-input").on("change", function() {
+                                                              var fileName = $(this).val().split("\\").pop();
+                                                              $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+                                                            });
+                                                            imgInp.onchange = evt => {
+                                                              const [file] = imgInp.files
+                                                              if (file) {
+                                                                blah.src = URL.createObjectURL(file)
+                                                              }
+                                                            }
+                                                        </script>
+
+                                                    </div>
+                                                </div>
+											</div>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <!-- Row end -->
+
+    <!-- PROD DETAILS -->
+
+    <script type="text/javascript">
+
+		//Wizard
+		$("#wizard").bwizard();
+
+		</script>
+
+{% endblock %}

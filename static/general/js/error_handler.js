@@ -66,7 +66,7 @@ function error_handler(response)
                 swal_response('error','PROCEDURE ERROR',response_message)
                 break;
             default:
-                swal_response('error','CONTACT SYSTEM ADMINISTRATOR',response_message)
+                swal_response('info','SYSTEM INFORMATION',response_message)
         }
 
     }

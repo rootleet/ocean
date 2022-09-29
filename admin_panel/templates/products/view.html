@@ -1,0 +1,59 @@
+{% extends 'products/prod_base.html' %}
+{% load static %}
+
+{% block body %}
+
+    <div class="w-100 container-fluid" style="height: 75vh; overflow: auto">
+        <div class="h-100 container w-100">
+                    <div style="height: 8%; background: #0C0C0C; color:#f3f3f3;" class="row no-gutters">
+                        <strong class="col-sm-2 pt-3 pb-2 h-100 border-right">IMAGE</strong>
+                        <strong class="col-sm-2 pt-3 pb-2 h-100 border-right">BARCODE</strong>
+                        <strong class="col-sm-2 pt-3 pb-2 h-100 border-right">DESCRIPTION</strong>
+                        <strong class="col-sm-2 pt-3 pb-2 h-100 border-right">SUPPLIER</strong>
+                        <strong class="col-sm-2 pt-3 pb-2 h-100 border-right">STOCK</strong>
+                        <strong class="col-sm-2 pt-3 pb-2 h-100">TOOLS</strong>
+                    </div>
+
+                    <div style="height: 90%; overflow: auto" class="row border border-dark no-gutters">
+
+                        {% for product in products %}
+
+                            <div class="col-sm-2 border pt-2 pb-2 border-dark">
+                                <div style="height: 40px; width: 40px; overflow: hidden">
+                                    <img src="../../../{{ product.prod_img }}" width="100%" alt="">
+                                </div>
+                            </div>
+                            <div class="col-sm-2 border pt-2 pb-2 border-dark">
+                                <div style="height: 40px; overflow: hidden">
+                                    {{ product.barcode }}
+                                </div>
+                            </div>
+                            <div class="col-sm-2 border pt-2 pb-2 border-dark">
+                                <div style="height: 40px; overflow: hidden">
+                                    {{ product.descr }}
+                                </div>
+                            </div>
+                            <div class="col-sm-2 border pt-2 pb-2 border-dark">
+                                <div style="height: 40px; overflow: hidden">
+                                    {{ product.supplier.company }}
+                                </div>
+                            </div>
+                            <div class="col-sm-2 border pt-2 pb-2 border-dark">
+                                <div style="height: 40px; overflow: hidden">
+                                    {{ product.stock }}
+                                </div>
+                            </div>
+                            <div class="col-sm-2 border pt-2 pb-2 border-dark">
+                                <div style="height: 40px; overflow: hidden" class="d-flex flex-wrap">
+                                    <kbd class="pointer"><a href="{% url 'adjust_product_qty' product.pk %}">ADJUST</a></kbd>
+                                </div>
+                            </div>
+
+
+                        {% endfor %}
+
+                    </div>
+                </div>
+    </div>
+
+{% endblock %}

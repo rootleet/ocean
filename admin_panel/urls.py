@@ -45,7 +45,29 @@ urlpatterns = [
     path('add_notification_mem/',views.add_notification_mem,name='add_notification_mem'),
     path('send_mail/<task_id>',views.send_mail,name='send_mail'),
     path('autos/<tool>', views.auto, name='autos'),
-    path('save_email_group/',views.save_email_group,name='save_email_group')
+    path('save_email_group/',views.save_email_group,name='save_email_group'),
+
+
+    # suppliers url
+    path('inventory/tools/',views.inventory_tools, name='inventory_tools'),
+    path('inventory/tools/save_suppler',views.save_supplier,name='save-supplier'),
+    path('inventory/tools/save-group',views.save_group,name='save-group'),
+    path('inventory/tools/save-sub-grop',views.save_sub_group,name='save-sub-group'),
+    path('inventory/tools/save-packing',views.save_packing,name='save-packing'),
+
+
+    #products master
+    path('inventory/products/',views.products,name='products'),
+    path('inventory/products/new/',views.new_products,name='new-product'),
+    path('inventory/products/save-new/',views.save_new_product,name='save-new-product'),
+    path('inventory/products/adjustment/<p>',views.adjust_product_qty,name='adjust_product_qty'),
+
+    # accounts urls
+    path('accounts/',views.accounts,name='accounts'),
+    path('accounts/tax-master/',views.tax_master,name='tax_master'),
+    path('accounts/bank-master/',views.bank_master,name='bank-master'),
+    path('accounts/bank_master/post/',views.bank_posts,name='bank-post'),
+    path('accounts/suppliers/', views.suppliers, name='suppliers')
 
 
 

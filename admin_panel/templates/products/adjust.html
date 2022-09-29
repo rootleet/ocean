@@ -1,0 +1,21 @@
+{% extends 'products/prod_base.html' %}
+{% load static %}
+
+{% block body %}
+
+    <form action="" method="post">
+        {% csrf_token %}
+
+        <input type="hidden" name="pk" value="{{ product.pk }}">
+        <label for="">Type</label>
+        <select name="type" id="" class="form-control">
+            <option value="IS">ISSUE</option>
+            <option value="GR">RECEIVED</option>
+        </select>
+        <label>Quantity Received
+            <input type="number" name="qty" class="form-control">
+        </label>
+        <button class="btn btn-success">SAVE</button>
+    </form>
+
+{% endblock %}
