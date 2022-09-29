@@ -903,7 +903,7 @@ def save_new_product(request):
             return redirect('products')
 
         except Exception as e:
-            messages.error(f'error%%{e}')
+            messages.error(request,f'error%%{e}')
             return HttpResponse(e)
 
     else:
