@@ -158,24 +158,24 @@ class BankAccounts(models.Model):
     edited_on = models.DateTimeField(auto_now=True)
     status = models.IntegerField(default=1)
 
-class SuppMaster(models.Model):
-    company = models.TextField()
-    contact_person = models.TextField(default='NULL')
-    purch_group = models.TextField()
-    origin = models.TextField()
-    email = models.TextField()
-    mobile = models.TextField()
-    city = models.TextField()
-    street = models.TextField()
-    taxable = models.IntegerField(default=1)
-    bank_acct = models.ForeignKey('BankAccounts',on_delete=models.CASCADE)
-    created_by = models.IntegerField(default=0)
-    created_on = models.DateTimeField(auto_now_add=True)
-    edited_on = models.DateTimeField(auto_now=True)
-    status = models.IntegerField(default=1)
-
-    def location(self):
-        return f"{self.origin} - {self.city}"
+# class SuppMaster(models.Model):
+#     company = models.TextField()
+#     contact_person = models.TextField(default='NULL')
+#     purch_group = models.TextField()
+#     origin = models.TextField()
+#     email = models.TextField()
+#     mobile = models.TextField()
+#     city = models.TextField()
+#     street = models.TextField()
+#     taxable = models.IntegerField(default=1)
+#     bank_acct = models.ForeignKey('BankAccounts',on_delete=models.CASCADE)
+#     created_by = models.IntegerField(default=0)
+#     created_on = models.DateTimeField(auto_now_add=True)
+#     edited_on = models.DateTimeField(auto_now=True)
+#     status = models.IntegerField(default=1)
+#
+#     def location(self):
+#         return f"{self.origin} - {self.city}"
 
 class ProductGroup(models.Model):
     descr = models.TextField()
