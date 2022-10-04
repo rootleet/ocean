@@ -10,6 +10,7 @@ from django.core.mail import send_mail
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from django.http import JsonResponse
 
 from admin_panel.form import NewProduct
 from admin_panel.models import *
@@ -918,7 +919,7 @@ def save_new_product(request):
             return redirect('products')
         try:
             if form.save():
-                # todo::validate packing for products creation
+                # validate packing for products creation
                 obj=ProductMaster.objects.latest('id')
                 purch_un = request.POST['purch_un']
                 purch_qty = request.POST['purch_qty']
@@ -973,3 +974,23 @@ def new_adjustment(request):
         'page_title': 'Add Adjustment'
     }
     return render(request,'products/new_adjustment.html',context=context)
+
+
+def api(request,module,action):
+    import json
+    if module == 'adjustment':
+
+        if action == 'new_tran':
+            json_data = json.loads(request.body)
+            return JsonResponse(json_data,safe=False)
+
+        elif action == 'new_hd':
+            # todo save new adjustment hd
+            json_data = json.loads(request.body)
+            remark = json_data['remark']
+            return JsonResponse(json_data, safe=False)
+        else:
+            return HttpResponse('Unknown action')
+
+    else:
+        return HttpResponse('Unknown Module')

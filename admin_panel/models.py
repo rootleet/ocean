@@ -251,4 +251,23 @@ class ProductTrans(models.Model):
     created_on = models.DateTimeField(auto_now_add=True)
 
 
+class AdjHd(models.Model):
+    remark = models.TextField()
+
+    created_by = models.IntegerField(default=0)
+    created_on = models.DateTimeField(auto_now_add=True)
+    edited_on = models.DateTimeField(auto_now=True)
+    status = models.IntegerField(default=1)
+
+    def entry_no(self):
+        return f"ADJ{self.pk}"
+
+class AdjTran(models.Model):
+    parent = models.ForeignKey('AdjHd',on_delete=models.CASCADE)
+    product = models.ForeignKey('ProductMaster',on_delete=models.CASCADE)
+    packing = models.TextField()
+    quantity = models.DecimalField(max_digits=65, decimal_places=2)
+
+
+
 

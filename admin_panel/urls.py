@@ -69,7 +69,9 @@ urlpatterns = [
     path('accounts/tax-master/',views.tax_master,name='tax_master'),
     path('accounts/bank-master/',views.bank_master,name='bank-master'),
     path('accounts/bank_master/post/',views.bank_posts,name='bank-post'),
-    path('accounts/suppliers/', views.suppliers, name='suppliers')
+    path('accounts/suppliers/', views.suppliers, name='suppliers'),
+
+    path('api/<module>/<action>/',views.api, name='api')
 
 
 

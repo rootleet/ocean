@@ -30,39 +30,20 @@
 
         <form class="panel h-75">
             <div class="panel-heading">
-                <button type="button" data-toggle="modal" data-target="#addItem" class="btn btn-warning btn-sm">Inert</button>
+                <button onclick="save_adjustment()" type="button" data-toggle="modal"  class="btn btn-success btn-sm">SAVE</button>
+                <button  type="button" data-toggle="modal" data-target="#addItem" class="btn btn-warning btn-sm">INSERT ROW</button>
 
             </div>
             <div class="panel-sub-heading">
                 <div class="w-100 container">
                     <div class="row w-100 text-left">
-                        <div class="col-sm-2">
-                            <label class="w-100">Entry Date
-                                <input type="text" class="form-control">
-                            </label>
-                        </div>
-                        <div class="col-sm-2">
-                            <label class="w-100">Entry Number
-                                <input type="text" class="form-control">
-                            </label>
-                        </div>
-                        <div class="col-sm-2">
-                            <label class="w-100">Owner
-                                <input type="text" class="form-control">
-                            </label>
-                        </div>
-                        <div class="col-sm-4">
-                            <label class="w-100">Remark
-                                <input type="text" class="form-control">
-                            </label>
-                        </div>
-                        <div class="col-sm-2">
 
-                            <div class="w-100 d-flex pt-4 flex-wrap">
-                                <button class="btn btn-sm"><</button>
-                                <button class="btn btn-sm">></button>
-                            </div>
+                        <div class="col-sm-12">
+                            <label class="w-100">Remark
+                                <input type="text" id="remarks" class="form-control">
+                            </label>
                         </div>
+
                     </div>
                 </div>
             </div>

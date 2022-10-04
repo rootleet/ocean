@@ -181,11 +181,17 @@ async function task_export(document) {
 function row_cal(id) {
     let pack_qty,qty,total
 
-    pack_qty = $(`pack_${id}`)
-    qty = $(`qty_${id}`)
-    total = $(`total_${id}`)
 
-    total.val(pack_qty.val())
+
+    pack_qty = parseFloat($(`#pack_${id}`).val())
+    qty = parseFloat($(`#qty_${id}`).val())
+    let result = pack_qty * qty
+    total = $(`#total_${id}`)
+
+    // console.log(`${pack_qty} ${qty}`)
+
+    let calc = parseFloat(result)
+    total.val(calc)
 
 }
 
@@ -303,7 +309,7 @@ function add_adj_tran_list(barcode) {
                                     <td><input id="${barcode_id}" type="text" class="form-control" readonly value="${barcode}"></td>
                                     <td><input type="text" class="form-control" readonly value="${p_descr}"></td>
                                     <td><select  class="form-control" name="" id="${pack_qty}">${options}</select></td>
-                                    <td><input onkeyup="row_cal(${rows})" id="${qty_id}" class="form-control" type="number"></td>
+                                    <td><input onkeyup="row_cal(${rows})" id="${qty_id}" value="0" class="form-control" type="number"></td>
                                     <td><input id="${total}" readonly value="0" class="form-control" type="number"></td>
                                 </tr>`
 
@@ -318,6 +324,80 @@ function add_adj_tran_list(barcode) {
 
 
     // add to row
+
+}
+
+function save_adjustment() {
+
+    let remarks,rows,row_id,qty_id,total_id;
+
+    // check adjustment header
+    remarks = $('#remarks').val()
+    if(remarks.length > 0 )
+    {
+
+        // check each row to make sure row pass
+        rows = $('#tBody tr').length
+
+        if(rows > 0){
+            let tran_err_count = 0;
+            let tran_err_msg = 'error%%'
+            // loop through each row to make sure no 0 values
+            for (let i = 0; i < rows; i++) {
+
+                let qty,total
+
+                // get row ids
+                qty_id = `#qty_${i}`
+                row_id = `#row_${i}`
+                total_id = `#total_${i}`
+
+                qty = $(qty_id).val()
+                total = $(total_id).val()
+
+                // todo :: check if quanty and total are greater than 0
+                if(qty > 0)
+                {
+                    //pass
+                } else
+                {
+                    // append quantity error
+                    tran_err_count ++
+                    tran_err_msg += `\n line number ${row_id}  quantity is less than 1\n`
+                }
+
+                if(total > 0)
+                {
+                    //pass
+                } else{
+                    // append quantity error
+                    tran_err_count ++
+                    tran_err_msg += `\n line number ${row_id}  total is less than 1\n`
+                }
+            }
+
+            if(tran_err_count > 0)
+            {
+                error_handler(tran_err_msg)
+            }
+            else
+            {
+                //save document and transactions
+            }
+
+        } else {
+            swal_response('error','Cannot Proceed','Document body cannot be empty, please add an item to list')
+        }
+
+
+    } else
+    {
+        error_handler(`error%%Please remarks can't be empty`)
+
+    }
+
+
+    // check adjustment transactions for error
 
 }
 
