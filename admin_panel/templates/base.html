@@ -47,6 +47,11 @@
 <script src="{% static 'general/js/sweetalert2@11' %}"></script>
 <script src="{% static 'general/js/all.js' %}"></script>
 
+    <script src="{% static 'general/js/classes/products.js' %}"></script>
+<script>
+    var pClass = new Products()
+</script>
+
     		<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 		<script src="{% static 'general/js/jquery.js' %}"></script>
 
@@ -136,6 +141,11 @@
 									<span>Product Master</span>
 								</a>
 							</li>
+                            <li>
+                                <a href="{% url 'adjustment' %}">
+                                    <span>Adjustment</span>
+                                </a>
+                            </li>
 						</ul>
 					</li>
 
@@ -213,7 +223,7 @@
 		<!-- Left sidebar end -->
 
 		<!-- Dashboard Wrapper Start -->
-		<div class="dashboard-wrapper" style="height: 100vh; overflow: hidden !important">
+		<div class="dashboard-wrapper" style="height: 95vh; overflow: hidden !important">
 
 			<!-- Header start -->
 			<header>
@@ -394,7 +404,7 @@
 
 
 
-                <div class="container-fluid">
+                <article class="container-fluid p-0">
                     <!-- Top Bar Starts -->
 				    <div class="top-bar clearfix">
                     <div class="page-title">
@@ -418,7 +428,7 @@
                         {% block body %}
 
                         {% endblock %}
-                    </div>
+                </article>
 
 
                 </div>

@@ -433,7 +433,7 @@ def export_task(request):
 
                 return response
 
-@login_required(login_url='/login/')
+#@login_required(login_url='/login/')
 def finder(request):
     if request.method == 'GET':
         form = request.GET
@@ -444,6 +444,34 @@ def finder(request):
             data = TaskHD.objects.filter(title__icontains=query)
             qs_json = serializers.serialize('json', data)
             return HttpResponse(qs_json, content_type='application/json')
+
+        elif target == 'item_for_adjust':
+            q = form['query']
+            data = ProductMaster.objects.filter(descr__icontains=q)
+            qs_json = serializers.serialize('json', data)
+            return HttpResponse(qs_json, content_type='application/json')
+
+        elif target == 'get_product':
+            q = form['query']
+            data = ProductMaster.objects.filter(barcode=q)
+            qs_json = serializers.serialize('json', data)
+            return HttpResponse(qs_json, content_type='application/json')
+
+        elif target == 'get_prod_packing':
+            q = form['query']
+
+            data = ProductPacking.objects.filter(product=ProductMaster.objects.get(barcode=q))
+
+
+            if data.count() > 0:
+                # x_json = serializers.serialize('json', obj)
+                qs_json = serializers.serialize('json', data)
+                return HttpResponse(qs_json, content_type='application/json')
+            else:
+                return HttpResponse('NO DATA')
+
+        else:
+            return HttpResponse('unknown')
 
 @login_required(login_url='/login/')
 def change_domain(request):
@@ -648,6 +676,8 @@ def auto(request,tool):
                 data = ProductGroupSub.objects.filter(group=ProductGroup.objects.get(pk=group))
                 qs_json = serializers.serialize('json', data)
                 return HttpResponse(qs_json, content_type='application/json')
+
+
 
 def save_email_group(request):
     if request.method == 'POST':
@@ -896,7 +926,7 @@ def save_new_product(request):
                 ass_qty = request.POST['ass_qty']
 
                 ProductPacking(product=obj,packing_un=PackingMaster.objects.get(pk=purch_un),pack_qty=purch_qty,packing_type='P').save()
-                ProductPacking(product=obj, packing_un=PackingMaster.objects.get(pk=ass_un), pack_qty=ass_qty, packing_type='P').save()
+                ProductPacking(product=obj, packing_un=PackingMaster.objects.get(pk=ass_un), pack_qty=ass_qty, packing_type='A').save()
 
                 messages.error(request,'done%%Item Added')
 
@@ -929,3 +959,17 @@ def adjust_product_qty(request,p):
             'page_title': f'Received {product.descr}','product':product
         }
         return render(request,'products/adjust.html',context=context)
+
+
+def adjustment(request):
+    context = {
+        'page_title': 'Adjustment'
+    }
+    return render(request,'products/adjustment.html',context=context)
+
+@login_required(login_url='/login/')
+def new_adjustment(request):
+    context = {
+        'page_title': 'Add Adjustment'
+    }
+    return render(request,'products/new_adjustment.html',context=context)

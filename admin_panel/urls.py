@@ -61,6 +61,8 @@ urlpatterns = [
     path('inventory/products/new/',views.new_products,name='new-product'),
     path('inventory/products/save-new/',views.save_new_product,name='save-new-product'),
     path('inventory/products/adjustment/<p>',views.adjust_product_qty,name='adjust_product_qty'),
+    path('inventory/adjustment/',views.adjustment,name='adjustment'),
+    path('inventory/adjustment/new/',views.new_adjustment,name='new_adjustment'),
 
     # accounts urls
     path('accounts/',views.accounts,name='accounts'),

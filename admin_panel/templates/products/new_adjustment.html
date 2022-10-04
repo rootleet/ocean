@@ -1,0 +1,94 @@
+{% extends 'products/prod_base.html' %}
+{% load static %}
+
+{% block prod %}
+
+    <div class="w-100 p-2 h-100">
+
+        <div class="modal" id="addItem" data-backdrop="false">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <strong class="modal-title">Seach Item</strong>
+                        <input id="adj_item_search" placeholder="query" class="form-control" type="text">
+
+                    </div>
+
+                    <div class="modal-body" style="height: 50vh">
+                        <div id="searchRes" class="h-100 w-100">
+                            
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button data-dismiss="modal" class="btn btn-sm btn-warning">CLOSE</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <form class="panel h-75">
+            <div class="panel-heading">
+                <button type="button" data-toggle="modal" data-target="#addItem" class="btn btn-warning btn-sm">Inert</button>
+
+            </div>
+            <div class="panel-sub-heading">
+                <div class="w-100 container">
+                    <div class="row w-100 text-left">
+                        <div class="col-sm-2">
+                            <label class="w-100">Entry Date
+                                <input type="text" class="form-control">
+                            </label>
+                        </div>
+                        <div class="col-sm-2">
+                            <label class="w-100">Entry Number
+                                <input type="text" class="form-control">
+                            </label>
+                        </div>
+                        <div class="col-sm-2">
+                            <label class="w-100">Owner
+                                <input type="text" class="form-control">
+                            </label>
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="w-100">Remark
+                                <input type="text" class="form-control">
+                            </label>
+                        </div>
+                        <div class="col-sm-2">
+
+                            <div class="w-100 d-flex pt-4 flex-wrap">
+                                <button class="btn btn-sm"><</button>
+                                <button class="btn btn-sm">></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel-body" style="overflow: hidden; height: 50vh">
+                <div class="w-100 h-100" style="overflow: auto">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Barcode</th>
+                                <th>Description</th>
+                                <th>Packing</th>
+                                <th>Quantity</th>
+                                <th>Total Quantity</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tBody">
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </form>
+
+    </div>
+
+{% endblock %}
+

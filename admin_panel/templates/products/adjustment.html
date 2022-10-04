@@ -1,0 +1,75 @@
+{% extends 'products/prod_base.html' %}
+{% load static %}
+
+{% block prod %}
+
+    <div class="w-100 p-2 h-100">
+
+        <div class="panel h-75">
+            <div class="panel-heading">
+                <button class="btn btn-info btn-sm" onclick="location.href='{% url 'new_adjustment' %}'">NEW</button>
+            </div>
+            <div class="panel-sub-heading">
+                <div class="w-100 container">
+                    <div class="row w-100 text-left">
+                        <div class="col-sm-2">
+                            <label class="w-100">Entry Date
+                                <input type="text" class="form-control">
+                            </label>
+                        </div>
+                        <div class="col-sm-2">
+                            <label class="w-100">Entry Number
+                                <input type="text" class="form-control">
+                            </label>
+                        </div>
+                        <div class="col-sm-2">
+                            <label class="w-100">Owner
+                                <input type="text" class="form-control">
+                            </label>
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="w-100">Remark
+                                <input type="text" class="form-control">
+                            </label>
+                        </div>
+                        <div class="col-sm-2">
+
+                            <div class="w-100 d-flex pt-4 flex-wrap">
+                                <button class="btn btn-sm"><</button>
+                                <button class="btn btn-sm">></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel-body" style="overflow: hidden; height: 50vh">
+                <div class="w-100 h-100" style="overflow: auto">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Barcode</th>
+                                <th>Description</th>
+                                <th>Pack Id</th>
+                                <th>Pack Description</th>
+                                <th>Quantity</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Barcode</td>
+                                <td>Description</td>
+                                <td>Pack Id</td>
+                                <td >Pack Description</td>
+                                <td>Quantity</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+{% endblock %}

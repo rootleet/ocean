@@ -178,6 +178,16 @@ async function task_export(document) {
     }
 }
 
+function row_cal(id) {
+    let pack_qty,qty,total
+
+    pack_qty = $(`pack_${id}`)
+    qty = $(`qty_${id}`)
+    total = $(`total_${id}`)
+
+    total.val(pack_qty.val())
+
+}
 
 $(function() {
     $("#search_task").on("change paste keyup", function() {
@@ -212,4 +222,105 @@ $(function() {
 
 
     });
-});;
+});
+
+//below is adjustment functions
+
+$(function() {
+    $("#adj_item_search").on("change paste keyup", function() {
+        let query = $(this).val()
+
+        let form_date = {
+           'for':'item_for_adjust',
+            'query':query
+        }
+
+        if(query.length > 0)
+        {
+            $.ajax({
+            url:$('#search_url').val(),
+            data:form_date,
+            type: 'GET',
+            success: function (response) {
+                console.log(response)
+                let res = response
+                let this_row;
+                let link_res = ""
+                for (let i = 0; i < res.length; i++) {
+                    this_row = res[i]['fields']
+                    link_res += `<div class="list-group-item d-flex flex-wrap"> <button  onclick="add_adj_tran_list('${this_row.barcode}')" class="btn btn-sm btn-info">ADD</button> ${this_row.barcode} | ${this_row.descr}</div>`
+                }
+                $('#searchRes').html(link_res)
+            }
+        })
+        } else {
+            $('#searchRes').html('')
+        }
+    })
+}
+)
+
+function add_adj_tran_list(barcode) {
+    let product,packing,p_descr,this_pack=''
+    //get product details
+    product = JSON.parse(pClass.GetProduct(barcode))[0]['fields']
+    p_descr = product.shrt_descr
+
+    // check if barcode exist
+    let rows = $('#tBody tr').length
+    let barcode_id = `barcode_${rows}`
+    let exist = 0;
+
+    for (let i = 0; i <= rows; i++) {
+        let line_barcode = `#barcode_${i}`
+        let barcode_val = $(line_barcode).val()
+        //console.log(barcode_val)
+        if (barcode_val == barcode)
+        {
+            exist = 1;
+        }
+    }
+    console.log(exist)
+
+    if(exist === 0)
+    {
+        // get packing details
+        packing = JSON.parse(pClass.GetProductPacking(barcode))
+        let options = ''
+        for (let i = 0; i < packing.length; i++) {
+            this_pack = packing[i]['fields']
+            let packing_type = this_pack['packing_type']
+            let pack_qty = this_pack['pack_qty']
+            let this_option = `<option value="${pack_qty}">${packing_type}</option>`
+            options += this_option
+        }
+
+
+        let qty_id = `qty_${rows}`
+        let pack_qty = `pack_${rows}`
+        let total = `total_${rows}`
+        let tr = `<tr id="row${rows}">
+                                    <td><input id="${barcode_id}" type="text" class="form-control" readonly value="${barcode}"></td>
+                                    <td><input type="text" class="form-control" readonly value="${p_descr}"></td>
+                                    <td><select  class="form-control" name="" id="${pack_qty}">${options}</select></td>
+                                    <td><input onkeyup="row_cal(${rows})" id="${qty_id}" class="form-control" type="number"></td>
+                                    <td><input id="${total}" readonly value="0" class="form-control" type="number"></td>
+                                </tr>`
+
+        $('#tBody').append(tr)
+
+        // ctable(product)
+        // ctable(packing)
+        // ctable(options)
+    }
+
+
+
+
+    // add to row
+
+}
+
+// end of adjustment functions
+
+// alert('hello')

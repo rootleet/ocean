@@ -238,6 +238,9 @@ class ProductPacking(models.Model):
     edited_on = models.DateTimeField(auto_now=True)
     status = models.IntegerField(default=1)
 
+    def desc(self):
+        return F"{self.pack_qty} IN 1{self.packing_un.descr}"
+
 class ProductTrans(models.Model):
     doc = models.CharField(max_length=2)
     doc_ref = models.TextField()
