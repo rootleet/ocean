@@ -251,41 +251,41 @@ class ProductTrans(models.Model):
     created_on = models.DateTimeField(auto_now_add=True)
 
 
-#
-# class AdjHd(models.Model):
-#     remark = models.TextField()
-#
-#     created_by = models.IntegerField(default=0)
-#     created_on = models.DateTimeField(auto_now_add=True)
-#     edited_on = models.DateTimeField(auto_now=True)
-#     status = models.IntegerField(default = 0)
-#
-#     def __set__(self, instance, value):
-#         return self.pk
-#
-#     def trans(self):
-#         return AdjTran.objects.get(parent=self.pk)
-#     def tran_count(self):
-#         return AdjTran.objects.filter(parent=self.pk).count()
-#
-#
-#
-#
-#
-#     def entry_no(self):
-#         return f"ADJ{self.pk}"
-#
-# class AdjTran(models.Model):
-#     parent = models.ForeignKey('AdjHd',on_delete=models.CASCADE)
-#     line = models.IntegerField()
-#     product = models.ForeignKey('ProductMaster',on_delete=models.CASCADE)
-#     packing = models.TextField()
-#     quantity = models.DecimalField(max_digits=65, decimal_places=2)
-#     total = models.IntegerField()
-#
-#     def product_name(self):
-#         return ProductMaster.objects.get(pk=self.product).descr
-#
-#
+
+class AdjHd(models.Model):
+    remark = models.TextField()
+
+    created_by = models.IntegerField(default=0)
+    created_on = models.DateTimeField(auto_now_add=True)
+    edited_on = models.DateTimeField(auto_now=True)
+    status = models.IntegerField(default = 0)
+
+    def __set__(self, instance, value):
+        return self.pk
+
+    def trans(self):
+        return AdjTran.objects.get(parent=self.pk)
+    def tran_count(self):
+        return AdjTran.objects.filter(parent=self.pk).count()
+
+
+
+
+
+    def entry_no(self):
+        return f"ADJ{self.pk}"
+
+class AdjTran(models.Model):
+    parent = models.ForeignKey('AdjHd',on_delete=models.CASCADE)
+    line = models.IntegerField()
+    product = models.ForeignKey('ProductMaster',on_delete=models.CASCADE)
+    packing = models.TextField()
+    quantity = models.DecimalField(max_digits=65, decimal_places=2)
+    total = models.IntegerField()
+
+    def product_name(self):
+        return ProductMaster.objects.get(pk=self.product).descr
+
+
 
 
