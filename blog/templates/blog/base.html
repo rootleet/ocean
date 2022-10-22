@@ -18,6 +18,7 @@
 <script src="{% static 'general/js/error_handler.js' %}"></script>
 <script src="{% static 'general/js/sweetalert2@11' %}"></script>
 <script src="{% static 'general/js/all.js' %}"></script>
+<link rel="icon" type="image/png" href="{% static 'general/img/icons/16.png' %}">
     {% if page_title %}
        <title> Ocean | Power Of Sharing | {{ page_title }} </title>
     {% else %}
@@ -25,7 +26,7 @@
     {% endif %}
 
 </head>
-<body style="height: 100vh; overflow: hidden" class="bg_default">
+<body style="height: 100vh; overflow: hidden;background: url('../{% static 'general/img/bg/bg_wall1.jpg' %}')" class="img_bg">
 
     {% if user.is_superuser %}
 
@@ -99,10 +100,9 @@
         </div>
     </div>
 
-    <header class="bg-light border-bottom custom_shadow">
-        <nav class="navbar navbar-expand-sm bg-light h-100 navbar-light">
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
           <div class="container text-dark">
-              <a class="navbar-link text-dark" href="{% url 'blog-home' %}"><strong>Ocean</strong></a>
+              <a class="navbar-link" href="{% url 'blog-home' %}"><img src="{% static 'general/img/icons/32.png' %}" alt="Ocean" class="img-fluid"></a>
               <ul class="navbar-nav mr-auto ml-5">
 
 
@@ -159,7 +159,6 @@
               </ul>
           </div>
         </nav>
-    </header>
 
 
 

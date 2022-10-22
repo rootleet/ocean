@@ -11,6 +11,7 @@
     <script src="{% static 'blog/js/popper.min.js' %}"></script>
     <script src="{% static 'blog/js/bootstrap.min.js' %}"></script>
 <link rel="stylesheet" href="{% static 'general/css/all.css' %}">
+<link rel="icon" type="image/png" href="{% static 'general/img/icons/16.png' %}">
     <script src="{% static 'general/js/all.js' %}"></script>
     {% if page_title %}
        <title> {{ page_title }} </title>
@@ -19,61 +20,62 @@
     {% endif %}
 
 </head>
-<body style="height: 100vh">
-    <form id="regular_form" method="post" action="{% url 'login_process' %}" class="container login_form h-100 overflow-hidden">
+<body class="img_bg" style="height: 100vh; background: url('../{% static 'general/img/bg/bg_wall1.jpg' %}')">
+    <form id="regular_form" method="post" action="{% url 'login_process' %}" class="container-fluid bg_trans_80 login_form h-100 overflow-hidden">
       <div class="row h-100 d-flex justify-content-center align-items-center">
           {% csrf_token %}
-          <div id='intro' class="col-sm-7 d-flex flex-wrap align-content-center h-100">
-              <div class="">
-                <h1 class="display-4 font-weight-bolder">OCEAN <i class="fa fa-share-alt"></i></h1>
-                <p>The power of collaboration and sharing</p>
-              </div>
-          </div>
 
-        <div class="col-sm-5">
-          <div class="card custom_shadow" style="border-radius: 1rem;">
+
+        <div class="col-sm-2">
+          <div class="card bg_trans_80 custom_shadow" style="border-radius: 1rem;">
 
               <div class="card-body text-center">
-
-              <div class="">
-
-                <div class="form-outline form-white mb-4">
-                  <input required name="username" autocomplete="off" id="inputEmail" type="text" placeholder="username" class="form-control form-control-lg" />
-                </div>
-
-
-                <div class="form-outline form-white mb-4">
-                  <input required name="password" id="inputPassword" type="password" placeholder="Password" class="form-control form-control-lg" />
-                </div>
-                  <input type="hidden" name="next" value="{{ next }}">
-                  {% if messages %}
-                    {% for message in messages %}
                 
-                        <div class="alert alert-danger alert-dismissible">
-                        <button type="button" class="close" data-dismiss="alert">&times;</button>
-                        <strong>Error!</strong> {{ message }}
-                      </div>
-
-                    {% endfor %}
-                {% endif %}
-                <button class="btn btn-primary w-100 btn-lg px-5 mb-4" type="submit">Login</button>
-                <p class="small"><a class="" href="#!">Forgot password?</a></p> <hr>
-
-
-
-                <!-- <div class="d-flex justify-content-center text-center m-4 pt-1">
-                  <a href="#!" class="text-white"><i class="fab fa-facebook-f fa-lg"></i></a>
-                  <a href="#!" class="text-white"><i class="fab fa-twitter fa-lg mx-4 px-2"></i></a>
-                  <a href="#!" class="text-white"><i class="fab fa-google fa-lg"></i></a>
-                </div> -->
-
-              </div><br>
-
-              <div>
-                <a href="{% url 'new-user' %}" id="new_user" class="btn btn-success btn-lg mb-4">Create a new account</a>
-              </div>
-
-            </div>
+                  <div class="">
+                  
+                    <div class="text-center">
+                        <div class="w-25 mx-auto mb-5">
+                            <img src="{% static 'general/img/icons/96.png' %}" alt="" class="img-fluid">
+                        </div>
+                    </div>
+    
+                    <div class="form-outline form-white mb-4">
+                      <input required name="username" autocomplete="off" id="inputEmail" type="text" placeholder="username" class="form-control form-control-sm rounded-0" />
+                    </div>
+    
+    
+                    <div class="form-outline form-white mb-4">
+                      <input required name="password" id="inputPassword" type="password" placeholder="Password" class="form-control form-control-sm rounded-0" />
+                    </div>
+                      <input type="hidden" name="next" value="{{ next }}">
+                      {% if messages %}
+                        {% for message in messages %}
+                    
+                            <div class="alert alert-danger alert-dismissible">
+                            <button type="button" class="close" data-dismiss="alert">&times;</button>
+                            <strong>Error!</strong> {{ message }}
+                          </div>
+    
+                        {% endfor %}
+                    {% endif %}
+                    <button class="btn btn-primary w-100 btn-sm rounded-0 px-5 mb-4" type="submit">Login</button>
+    
+                    <hr>
+                    <div class="w-100 d-flex flex-wrap justify-content-between">
+                        <p class="small"><a class="" href="#!">Forgot password?</a></p>
+                        <p class="small"><a class="" href="{% url 'new-user' %}">Register</a></p>
+                    </div>
+    
+    
+                    <!-- <div class="d-flex justify-content-center text-center m-4 pt-1">
+                      <a href="#!" class="text-white"><i class="fab fa-facebook-f fa-lg"></i></a>
+                      <a href="#!" class="text-white"><i class="fab fa-twitter fa-lg mx-4 px-2"></i></a>
+                      <a href="#!" class="text-white"><i class="fab fa-google fa-lg"></i></a>
+                    </div> -->
+    
+                  </div>
+    
+                </div>
         </div>
         </div>
 
