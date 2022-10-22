@@ -29,6 +29,46 @@ function log_issue(uni) {
 
 }
 
+function api_call(module,action,data) {
+    // console.log(JSON.stringify(data))
+    let link = `/admin_panel/api/${module}/${action}/`
+    console.table(data)
+    var result = 0;
+    $.ajax({
+        url:link,
+        type: 'POST',
+        contentType: 'application/json; charset=utf-8',
+        processData: false,
+        async: false,
+        dataType: 'html',
+        data:JSON.stringify(data),
+        // dataType: "json",
+        success: function (response) {
+
+            result =  response
+            console.table(response)
+
+        },
+        error: function (error)
+        {
+
+            result = error
+        }
+    })
+
+    console.table(result['responseText'])
+    return result
+}
+
+function dataType(data) {
+
+        console.table({
+            'data':data,'type':typeof(data)
+        })
+    }
+
+
+
 function mark_for_escalation(issue) {
 
     let url = $('#url').val()
@@ -44,6 +84,29 @@ function mark_for_escalation(issue) {
                 console.log(response)
             }
         })
+}
+
+function new_adj_hd(remark) {
+    var data = {'remark': remark}
+
+    let exe = JSON.parse(api_call('adjustment', 'new_hd', data))
+    let status = exe['status']
+    let message = exe['message']
+
+    return message;
+}
+
+function new_adj_tran(parent,line,product,packing,quantity,total) {
+    let p = {'id':65}
+    var data = {'parent':parent,"line":line,"product":product,"packing":packing,"quantity":quantity,"total":total}
+
+    console.table(data)
+
+    let exe =  JSON.parse(api_call('adjustment','new_tran',data))
+    let status = exe['status']
+    let message = exe['message']
+
+    return status
 }
 
 async function escalate(provider_code) {
@@ -355,24 +418,19 @@ function save_adjustment() {
                 qty = $(qty_id).val()
                 total = $(total_id).val()
 
-                // todo :: check if quanty and total are greater than 0
-                if(qty > 0)
-                {
-                    //pass
-                } else
-                {
-                    // append quantity error
-                    tran_err_count ++
-                    tran_err_msg += `\n line number ${row_id}  quantity is less than 1\n`
-                }
+                // check if quanty and total are greater than 0
+                // if(qty === 0)
+                // {
+                //     // append quantity error
+                //     tran_err_count ++
+                //     tran_err_msg += `\n line number ${row_id}  : Cannot make adjustment of 0\n`
+                // }
 
-                if(total > 0)
+                if(total == 0)
                 {
-                    //pass
-                } else{
                     // append quantity error
                     tran_err_count ++
-                    tran_err_msg += `\n line number ${row_id}  total is less than 1\n`
+                    tran_err_msg += `<p>line number ${row_id}  : Cannot Make adjustment of 0</p>`
                 }
             }
 
@@ -382,7 +440,45 @@ function save_adjustment() {
             }
             else
             {
-                //save document and transactions
+                //insert into adjustment hd
+
+                let paren = new_adj_hd(remarks)
+
+                if( paren > 0)
+                {
+
+                    for (let xi = 0; xi < rows; xi++)
+                    {
+                        // todo insert each line
+                        let qty_id,row_id,total_id,qty,total,barcode_id,pack_id,barcode,pack
+                        qty_id = `#qty_${xi}`
+                        row_id = `#row_${xi}`
+                        total_id = `#total_${xi}`
+                        barcode_id = `#barcode_${xi}`
+                        pack_id = `#pack_${xi}`
+
+
+                        barcode = $(barcode_id).val()
+
+                        qty = $(qty_id).val()
+                        total = $(total_id).val()
+                        pack = $(pack_id).val()
+
+
+
+                        new_adj_tran(paren,xi,barcode,pack,qty,total)
+                    }
+
+                    // reload page
+                    location.href='/admin_panel/inventory/adjustment/'
+
+                } else {
+                    error_handler(`error%%Cannot Create Header ${paren}`)
+                }
+
+
+
+
             }
 
         } else {
@@ -400,6 +496,8 @@ function save_adjustment() {
     // check adjustment transactions for error
 
 }
+
+
 
 // end of adjustment functions
 

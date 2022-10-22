@@ -31,7 +31,7 @@ function swal_response(icon='info',title = 'SWAL RESPONSE',text ='') {
     swal.fire({
         icon: icon,
         title: title,
-        text:text,
+        html:text,
     })
 }
 

@@ -16,6 +16,8 @@ from admin_panel.form import NewProduct
 from admin_panel.models import *
 from blog.models import *
 from community.models import *
+from django.views.decorators.csrf import csrf_exempt
+
 
 
 def today(what='none'):  # get time
@@ -961,12 +963,19 @@ def adjust_product_qty(request,p):
         }
         return render(request,'products/adjust.html',context=context)
 
-
+@login_required(login_url='/login/')
 def adjustment(request):
-    context = {
-        'page_title': 'Adjustment'
-    }
-    return render(request,'products/adjustment.html',context=context)
+
+    if AdjHd.objects.all().count() == 0:
+        messages.success(request,"No Adjustment Entry")
+        return redirect('new_adjustment')
+
+    else:
+        context = {
+            'last':AdjHd.objects.last().pk,
+            'page_title': 'Adjustment'
+        }
+        return render(request,'products/adjustment.html',context=context)
 
 @login_required(login_url='/login/')
 def new_adjustment(request):
@@ -975,20 +984,204 @@ def new_adjustment(request):
     }
     return render(request,'products/new_adjustment.html',context=context)
 
-
+@csrf_exempt
 def api(request,module,action):
+    global status, message
     import json
+
+
     if module == 'adjustment':
 
         if action == 'new_tran':
+
             json_data = json.loads(request.body)
-            return JsonResponse(json_data,safe=False)
+
+
+            print(json_data)
+            # inititialising json object
+            parent = json_data['parent']
+            line = json_data['line']
+            packing = json_data['packing']
+            quantity = json_data['quantity']
+            total = json_data['total']
+            product = json_data['product']
+
+
+
+            # insert into database
+            try:
+                AdjTran(parent=AdjHd.objects.get(pk=parent  ), line=line,
+                        product=ProductMaster.objects.get(barcode=product), packing=packing, quantity=quantity,
+                        total=total).save()
+                # ProductTrans(doc='ADJ', doc_ref=parent, tran_qty=total,
+                #              product=ProductMaster.objects.get(pk=ProductMaster.objects.get(barcode=product)).pk).save()
+
+                messages.error(request, 'done%%Product Received')
+
+                status = 202
+                message = 'Data Added'
+
+            except Exception as error:
+                status = 505
+                message = str(error)
+
+
+
+            return JsonResponse({'status': status, 'message': message}, safe=False)
 
         elif action == 'new_hd':
             # todo save new adjustment hd
+
             json_data = json.loads(request.body)
-            remark = json_data['remark']
-            return JsonResponse(json_data, safe=False)
+            # return HttpResponse(json_data['remark'])
+
+
+            try:
+
+                remark = json_data['remark']
+                AdjHd(remark=remark).save()
+
+                last = AdjHd.objects.last()
+                id = last.pk
+                status = 200
+                message = id
+
+            except Exception as e:
+                status = 505
+                message = str(e)
+
+
+            return JsonResponse({'status':status,'message':message}, safe=False)
+
+        elif action == 'get_hd':
+
+            json_data = json.loads(request.body)
+
+
+            hd = json_data['pk']
+
+
+
+            if AdjHd.objects.filter(pk=hd).count() == 1:
+                data = AdjHd.objects.get(pk=hd)
+                prev_count = AdjHd.objects.all().filter(pk__lt=hd).count()
+                next_count = AdjHd.objects.all().filter(pk__gt=hd).count()
+
+                next = 0
+                x_p=0
+                y_p = 0
+
+                if prev_count > 0:
+                    prevx = AdjHd.objects.all().filter(pk__lt = hd)
+                    for x in prevx:
+                        print(x.pk)
+                        x_p = str(x.pk)
+                if next_count > 0:
+                    next = AdjHd.objects.all().filter(pk__gt = hd)[:1]
+                    for y in next:
+                        print(y.pk)
+                        y_p = str(y.pk)
+
+                print()
+                print(f"PREV {x_p}")
+                print(f"NEXT {next}")
+                print(prev_count)
+                print()
+
+                status = 202
+                message = {
+                    'entry_no':f"ADJ000{hd}",
+                    'remark':data.remark,
+                    'date':data.created_on,
+                    'status':data.status,
+                    'next_count':next_count,
+                    'next':y_p,
+                    'prev_count':prev_count,
+                    'prev':x_p
+                }
+
+                # print()
+                # print(f"CUST MESSAGE {message}")
+                # print()
+
+            else:
+                status = 404
+                message = 'Adjustment HD Not Found'
+            return JsonResponse({'status': status, 'message': message}, safe=False)
+
+        elif action == 'get_tran':
+            json_data = json.loads(request.body)
+
+            print()
+            print(f"JSON DATA {request.body}")
+            print()
+
+            hd = json_data['pk']
+
+            if AdjTran.objects.filter(parent=hd).count() > 0:
+                x_tran = AdjTran.objects.filter(parent=hd)
+                message = []
+                for x in x_tran:
+                    this_line = {
+                        'line':x.line,
+                        'barcode': x.product.barcode,
+                        'description': x.product.descr,
+                        'quantity': x.quantity,
+                        'pack_qty': x.packing,
+                        'total': x.total
+                    }
+                    message.append(this_line)
+
+                status = 202
+                print()
+                print(f"CUST MESSAGE {message}")
+                print()
+
+            else:
+                status = 404
+                message = 'No Trans'
+            return JsonResponse({'status': status, 'message': message}, safe=False)
+
+        elif action == 'approve':
+            json_data = json.loads(request.body)
+
+            hd = json_data['pk']
+
+            if AdjHd.objects.filter(pk=hd).count() > 0:
+                trans = AdjTran.objects.filter(parent=hd)
+                message = ''
+                add_err = 0
+                for tran in trans:
+                   doc = 'AD'
+                   doc_ref = hd
+                   product = ProductMaster.objects.get(pk=tran.product.pk)
+                   tran_qty = tran.quantity
+
+                   try:
+                       ProductTrans(doc=doc,doc_ref=doc_ref,product=product,tran_qty=tran_qty).save()
+                   except Exception as e:
+                       add_err =+ 1
+                       message += f"<p>{e}</p>"
+
+
+                if add_err > 0:
+                    # delete transaction
+                    ProductTrans.objects.filter(doc='ADJ',doc_ref=hd).delete()
+                    status = 505
+                    message = message
+                else:
+                    x_hd = AdjHd.objects.get(pk=hd)
+                    x_hd.status = 1
+                    x_hd.save()
+                    message = 'document save'
+                    status = 202
+
+            else:
+                status = 404
+                message = 'No Trans'
+                messages.error(request,message)
+            return JsonResponse({'status': status, 'message': message}, safe=False)
+
         else:
             return HttpResponse('Unknown action')
 
