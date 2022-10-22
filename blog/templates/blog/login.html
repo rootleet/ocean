@@ -20,7 +20,7 @@
     {% endif %}
 
 </head>
-<body class="img_bg" style="height: 100vh; background: url('../{% static 'general/img/bg/bg_wall1.jpg' %}')">
+<body class="img_bg" style="height: 100vh; background: url('{% static 'general/img/bg/bg_wall1.jpg' %}')">
     <form id="regular_form" method="post" action="{% url 'login_process' %}" class="container-fluid bg_trans_80 login_form h-100 overflow-hidden">
       <div class="row h-100 d-flex justify-content-center align-items-center">
           {% csrf_token %}
