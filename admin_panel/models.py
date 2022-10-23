@@ -242,10 +242,17 @@ class ProductPacking(models.Model):
         return F"{self.pack_qty} IN 1{self.packing_un.descr}"
 
 class ProductTrans(models.Model):
+    loc = models.ForeignKey('Locations',on_delete=models.CASCADE)
     doc = models.CharField(max_length=2)
     doc_ref = models.TextField()
     product = models.ForeignKey('ProductMaster',on_delete=models.CASCADE)
     tran_qty = models.DecimalField(max_digits=65, decimal_places=2)
+
+    def stock(self):
+        if self.objects.filter(product=self.product.pk).aggregate(Sum('tran_qty'))['tran_qty__sum'] is None:
+            return 0
+        else:
+            return self.objects.filter(product=self.product.pk).aggregate(Sum('tran_qty'))['tran_qty__sum']
 
     created_by = models.IntegerField(default=0)
     created_on = models.DateTimeField(auto_now_add=True)
@@ -253,6 +260,7 @@ class ProductTrans(models.Model):
 
 
 class AdjHd(models.Model):
+    loc = models.ForeignKey('Locations', on_delete=models.CASCADE)
     remark = models.TextField()
 
     created_by = models.IntegerField(default=0)
@@ -286,6 +294,43 @@ class AdjTran(models.Model):
     def product_name(self):
         return ProductMaster.objects.get(pk=self.product).descr
 
+class Locations(models.Model):
+    code = models.CharField(max_length=3,unique=True)
+    descr = models.TextField()
+
+    created_by = models.IntegerField(default=0)
+    created_on = models.DateTimeField(auto_now_add=True)
+    edited_on = models.DateTimeField(auto_now=True)
+    status = models.IntegerField(default=0)
 
 
+class TransferHD(models.Model):
+    loc_fr = models.ForeignKey('Locations', on_delete=models.CASCADE)
 
+    loc_to = models.CharField(max_length=3)
+
+    remark = models.TextField()
+
+    created_by = models.IntegerField(default=0)
+    created_on = models.DateTimeField(auto_now_add=True)
+    edited_on = models.DateTimeField(auto_now=True)
+    status = models.IntegerField(default = 0)
+
+    def to(self):
+        return Locations.objects.get(pk=self.loc_to)
+
+    def trans(self):
+        return TransferTran.objects.get(parent=self.pk)
+    def tran_count(self):
+        return TransferTran.objects.filter(parent=self.pk).count()
+
+class TransferTran(models.Model):
+    parent = models.ForeignKey('TransferHD',on_delete=models.CASCADE)
+    line = models.IntegerField()
+    product = models.ForeignKey('ProductMaster',on_delete=models.CASCADE)
+    packing = models.TextField()
+    quantity = models.DecimalField(max_digits=65, decimal_places=2)
+    total = models.IntegerField()
+
+    def product_name(self):
+        return ProductMaster.objects.get(pk=self.product).descr

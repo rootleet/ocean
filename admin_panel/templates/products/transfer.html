@@ -9,14 +9,19 @@
 
         <div class="panel h-75">
             <div class="panel-heading">
-                <button class="btn btn-info btn-sm" onclick="location.href='{% url 'new_adjustment' %}'">NEW</button>
+                <button class="btn btn-info btn-sm" onclick="location.href='{% url 'new_transfer' %}'">NEW</button>
             </div>
             <div class="panel-sub-heading">
                 <div class="w-100 container">
                     <div class="row w-100 text-left">
-                        <div class="col-sm-2">
-                            <label class="w-100">Location
-                                <input readonly id="ent_loc" type="text" class="form-control">
+                        <div class="col-sm-1">
+                            <label class="w-100">From
+                                <input readonly id="loc_fro" type="text" class="form-control">
+                            </label>
+                        </div>
+                        <div class="col-sm-1">
+                            <label class="w-100">To
+                                <input readonly id="loc_to" type="text" class="form-control">
                             </label>
                         </div>
                         <div class="col-sm-2">
@@ -36,10 +41,10 @@
                         </div>
                         <div class="col-sm-2">
 
-                            <div class="w-100 d-flex pt-4 flex-wrap">
-                                <button id="prev" onclick="adj.loadScreen($('#prev').val())" class="btn btn-sm"><</button>
-                                <button id="next" onclick="adj.loadScreen($('#next').val())" class="btn btn-sm">></button>
-                                <button onclick="adj.approveAdjustment(this.value)" id="adjProcess" class="btn btn-sm btn-info">APPROVE</button>
+                            <div class="w-100 d-flex pt-4 flex-wrap justify-content-between">
+                                <button id="prev" onclick="transfer.loadScreen($('#prev').val())" class="btn btn-sm"><</button>
+                                <button id="next" onclick="transfer.loadScreen($('#next').val())" class="btn btn-sm">></button>
+                                <button onclick="transfer.approve(this.value)" id="adjProcess" class="btn btn-sm btn-info">APPROVE</button>
                             </div>
                         </div>
                     </div>
@@ -73,12 +78,12 @@
 
         </div>
 
+        <script>
+            transfer.loadScreen({{ last }})
+        </script>
+
     </div>
 
-    <script>
-        let adj = new Adjustment();
-        adj.loadScreen({{ last }})
-    </script>
 
 {% endblock %}
 

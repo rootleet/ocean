@@ -9,9 +9,9 @@
         </div>
         <div class="panel-body container w-100">
                     <div style="height: 8%; background: #0C0C0C; color:#f3f3f3;" class="row no-gutters">
-                        <strong class="col-sm-2 pt-3 pb-2 h-100 border-right">IMAGE</strong>
+                        <strong class="col-sm-1 pt-3 pb-2 h-100 border-right">IMAGE</strong>
                         <strong class="col-sm-2 pt-3 pb-2 h-100 border-right">BARCODE</strong>
-                        <strong class="col-sm-2 pt-3 pb-2 h-100 border-right">DESCRIPTION</strong>
+                        <strong class="col-sm-3 pt-3 pb-2 h-100 border-right">DESCRIPTION</strong>
                         <strong class="col-sm-2 pt-3 pb-2 h-100 border-right">SUPPLIER</strong>
                         <strong class="col-sm-2 pt-3 pb-2 h-100 border-right">STOCK</strong>
                         <strong class="col-sm-2 pt-3 pb-2 h-100">TOOLS</strong>
@@ -21,7 +21,7 @@
 
                         {% for product in products %}
 
-                            <div class="col-sm-2 border pt-2 pb-2 border-dark">
+                            <div class="col-sm-1 border pt-2 pb-2 border-dark">
                                 <div style="height: 40px; width: 40px; overflow: hidden">
                                     <img src="../../../{{ product.prod_img }}" width="100%" alt="">
                                 </div>
@@ -31,7 +31,7 @@
                                     {{ product.barcode }}
                                 </div>
                             </div>
-                            <div class="col-sm-2 border pt-2 pb-2 border-dark">
+                            <div class="col-sm-3 border pt-2 pb-2 border-dark">
                                 <div style="height: 40px; overflow: hidden">
                                     {{ product.descr }}
                                 </div>
@@ -43,7 +43,7 @@
                             </div>
                             <div class="col-sm-2 border pt-2 pb-2 border-dark">
                                 <div style="height: 40px; overflow: hidden">
-                                    {{ product.stock }}
+                                    <span onclick="pClass.Stock({{ product.pk }})" class="badge badge-info">{{ product.stock }}</span>
                                 </div>
                             </div>
                             <div class="col-sm-2 border pt-2 pb-2 border-dark">

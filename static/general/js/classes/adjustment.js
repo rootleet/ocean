@@ -41,7 +41,7 @@ class Adjustment {
             // disable previous
             $('#prev').prop( "disabled", true );
         }
-
+        $('#ent_loc').val(hd['loc'])
         $('#ent_date').val(hd['date'])
         $('#ent_num').val(hd['entry_no'])
         $('#ent_rm').val(hd['remark'])

@@ -1,6 +1,6 @@
 from django import forms
 
-from admin_panel.models import ProductMaster, ProductPacking
+from admin_panel.models import ProductMaster, ProductPacking, Locations
 
 
 class NewProduct(forms.ModelForm):
@@ -11,4 +11,9 @@ class NewProduct(forms.ModelForm):
 class NewProductPacking(forms.ModelForm):
     class Meta:
         model = ProductPacking
+        exclude = ['created_on', 'edited_on', 'status', 'created_by']
+
+class NewLocation(forms.ModelForm):
+    class Meta:
+        model = Locations
         exclude = ['created_on', 'edited_on', 'status', 'created_by']

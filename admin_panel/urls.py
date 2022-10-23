@@ -63,6 +63,8 @@ urlpatterns = [
     path('inventory/products/adjustment/<p>',views.adjust_product_qty,name='adjust_product_qty'),
     path('inventory/adjustment/',views.adjustment,name='adjustment'),
     path('inventory/adjustment/new/',views.new_adjustment,name='new_adjustment'),
+    path('inventory/transfer/',views.transfer,name='transfer'),
+    path('inventory/transfer/new/',views.new_transfer,name='new_transfer'),
 
     # accounts urls
     path('accounts/',views.accounts,name='accounts'),
@@ -70,6 +72,10 @@ urlpatterns = [
     path('accounts/bank-master/',views.bank_master,name='bank-master'),
     path('accounts/bank_master/post/',views.bank_posts,name='bank-post'),
     path('accounts/suppliers/', views.suppliers, name='suppliers'),
+
+    #company setup
+    path('company/locations/',views.loc_master,name='loc_master'),
+    path('company/form_post/',views.post_form, name='post_form'),
 
     path('api/<module>/<action>/',views.api, name='api')
 

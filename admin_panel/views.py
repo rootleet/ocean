@@ -12,7 +12,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.http import JsonResponse
 
-from admin_panel.form import NewProduct
+from admin_panel.form import NewProduct, NewLocation
 from admin_panel.models import *
 from blog.models import *
 from community.models import *
@@ -225,6 +225,7 @@ def accessories(request):
 
 
     context = {
+        'nav':True,
         'comm_tags': tags.objects.all(),
         'providers': Providers.objects.all(),
         'notomem': NotificationGroups.objects.all()
@@ -681,6 +682,29 @@ def auto(request,tool):
                 return HttpResponse(qs_json, content_type='application/json')
 
 
+def post_form(request):
+    if request.method == 'POST':
+        form = request.POST
+        function = form['function']
+
+        if function == 'new_location':
+            form = NewLocation(request.POST)
+            if form.is_valid():
+                try:
+                    form.save()
+                    return redirect('loc_master')
+                except Exception as e:
+                    messages.error(redirect,f"Could not save location {e}")
+                    return redirect('loc_master')
+            else:
+                return HttpResponse(f"INVALID FORM {form}")
+
+
+        else:
+            return HttpResponse('INVALID FUNCTION')
+
+    else:
+        return HttpResponse('INVALID METHOD')
 
 def save_email_group(request):
     if request.method == 'POST':
@@ -820,6 +844,7 @@ def products(request):
         messages.error(request,f"done%%Inventory is empty, Create an item")
         return redirect('new-product')
     context = {
+        'nav':True,
         'page_title':'Products Master | View','products':ProductMaster.objects.all()
     }
     return render(request,'products/view.html',context=context)
@@ -972,6 +997,7 @@ def adjustment(request):
 
     else:
         context = {
+            'nav':True,
             'last':AdjHd.objects.last().pk,
             'page_title': 'Adjustment'
         }
@@ -980,7 +1006,9 @@ def adjustment(request):
 @login_required(login_url='/login/')
 def new_adjustment(request):
     context = {
-        'page_title': 'Add Adjustment'
+        'nav': True,
+        'page_title': 'Add Adjustment',
+        'locs': Locations.objects.all()
     }
     return render(request,'products/new_adjustment.html',context=context)
 
@@ -988,6 +1016,8 @@ def new_adjustment(request):
 def api(request,module,action):
     global status, message
     import json
+    status = 000
+    message = 000
 
 
     if module == 'adjustment':
@@ -1030,16 +1060,13 @@ def api(request,module,action):
             return JsonResponse({'status': status, 'message': message}, safe=False)
 
         elif action == 'new_hd':
-            # todo save new adjustment hd
-
+            # save new adjustment hd
             json_data = json.loads(request.body)
-            # return HttpResponse(json_data['remark'])
-
-
             try:
 
                 remark = json_data['remark']
-                AdjHd(remark=remark).save()
+                loc = Locations.objects.get(pk=json_data['loc'])
+                AdjHd(remark=remark,loc=loc).save()
 
                 last = AdjHd.objects.last()
                 id = last.pk
@@ -1093,6 +1120,7 @@ def api(request,module,action):
                     'entry_no':f"ADJ000{hd}",
                     'remark':data.remark,
                     'date':data.created_on,
+                    'loc': f"{data.loc.code} - {data.loc.descr}",
                     'status':data.status,
                     'next_count':next_count,
                     'next':y_p,
@@ -1148,6 +1176,9 @@ def api(request,module,action):
             hd = json_data['pk']
 
             if AdjHd.objects.filter(pk=hd).count() > 0:
+                hd_details = AdjHd.objects.get(pk=hd)
+                loc = Locations.objects.get(pk=hd_details.loc.pk)
+
                 trans = AdjTran.objects.filter(parent=hd)
                 message = ''
                 add_err = 0
@@ -1158,7 +1189,7 @@ def api(request,module,action):
                    tran_qty = tran.quantity
 
                    try:
-                       ProductTrans(doc=doc,doc_ref=doc_ref,product=product,tran_qty=tran_qty).save()
+                       ProductTrans(doc=doc,doc_ref=doc_ref,product=product,tran_qty=tran_qty,loc=loc).save()
                    except Exception as e:
                        add_err =+ 1
                        message += f"<p>{e}</p>"
@@ -1182,8 +1213,286 @@ def api(request,module,action):
                 messages.error(request,message)
             return JsonResponse({'status': status, 'message': message}, safe=False)
 
+
         else:
             return HttpResponse('Unknown action')
 
+    elif module == 'transfer':
+        if action == 'new_hd':
+            json_data = json.loads(request.body)
+            try:
+
+                remark = json_data['remark']
+                loc_fr = Locations.objects.get(pk=json_data['from'])
+                loc_to = json_data['to']
+
+                TransferHD(remark=remark, loc_fr=loc_fr,loc_to=loc_to).save()
+
+                last = TransferHD.objects.last()
+                id = last.pk
+                status = 200
+                message = id
+
+            except Exception as e:
+                status = 505
+                message = str(e)
+
+            return JsonResponse({'status': status, 'message': message}, safe=False)
+
+        if action == 'new_tran':
+
+            json_data = json.loads(request.body)
+
+            print(json_data)
+            # inititialising json object
+            parent = json_data['parent']
+            line = json_data['line']
+            packing = json_data['packing']
+            quantity = json_data['quantity']
+            total = json_data['total']
+            product = json_data['product']
+
+            # insert into database
+            try:
+                TransferTran(parent=TransferHD.objects.get(pk=parent), line=line,
+                        product=ProductMaster.objects.get(barcode=product), packing=packing, quantity=quantity,
+                        total=total).save()
+
+                messages.error(request, 'done%%Transaction Saved')
+
+                status = 202
+                message = 'Transfer Saved'
+
+            except Exception as error:
+                status = 505
+                message = str(error)
+
+            return JsonResponse({'status': status, 'message': message}, safe=False)
+
+        elif action == 'get_hd':
+
+            json_data = json.loads(request.body)
+            hd = json_data['pk']
+
+            if TransferHD.objects.filter(pk=hd).exists():
+
+                tran_hd = TransferHD.objects.get(pk=hd)
+                to = Locations.objects.get(pk=tran_hd.loc_to)
+
+                prev_count = TransferHD.objects.all().filter(pk__lt=hd).count()
+                next_count = TransferHD.objects.all().filter(pk__gt=hd).count()
+
+                next = 0
+                x_p = 0
+                y_p = 0
+
+                if prev_count > 0:
+                    prevx = TransferHD.objects.all().filter(pk__lt=hd)
+                    for x in prevx:
+                        print(x.pk)
+                        x_p = str(x.pk)
+                if next_count > 0:
+                    next = TransferHD.objects.all().filter(pk__gt=hd)[:1]
+                    for y in next:
+                        print(y.pk)
+                        y_p = str(y.pk)
+
+                message = {
+                    'entry_no': tran_hd.pk,
+                    'date':tran_hd.created_on,
+                    'remark':tran_hd.remark,
+                    'from_code':tran_hd.loc_fr.code,
+                    'from_descr':tran_hd.loc_fr.descr,
+                    'to':to.code,
+                    'to_descr':to.descr,
+                    'status': tran_hd.status,
+                    'next_count': next_count,
+                    'next': y_p,
+                    'prev_count': prev_count,
+                    'prev': x_p
+                }
+
+
+            else:
+                message = 'Document Does Not Exist'
+
+            return JsonResponse({'status': status, 'message': message}, safe=False)
+
+        elif action == 'get_tran':
+            json_data = json.loads(request.body)
+
+            print()
+            print(f"JSON DATA {request.body}")
+            print()
+
+            hd = json_data['pk']
+
+            if TransferHD.objects.filter(pk=hd).exists():
+                transfer_tran = TransferTran.objects.filter(parent=hd)
+                message = []
+                for x in transfer_tran:
+                    this_line = {
+                        'line':x.line,
+                        'barcode': x.product.barcode,
+                        'description': x.product.descr,
+                        'quantity': x.quantity,
+                        'pack_qty': x.packing,
+                        'total': x.total
+                    }
+                    message.append(this_line)
+
+                status = 202
+                print()
+                print(f"CUST MESSAGE {message}")
+                print()
+
+            else:
+                status = 404
+                message = 'No Trans'
+            return JsonResponse({'status': status, 'message': message}, safe=False)
+
+
+        elif action == 'approve':
+
+            json_data = json.loads(request.body)
+
+            hd = json_data['pk']
+
+            if TransferHD.objects.filter(pk=hd).exists():
+
+                hd_details = TransferHD.objects.get(pk=hd)
+
+                loc_fr = Locations.objects.get(pk=hd_details.loc_fr.pk)
+                loc_to = Locations.objects.get(pk=hd_details.loc_to)
+
+
+                trans = TransferTran.objects.filter(parent=hd)
+
+                message = ''
+
+                add_err = 0
+
+                for tran in trans:
+
+                    doc = 'TR'
+
+                    doc_ref = hd
+
+                    product = ProductMaster.objects.get(pk=tran.product.pk)
+
+                    tran_qty = tran.total
+                    tran_qty_fro = tran_qty * 2
+
+                    try:
+
+                        ProductTrans(doc=doc, doc_ref=doc_ref, product=product, tran_qty=tran_qty, loc=loc_to).save()
+                        ProductTrans(doc=doc, doc_ref=doc_ref, product=product, tran_qty=tran_qty-tran_qty_fro, loc=loc_fr).save()
+
+                    except Exception as e:
+
+                        add_err = + 1
+
+                        message += f"<p>{e}</p>"
+
+                if add_err > 0:
+
+                    # delete transaction
+
+                    ProductTrans.objects.filter(doc='TR', doc_ref=hd).delete()
+
+                    status = 505
+
+                    message = message
+
+                else:
+
+                    try:
+                        xxm = TransferHD.objects.get(pk=hd)
+
+                        xxm.status = 1
+
+                        xxm.save()
+
+                        message = 'Document Approved'
+
+                        status = 202
+
+                    except Exception as e:
+                        message = 'Could Not Update Header'
+
+                        status = 404
+
+
+            else:
+
+                status = 404
+
+                message = 'No Trans'
+
+                messages.error(request, message)
+
+            return JsonResponse({'status': status, 'message': message}, safe=False)
+
+
+
+    elif module == 'products':
+        if action == 'get_stock':
+            json_data = json.loads(request.body)
+            product = json_data['pk']
+            message = []
+            for loc in Locations.objects.all():
+
+                if ProductTrans.objects.filter(product=ProductMaster.objects.get(pk=product),loc=loc.pk).aggregate(Sum('tran_qty'))['tran_qty__sum'] is None:
+                    total = 0
+                else:
+                    total = ProductTrans.objects.filter(product=ProductMaster.objects.get(pk=product),loc=loc.pk).aggregate(Sum('tran_qty'))['tran_qty__sum']
+
+                this_stock = {
+                    'loc':loc.code,
+                    'loc_descr':loc.descr,
+                    'stock':total
+                }
+
+                message.append(this_stock)
+
+            status = 202
+            # message = {
+            #     'loc1':total,
+            #     'loc2':300
+            # }
+
+        return JsonResponse({'status': status, 'message': message}, safe=False)
+
     else:
         return HttpResponse('Unknown Module')
+
+
+def loc_master(request):
+    context = {
+        'page_title':'Location Master',
+        'locations':Locations.objects.all()
+    }
+    return render(request,'company/loc_master.html',context=context)
+
+@login_required()
+def transfer(request):
+    if TransferHD.objects.filter().count() < 1:
+        return redirect('new_transfer')
+    else:
+        context = {
+            'nav': True,
+            'last':TransferHD.objects.last().pk,
+            'page_title': 'Transfer',
+            'locations': Locations.objects.all()
+        }
+
+        return render(request, 'products/transfer.html', context=context)
+
+@login_required()
+def new_transfer(request):
+    context = {
+        'nav': True,
+        'page_title': 'New Transfer',
+        'locations': Locations.objects.all()
+    }
+    return render(request, 'products/new_transfer.html', context=context)

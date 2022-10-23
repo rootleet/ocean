@@ -16,7 +16,7 @@
 
                     <div class="modal-body" style="height: 50vh">
                         <div id="searchRes" class="h-100 w-100">
-                            
+
                         </div>
                     </div>
 
@@ -31,7 +31,7 @@
         <form class="panel h-75">
             <div class="panel-heading">
 
-                <button onclick="save_adjustment()" type="button" data-toggle="modal"  class="btn btn-success btn-sm">SAVE</button>
+                <button onclick="transfer.saveTransfer()" type="button" data-toggle="modal"  class="btn btn-success btn-sm">SAVE</button>
                 <button  type="button" data-toggle="modal" data-target="#addItem" class="btn btn-warning btn-sm">INSERT ROW</button>
 
             </div>
@@ -40,10 +40,21 @@
                     <div class="row w-100 text-left">
 
                         <div class="col-sm-2">
-                            <label class="w-100">Location
-                                <select name="loc" id="loc" class="form-control">
-                                    <option disabled selected>Select Location</option>
-                                    {% for loc in locs %}
+                            <label class="w-100">From
+                                <select name="loc_fr" id="loc_fr" class="form-control">
+
+                                    {% for loc in locations %}
+                                        <option value="{{ loc.pk }}">{{ loc.code }} - {{ loc.descr }}</option>
+                                    {% endfor %}
+                                </select>
+                            </label>
+                        </div>
+
+                        <div class="col-sm-2">
+                            <label class="w-100">To
+                                <select name="loc_to" id="loc_to" class="form-control">
+
+                                    {% for loc in locations %}
                                         <option value="{{ loc.pk }}">{{ loc.code }} - {{ loc.descr }}</option>
                                     {% endfor %}
                                 </select>
@@ -82,6 +93,11 @@
         </form>
 
     </div>
+
+    <script src="{% static 'general/js/classes/transfer.js' %}"></script>
+    <script>
+        let transfer = new Transfer()
+    </script>
 
 {% endblock %}
 

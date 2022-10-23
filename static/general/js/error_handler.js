@@ -89,3 +89,12 @@ function ctable(str){
 function clog(str) {
     console.log(str)
 }
+
+function windowPopUp(url, title, w, h)
+{
+    let left = (screen.width/2)-(w/2);
+    let top = (screen.height/2)-(h/2);
+    let reAssignWindow = open(url, title, 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width='+w+', height='+h+', top='+top+', left='+left);
+    parent.document.body.disabled = true;
+    reAssignWindow.focus();
+}

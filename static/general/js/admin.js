@@ -86,8 +86,8 @@ function mark_for_escalation(issue) {
         })
 }
 
-function new_adj_hd(remark) {
-    var data = {'remark': remark}
+function new_adj_hd(data) {
+
 
     let exe = JSON.parse(api_call('adjustment', 'new_hd', data))
     let status = exe['status']
@@ -392,11 +392,13 @@ function add_adj_tran_list(barcode) {
 
 function save_adjustment() {
 
-    let remarks,rows,row_id,qty_id,total_id;
+    let remarks,rows,row_id,qty_id,total_id,loc;
 
     // check adjustment header
     remarks = $('#remarks').val()
-    if(remarks.length > 0 )
+    loc = $('#loc').val()
+
+    if(remarks.length > 0 && loc.length > 0 )
     {
 
         // check each row to make sure row pass
@@ -418,13 +420,6 @@ function save_adjustment() {
                 qty = $(qty_id).val()
                 total = $(total_id).val()
 
-                // check if quanty and total are greater than 0
-                // if(qty === 0)
-                // {
-                //     // append quantity error
-                //     tran_err_count ++
-                //     tran_err_msg += `\n line number ${row_id}  : Cannot make adjustment of 0\n`
-                // }
 
                 if(total == 0)
                 {
@@ -442,7 +437,7 @@ function save_adjustment() {
             {
                 //insert into adjustment hd
 
-                let paren = new_adj_hd(remarks)
+                let paren = new_adj_hd({'remark': remarks,'loc':loc})
 
                 if( paren > 0)
                 {

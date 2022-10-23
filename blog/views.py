@@ -172,6 +172,9 @@ def load_meta(request, meta):
 
 
 def login(request):
+    if request.user.is_authenticated:
+        return redirect('blog-home')
+
     if request.method == 'GET' and 'next' in request.GET:
         next_page = request.GET['next']
     else:

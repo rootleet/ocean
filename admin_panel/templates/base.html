@@ -102,19 +102,41 @@
         <script src="{% static 'general/js/sweetalert2@11' %}"></script>
     <script src="{% static 'general/js/prod_master.js' %}"></script>
     <script src="{% static 'general/js/classes/adjustment.js' %}"></script>
+    <script src="{% static 'general/js/classes/transfer.js' %}"></script>
+
+    <script>
+        let transfer = new Transfer()
+    </script>
 
 
 </head>
 <body>
-<input type="" id="autos_url" value="{% url 'autos' 'ajax' %}">
+<input type="hidden" id="autos_url" value="{% url 'autos' 'ajax' %}">
+
+<div class="modal" id="g_modal" data-backdrop="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <stong class="modal-title" id="g_modal_title"></stong>
+            </div>
+            <div class="moda-body p-2" id="g_modal_body">
+
+            </div>
+            <div class="modal-footer">
+                <button data-dismiss="modal" class="btn btn-sm btn-info">CLOSE</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 	{% if user.is_authenticated %}
+        {% if nav %}
 		<!-- Left sidebar start -->
 		<aside id="sidebar">
 
 			<!-- Logo starts -->
-			<a href="#" class="logo">
-				<img src="{% static 'general/img/logo.png' %}" alt="logo">
+			<a href="#" style="width: 50px" class="logo">
+				<img src="{% static 'general/img/icons/96.png' %}" alt="logo">
 			</a>
 			<!-- Logo ends -->
 
@@ -147,6 +169,11 @@
                             <li>
                                 <a href="{% url 'adjustment' %}">
                                     <span>Adjustment</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{% url 'transfer' %}">
+                                    <span>Transfer</span>
                                 </a>
                             </li>
 						</ul>
@@ -224,6 +251,7 @@
 
 		</aside>
 		<!-- Left sidebar end -->
+        {% endif %}
 
 		<!-- Dashboard Wrapper Start -->
 		<div class="dashboard-wrapper" style="height: 95vh; overflow: hidden !important">
@@ -231,25 +259,25 @@
 			<!-- Header start -->
 			<header>
 				<ul class="pull-left" id="left-nav">
-					<li class="hidden-lg hidden-md hidden-sm">
-						<div class="logo-mob clearfix">
-							<h2><div class="fs1" aria-hidden="true" data-icon="&#xe0db;"></div><span>Cloud Admin</span></h2>
-						</div>
-					</li>
-					<li>
-						<div class="custom-search hidden-sm hidden-xs pull-left">
-							<input type="text" class="search-query" placeholder="Search here">
-							<i class="fa fa-search"></i>
-
-						</div>
-					</li>
-                    <li>
-						<div class="custom-search hidden-sm hidden-xs pull-left">
-							<input type="text" class="search-query" placeholder="Search here">
-							<i class="fa fa-search"></i>
-
-						</div>
-					</li>
+{#					<li class="hidden-lg hidden-md hidden-sm">#}
+{#						<div class="logo-mob clearfix">#}
+{#							<h2><div class="fs1" aria-hidden="true" data-icon="&#xe0db;"></div><span>Cloud Admin</span></h2>#}
+{#						</div>#}
+{#					</li>#}
+{#					<li>#}
+{#						<div class="custom-search hidden-sm hidden-xs pull-left">#}
+{#							<input type="text" class="search-query" placeholder="Search here">#}
+{#							<i class="fa fa-search"></i>#}
+{##}
+{#						</div>#}
+{#					</li>#}
+{#                    <li>#}
+{#						<div class="custom-search hidden-sm hidden-xs pull-left">#}
+{#							<input type="text" class="search-query" placeholder="Search here">#}
+{#							<i class="fa fa-search"></i>#}
+{##}
+{#						</div>#}
+{#					</li>#}
 
 
 				</ul>
