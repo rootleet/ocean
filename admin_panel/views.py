@@ -87,7 +87,10 @@ def is_logged_in(request):
 @login_required(login_url='/login/')
 def index(request):
     # is_logged_in(request)
-    return render(request, 'index.html')
+    context = {
+        'nav':True
+    }
+    return render(request, 'index.html',context=context)
 
 @login_required(login_url='/login/')
 def all_issues(request):
