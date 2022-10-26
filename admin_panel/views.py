@@ -13,7 +13,7 @@ from django.http import HttpResponse, FileResponse
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.http import JsonResponse
-
+from fpdf import FPDF
 
 from admin_panel.form import NewProduct, NewLocation
 from admin_panel.models import *
@@ -417,7 +417,6 @@ def export_task(request):
         doc_type = form['doc_type']
 
         if doc_type == 'pdf':
-            from fpdf import FPDF
             pdf = FPDF('P', 'mm', 'A4')
             pdf.add_page()
             pdf.set_font('Arial', 'B', 16)
