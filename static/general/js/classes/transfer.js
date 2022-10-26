@@ -120,10 +120,6 @@ class Transfer {
 
 
 
-        let header = this.newHd()
-
-
-
     }
 
     loadScreen(pk){

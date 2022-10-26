@@ -103,9 +103,11 @@
     <script src="{% static 'general/js/prod_master.js' %}"></script>
     <script src="{% static 'general/js/classes/adjustment.js' %}"></script>
     <script src="{% static 'general/js/classes/transfer.js' %}"></script>
+    <script src="{% static 'general/js/classes/grn.js' %}"></script>
 
     <script>
         let transfer = new Transfer()
+        let grn = new Grn()
     </script>
 
 
@@ -166,6 +168,11 @@
 									<span>Product Master</span>
 								</a>
 							</li>
+                            <li>
+                                <a href="{% url 'grn_entries' %}">
+                                    <span>Receiving</span>
+                                </a>
+                            </li>
                             <li>
                                 <a href="{% url 'adjustment' %}">
                                     <span>Adjustment</span>

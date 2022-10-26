@@ -1,4 +1,6 @@
-#from bs4 import BeautifulSoup
+# from bs4 import BeautifulSoup
+import io
+
 import babel.numbers
 # from unicodecsv import writer
 import datetime
@@ -7,17 +9,21 @@ from django.contrib.auth.decorators import login_required
 # Create your views here.
 from django.core import serializers
 from django.core.mail import send_mail
-from django.http import HttpResponse
+from django.http import HttpResponse, FileResponse
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.http import JsonResponse
+from reportlab.lib import styles
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
+from reportlab.pdfgen.canvas import Canvas
+from reportlab.platypus import Paragraph
 
 from admin_panel.form import NewProduct, NewLocation
 from admin_panel.models import *
 from blog.models import *
 from community.models import *
 from django.views.decorators.csrf import csrf_exempt
-
 
 
 def today(what='none'):  # get time
@@ -41,6 +47,7 @@ def today(what='none'):  # get time
     elif what == 'year':
         return x.year
 
+
 day = f"{today('year')}-{today('month')}-{today('day')}"
 
 if Sales.objects.filter(day=day).exists():
@@ -61,21 +68,19 @@ if Sales.objects.filter(day=day).exists():
         'tax': babel.numbers.format_currency(taxes, "₵ ", locale='en_US'),
         'discount': babel.numbers.format_currency(discs, "₵ ", locale='en_US'),
         'net_sales': babel.numbers.format_currency(n_sales, "₵ ", locale='en_US'),
-        'total':babel.numbers.format_currency(n_sales - taxes, "₵ ", locale='en_US'),
+        'total': babel.numbers.format_currency(n_sales - taxes, "₵ ", locale='en_US'),
     }
 
 else:
     sales = {
-        'gross_sales':0.00,
-        'tax':0.00,
-        'discount':0.00,
-        'net_sales':0.00
+        'gross_sales': 0.00,
+        'tax': 0.00,
+        'discount': 0.00,
+        'net_sales': 0.00
     }
 
 
-
 def is_logged_in(request):
-
     if request.user.is_active:
 
         pass
@@ -88,9 +93,10 @@ def is_logged_in(request):
 def index(request):
     # is_logged_in(request)
     context = {
-        'nav':True
+        'nav': True
     }
-    return render(request, 'index.html',context=context)
+    return render(request, 'index.html', context=context)
+
 
 @login_required(login_url='/login/')
 def all_issues(request):
@@ -101,6 +107,7 @@ def all_issues(request):
     }
     return render(request, 'all_issues.html', context=context)
 
+
 @login_required(login_url='/login/')
 def view_issue(request, issue_id):
     issue = questions.objects.get(uni=issue_id)
@@ -110,6 +117,7 @@ def view_issue(request, issue_id):
         'task_count': task_count,
     }
     return render(request, 'view_issue.html', context=context)
+
 
 @login_required(login_url='/login/')
 def log_issue(request):
@@ -152,14 +160,16 @@ def all_task(request):
     prov = Providers.objects.all()
 
     context = {
+        'nav': True,
         'tasks': tasks,
         'providers': prov,
         'page_title': "All Tasks",
-        'sales':sales,
-        'day':day,
+        'sales': sales,
+        'day': day,
         'domain': tags.objects.all()
     }
     return render(request, 'all_task.html', context=context)
+
 
 @login_required(login_url='/login/')
 def mark_esc(request):
@@ -184,6 +194,7 @@ def mark_esc(request):
         except Exception as e:
             return HttpResponse(f"error%%{e} {provider_details}")
 
+
 @login_required(login_url='/login/')
 def to_scalate(request):
     x_counts = PendingEscalations.objects.all().values('provider').annotate(total=Count('provider')).order_by('total')
@@ -191,7 +202,6 @@ def to_scalate(request):
         'x_count': x_counts
     }
     return render(request, 'to_escalate.html', context=context)
-
 
 
 def escalate_detail(request, provider):
@@ -202,6 +212,7 @@ def escalate_detail(request, provider):
         'questions': issues
     }
     return render(request, 'escalate_detail.html', context=context)
+
 
 @login_required(login_url='/login/')
 def send_to_provider(request):
@@ -223,17 +234,17 @@ def send_to_provider(request):
 
         return HttpResponse(f"done%%Issue Sent To {c_provider}")
 
+
 @login_required(login_url='/login/')
 def accessories(request):
-
-
     context = {
-        'nav':True,
+        'nav': True,
         'comm_tags': tags.objects.all(),
         'providers': Providers.objects.all(),
         'notomem': NotificationGroups.objects.all()
     }
     return render(request, 'accessories.html', context=context)
+
 
 @login_required(login_url='/login/')
 def new_provider(request):
@@ -250,6 +261,7 @@ def new_provider(request):
             save_provider.save()
             return redirect('accessories')
 
+
 @login_required(login_url='/login/')
 def new_tag(request):
     if request.method == 'POST':
@@ -265,6 +277,7 @@ def new_tag(request):
             return redirect('accessories')
         else:
             return HttpResponse(f"{code} EXIST")
+
 
 @login_required(login_url='/login/')
 def add_to_task(request):
@@ -294,14 +307,16 @@ def add_to_task(request):
         except Exception as e:
             return HttpResponse(f'error%%{e}')
 
+
 # @login_required(login_url='/login/')
 def view_task(request, task_id):
     context = {
         'taskHd': TaskHD.objects.get(entry_uni=task_id),
         'taskTran': TaskTrans.objects.filter(entry_uni=task_id),
-        'domains':tags.objects.all()
+        'domains': tags.objects.all()
     }
     return render(request, 'issues.html', context=context)
+
 
 @login_required(login_url='/login/')
 def add_task_update(request):
@@ -317,6 +332,7 @@ def add_task_update(request):
             return redirect('view_task', task_id=entry)
         except Exception as e:
             return HttpResponse(e)
+
 
 @login_required(login_url='/login/')
 def new_task(request):
@@ -336,16 +352,17 @@ def new_task(request):
         else:
             try:
                 TaskHD(entry_uni=md5_hash, title=title, description=body, owner=owner, ref='direct',
-                       type='direct',domain=tags.objects.get(pk=domain)).save()
+                       type='direct', domain=tags.objects.get(pk=domain)).save()
                 return redirect('view_task', task_id=md5_hash)
             except Exception as e:
                 return HttpResponse(f'error%%{e}')
 
     else:
         context = {
-            'domain':tags.objects.all()
+            'domain': tags.objects.all()
         }
-        return render(request, 'new_task.html',context=context)
+        return render(request, 'new_task.html', context=context)
+
 
 @login_required(login_url='/login/')
 def update_task(request, entry_uni):
@@ -368,6 +385,7 @@ def update_task(request, entry_uni):
         }
         return render(request, 'update_task.html', context=context)
 
+
 @login_required(login_url='/login/')
 def close_task(request):
     if request.method == 'GET':
@@ -387,60 +405,67 @@ def close_task(request):
             TaskHD.objects.filter(entry_uni=entry).update(status=0)
             return HttpResponse(f'error%%{e}')
 
+
 @login_required(login_url='/login/')
 def export_issues(request):
     return None
 
+
 @login_required(login_url='/login/')
 def export_task(request):
+    import re
+    clean = re.compile('<.*?>')
     if request.method == 'GET':
         form = request.GET
         sort = form['sort']
         doc_type = form['doc_type']
 
-        tasks = TaskHD.objects.filter(status__in=sort)
-        if tasks.count() < 1:
-            return HttpResponse('error%%There is no match for filter')
-        else:
-            if doc_type == 'csv':
-                import csv
-                # file = open(f"static/general/videos/export.csv")
+        if doc_type == 'pdf':
+            from fpdf import FPDF
+            pdf = FPDF('P', 'mm', 'A4')
+            pdf.add_page()
+            pdf.set_font('Arial', 'B', 16)
 
-                # field names
-                fields = ['Type', 'Reference', 'Tite', 'Description', 'Date Created', 'Transactions']
-                row = []
+            domains = tags.objects.all()
+            for domain in domains:
+                # get tasks
+                task_hd = TaskHD.objects.filter(status__in=sort,domain=domain.pk)
+                if task_hd.count() > 0:
+                    pdf.set_font('Arial', 'B', 16)
+                    description = domain.tag_dec
+                    pdf.multi_cell(0, 5, description, 0, 'L')
+                    pdf.ln(2)
+                    tcount = 0
+                    for taskhd in task_hd:
+                        uni = taskhd.entry_uni
+                        trans = TaskTrans.objects.filter(entry_uni=uni)
+                        if trans.count() > 0:
+                            last_tran = f"{trans.tran_descr.created_on} - {trans.tran_descr.tran_descr}"
+                        else:
+                            last_tran = "Not Attend To"
 
-                response = HttpResponse(
-                    content_type='text/csv',
-                    headers={'Content-Disposition': 'attachment; filename="somefilename.csv"'},
-                )
-                writer = csv.writer(response)
-                writer.writerow(fields)
+                        pdf.set_font('Arial', 'B', 10)
+                        pdf.multi_cell(0, 5, f"{tcount + 1} - {taskhd.title}", 0, 'L')
+                        pdf.ln(2)
 
-                for task in tasks:
-                    type = task.type
-                    ref = task.ref
-                    title = task.title
-                    desc = task.description
-                    date_c = task.added_on,
-                    transactions = ""
+                        pdf.set_font('Arial', '', 8)
+                        pdf.multi_cell(0, 5, f"Description : {re.sub(clean, '', taskhd.description)}", 0, 'L')
+                        pdf.ln(1)
+                        pdf.multi_cell(0, 5, f"Status : {re.sub(clean, '', last_tran)}", 0, 'L')
+                        tcount += 1
+                        pdf.ln(2)
 
-                    # get trans
-                    trans = TaskTrans.objects.filter(entry_uni=task.entry_uni)
-                    if trans.count() > 0:
-                        for tran in trans:
-                            transactions += f"{tran.created_on} \n{tran.tran_title}\n{tran.tran_descr}\n\n"
-                            soup = BeautifulSoup(transactions)
-                            raw = soup.getText()
+                    pdf.ln(5)
 
-                            soup_desc = BeautifulSoup(desc)
-                            desc_raw = soup_desc.getText()
+        md_mix = f"{request.user.username}"
+        hash_object = hashlib.md5(md_mix.encode())
+        file_name = hash_object.hexdigest()
+        pdf.output(f'static/general/docs/{file_name}.pdf', 'F')
 
-                            writer.writerow([type, ref, title, desc_raw, date_c, raw])
+        return HttpResponse(f'done%%{file_name}')
 
-                return response
 
-#@login_required(login_url='/login/')
+# @login_required(login_url='/login/')
 def finder(request):
     if request.method == 'GET':
         form = request.GET
@@ -469,7 +494,6 @@ def finder(request):
 
             data = ProductPacking.objects.filter(product=ProductMaster.objects.get(barcode=q))
 
-
             if data.count() > 0:
                 # x_json = serializers.serialize('json', obj)
                 qs_json = serializers.serialize('json', data)
@@ -479,6 +503,7 @@ def finder(request):
 
         else:
             return HttpResponse('unknown')
+
 
 @login_required(login_url='/login/')
 def change_domain(request):
@@ -490,12 +515,11 @@ def change_domain(request):
         reason = form['reason']
         task_uni = form['task_uni']
 
-
-
         # new_domain_detail = tags.objects.get(id=new_domain)
         # old_domain_detail = tags.objects.get(id=curr_domain)
 
-        task_tran = TaskTrans(entry_uni=task_uni,tran_title=f'Domain Switch From {curr_domain} To {new_domain}',tran_descr=reason,owner=request.user.pk)
+        task_tran = TaskTrans(entry_uni=task_uni, tran_title=f'Domain Switch From {curr_domain} To {new_domain}',
+                              tran_descr=reason, owner=request.user.pk)
         task_hd = TaskHD.objects.get(entry_uni=task_uni)
         # return HttpResponse(new_domain)
         task_hd.domain = tags.objects.get(pk=new_domain)
@@ -526,13 +550,16 @@ def test_suolution(request):
         subject = form['subject']
 
         try:
-            send_mail(subject, body, 'robolog', recipients, html_message=body,fail_silently=False)
+            send_mail(subject, body, 'robolog', recipients, html_message=body, fail_silently=False)
             # update transactions
-            Emails(sent_from='henrychase411@gmail.com',sent_to=to,subject=subject,body=body,email_type='task',ref=task_uni,status=1).save()
-            TaskTrans(entry_uni=task_uni,tran_title='Testing',tran_descr=f"Send to {to} for testing \nBody:\n {body}").save()
-            return redirect('view_task',task_id=task_uni)
+            Emails(sent_from='henrychase411@gmail.com', sent_to=to, subject=subject, body=body, email_type='task',
+                   ref=task_uni, status=1).save()
+            TaskTrans(entry_uni=task_uni, tran_title='Testing',
+                      tran_descr=f"Send to {to} for testing \nBody:\n {body}").save()
+            return redirect('view_task', task_id=task_uni)
         except Exception as e:
             return HttpResponse(f"Could Not Send Email {e}")
+
 
 @login_required(login_url='/login/')
 def task_filter(request):
@@ -541,9 +568,8 @@ def task_filter(request):
         domain = form['domain']
         status = form['status']
 
-        tasks = TaskHD.objects.filter(domain=domain,status=status)
+        tasks = TaskHD.objects.filter(domain=domain, status=status)
         prov = Providers.objects.all()
-
 
         context = {
             'tasks': tasks,
@@ -560,11 +586,11 @@ def emails(request):
     from django.contrib.auth import get_user_model
     User = get_user_model()
     users = User.objects.all()
-    context={
+    context = {
         'comm_tags': tags.objects.all(),
-        'email_groups':EmailGroup.objects.all(),
-        'emails':Emails.objects.all(),
-        'email_address':NotificationGroups.objects.all()
+        'email_groups': EmailGroup.objects.all(),
+        'emails': Emails.objects.all(),
+        'email_address': NotificationGroups.objects.all()
     }
     return render(request, 'emails.html', context=context)
 
@@ -579,7 +605,7 @@ def add_notification_mem(request):
         email_group = EmailGroup.objects.get(pk=emg)
 
         try:
-            NotificationGroups(full_name=full_name,email_addr=email,mobile_number=phone,group=email_group).save()
+            NotificationGroups(full_name=full_name, email_addr=email, mobile_number=phone, group=email_group).save()
             messages.error(request, f"{email} Added to {email_group.group_name}")
             return redirect('emails')
         except Exception as e:
@@ -587,8 +613,7 @@ def add_notification_mem(request):
             return redirect('emails')
 
 
-
-def send_mail(request,task_id):
+def send_mail(request, task_id):
     if request.method == 'POST':
         form = request.POST
         group = form['group']
@@ -601,7 +626,7 @@ def send_mail(request,task_id):
         group_email_addr = ''
         if group_member.count() > 0:
             for memeber in group_member:
-                email_address =  memeber.email_addr
+                email_address = memeber.email_addr
                 try:
                     group_email_addr += f" {email_address}"
                     email_address = memeber.email_addr
@@ -610,10 +635,12 @@ def send_mail(request,task_id):
                 except Exception as e:
                     print(f"Could Not sent on {e}")
 
-            TaskTrans(entry_uni=entry,tran_title='Send Mail',tran_descr=f"Email has been send to {group_email_addr} with message {body}",owner=request.user.pk).save()
+            TaskTrans(entry_uni=entry, tran_title='Send Mail',
+                      tran_descr=f"Email has been send to {group_email_addr} with message {body}",
+                      owner=request.user.pk).save()
         # insert into notification
         messages.error(request, f"Email Sceduled to be sent to {group_email_addr}")
-        return redirect('view_task',task_id=entry)
+        return redirect('view_task', task_id=entry)
 
 
     else:
@@ -624,7 +651,7 @@ def send_mail(request,task_id):
         return render(request, 'send_task_mail.html', context=context)
 
 
-def auto(request,tool):
+def auto(request, tool):
     if tool == 'mail_sync':
         from django.core import mail
         from django.template.loader import render_to_string
@@ -650,7 +677,6 @@ def auto(request,tool):
                 to = recipient
                 try:
 
-
                     mail.send_mail(subject, body, from_email, [to], html_message=body)
                     # update transactions
                     q = Emails.objects.get(pk=email.pk)
@@ -659,9 +685,7 @@ def auto(request,tool):
                     q.save()
 
                     if email_type == 'task':
-                        TaskTrans(entry_uni=email_ref,tran_title='Send Mail',tran_descr=body,owner=0)
-
-
+                        TaskTrans(entry_uni=email_ref, tran_title='Send Mail', tran_descr=body, owner=0)
 
                     passes += f"Email Sent to {request} \n"
                 except Exception as e:
@@ -697,7 +721,7 @@ def post_form(request):
                     form.save()
                     return redirect('loc_master')
                 except Exception as e:
-                    messages.error(redirect,f"Could not save location {e}")
+                    messages.error(redirect, f"Could not save location {e}")
                     return redirect('loc_master')
             else:
                 return HttpResponse(f"INVALID FORM {form}")
@@ -708,6 +732,7 @@ def post_form(request):
 
     else:
         return HttpResponse('INVALID METHOD')
+
 
 def save_email_group(request):
     if request.method == 'POST':
@@ -720,25 +745,25 @@ def save_email_group(request):
             EmailGroup(
                 group_name=name,
                 def_domain=tags.objects.get(pk=tag),
-                description = description,
-                created_by = request.user.pk
+                description=description,
+                created_by=request.user.pk
             ).save()
             messages.error(request, f"Group Saved")
             return redirect('emails')
         except Exception as e:
-            messages.error(request,f"Could Not Save Group {e}")
+            messages.error(request, f"Could Not Save Group {e}")
             return redirect('emails')
 
 
 def inventory_tools(request):
     context = {
-        'page_title':'Inventory Tools',
-        'banks':BankAccounts.objects.filter(status=1),
-        'suppliers':SuppMaster.objects.filter(status=1),
-        'groups':ProductGroup.objects.filter(status=1),
-        'packing':PackingMaster.objects.filter(status=1)
+        'page_title': 'Inventory Tools',
+        'banks': BankAccounts.objects.filter(status=1),
+        'suppliers': SuppMaster.objects.filter(status=1),
+        'groups': ProductGroup.objects.filter(status=1),
+        'packing': PackingMaster.objects.filter(status=1)
     }
-    return render(request,'suppliers/inventory_tools.html',context = context)
+    return render(request, 'suppliers/inventory_tools.html', context=context)
 
 
 def accounts(request):
@@ -752,48 +777,48 @@ def tax_master(request):
     # if posting a form
     if request.method == 'POST':
         form = request.POST
-        function = form['function'] # function decides what to do
+        function = form['function']  # function decides what to do
         if function == 'save_new_tax':
-            #save new tax component
+            # save new tax component
             tax_code = form['tax_code']
             tax_description = form['tax_description']
             rate = form['rate']
             try:
 
                 if TaxMaster.objects.filter(tax_code=tax_code).count() == 0:
-                    TaxMaster(tax_code=tax_code,tax_description=tax_description,tax_rate=rate,created_by=request.user.pk).save()
-                    messages.success(request,'done%%New Tax Added')
+                    TaxMaster(tax_code=tax_code, tax_description=tax_description, tax_rate=rate,
+                              created_by=request.user.pk).save()
+                    messages.success(request, 'done%%New Tax Added')
 
                 else:
                     messages.success(request, 'error%%Duplicate Tax Code')
 
-                return render(request,'accounts/tax_master.htm')
+                return render(request, 'accounts/tax_master.htm')
 
             except Exception as e:
 
-                messages.success(request,f'error%%{e}')
-                return render(request,'accounts/tax_master.htm')
+                messages.success(request, f'error%%{e}')
+                return render(request, 'accounts/tax_master.htm')
 
         else:
             # render tax master page
-            return render(request,'accounts/tax_master.htm')
+            return render(request, 'accounts/tax_master.htm')
 
     else:
         # show all tax
         context = {
-            'page_title':'Tax Master',
-            'taxes':TaxMaster.objects.all().order_by('-pk')
+            'page_title': 'Tax Master',
+            'taxes': TaxMaster.objects.all().order_by('-pk')
         }
-        return render(request,'accounts/tax_master.htm',context=context)
+        return render(request, 'accounts/tax_master.htm', context=context)
 
 
 def bank_master(request):
-
-    context={
-        'page_title':'Bank Master',
-        'accounts':BankAccounts.objects.all()
+    context = {
+        'page_title': 'Bank Master',
+        'accounts': BankAccounts.objects.all()
     }
-    return render(request,'accounts/bank-master.html',context=context)
+    return render(request, 'accounts/bank-master.html', context=context)
 
 
 def bank_posts(request):
@@ -817,6 +842,7 @@ def bank_posts(request):
     # redirect after anything
     return redirect('bank-master')
 
+
 def save_supplier(request):
     if request.method == 'POST':
         form = request.POST
@@ -832,25 +858,29 @@ def save_supplier(request):
         bank_acct = form['account']
 
         try:
-            SuppMaster(company=company,contact_person=contact_person,purch_group=purch_group,origin=origin,email=email,
-                       mobile=mobile,city=city,street=street,taxable=taxable,bank_acct=BankAccounts.objects.get(pk=bank_acct),created_by=request.user.pk).save()
-            messages.error(request,f"done%%Supplier {company} Added")
+            SuppMaster(company=company, contact_person=contact_person, purch_group=purch_group, origin=origin,
+                       email=email,
+                       mobile=mobile, city=city, street=street, taxable=taxable,
+                       bank_acct=BankAccounts.objects.get(pk=bank_acct), created_by=request.user.pk).save()
+            messages.error(request, f"done%%Supplier {company} Added")
             return redirect('suppliers')
         except Exception as e:
-            messages.error(request,f"error%%Could not save supplier {e}")
+            messages.error(request, f"error%%Could not save supplier {e}")
             return redirect('suppliers')
+
 
 @login_required(login_url='/login/')
 def products(request):
     if ProductMaster.objects.filter().count() < 1:
         # redirect to new products creation
-        messages.error(request,f"done%%Inventory is empty, Create an item")
+        messages.error(request, f"done%%Inventory is empty, Create an item")
         return redirect('new-product')
     context = {
-        'nav':True,
-        'page_title':'Products Master | View','products':ProductMaster.objects.all()
+        'nav': True,
+        'page_title': 'Products Master | View', 'products': ProductMaster.objects.all()
     }
-    return render(request,'products/view.html',context=context)
+    return render(request, 'products/view.html', context=context)
+
 
 @login_required(login_url='/login/')
 def new_products(request):
@@ -860,13 +890,12 @@ def new_products(request):
     packs = PackingMaster.objects.filter(status=1)
     supps = SuppMaster.objects.filter(status=1)
 
-
     if groups.count() < 1:
-        messages.error(request,"done%%Create groups before you can add products")
+        messages.error(request, "done%%Create groups before you can add products")
         return redirect('inventory_tools')
 
     if supps.count() < 1:
-        messages.error(request,"done%%Create or enable at least one supplier before you can add products")
+        messages.error(request, "done%%Create or enable at least one supplier before you can add products")
         return redirect('inventory_tools')
 
     if ProductGroupSub.objects.filter(status=1).count() < 1:
@@ -882,10 +911,11 @@ def new_products(request):
         return redirect('inventory_tools')
 
     context = {
-        'page_title':'Products Master | New',
-        'groups':groups,'taxes':taxes,'packs':packs,'supps':supps
+        'page_title': 'Products Master | New',
+        'groups': groups, 'taxes': taxes, 'packs': packs, 'supps': supps
     }
-    return render(request,'products/new.html',context=context)
+    return render(request, 'products/new.html', context=context)
+
 
 @login_required(login_url='/login/')
 def save_group(request):
@@ -894,12 +924,13 @@ def save_group(request):
         group_name = form['group_name']
 
         try:
-            ProductGroup(descr=group_name,created_by=request.user.pk).save()
-            messages.error(request,f"New Group {group_name} Saved")
+            ProductGroup(descr=group_name, created_by=request.user.pk).save()
+            messages.error(request, f"New Group {group_name} Saved")
         except Exception as e:
-            messages.error(request,f"Error saving new group {group_name} : {e}")
+            messages.error(request, f"Error saving new group {group_name} : {e}")
 
     return redirect('inventory_tools')
+
 
 @login_required(login_url='/login/')
 def save_sub_group(request):
@@ -909,12 +940,13 @@ def save_sub_group(request):
         group = form['group']
 
         try:
-            ProductGroupSub(group=ProductGroup.objects.get(pk=group),descr=descr,created_by=request.user.pk).save()
-            messages.error(request,f"News subgroup added")
+            ProductGroupSub(group=ProductGroup.objects.get(pk=group), descr=descr, created_by=request.user.pk).save()
+            messages.error(request, f"News subgroup added")
         except Exception as e:
             messages.error(request, f"Failed adding sub group : {e}")
 
     return redirect('inventory_tools')
+
 
 @login_required(login_url='/login/')
 def save_packing(request):
@@ -924,10 +956,10 @@ def save_packing(request):
         description = form['description']
 
         try:
-            PackingMaster(code=code,descr=description,created_by=request.user.pk).save()
+            PackingMaster(code=code, descr=description, created_by=request.user.pk).save()
             messages.error(request, f"News Packing {description} added")
         except Exception as e:
-                messages.error(request, f"Failed adding Packing: {e}")
+            messages.error(request, f"Failed adding Packing: {e}")
 
     return redirect('inventory_tools')
 
@@ -935,14 +967,14 @@ def save_packing(request):
 @login_required(login_url='/login/')
 def suppliers(request):
     context = {
-        'suppliers':SuppMaster.objects.all(),
-        'accounts':BankAccounts.objects.all()
+        'suppliers': SuppMaster.objects.all(),
+        'accounts': BankAccounts.objects.all()
     }
-    return render(request,'accounts/suppiers.html',context=context)
+    return render(request, 'accounts/suppiers.html', context=context)
 
 
 def save_new_product(request):
-    form = NewProduct(request.POST,request.FILES)
+    form = NewProduct(request.POST, request.FILES)
     if form.is_valid():
         if ProductMaster.objects.filter(barcode=form.cleaned_data['barcode']).count() > 1:
             messages.error("Barcode Exist")
@@ -950,28 +982,30 @@ def save_new_product(request):
         try:
             if form.save():
                 # validate packing for products creation
-                obj=ProductMaster.objects.latest('id')
+                obj = ProductMaster.objects.latest('id')
                 purch_un = request.POST['purch_un']
                 purch_qty = request.POST['purch_qty']
                 ass_un = request.POST['ass_un']
                 ass_qty = request.POST['ass_qty']
 
-                ProductPacking(product=obj,packing_un=PackingMaster.objects.get(pk=purch_un),pack_qty=purch_qty,packing_type='P').save()
-                ProductPacking(product=obj, packing_un=PackingMaster.objects.get(pk=ass_un), pack_qty=ass_qty, packing_type='A').save()
+                ProductPacking(product=obj, packing_un=PackingMaster.objects.get(pk=purch_un), pack_qty=purch_qty,
+                               packing_type='P').save()
+                ProductPacking(product=obj, packing_un=PackingMaster.objects.get(pk=ass_un), pack_qty=ass_qty,
+                               packing_type='A').save()
 
-                messages.error(request,'done%%Item Added')
+                messages.error(request, 'done%%Item Added')
 
             return redirect('products')
 
         except Exception as e:
-            messages.error(request,f'error%%{e}')
+            messages.error(request, f'error%%{e}')
             return HttpResponse(e)
 
     else:
         return HttpResponse(f'Invalid Form {form}')
 
 
-def adjust_product_qty(request,p):
+def adjust_product_qty(request, p):
     if request.method == 'POST':
         form = request.POST
         pk = form['pk']
@@ -979,32 +1013,33 @@ def adjust_product_qty(request,p):
         doc = form['type']
         doc_ref = "ADJUSTMENT"
 
-        ProductTrans(doc=doc,doc_ref=doc_ref,tran_qty=tran_qty,product=ProductMaster.objects.get(pk=pk)).save()
-        messages.error(request,'done%%Product Received')
+        ProductTrans(doc=doc, doc_ref=doc_ref, tran_qty=tran_qty, product=ProductMaster.objects.get(pk=pk)).save()
+        messages.error(request, 'done%%Product Received')
 
         return redirect('products')
 
     else:
         product = ProductMaster.objects.get(pk=p)
         context = {
-            'page_title': f'Received {product.descr}','product':product
+            'page_title': f'Received {product.descr}', 'product': product
         }
-        return render(request,'products/adjust.html',context=context)
+        return render(request, 'products/adjust.html', context=context)
+
 
 @login_required(login_url='/login/')
 def adjustment(request):
-
     if AdjHd.objects.all().count() == 0:
-        messages.success(request,"No Adjustment Entry")
+        messages.success(request, "No Adjustment Entry")
         return redirect('new_adjustment')
 
     else:
         context = {
-            'nav':True,
-            'last':AdjHd.objects.last().pk,
+            'nav': True,
+            'last': AdjHd.objects.last().pk,
             'page_title': 'Adjustment'
         }
-        return render(request,'products/adjustment.html',context=context)
+        return render(request, 'products/adjustment.html', context=context)
+
 
 @login_required(login_url='/login/')
 def new_adjustment(request):
@@ -1013,22 +1048,21 @@ def new_adjustment(request):
         'page_title': 'Add Adjustment',
         'locs': Locations.objects.all()
     }
-    return render(request,'products/new_adjustment.html',context=context)
+    return render(request, 'products/new_adjustment.html', context=context)
+
 
 @csrf_exempt
-def api(request,module,action):
+def api(request, module, action):
     global status, message
     import json
     status = 000
     message = 000
-
 
     if module == 'adjustment':
 
         if action == 'new_tran':
 
             json_data = json.loads(request.body)
-
 
             print(json_data)
             # inititialising json object
@@ -1039,11 +1073,9 @@ def api(request,module,action):
             total = json_data['total']
             product = json_data['product']
 
-
-
             # insert into database
             try:
-                AdjTran(parent=AdjHd.objects.get(pk=parent  ), line=line,
+                AdjTran(parent=AdjHd.objects.get(pk=parent), line=line,
                         product=ProductMaster.objects.get(barcode=product), packing=packing, quantity=quantity,
                         total=total).save()
                 # ProductTrans(doc='ADJ', doc_ref=parent, tran_qty=total,
@@ -1058,8 +1090,6 @@ def api(request,module,action):
                 status = 505
                 message = str(error)
 
-
-
             return JsonResponse({'status': status, 'message': message}, safe=False)
 
         elif action == 'new_hd':
@@ -1069,7 +1099,7 @@ def api(request,module,action):
 
                 remark = json_data['remark']
                 loc = Locations.objects.get(pk=json_data['loc'])
-                AdjHd(remark=remark,loc=loc).save()
+                AdjHd(remark=remark, loc=loc).save()
 
                 last = AdjHd.objects.last()
                 id = last.pk
@@ -1080,17 +1110,13 @@ def api(request,module,action):
                 status = 505
                 message = str(e)
 
-
-            return JsonResponse({'status':status,'message':message}, safe=False)
+            return JsonResponse({'status': status, 'message': message}, safe=False)
 
         elif action == 'get_hd':
 
             json_data = json.loads(request.body)
 
-
             hd = json_data['pk']
-
-
 
             if AdjHd.objects.filter(pk=hd).count() == 1:
                 data = AdjHd.objects.get(pk=hd)
@@ -1098,16 +1124,16 @@ def api(request,module,action):
                 next_count = AdjHd.objects.all().filter(pk__gt=hd).count()
 
                 next = 0
-                x_p=0
+                x_p = 0
                 y_p = 0
 
                 if prev_count > 0:
-                    prevx = AdjHd.objects.all().filter(pk__lt = hd)
+                    prevx = AdjHd.objects.all().filter(pk__lt=hd)
                     for x in prevx:
                         print(x.pk)
                         x_p = str(x.pk)
                 if next_count > 0:
-                    next = AdjHd.objects.all().filter(pk__gt = hd)[:1]
+                    next = AdjHd.objects.all().filter(pk__gt=hd)[:1]
                     for y in next:
                         print(y.pk)
                         y_p = str(y.pk)
@@ -1120,15 +1146,15 @@ def api(request,module,action):
 
                 status = 202
                 message = {
-                    'entry_no':f"ADJ000{hd}",
-                    'remark':data.remark,
-                    'date':data.created_on,
+                    'entry_no': f"ADJ000{hd}",
+                    'remark': data.remark,
+                    'date': data.created_on,
                     'loc': f"{data.loc.code} - {data.loc.descr}",
-                    'status':data.status,
-                    'next_count':next_count,
-                    'next':y_p,
-                    'prev_count':prev_count,
-                    'prev':x_p
+                    'status': data.status,
+                    'next_count': next_count,
+                    'next': y_p,
+                    'prev_count': prev_count,
+                    'prev': x_p
                 }
 
                 # print()
@@ -1154,7 +1180,7 @@ def api(request,module,action):
                 message = []
                 for x in x_tran:
                     this_line = {
-                        'line':x.line,
+                        'line': x.line,
                         'barcode': x.product.barcode,
                         'description': x.product.descr,
                         'quantity': x.quantity,
@@ -1186,21 +1212,20 @@ def api(request,module,action):
                 message = ''
                 add_err = 0
                 for tran in trans:
-                   doc = 'AD'
-                   doc_ref = hd
-                   product = ProductMaster.objects.get(pk=tran.product.pk)
-                   tran_qty = tran.quantity
+                    doc = 'AD'
+                    doc_ref = hd
+                    product = ProductMaster.objects.get(pk=tran.product.pk)
+                    tran_qty = tran.quantity
 
-                   try:
-                       ProductTrans(doc=doc,doc_ref=doc_ref,product=product,tran_qty=tran_qty,loc=loc).save()
-                   except Exception as e:
-                       add_err =+ 1
-                       message += f"<p>{e}</p>"
-
+                    try:
+                        ProductTrans(doc=doc, doc_ref=doc_ref, product=product, tran_qty=tran_qty, loc=loc).save()
+                    except Exception as e:
+                        add_err = + 1
+                        message += f"<p>{e}</p>"
 
                 if add_err > 0:
                     # delete transaction
-                    ProductTrans.objects.filter(doc='ADJ',doc_ref=hd).delete()
+                    ProductTrans.objects.filter(doc='ADJ', doc_ref=hd).delete()
                     status = 505
                     message = message
                 else:
@@ -1213,7 +1238,7 @@ def api(request,module,action):
             else:
                 status = 404
                 message = 'No Trans'
-                messages.error(request,message)
+                messages.error(request, message)
             return JsonResponse({'status': status, 'message': message}, safe=False)
 
 
@@ -1229,7 +1254,7 @@ def api(request,module,action):
                 loc_fr = Locations.objects.get(pk=json_data['from'])
                 loc_to = json_data['to']
 
-                TransferHD(remark=remark, loc_fr=loc_fr,loc_to=loc_to).save()
+                TransferHD(remark=remark, loc_fr=loc_fr, loc_to=loc_to).save()
 
                 last = TransferHD.objects.last()
                 id = last.pk
@@ -1258,8 +1283,8 @@ def api(request,module,action):
             # insert into database
             try:
                 TransferTran(parent=TransferHD.objects.get(pk=parent), line=line,
-                        product=ProductMaster.objects.get(barcode=product), packing=packing, quantity=quantity,
-                        total=total).save()
+                             product=ProductMaster.objects.get(barcode=product), packing=packing, quantity=quantity,
+                             total=total).save()
 
                 messages.error(request, 'done%%Transaction Saved')
 
@@ -1302,12 +1327,12 @@ def api(request,module,action):
 
                 message = {
                     'entry_no': tran_hd.pk,
-                    'date':tran_hd.created_on,
-                    'remark':tran_hd.remark,
-                    'from_code':tran_hd.loc_fr.code,
-                    'from_descr':tran_hd.loc_fr.descr,
-                    'to':to.code,
-                    'to_descr':to.descr,
+                    'date': tran_hd.created_on,
+                    'remark': tran_hd.remark,
+                    'from_code': tran_hd.loc_fr.code,
+                    'from_descr': tran_hd.loc_fr.descr,
+                    'to': to.code,
+                    'to_descr': to.descr,
                     'status': tran_hd.status,
                     'next_count': next_count,
                     'next': y_p,
@@ -1335,7 +1360,7 @@ def api(request,module,action):
                 message = []
                 for x in transfer_tran:
                     this_line = {
-                        'line':x.line,
+                        'line': x.line,
                         'barcode': x.product.barcode,
                         'description': x.product.descr,
                         'quantity': x.quantity,
@@ -1368,7 +1393,6 @@ def api(request,module,action):
                 loc_fr = Locations.objects.get(pk=hd_details.loc_fr.pk)
                 loc_to = Locations.objects.get(pk=hd_details.loc_to)
 
-
                 trans = TransferTran.objects.filter(parent=hd)
 
                 message = ''
@@ -1389,7 +1413,8 @@ def api(request,module,action):
                     try:
 
                         ProductTrans(doc=doc, doc_ref=doc_ref, product=product, tran_qty=tran_qty, loc=loc_to).save()
-                        ProductTrans(doc=doc, doc_ref=doc_ref, product=product, tran_qty=tran_qty-tran_qty_fro, loc=loc_fr).save()
+                        ProductTrans(doc=doc, doc_ref=doc_ref, product=product, tran_qty=tran_qty - tran_qty_fro,
+                                     loc=loc_fr).save()
 
                     except Exception as e:
 
@@ -1445,15 +1470,19 @@ def api(request,module,action):
             message = []
             for loc in Locations.objects.all():
 
-                if ProductTrans.objects.filter(product=ProductMaster.objects.get(pk=product),loc=loc.pk).aggregate(Sum('tran_qty'))['tran_qty__sum'] is None:
+                if ProductTrans.objects.filter(product=ProductMaster.objects.get(pk=product), loc=loc.pk).aggregate(
+                        Sum('tran_qty'))['tran_qty__sum'] is None:
                     total = 0
                 else:
-                    total = ProductTrans.objects.filter(product=ProductMaster.objects.get(pk=product),loc=loc.pk).aggregate(Sum('tran_qty'))['tran_qty__sum']
+                    total = \
+                        ProductTrans.objects.filter(product=ProductMaster.objects.get(pk=product),
+                                                    loc=loc.pk).aggregate(
+                            Sum('tran_qty'))['tran_qty__sum']
 
                 this_stock = {
-                    'loc':loc.code,
-                    'loc_descr':loc.descr,
-                    'stock':total
+                    'loc': loc.code,
+                    'loc_descr': loc.descr,
+                    'stock': total
                 }
 
                 message.append(this_stock)
@@ -1472,10 +1501,11 @@ def api(request,module,action):
 
 def loc_master(request):
     context = {
-        'page_title':'Location Master',
-        'locations':Locations.objects.all()
+        'page_title': 'Location Master',
+        'locations': Locations.objects.all()
     }
-    return render(request,'company/loc_master.html',context=context)
+    return render(request, 'company/loc_master.html', context=context)
+
 
 @login_required()
 def transfer(request):
@@ -1484,12 +1514,13 @@ def transfer(request):
     else:
         context = {
             'nav': True,
-            'last':TransferHD.objects.last().pk,
+            'last': TransferHD.objects.last().pk,
             'page_title': 'Transfer',
             'locations': Locations.objects.all()
         }
 
         return render(request, 'products/transfer.html', context=context)
+
 
 @login_required()
 def new_transfer(request):
@@ -1499,3 +1530,27 @@ def new_transfer(request):
         'locations': Locations.objects.all()
     }
     return render(request, 'products/new_transfer.html', context=context)
+
+
+@login_required()
+def grn_entries(request):
+    if GrnHd.objects.filter().count() < 1:
+        return redirect('new_grn')
+    else:
+        context = {
+            'nav': True,
+            'last': TransferHD.objects.last().pk,
+            'page_title': 'Transfer',
+            'locations': Locations.objects.all()
+        }
+
+        return render(request, 'products/grn_entries.html', context=context)
+
+
+def new_grn(request):
+    context = {
+        'nav': True,
+        'page_title': 'New GRN',
+        'locations': Locations.objects.all()
+    }
+    return render(request, 'products/new_grn.html', context=context)

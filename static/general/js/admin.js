@@ -183,7 +183,7 @@ async function task_export(document) {
         title: 'Select field validation',
         input: 'select',
         inputOptions: {
-            'csv': 'CSV'
+            'pdf': 'PDF'
         },
 
         inputPlaceholder: 'Document Type',
@@ -205,7 +205,7 @@ async function task_export(document) {
             resolve({
               '0': 'Open',
               '1': 'Closed',
-              '*': 'All'
+              '*': '01'
             })
           }, 1000)
         })
@@ -232,8 +232,13 @@ async function task_export(document) {
                 data:form_date,
                 type:'GET',
                 success: function (response) {
-                    error_handler(response)
+                    let spl = response.split('%%')
                     console.log(response)
+                    if (spl[0] === 'done')
+                    {
+                        let text = `view <a target="_blank" href="/static/general/docs/${spl[1]}.pdf">file</a>`
+                        swal_response('success','FILE READY',text)
+                    }
                 }
             })
           Swal.fire({ html: `You selected: ${sort} Doc : ${doc_type}` })

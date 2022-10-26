@@ -33,7 +33,7 @@ LOGIN_URL = '/login/'
 # Application definition
 
 INSTALLED_APPS = [
-    'sslserver',
+
     'stream.apps.StreamConfig',
     'blog.apps.BlogConfig',
     'django.contrib.admin',

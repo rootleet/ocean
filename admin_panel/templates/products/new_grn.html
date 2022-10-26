@@ -1,0 +1,93 @@
+{% extends 'products/prod_base.html' %}
+{% load static %}
+
+{% block prod %}
+
+    <div class="w-100 p-2 h-100">
+
+        <div class="modal" id="addItem" data-backdrop="false">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <strong class="modal-title">Seach Item</strong>
+                        <input id="adj_item_search" autocomplete="off" placeholder="query" class="form-control" type="text">
+
+                    </div>
+
+                    <div class="modal-body" style="height: 50vh">
+                        <div id="searchRes" class="h-100 w-100">
+
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button data-dismiss="modal" class="btn btn-sm btn-warning">CLOSE</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <form class="panel h-75">
+            <div class="panel-heading">
+
+                <button onclick="transfer.saveTransfer()" type="button" data-toggle="modal"  class="btn btn-success btn-sm">SAVE</button>
+                <button  type="button" data-toggle="modal" data-target="#addItem" class="btn btn-warning btn-sm">INSERT ROW</button>
+
+            </div>
+            <div class="panel-sub-heading">
+                <div class="w-100 container">
+                    <div class="row w-100 text-left">
+
+
+                        <div class="col-sm-2">
+                            <label class="w-100">Location
+                                <select name="loc_to" id="loc_to" class="form-control">
+
+                                    {% for loc in locations %}
+                                        <option value="{{ loc.pk }}">{{ loc.code }} - {{ loc.descr }}</option>
+                                    {% endfor %}
+                                </select>
+                            </label>
+                        </div>
+
+                        <div class="col-sm-8">
+                            <label class="w-100">Remark
+                                <input autocomplete="off" type="text" id="remarks" class="form-control">
+                            </label>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel-body" style="overflow: hidden; height: 50vh">
+                <div class="w-100 h-100" style="overflow: auto">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Barcode</th>
+                                <th>Description</th>
+                                <th>Packing</th>
+                                <th>Quantity</th>
+                                <th>Total Quantity</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tBody">
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </form>
+
+    </div>
+
+    <script src="{% static 'general/js/classes/transfer.js' %}"></script>
+    <script>
+        let transfer = new Transfer()
+    </script>
+
+{% endblock %}
+
