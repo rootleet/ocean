@@ -13,11 +13,7 @@ from django.http import HttpResponse, FileResponse
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.http import JsonResponse
-from reportlab.lib import styles
-from reportlab.lib.pagesizes import letter
-from reportlab.pdfgen import canvas
-from reportlab.pdfgen.canvas import Canvas
-from reportlab.platypus import Paragraph
+
 
 from admin_panel.form import NewProduct, NewLocation
 from admin_panel.models import *
