@@ -205,7 +205,7 @@ async function task_export(document) {
             resolve({
               '0': 'Open',
               '1': 'Closed',
-              '*': '01'
+              '01': 'All'
             })
           }, 1000)
         })
