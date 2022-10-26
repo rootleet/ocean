@@ -436,6 +436,7 @@ def export_task(request):
                     pdf.multi_cell(0, 5, description, 0, 'L')
                     pdf.ln(2)
                     tcount = 0
+
                     for taskhd in task_hd:
                         uni = taskhd.entry_uni
                         trans = TaskTrans.objects.filter(entry_uni=uni)
