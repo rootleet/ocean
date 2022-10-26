@@ -419,14 +419,16 @@ def export_task(request):
         if doc_type == 'pdf':
             pdf = FPDF('P', 'mm', 'A4')
             pdf.add_page()
+
             pdf.set_font('Arial', 'B', 16)
 
             domains = tags.objects.all()
             for domain in domains:
                 # get tasks
-                task_hd = TaskHD.objects.filter(status__in=sort,domain=domain.pk)
+                task_hd = TaskHD.objects.filter(status__in=sort, domain=domain.pk)
                 if task_hd.count() > 0:
                     pdf.set_font('Arial', 'B', 16)
+                    pdf.set_text_color(40, 116, 166)
                     description = domain.tag_dec
                     pdf.multi_cell(0, 5, description, 0, 'L')
                     pdf.ln(2)
@@ -442,12 +444,16 @@ def export_task(request):
                             last_tran = "Not Attend To"
 
                         pdf.set_font('Arial', 'B', 10)
+                        pdf.set_text_color(72, 201, 176)
                         pdf.multi_cell(0, 5, f"{tcount + 1} - {taskhd.title}", 0, 'L')
+
                         pdf.ln(2)
 
                         pdf.set_font('Arial', '', 8)
-                        pdf.multi_cell(0, 5, f"Description : {re.sub(clean, '', taskhd.description)}", 0, 'L')
+                        pdf.set_text_color(23, 32, 42)
+                        pdf.multi_cell(0, 5, f"Description : {re.sub(clean, '', taskhd.description[0:300])} ", 0, 'L')
                         pdf.ln(1)
+                        pdf.set_text_color(229, 152, 102)
                         pdf.multi_cell(0, 5, f"Status : {re.sub(clean, '', last_tran)}", 0, 'L')
                         tcount += 1
                         pdf.ln(2)
