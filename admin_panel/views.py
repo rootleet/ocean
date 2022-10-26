@@ -434,9 +434,10 @@ def export_task(request):
 
                     for taskhd in task_hd:
                         uni = taskhd.entry_uni
-                        trans = TaskTrans.objects.filter(entry_uni=uni).last()
+                        trans = TaskTrans.objects.filter(entry_uni=uni)
                         if trans.count() > 0:
-                            last_tran = f"{trans.created_on} -  {re.sub(clean, '', trans.tran_descr)}"
+                            last = trans.last()
+                            last_tran = f"{last.created_on} -  {re.sub(clean, '', last.tran_descr)}"
                         else:
                             last_tran = "Not Attend To"
 
