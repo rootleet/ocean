@@ -162,7 +162,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'mail.snedamotors.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587  # I use this for SSL
-EMAIL_HOST_USER = "tasks@snedamotors.com"
+EMAIL_HOST_USER = "sneda-task-manager@snedamotors.com"
 EMAIL_HOST_PASSWORD = "Sunderland@411"
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
