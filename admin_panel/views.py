@@ -21,6 +21,8 @@ from blog.models import *
 from community.models import *
 from django.views.decorators.csrf import csrf_exempt
 
+from ocean.settings import EMAIL_HOST_USER
+
 
 def today(what='none'):  # get time
     x = datetime.now()
@@ -676,7 +678,7 @@ def auto(request, tool):
 
                 html_message = render_to_string('mail_template.html', {'body': body})
                 plain_message = strip_tags(html_message)
-                from_email = sent_from
+                from_email = EMAIL_HOST_USER
                 to = recipient
                 try:
 
