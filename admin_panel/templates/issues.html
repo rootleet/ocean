@@ -137,11 +137,12 @@
                     <div class="accordion-item">
                       <h2 class="accordion-header" id="flush-headingOne">
                         <button class="accordion-button p-3 collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse{{ tran.pk }}" aria-expanded="false" aria-controls="flush-collapseOne">
-                          {{ tran.tran_title }}
+                          <kbd class="mr-2 bg-primary">{{ tran.owner_name }}</kbd>  -  <span class="ml-2 text-muted">{{ tran.tran_title }}</span>
                         </button>
                       </h2>
                       <div id="flush-collapse{{ tran.pk }}" class="accordion-collapse collapse p-4" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
                         <div class="accordion-body">
+                            <p class="text-info">{{ tran.created_on }}</p>
                             {{ tran.tran_descr | safe }}
                         </div>
                       </div>
