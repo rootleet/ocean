@@ -11,7 +11,7 @@
                             <div class="card">
                                 <div style="text-align: left" class="card-body p-1">
                                 <div style="width: 100%;" class="d-flex flex-wrap justify-content-end">
-                                    <span onclick="windowPopUp('{% url 'new_task' %}','NEW TASK',900,600)" class="btn btn-sm rounded-0 btn-info m-1">NEW TASK</span>
+                                    <span onclick="windowPopUp('{% url 'new_task' %}','NEW TASK',800,900)" class="btn btn-sm rounded-0 btn-info m-1">NEW TASK</span>
                                     <button onclick="task_export('csv')" type="button" class="btn  m-1 btn-primary btn-sm rounded-0" data-toggle="dropdown">
                                         Export
                                       </button>
@@ -105,7 +105,7 @@
                                   {% for task in tasks %}
                                     <a onclick="windowPopUp('{% url 'view_task' task.entry_uni %}','TASK MANAGER',900,600)" style="cursor: pointer;" class="list-group-item list-group-item-action" aria-current="true">
                                       <div class="d-flex w-100 justify-content-between">
-                                        <strong class="mb-1">List group item heading</strong>
+                                        <strong class="mb-1">{{ task.title }}</strong>
                                         <small>{{ task.added_on }}</small>
                                       </div>
                                       <p class="m-0">{{ task.description | safe | slice:':30' }} ...</p>

@@ -124,8 +124,12 @@
         <div class="card" >
             <div class="card-header">
                 <h5 class="card-title m-0">{{ taskHd.title }}</h5>
+
             </div>
             <div class="card-body p-2">
+                <div class="alert alert-info">
+                    <p >{{ taskHd.description | safe  }}</p>
+                </div>
 
                 <!-- Accordion without outline borders -->
               <div class="accordion accordion-flush" id="accordionFlushExample">

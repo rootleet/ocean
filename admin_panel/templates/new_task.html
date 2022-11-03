@@ -16,7 +16,7 @@
                         <div class="row">
                             <div class="col-sm-3">
                                 <label style="width: 100%">Domain :
-                                    <select name="domain" id="domain" class="form-control" required>
+                                    <select name="domain" id="domain" class="form-control rounded-0" required>
                                         <option value="0">Select Tag</option>
                                         {% for dom in domain %}
                                             <option value="{{ dom.pk }}">{{ dom.tag_dec }}</option>
@@ -27,16 +27,14 @@
 
                             <div class="col-sm-9">
                                 <label style="width: 100%">Title :
-                                    <input type="text" required name="title" class="form-control mb-3">
+                                    <input type="text" required name="title" class="form-control rounded-0 mb-3">
                                 </label>
                             </div>
                         </div>
 
 
+                        <label for="update_details">Description</label><textarea name="body" rows="10" class="form-control rounded-0" id="update_details"></textarea>
 
-                        <textarea name="body" style="height: 75vh" class="form-control" id="update_details"></textarea>
-                        <script src="{% static 'blog/js/htmeditor.min.js' %}"      htmeditor_textarea="update_details"      full_screen="no"      editor_height="400"     run_local="no">
-                        </script>
                         <hr>
                         <div style="width: 100%; margin: auto 0" class="d-flex flex-wrap justify-content-end">
                             <button type="button" onclick="location.href='{% url 'all_task' %}'" class="btn btn-sm btn-warning rounded-0">CANCEL</button>

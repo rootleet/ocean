@@ -161,7 +161,7 @@ def log_issue(request):
 
 @login_required(login_url='/login/')
 def all_task(request):
-    tasks = TaskHD.objects.all()
+    tasks = TaskHD.objects.filter(status=0)
     prov = Providers.objects.all()
 
     context = {
