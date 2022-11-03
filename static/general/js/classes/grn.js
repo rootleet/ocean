@@ -118,3 +118,5 @@ class Grn {
 
     }
 }
+
+const grn = new Grn()

@@ -7,12 +7,12 @@
 
     <div class="w-100 p-2 h-100">
 
-        <div class="panel h-75">
-            <div class="panel-heading">
+        <div class="card h-100">
+            <div class="card-header">
                 <button class="btn btn-info btn-sm" onclick="location.href='{% url 'new_transfer' %}'">NEW</button>
             </div>
-            <div class="panel-sub-heading">
-                <div class="w-100 container">
+            <div class="panel-sub-heading m-2">
+                <div class="w-100 container-fluid">
                     <div class="row w-100 text-left">
                         <div class="col-sm-1">
                             <label class="w-100">From
@@ -42,16 +42,16 @@
                         <div class="col-sm-2">
 
                             <div class="w-100 d-flex pt-4 flex-wrap justify-content-between">
-                                <button id="prev" onclick="transfer.loadScreen($('#prev').val())" class="btn btn-sm"><</button>
-                                <button id="next" onclick="transfer.loadScreen($('#next').val())" class="btn btn-sm">></button>
-                                <button onclick="transfer.approve(this.value)" id="adjProcess" class="btn btn-sm btn-info">APPROVE</button>
+                                <button id="prev" onclick="trans_ini.loadScreen($('#prev').val())" class="btn btn-sm"><</button>
+                                <button id="next" onclick="trans_ini.loadScreen($('#next').val())" class="btn btn-sm">></button>
+                                <button onclick="trans_ini.approve(this.value)" id="adjProcess" class="btn btn-sm btn-info">APPROVE</button>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="panel-body" style="overflow: hidden; height: 50vh">
+            <div class="card-body" style="overflow: hidden; height: 50vh">
                 <div class="w-100 h-100" style="overflow: auto">
                     <table class="table">
                         <thead>
@@ -79,7 +79,7 @@
         </div>
 
         <script>
-            transfer.loadScreen({{ last }})
+            trans_ini.loadScreen({{ last }})
         </script>
 
     </div>

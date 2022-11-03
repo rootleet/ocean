@@ -241,3 +241,5 @@ class Transfer {
         }
     }
 }
+
+const trans_ini = new Transfer()

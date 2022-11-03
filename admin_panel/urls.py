@@ -79,7 +79,8 @@ urlpatterns = [
     path('company/locations/',views.loc_master,name='loc_master'),
     path('company/form_post/',views.post_form, name='post_form'),
 
-    path('api/<module>/<action>/',views.api, name='api')
+    path('api/<module>/<action>/',views.api, name='api'),
+    path('profile/',views.profile,name='profile'),
 
 
 

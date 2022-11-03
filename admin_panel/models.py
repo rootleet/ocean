@@ -83,6 +83,8 @@ class TaskHD(models.Model):  ## task model
         return domain
 
 
+
+
 # task transactions
 class TaskTrans(models.Model):
     entry_uni = models.TextField()

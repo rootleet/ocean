@@ -87,11 +87,18 @@ def is_logged_in(request):
         return redirect('login')
 
 
+page = {
+    'title': ''
+}
+
+
 @login_required(login_url='/login/')
 def index(request):
     # is_logged_in(request)
+    page['title'] = 'Dashboard'
     context = {
-        'nav': True
+        'nav': True,
+        'page': page
     }
     return render(request, 'index.html', context=context)
 
@@ -577,6 +584,7 @@ def task_filter(request):
         prov = Providers.objects.all()
 
         context = {
+            'nav':True,
             'tasks': tasks,
             'providers': prov,
             'page_title': "All Tasks",
@@ -761,12 +769,14 @@ def save_email_group(request):
 
 
 def inventory_tools(request):
+    page['title'] = 'Inventory Add-Ons'
     context = {
         'page_title': 'Inventory Tools',
         'banks': BankAccounts.objects.filter(status=1),
         'suppliers': SuppMaster.objects.filter(status=1),
         'groups': ProductGroup.objects.filter(status=1),
-        'packing': PackingMaster.objects.filter(status=1)
+        'packing': PackingMaster.objects.filter(status=1),
+        'page':page
     }
     return render(request, 'suppliers/inventory_tools.html', context=context)
 
@@ -1559,3 +1569,12 @@ def new_grn(request):
         'locations': Locations.objects.all()
     }
     return render(request, 'products/new_grn.html', context=context)
+
+
+@login_required()
+def profile(request):
+    user = request.user
+    context = {
+        'user':user
+    }
+    return render(request,'profile/profile.html',context=context)

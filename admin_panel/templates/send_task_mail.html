@@ -4,11 +4,11 @@
 {% block  body %}
     <div class="w-50 card">
         <div class="panel panel-default no-margin">
-            <div class="panel-heading">
+            <div class="card-header">
                 <h4>Update : {{ entry.title }}</h4>
 
             </div>
-            <div class="panel-body">
+            <div class="card-body">
                 <form method="post" id="" action="{% url 'send_mail' entry.entry_uni %}" class="card">
                 {% csrf_token %}
                     <div style="width: 75%;margin: 0 auto">
