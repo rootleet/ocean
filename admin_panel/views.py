@@ -428,7 +428,7 @@ def add_to_task(request):
 @login_required(login_url='/login/')
 def view_task(request, task_id):
     context = {
-        'taskHd': TaskHD.objects.get(entry_uni=task_id).order_by('-pk'),
+        'taskHd': TaskHD.objects.get(entry_uni=task_id),
         'taskTran': TaskTrans.objects.filter(entry_uni=task_id),
         'domains': tags.objects.all()
     }
