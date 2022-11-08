@@ -1,0 +1,183 @@
+{% load static %}
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+<link href="{% static 'general/css/video-js.css' %}" rel="stylesheet" />
+    <link rel="stylesheet" href="{% static 'blog/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'general/css/main.css' %}">
+<link rel="stylesheet" href="{% static 'general/css/all.css' %}">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/fontawesome.min.css" integrity="sha384-jLKHWM3JRmfMU0A5x5AkjWkw/EYfGUAGagvnfryNV3F9VqM98XiIH7VBGVoxVSc7" crossorigin="anonymous">
+    <script src="{% static 'blog/js/jquery.min.js' %}"></script>
+    <script src="{% static 'blog/js/popper.min.js' %}"></script>
+    <script src="{% static 'blog/js/bootstrap.min.js' %}"></script>
+ <script src="{% static 'general/js/cust.js' %}"></script>
+<script src="{% static 'general/js/error_handler.js' %}"></script>
+<script src="{% static 'general/js/sweetalert2@11' %}"></script>
+<script src="{% static 'general/js/all.js' %}"></script>
+<link rel="icon" type="image/png" href="{% static 'general/img/icons/16.png' %}">
+    {% if page_title %}
+       <title> Ocean | Power Of Sharing | {{ page_title }} </title>
+    {% else %}
+        <title>Ocean | Power Of Sharing</title>
+    {% endif %}
+
+</head>
+<body style="height: 100vh; overflow: hidden;background: url('{% static 'general/img/bg/bg_wall1.jpg' %}')" class="img_bg">
+
+    {% if user.is_superuser %}
+
+        <div class="modal fade" id="uploadVideo">
+                                        <div class="modal-dialog">
+                                            <form method="post" action="{% url 'upload_video' %}" enctype="multipart/form-data" id="upload_file_form" class="modal-content">
+                                                <div class="modal-body">
+                                                    {% csrf_token %}
+                                                    <progress class="progress">
+
+                                                    </progress>
+                                                    <br>
+                                                    <input type="text" name="title" placeholder="Video Title" required class="form-control rounded-o mb-3">
+                                                    <textarea name="description" required placeholder="Video Description" class="form-control mb-3" id="" cols="30" rows="5"></textarea>
+                                                     <div class="custom-file">
+                                                        <input accept="video/mp4" type="file" class="custom-file-input" name="video_file" id="customFile">
+                                                        <label class="custom-file-label" for="customFile">Choose file</label>
+                                                      </div>
+                                                    <script>
+                                                        $(".custom-file-input").on("change", function() {
+                                                          var fileName = $(this).val().split("\\").pop();
+                                                          $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+                                                        });
+                                                    </script>
+
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="submit" class="btn btn-success">UPLOAD</button>
+                                                    <button class="btn btn-warning" type="button" data-dismiss="modal">CANCEL</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+
+    {% endif %}
+    <div class="modal fade" id="imageLink">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <strong class="modal-title">ImageLink</strong>
+                </div>
+
+                <div class="modal-body">
+
+                    <div class="custom-file mb-2">
+                        <input type="file" class="custom-file-input" id="imgInp">
+                        <label class="custom-file-label" for="customFile">Choose file</label>
+                    </div>
+
+                    <div class="w-50 mx-auto">
+                        <img id="blah" class="img-fluid" src="#" alt="your image" />
+                    </div>
+
+                </div>
+
+                <script>
+                    // Add the following code if you want the name of the file appear on select
+                    $(".custom-file-input").on("change", function() {
+                      var fileName = $(this).val().split("\\").pop();
+                      $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+                    });
+                    imgInp.onchange = evt => {
+                      const [file] = imgInp.files
+                      if (file) {
+                        blah.src = URL.createObjectURL(file)
+                      }
+                    }
+                </script>
+
+            </div>
+        </div>
+    </div>
+
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+          <div class="container text-dark">
+              <a class="navbar-link" href="{% url 'blog-home' %}"><img src="{% static 'general/img/icons/32.png' %}" alt="Ocean" class="img-fluid"></a>
+              <ul class="navbar-nav mr-auto ml-5">
+
+
+                <li>
+{#                    <form class="form-inline" method="post" action="{% url 'search-article' %}">#}
+{#                        {% csrf_token %}#}
+{#                          <input style="width: 400px" value="{{ query_str }}" type="search" class="form-control rounded_c_m" autocomplete="off" name="query" placeholder="Search Query" id="email">#}
+{#                          <button style="display: none" type="submit" class="btn rounded-0 btn-info">GO</button>#}
+{#                        </form>#}
+                </li>
+
+              </ul>
+
+              <ul class="navbar-nav ml-auto ml-5 d-flex flex-wrap align-content-center">
+
+                    {% if user.is_authenticated %}
+                        <div class="h-100 d-flex flex-wrap align-content-center">
+
+                            <div class="dropdown dropleft">
+                              <button type="button" data-toggle="dropdown" class="btn btn-sm btn-outline-dark p-0 user_profile">
+                                  <img src="{% static 'blog/asssets/users/user.png' %}" alt="" class="img-fluid">
+                              </button>
+                              <div class="dropdown-menu">
+                                  {% if user.is_superuser %}
+
+                                      <a class="dropdown-item text-success" href="{% url 'new-article' %}"><i class="fa fa-newspaper"></i> New Article</a>
+                                      <a  class="dropdown-item text-danger" data-toggle="modal" href="#uploadVideo"><i class="fa fa-video-camera"></i> Upload Video</a>
+
+
+                                  {% endif %}
+                                <button  class="dropdown-item text-danger" data-toggle="modal" data-target="#imageLink"><i class="fa fa-image"></i> imageLink</button>
+
+
+
+                                <a class="dropdown-item text-primary" href="#"><i class="fa fa-user-circle"></i> Profile</a>
+                              <a class="dropdown-item text-info" href="{% url 'ask_questions' %}"><i class="fa fa-question-circle"></i> Ask Support</a>
+                                <a class="dropdown-item text-danger" href="{% url 'logout' %}"><i class="fa fa-power-off"></i> Logout</a>
+                                <a class="dropdown-item" href="#">Link 3</a>
+                              </div>
+                            </div>
+                        </div>
+                        {% if user.is_superuser %}
+
+                            <a href="{% url 'admin_panel' %}" class="btn btn-sm ml-2 btn-outline-dark p-0 user_profile">
+                                  <img src="{% static 'general/img/icons/admin.png' %}" alt="" class="img-fluid">
+                              </a>
+
+                        {% endif %}
+{#                        <button onclick="location.href='{% url 'new-article' %}'" class="btn btn-success rounded-0 ml-2">New Article</button>#}
+                    {% else %}
+                        <a href="{% url 'login' %}?next={{ request.get_full_path }}" class="btn btn-info">LOGIN</a>
+                    {% endif %}
+
+              </ul>
+          </div>
+        </nav>
+
+
+
+
+    <article class="overflow-auto bg_trans_80 h-100">
+        {% block body %}
+
+        {% endblock %}
+    </article>
+
+{#    <footer class="w-100 bg-primary p-5">#}
+{#        <div class="container">#}
+{#            <div class="d-flex w-50 mx-auto text-center flex-wrap justify-content-center text-center">#}
+{#                <h1 class="text-center m-0 text-light font-weight-bolder">OCEAN</h1> <br>#}
+{#                <div class="w-100"><a class="text-dark" href="{% url 'new-article' %}">New Article</a></div>#}
+{#            </div>#}
+{#        </div>#}
+{#    </footer>#}
+  <script src="{% static 'general/js/video.min.js' %}"></script>
+
+</body>
+</html>

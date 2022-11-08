@@ -1,183 +1,449 @@
 {% load static %}
-
-
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-<link href="{% static 'general/css/video-js.css' %}" rel="stylesheet" />
-    <link rel="stylesheet" href="{% static 'blog/css/bootstrap.min.css' %}">
-    <link rel="stylesheet" href="{% static 'general/css/main.css' %}">
-<link rel="stylesheet" href="{% static 'general/css/all.css' %}">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/fontawesome.min.css" integrity="sha384-jLKHWM3JRmfMU0A5x5AkjWkw/EYfGUAGagvnfryNV3F9VqM98XiIH7VBGVoxVSc7" crossorigin="anonymous">
-    <script src="{% static 'blog/js/jquery.min.js' %}"></script>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>OCEAN</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="{% static 'assets/img/favicon.png' %}" rel="icon">
+  <link href="{% static 'assets/img/apple-touch-icon.png' %}" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.gstatic.com" rel="preconnect">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/boxicons/css/boxicons.min.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/quill/quill.snow.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/quill/quill.bubble.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/remixicon/remixicon.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/simple-datatables/style.css' %}" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link href="{% static 'assets/css/style.css' %}" rel="stylesheet">
+
+
+
+     <script src="{% static 'blog/js/jquery.min.js' %}"></script>
     <script src="{% static 'blog/js/popper.min.js' %}"></script>
     <script src="{% static 'blog/js/bootstrap.min.js' %}"></script>
  <script src="{% static 'general/js/cust.js' %}"></script>
+    <script src="{% static 'general/js/admin.js' %}"></script>
 <script src="{% static 'general/js/error_handler.js' %}"></script>
 <script src="{% static 'general/js/sweetalert2@11' %}"></script>
 <script src="{% static 'general/js/all.js' %}"></script>
-<link rel="icon" type="image/png" href="{% static 'general/img/icons/16.png' %}">
-    {% if page_title %}
-       <title> Ocean | Power Of Sharing | {{ page_title }} </title>
-    {% else %}
-        <title>Ocean | Power Of Sharing</title>
-    {% endif %}
+    <script src="{% static 'general/js/prod_master.js' %}"></script>
 
+    <script src="{% static 'general/js/classes/products.js' %}"></script>
+    <script src="{% static 'general/js/classes/adjustment.js' %}"></script>
+    <script src="{% static 'general/js/classes/grn.js' %}"></script>
+    <script src="{% static 'general/js/classes/transfer.js' %}"></script>
+
+<script>
+    var pClass = new Products()
+
+</script>
+
+  <!-- =======================================================
+  * Template Name: NiceAdmin - v2.4.1
+  * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
+  * Author: BootstrapMade.com
+  * License: https://bootstrapmade.com/license/
+  ======================================================== -->
 </head>
-<body style="height: 100vh; overflow: hidden;background: url('{% static 'general/img/bg/bg_wall1.jpg' %}')" class="img_bg">
 
-    {% if user.is_superuser %}
+<body>
+<input type="hidden" id="autos_url" value="{% url 'autos' 'ajax' %}">
+<input type="hidden" id="search_url" value="{% url 'search' %}">
+{% if nav == True %}
+  <!-- ======= Header ======= -->
+  <header id="header" class="header fixed-top d-flex align-items-center">
 
-        <div class="modal fade" id="uploadVideo">
-                                        <div class="modal-dialog">
-                                            <form method="post" action="{% url 'upload_video' %}" enctype="multipart/form-data" id="upload_file_form" class="modal-content">
-                                                <div class="modal-body">
-                                                    {% csrf_token %}
-                                                    <progress class="progress">
+    <div class="d-flex align-items-center justify-content-between">
+      <a href="index.html" class="logo d-flex align-items-center">
+        <img src="{% static 'assets/img/favicon.png' %}" alt="">
+        <span class="d-none d-lg-block">OCEAN</span>
+      </a>
+      <i class="bi bi-list toggle-sidebar-btn"></i>
+    </div><!-- End Logo -->
 
-                                                    </progress>
-                                                    <br>
-                                                    <input type="text" name="title" placeholder="Video Title" required class="form-control rounded-o mb-3">
-                                                    <textarea name="description" required placeholder="Video Description" class="form-control mb-3" id="" cols="30" rows="5"></textarea>
-                                                     <div class="custom-file">
-                                                        <input accept="video/mp4" type="file" class="custom-file-input" name="video_file" id="customFile">
-                                                        <label class="custom-file-label" for="customFile">Choose file</label>
-                                                      </div>
-                                                    <script>
-                                                        $(".custom-file-input").on("change", function() {
-                                                          var fileName = $(this).val().split("\\").pop();
-                                                          $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
-                                                        });
-                                                    </script>
+    <div class="search-bar">
+      <form class="search-form d-flex align-items-center" method="POST" action="#">
+        <input type="text" name="query" placeholder="Search" title="Enter search keyword">
+        <button type="submit" title="Search"><i class="bi bi-search"></i></button>
+      </form>
+    </div><!-- End Search Bar -->
 
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="submit" class="btn btn-success">UPLOAD</button>
-                                                    <button class="btn btn-warning" type="button" data-dismiss="modal">CANCEL</button>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
+    <nav class="header-nav ms-auto">
+      <ul class="d-flex align-items-center">
 
-    {% endif %}
-    <div class="modal fade" id="imageLink">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <strong class="modal-title">ImageLink</strong>
+        <li class="nav-item d-block d-lg-none">
+          <a class="nav-link nav-icon search-bar-toggle " href="#">
+            <i class="bi bi-search"></i>
+          </a>
+        </li><!-- End Search Icon-->
+
+        <li class="nav-item dropdown">
+
+          <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
+            <i class="bi bi-bell"></i>
+            <span class="badge bg-primary badge-number">4</span>
+          </a><!-- End Notification Icon -->
+
+          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
+            <li class="dropdown-header">
+              You have 4 new notifications
+              <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li class="notification-item">
+              <i class="bi bi-exclamation-circle text-warning"></i>
+              <div>
+                <h4>Lorem Ipsum</h4>
+                <p>Quae dolorem earum veritatis oditseno</p>
+                <p>30 min. ago</p>
+              </div>
+            </li>
+
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li class="notification-item">
+              <i class="bi bi-x-circle text-danger"></i>
+              <div>
+                <h4>Atque rerum nesciunt</h4>
+                <p>Quae dolorem earum veritatis oditseno</p>
+                <p>1 hr. ago</p>
+              </div>
+            </li>
+
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li class="notification-item">
+              <i class="bi bi-check-circle text-success"></i>
+              <div>
+                <h4>Sit rerum fuga</h4>
+                <p>Quae dolorem earum veritatis oditseno</p>
+                <p>2 hrs. ago</p>
+              </div>
+            </li>
+
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li class="notification-item">
+              <i class="bi bi-info-circle text-primary"></i>
+              <div>
+                <h4>Dicta reprehenderit</h4>
+                <p>Quae dolorem earum veritatis oditseno</p>
+                <p>4 hrs. ago</p>
+              </div>
+            </li>
+
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li class="dropdown-footer">
+              <a href="#">Show all notifications</a>
+            </li>
+
+          </ul><!-- End Notification Dropdown Items -->
+
+        </li><!-- End Notification Nav -->
+
+        <li class="nav-item dropdown">
+
+          <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
+            <i class="bi bi-chat-left-text"></i>
+            <span class="badge bg-success badge-number">3</span>
+          </a><!-- End Messages Icon -->
+
+          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow messages">
+            <li class="dropdown-header">
+              You have 3 new messages
+              <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li class="message-item">
+              <a href="#">
+                <img src="assets/img/messages-1.jpg" alt="" class="rounded-circle">
+                <div>
+                  <h4>Maria Hudson</h4>
+                  <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
+                  <p>4 hrs. ago</p>
                 </div>
+              </a>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
 
-                <div class="modal-body">
-
-                    <div class="custom-file mb-2">
-                        <input type="file" class="custom-file-input" id="imgInp">
-                        <label class="custom-file-label" for="customFile">Choose file</label>
-                    </div>
-
-                    <div class="w-50 mx-auto">
-                        <img id="blah" class="img-fluid" src="#" alt="your image" />
-                    </div>
-
+            <li class="message-item">
+              <a href="#">
+                <img src="assets/img/messages-2.jpg" alt="" class="rounded-circle">
+                <div>
+                  <h4>Anna Nelson</h4>
+                  <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
+                  <p>6 hrs. ago</p>
                 </div>
+              </a>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
 
-                <script>
-                    // Add the following code if you want the name of the file appear on select
-                    $(".custom-file-input").on("change", function() {
-                      var fileName = $(this).val().split("\\").pop();
-                      $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
-                    });
-                    imgInp.onchange = evt => {
-                      const [file] = imgInp.files
-                      if (file) {
-                        blah.src = URL.createObjectURL(file)
-                      }
-                    }
-                </script>
+            <li class="message-item">
+              <a href="#">
+                <img src="assets/img/messages-3.jpg" alt="" class="rounded-circle">
+                <div>
+                  <h4>David Muldon</h4>
+                  <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
+                  <p>8 hrs. ago</p>
+                </div>
+              </a>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
 
-            </div>
-        </div>
-    </div>
+            <li class="dropdown-footer">
+              <a href="#">Show all messages</a>
+            </li>
 
-    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
-          <div class="container text-dark">
-              <a class="navbar-link" href="{% url 'blog-home' %}"><img src="{% static 'general/img/icons/32.png' %}" alt="Ocean" class="img-fluid"></a>
-              <ul class="navbar-nav mr-auto ml-5">
+          </ul><!-- End Messages Dropdown Items -->
+
+        </li><!-- End Messages Nav -->
+
+        <li class="nav-item dropdown pe-3">
+
+          <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
+            <img src="{% static 'assets/img/users/default.png' %}" alt="Profile" class="rounded-circle">
+            <span class="d-none d-md-block dropdown-toggle ps-2">{{ user.username }}</span>
+          </a><!-- End Profile Iamge Icon -->
+
+          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+            <li class="dropdown-header">
+              <h6>{{ user.firstname }} {{ user.lastname }}</h6>
+              <span>Web Designer</span>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li>
+              <a class="dropdown-item d-flex align-items-center" href="{% url 'profile' %}">
+                <i class="bi bi-person"></i>
+                <span>My Profile</span>
+              </a>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li>
+              <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
+                <i class="bi bi-gear"></i>
+                <span>Account Settings</span>
+              </a>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li>
+              <a class="dropdown-item d-flex align-items-center" href="pages-faq.html">
+                <i class="bi bi-question-circle"></i>
+                <span>Need Help?</span>
+              </a>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li>
+              <a class="dropdown-item d-flex align-items-center" href="{% url 'logout' %}">
+                <i class="bi bi-box-arrow-right"></i>
+                <span>Sign Out</span>
+              </a>
+            </li>
+
+          </ul><!-- End Profile Dropdown Items -->
+        </li><!-- End Profile Nav -->
+
+      </ul>
+    </nav><!-- End Icons Navigation -->
+
+  </header><!-- End Header -->
+
+  <!-- ======= Sidebar ======= -->
+
+  <aside id="sidebar" class="sidebar">
+
+    <ul class="sidebar-nav" id="sidebar-nav">
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{% url 'admin_panel' %}">
+          <i class="bi bi-grid"></i>
+          <span>Dashboard</span>
+        </a>
+      </li><!-- End Dashboard Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-archive"></i><span>Inventory</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <a href="{% url 'inventory_tools' %}">
+              <i class="bi bi-circle"></i><span>Tools</span>
+            </a>
+          </li>
+            <li>
+                <a href="{% url 'products' %}">
+                  <i class="bi bi-circle"></i><span>Products Master</span>
+                </a>
+            </li>
+{#            <li>#}
+{#                <a href="{% url 'grn_entries' %}">#}
+{#                  <i class="bi bi-circle"></i><span>Receive</span>#}
+{#                </a>#}
+{#            </li>#}
+            <li>
+                <a href="{% url 'transfer' %}">
+                  <i class="bi bi-circle"></i><span>Transfer</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'adjustment' %}">
+                  <i class="bi bi-circle"></i><span>Adjustment</span>
+                </a>
+            </li>
+
+        </ul>
+      </li><!-- End Inventory Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#Community-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-megaphone"></i><span>Community</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="Community-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <a href="{% url 'all-issues' %}">
+              <i class="bi bi-circle"></i><span>Questions</span>
+            </a>
+          </li>
+
+        </ul>
+      </li><!-- End Community Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#task-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-calendar-check"></i><span>Task Manager</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="task-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <a href="{% url 'new_task' %}">
+              <i class="bi bi-circle"></i><span>Create</span>
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'all_task' %}">
+              <i class="bi bi-circle"></i><span>All Task</span>
+            </a>
+          </li>
 
 
-                <li>
-{#                    <form class="form-inline" method="post" action="{% url 'search-article' %}">#}
-{#                        {% csrf_token %}#}
-{#                          <input style="width: 400px" value="{{ query_str }}" type="search" class="form-control rounded_c_m" autocomplete="off" name="query" placeholder="Search Query" id="email">#}
-{#                          <button style="display: none" type="submit" class="btn rounded-0 btn-info">GO</button>#}
-{#                        </form>#}
-                </li>
+        </ul>
+      </li><!-- End Task Manage Nav -->
 
-              </ul>
-
-              <ul class="navbar-nav ml-auto ml-5 d-flex flex-wrap align-content-center">
-
-                    {% if user.is_authenticated %}
-                        <div class="h-100 d-flex flex-wrap align-content-center">
-
-                            <div class="dropdown dropleft">
-                              <button type="button" data-toggle="dropdown" class="btn btn-sm btn-outline-dark p-0 user_profile">
-                                  <img src="{% static 'blog/asssets/users/user.png' %}" alt="" class="img-fluid">
-                              </button>
-                              <div class="dropdown-menu">
-                                  {% if user.is_superuser %}
-
-                                      <a class="dropdown-item text-success" href="{% url 'new-article' %}"><i class="fa fa-newspaper"></i> New Article</a>
-                                      <a  class="dropdown-item text-danger" data-toggle="modal" href="#uploadVideo"><i class="fa fa-video-camera"></i> Upload Video</a>
-
-
-                                  {% endif %}
-                                <button  class="dropdown-item text-danger" data-toggle="modal" data-target="#imageLink"><i class="fa fa-image"></i> imageLink</button>
+        {% if user.is_superuser %}
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#csetup-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-gear"></i><span>Company Setup</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="csetup-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <a href="{% url 'accounts' %}">
+              <i class="bi bi-circle"></i><span>Accounts</span>
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'accessories' %}">
+              <i class="bi bi-circle"></i><span>Add-Ons</span>
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'emails' %}">
+              <i class="bi bi-ema"></i><span>Emails</span>
+            </a>
+          </li>
 
 
+        </ul>
+      </li><!-- End Company Setup Nav -->
+            {% endif %}
 
-                                <a class="dropdown-item text-primary" href="#"><i class="fa fa-user-circle"></i> Profile</a>
-                              <a class="dropdown-item text-info" href="{% url 'ask_questions' %}"><i class="fa fa-question-circle"></i> Ask Support</a>
-                                <a class="dropdown-item text-danger" href="{% url 'logout' %}"><i class="fa fa-power-off"></i> Logout</a>
-                                <a class="dropdown-item" href="#">Link 3</a>
-                              </div>
-                            </div>
-                        </div>
-                        {% if user.is_superuser %}
+    </ul>
 
-                            <a href="{% url 'admin_panel' %}" class="btn btn-sm ml-2 btn-outline-dark p-0 user_profile">
-                                  <img src="{% static 'general/img/icons/admin.png' %}" alt="" class="img-fluid">
-                              </a>
+  </aside><!-- End Sidebar-->
+{% endif %}
 
-                        {% endif %}
-{#                        <button onclick="location.href='{% url 'new-article' %}'" class="btn btn-success rounded-0 ml-2">New Article</button>#}
-                    {% else %}
-                        <a href="{% url 'login' %}?next={{ request.get_full_path }}" class="btn btn-info">LOGIN</a>
-                    {% endif %}
+  <main id="main" class="main">
 
-              </ul>
-          </div>
-        </nav>
+    <div class="pagetitle">
+      <h1>{{ page.title }}</h1>
+      <nav>
+{#        <ol class="breadcrumb">#}
+{#          <li class="breadcrumb-item"><a href="index.html">Home</a></li>#}
+{#          <li class="breadcrumb-item">Pages</li>#}
+{#          <li class="breadcrumb-item active">Blank</li>#}
+{#        </ol>#}
+      </nav>
+    </div><!-- End Page Title -->
+
+    <section class="section h-100">
+      {% block body %}
+
+      {% endblock %}
+    </section>
+
+  </main><!-- End #main -->
 
 
 
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
-    <article class="overflow-auto bg_trans_80 h-100">
-        {% block body %}
+  <!-- Vendor JS Files -->
+  <script src="{% static 'assets/vendor/apexcharts/apexcharts.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/chart.js/chart.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/echarts/echarts.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/quill/quill.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/simple-datatables/simple-datatables.js' %}"></script>
+  <script src="{% static 'assets/vendor/tinymce/tinymce.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/php-email-form/validate.js' %}"></script>
 
-        {% endblock %}
-    </article>
-
-{#    <footer class="w-100 bg-primary p-5">#}
-{#        <div class="container">#}
-{#            <div class="d-flex w-50 mx-auto text-center flex-wrap justify-content-center text-center">#}
-{#                <h1 class="text-center m-0 text-light font-weight-bolder">OCEAN</h1> <br>#}
-{#                <div class="w-100"><a class="text-dark" href="{% url 'new-article' %}">New Article</a></div>#}
-{#            </div>#}
-{#        </div>#}
-{#    </footer>#}
-  <script src="{% static 'general/js/video.min.js' %}"></script>
+  <!-- Template Main JS File -->
+  <script src="{% static 'assets/js/main.js' %}"></script>
 
 </body>
+
 </html>

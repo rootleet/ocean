@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import models
 from community.models import questions, QuestionTags
@@ -81,8 +82,6 @@ class TaskHD(models.Model):  ## task model
     def provider(self):
         domain = self.domain.provider
         return domain
-
-
 
 
 # task transactions
@@ -372,3 +371,32 @@ class GrnTran(models.Model):
 
     def product_name(self):
         return ProductMaster.objects.get(pk=self.product).descr
+
+
+class Notifications(models.Model):
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    type = models.IntegerField(default=0)  # 1 = success, 2 = information, 3 = warning, 4 = errpr
+    title = models.TextField()
+    descr = models.TextField()
+    read = models.IntegerField(default=0)
+
+    created_date = models.DateField(auto_now_add=True)
+    created_time = models.TimeField(auto_now_add=True)
+
+
+class TicketHd(models.Model):
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    title = models.TextField()
+    descr = models.TextField()
+
+    created_on = models.DateTimeField(auto_now_add=True)
+    edited_on = models.DateTimeField(auto_now=True)
+    status = models.IntegerField(default=0)
+
+
+class Files(models.Model):
+    doc = models.CharField(max_length=3)
+    media = models.FileField(upload_to=f'static/general/img/files/%Y/%m/%d')
+
+    created_date = models.DateField(auto_now_add=True)
+    created_time = models.TimeField(auto_now_add=True)

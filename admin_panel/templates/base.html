@@ -47,6 +47,24 @@
     <script src="{% static 'general/js/classes/grn.js' %}"></script>
     <script src="{% static 'general/js/classes/transfer.js' %}"></script>
 
+    {% if messages %}
+            <script>
+                let mess = ''
+            </script>
+            {% for message in messages %}
+
+                <script>
+                    mess += " {{ message }} \n"
+                </script>
+
+            {% endfor %}
+            <script>
+                error_handler(`${mess}`)
+
+            </script>
+
+{% endif %}
+
 <script>
     var pClass = new Products()
 
@@ -95,17 +113,29 @@
 
           <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
             <i class="bi bi-bell"></i>
-            <span class="badge bg-primary badge-number">4</span>
+            <span class="badge bg-primary badge-number">{{ notifications.unread.count }}</span>
           </a><!-- End Notification Icon -->
 
           <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
+
             <li class="dropdown-header">
-              You have 4 new notifications
+              You have {{ notifications.unread.count }} new notifications
               <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
             </li>
             <li>
               <hr class="dropdown-divider">
             </li>
+
+              {% for notification in notifications.unread %}
+                  <li class="notification-item">
+                      <i class="bi bi-exclamation-circle text-warning"></i>
+                      <div>
+                        <h4>{{ notification.title }}</h4>
+                        <p>{{ notification.descr }}</p>
+                        <p>{{ notification.created_date }} <span class="text-info">{{ notification.created_time }}</span></p>
+                      </div>
+                  </li>
+              {% endfor %}
 
             <li class="notification-item">
               <i class="bi bi-exclamation-circle text-warning"></i>
@@ -279,7 +309,7 @@
             </li>
 
             <li>
-              <a class="dropdown-item d-flex align-items-center" href="#">
+              <a class="dropdown-item d-flex align-items-center" href="{% url 'logout' %}">
                 <i class="bi bi-box-arrow-right"></i>
                 <span>Sign Out</span>
               </a>
@@ -345,6 +375,11 @@
           <i class="bi bi-megaphone"></i><span>Community</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
         <ul id="Community-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+            <li>
+                <a href="{% url 'open-ticket' %}">
+              <i class="bi bi-circle"></i><span>Tickets</span>
+            </a>
+          </li>
           <li>
             <a href="{% url 'all-issues' %}">
               <i class="bi bi-circle"></i><span>Questions</span>
@@ -362,6 +397,11 @@
           <li>
             <a href="{% url 'new_task' %}">
               <i class="bi bi-circle"></i><span>Create</span>
+            </a>
+          </li>
+            <li>
+            <a href="{% url 'all-ticket' %}">
+              <i class="bi bi-circle"></i><span>Tickets</span>
             </a>
           </li>
           <li>
@@ -442,6 +482,12 @@
   <!-- Template Main JS File -->
   <script src="{% static 'assets/js/main.js' %}"></script>
 
+
+
+<script>
+
+</script>
 </body>
 
 </html>
+

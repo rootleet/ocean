@@ -97,25 +97,25 @@
                             <div class="card">
 
 
-                                <div class="card-body p-2">
+                                <div class="card-body p-2" style="height:80vh; overflow:auto">
 
 
-                              <!-- List group with Advanced Contents -->
-                              <div class="list-group">
-                                  {% for task in tasks %}
-                                    <a onclick="windowPopUp('{% url 'view_task' task.entry_uni %}','TASK MANAGER',900,600)" style="cursor: pointer;" class="list-group-item list-group-item-action" aria-current="true">
-                                      <div class="d-flex w-100 justify-content-between">
-                                        <strong class="mb-1">{{ task.title }}</strong>
-                                        <small>{{ task.added_on }}</small>
-                                      </div>
-                                      <p class="m-0">{{ task.description | safe | slice:':30' }} ...</p>
-                                        <kbd class="bg-info">{{ task.provider.descr }}</kbd> <kbd class="bg-primary">{{ task.domain.tag_dec }}</kbd>
-                                    </a>
-                                  {% endfor %}
+                                  <!-- List group with Advanced Contents -->
+                                  <div class="list-group">
+                                      {% for task in tasks %}
+                                        <a onclick="windowPopUp('{% url 'view_task' task.entry_uni %}','TASK MANAGER',900,600)" style="cursor: pointer;" class="list-group-item list-group-item-action" aria-current="true">
+                                          <div class="d-flex w-100 justify-content-between">
+                                            <strong class="mb-1">{{ task.title }}</strong>
+                                            <small>{{ task.added_on }}</small>
+                                          </div>
+                                          <p class="m-0">{{ task.description | safe | slice:':30' }} ...</p>
+                                            <kbd class="bg-info">{{ task.provider.descr }}</kbd> <kbd class="bg-primary">{{ task.domain.tag_dec }}</kbd>
+                                        </a>
+                                      {% endfor %}
 
-                              </div><!-- End List group Advanced Content -->
+                                  </div><!-- End List group Advanced Content -->
 
-                            </div>
+                                </div>
                             </div>
 
                           </div>

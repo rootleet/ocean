@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'admin_panel.apps.AdminPanelConfig',
     'community.apps.CommunityConfig',
+    'api.apps.ApiConfig'
 
 ]
 

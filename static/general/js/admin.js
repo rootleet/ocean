@@ -31,7 +31,7 @@ function log_issue(uni) {
 
 function api_call(module,action,data) {
     // console.log(JSON.stringify(data))
-    let link = `/admin_panel/api/${module}/${action}/`
+    let link = `/adminapi/${module}/${action}/`
     console.table(data)
     var result = 0;
     $.ajax({
@@ -167,6 +167,7 @@ async function close_issue(issue_id) {
                 type: "GET",
                 success: function (response) {
                     error_handler(response)
+                    window.close()
                 }
             })
 

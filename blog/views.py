@@ -3,6 +3,7 @@ import random
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import authenticate, login as auth_login, logout
+from django.contrib.auth.decorators import login_required
 from django.contrib.sites import requests
 from django.core.mail import send_mail
 
@@ -21,11 +22,13 @@ all_meta = article_meta.objects.all()
 
 
 # Create your views here.
+@login_required()
 def index(request):
     artcs = articles.objects.all().order_by('-id')[:10]
     groups = article_meta.objects.all()
 
     context = {
+        'nav':True,
         'page_title': 'Ocean | The Power In Sharing',
         'search_form': search_form,
         'artcs': artcs,

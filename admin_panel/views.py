@@ -5,6 +5,8 @@ import babel.numbers
 # from unicodecsv import writer
 import datetime
 import hashlib
+
+from django.contrib.auth import authenticate, login as auth_login, logout
 from django.contrib.auth.decorators import login_required
 # Create your views here.
 from django.core import serializers
@@ -15,7 +17,7 @@ from django.contrib import messages
 from django.http import JsonResponse
 from fpdf import FPDF
 
-from admin_panel.form import NewProduct, NewLocation
+from admin_panel.form import NewProduct, NewLocation, LogIn, NewTicket, UploadFIle
 from admin_panel.models import *
 from blog.models import *
 from community.models import *
@@ -95,12 +97,122 @@ page = {
 @login_required(login_url='/login/')
 def index(request):
     # is_logged_in(request)
+
+    notifications = {
+        'unread' : Notifications.objects.filter(owner=request.user,read=0).order_by('-pk'),
+        'all': Notifications.objects.filter(owner=request.user).order_by('-pk')
+    }
     page['title'] = 'Dashboard'
+    my_issues = {
+        'open': TicketHd.objects.filter(owner=request.user.pk, status=0).count(),
+        'scheduled': TicketHd.objects.filter(owner=request.user.pk, status=1).count(),
+        'close':TicketHd.objects.filter(owner=request.user.pk, status=3).count(),
+    }
     context = {
+        'notifications':notifications,
         'nav': True,
-        'page': page
+        'page': page,
+        'my_issues': my_issues
     }
     return render(request, 'index.html', context=context)
+
+
+def login_process(request):
+    if request.method == 'POST':
+        form = LogIn(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            next = form.cleaned_data['next']
+
+            # check if user exist
+            user = authenticate(request, username=username, password=password)
+
+            try:
+                # check if user is valid
+                if hasattr(user, 'is_active'):
+                    auth_login(request, user)
+                    # Redirect to a success page.
+                    return redirect(next)
+                else:
+                    messages.error(request,
+                                   f"There is an error logging in, please check your credentials again or contact Administrator")
+                    return redirect('login')
+
+            except Exception as e:
+                messages.error(request, f"There was an error {e}")
+                return redirect('login')
+
+        else:
+            return HttpResponse("Invalid Form")
+    else:
+        pass
+
+
+def logout_view(request):
+    logout(request)
+    return redirect('home')
+
+
+def login(request):
+    if request.user.is_authenticated:
+        return redirect('blog-home')
+
+    if request.method == 'GET' and 'next' in request.GET:
+        next_page = request.GET['next']
+    else:
+        next_page = 'home'
+    context = {
+        'page_title': 'Ocean | Login',
+        'form': LogIn(),
+        'next': next_page
+    }
+    return render(request, 'profile/login.html', context=context)
+
+
+def new_user(request):
+    context = {
+        'page_title': 'Ocean | Register',
+        'form': LogIn()
+    }
+    return render(request, 'profile/register.html', context=context)
+
+
+def sign_up(request):
+    if request.method == 'POST':
+        form = SignUp(request.POST)
+        if form.is_valid():
+            first_name = form.cleaned_data['first_name']
+            last_name = form.cleaned_data['last_name']
+            email = form.cleaned_data['email']
+            password = form.cleaned_data['password']
+
+            # generate username
+            number = '{:03d}'.format(random.randrange(1, 9999))
+            username = '{}{}'.format(last_name, number)
+
+            # save username
+            new_user_instance = User.objects.create_user(username=username, password=password, email=email,
+                                                         first_name=first_name, last_name=last_name)
+
+            try:
+                new_user_instance.save()
+                new_user_instance.is_active = False
+                subject = 'welcome to OCEAN'
+                message = f'Hi {first_name} {last_name}, thank you for registering in ocean. your username is {username} and password is {password} logn at ocean t explore the power in collaboration '
+                email_from = settings.EMAIL_HOST_USER
+                recipient_list = [email]
+                send_mail(subject, message, email_from, recipient_list)
+                messages.error(request, "Please check your email to activate your account")
+                return redirect('new-user')
+            except:
+                messages.error(request, "Error Saving User")
+                return redirect('new-user')
+
+        else:
+            return HttpResponse("Invalid Form")
+    else:
+        return HttpResponse("Unaccepted Form Method")
 
 
 @login_required(login_url='/login/')
@@ -313,7 +425,7 @@ def add_to_task(request):
             return HttpResponse(f'error%%{e}')
 
 
-# @login_required(login_url='/login/')
+@login_required(login_url='/login/')
 def view_task(request, task_id):
     context = {
         'taskHd': TaskHD.objects.get(entry_uni=task_id),
@@ -345,6 +457,14 @@ def new_task(request):
         form = request.POST
         title = form['title']
         body = form['body']
+        ref = 'direct'
+        type = 'direct'
+        if form['ref']:
+            ref = form['ref']
+
+        if form['type']:
+            type = form['type']
+
         domain = form['domain']
         owner = request.user.pk
 
@@ -353,13 +473,28 @@ def new_task(request):
         md5_hash = hash_object.hexdigest()
 
         if TaskHD.objects.filter(entry_uni=md5_hash).exists():
+            messages.success(request, 'Task Exist')
             return redirect('all_task')
         else:
             try:
-                TaskHD(entry_uni=md5_hash, title=title, description=body, owner=owner, ref='direct',
-                       type='direct', domain=tags.objects.get(pk=domain)).save()
+                TaskHD(entry_uni=md5_hash, title=title, description=body, owner=owner, ref=ref,
+                       type=type, domain=tags.objects.get(pk=domain)).save()
+                if type == 'TIK':
+                    xticket = TicketHd.objects.get(pk=ref)
+                    xticket.status = 1
+
+                    notification = Notifications(owner=User.objects.get(pk=xticket.owner.pk), type=2, title='Ticket Longed',
+                                                 descr=f"Your ticket {xticket.title} has been logged by an admin")
+
+                    xticket.save()
+                    notification.save()
+                messages.success(request, "done%%Task Added")
                 return redirect('view_task', task_id=md5_hash)
             except Exception as e:
+                # delete notification
+                if TaskHD.objects.filter(entry_uni=md5_hash).count() > 0:
+                    TaskHD.objects.get(entry_uni=md5_hash).delete()
+
                 return HttpResponse(f'error%%{e}')
 
     else:
@@ -584,7 +719,7 @@ def task_filter(request):
         prov = Providers.objects.all()
 
         context = {
-            'nav':True,
+            'nav': True,
             'tasks': tasks,
             'providers': prov,
             'page_title': "All Tasks",
@@ -776,7 +911,7 @@ def inventory_tools(request):
         'suppliers': SuppMaster.objects.filter(status=1),
         'groups': ProductGroup.objects.filter(status=1),
         'packing': PackingMaster.objects.filter(status=1),
-        'page':page
+        'page': page
     }
     return render(request, 'suppliers/inventory_tools.html', context=context)
 
@@ -1575,6 +1710,61 @@ def new_grn(request):
 def profile(request):
     user = request.user
     context = {
-        'user':user
+        'user': user
     }
-    return render(request,'profile/profile.html',context=context)
+    return render(request, 'profile/profile.html', context=context)
+
+
+def logout_view(request):
+    logout(request)
+    return redirect('home')
+
+
+@login_required()
+def ticket(request):
+    context = {
+        'nav': True,
+        'ticket_count': TicketHd.objects.filter(owner=request.user).count(),
+        'my_tickets': TicketHd.objects.filter(owner=request.user),
+        'page': {
+            'title': 'My Tickets'
+        }
+    }
+    return render(request, 'profile/tickets.html', context=context)
+
+
+def all_tickets(request):
+    context = {
+        'nav': True,
+        'ticket_count': 10,
+        'my_tickets': TicketHd.objects.filter(status=0),
+        'domain': tags.objects.all(),
+        'page': {
+            'title': 'All Tickets'
+        }
+    }
+    return render(request, 'profile/all-.html', context=context)
+
+
+@login_required()
+def make_ticket(request):
+    user = request.user
+    if request.method == 'POST':
+        form = NewTicket(request.POST, request.FILES)
+        files = UploadFIle(request.POST, request.FILES)
+
+        if form.is_valid():
+            try:
+                form.save()
+                # if files.is_valid():
+                #     files.save()
+                messages.success(request, "Ticket Added")
+
+
+            except Exception as e:
+                messages.success(request, f"Could Not Open Ticket {e}")
+
+            return redirect('open-ticket')
+
+        else:
+            return HttpResponse(form)
