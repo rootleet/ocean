@@ -112,12 +112,15 @@
 
         <div class="card">
             <div class="card-body p-0">
+
                 <div class="w-100 d-flex flex-wrap justify-content-end">
-                    <button data-bs-toggle="modal" data-bs-target="#updateModal" class="btn btn-info btn-sm rounded-0 m-2">UPDATE</button>
                     {% if taskHd.status == 0 %}
+                    <button data-bs-toggle="modal" data-bs-target="#updateModal" class="btn btn-info btn-sm rounded-0 m-2">UPDATE</button>
+
                         <button onclick="close_issue('{{ taskHd.entry_uni }}')" class="btn btn-warning btn-sm rounded-0 m-2">CLOSE</button>
-                    {% endif %}
+
                     <button data-toggle="modal" data-target="#changeDomain" class="btn btn-primary btn-sm rounded-0 m-2">CHANGE DOMAIN</button>
+                    {% endif %}
                     <button data-toggle="modal" data-target="#sendMail" class="btn btn-success btn-sm rounded-0 m-2">SEND MAIL</button>
                     <button onclick="location.href='{% url 'send_mail' taskHd.entry_uni %}'" class="btn btn-success btn-sm rounded-0 m-2">SEND MAIL V2</button>
                     <input type="hidden" value="{% url 'mark-esc' %}" id="url">
