@@ -7,12 +7,9 @@
         <input type="hidden" id="close_url" value="{% url 'close_task' %}">
 
               <form method="post" action="{% url 'update_task' taskHd.entry_uni %}" class="modal fade" id="updateModal" tabindex="-1">
-                <div class="modal-dialog modal-xl">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h5 class="modal-title">UPDATE</h5>
-                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
+                <div class="modal-dialog modal-xl modal-dialog-centered">
+                  <div class="modal-content rounded-0">
+
                     <div class="modal-body">
 
 
@@ -22,27 +19,29 @@
 
                                     <div class="form-group mb-2">
                                         <input type="hidden" name="entry" value="{{ taskHd.entry_uni }}">
-                                        <label style="width: 100%">Title :
-                                            <input type="text"
-                                                   class="form-control mb-3"
-                                                   name="title"
-                                                   required
-                                            >
-                                        </label>
-                                        <hr>
+{#                                        <label style="width: 100%">Title :#}
+{#                                            <input type="text"#}
+{#                                                   class="form-control mb-3"#}
+{#                                                   name="title"#}
+{#                                                   required#}
+{#                                            >#}
+{#                                        </label>#}
+                                        <div class="w-100 d-flex flex-wrap justify-content-end"><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div>
+
                                         <textarea name="body" style="height: 50vh" class="form-control" id="update_details"></textarea>
                                         <script src="{% static 'blog/js/htmeditor.min.js' %}"      htmeditor_textarea="update_details"      full_screen="no"      editor_height="300"     run_local="no">
                                         </script>
+
+                                        <div class="w-100 d-flex flex-wrap mt-2 justify-content-end">
+                                            <button type="submit" class="btn btn-primary rounded-0">SUBMIT</button>
+                                        </div>
+
                                     </div>
 
 
                                 </div>
 
 
-                    </div>
-                    <div class="modal-footer">
-                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                      <button type="submit" class="btn btn-primary">SUBMIT</button>
                     </div>
                   </div>
                 </div>
@@ -115,14 +114,14 @@
 
                 <div class="w-100 d-flex flex-wrap justify-content-end">
                     {% if taskHd.status == 0 %}
-                    <button data-bs-toggle="modal" data-bs-target="#updateModal" class="btn btn-info btn-sm rounded-0 m-2">UPDATE</button>
+                    <button data-bs-toggle="modal" data-bs-target="#updateModal" class="btn btn-info btn-sm m-2">UPDATE</button>
 
-                        <button onclick="close_issue('{{ taskHd.entry_uni }}')" class="btn btn-warning btn-sm rounded-0 m-2">CLOSE</button>
+                        <button onclick="close_issue('{{ taskHd.entry_uni }}')" class="btn btn-warning btn-sm m-2">CLOSE</button>
 
-                    <button data-toggle="modal" data-target="#changeDomain" class="btn btn-primary btn-sm rounded-0 m-2">CHANGE DOMAIN</button>
+                    <button data-toggle="modal" data-target="#changeDomain" class="btn btn-primary btn-sm m-2">CHANGE DOMAIN</button>
                     {% endif %}
-                    <button data-toggle="modal" data-target="#sendMail" class="btn btn-success btn-sm rounded-0 m-2">SEND MAIL</button>
-                    <button onclick="location.href='{% url 'send_mail' taskHd.entry_uni %}'" class="btn btn-success btn-sm rounded-0 m-2">SEND MAIL V2</button>
+                    <button data-toggle="modal" data-target="#sendMail" class="btn btn-success btn-sm m-2">SEND MAIL</button>
+                    <button onclick="location.href='{% url 'send_mail' taskHd.entry_uni %}'" class="btn btn-success btn-sm m-2">SEND MAIL V2</button>
                     <input type="hidden" value="{% url 'mark-esc' %}" id="url">
                 </div>
             </div>
@@ -132,7 +131,7 @@
                 <h5 class="card-title m-0">{{ taskHd.title }}</h5>
 
             </div>
-            <div class="card-body p-2">
+            <div class="card-body p-2 overflow-auto" style="max-height: 75vh !important">
                 <div class="alert alert-info">
                     <p >{{ taskHd.description | safe  }}</p>
                 </div>
@@ -140,22 +139,33 @@
                 <!-- Accordion without outline borders -->
               <div class="accordion accordion-flush" id="accordionFlushExample">
                   {% for tran in taskTran %}
-                    <div class="accordion-item">
-                      <h2 class="accordion-header" id="flush-headingOne">
-                        <button class="accordion-button p-3 collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse{{ tran.pk }}" aria-expanded="false" aria-controls="flush-collapseOne">
-                          <kbd class="mr-2 bg-primary">{{ tran.owner_name }}</kbd>  -  <span class="ml-2 text-muted">{{ tran.tran_title }}</span>
-                        </button>
-                      </h2>
-                      <div id="flush-collapse{{ tran.pk }}" class="accordion-collapse collapse p-4" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
-                        <div class="accordion-body">
+                      <div class="w-100 d-flex flex-wrap p-3">
+                        <div style="width: 10%">
+                            <img style="width: 60px" src="{% static 'assets/img/users/default.png' %}" alt="Profile" class="rounded-circle">
+
+                        </div>
+                        <div class="accordion-body" style="width: 90%">
                             <p class="text-info">{{ tran.created_on }}</p>
                             {{ tran.tran_descr | safe }}
                         </div>
                       </div>
-                    </div>
+{#                    <div class="accordion-item">#}
+{#                      <h2 class="accordion-header" id="flush-headingOne">#}
+{#                        <button class="accordion-button p-3 collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse{{ tran.pk }}" aria-expanded="false" aria-controls="flush-collapseOne">#}
+{#                          <kbd class="mr-2 bg-primary">{{ tran.owner_name }}</kbd>  -  <span class="ml-2 text-muted">{{ tran.tran_title }}</span>#}
+{#                        </button>#}
+{#                      </h2>#}
+{#                      <div id="flush-collapse{{ tran.pk }}" class="accordion-collapse collapse p-4" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">#}
+{#                        <div class="accordion-body">#}
+{#                            <p class="text-info">{{ tran.created_on }}</p>#}
+{#                            {{ tran.tran_descr | safe }}#}
+{#                        </div>#}
+{#                      </div>#}
+{#                    </div>#}
                   {% endfor %}
 
               </div><!-- End Accordion without outline borders -->
+
 
 
             </div>

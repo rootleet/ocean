@@ -103,7 +103,12 @@
                                   <!-- List group with Advanced Contents -->
                                   <div class="list-group">
                                       {% for task in tasks %}
-                                        <a onclick="windowPopUp('{% url 'view_task' task.entry_uni %}','TASK MANAGER',900,600)" style="cursor: pointer;" class="list-group-item list-group-item-action" aria-current="true">
+                                        <a
+{#                                                onclick="windowPopUp('{% url 'view_task' task.entry_uni %}','TASK MANAGER',900,600)" #}
+                                                onclick="location.href='{% url 'view_task' task.entry_uni %}'"
+                                                style="cursor: pointer;"
+                                                class="list-group-item list-group-item-action" aria-current="true"
+                                        >
                                           <div class="d-flex w-100 justify-content-between">
                                             <strong class="mb-1">{{ task.title }}</strong>
                                             <small>{{ task.added_on }}</small>
