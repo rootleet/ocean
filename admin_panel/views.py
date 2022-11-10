@@ -462,11 +462,11 @@ def new_task(request):
         body = form['body']
         ref = 'direct'
         type = 'direct'
-        if form['ref']:
-            ref = form['ref']
+        # if form['ref']:
+        #     ref = form['ref']
 
-        if form['type']:
-            type = form['type']
+        # if form['type']:
+        #     type = form['type']
 
         domain = form['domain']
         owner = request.user.pk
