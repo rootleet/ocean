@@ -337,7 +337,28 @@
         </a>
       </li><!-- End Dashboard Nav -->
 
+
+
       <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#Community-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-megaphone"></i><span>Community</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="Community-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+            <li>
+                <a href="{% url 'open-ticket' %}">
+              <i class="bi bi-circle"></i><span>Tickets</span>
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'all-issues' %}">
+              <i class="bi bi-circle"></i><span>Questions</span>
+            </a>
+          </li>
+
+        </ul>
+      </li><!-- End Community Nav -->
+        {% if user.is_superuser %}
+            <li class="nav-item">
         <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
           <i class="bi bi-archive"></i><span>Inventory</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
@@ -370,27 +391,7 @@
 
         </ul>
       </li><!-- End Inventory Nav -->
-
-      <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#Community-nav" data-bs-toggle="collapse" href="#">
-          <i class="bi bi-megaphone"></i><span>Community</span><i class="bi bi-chevron-down ms-auto"></i>
-        </a>
-        <ul id="Community-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-            <li>
-                <a href="{% url 'open-ticket' %}">
-              <i class="bi bi-circle"></i><span>Tickets</span>
-            </a>
-          </li>
-          <li>
-            <a href="{% url 'all-issues' %}">
-              <i class="bi bi-circle"></i><span>Questions</span>
-            </a>
-          </li>
-
-        </ul>
-      </li><!-- End Community Nav -->
-
-      <li class="nav-item">
+            <li class="nav-item">
         <a class="nav-link collapsed" data-bs-target="#task-nav" data-bs-toggle="collapse" href="#">
           <i class="bi bi-calendar-check"></i><span>Task Manager</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
@@ -414,8 +415,7 @@
 
         </ul>
       </li><!-- End Task Manage Nav -->
-
-      <li class="nav-item">
+            <li class="nav-item">
         <a class="nav-link collapsed" data-bs-target="#csetup-nav" data-bs-toggle="collapse" href="#">
           <i class="bi bi-gear"></i><span>Company Setup</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
@@ -444,6 +444,9 @@
 
         </ul>
       </li><!-- End Company Setup Nav -->
+        {% endif %}
+
+
 
     </ul>
 

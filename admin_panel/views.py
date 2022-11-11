@@ -191,7 +191,6 @@ def sign_up(request):
             password = form.cleaned_data['password']
             mobile = form.cleaned_data['mobile']
 
-
             # generate username
             number = '{:03d}'.format(random.randrange(1, 9999))
             username = '{}{}'.format(last_name, number)
@@ -203,18 +202,25 @@ def sign_up(request):
             new_user_instance = User.objects.create_user(username=username, password=pass_w, email=email,
                                                          first_name=first_name, last_name=last_name)
 
+            md_mix = f"{pass_w} {first_name} {last_name} {username} "
+            hash_object = hashlib.md5(md_mix.encode())
+            api_token = hash_object.hexdigest()
+
             try:
                 new_user_instance.save()
                 new_user_instance.is_active = False
+                AuthToken(user=new_user_instance, token=api_token).save()
                 subject = 'ACCESS TO OCEAN'
                 message = f'Hi {first_name} {last_name}, thank you for registering in ocean. your username is {username} and password is {pass_w} logn at ocean t explore the power in collaboration '
                 message = f"Hello {first_name} {last_name}, an account has been created for you buy sneda at ocean. " \
                           f"<br>Use this platform to report and track your IT related " \
                           f"issues.<br><strong>Username</strong> : {username}<br><strong>Password</strong> : " \
-                          f"{pass_w}<br><strong>Access</strong>: <a href='ocean.sneda.gh'>Link</a> "
+                          f"{pass_w}<br><strong>Access</strong>: <a href='ocean.sneda.gh'>Link</a> " \
+                          f"<br><strong>API TOKEN</strong> {api_token}"
                 email_from = settings.EMAIL_HOST_USER
                 recipient_list = [email]
-                Emails(sent_from=email_from,sent_to=email,subject=subject,body=message,email_type='system',ref='system').save()
+                Emails(sent_from=email_from, sent_to=email, subject=subject, body=message, email_type='system',
+                       ref='system').save()
                 # send_mail(subject, message, email_from, recipient_list)
                 # messages.error(request, "Please check your email to activate your account")
                 return redirect('new-user')

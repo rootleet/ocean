@@ -400,3 +400,12 @@ class Files(models.Model):
 
     created_date = models.DateField(auto_now_add=True)
     created_time = models.TimeField(auto_now_add=True)
+
+
+class AuthToken(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    token = models.TextField()
+
+    created_date = models.DateField(auto_now_add=True)
+    created_time = models.TimeField(auto_now=True)
+    status = models.IntegerField(default=0)
