@@ -50,6 +50,7 @@ class SignUp(forms.Form):
     last_name = forms.CharField(max_length=200)
     email = forms.EmailField()
     password = forms.CharField(max_length=200)
+    mobile = forms.CharField(max_length=200)
 
 
 class NewTicket(forms.ModelForm):

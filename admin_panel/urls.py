@@ -92,7 +92,8 @@ urlpatterns = [
     path('login-process', views.login_process, name='login_process'),
     path('open-ticket/',views.ticket,name='open-ticket'),
     path('all-ticket/',views.all_tickets,name='all-ticket'),
-    path('save-ticket/',views.make_ticket,name='save-ticket')
+    path('save-ticket/',views.make_ticket,name='save-ticket'),
+    path('all-users/',views.all_users,name='all-users')
 
 
 

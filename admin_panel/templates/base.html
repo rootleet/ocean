@@ -32,6 +32,7 @@
 
 
 
+
      <script src="{% static 'blog/js/jquery.min.js' %}"></script>
     <script src="{% static 'blog/js/popper.min.js' %}"></script>
     <script src="{% static 'blog/js/bootstrap.min.js' %}"></script>
@@ -86,7 +87,7 @@
   <header id="header" class="header fixed-top d-flex align-items-center">
 
     <div class="d-flex align-items-center justify-content-between">
-      <a href="index.html" class="logo d-flex align-items-center">
+      <a href="{% url 'home' %}" class="logo d-flex align-items-center">
         <img src="assets/img/logo.png" alt="">
         <span class="d-none d-lg-block">Admin Panel</span>
       </a>
@@ -431,7 +432,12 @@
           </li>
           <li>
             <a href="{% url 'emails' %}">
-              <i class="bi bi-ema"></i><span>Emails</span>
+              <i class="bi bi-circle"></i><span>Emails</span>
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'all-users' %}">
+              <i class="bi bi-circle"></i><span>Users</span>
             </a>
           </li>
 

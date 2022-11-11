@@ -1,5 +1,6 @@
 # from bs4 import BeautifulSoup
 import io
+import random
 
 import babel.numbers
 # from unicodecsv import writer
@@ -17,7 +18,7 @@ from django.contrib import messages
 from django.http import JsonResponse
 from fpdf import FPDF
 
-from admin_panel.form import NewProduct, NewLocation, LogIn, NewTicket, UploadFIle
+from admin_panel.form import NewProduct, NewLocation, LogIn, NewTicket, UploadFIle, SignUp
 from admin_panel.models import *
 from blog.models import *
 from community.models import *
@@ -99,17 +100,17 @@ def index(request):
     # is_logged_in(request)
 
     notifications = {
-        'unread' : Notifications.objects.filter(owner=request.user,read=0).order_by('-pk'),
+        'unread': Notifications.objects.filter(owner=request.user, read=0).order_by('-pk'),
         'all': Notifications.objects.filter(owner=request.user).order_by('-pk')
     }
     page['title'] = 'Dashboard'
     my_issues = {
         'open': TicketHd.objects.filter(owner=request.user.pk, status=0).count(),
         'scheduled': TicketHd.objects.filter(owner=request.user.pk, status=1).count(),
-        'close':TicketHd.objects.filter(owner=request.user.pk, status=3).count(),
+        'close': TicketHd.objects.filter(owner=request.user.pk, status=3).count(),
     }
     context = {
-        'notifications':notifications,
+        'notifications': notifications,
         'nav': True,
         'page': page,
         'my_issues': my_issues
@@ -171,6 +172,8 @@ def login(request):
 
 
 def new_user(request):
+    if request.user.is_authenticated:
+        return redirect('home')
     context = {
         'page_title': 'Ocean | Register',
         'form': LogIn()
@@ -186,31 +189,41 @@ def sign_up(request):
             last_name = form.cleaned_data['last_name']
             email = form.cleaned_data['email']
             password = form.cleaned_data['password']
+            mobile = form.cleaned_data['mobile']
+
 
             # generate username
             number = '{:03d}'.format(random.randrange(1, 9999))
             username = '{}{}'.format(last_name, number)
 
+            pass_num = '{:03d}'.format(random.randrange(1, 999999))
+            pass_w = '{}{}'.format(f"{last_name}", pass_num)
+
             # save username
-            new_user_instance = User.objects.create_user(username=username, password=password, email=email,
+            new_user_instance = User.objects.create_user(username=username, password=pass_w, email=email,
                                                          first_name=first_name, last_name=last_name)
 
             try:
                 new_user_instance.save()
                 new_user_instance.is_active = False
-                subject = 'welcome to OCEAN'
-                message = f'Hi {first_name} {last_name}, thank you for registering in ocean. your username is {username} and password is {password} logn at ocean t explore the power in collaboration '
+                subject = 'ACCESS TO OCEAN'
+                message = f'Hi {first_name} {last_name}, thank you for registering in ocean. your username is {username} and password is {pass_w} logn at ocean t explore the power in collaboration '
+                message = f"Hello {first_name} {last_name}, an account has been created for you buy sneda at ocean. " \
+                          f"<br>Use this platform to report and track your IT related " \
+                          f"issues.<br><strong>Username</strong> : {username}<br><strong>Password</strong> : " \
+                          f"{pass_w}<br><strong>Access</strong>: <a href='ocean.sneda.gh'>Link</a> "
                 email_from = settings.EMAIL_HOST_USER
                 recipient_list = [email]
-                send_mail(subject, message, email_from, recipient_list)
-                messages.error(request, "Please check your email to activate your account")
+                Emails(sent_from=email_from,sent_to=email,subject=subject,body=message,email_type='system',ref='system').save()
+                # send_mail(subject, message, email_from, recipient_list)
+                # messages.error(request, "Please check your email to activate your account")
                 return redirect('new-user')
             except:
                 messages.error(request, "Error Saving User")
                 return redirect('new-user')
 
         else:
-            return HttpResponse("Invalid Form")
+            return HttpResponse(f"Invalid Form {form}")
     else:
         return HttpResponse("Unaccepted Form Method")
 
@@ -429,8 +442,8 @@ def add_to_task(request):
 def view_task(request, task_id):
     page['title'] = 'Issues Details'
     context = {
-        'page':page,
-        'nav':True,
+        'page': page,
+        'nav': True,
         'taskHd': TaskHD.objects.get(entry_uni=task_id),
         'taskTran': TaskTrans.objects.filter(entry_uni=task_id),
         'domains': tags.objects.all()
@@ -486,7 +499,8 @@ def new_task(request):
                     xticket = TicketHd.objects.get(pk=ref)
                     xticket.status = 1
 
-                    notification = Notifications(owner=User.objects.get(pk=xticket.owner.pk), type=2, title='Ticket Longed',
+                    notification = Notifications(owner=User.objects.get(pk=xticket.owner.pk), type=2,
+                                                 title='Ticket Longed',
                                                  descr=f"Your ticket {xticket.title} has been logged by an admin")
 
                     xticket.save()
@@ -737,7 +751,10 @@ def emails(request):
     from django.contrib.auth import get_user_model
     User = get_user_model()
     users = User.objects.all()
+    page['title'] = "Email Setups"
     context = {
+        'nav': True,
+        'pahe': page,
         'comm_tags': tags.objects.all(),
         'email_groups': EmailGroup.objects.all(),
         'emails': Emails.objects.all(),
@@ -1771,3 +1788,13 @@ def make_ticket(request):
 
         else:
             return HttpResponse(form)
+
+
+def all_users(request):
+    page['title'] = 'Users'
+    context = {
+        'nav': True,
+        'page': page,
+        'users': User.objects.all(),
+    }
+    return render(request, 'company/all-users.html', context=context)

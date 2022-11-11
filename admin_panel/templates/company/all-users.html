@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body %}
+
+    <div class="w-100 h-100">
+
+        <div class="container-fluid">
+
+            <div class="col-sm-8" style="height: 75vh; overflow: hidden">
+                <div class="card">
+                    <div class="card-header">
+                        <strong class="card-title">Users</strong>
+                    </div>
+
+                    <div class="card-header">
+                        <button data-bs-target="#newUser" data-bs-toggle="modal" class="btn btn-sm btn-info" style="height: fit-content">NEW USER</button>
+                        <div id="newUser" class="modal fade">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+
+                                    <div class="modal-header">
+                                        <strong class="modal-title">Creating User</strong>
+                                    </div>
+
+                                    <div class="modal-body p-2">
+                                        <form action="{% url 'sign_up' %}" method="post">
+                                            {% csrf_token %}
+                                            <div class="input-group input-group-sm mb-2">
+                                                <label class="w-100">Username
+                                                    <input type="text" name="username" autocomplete="off" required class="form-control form-control-sm rounded-0">
+                                                </label>
+                                            </div>
+                                            <div class="input-group input-group-sm mb-2">
+                                                <label class="w-100">First Name
+                                                    <input type="text" name="first_name" autocomplete="off" required class="form-control form-control-sm rounded-0">
+                                                </label>
+                                            </div>
+                                            <div class="input-group input-group-sm mb-2">
+                                                <label class="w-100">Last Name
+                                                    <input type="text" name="last_name" autocomplete="off" required class="form-control form-control-sm rounded-0">
+                                                </label>
+                                            </div>
+
+                                            <input type="hidden" name="password" value="1111111">
+
+                                            <div class="w-100 d-flex flex-wrap justify-content-between">
+
+                                                <div class="w-40">
+                                                    <div class="input-group input-group-sm mb-2">
+                                                        <label class="w-100">Email
+                                                            <input type="email" name="email" autocomplete="off" required class="form-control form-control-sm rounded-0">
+                                                        </label>
+                                                    </div>
+                                                </div>
+
+                                                <div class="w-45">
+                                                    <div class="input-group input-group-sm mb-2">
+                                                        <label class="w-100">Phone
+                                                            <input type="tel" name="mobile" autocomplete="off" required class="form-control form-control-sm rounded-0">
+                                                        </label>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+                                            <button class="btn btn-success">REGISTER</button>
+
+                                        </form>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+
+                        <table class="table mb-0 table-striped table-hover table-sm">
+                            <thead>
+                                <tr>
+                                    <th>First Name</th><th>Last Name</th><th>Username</th><th>Status</th><th>Last Login</th><th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for this_user in users %}
+                                    <tr style="cursor: pointer;">
+                                        <td>{{ this_user.first_name }}</td>
+                                        <td>{{ this_user.last_name }}</td>
+                                        <td>{{ this_user.username}}</td>
+                                        <td><span class="text-success">ac</span></td>
+                                        <td>{{ this_user.last_login }}</td>
+                                        <td>Actions</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+
+
+    </div>
+
+{% endblock %}
