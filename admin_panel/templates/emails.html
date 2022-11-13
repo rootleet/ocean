@@ -232,7 +232,7 @@
                                                     </thead>
                                                     <tbody>
                                                         {% for email in emails %}
-                                                            <tr>
+                                                            <tr data-bs-toggle="modal" data-bs-target="#mail{{ email.pk }}" >
                                                                 <td title="{{ email.sent_from }}">{{ email.sent_from | slice:":10" }}</td>
                                                                 <td title="{{ email.sent_to }}">{{ email.sent_to | slice:":20" }}</td>
                                                                 <td title="{{ email.subject }}">{{ email.subject | slice:":40" }}</td>
@@ -241,6 +241,16 @@
                                                                 <td>{{ email.status }}</td>
                                                                 <td>{{ email.scheduled_on }}</td>
                                                             </tr>
+
+                                                            <div class="modal fade" id="mail{{ email.pk }}">
+                                                                <div class="modal-dialog">
+                                                                    <div class="modal-content">
+                                                                        <div class="modal-body p-2">
+                                                                            {{ email.body }}
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
 
                                                         {% endfor %}
 

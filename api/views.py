@@ -1,8 +1,10 @@
+from django.contrib import messages
+from django.contrib.auth import authenticate, login as auth_login, logout
 from django.contrib.auth.models import User
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import JsonResponse
-from admin_panel.models import Notifications
+from admin_panel.models import Notifications, AuthToken
 import json
 
 # Create your views here.
@@ -66,10 +68,46 @@ def get_notification(user):
 
 
 def api_call(request, module, crud):
-    api_body = json.loads(request.body)
+    try:
+        api_body = json.loads(request.body)
+    except Exception as e:
+        pass
+
     if module == 'notif':
         user = api_body['user']
         return get_notification(user=user)
+
+    elif module == 'auth': # authentication model queried
+        api_token = crud # api access token
+
+        token_filter = AuthToken.objects.filter(token=api_token) # filter for token existence
+
+        if token_filter.count() == 1: # if there is token
+            token_d = AuthToken.objects.get(token=api_token)
+            username = token_d.user.username
+            password = token_d.user.password
+
+            # login
+            user = authenticate(request, username=username, password=password)
+
+            try:
+                # check if user is valid
+                if hasattr(user, 'is_active'):
+                    auth_login(request, user)
+                    # Redirect to a success page.
+                    return redirect('home')
+                else:
+                    messages.error(request,
+                                   f"There is an error logging in, please check your credentials again or contact "
+                                   f"Administrator")
+                    return redirect('login')
+
+            except Exception as e:
+                messages.error(request, f"There was an error {e}")
+                return redirect('login')
+
+        else:
+            return HttpResponse('INVALID TOKEN')
 
 
 def index(request):

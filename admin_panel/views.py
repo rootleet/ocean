@@ -157,7 +157,7 @@ def logout_view(request):
 
 def login(request):
     if request.user.is_authenticated:
-        return redirect('blog-home')
+        return redirect('home')
 
     if request.method == 'GET' and 'next' in request.GET:
         next_page = request.GET['next']
@@ -481,11 +481,15 @@ def new_task(request):
         body = form['body']
         ref = 'direct'
         type = 'direct'
-        # if form['ref']:
-        #     ref = form['ref']
+        try:
+            ref = form['ref']
+        except Exception as e :
+            pass
 
-        # if form['type']:
-        #     type = form['type']
+        try:
+            type = form['type']
+        except Exception as e:
+            pass
 
         domain = form['domain']
         owner = request.user.pk
@@ -1234,7 +1238,36 @@ def api(request, module, action):
     status = 000
     message = 000
 
-    if module == 'adjustment':
+    if module == 'auth':
+        api_token = action
+        token_filter = AuthToken.objects.filter(token=api_token)
+        if token_filter.count() == 1:
+            token_d = AuthToken.objects.get(token=api_token)
+            username = token_d.user.username
+            password = token_d.user.password
+
+            # login
+            user = authenticate(request, username=username, password=password)
+
+            try:
+                # check if user is valid
+                if hasattr(user, 'is_active'):
+                    auth_login(request, user)
+                    # Redirect to a success page.
+                    return redirect('home')
+                else:
+                    messages.error(request,
+                                   f"There is an error logging in, please check your credentials again or contact Administrator")
+                    return redirect('login')
+
+            except Exception as e:
+                messages.error(request, f"There was an error {e}")
+                return redirect('login')
+
+        else:
+            return HttpResponse('INVALID TOKEN')
+
+    elif module == 'adjustment':
 
         if action == 'new_tran':
 
