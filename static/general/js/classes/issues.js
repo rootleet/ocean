@@ -3,7 +3,7 @@ class Issues {
     async createBranch() {
 
 
-        const { value: text } = await Swal.fire({
+        const { value: br_name } = await Swal.fire({
           title: 'Creating A Branch',
           input: 'text',
           inputLabel: 'Branch Name',
@@ -15,11 +15,60 @@ class Issues {
           }
         })
 
-        if (text) {
-            let data = {'br_name':text,'task':$('#task').val()}
-            let apicall = api_call('issues','newBranch',data)
+        if (br_name) {
 
-          Swal.fire(`Your IP address is ${apicall}`)
+
+            const { value: text } = await Swal.fire({
+              input: 'textarea',
+              inputLabel: 'Description',
+              inputPlaceholder: 'Describe Your Branch...',
+              inputAttributes: {
+                'aria-label': 'Type your message here'
+              },
+              showCancelButton: true
+            })
+
+            if (text) {
+              let data = {'branch_name':br_name,'parent_task':$('#task').val(),'description':text}
+                let apicall = api_call('issues','newBranch',data)
+                let r = JSON.parse(apicall)
+                if(r['status'] == 200)
+                {
+                    location.reload()
+                } else {
+                    swal_success(r['staus'])
+                }
+                // Swal.fire(`API RESPONSE : ${apicall['message']}`)
+            }
+
+
+
+
+        }
+    }
+
+    async updateBranch() {
+        const {value: text} = await Swal.fire({
+            input: 'textarea',
+            inputLabel: 'UPDATE',
+            inputPlaceholder: 'Update...',
+            inputAttributes: {
+                'aria-label': 'Type your message here'
+            },
+            showCancelButton: true
+        })
+
+        if (text) {
+            let branchId = $('#branchId').val()
+            let apcall = api_call('issues','updateBranch',{'descr':text,'br':branchId})
+            let r = JSON.parse(apcall)
+            if(r['status'] === 200)
+            {
+                location.reload()
+            } else {
+                error_handler('error%%Count Not Save Update')
+            }
+
         }
     }
 }

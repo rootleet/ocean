@@ -484,7 +484,7 @@ def new_task(request):
         type = 'direct'
         try:
             ref = form['ref']
-        except Exception as e :
+        except Exception as e:
             pass
 
         try:
@@ -1672,13 +1672,47 @@ def api(request, module, action):
             return JsonResponse({'status': status, 'message': message}, safe=False)
 
     elif module == 'issues':
-        json_data = json.loads(request.body)
-        if action == 'newBranch':
-            br_name = json_data['br_name']
-            task = json_data['task']
 
-            # try:
-            #     TaskBranchHD(task=TaskHD.objects.get(pk=task))
+        x_json = json.loads(request.body)  # JSON DATA
+
+        if action == 'newBranch':  # creating new branch
+            branch_name = x_json['branch_name']
+            parent_task = x_json['parent_task'],
+            description = x_json['description']
+
+            md_mix = f"{branch_name} {parent_task} {description} {datetime.date}"
+            hash_object = hashlib.md5(md_mix.encode())
+            line_uni = hash_object.hexdigest()
+
+            tas_id = int(list(parent_task)[0])
+
+            task = TaskHD.objects.get(pk=tas_id)
+
+            owner = request.user.pk
+            owner = 1
+
+            try:
+                TaskBranchHD(br_name=branch_name, descr=description, task=task, md_hash=line_uni).save()
+                status = 200
+                message = 'Branch Created'
+            except Exception as e:
+                status = 505
+                message = e
+                # return HttpResponse(e)
+            return JsonResponse({'status': status, 'message': message}, safe=False)
+
+        elif action == 'updateBranch':
+            br = x_json['br']
+            descr = x_json['descr']
+
+            try:
+                TaskBranchTran(parent=TaskBranchHD.objects.get(pk=br), descr=descr,
+                               owner=User.objects.get(pk=request.user.pk)).save()
+                status = 200
+                message = 'Updated Added'
+            except Exception as e:
+                status = 505
+                message = e
 
 
     elif module == 'products':
@@ -1714,7 +1748,10 @@ def api(request, module, action):
         return JsonResponse({'status': status, 'message': message}, safe=False)
 
     else:
-        return HttpResponse('Unknown Module')
+        status = 505
+        message = 'UNKNOWN MODEL'
+
+    return JsonResponse({'status': status, 'message': message}, safe=False)
 
 
 def loc_master(request):
@@ -1846,3 +1883,18 @@ def all_users(request):
         'users': User.objects.all(),
     }
     return render(request, 'company/all-users.html', context=context)
+
+
+def issues_branch(request, task, br):
+    t_br = TaskBranchHD.objects.get(md_hash=br)
+    task = TaskHD.objects.get(pk=t_br.task.pk)
+
+    page['title'] = f"{task.title} / {t_br.br_name}"
+    context = {
+        'nav': True,
+        'page': page,
+        'branch': t_br,
+        'taskHd': task,
+        'branches': TaskBranchHD.objects.filter(task=TaskHD.objects.get(entry_uni=task.entry_uni))
+    }
+    return render(request, 'task/branch.html', context=context)

@@ -73,6 +73,9 @@ class TaskHD(models.Model):  ## task model
     status = models.IntegerField(default=0)
     domain = models.ForeignKey('community.tags', on_delete=models.CASCADE)
 
+    def url(self):
+        return self.title.lower().replace(' ','-')
+
     def owner_name(self):
         return User.objects.get(pk=self.owner).username
 
@@ -413,13 +416,15 @@ class AuthToken(models.Model):
 
 class TaskBranchHD(models.Model):
     task = models.ForeignKey('TaskHD', on_delete=models.CASCADE)
-    title = models.TextField()
+    br_name = models.TextField()
     descr = models.TextField()
+    md_hash = models.CharField(max_length=60,unique=True)
 
     created_date = models.DateField(auto_now_add=True)
     created_time = models.TimeField(auto_now=True)
-    status = models.IntegerField(default=0)
-    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
+    def trans(self):
+        return TaskBranchTran.objects.filter(parent=self.pk)
 
 
 class TaskBranchTran(models.Model):

@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block  body %}
+    <input type="hidden" id="branchId" value="{{ branch.pk }}">
+    <div class="container">
+
+        <input type="hidden" id="close_url" value="{% url 'close_task' %}">
+
+        <div class="card">
+            <div class="card-body p-0">
+
+                <div class="w-100 d-flex flex-wrap justify-content-between">
+                    <div class="w-50 h-100 d-flex flex-wrap">
+
+                        <div class="dropdown">
+                          <button type="button" id="task" value="{{ taskHd.pk }}" class="btn btn-dark btn-sm m-2 dropdown-toggle" data-toggle="dropdown">
+                            SWITCH BRANCH
+                          </button>
+                          <div class="dropdown-menu p-1">
+                              <a class="dropdown-item text-danger bi pointer" href="{% url 'view_task' taskHd.entry_uni %}"> Main</a>
+                                <div class="dropdown-divider"></div>
+                              {% for branch in branches %}
+                              <a href="{% url 'view_branch' taskHd.url branch.md_hash %}" class="dropdown-item text-info">{{ branch.br_name }}</a>
+                              {% endfor %}
+                          </div>
+                        </div>
+
+
+
+
+                    </div>
+
+                    <div class="dropdown">
+                      <button type="button" class="btn btn-success btn-sm m-2 dropdown-toggle" data-toggle="dropdown">
+                        ACTION
+                      </button>
+                      <div class="dropdown-menu">
+                          {% if taskHd.status == 0 %}
+                            <a class="dropdown-item text-info bi bi-list pointer" onclick="issues.updateBranch()" > Update</a>
+                            <a class="dropdown-item text-primary bi bi-toggles2" data-toggle="modal" href="#changeDomain"> Domain Switch</a>
+                          {% endif %}
+                            <a class="dropdown-item text-info bi bi-send" href="{% url 'send_mail' taskHd.entry_uni %}"> Send Mail</a>
+                          {% if taskHd.status == 0 %}
+                            <a class="dropdown-item pointer text-danger bi bi-lock" onclick="close_issue('{{ taskHd.entry_uni }}')"> Close</a>
+                          {% endif %}
+                      </div>
+                    </div>
+                    <input type="hidden" value="{% url 'mark-esc' %}" id="url">
+                </div>
+            </div>
+        </div>
+        <div class="card" >
+            <div class="card-header">
+                <h5 class="card-title m-0">{{ branch.br_name }}</h5>
+
+            </div>
+            <div class="card-body p-2 overflow-auto" style="max-height: 75vh !important">
+                <div class="alert alert-info">
+                    <p >{{ branch.descr | safe  }}</p>
+                </div>
+
+                <!-- Accordion without outline borders -->
+              <div class="accordion accordion-flush" id="accordionFlushExample">
+                  {% for tran in branch.trans %}
+                      <div class="w-100 d-flex flex-wrap p-3">
+                        <div style="width: 10%">
+                            <img style="width: 60px" src="{% static 'assets/img/users/default.png' %}" alt="Profile" class="rounded-circle">
+
+                        </div>
+                        <div class="accordion-body" style="width: 90%">
+                            <p class="text-info">{{ tran.created_date }} {{ tran.created_time }}</p>
+                            {{ tran.descr | safe }}
+                        </div>
+                      </div>
+{#                    <div class="accordion-item">#}
+{#                      <h2 class="accordion-header" id="flush-headingOne">#}
+{#                        <button class="accordion-button p-3 collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse{{ tran.pk }}" aria-expanded="false" aria-controls="flush-collapseOne">#}
+{#                          <kbd class="mr-2 bg-primary">{{ tran.owner_name }}</kbd>  -  <span class="ml-2 text-muted">{{ tran.tran_title }}</span>#}
+{#                        </button>#}
+{#                      </h2>#}
+{#                      <div id="flush-collapse{{ tran.pk }}" class="accordion-collapse collapse p-4" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">#}
+{#                        <div class="accordion-body">#}
+{#                            <p class="text-info">{{ tran.created_on }}</p>#}
+{#                            {{ tran.tran_descr | safe }}#}
+{#                        </div>#}
+{#                      </div>#}
+{#                    </div>#}
+                  {% endfor %}
+
+              </div><!-- End Accordion without outline borders -->
+
+
+
+            </div>
+        </div>
+
+
+    </div>
+{% endblock %}

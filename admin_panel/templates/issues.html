@@ -117,10 +117,13 @@
 
                         <div class="dropdown">
                           <button type="button" id="task" value="{{ taskHd.pk }}" class="btn btn-dark btn-sm m-2 dropdown-toggle" data-toggle="dropdown">
-                            Branch
+                            SWITCH BRANCH
                           </button>
                           <div class="dropdown-menu p-1">
                               <a class="dropdown-item text-primary bi pointer" onclick="issues.createBranch()"> New Branch</a>
+                              {% for branch in branches %}
+                              <a href="{% url 'view_branch' taskHd.url branch.md_hash %}" class="dropdown-item text-info">{{ branch.br_name }}</a>
+                              {% endfor %}
                           </div>
                         </div>
 
