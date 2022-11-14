@@ -409,3 +409,24 @@ class AuthToken(models.Model):
     created_date = models.DateField(auto_now_add=True)
     created_time = models.TimeField(auto_now=True)
     status = models.IntegerField(default=0)
+
+
+class TaskBranchHD(models.Model):
+    task = models.ForeignKey('TaskHD', on_delete=models.CASCADE)
+    title = models.TextField()
+    descr = models.TextField()
+
+    created_date = models.DateField(auto_now_add=True)
+    created_time = models.TimeField(auto_now=True)
+    status = models.IntegerField(default=0)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
+
+class TaskBranchTran(models.Model):
+    parent = models.ForeignKey('TaskBranchHD', on_delete=models.CASCADE)
+    descr = models.TextField()
+
+    created_date = models.DateField(auto_now_add=True)
+    created_time = models.TimeField(auto_now=True)
+    status = models.IntegerField(default=0)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)

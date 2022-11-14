@@ -112,16 +112,45 @@
         <div class="card">
             <div class="card-body p-0">
 
-                <div class="w-100 d-flex flex-wrap justify-content-end">
-                    {% if taskHd.status == 0 %}
-                    <button data-bs-toggle="modal" data-bs-target="#updateModal" class="btn btn-info btn-sm m-2">UPDATE</button>
+                <div class="w-100 d-flex flex-wrap justify-content-between">
+                    <div class="w-50 h-100 d-flex flex-wrap">
 
-                        <button onclick="close_issue('{{ taskHd.entry_uni }}')" class="btn btn-warning btn-sm m-2">CLOSE</button>
+                        <div class="dropdown">
+                          <button type="button" id="task" value="{{ taskHd.pk }}" class="btn btn-dark btn-sm m-2 dropdown-toggle" data-toggle="dropdown">
+                            Branch
+                          </button>
+                          <div class="dropdown-menu p-1">
+                              <a class="dropdown-item text-primary bi pointer" onclick="issues.createBranch()"> New Branch</a>
+                          </div>
+                        </div>
 
-                    <button data-toggle="modal" data-target="#changeDomain" class="btn btn-primary btn-sm m-2">CHANGE DOMAIN</button>
-                    {% endif %}
-                    <button data-toggle="modal" data-target="#sendMail" class="btn btn-success btn-sm m-2">SEND MAIL</button>
-                    <button onclick="location.href='{% url 'send_mail' taskHd.entry_uni %}'" class="btn btn-success btn-sm m-2">SEND MAIL V2</button>
+                        <span class="m-2 bx bx-git-branch"> {{ branches.count }}</span>
+
+                    </div>
+{#                    {% if taskHd.status == 0 %}#}
+{#                    <button data-bs-toggle="modal" data-bs-target="#updateModal" class="btn btn-info btn-sm m-2">UPDATE</button>#}
+{##}
+{#                        <button onclick="close_issue('{{ taskHd.entry_uni }}')" class="btn btn-danger btn-sm m-2">CLOSE</button>#}
+{##}
+{#                    <button data-toggle="modal" data-target="#changeDomain" class="btn btn-primary btn-sm m-2">CHANGE DOMAIN</button>#}
+{#                    {% endif %}#}
+{#                    <button data-toggle="modal" data-target="#sendMail" class="btn btn-success btn-sm m-2">SEND MAIL</button>#}
+{#                    <button onclick="location.href='{% url 'send_mail' taskHd.entry_uni %}'" class="btn btn-success btn-sm m-2">SEND MAIL V2</button>#}
+                    <div class="dropdown">
+                      <button type="button" class="btn btn-success btn-sm m-2 dropdown-toggle" data-toggle="dropdown">
+                        ACTION
+                      </button>
+                      <div class="dropdown-menu">
+                          {% if taskHd.status == 0 %}
+                            <a class="dropdown-item text-info bi bi-list" data-bs-toggle="modal" href="#updateModal"> Update</a>
+                            <a class="dropdown-item text-primary bi bi-toggles2" data-toggle="modal" href="#changeDomain"> Domain Switch</a>
+                          {% endif %}
+                            <a class="dropdown-item text-info bi bi-send" href="{% url 'send_mail' taskHd.entry_uni %}"> Send Mail</a>
+                          {% if taskHd.status == 0 %}
+                            <a class="dropdown-item pointer text-danger bi bi-lock" onclick="close_issue('{{ taskHd.entry_uni }}')"> Close</a>
+                          {% endif %}
+                      </div>
+                    </div>
                     <input type="hidden" value="{% url 'mark-esc' %}" id="url">
                 </div>
             </div>

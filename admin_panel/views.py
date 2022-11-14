@@ -452,7 +452,8 @@ def view_task(request, task_id):
         'nav': True,
         'taskHd': TaskHD.objects.get(entry_uni=task_id),
         'taskTran': TaskTrans.objects.filter(entry_uni=task_id),
-        'domains': tags.objects.all()
+        'domains': tags.objects.all(),
+        'branches': TaskBranchHD.objects.filter(task=TaskHD.objects.get(entry_uni=task_id))
     }
     return render(request, 'issues.html', context=context)
 
@@ -1670,6 +1671,14 @@ def api(request, module, action):
 
             return JsonResponse({'status': status, 'message': message}, safe=False)
 
+    elif module == 'issues':
+        json_data = json.loads(request.body)
+        if action == 'newBranch':
+            br_name = json_data['br_name']
+            task = json_data['task']
+
+            # try:
+            #     TaskBranchHD(task=TaskHD.objects.get(pk=task))
 
 
     elif module == 'products':
