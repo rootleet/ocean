@@ -68,6 +68,7 @@ urlpatterns = [
     path('inventory/receiving/', views.grn_entries, name='grn_entries'),
     path('inventory/receiving/new/', views.new_grn, name='new_grn'),
 
+
     # accounts urls
     path('accounts/', views.accounts, name='accounts'),
     path('accounts/tax-master/', views.tax_master, name='tax_master'),
@@ -91,7 +92,8 @@ urlpatterns = [
     path('open-ticket/', views.ticket, name='open-ticket'),
     path('all-ticket/', views.all_tickets, name='all-ticket'),
     path('save-ticket/', views.make_ticket, name='save-ticket'),
-    path('all-users/', views.all_users, name='all-users')
+    path('all-users/', views.all_users, name='all-users'),
+    path('update_profile/',views.update_profile,name='update_profile')
 
 ]
 

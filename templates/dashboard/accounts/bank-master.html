@@ -1,0 +1,73 @@
+{% extends 'accounts/main.html' %}
+{% load static %}
+
+{% block acc_screen %}
+
+    <div style="height: 100%; width: 100%; overflow: hidden" class="">
+        <header class="d-flex flex-wrap">
+            <button class="btn btn-sm btn-info" data-toggle="modal" href="#newAccount">New Account</button>
+            <form method="post" action="{% url 'bank-post' %}" class="modal fade" id="newAccount" data-backdrop="false">
+                <input type="hidden" name="function" value="new_account">
+                {% csrf_token %}
+                <div class="modal-dialog">
+                    <div class="modal-content">
+
+                        <div class="modal-header">
+                            <strong class="modal-title">Creating New Account</strong>
+                        </div>
+
+                        <div class="modal-body">
+
+                            <label class="w-100">Account Name <i class="text-danger">*</i>
+                                <input type="text" name="account_name" required autocomplete="off" class="form-control">
+                            </label>
+                            <hr>
+
+                            <label class="w-100">Description <i class="text-danger">*</i>
+                                <textarea name="description" required class="form-control" cols="30" rows="3"></textarea>
+                                <small class="text-info">Purpose of account</small>
+                            </label>
+
+                        </div>
+
+                        <div class="modal-footer">
+                            <button class="btn btn-sm btn-warning rounded-0" type="button" data-dismiss="modal">CANCEL</button>
+                            <button class="btn btn-sm btn-success rounded-0" type="submit">SAVE</button>
+                        </div>
+
+
+                    </div>
+                </div>
+            </form>
+        </header>
+
+        <article>
+            <table class="table table-sm">
+
+            <thead>
+                <tr>
+                    <th>Account Name</th>
+                    <th>Account Number</th>
+                    <th>Debit</th>
+                    <th>Credit</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for account in accounts %}
+                    <tr>
+                        <td>{{ account.acct_name }}</td>
+                        <td>{{ account.acct_serial }}</td>
+                        <td>0</td>
+                        <td>0</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+
+
+        </table>
+        </article>
+
+    </div>
+
+{% endblock %}

@@ -1,9 +1,12 @@
+import pathlib
+
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import models
 from community.models import questions, QuestionTags
 from blog.models import Providers
 from django.db.models import Sum
+from appconfig.models import *
 
 
 # Create your models here.
@@ -74,7 +77,7 @@ class TaskHD(models.Model):  ## task model
     domain = models.ForeignKey('community.tags', on_delete=models.CASCADE)
 
     def url(self):
-        return self.title.lower().replace(' ','-')
+        return self.title.lower().replace(' ', '-')
 
     def owner_name(self):
         return User.objects.get(pk=self.owner).username
@@ -399,10 +402,14 @@ class TicketHd(models.Model):
 
 class Files(models.Model):
     doc = models.CharField(max_length=3)
-    media = models.FileField(upload_to=f'static/general/img/files/%Y/%m/%d')
+    cryp_key = models.CharField(max_length=60)
+    media = models.FileField(upload_to=f'static/assets/uploads/%Y%m%d')
 
     created_date = models.DateField(auto_now_add=True)
     created_time = models.TimeField(auto_now_add=True)
+
+    def file_name(self):
+        return pathlib.PureWindowsPath(self.media.name).stem
 
 
 class AuthToken(models.Model):
@@ -414,11 +421,25 @@ class AuthToken(models.Model):
     status = models.IntegerField(default=0)
 
 
+# hold extra user details
+class UserAddOns(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    about = models.TextField()
+    company = models.TextField()
+    position = models.TextField()
+    country = models.TextField()
+    Address = models.TextField()
+    news = models.IntegerField(default=1)
+    phone = models.CharField(max_length=14, unique=True)
+    app_version = models.ForeignKey('appconfig.VersionHistory', on_delete=models.CASCADE)
+    profile_pic = models.FileField(upload_to=f'static/general/img/users/')
+
+
 class TaskBranchHD(models.Model):
     task = models.ForeignKey('TaskHD', on_delete=models.CASCADE)
     br_name = models.TextField()
     descr = models.TextField()
-    md_hash = models.CharField(max_length=60,unique=True)
+    md_hash = models.CharField(max_length=60, unique=True)
 
     created_date = models.DateField(auto_now_add=True)
     created_time = models.TimeField(auto_now=True)
@@ -435,3 +456,5 @@ class TaskBranchTran(models.Model):
     created_time = models.TimeField(auto_now=True)
     status = models.IntegerField(default=0)
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
+

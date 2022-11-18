@@ -1,0 +1,304 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body %}
+
+    <div class="container-fluid h-100">
+        <div class="row no-gutters p-2" style="height: 90vh">
+            <input type="hidden" id="meetingPk" value="{{ meeting.pk }}">
+
+            <!-- MEETING BODY -->
+            <div class="col-sm-12 m-0 p-0 h-100">
+                <div class="w-100 h-100">
+
+                    <div class="card-body p-2">
+                        <div class="container-fluid">
+                            {% if meeting.status  == 0 %}
+                                <div class="modal fade" id="newParticipant">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+
+                                            <div class="modal-header">
+                                                <strong class="modal-title">Add A Participant</strong>
+                                            </div>
+                                            <form method="post" action="{% url 'add_participant' %}"  class="modal-body">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="meeting" value="{{ meeting.pk }}">
+                                                {% for us in users %}
+                                                    <div class="form-check">
+                                                      <label class="form-check-label">
+                                                        <input type="checkbox" class="form-check-input" name="user_to_add" value="{{ us.pk }}">{{ us.first_name }} {{ us.last_name }}
+                                                      </label>
+                                                    </div>
+                                                {% endfor %}
+
+                                                <hr>
+                                            <button class="btn btn-success" type="submit">SAVE</button>
+
+                                            </form>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="modal fade" id="newPoint">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+
+                                            <div class="modal-header">
+                                                <strong class="modal-title">Add Talking Point</strong>
+                                            </div>
+                                            <form method="post" action="{% url 'add_talking_point' %}"  class="modal-body">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="meeting" value="{{ meeting.pk }}">
+                                                <input type="text" class="form-control form-control-lg" name="title" required>
+                                                <input type="hidden" name="owner" value="{{ user.pk }}">
+
+                                                <hr>
+                                            <button class="btn btn-success" type="submit">SAVE</button>
+
+                                            </form>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+
+                                {% if meeting.status  != 1 %}
+
+                                <div class="modal fade" id="newAttachments">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+
+                                            <div class="modal-header">
+                                                <strong class="modal-title">Add Talking Point</strong>
+                                            </div>
+                                            <form method="post" action="{% url 'attach' %}" enctype="multipart/form-data" class="modal-body">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="cryp_key" value="{{ meeting.uni }}">
+                                                <input type="hidden" name="doc">
+                                                <div class="custom-file mb-3">
+                                                  <input type="file" class="custom-file-input" id="customFile" name="media">
+                                                </div>
+                                                <label for="">Description</label><textarea name="descr" class="form-control form-control-lg" required id="" cols="30" rows="5"></textarea>
+                                                <input type="hidden" name="owner" value="{{ user.pk }}">
+
+                                                <script>
+                                                // Add the following code if you want the name of the file appear on select
+                                                $(".custom-file-input").on("change", function() {
+                                                  var fileName = $(this).val().split("\\").pop();
+                                                  $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+                                                });
+                                                </script>
+
+                                                <hr>
+                                            <button class="btn btn-success" type="submit">SAVE</button>
+
+                                            </form>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endif %}
+
+
+                            <div class="row overflow-hidden" style="height: 80vh">
+
+                                <div class="col-sm-9 h-100">
+                                {% if meeting.status  != 0 %}
+                                    <div class="card h-100">
+                                        <div class="card-header rounded-0">
+                                            <div class="w-100 d-flex flex-wrap justify-content-between">
+                                                <div class="w-50 h-100">
+                                                    <strong class="">{{ meeting.title }}</strong>
+                                                </div>
+
+                                                <div class="w-50 h-100 d-flex flex-wrap justify-content-end">
+
+                                                    <span class="btn btn-success mx-2">{{ meeting.start_date }} {{ meeting.start_time }}</span>
+                                                    <span class="btn btn-danger mx-2">{{ meeting.end_date }} {{ meeting.end_time }}</span>
+                                                    {% if meeting.status  == 1 %}
+                                                    <button onclick="meeting.endMeeting()" class="btn btn-warning mx-2">End</button>
+                                                    {% endif %}
+
+                    {#                                <button form="saveMeeting" class="btn btn-success">SAVE</button>#}
+
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+                                        <div class="card-body p-2 overflow-auto" id="xBody">
+
+                                            <div class="alert alert-primary">
+                                                <strong>Point</strong> <br>
+                                                <p class="m-0">Hello World</p>
+                                            </div>
+
+                                        </div>
+
+                                    {% if meeting.status  == 1 %}
+
+                                        <div class="card-footer">
+                                            <div class="w-100 d-flex flex-wrap justify-content-between">
+                                                <select name="" id="talking_point" class="form-control w-20">
+                                                    <option value="null">Talking Point</option>
+                                                    {% for p in meeting.talking_points %}
+                                                        <option value="{{ p.pk }}">{{ p.title }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                                <input type="text" id="tran_text" class="form-control w-75 form-control-lg">
+
+                                                <button onclick="meeting.NewMeetingTran()" class="btn btn-sm btn-success bi bi-send"></button>
+
+                                            </div>
+                                        </div>
+                                        {% endif %}
+
+                                    </div>
+                                {% else %}
+                                    <div class="w-100 h-100 card d-flex flex-wrap align-content-center justify-content-center">
+                                        <button onclick="meeting.startMeeting()" class="btn btn-success">START</button>
+                                    </div>
+                                {% endif %}
+
+                                </div>
+
+                                <div class="col-sm-3 h-100 overflow-auto">
+                                    <!-- PARTICIPANTS -->
+                                    <div class="card h-25 border border-info">
+                                            <div class="card-header">
+                                                <div class="w-100 h-100 d-flex flex-wrap justify-content-between">
+                                                    <strong class="">Participants</strong>
+                                                    {% if meeting.status  == 0 %}
+                                                        <span data-bs-toggle="modal" data-bs-target="#newParticipant" class="btn-info btn">Add</span>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                            <div class="card-body p-2 overflow-auto">
+                                                {% if meeting.participants.count > 0 %}
+                                                {% for participant in meeting.participants %}
+                                                    <div class="w-100 d-flex flex-wrap p-2">
+                                                        <div style="width: 10%" class="overflow-hidden">
+                                                            <img style="width: 30px" src="{% static 'assets/img/users/default.png' %}" alt="Profile" class="rounded-circle">
+
+                                                        </div>
+                                                        <div class="accordion-body" style="width: 70%">
+                                                            <small class="text-primary">{{ participant.user.first_name }} {{ participant.user.last_name }}</small>
+                                                        </div>
+                                                        <div style="width:20% "><i onclick="location.href='{% url 'remove_participant' meeting.uni participant.pk %}'" class="text-danger pointer">del</i></div>
+                                                    </div>
+                                                {% endfor %}
+                                                {% else %}
+                                                    <div class="alert alert-warning text-center">
+                                                        No Participant
+                                                    </div>
+                                                {% endif %}
+
+
+
+                                            </div>
+                                        </div>
+
+                                    <!-- TALKING POINTS -->
+                                    <div class="card h-25 border border-info">
+
+                                        <div class="card-header">
+                                            <div class="w-100 h-100 d-flex flex-wrap justify-content-between">
+                                                <strong class="">Talking Points</strong>
+                                                {% if meeting.status  == 0 %}
+                                                <span data-bs-toggle="modal" data-bs-target="#newPoint" class="btn-info btn">Add</span>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                        <div class="card-body p-2 overflow-auto">
+                                            {% if meeting.talking_points.count > 0 %}
+                                            {% for point in meeting.talking_points %}
+                                                <div class="w-100 d-flex flex-wrap justify-content-between p-2">
+                                                    <small class="bi bi-check-square-fill"> {{ point.title }}</small>
+                                                    {% if meeting.status  == 0 %}
+                                                        <a href="{% url 'remove_point' meeting.uni point.pk %}" class="text-danger">Delete</a>
+                                                    {% endif %}
+                                                </div>
+                                            {% endfor %}
+                                        {% else %}
+                                            <div class="alert alert-warning text-center">
+                                                No Talking Point
+                                            </div>
+                                        {% endif %}
+
+
+
+                                        </div>
+                                    </div>
+
+                                    <!-- ATTACHMENTS -->
+                                    <div class="card h-25 border border-info">
+                                        <div class="card-header">
+                                            <div class="w-100 h-100 d-flex flex-wrap justify-content-between">
+
+                                                <strong class="">Attachments</strong>
+                                                {% if meeting.status  != 1 %}
+                                                    <span data-bs-toggle="modal" data-bs-target="#newAttachments" class="btn-info btn">Upload</span>
+                                                {% endif %}
+
+                                            </div>
+                                        </div>
+                                        <div class="card-body p-2 overflow-auto">
+                                            <div class="w-100 h-100 overflow-auto">
+                                                {% if meeting.attachments.count > 0 %}
+                                            {% for attactment in meeting.attachments %}
+                                                <div class="w-100 d-flex flex-wrap justify-content-between p-2">
+                                                    <a href="{{ attactment.media.url }}" target="_blank" class="bi bi-file"> {{ attactment.file_name }}</a>
+                                                    {% if meeting.status  == 0 %}
+                                                        <a href="" class="btn btn-danger">Delete</a>
+                                                    {% endif %}
+                                                </div>
+                                            {% endfor %}
+                                            {% else %}
+                                                <div class="alert alert-warning text-center">
+                                                    No Attachments
+                                                </div>
+                                            {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+
+                                    {% if meeting.status  == 1 %}
+                                    <!-- RECORD -->
+                                    <div class="card h-25 border border-info">
+                                        <div class="holder w-100">
+                                            <div data-role="controls">
+                                                <button>Record</button>
+                                            </div>
+                                            <div data-role="recordings">
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endif %}
+
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script type="text/javascript" src="https://code.jquery.com/jquery.min.js"></script>
+        <script src="https://markjivko.com/dist/recorder.js"></script>
+    <script>
+        meeting.liveTrans()
+    </script>
+
+{% endblock %}

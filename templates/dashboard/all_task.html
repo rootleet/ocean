@@ -1,0 +1,187 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body %}
+    <!-- Main Container Start -->
+			<div class="main-container">
+
+
+                        <div class="container">
+
+                            <div class="card">
+                                <div style="text-align: left" class="card-body p-1">
+                                <div style="width: 100%;" class="d-flex flex-wrap justify-content-end">
+                                    <span onclick="windowPopUp('{% url 'new_task' %}','NEW TASK',800,900)" class="btn btn-sm rounded-0 btn-info m-1">NEW TASK</span>
+                                    <button onclick="task_export('csv')" type="button" class="btn  m-1 btn-primary btn-sm rounded-0" data-toggle="dropdown">
+                                        Export
+                                      </button>
+                                    <button  type="button" class="btn btn-sm rounded-0 m-1 btn-primary" data-toggle="modal" data-target="#search">
+                                        Search
+                                      </button>
+
+                                    <button data-toggle="modal" data-target="#filter" class="btn m-1 btn-sm rounded-0 btn-primary">FILTER</button>
+                                    <div class="modal fade" id="filter">
+                                        <div class="modal-dialog">
+                                            <form method="get" action="{% url 'task_filter' %}" class="modal-content">
+                                                <div class="modal-header">
+                                                    <strong class="modal-title">Filter Option</strong>
+                                                </div>
+
+                                                <div class="modal-body">
+
+                                                    <!-- DOMEIn -->
+                                                    <div class="panel panel-default">
+                                                        <div class="card-header">
+                                                            <h4>Domain</h4>
+                                                        </div>
+                                                        <div class="card-body">
+                                                            {% for tag in domain %}
+                                                              <label class="radio-inline">
+                                                                <input required type="radio" name="domain" id="optionsRadios{{ tag.pk }}" value="{{ tag.pk }}"> {{ tag.tag_dec }}
+                                                              </label>
+                                                            {% endfor %}
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- STATUS -->
+                                                    <div class="panel panel-default">
+                                                        <div class="card-header">
+                                                            <h4>Status</h4>
+                                                        </div>
+                                                        <div class="card-body">
+                                                            <label class="radio-inline">
+                                                                <input required type="radio" name="status" id="optionsRadios1" value="0"> OPEN
+                                                              </label>
+                                                            <label class="radio-inline">
+                                                                <input required type="radio" name="status" id="optionsRadios2" value="1"> CLOSE
+                                                              </label>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-warning btn-sm">CANCEL</button>
+                                                    <a href="{% url 'all_task' %}" class="btn btn-sm btn-primary">ALL TASK</a>
+                                                    <button type="submit" class="btn btn-success">APPLY FILTER</button>
+                                                </div>
+
+                                            </form>
+                                        </div>
+                                    </div>
+
+                                    <input type="hidden" name="export_url" id="export_url" value="{% url 'export_task' %}">
+                                    <div class="modal fade" id="search" data-backdrop="false">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header"><strong class="modal-title">
+                                                    <input type="search" class="form-control" placeholder="query" autocomplete="off" id="search_task">
+                                                </strong></div>
+                                                <div class="modal-body">
+
+                                                    <div style="height: 50vh; overflow: auto" id="search_result">
+                                                        <div class="list-group" id="searchRes">
+
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            </div>
+
+                            <div class="card p-2">
+
+
+                                <div class="card-body p-2" style="height:80vh; overflow:auto">
+
+
+                                  <!-- List group with Advanced Contents -->
+                                  <div class="list-group">
+                                      {% for task in tasks %}
+                                        <a
+{#                                                onclick="windowPopUp('{% url 'view_task' task.entry_uni %}','TASK MANAGER',900,600)" #}
+                                                onclick="location.href='{% url 'view_task' task.entry_uni %}'"
+                                                style="cursor: pointer;"
+                                                class="list-group-item list-group-item-action" aria-current="true"
+                                        >
+                                          <div class="d-flex w-100 justify-content-between">
+                                            <strong class="mb-1">{{ task.title }}</strong>
+                                            <small>{{ task.added_on }}</small>
+                                          </div>
+                                          <p class="m-0">{{ task.description | safe | slice:':30' }} ...</p>
+                                            <kbd class="bg-info">{{ task.provider.descr }}</kbd> <kbd class="bg-primary">{{ task.domain.tag_dec }}</kbd>
+                                        </a>
+                                      {% endfor %}
+
+                                  </div><!-- End List group Advanced Content -->
+
+                                </div>
+                            </div>
+
+                          </div>
+
+{#                <div class="card panel-info">#}
+{#                    <div class="card-header">#}
+{#                        <h4 class="card-tit">Community Issues</h4>#}
+{##}
+{#                    </div>#}
+{#                    <div class="card-body">#}
+{##}
+{##}
+{##}
+{#                        <div class="table-responsive" style="height: 60vh; overflow: auto">#}
+{#                            <table class="table table-bordered table-striped table-hover border-info">#}
+{#                                <input type="hidden" id="close_url" value="{% url 'close_task' %}">#}
+{#                                                    <thead>#}
+{#                                                        <tr>#}
+{#                                                            <th style="width: 10%">Domain</th>#}
+{#                                                            <th style="width: 10%">Provider</th>#}
+{#                                                            <th style="width: 15%">Title</th>#}
+{#                                                            <th style="width: 20%">Description</th>#}
+{#                                                            <th style="width: 5%">Status</th>#}
+{#                                                            <th style="width: 15%">Timestamp</th>#}
+{#                                                            <th style="width: 25%">Action</th>#}
+{#                                                        </tr>#}
+{#                                                    </thead>#}
+{#                                                    <tbody>#}
+{#                                                        {% for task in tasks %}#}
+{#                                                        <tr class="{% if task.status == 1 %}bg-success{% endif %}">#}
+{#                                                            <td>#}
+{#                                                                <span class="">{{ task.domain.tag_dec }}</span>#}
+{#                                                            </td>#}
+{#                                                            <td class="">{{ task.provider.descr }}</td>#}
+{#                                                            <td>{{ task.title }}</td><td>{{ task.description | safe | slice:":30" }}</td>#}
+{#                                                            <td>#}
+{#                                                                {% if task.status == 0 %}#}
+{#                                                                    <kbd class="bg-warning">OPEN</kbd>#}
+{#                                                                {% else %}#}
+{#                                                                    <span class="bg-info">CLOSE</span>#}
+{#                                                                {% endif %}#}
+{#                                                            </td>#}
+{#                                                            <td>{{ task.added_on }}</td>#}
+{#                                                            <td><div class="w-100 d-flex flex-wrap align-content-center justify-content-between">#}
+{#                                                                <button onclick="windowPopUp('{% url 'view_task' task.entry_uni %}','TASK MANAGER',900,600)" class="btn-info btn pointer btn-sm rounded-0 pointer mx-1">VIEW</button>#}
+{#                                                                {% if task.status == 0 %}#}
+{#                                                                <button onclick="windowPopUp('{% url 'update_task' task.entry_uni %}','TASK MANAGER',900,600)" class="btn-success btn pointer btn-sm rounded-0 pointer mx-1">UPDATE</button>#}
+{#                                                                <span onclick="close_issue('{{ task.entry_uni }}')" class="btn-danger btn pointer btn-sm rounded-0 pointer mx-1">CLOSE</span>#}
+{##}
+{#                                                                {% endif %}#}
+{#                                                            </div></td>#}
+{#                                                        </tr>#}
+{#                                                        {% endfor %}#}
+{##}
+{#                                                    </tbody>#}
+{#                                                </table>#}
+{#                        </div>#}
+{#                    </div>#}
+{##}
+{##}
+{#                </div>#}
+
+            </div>
+{% endblock %}

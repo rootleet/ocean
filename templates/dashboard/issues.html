@@ -1,0 +1,208 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block  body %}
+    <div class="container">
+
+        <input type="hidden" id="close_url" value="{% url 'close_task' %}">
+
+              <form method="post" action="{% url 'update_task' taskHd.entry_uni %}" class="modal fade" id="updateModal" tabindex="-1">
+                <div class="modal-dialog modal-xl modal-dialog-centered">
+                  <div class="modal-content rounded-0">
+
+                    <div class="modal-body">
+
+
+                            {% csrf_token %}
+                                <div class="w-100">
+
+
+                                    <div class="form-group mb-2">
+                                        <input type="hidden" name="entry" value="{{ taskHd.entry_uni }}">
+{#                                        <label style="width: 100%">Title :#}
+{#                                            <input type="text"#}
+{#                                                   class="form-control mb-3"#}
+{#                                                   name="title"#}
+{#                                                   required#}
+{#                                            >#}
+{#                                        </label>#}
+                                        <div class="w-100 d-flex flex-wrap justify-content-end"><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div>
+
+                                        <textarea name="body" style="height: 50vh" class="form-control" id="update_details"></textarea>
+                                        <script src="{% static 'blog/js/htmeditor.min.js' %}"      htmeditor_textarea="update_details"      full_screen="no"      editor_height="300"     run_local="no">
+                                        </script>
+
+                                        <div class="w-100 d-flex flex-wrap mt-2 justify-content-end">
+                                            <button type="submit" class="btn btn-primary rounded-0">SUBMIT</button>
+                                        </div>
+
+                                    </div>
+
+
+                                </div>
+
+
+                    </div>
+                  </div>
+                </div>
+              </form>
+
+        <div class="modal" id="changeDomain" >
+                                <form method="post" id="general_form" action="{% url 'change_domain' %}" class="modal-dialog modal-dialog-centered">
+                                    <input type="hidden" name="task_uni" value="{{ taskHd.entry_uni }}">
+                                    {% csrf_token %}
+                                    <div class="modal-content">
+
+                                        <div class="modal-header">
+                                            <strong class="modal-title">Chaning Domain</strong>
+                                        </div>
+
+                                        <div class="modal-body">
+                                            <label for="">From : </label><select name="curr_domain" readonly id="" class="form-control">
+                                                <option value="{{ taskHd.domain.pk }}">{{ taskHd.provider.descr }}</option>
+                                            </select> <br>
+                                            <label for="">To : </label><select name="new_domain" id="" class="form-control">
+                                                {% for domain in domains %}
+                                                    {% if domain.pk != taskHd.domain.pk %}
+                                                        <option value="{{ domain.pk }}">{{ domain.tag_dec }}</option>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </select> <br>
+                                            <textarea name="reason"  placeholder="Reason.." class="form-control" id="" cols="30" rows="5"></textarea>
+                                        </div>
+
+                                        <div class="modal-footer">
+                                            <button class="btn btn-sm btn-warning rounded-0" type="button" data-dismiss="modal">CANCEL</button>
+                                            <button class="btn btn-success btn-sm rounded-0" type="submit">SEND</button>
+                                        </div>
+
+                                    </div>
+                                </form>
+                            </div>
+
+        <div class="modal" id="sendMail" >
+                                <form method="post"  action="{% url 'test_suolution' %}" class="modal-dialog modal-dialog-centered">
+                                    <input type="hidden" name="task_uni" value="{{ taskHd.entry_uni }}">
+                                    {% csrf_token %}
+                                    <div class="modal-content modal-lg">
+
+                                        <div class="modal-header">
+                                            <strong class="modal-title">Send Mail</strong>
+                                        </div>
+
+                                        <div class="modal-body">
+                                            <label for="">To : </label><input type="text" name="to" required class="form-control"> <br>
+                                            <label for="">Subject : </label><input type="text" name="subject" required class="form-control"> <br>
+                                            <label for="update_details">Message:</label><textarea name="body" style="height: 75vh" class="form-control" id="update_details">
+                                            Issue <strong>{{ taskHd.title }}</strong> has been resolved and below are instructions to follow for confirmation: <br>
+                                        </textarea>
+                                            <script src="{% static 'blog/js/htmeditor.min.js' %}"      htmeditor_textarea="update_details"      full_screen="no"      editor_height="500"     run_local="no">
+                                            </script>
+                                        </div>
+
+                                        <div class="modal-footer">
+                                            <button class="btn btn-sm btn-warning rounded-0" type="button" data-dismiss="modal">CANCEL</button>
+                                            <button class="btn btn-success btn-sm rounded-0" type="submit">SEND</button>
+                                        </div>
+
+                                    </div>
+                                </form>
+                            </div>
+
+        <div class="card">
+            <div class="card-body p-0">
+
+                <div class="w-100 d-flex flex-wrap justify-content-between">
+                    <div class="w-50 h-100 d-flex flex-wrap">
+
+                        <div class="dropdown">
+                          <button type="button" id="task" value="{{ taskHd.pk }}" class="btn btn-dark btn-sm m-2 dropdown-toggle" data-toggle="dropdown">
+                            SWITCH BRANCH
+                          </button>
+                          <div class="dropdown-menu p-1">
+                              <a class="dropdown-item text-primary bi pointer" onclick="issues.createBranch()"> New Branch</a>
+                              {% for branch in branches %}
+                              <a href="{% url 'view_branch' taskHd.url branch.md_hash %}" class="dropdown-item text-info">{{ branch.br_name }}</a>
+                              {% endfor %}
+                          </div>
+                        </div>
+
+                        <span class="m-2 bx bx-git-branch"> {{ branches.count }}</span>
+
+                    </div>
+{#                    {% if taskHd.status == 0 %}#}
+{#                    <button data-bs-toggle="modal" data-bs-target="#updateModal" class="btn btn-info btn-sm m-2">UPDATE</button>#}
+{##}
+{#                        <button onclick="close_issue('{{ taskHd.entry_uni }}')" class="btn btn-danger btn-sm m-2">CLOSE</button>#}
+{##}
+{#                    <button data-toggle="modal" data-target="#changeDomain" class="btn btn-primary btn-sm m-2">CHANGE DOMAIN</button>#}
+{#                    {% endif %}#}
+{#                    <button data-toggle="modal" data-target="#sendMail" class="btn btn-success btn-sm m-2">SEND MAIL</button>#}
+{#                    <button onclick="location.href='{% url 'send_mail' taskHd.entry_uni %}'" class="btn btn-success btn-sm m-2">SEND MAIL V2</button>#}
+                    <div class="dropdown">
+                      <button type="button" class="btn btn-success btn-sm m-2 dropdown-toggle" data-toggle="dropdown">
+                        ACTION
+                      </button>
+                      <div class="dropdown-menu">
+                          {% if taskHd.status == 0 %}
+                            <a class="dropdown-item text-info bi bi-list" data-bs-toggle="modal" href="#updateModal"> Update</a>
+                            <a class="dropdown-item text-primary bi bi-toggles2" data-toggle="modal" href="#changeDomain"> Domain Switch</a>
+                          {% endif %}
+                            <a class="dropdown-item text-info bi bi-send" href="{% url 'send_mail' taskHd.entry_uni %}"> Send Mail</a>
+                          {% if taskHd.status == 0 %}
+                            <a class="dropdown-item pointer text-danger bi bi-lock" onclick="close_issue('{{ taskHd.entry_uni }}')"> Close</a>
+                          {% endif %}
+                      </div>
+                    </div>
+                    <input type="hidden" value="{% url 'mark-esc' %}" id="url">
+                </div>
+            </div>
+        </div>
+        <div class="card" >
+            <div class="card-header">
+                <h5 class="card-title m-0">{{ taskHd.title }}</h5>
+
+            </div>
+            <div class="card-body p-2 overflow-auto" style="max-height: 75vh !important">
+                <div class="alert alert-info">
+                    <p >{{ taskHd.description | safe  }}</p>
+                </div>
+
+                <!-- Accordion without outline borders -->
+              <div class="accordion accordion-flush" id="accordionFlushExample">
+                  {% for tran in taskTran %}
+                      <div class="w-100 d-flex flex-wrap p-3">
+                        <div style="width: 10%">
+                            <img style="width: 60px" src="{% static 'assets/img/users/default.png' %}" alt="Profile" class="rounded-circle">
+
+                        </div>
+                        <div class="accordion-body" style="width: 90%">
+                            <p class="text-info">{{ tran.created_on }}</p>
+                            {{ tran.tran_descr | safe }}
+                        </div>
+                      </div>
+{#                    <div class="accordion-item">#}
+{#                      <h2 class="accordion-header" id="flush-headingOne">#}
+{#                        <button class="accordion-button p-3 collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse{{ tran.pk }}" aria-expanded="false" aria-controls="flush-collapseOne">#}
+{#                          <kbd class="mr-2 bg-primary">{{ tran.owner_name }}</kbd>  -  <span class="ml-2 text-muted">{{ tran.tran_title }}</span>#}
+{#                        </button>#}
+{#                      </h2>#}
+{#                      <div id="flush-collapse{{ tran.pk }}" class="accordion-collapse collapse p-4" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">#}
+{#                        <div class="accordion-body">#}
+{#                            <p class="text-info">{{ tran.created_on }}</p>#}
+{#                            {{ tran.tran_descr | safe }}#}
+{#                        </div>#}
+{#                      </div>#}
+{#                    </div>#}
+                  {% endfor %}
+
+              </div><!-- End Accordion without outline borders -->
+
+
+
+            </div>
+        </div>
+
+
+    </div>
+{% endblock %}

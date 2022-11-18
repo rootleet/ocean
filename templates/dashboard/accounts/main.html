@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body %}
+
+    <div class="w-100 h-100">
+
+        <div class="panel panel-danger" style="height: 75vh; overflow: hidden !important">
+
+            <div style="text-align: left" class="panel-sub-heading">
+                <div style="width: 100%;" class="d-flex flex-wrap">
+                    
+                                <button onclick="location.href='{% url 'tax_master' %}'" class="btn btn-sm btn-warning">Tax Master</button>
+                                <button onclick="location.href='{% url 'bank-master' %}'" class="btn btn-sm btn-danger">Bank Accounts</button>
+                                <button onclick="location.href='{% url 'suppliers' %}'" class="btn btn-sm btn-info">Suppliers</button>
+
+
+
+                            </div>
+            </div>
+
+            <div class="card-body" style="height: 95%!important ;overflow: auto!important">
+                {% block acc_screen %}
+
+
+
+                {% endblock %}
+            </div>
+
+
+        </div>
+
+    </div>
+
+{% endblock %}

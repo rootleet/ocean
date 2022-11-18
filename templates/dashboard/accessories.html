@@ -1,0 +1,149 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body %}
+
+    <div class="w-100 h-100">
+
+        <!-- TAGS -->
+        <button class="btn btn-info" data-toggle="modal" data-target="#tags">TAGS</button>
+        <div  class="modal" id="tags" data-backdrop="false">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <strong class="modal-title">Tags</strong>
+                        <button class="close" data-dismiss="modal">&times</button>
+                    </div>
+                    <form method="post" action="{% url 'save-tag' %}" class="modal-body">
+                    {% csrf_token %}
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>CODE</th><th>DESCRIPTION</th><th>Provider</th><th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><input type="text" required name="code" maxlength="3" class="form-control form-control-sm"></td>
+                                    <td><input type="text" required name="description" class="form-control form-control-sm"></td>
+                                    <td>
+                                        <select required name="provider" class="form-control form-control-sm" id="">
+                                            {% for provider in providers %}
+
+                                                <option value="{{ provider.pk }}">{{ provider.descr }}</option>
+
+                                            {% endfor %}
+                                        </select>
+                                    </td>
+                                    <td><button class="btn btn-success rounded-0">SAVE</button></td>
+                                </tr>
+                                {% for tag in comm_tags %}
+                                    <tr>
+                                        <td>{{ tag.tag_code }}</td>
+                                        <td>{{ tag.tag_dec }}</td>
+                                        <td colspan="2">{{ tag.provider.descr }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- PROVIDER -->
+        <button class="btn btn-info" data-toggle="modal" data-target="#providers">PROVIDERS</button>
+        <div  class="modal" id="providers" data-backdrop="false">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <strong class="modal-title">Providers</strong>
+                        <button class="close" data-dismiss="modal">&times</button>
+                    </div>
+                    <form method="post" action="{% url 'save-provider' %}" class="modal-body">
+                        {% csrf_token %}
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>CODE</th><th>DESCRIPTION</th><th>Mobile</th><th>Email</th><th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><input type="text" name="code" maxlength="3" required class="form-control form-control-sm"></td>
+                                    <td><input type="text" name="description" required class="form-control form-control-sm"></td>
+                                    <td><input type="tel" name="mobile" required class="form-control form-control-sm"></td>
+                                    <td><input type="email" name="email" required class="form-control form-control-sm"></td>
+                                    <td><button class="btn btn-success rounded-0">SAVE</button></td>
+                                </tr>
+                                {% for procider in providers %}
+
+                                    <tr>
+                                        <th>{{ procider.provider_code }}</th>
+                                        <th>{{ procider.descr }}</th>
+                                        <th>{{ procider.mobile }}</th>
+                                        <th colspan="2">{{ procider.email }}</th>
+                                    </tr>
+
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- EMAIL GROUPS -->
+        <a class="btn btn-info" data-toggle="modal" href="#mailGroups">Notifications List</a>
+        <div  class="modal" id="mailGroups" data-backdrop="false">
+            <div class="modal-dialog">
+                <div class="modal-content modal-lg">
+                    <div class="modal-header">
+                        <strong class="modal-title">Tags</strong>
+                        <button class="close" data-dismiss="modal">&times</button>
+                    </div>
+                    <form method="post" action="{% url 'add_notification_mem' %}" class="modal-body">
+                    {% csrf_token %}
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Full Name</th><th>Email</th><th>Mobile</th><th>Tag</th><th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><input type="text" autocomplete="off" required name="full_name" class="form-control form-control-sm"></td>
+                                    <td><input type="email" autocomplete="off" required name="email" class="form-control form-control-sm"></td>
+                                    <td><input type="tel" autocomplete="off" required name="phone" class="form-control form-control-sm"></td>
+                                    <td>
+                                        <select required name="provider" class="form-control form-control-sm" id="">
+                                            {% for provider in comm_tags %}
+
+                                                <option value="{{ provider.pk }}">{{ provider.tag_dec }}</option>
+
+                                            {% endfor %}
+                                        </select>
+                                    </td>
+                                    <td><button class="btn btn-success rounded-0">SAVE</button></td>
+                                </tr>
+                                {% for note in notomem %}
+
+                                    <tr>
+                                        <td>{{ note.full_name }}</td>
+                                        <td>{{ note.email_addr }}</td>
+                                        <td>{{ note.mobile_number }}</td>
+                                        <td>{{ note.domain.tag_dec }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- LOCATIONS -->
+        <button onclick="windowPopUp('{% url 'loc_master' %}','Location Master',700,500)" class="btn btn-info" >Location Master</button>
+
+    </div>
+
+{% endblock %}

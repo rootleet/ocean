@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block  body %}
+    <div class="w-100 card">
+        <div class="panel panel-default no-margin">
+            <div class="card-header">
+                <h4>New Task</h4>
+
+            </div>
+            <div class="card-body p-2">
+                <form method="post" id="" action="{% url 'new_task' %}">
+                {% csrf_token %}
+                    <div class="container-fluid">
+
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <label style="width: 100%">Domain :
+                                    <select name="domain" id="domain" class="form-control rounded-0" required>
+                                        <option value="0">Select Tag</option>
+                                        {% for dom in domain %}
+                                            <option value="{{ dom.pk }}">{{ dom.tag_dec }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </label>
+                            </div>
+
+                            <div class="col-sm-9">
+                                <label style="width: 100%">Title :
+                                    <input type="text" required name="title" class="form-control rounded-0 mb-3">
+                                </label>
+                            </div>
+                        </div>
+
+
+                        <label for="update_details">Description</label><textarea name="body" rows="10" class="form-control rounded-0" id="update_details"></textarea>
+
+                        <hr>
+                        <div style="width: 100%; margin: auto 0" class="d-flex flex-wrap justify-content-end">
+                            <button type="button" onclick="location.href='{% url 'all_task' %}'" class="btn btn-sm btn-warning rounded-0">CANCEL</button>
+                            <button class="btn btn-sm btn-success rounded-0">SAVE</button>
+                        </div>
+
+                        <ul class="chat mt-5">
+
+                            {% for tran in taskTran %}
+                                <li class="in">
+                                <img class="avatar" alt="" src="{% static 'general/img/admin11.png' %}">
+                                <div class="message">
+                                    <span class="arrow">
+                                    </span>
+                                    <a href="#" class="name">
+                                        {{ tran.owner_name }}
+                                    </a>
+                                    <span class="date-time">
+                                        at {{ tran.created_on }}
+                                    </span>
+
+                                    <span class="body body-grey">
+                                        <strong>{{ tran.tran_title }}</strong><br>
+                                        {{ tran.tran_descr | safe }}
+                                    </span>
+                                </div>
+                            </li>
+                            {% endfor %}
+
+                        </ul>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

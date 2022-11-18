@@ -65,10 +65,13 @@ function error_handler(response)
             case 'error':
                 swal_response('error','PROCEDURE ERROR',response_message)
                 break;
+
             default:
                 swal_response('info','SYSTEM INFORMATION',response_message)
         }
 
+    } else {
+        swal_response('info','SYSTEM INFORMATION',response)
     }
 }
 

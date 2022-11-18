@@ -1,0 +1,138 @@
+{% extends 'accounts/main.html' %}
+{% load static %}
+
+{% block acc_screen %}
+
+    <div class="h-100 w-100">
+        <div class="panel h-100">
+            <div class="panel panel-sub-heading">
+
+                <button data-toggle="modal" href="#newSupplier" class="btn btn-sm btn-info">New Supplier</button>
+                <form method="post" action="{% url 'save-supplier' %}" class="modal fade text-left" id="newSupplier" data-backdrop="false">
+                                {% csrf_token %}
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <strong class="modal-title">Adding Supplier</strong>
+                                            </div>
+                                            <div class="modal-body">
+                                                <label style="width: 100%">Organization
+                                                    <input type="text" required autocomplete="off" name="company" class="form-control rounded-o">
+                                                </label>
+                                                <small class="text-info">Descriptive name of supplier</small>
+                                                <hr>
+
+                                                <label style="width: 100%">Representative
+                                                    <input type="text" required autocomplete="off" name="contact_person" class="form-control rounded-o">
+                                                </label>
+                                                <small class="text-info">Descriptive name of supplier</small>
+                                                <hr>
+
+                                                <!-- DOMAIN -->
+                                                <label for="">Domain</label><select name="domain" id="" class="form-control rounded-0">
+                                                    <option >LOCAL</option>
+                                                    <option >IMPORT</option>
+                                                </select>
+                                                <small class="text-info">The source of this supplier</small>
+                                                <hr>
+
+                                                <!-- COUNTRY OF ORIGIN -->
+                                                <label for="">Origin</label>
+                                                <select name="origin" id="" class="form-control rounded-0">
+                                                    <option >Ghana</option>
+                                                    <option >Dubai</option>
+                                                </select>
+                                                <small class="text-info">Country of Origin</small>
+                                                <hr>
+
+                                                <!-- CONTACT EMAIL -->
+                                                <div  class="row">
+                                                    <div class="col-sm-6">
+                                                        <label style="width: 100%">Email Address
+                                                            <input autocomplete="off" required name="email" type="email" class="form-control">
+                                                        </label>
+                                                    </div>
+                                                    <div class="col-sm-6">
+                                                        <label style="width: 100%">Mobile
+                                                            <input autocomplete="off" required type="tel" name="phone" class="form-control">
+                                                        </label>
+                                                    </div>
+                                                    <div class="col-sm-6">
+                                                        <label style="width: 100%">City
+                                                            <input required type="text" name="city" class="form-control">
+                                                        </label>
+                                                    </div>
+                                                    <div class="col-sm-6">
+                                                        <label style="width: 100%">Street
+                                                            <input autocomplete="off" required type="text" name="street" class="form-control">
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <hr>
+                                                <div class="row">
+                                                    <!-- TAXABLE -->
+                                                    <div class="col-sm-6">
+                                                        <label for="">Taxable</label>
+                                                        <select name="taxable" id="" class="form-control">
+                                                            <option value="1">YES</option>
+                                                            <option value="0">NO</option>
+                                                        </select>
+                                                    </div>
+
+                                                    <!-- Create Account -->
+                                                    <div class="col-sm-6">
+                                                        <label for="">Account</label>
+                                                        <select name="account" id="" class="form-control">
+                                                            {% for account in accounts %}
+                                                                <option value="{{ account.pk }}">{{ account.acct_name }}</option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button class="btn btn-warning btn-sm rounded-0" type="button" data-dismiss="modal">CANCEL</button>
+                                                <button class="btn btn-sm btn-success rounded-0" type="submit">SAVE</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+
+            </div>
+
+
+            <div style="height: 90%" class="card-body">
+                <div class="h-100 container w-100">
+                    <div style="height: 8%; background: #0C0C0C; color:#f3f3f3;" class="row no-gutters">
+                        <strong class="col-sm-2 pt-3 pb-2 h-100 border-right">Company</strong>
+                        <strong class="col-sm-2 pt-3 pb-2 h-100 border-right">Location</strong>
+                        <strong class="col-sm-2 pt-3 pb-2 h-100 border-right">Rep</strong>
+                        <strong class="col-sm-2 pt-3 pb-2 h-100 border-right">Mobile</strong>
+                        <strong class="col-sm-2 pt-3 pb-2 h-100 border-right">Email</strong>
+                        <strong class="col-sm-2 pt-3 pb-2 h-100">Action</strong>
+                    </div>
+
+                    <div style="height: 90%" class="row border border-dark no-gutters">
+
+                        {% for supplier in suppliers %}
+
+                            <div class="col-sm-2 border pt-2 pb-2 border-dark">{{ supplier.company }}</div>
+                            <div class="col-sm-2 border pt-2 pb-2 border-dark">{{ supplier.location }}</div>
+                            <div class="col-sm-2 border pt-2 pb-2 border-dark">{{ supplier.contact_person }}</div>
+                            <div class="col-sm-2 border pt-2 pb-2 border-dark">{{ supplier.mobile }}</div>
+                            <div class="col-sm-2 border pt-2 pb-2 border-dark">{{ supplier.email }}</div>
+                            <div class="col-sm-2 border pt-2 pb-2 border-dark">Action</div>
+
+
+                        {% endfor %}
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+{% endblock %}

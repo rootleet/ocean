@@ -44,7 +44,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'admin_panel.apps.AdminPanelConfig',
     'community.apps.CommunityConfig',
-    'api.apps.ApiConfig'
+    'api.apps.ApiConfig',
+    'meeting.apps.MeetingConfig',
+    'appconfig.apps.AppconfigConfig',
+    'inventory.apps.InventoryConfig'
 
 ]
 
@@ -63,9 +66,8 @@ ROOT_URLCONF = 'ocean.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates']
-        ,
-        'APP_DIRS': True,
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'APP_DIRS': False,
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
@@ -149,6 +151,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+APP_VERSION = 0.1
 
 # email config
 

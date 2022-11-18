@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body %}
+
+    <div class="container">
+        <div class="panel">
+            <div class="card-header">
+                <h2 class="panel-title">Location Master</h2>
+            </div>
+
+            <div class="panel-sub-heading">
+                <button data-toggle="modal" href="#newLocation" class="btn btn-info">NEW</button>
+                <div class="modal fade" id="newLocation" data-backdrop="false">
+                    <div class="modal-dialog">
+                        <form method="post" action="{% url 'post_form' %}" class="modal-content text-left">
+                            <input type="hidden" name="function" value="new_location">
+                            {% csrf_token %}
+
+                            <div class="modal-body p-2">
+                                <table class="table">
+                                    <tr>
+                                        <th>Code</th>
+                                        <th>Description</th>
+                                    </tr>
+
+                                    <tr>
+                                        <td><input name="code" style="width: 100px" maxlength="3" minlength="3" autocomplete="off" type="text" required class="form-control"></td>
+                                        <td><input name="descr" autocomplete="off" type="text" required class="form-control"></td>
+                                    </tr>
+                                </table>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button class="btn btn-warning" type="button" data-dismiss="modal">CANCEL</button>
+                                <button class="btn btn-success">SUBMIT</button>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-body p-2">
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th>CODE</th><th>DESCRIPTION</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for location in locations %}
+                            <tr>
+                                <td>{{ location.code }}</td>
+                                <td>{{ location.descr }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+
+{% endblock %}

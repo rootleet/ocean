@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body %}
+
+    <div class="w-100 h-100 container-fluid overflow-hidden p-2">
+        <div class="row h-100 overflow-hidden no-gutters">
+            <div class="col-sm-9 h-100 card custom_shadow rounded-0">
+                <div class="card-header">
+                    <div class="w-100 h-100 d-flex flex-wrap">
+                        <div class="w-50 h-100 d-flex flex-wrap align-content-center justify-content-end">
+                            <a href="{% url 'all-issues' %}" class="btn btn-sm btn-primary mr-2">All Documents</a>
+
+                            {% if task_count == 0 %}
+                                <a href="" class="btn btn-sm btn-warning mr-2"><i class="fa fa-edit"></i> Edit {{ issue.task }}</a>
+                                <button type="button" onclick="delete_document('1234')" class="btn btn-sm btn-danger"><i class="fa fa-recycle"></i> Delete</button>
+                                <button type="button" data-target="#task" data-toggle="modal" class="btn btn-sm btn-info"><i class="fa fa-check"></i> Add TO Task</button>
+                                <div class="modal fade" id="task" data-backdrop="false">
+                                    <div class="modal-dialog">
+                                        <form id="general_form" action="{% url 'add_to_task' %}" method="post" class="modal-content">
+                                            {% csrf_token %}
+                                            <div class="modal-header">
+                                                <strong class="modal-title">CREAT TASK</strong>
+                                            </div>
+
+                                            <div class="modal-body">
+                                                <input type="hidden" name="question" value="{{ issue.uni }}">
+                                                <label for="title">Owner:</label><input type="text" readonly required name="owner" id="owner" value="{{ issue.owner_name }}" class="form-control mb-2">
+                                                <hr>
+                                                <label for="title">Title:</label><input type="text" required name="title" id="title" value="{{ issue.title }}" class="form-control mb-2">
+                                                <hr>
+                                                <label for="description">Description</label><textarea name="description" id="description" cols="10" rows="10" class="form-control mb-2">{{ issue.body | safe }}</textarea>
+                                                <hr>
+                                                <label for="description">Tried?</label><textarea autofocus required name="tried" id="tried" cols="10" rows="10" class="form-control mb-2"></textarea>
+                                            </div>
+
+                                            <div class="modal-footer">
+                                                <button type="button" data-dismiss="modal" class="btn btn-sm btn-warning rounded-0">CANCEL</button>
+                                                <button class="btn btn-sm btn-success rounded-0 ml-2">SAVE</button>
+                                            </div>
+
+                                        </form>
+                                    </div>
+                                </div>
+                            {% endif %}
+
+                        </div>
+                        <div class="w-50 h-100 d-flex flex-wrap align-content-center">
+
+                        </div>
+
+                    </div>
+                </div>
+                <hr>
+
+                <div class="card-body overflow-auto text-muted">
+                    <h3 class="card-title text-info m-0">{{ issue.title }}</h3>
+                    <article class="mt-5">
+                        {{ issue.body | safe }}
+                    </article>
+                </div>
+
+            </div>
+
+            <!-- MEDIA -->
+            <div class="col-sm-3 h-100 custom_shadow pl-2">
+
+                <div class="w-100 h-50 card rounded-0">
+                    <div class="card-header">
+                        <p class="card-title m-0 text-muted"><i class="fa fa-paperclip"></i> Attachments</p>
+                    </div>
+                    <div class="card-body overflow-auto">
+                        <ul class="list-group list-group-flush">
+                          <li class="list-group-item p-1"><a href="#"><i class="text-danger">file_name</i></a></li>
+                            <li class="list-group-item p-1"><a href="#"><i class="text-danger">file_name</i></a></li>
+                            <li class="list-group-item p-1"><a href="#"><i class="text-danger">file_name</i></a></li>
+                            <li class="list-group-item p-1"><a href="#"><i class="text-danger">file_name</i></a></li>
+                            <li class="list-group-item p-1"><a href="#"><i class="text-danger">file_name</i></a></li>
+                            <li class="list-group-item p-1"><a href="#"><i class="text-danger">file_name</i></a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <hr>
+
+
+            </div>
+
+        </div>
+    </div>
+{% endblock %}

@@ -1,1 +1,1 @@
-make migrations for admin panel
+make migrations for OCEAN

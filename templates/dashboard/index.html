@@ -1,0 +1,72 @@
+
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body %}
+
+    <div class="container-fluid">
+        <div class="row">
+
+            <!-- ISSUES STATS -->
+            <div class="col-lg-6">
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">Pie Chart</h5>
+
+                  <!-- Pie Chart -->
+                  <div id="pieChart" style="min-height: 400px;" class="echart"></div>
+
+                  <script>
+                    document.addEventListener("DOMContentLoaded", () => {
+                      echarts.init(document.querySelector("#pieChart")).setOption({
+                        title: {
+                          text: 'ISSUES LOGED',
+                          subtext: 'Statistics of my issues reported',
+                          left: 'center'
+                        },
+                        tooltip: {
+                          trigger: 'item'
+                        },
+                        legend: {
+                          orient: 'vertical',
+                          left: 'left'
+                        },
+                        series: [{
+                          name: 'My Issues',
+                          type: 'pie',
+                          radius: '50%',
+                          data: [{
+                              value: {{ my_issues.open }},
+                              name: 'Open'
+                            },
+                            {
+                              value: {{ my_issues.scheduled }},
+                              name: 'scheduled'
+                            },
+                            {
+                              value: {{ my_issues.close }},
+                              name: 'Closed'
+                            },
+
+                          ],
+                          emphasis: {
+                            itemStyle: {
+                              shadowBlur: 10,
+                              shadowOffsetX: 0,
+                              shadowColor: 'rgba(0, 0, 0, 0.5)'
+                            }
+                          }
+                        }]
+                      });
+                    });
+                  </script>
+                  <!-- End Pie Chart -->
+
+                </div>
+              </div>
+            </div>
+
+        </div>
+    </div>
+
+{% endblock %}

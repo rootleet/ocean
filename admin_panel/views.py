@@ -24,6 +24,7 @@ from blog.models import *
 from community.models import *
 from django.views.decorators.csrf import csrf_exempt
 
+from meeting.models import MeetingHD, MeetingTalkingPoints, MeetingTrans
 from ocean.settings import EMAIL_HOST_USER
 
 
@@ -95,9 +96,19 @@ page = {
 }
 
 
+## check fingurations
+def check_config(pk):
+    if UserAddOns.objects.filter(user=pk).count() != 1:
+        return redirect('profile')
+
+
 @login_required(login_url='/login/')
 def index(request):
-    # is_logged_in(request)
+    # check user config
+    # if request.user.is_authenticated:
+    #     if UserAddOns.objects.filter(user=request.user.pk).count() != 1:
+    #         messages.error(request, 'error%%Please configure your profile')
+    #         return redirect('profile')
 
     notifications = {
         'unread': Notifications.objects.filter(owner=request.user, read=0).order_by('-pk'),
@@ -115,7 +126,7 @@ def index(request):
         'page': page,
         'my_issues': my_issues
     }
-    return render(request, 'index.html', context=context)
+    return render(request, 'dashboard/index.html', context=context)
 
 
 def login_process(request):
@@ -168,7 +179,7 @@ def login(request):
         'form': LogIn(),
         'next': next_page
     }
-    return render(request, 'profile/login.html', context=context)
+    return render(request, 'dashboard/profile/loginv2.html', context=context)
 
 
 def new_user(request):
@@ -178,55 +189,76 @@ def new_user(request):
         'page_title': 'Ocean | Register',
         'form': LogIn()
     }
-    return render(request, 'profile/register.html', context=context)
+    return render(request, 'dashboard/profile/register.html', context=context)
 
 
 def sign_up(request):
     if request.method == 'POST':
+
         form = SignUp(request.POST)
         if form.is_valid():
             first_name = form.cleaned_data['first_name']
             last_name = form.cleaned_data['last_name']
             email = form.cleaned_data['email']
             password = form.cleaned_data['password']
+
             mobile = form.cleaned_data['mobile']
+            position = request.POST['position']
+            company = request.POST['company']
 
-            # generate username
-            number = '{:03d}'.format(random.randrange(1, 9999))
-            username = '{}{}'.format(last_name, number)
+            # check if email exist
+            if User.objects.filter(email=email).count() > 0:
 
-            pass_num = '{:03d}'.format(random.randrange(1, 999999))
-            pass_w = '{}{}'.format(f"{last_name}", pass_num)
+                return HttpResponse(User.objects.filter(email=email).count())
 
-            # save username
-            new_user_instance = User.objects.create_user(username=username, password=pass_w, email=email,
-                                                         first_name=first_name, last_name=last_name)
+            else:
 
-            md_mix = f"{pass_w} {first_name} {last_name} {username} "
-            hash_object = hashlib.md5(md_mix.encode())
-            api_token = hash_object.hexdigest()
+                # generate username
+                number = '{:03d}'.format(random.randrange(1, 9999))
+                username = '{}{}'.format(last_name, number)
 
-            try:
-                new_user_instance.save()
-                new_user_instance.is_active = False
-                AuthToken(user=new_user_instance, token=api_token).save()
-                subject = 'ACCESS TO OCEAN'
-                message = f'Hi {first_name} {last_name}, thank you for registering in ocean. your username is {username} and password is {pass_w} logn at ocean t explore the power in collaboration '
-                message = f"Hello {first_name} {last_name}, an account has been created for you buy sneda at ocean. " \
-                          f"<br>Use this platform to report and track your IT related " \
-                          f"issues.<br><strong>Username</strong> : {username}<br><strong>Password</strong> : " \
-                          f"{pass_w}<br><strong>Access</strong>: <a href='ocean.sneda.gh'>Link</a> " \
-                          f"<br><strong>API TOKEN</strong> {api_token}"
-                email_from = settings.EMAIL_HOST_USER
-                recipient_list = [email]
-                Emails(sent_from=email_from, sent_to=email, subject=subject, body=message, email_type='system',
-                       ref='system').save()
-                # send_mail(subject, message, email_from, recipient_list)
-                # messages.error(request, "Please check your email to activate your account")
-                return redirect('new-user')
-            except:
-                messages.error(request, "Error Saving User")
-                return redirect('new-user')
+                pass_num = '{:03d}'.format(random.randrange(1, 999999))
+                pass_w = '{}{}'.format(f"{last_name}", pass_num)
+
+                # save username
+                new_user_instance = User.objects.create_user(username=username, password=pass_w, email=email,
+                                                             first_name=first_name, last_name=last_name)
+
+                md_mix = f"{pass_w} {first_name} {last_name} {username} "
+                hash_object = hashlib.md5(md_mix.encode())
+                api_token = hash_object.hexdigest()
+
+                try:
+                    new_user_instance.save()
+                    new_user_instance.is_active = False
+                    AuthToken(user=new_user_instance, token=api_token).save()
+
+                    use_ad_on = UserAddOns(user=new_user_instance, company=company,
+                                           app_version=VersionHistory.objects.get(version=settings.APP_VERSION),
+                                           position=position, phone=mobile)
+                    use_ad_on.save()
+
+                    subject = 'ACCESS TO OCEAN'
+                    message = f'Hi {first_name} {last_name}, thank you for registering in ocean. your username is {username} and password is {pass_w} logn at ocean t explore the power in collaboration '
+                    message = f"Hello {first_name} {last_name}, an account has been created for you buy sneda at ocean. " \
+                              f"<br>Use this platform to report and track your IT related " \
+                              f"issues.<br><strong>Username</strong> : {username}<br><strong>Password</strong> : " \
+                              f"{pass_w}<br><strong>Access</strong>: <a href='http://ocean.snedaghana.loc'>Link</a> " \
+                              f"<br><strong>API TOKEN</strong> {api_token}"
+                    email_from = settings.EMAIL_HOST_USER
+                    try:
+                        Emails(sent_from=email_from, sent_to=email, subject=subject, body=message, email_type='system',
+                               ref='system').save()
+                        # send_mail(subject, message, email_from, recipient_list)
+                        # messages.error(request, "Please check your email to activate your account")
+
+                        return redirect('all-users')
+                    except Exception as e:
+                        return HttpResponse(e)
+                except Exception as e:
+                    new_user_instance.delete()
+                    messages.error(request, f"error%%Error Saving User {e}")
+                    return HttpResponse(e)
 
         else:
             return HttpResponse(f"Invalid Form {form}")
@@ -241,7 +273,7 @@ def all_issues(request):
         'page-title': 'ALL ISSUES',
         'issues': issues
     }
-    return render(request, 'all_issues.html', context=context)
+    return render(request, 'dashboard/all_issues.html', context=context)
 
 
 @login_required(login_url='/login/')
@@ -252,7 +284,7 @@ def view_issue(request, issue_id):
         'issue': issue,
         'task_count': task_count,
     }
-    return render(request, 'view_issue.html', context=context)
+    return render(request, 'dashboard/view_issue.html', context=context)
 
 
 @login_required(login_url='/login/')
@@ -304,7 +336,7 @@ def all_task(request):
         'day': day,
         'domain': tags.objects.all()
     }
-    return render(request, 'all_task.html', context=context)
+    return render(request, 'dashboard/all_task.html', context=context)
 
 
 @login_required(login_url='/login/')
@@ -337,7 +369,7 @@ def to_scalate(request):
     context = {
         'x_count': x_counts
     }
-    return render(request, 'to_escalate.html', context=context)
+    return render(request, 'dashboard/to_escalate.html', context=context)
 
 
 def escalate_detail(request, provider):
@@ -347,7 +379,7 @@ def escalate_detail(request, provider):
         'provider': prov_det,
         'questions': issues
     }
-    return render(request, 'escalate_detail.html', context=context)
+    return render(request, 'dashboard/escalate_detail.html', context=context)
 
 
 @login_required(login_url='/login/')
@@ -379,7 +411,7 @@ def accessories(request):
         'providers': Providers.objects.all(),
         'notomem': NotificationGroups.objects.all()
     }
-    return render(request, 'accessories.html', context=context)
+    return render(request, 'dashboard/accessories.html', context=context)
 
 
 @login_required(login_url='/login/')
@@ -455,7 +487,7 @@ def view_task(request, task_id):
         'domains': tags.objects.all(),
         'branches': TaskBranchHD.objects.filter(task=TaskHD.objects.get(entry_uni=task_id))
     }
-    return render(request, 'issues.html', context=context)
+    return render(request, 'dashboard/issues.html', context=context)
 
 
 @login_required(login_url='/login/')
@@ -529,7 +561,7 @@ def new_task(request):
         context = {
             'domain': tags.objects.all()
         }
-        return render(request, 'new_task.html', context=context)
+        return render(request, 'dashboard/new_task.html', context=context)
 
 
 @login_required(login_url='/login/')
@@ -551,7 +583,7 @@ def update_task(request, entry_uni):
         context = {
             'entry': TaskHD.objects.get(entry_uni=entry_uni),
         }
-        return render(request, 'update_task.html', context=context)
+        return render(request, 'dashboard/update_task.html', context=context)
 
 
 @login_required(login_url='/login/')
@@ -755,7 +787,7 @@ def task_filter(request):
             'day': day,
             'domain': tags.objects.all()
         }
-        return render(request, 'all_task.html', context=context)
+        return render(request, 'dashboard/all_task.html', context=context)
 
 
 def emails(request):
@@ -771,7 +803,7 @@ def emails(request):
         'emails': Emails.objects.all(),
         'email_address': NotificationGroups.objects.all()
     }
-    return render(request, 'emails.html', context=context)
+    return render(request, 'dashboard/emails.html', context=context)
 
 
 def add_notification_mem(request):
@@ -827,7 +859,7 @@ def send_mail(request, task_id):
             'entry': TaskHD.objects.get(entry_uni=task_id),
             'groups': EmailGroup.objects.all()
         }
-        return render(request, 'send_task_mail.html', context=context)
+        return render(request, 'dashboard/send_task_mail.html', context=context)
 
 
 def auto(request, tool):
@@ -850,7 +882,7 @@ def auto(request, tool):
                 email_type = email.email_type
                 email_ref = email.ref
 
-                html_message = render_to_string('mail_template.html', {'body': body})
+                html_message = render_to_string('dashboard/mail_template.html', {'body': body})
                 plain_message = strip_tags(html_message)
                 from_email = EMAIL_HOST_USER
                 to = recipient
@@ -937,6 +969,7 @@ def save_email_group(request):
 def inventory_tools(request):
     page['title'] = 'Inventory Add-Ons'
     context = {
+        'nav': True,
         'page_title': 'Inventory Tools',
         'banks': BankAccounts.objects.filter(status=1),
         'suppliers': SuppMaster.objects.filter(status=1),
@@ -944,14 +977,14 @@ def inventory_tools(request):
         'packing': PackingMaster.objects.filter(status=1),
         'page': page
     }
-    return render(request, 'suppliers/inventory_tools.html', context=context)
+    return render(request, 'dashboard/suppliers/inventory_tools.html', context=context)
 
 
 def accounts(request):
     context = {
         'page_title': 'Accounts'
     }
-    return render(request, 'accounts/acct_home.html', context=context)
+    return render(request, 'dashboard/accounts/acct_home.html', context=context)
 
 
 def tax_master(request):
@@ -974,16 +1007,16 @@ def tax_master(request):
                 else:
                     messages.success(request, 'error%%Duplicate Tax Code')
 
-                return render(request, 'accounts/tax_master.htm')
+                return render(request, 'dashboard/accounts/tax_master.htm')
 
             except Exception as e:
 
                 messages.success(request, f'error%%{e}')
-                return render(request, 'accounts/tax_master.htm')
+                return render(request, 'dashboard/accounts/tax_master.htm')
 
         else:
             # render tax master page
-            return render(request, 'accounts/tax_master.htm')
+            return render(request, 'dashboard/accounts/tax_master.htm')
 
     else:
         # show all tax
@@ -991,7 +1024,7 @@ def tax_master(request):
             'page_title': 'Tax Master',
             'taxes': TaxMaster.objects.all().order_by('-pk')
         }
-        return render(request, 'accounts/tax_master.htm', context=context)
+        return render(request, 'dashboard/accounts/tax_master.htm', context=context)
 
 
 def bank_master(request):
@@ -999,7 +1032,7 @@ def bank_master(request):
         'page_title': 'Bank Master',
         'accounts': BankAccounts.objects.all()
     }
-    return render(request, 'accounts/bank-master.html', context=context)
+    return render(request, 'dashboard/accounts/bank-master.html', context=context)
 
 
 def bank_posts(request):
@@ -1060,7 +1093,7 @@ def products(request):
         'nav': True,
         'page_title': 'Products Master | View', 'products': ProductMaster.objects.all()
     }
-    return render(request, 'products/view.html', context=context)
+    return render(request, 'dashboard/products/view.html', context=context)
 
 
 @login_required(login_url='/login/')
@@ -1092,10 +1125,11 @@ def new_products(request):
         return redirect('inventory_tools')
 
     context = {
+        'nav': True,
         'page_title': 'Products Master | New',
         'groups': groups, 'taxes': taxes, 'packs': packs, 'supps': supps
     }
-    return render(request, 'products/new.html', context=context)
+    return render(request, 'dashboard/products/new.html', context=context)
 
 
 @login_required(login_url='/login/')
@@ -1151,7 +1185,7 @@ def suppliers(request):
         'suppliers': SuppMaster.objects.all(),
         'accounts': BankAccounts.objects.all()
     }
-    return render(request, 'accounts/suppiers.html', context=context)
+    return render(request, 'dashboard/accounts/suppiers.html', context=context)
 
 
 def save_new_product(request):
@@ -1204,7 +1238,7 @@ def adjust_product_qty(request, p):
         context = {
             'page_title': f'Received {product.descr}', 'product': product
         }
-        return render(request, 'products/adjust.html', context=context)
+        return render(request, 'dashboard/products/adjust.html', context=context)
 
 
 @login_required(login_url='/login/')
@@ -1219,7 +1253,7 @@ def adjustment(request):
             'last': AdjHd.objects.last().pk,
             'page_title': 'Adjustment'
         }
-        return render(request, 'products/adjustment.html', context=context)
+        return render(request, 'dashboard/products/adjustment.html', context=context)
 
 
 @login_required(login_url='/login/')
@@ -1229,7 +1263,7 @@ def new_adjustment(request):
         'page_title': 'Add Adjustment',
         'locs': Locations.objects.all()
     }
-    return render(request, 'products/new_adjustment.html', context=context)
+    return render(request, 'dashboard/products/new_adjustment.html', context=context)
 
 
 @csrf_exempt
@@ -1238,6 +1272,11 @@ def api(request, module, action):
     import json
     status = 000
     message = 000
+
+    try:
+        json_data = json.loads(request.body)
+    except Exception as e:
+        pass
 
     if module == 'auth':
         api_token = action
@@ -1267,6 +1306,25 @@ def api(request, module, action):
 
         else:
             return HttpResponse('INVALID TOKEN')
+
+    elif module == 'user':
+        if action == 'delete':
+
+            pk = json_data['user']
+
+            user = User.objects.get(pk=pk)
+            try:
+                user.delete()
+                if UserAddOns.objects.filter(user=pk).count() > 0:
+                    UserAddOns.objects.get(user=pk).delete()
+                status = 200
+                message = "User Deleted"
+            except Exception as e:
+                status = 505
+                message = e
+
+
+
 
     elif module == 'adjustment':
 
@@ -1747,6 +1805,80 @@ def api(request, module, action):
 
         return JsonResponse({'status': status, 'message': message}, safe=False)
 
+    elif module == 'meeting':
+
+        if action == 'tran':  ## new meeting tran
+            meeting_pk = json_data['meeting']
+            meeting = MeetingHD.objects.get(pk=meeting_pk)
+
+            talking_point_pk = json_data['talking_point']
+            talking_point = MeetingTalkingPoints.objects.get(pk=talking_point_pk)
+
+            tran = json_data['tran']
+
+            user = User.objects.get(pk=request.user.pk)
+
+            try:
+                MeetingTrans(meeting=meeting, talking_point=talking_point, descr=tran, owner=user).save()
+                status = 200
+                message = "Tran Added"
+            except Exception as e:
+                status = 500
+                message = e
+
+        # get meeting trans
+        elif action == 'GrtTan':
+            meeting_pk = json_data['meeting']
+            meeting = MeetingHD.objects.get(pk=meeting_pk)
+            trans = MeetingTrans.objects.filter(meeting=meeting)
+
+            to_return = []
+            if trans.count() > 0:
+                status = 200
+                for tran in trans:
+                    this_line = {
+                        'point': tran.talking_point.title,
+                        'descr': tran.descr,
+                        'created_date': tran.created_date,
+                        'created_time': tran.created_time,
+                        'owner': f"{tran.owner.first_name} {tran.owner.last_name}"
+                    }
+
+                    to_return.append(this_line)
+            else:
+                message = 'No RECORD'
+
+            message = to_return
+
+        # start meeting
+        elif action == 'start':
+            meeting_pk = json_data['meeting']
+            try:
+                meeting = MeetingHD.objects.get(pk=meeting_pk)
+                meeting.status = 1
+                meeting.save()
+                status = 200
+                message = "Started"
+            except Exception as e:
+                status = 500
+                message = e
+
+        # end
+        elif action == 'end':
+            meeting_pk = json_data['meeting']
+            try:
+                meeting = MeetingHD.objects.get(pk=meeting_pk)
+                meeting.status = 3
+                meeting.save()
+                status = 200
+                message = "Started"
+            except Exception as e:
+                status = 500
+                message = e
+
+        else:
+            message = f"UNKNOWN ACTION {action}"
+
     else:
         status = 505
         message = 'UNKNOWN MODEL'
@@ -1759,7 +1891,7 @@ def loc_master(request):
         'page_title': 'Location Master',
         'locations': Locations.objects.all()
     }
-    return render(request, 'company/loc_master.html', context=context)
+    return render(request, 'dashboard/company/loc_master.html', context=context)
 
 
 @login_required()
@@ -1774,7 +1906,7 @@ def transfer(request):
             'locations': Locations.objects.all()
         }
 
-        return render(request, 'products/transfer.html', context=context)
+        return render(request, 'dashboard/products/transfer.html', context=context)
 
 
 @login_required()
@@ -1784,7 +1916,7 @@ def new_transfer(request):
         'page_title': 'New Transfer',
         'locations': Locations.objects.all()
     }
-    return render(request, 'products/new_transfer.html', context=context)
+    return render(request, 'dashboard/products/new_transfer.html', context=context)
 
 
 @login_required()
@@ -1799,7 +1931,7 @@ def grn_entries(request):
             'locations': Locations.objects.all()
         }
 
-        return render(request, 'products/grn_entries.html', context=context)
+        return render(request, 'dashboard/products/grn_entries.html', context=context)
 
 
 def new_grn(request):
@@ -1808,16 +1940,17 @@ def new_grn(request):
         'page_title': 'New GRN',
         'locations': Locations.objects.all()
     }
-    return render(request, 'products/new_grn.html', context=context)
+    return render(request, 'dashboard/products/new_grn.html', context=context)
 
 
 @login_required()
 def profile(request):
     user = request.user
     context = {
-        'user': user
+        'user': user,
+        'ad_on': UserAddOns.objects.get(user=user.pk),
     }
-    return render(request, 'profile/profile.html', context=context)
+    return render(request, 'dashboard/profile/profile.html', context=context)
 
 
 def logout_view(request):
@@ -1835,7 +1968,7 @@ def ticket(request):
             'title': 'My Tickets'
         }
     }
-    return render(request, 'profile/tickets.html', context=context)
+    return render(request, 'dashboard/profile/tickets.html', context=context)
 
 
 def all_tickets(request):
@@ -1848,7 +1981,7 @@ def all_tickets(request):
             'title': 'All Tickets'
         }
     }
-    return render(request, 'profile/all-.html', context=context)
+    return render(request, 'dashboard/profile/all-.html', context=context)
 
 
 @login_required()
@@ -1882,7 +2015,7 @@ def all_users(request):
         'page': page,
         'users': User.objects.all(),
     }
-    return render(request, 'company/all-users.html', context=context)
+    return render(request, 'dashboard/company/all-users.html', context=context)
 
 
 def issues_branch(request, task, br):
@@ -1897,4 +2030,47 @@ def issues_branch(request, task, br):
         'taskHd': task,
         'branches': TaskBranchHD.objects.filter(task=TaskHD.objects.get(entry_uni=task.entry_uni))
     }
-    return render(request, 'task/branch.html', context=context)
+    return render(request, 'dashboard/task/branch.html', context=context)
+
+
+def update_profile(request):
+    if request.method == 'POST':
+        form = request.POST
+
+        # profile_pic = request.FILES['profile_pic']
+        first_name = form['first_name']
+        last_name = form['last_name']
+        email = form['email']
+        pk = form['pk']
+
+        user = User.objects.get(pk=pk)
+        ad_on = UserAddOns.objects.get(user=user)
+
+        user.email = email
+        user.first_name = first_name
+        user.last_name = last_name
+        user.save()
+
+        about = form['about']
+        company = form['company']
+        position = form['position']
+        country = form['country']
+        phone = form['phone']
+
+        ad_on.about = about
+        ad_on.company = company
+        ad_on.position = position
+        ad_on.country = country
+        ad_on.phone = phone
+
+        try:
+            ad_on.profile_pic = request.FILES['profile_pic']
+        except Exception as e:
+            pass
+
+        user.save()
+        ad_on.save()
+
+        return redirect('profile')
+
+

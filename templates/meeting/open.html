@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body %}
+
+    <div class="container-fluid h-100">
+        <div class="row no-gutters" style="height: 90vh">
+            <!-- MEETING HEADER -->
+            <div class="col-sm-3 round m-0 p-0 h-100">
+                <div class="card h-100 rounded-0 shadow-none">
+                    <div class="card-header">
+                        <strong class="card-title">Meetings</strong>
+                    </div>
+                    <div class="card-body">
+
+                        <div class="w-100 d-flex flex-wrap pointer meeting m-2 p-2">
+                            <div style="width: 20%" class="overflow-hidden">
+                                <img style="width: 60px" src="{% static 'assets/img/users/default.png' %}" alt="Profile" class="rounded-circle">
+
+                            </div>
+                            <div class="accordion-body" style="width: 80%">
+                                <strong class="text-primary">Meeting Title</strong>
+                                <small class="ellipsis_2 text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aspernatur consectetur delectus dolor, doloribus ea enim, esse explicabo fuga fugiat ipsam, iure magni maiores neque praesentium repellendus sint sunt unde vero!</small>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- MEETING BODY -->
+            <div class="col-sm-9 m-0 p-0 h-100" style="border-left: 1px solid #ccc">
+                <div class="card rounded-0 shadow-none h-100">
+                    <div class="card-header rounded-0">
+                        <div class="w-100 d-flex flex-wrap justify-content-between">
+                            <div class="w-50 h-100">
+                                <strong class="">{{ meeting.title }}</strong>
+                            </div>
+
+                            <div class="w-50 h-100 d-flex flex-wrap justify-content-end">
+
+                                <div class="dropdown dropleft">
+                                  <button type="button" id="task" value="{{ taskHd.pk }}" class="btn btn-info btn-sm m-2" data-toggle="dropdown">
+                                    Details
+                                  </button>
+                                  <div class="dropdown-menu p-1">
+                                      <div class="dropdown-header">
+                                          <span class="dropdown-title">Meeting Details</span>
+                                      </div>
+                                      <div class="dropdown-divider"></div>
+                                      <a class="dropdown-item bi pointer" data-bs-toggle="moda" href="#talkingPoints"> Talking Points</a>
+                                      <a class="dropdown-item bi pointer" href="#"> Participants</a>
+                                  </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div class="card-body p-2">
+
+                        <div class="alert alert-info">
+                            {{ meeting.descr }}
+                        </div>
+
+                        <div class="w-75 mx-auto d-flex flex-wrap pointer meeting m-2 p-2">
+                            <div style="width: 10%" class="overflow-hidden">
+                                <img style="width: 60px" src="{% static 'assets/img/users/default.png' %}" alt="Profile" class="rounded-circle">
+
+                            </div>
+                            <div class="accordion-body" style="width: 80%">
+                                <strong class="text-primary">Meeting Title</strong>
+                                <small class="ellipsis_2 text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aspernatur consectetur delectus dolor, doloribus ea enim, esse explicabo fuga fugiat ipsam, iure magni maiores neque praesentium repellendus sint sunt unde vero!</small>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+{% endblock %}

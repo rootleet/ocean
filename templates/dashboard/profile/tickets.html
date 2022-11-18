@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body %}
+    <div class="container">
+        <div class="modal fade" id="openTicket">
+            <div class="modal-dialog modal-dialog-centered modal-xl">
+                <form method="post" enctype="multipart/form-data" action="{% url 'save-ticket' %}" class="modal-content">
+                    <input type="hidden" name="owner" value="{{ user.pk }}">
+                    {% csrf_token %}
+                    <div class="modal-header">
+                        <strong class="modal-title">NEW TICKET</strong>
+                    </div>
+                    <div class="modal-body p-2">
+                        <div class="w-100 p-2">
+                            <label class="w-100 mb-2">Title
+                                <input type="text" name="title" required class="form-control rounded-0">
+                            </label>
+                        <label for="description">Description</label><textarea  name="descr" id="description" cols="30" rows="10" class="form-control mb-2 rounded-0"></textarea>
+
+{#                            <input type="file" name="media" multiple class="form-control">#}
+{#                            <input type="hidden" name="doc" value="TIK">#}
+
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" data-bs-dismiss="modal" class="btn-warning btn rounded-0">CANCEL</button>
+                        <button type="submit" class="btn btn-success rounded-0">SAVE</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="card mt-5" style="height: 75vh; overflow: hidden">
+            {% if ticket_count < 1 %}
+                <div class="card-body w-100 h-100">
+                    <div class="w-100 h-100 d-flex flex-wrap justify-content-center align-content-center">
+                        <div class="alert text-center alert-info">
+                            YOU HAVE NO TICKET <hr>
+                            <button data-bs-toggle="modal" data-bs-target="#openTicket" class="btn btn-info rounded-0">OPEN</button>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+
+                <div class="card h-100">
+                    <div class="card-header">
+
+                        <button data-bs-toggle="modal" data-bs-target="#openTicket" class="btn btn-info">NEW TICKET</button>
+                    </div>
+                    <div class="card-body p-2 overflow-auto">
+                        <div class="table-responsive">
+                            <table class="table table-hover table-sm table-bordered border-info">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th>Title</th>
+                                        <th>Description</th>
+                                        <th>Status</th>
+                                        <th>Date</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for ticket in my_tickets %}
+                                        <tr>
+                                            <td>{{ ticket.title }}</td>
+                                            <td>{{ ticket.descr | slice:':30' }}</td>
+                                            <td>
+                                                {% if ticket.status == 0 %}
+                                                    <kbd class="bg-danger">UNATTENDED</kbd>
+                                                {% elif ticket.status == 1 %}
+                                                    <kbd class="bg-info">SCHEDULED</kbd>
+                                                {% elif ticket.status == 2 %}
+                                                <kbd class="bg-success">DONE</kbd>
+                                                {% endif %}
+                                            </td>
+                                            <td>{{ ticket.created_on }}</td>
+                                            <td>
+
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body %}
+
+    <div class="container-fluid h-100">
+        <div class="row no-gutters" style="height: 90vh">
+            <!-- MEETING HEADER -->
+            <div class="col-sm-12 round m-0 p-0 h-100">
+                <div class="card h-100 rounded-0 shadow-none">
+                    <div class="card-header">
+                        <button onclick="location.href='{% url 'new_meeting' %}'" class="btn btn-info">CREATE MEETING</button>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table-sm table table-hover table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Title</th>
+                                        <th>Created On</th>
+                                        <th>Start Time</th>
+                                        <th>End TIme</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for meeting in meetings %}
+                                        <tr data-bs-toggle="modal" class="pointer" data-bs-target="#medDetail">
+                                            <td>{{ meeting.title }}</td>
+                                            <td>{{ meeting.created_date }} {{ meeting.created_time }}</td>
+                                            <td>{{ meeting.start_date }} {{ meeting.start_time }}</td>
+                                            <td>{{ meeting.end_date }} {{ meeting.end_time }}</td>
+                                            <td><span class="{{ meeting.m_stat.class }}">{{ meeting.m_stat.text }}</span></td>
+                                        </tr>
+
+                                        <div class="modal fade" id="medDetail">
+                                            <div class="modal-dialog modal-lg">
+                                                <div class="modal-content">
+                                                    <div class="modal-body">
+                                                        <div class="w-100 d-flex flex-wrap justify-content-between">
+                                                            <button onclick="location.href='{% url 'open_meeting' meeting.uni %}'" class="btn btn-success">open</button>
+                                                            <span class="text-info">{{ meeting.title }}</span>
+                                                            {% if meeting.status == 0 %}
+                                                            <button class="btn btn-info">postpone</button>
+                                                            {% endif %}
+                                                        </div>
+                                                        <hr>
+                                                        <div class="w-100 d-flex flex-wrap">
+                                                            <kbd class="mx-2">Participants <span class="bg-info badge">{{ meeting.participants.count }}</span></kbd>
+                                                            <kbd class="mx-2">Attachments <span class="bg-info badge">{{ meeting.attachments.count }}</span></kbd>
+                                                        </div>
+                                                        <hr>
+                                                        {{ meeting.descr }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+{% endblock %}

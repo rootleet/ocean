@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body %}
+
+    <div class="container-fluid h-100">
+        <div class="row no-gutters" style="height: 90vh">
+
+
+            <!-- MEETING BODY -->
+            <div class="col-sm-12 m-0 p-0 h-100">
+                <div class="card rounded-0 shadow-none h-100">
+                    <div class="card-header rounded-0">
+                        <div class="w-100 d-flex flex-wrap justify-content-between">
+                            <div class="w-50 h-100">
+                                <strong class="">Creating Meeting</strong>
+                            </div>
+
+                            <div class="w-50 h-100 d-flex flex-wrap justify-content-end">
+
+                                <button form="saveMeeting" class="btn btn-success">SAVE</button>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div class="card-body p-2">
+
+                        <div class="container-fluid">
+
+                            <div class="row d-flex flex-wrap justify-content-center">
+                                <!-- DETAILS -->
+                                <form id="saveMeeting" method="post" action="{% url 'save_meeting' %}" class="col-sm-4">
+                                    {% csrf_token %}
+                                    <card class="card border border-info">
+                                        <div class="card-header">
+                                            <strong class="card-title">Details</strong>
+                                        </div>
+                                        <div class="card-body p-2">
+                                            <input type="hidden" name="owner" value="{{ user.pk }}">
+                                            <input type="text" readonly name="uni" class="form-control form-control-lg" value="{{ m_uni }}">
+                                            <!-- TITLE -->
+                                            <div class="input-group input-group-sm mb-2">
+
+                                                <label class="w-100">Title
+                                                    <input type="text" autocomplete="off" required name="title" class="form-control form-control-lg">
+                                                </label>
+                                            </div>
+                                            <hr>
+
+                                            <!-- START TIME -->
+                                            <div class="input-group input-group-sm mb-2">
+                                                <div class="w-100 d-flex justify-content-between">
+                                                    <div class="w-50">
+                                                        <label class="w-100">Start Date
+                                                            <input name="start_date" type="date" class="form-control form-control-lg">
+                                                        </label>
+                                                    </div>
+                                                    <div class="w-25">
+                                                        <label class="w-100">Start Time
+                                                            <input name="start_time" type="time" class="form-control form-control-lg">
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- END TIME -->
+                                            <div class="input-group input-group-sm mb-2">
+                                                <div class="w-100 d-flex justify-content-between">
+                                                    <div class="w-50">
+                                                        <label class="w-100">End Date
+                                                            <input name="end_date" type="date" class="form-control form-control-lg">
+                                                        </label>
+                                                    </div>
+                                                    <div class="w-25">
+                                                        <label class="w-100">End Time
+                                                            <input name="end_time" type="time" class="form-control form-control-lg">
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <hr>
+
+                                            <!-- DETAILS -->
+                                            <div class="input-group input-group-sm mb-2">
+                                                <label class="w-100" for="">Description</label><textarea name="descr" id="" cols="30" rows="10"
+                                                                                class="form-control form-control-lg rounded"></textarea>
+                                            </div>
+
+                                        </div>
+                                    </card>
+                                </form>
+
+                            </div>
+
+
+
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+{% endblock %}

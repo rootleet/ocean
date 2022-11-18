@@ -1,0 +1,84 @@
+{% extends 'dashboard/products/prod_base.html' %}
+{% load static %}
+
+{% block prod %}
+
+
+
+    <div class="w-100 p-2 h-100">
+
+        <div class="card h-75">
+            <div class="card-header">
+                <button class="btn btn-info btn-sm" onclick="location.href='{% url 'new_adjustment' %}'">NEW</button>
+            </div>
+            <div class="panel-sub-heading m-2">
+                <div class="w-100 container-fluid">
+                    <div class="row w-100 text-left">
+                        <div class="col-sm-2">
+                            <label class="w-100">Location
+                                <input readonly id="ent_loc" type="text" class="form-control">
+                            </label>
+                        </div>
+                        <div class="col-sm-2">
+                            <label class="w-100">Entry Date
+                                <input readonly id="ent_date" type="text" class="form-control">
+                            </label>
+                        </div>
+                        <div class="col-sm-1">
+                            <label class="w-100">Entry Number
+                                <input readonly id="ent_num" type="text" class="form-control">
+                            </label>
+                        </div>
+                        <div class="col-sm-5">
+                            <label class="w-100">Remark
+                                <input readonly id="ent_rm" type="text" class="form-control">
+                            </label>
+                        </div>
+                        <div class="col-sm-2">
+
+                            <div class="w-100 d-flex pt-4 flex-wrap">
+                                <button id="prev" onclick="adj.loadScreen($('#prev').val())" class="btn btn-sm"><</button>
+                                <button id="next" onclick="adj.loadScreen($('#next').val())" class="btn btn-sm">></button>
+                                <button onclick="adj.approveAdjustment(this.value)" id="adjProcess" class="btn btn-sm btn-info">APPROVE</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-body" style="overflow: hidden; height: 50vh">
+                <div class="w-100 h-100" style="overflow: auto">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Barcode</th>
+                                <th>Description</th>
+                                <th>Pack Id</th>
+                                <th>Pack Description</th>
+                                <th>Quantity</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody">
+                            <tr>
+                                <td>Barcode</td>
+                                <td>Description</td>
+                                <td>Pack Id</td>
+                                <td >Pack Description</td>
+                                <td>Quantity</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+        let adj = new Adjustment();
+        adj.loadScreen({{ last }})
+    </script>
+
+{% endblock %}
+
