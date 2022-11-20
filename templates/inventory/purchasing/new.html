@@ -1,0 +1,108 @@
+{% extends 'dashboard/products/prod_base.html' %}
+{% load static %}
+
+{% block prod %}
+    <input type="hidden" id="owner" value="{{ request.user.pk }}">
+    <div class="w-100 p-2 h-100">
+
+        <div class="modal" id="addItem" data-backdrop="false">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+
+                        <input id="adj_item_search" autocomplete="off" placeholder="query" class="form-control" type="text">
+
+                    </div>
+
+                    <div class="modal-body" style="height: 50vh">
+                        <div id="searchRes" class="h-100 w-100">
+
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button data-dismiss="modal" class="btn btn-sm btn-warning">CLOSE</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <form class="card h-75">
+            <div class="card-header">
+
+                <button onclick="po.save()" type="button" data-toggle="modal"  class="btn btn-success btn-sm">SAVE</button>
+                <button  type="button" data-toggle="modal" data-target="#addItem" class="btn btn-warning btn-sm">INSERT ROW</button>
+
+            </div>
+            <div class="panel-sub-heading">
+                <div class="w-100 container-fluid">
+                    <div class="w-100 row">
+                        <div class="col-sm-3">
+                            <label class="w-100">Entry NO <br>
+                                <input type="text" id="ent_num" value="AUTO" disabled class="anton-form-tool">
+                            </label>
+                            <label class="w-100">Supplier <br>
+                                <select name="supplier" id="supplier" class="anton-select-tool">
+                                    <option  value="none" selected>Select Supplier</option>
+                                    {% for sup in suppliers %}
+                                        <option value="{{ sup.pk }}">{{ sup.company }}</option>
+                                    {% endfor %}
+                                </select>
+                            </label>
+                            <label class="w-100">Location <br>
+                                <select name="loc" id="loc" class="anton-select-tool">
+                                    <option value="none"  selected>Select Location</option>
+                                    {% for loc in locs %}
+                                        <option value="{{ loc.pk }}">{{ loc.code }} - {{ loc.descr }}</option>
+                                    {% endfor %}
+                                </select>
+                            </label>
+                        </div>
+
+                        <div class="col-sm-3">
+                            <label for="taxable" class="w-100">Taxable ?</label><select name="taxable" id="taxable" class="anton-select-tool">
+                                <option value="1">YES</option>
+                                <option value="0">NO</option>
+                            </select>
+                        </div>
+
+                        <div class="col-sm-3">
+                            <label class="w-100">Remark
+                                <textarea id="remarks" class="anton-form-tool w-100" cols="30" rows="5"></textarea>
+                            </label>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-body" style="overflow: hidden; height: 50vh">
+                <div class="w-100 h-100" style="overflow: auto">
+                    <table class="table table-bordered table-hover table-striped table-sm">
+                        <thead>
+                            <tr>
+                                <th>line</th>
+                                <th>barcode</th>
+                                <th>descr</th>
+                                <th>packing</th>
+                                <th>pack_descr</th>
+                                <th>tan_qty</th>
+{#                                <th>total_qty</th>#}
+                                <th>un_cost</th>
+                                <th>tot_cost</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tBody">
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </form>
+
+    </div>
+
+{% endblock %}
+

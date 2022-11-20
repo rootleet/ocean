@@ -6,7 +6,7 @@ from admin_panel.models import ProductMaster, ProductPacking, Locations, TicketH
 class NewProduct(forms.ModelForm):
     class Meta:
         model = ProductMaster
-        exclude = ['created_on', 'edited_on', 'status', 'created_by']
+        exclude = ['created_on', 'edited_on', 'status', 'created_by','price_center']
 
 
 class NewProductPacking(forms.ModelForm):

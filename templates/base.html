@@ -55,6 +55,7 @@
 <script src="{% static 'general/js/classes/meeting.js' %}"></script>
 <script src="{% static 'general/js/record.js' %}"></script>
     <script src="{% static 'general/js/classes/user.js' %}"></script>
+    <script src="{% static 'general/js/classes/po.js' %}"></script>
 
 
 <script>
@@ -380,7 +381,7 @@
             </a>
           </li>
             <li>
-                <a href="{% url 'products' %}">
+                <a href="{% url 'inventory' %}">
                   <i class="bi bi-circle"></i><span>Products Master</span>
                 </a>
             </li>
@@ -401,7 +402,7 @@
             </li>
 
             <li>
-                <a href="{% url 'adjustment' %}">
+                <a href="{% url 'purchasing' %}">
                   <i class="bi bi-circle"></i><span>Purchase Order</span>
                 </a>
             </li>

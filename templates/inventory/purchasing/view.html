@@ -1,0 +1,95 @@
+{% extends 'dashboard/products/prod_base.html' %}
+
+{% block prod %}
+
+    <div class="w-100 p-2 h-100">
+
+        <div class="card h-100">
+            <div class="card-header d-flex flex-wrap justify-content-between">
+                <button style="height: fit-content" class="btn btn-primary btn-sm" onclick="location.href='{% url 'new_purchasing_order' %}'">NEW</button>
+                <div class="w-50 d-flex flex-wrap justify-content-end">
+                                <button id="prev" onclick="po.loadTrans($('#prev').val())" class="btn btn-info btn-sm mx-2 bi bi-skip-backward"></button>
+                                <button id="next" onclick="po.loadTrans($('#next').val())" class="btn btn-info btn-sm bi bi-skip-forward"></button>
+
+                            </div>
+            </div>
+            <div class="panel-sub-heading m-2">
+                <div class="w-100 container-fluid">
+                    <div class="w-100 row">
+                        <div class="col-sm-3">
+                            <label class="w-100">Entry NO <br>
+                                <input type="text" id="ent_num" disabled class="anton-form-tool">
+                            </label>
+                            <label class="w-100">Supplier <br>
+                                <input type="text" id="supplier" disabled class="anton-form-tool">
+                            </label>
+                            <label class="w-100">Location <br>
+                                <input type="text" id="loc" disabled class="anton-form-tool">
+                            </label>
+                        </div>
+                        <div class="col-sm-3">
+                            <label class="w-100">Date Created <br>
+                                <input type="text" id="ent_date" disabled class="anton-form-tool">
+                            </label>
+                            <label class="w-100">Owner <br>
+                                <input type="text" id="t_owner" disabled class="anton-form-tool">
+                            </label>
+                            <label class="w-100">Taxable <br>
+                                <input type="text" id="taxable" disabled class="anton-form-tool">
+                            </label>
+                        </div>
+                        <div class="col-sm-3">
+                            <label class="w-100">Taxable Amount <br>
+                                <input type="text" id="taxable_amt" disabled class="anton-form-tool">
+                            </label>
+                            <label class="w-100">Tax Amount<br>
+                                <input type="text" id="tax_amt" disabled class="anton-form-tool">
+                            </label>
+                            <label class="w-100">Total Amount<br>
+                                <input type="text" id="tot_amt" disabled class="anton-form-tool">
+                            </label>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="w-100 d-flex flex-wrap">
+                                <button title="Approve" data-bs-toggle="tooltip"  onclick="trans_ini.approve(this.value)" id="approve" class="btn btn-sm m-1 btn-success">APPROVE</button>
+                                <button title="Print Document" data-bs-toggle="tooltip" id="print" onclick="po.Print(this.value)" class="btn btn-sm m-1 btn-dark bi bi-printer"></button>
+                            </div>
+                            <br>
+
+                            <label for="ent_rm">Remarks</label><textarea name="" id="ent_rm" cols="30" class="anton-form-tool w-100" disabled rows="3"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-body" style="overflow: hidden; height: 50vh">
+                <div class="w-100 h-100" style="overflow: auto">
+                    <table class="table table-sm table-bordered table-hover table-striped">
+                        <thead>
+                            <tr>
+                                <th>sn</th>
+                                <th>barcode</th>
+                                <th>description</th>
+                                <th>packing</th>
+                                <th>tran_qty</th>
+                                <th>un_cost</th>
+                                <th>tot_cost</th>
+
+                            </tr>
+                        </thead>
+                        <tbody id="tbody">
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
+        <script>
+            po.loadTrans({{ po }})
+        </script>
+
+    </div>
+
+{% endblock %}

@@ -621,7 +621,7 @@ def export_task(request):
         doc_type = form['doc_type']
 
         if doc_type == 'pdf':
-            pdf = FPDF('P', 'mm', 'A4')
+            pdf = FPDF('L', 'mm', 'A4')
             pdf.add_page()
 
             pdf.set_font('Arial', 'B', 16)

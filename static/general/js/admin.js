@@ -60,6 +60,38 @@ function api_call(module,action,data) {
     return result
 }
 
+function apiv2(module,action,data) {
+    // console.log(JSON.stringify(data))
+    let link = `/api/${module}/${action}/`
+    console.table(data)
+    var result = 0;
+    $.ajax({
+        url:link,
+        type: 'POST',
+        contentType: 'application/json; charset=utf-8',
+        processData: false,
+        async: false,
+        dataType: 'html',
+        data:JSON.stringify(data),
+        // dataType: "json",
+        success: function (response) {
+
+            result =  response
+            // console.table(response)
+
+        },
+        error: function (error)
+        {
+
+            result = error
+        }
+    })
+
+    console.table(result['responseText'])
+    return result
+}
+
+
 function dataType(data) {
 
         console.table({
@@ -323,7 +355,7 @@ $(function() {
                 let link_res = ""
                 for (let i = 0; i < res.length; i++) {
                     this_row = res[i]['fields']
-                    link_res += `<div class="list-group-item d-flex flex-wrap"> <button  onclick="add_adj_tran_list('${this_row.barcode}')" class="btn btn-sm btn-info">ADD</button> ${this_row.barcode} | ${this_row.descr}</div>`
+                    link_res += `<div class="list-group-item d-flex flex-wrap"> <button  onclick="productMaster.FillTranList('${this_row.barcode}')" class="btn btn-sm btn-info">ADD</button> ${this_row.barcode} | ${this_row.descr}</div>`
                 }
                 $('#searchRes').html(link_res)
             }
@@ -375,11 +407,12 @@ function add_adj_tran_list(barcode) {
         let pack_qty = `pack_${rows}`
         let total = `total_${rows}`
         let tr = `<tr id="row${rows}">
-                                    <td><input id="${barcode_id}" type="text" class="form-control" readonly value="${barcode}"></td>
-                                    <td><input type="text" class="form-control" readonly value="${p_descr}"></td>
-                                    <td><select  class="form-control" name="" id="${pack_qty}">${options}</select></td>
-                                    <td><input onkeyup="row_cal(${rows})" id="${qty_id}" value="0" class="form-control" type="number"></td>
-                                    <td><input id="${total}" readonly value="0" class="form-control" type="number"></td>
+                                    <td>${rows}</td>
+                                    <td><input id="${barcode_id}" type="text" class="anton-form" readonly value="${barcode}"></td>
+                                    <td><input type="text" class="anton-form" readonly value="${p_descr}"></td>
+                                    <td><select  class="anton-select" name="" id="${pack_qty}">${options}</select></td>
+                                    <td><input onkeyup="row_cal(${rows})" id="${qty_id}" value="0" class="anton-form" type="number"></td>
+                                    <td><input id="${total}" readonly value="0" class="anton-form" type="number"></td>
                                 </tr>`
 
         $('#tBody').append(tr)

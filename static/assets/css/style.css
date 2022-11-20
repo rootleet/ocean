@@ -1630,11 +1630,27 @@ a:hover
     transition-property: color,background-color,box-shadow,border-color;
 }
 
-.form-control, .form-select {
+.anton-form-tool, .anton-select-tool {
     padding: 5px 12px;
     font-size: 14px;
     line-height: 20px;
-    color: #adbac7;
+    color: #444c56;
+    vertical-align: middle;
+    background-color: #FBCEB1;
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    border: 1px solid #444c56;
+    border-radius: 0px !important;
+
+    transition: 80ms cubic-bezier(0.33, 1, 0.68, 1);
+    transition-property: color,background-color,box-shadow,border-color;
+}
+
+.anton-form, .anton-select {
+    padding: 5px 12px;
+    font-size: 14px;
+    line-height: 20px;
+    color: #444c56;
     vertical-align: middle;
     background-color: #22272e;
     background-repeat: no-repeat;
@@ -1646,7 +1662,7 @@ a:hover
     transition-property: color,background-color,box-shadow,border-color;
 }
 
-.form-control:focus, .form-control:active {
+.anton-form:focus, .anton-form:active {
     padding: 5px 12px;
     font-size: 14px;
     line-height: 20px;

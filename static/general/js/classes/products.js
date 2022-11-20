@@ -75,4 +75,125 @@ class Products {
 
     }
 
+    // fill item document transaction
+    FillTranList(barcode){
+        let product_request = apiv2('product','get_product',{'barcode':barcode})
+        let product_response = JSON.parse(product_request)
+        if(product_response['status'] === 200)
+        {
+            // there is a positive result
+            let product = JSON.parse(JSON.stringify(product_response['message']))
+            // console.table(product)
+            let group,others,prod_details,prod_pack,supplier,tax
+
+            others = product['others']
+
+            let barcode,descr
+            prod_details = product['prod_details']
+            barcode = prod_details['barcode']
+            descr = prod_details['prod_sht_descr']
+
+            prod_pack = product['prod_pack']
+            let packing_option = ''
+            let pack_descr = ''
+            for (let i = 0; i < prod_pack.length; i++) {
+                let packing = prod_pack[i]
+                let pack_code,pack_type,pack_qty,opt = "UNKNOWN"
+                pack_code = packing['pack_code']
+                pack_type = packing['pack_type']
+                pack_qty = packing['pack_qty']
+                let sel = ''
+
+                if(pack_type === 'A')
+                {
+                    opt = "ISSUE"
+
+                } else if(pack_type === 'P')
+                {
+                    opt = "PURCHASING"
+                    sel = "selected"
+                    pack_descr = packing['pack_descr']
+                }
+
+                packing_option += `<option ${sel} value="${pack_qty}">${opt} ( ${pack_qty} ${packing['pack_code']} in 1 )</option>`
+
+            }
+            // console.log(pack_descr)
+
+            let sn = $('#tBody tr').length + 1
+
+            let row = `<tr id="row_${sn}">
+                                <td>${sn}</td>
+                                <td id="barcode_${sn}">${barcode}</td>
+                                <td id="descr_${sn}">${descr}</td>
+                                <td><select onchange="productMaster.TranRowCalc('${sn}')" name="" id="packing_${sn}" class="anton-form-tool form-control-sm">${packing_option}</select></td>
+                                <td id="pack_descr_${sn}">${pack_descr}</td>
+                                <td><input type="number" onchange="productMaster.TranRowCalc('${sn}')" style="width: 100px" class="anton-form-tool form-control-sm" id="tran_qty_${sn}" value="1"></td>
+                                
+                                <td><input type="number" onchange="productMaster.TranRowCalc('${sn}')" style="width: 100px"  class="anton-form-tool form-control-sm" id="un_cost_${sn}" value="${others['cost_price']}"></td>
+                                <td><input readonly type="number" style="width: 100px"  class="anton-form-tool form-control-sm" id="tot_cost_${sn}" value="${others['cost_price']}"></td>
+                            </tr>`
+
+            // confirm it item exist in transaction
+            let item_exit = 0
+            for (let i = 1; i <= sn; i++) {
+                let barcode_row = `barcode_${i}`
+                let bbarcode = $(`#${barcode_row}`)
+                let bb_val = bbarcode.text()
+                // console.log(`row barcode : ${bb_val}`)
+                if(bb_val === barcode)
+                {
+                    item_exit += 1
+                }
+            }
+
+            if(item_exit < 1){
+               $('#tBody').append(row)
+            }
+
+
+
+
+        } else {
+            // no response
+            console.log(product_response['message'])
+
+        }
+    }
+
+    // calculate item trans
+    TranRowCalc(id)
+    {
+        let row_id,barcode_id,descr_id,packing_id,tan_qty_id,total_qty_id,
+            un_cost_id,tot_cost_id
+
+        row_id = $(`#row_${id}`)
+        packing_id = $(`#packing_${id}`)
+        tan_qty_id = $(`#tran_qty_${id}`)
+        total_qty_id = $(`#total_qty_${id}`)
+        un_cost_id = $(`#un_cost_${id}`)
+        tot_cost_id = $(`#tot_cost_${id}`)
+
+        let pack_qty,tran_qty,tran_math,un_cost,tot
+
+        pack_qty = packing_id.val()
+        tran_qty = tan_qty_id.val()
+
+        tran_math = pack_qty * tran_qty
+
+        un_cost = un_cost_id.val()
+        tot = un_cost * tran_math
+
+        tot_cost_id.val(tot)
+        console.log(tot)
+
+
+
+
+    }
+
+
+
 }
+
+const productMaster = new Products()

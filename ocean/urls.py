@@ -22,5 +22,6 @@ urlpatterns = [
     path('community/', include('community.urls')),
     path('stream/', include('stream.urls')),
     path('api/', include('api.urls')),
-    path('meeting/', include('meeting.urls'))
+    path('meeting/', include('meeting.urls')),
+    path('inventory/', include('inventory.urls'))
 ]
