@@ -20,7 +20,7 @@ from . import views
 urlpatterns = [
     path('', views.meeting, name='meeting'),
     path('new/', views.new_meeting, name='new_meeting'),
-    path('open/<meeting>/', views.open_meeting, name='open_meeting'),
+    path('config_meeting/<meeting>/', views.open_meeting, name='open_meeting'),
     path('save_meeting', views.save_meeting, name='save_meeting'),
     path('config_meeting/<meeting>', views.meeting_config, name='config_meeting'),
     path('add_participant/',views.add_participant,name='add_participant'),
