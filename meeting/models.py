@@ -24,7 +24,7 @@ class MeetingHD(models.Model):
         if self.status == 0:
             return {
                 'class':f"btn btn-sm btn-danger",
-                'text':"PENDING"
+                'text':"NOT STARTED"
             }
         elif self.status == 1:
             return {

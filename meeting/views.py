@@ -155,3 +155,10 @@ def attach(request):
         Files(cryp_key=cryp_key, doc=doc, media=media).save()
 
         return HttpResponse('UPLOADED')
+
+
+def end_meeting(request, meeting):
+    met = MeetingHD.objects.get(uni=meeting)
+    met.status = 3
+    met.save()
+    return redirect('open_meeting', meeting_config)

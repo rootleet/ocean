@@ -27,7 +27,8 @@ urlpatterns = [
     path('add_talking_point',views.add_talking_point,name='add_talking_point'),
     path('attach/',views.attach,name='attach'),
     path('remove_participant/<meet>/<pk>',views.remove_participant,name='remove_participant'),
-    path('remove_point/<meet><pk>',views.remove_point,name='remove_point')
+    path('remove_point/<meet><pk>',views.remove_point,name='remove_point'),
+    path('open/<meeting>/', views.end_meeting, name='end_meeting'),
 
 ]
 

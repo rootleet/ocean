@@ -25,7 +25,7 @@
                                 </thead>
                                 <tbody>
                                     {% for meeting in meetings %}
-                                        <tr data-bs-toggle="modal" class="pointer" data-bs-target="#medDetail">
+                                        <tr data-bs-toggle="modal" class="pointer" data-bs-target="#medDetail{{ meeting.uni }}">
                                             <td>{{ meeting.title }}</td>
                                             <td>{{ meeting.created_date }} {{ meeting.created_time }}</td>
                                             <td>{{ meeting.start_date }} {{ meeting.start_time }}</td>
@@ -33,12 +33,12 @@
                                             <td><span class="{{ meeting.m_stat.class }}">{{ meeting.m_stat.text }}</span></td>
                                         </tr>
 
-                                        <div class="modal fade" id="medDetail">
+                                        <div class="modal fade" id="medDetail{{ meeting.uni }}">
                                             <div class="modal-dialog modal-lg">
                                                 <div class="modal-content">
                                                     <div class="modal-body">
                                                         <div class="w-100 d-flex flex-wrap justify-content-between">
-                                                            <button onclick="location.href='{% url 'open_meeting' meeting.uni %}'" class="btn btn-success">open</button>
+                                                            <button onclick="location.href='{% url 'config_meeting' meeting.uni %}'" class="btn btn-success">open</button>
                                                             <span class="text-info">{{ meeting.title }}</span>
                                                             {% if meeting.status == 0 %}
                                                             <button class="btn btn-info">postpone</button>
