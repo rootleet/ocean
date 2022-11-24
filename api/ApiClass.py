@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.db.models import Sum
 from django.http import JsonResponse
 
-from inventory.models import PoHd, PoTran
+from inventory.models import PoHd, PoTran, DocAppr
 
 response = {
     'status': 505,
@@ -18,6 +18,7 @@ def GetPo(entry):
     if PoHd.objects.filter(pk=entry).exists():
         # if po exist
         hd = PoHd.objects.get(pk=entry)
+        appr = DocAppr.objects.get(doc_type='po', entry_no=hd.pk)
 
         header = {
             'header': {
@@ -47,11 +48,18 @@ def GetPo(entry):
             trans['trans']['count'] = transactions.count()
 
             for transaction in transactions:
+                tran_pac = transaction.packing
+                packing = {
+                    'code':tran_pac.packing_un.code,
+                    'descr':tran_pac.packing_un.descr,
+                    'pack_un_qty':tran_pac.pack_qty,
+                    'tran_pack_qty':transaction.pack_qty
+                }
                 this_trans = {
                     'line': transaction.line,
                     'product_descr': transaction.product.descr,
                     'product_barcode': transaction.product.barcode,
-                    'packing': transaction.packing,
+                    'packing': packing,
                     'qty': transaction.qty,
                     'total_qty': transaction.total_qty,
                     'un_cost': transaction.un_cost,
@@ -130,9 +138,9 @@ def GetPo(entry):
 
         if hd.status == 1:
             # get approve details
-            p_status['p_status']['approved_by'] = User.objects.get(pk=hd.approved_by)
-            p_status['p_status']['approved_date'] = hd.approved_date
-            p_status['p_status']['approved_time'] = hd.approved_time
+            p_status['p_status']['approved_by'] = appr.approved_by.first_name
+            p_status['p_status']['approved_date'] = appr.approved_on.date()
+            # p_status['p_status']['approved_time'] = hd.approved_time
 
         meg.update(header)
         meg.update(trans)

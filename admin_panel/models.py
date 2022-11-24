@@ -355,33 +355,6 @@ class TransferTran(models.Model):
         return ProductMaster.objects.get(pk=self.product).descr
 
 
-class GrnHd(models.Model):
-    loc = models.ForeignKey('Locations', on_delete=models.CASCADE)
-    remark = models.TextField()
-    created_by = models.IntegerField(default=0)
-    created_on = models.DateTimeField(auto_now_add=True)
-    edited_on = models.DateTimeField(auto_now=True)
-    status = models.IntegerField(default=0)
-
-    def trans(self):
-        return GrnTran.objects.get(parent=self.pk)
-
-    def tran_count(self):
-        return GrnTran.objects.filter(parent=self.pk).count()
-
-
-class GrnTran(models.Model):
-    parent = models.ForeignKey('TransferHD', on_delete=models.CASCADE)
-    line = models.IntegerField()
-    product = models.ForeignKey('ProductMaster', on_delete=models.CASCADE)
-    packing = models.TextField()
-    quantity = models.DecimalField(max_digits=65, decimal_places=2)
-    total = models.IntegerField()
-
-    def product_name(self):
-        return ProductMaster.objects.get(pk=self.product).descr
-
-
 class Notifications(models.Model):
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     type = models.IntegerField(default=0)  # 1 = success, 2 = information, 3 = warning, 4 = errpr
@@ -459,5 +432,3 @@ class TaskBranchTran(models.Model):
     created_time = models.TimeField(auto_now=True)
     status = models.IntegerField(default=0)
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-
-

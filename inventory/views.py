@@ -7,7 +7,7 @@ from django.contrib.auth import authenticate, login as auth_login, logout
 from django.contrib.auth.decorators import login_required
 
 from admin_panel.views import page
-from inventory.models import PoHd
+from inventory.models import PoHd, GrnHd
 
 
 # Create your views here.
@@ -49,3 +49,30 @@ def new_purchasing_order(request):
         'locs': Locations.objects.all()
     }
     return render(request, 'inventory/purchasing/new.html', context=context)
+
+
+@login_required(login_url='/login/')
+def grn(request):
+    if GrnHd.objects.all().count() > 0:
+        page['title'] = "GRN"
+        context = {
+            'page': page,
+            'nav': True,
+            'po': GrnHd.objects.all().last().pk
+        }
+        return render(request, 'inventory/grn/view.html', context=context)
+    else:
+        return redirect('new-grn')
+
+
+@login_required(login_url='/login/')
+def new_grn(request):
+    page['title'] = 'Goods Receiving Note - NEW'
+    context = {
+        'page': page,
+        'nav': True,
+        'suppliers': SuppMaster.objects.all(),
+        'locs': Locations.objects.all(),
+        'po': PoHd.objects.filter(status=1)
+    }
+    return render(request, 'inventory/grn/new.html', context=context)

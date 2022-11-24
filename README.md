@@ -20,3 +20,4 @@ All these core functions are implemented for reasons and they will be outlined b
 
 #### To A Contributor.
 As a contributor, it is important to share your changes so more functions can be merged
+

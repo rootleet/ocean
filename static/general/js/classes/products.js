@@ -96,12 +96,15 @@ class Products {
             prod_pack = product['prod_pack']
             let packing_option = ''
             let pack_descr = ''
+            let gen_pack_qty = ''
             for (let i = 0; i < prod_pack.length; i++) {
                 let packing = prod_pack[i]
                 let pack_code,pack_type,pack_qty,opt = "UNKNOWN"
                 pack_code = packing['pack_code']
                 pack_type = packing['pack_type']
+                let ppk = packing['pk']
                 pack_qty = packing['pack_qty']
+
                 let sel = ''
 
                 if(pack_type === 'A')
@@ -113,9 +116,10 @@ class Products {
                     opt = "PURCHASING"
                     sel = "selected"
                     pack_descr = packing['pack_descr']
+                    gen_pack_qty = pack_qty
                 }
 
-                packing_option += `<option ${sel} value="${pack_qty}">${opt} ( ${pack_qty} ${packing['pack_code']} in 1 )</option>`
+                packing_option += `<option ${sel} value="${ppk}"> ${pack_type} - ${packing['pack_code']}</option>`
 
             }
             // console.log(pack_descr)
@@ -123,11 +127,11 @@ class Products {
             let sn = $('#tBody tr').length + 1
 
             let row = `<tr id="row_${sn}">
-                                <td>${sn}</td>
+                                <td>${sn} <input type="hidden" id="pack_${sn}" value=""> </td>
                                 <td id="barcode_${sn}">${barcode}</td>
                                 <td id="descr_${sn}">${descr}</td>
-                                <td><select onchange="productMaster.TranRowCalc('${sn}')" name="" id="packing_${sn}" class="anton-form-tool form-control-sm">${packing_option}</select></td>
-                                <td id="pack_descr_${sn}">${pack_descr}</td>
+                                <td><select onchange="productMaster.TranPack(this.value,${sn});productMaster.TranRowCalc('${sn}')" name="" id="packing_${sn}" class="anton-form-tool form-control-sm">${packing_option}</select></td>
+                                <td><input type="number" readonly style="width: 50px" value="${gen_pack_qty}" id="pack_qty_${sn}"></td>
                                 <td><input type="number" onchange="productMaster.TranRowCalc('${sn}')" style="width: 100px" class="anton-form-tool form-control-sm" id="tran_qty_${sn}" value="1"></td>
                                 
                                 <td><input type="number" onchange="productMaster.TranRowCalc('${sn}')" style="width: 100px"  class="anton-form-tool form-control-sm" id="un_cost_${sn}" value="${others['cost_price']}"></td>
@@ -168,7 +172,7 @@ class Products {
             un_cost_id,tot_cost_id
 
         row_id = $(`#row_${id}`)
-        packing_id = $(`#packing_${id}`)
+        packing_id = $(`#pack_qty_${id}`)
         tan_qty_id = $(`#tran_qty_${id}`)
         total_qty_id = $(`#total_qty_${id}`)
         un_cost_id = $(`#un_cost_${id}`)
@@ -193,7 +197,34 @@ class Products {
     }
 
 
+    TranPack(pack_pk,line_no) {
+        let data = {
+            'pk':pack_pk
+        }
 
+        let api_req,status,message
+        api_req = JSON.parse(apiv2('general','prodPack',data))
+
+        status = api_req['status']
+        message = api_req['message']
+
+        if(status === 200)
+        {
+            let pack_qty = message['pack_qty']
+            $(`#pack_qty_${line_no}`).val(pack_qty)
+
+        }
+    }
+
+    ApprTrans(doc,entry)
+    {
+        let api_rsp,status,message
+        api_rsp = apiv2('doc_approve','approve',{'doc':doc,'entry':entry,'user':$('#mypk').val()})
+        status = api_rsp['status']
+        message = api_rsp['message']
+
+        swal_response('info',status,message)
+    }
 }
 
 const productMaster = new Products()

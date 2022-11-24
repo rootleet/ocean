@@ -93,7 +93,7 @@ class Po {
 
                         // loop through each row and add to transaction
                         for (let i = 1; i <= tran_list ; i++) {
-                            let row, barcode, descr, packing, pack_descr, tran_qty, un_cost, tot_cost
+                            let row, barcode, descr, packing, pack_descr, tran_qty, un_cost, tot_cost,pack_qty
                             row = $(`#row_${i}`)
                             barcode = $(`#barcode_${i}`)
                             descr = $(`#descr_${i}`)
@@ -102,12 +102,14 @@ class Po {
                             tran_qty = $(`#tran_qty_${i}`)
                             un_cost = $(`#un_cost_${i}`)
                             tot_cost = $(`#tot_cost_${i}`)
+                            pack_qty = $(`#pack_qty_${i}`)
 
                             let data = {
                                 "entry_no":entry_no,
                                 "line":i,
                                 "barcode":barcode.text(),
-                                "packing":`${packing.val()} - ${pack_descr.text()}`,
+                                "packing":packing.val(),
+                                'pack_qty':pack_qty.val(),
                                 "qty":tran_qty.val(),
                                 "total_qty":packing.val() *  tran_qty.val() ,
                                 "un_cost":un_cost.val(),
@@ -115,6 +117,8 @@ class Po {
                             }
 
                             apiv2('po','newTran',data)
+                            console.table(data)
+                            alert("DATA INSERTED")
 
                         }
 
@@ -166,6 +170,7 @@ class Po {
             $('#ent_rm').val(header['remark'])
             $('#t_owner').val(header['owner'])
             $('#print').val(header['pk'])
+            $('#approve').val(header['pk'])
             console.table(trans)
             if(trans['count'] > 0)
             {
@@ -174,11 +179,15 @@ class Po {
                 let row = ''
                 for (let i = 0; i < transactions.length; i++) {
                     let tran = transactions[i]
+                    let packing = tran['packing']
+                    console.table(packing)
+
                     row += `<tr>
                                 <td>${tran['line']}</td>
                                 <td>${tran['product_barcode']}</td>
                                 <td>${tran['product_descr']}</td>
-                                <td>${tran['packing']}</td>
+                                <td>${packing['code']}</td>
+                                <td>${packing['pack_qty']}</td>
                                 <td>${tran['qty']}</td>
                                 <td>${tran['un_cost']}</td>
                                 <td>${tran['tot_cost']}</td>
@@ -195,7 +204,7 @@ class Po {
             {
                 // not approved
                 $('#approve').prop('disabled',false)
-            } else if(state === 1)
+            } else if(nav['status'] === 1)
             {
                 // approved
                 $('#approve').prop('disabled',true)

@@ -74,13 +74,14 @@
 <body>
 <input type="hidden" id="autos_url" value="{% url 'autos' 'ajax' %}">
 <input type="hidden" id="search_url" value="{% url 'search' %}">
+<input type="hidden" value="{{ request.user.pk }}" id="mypk">
 {% if nav == True %}
   <!-- ======= Header ======= -->
   <header id="header" class="header fixed-top d-flex align-items-center">
 
     <div class="d-flex align-items-center justify-content-between">
       <a href="{% url 'home' %}" class="logo d-flex align-items-center">
-        <img src="assets/img/logo.png" alt="">
+        <img src="{% static 'assets/img/logo.png' %}" alt="">
         <span class="d-none d-lg-block">OCEAN</span>
       </a>
       <i class="bi bi-list toggle-sidebar-btn"></i>
@@ -207,7 +208,7 @@
 
             <li class="message-item">
               <a href="#">
-                <img src="assets/img/messages-1.jpg" alt="" class="rounded-circle">
+                <img src="{% static 'assets/img/messages-1.jpg' %}" alt="" class="rounded-circle">
                 <div>
                   <h4>Maria Hudson</h4>
                   <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
@@ -221,7 +222,7 @@
 
             <li class="message-item">
               <a href="#">
-                <img src="assets/img/messages-2.jpg" alt="" class="rounded-circle">
+                <img src="{% static 'assets/img/messages-2.jpg' %}" alt="" class="rounded-circle">
                 <div>
                   <h4>Anna Nelson</h4>
                   <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
@@ -235,7 +236,7 @@
 
             <li class="message-item">
               <a href="#">
-                <img src="assets/img/messages-3.jpg" alt="" class="rounded-circle">
+                <img src="{% static 'assets/img/messages-3.jpg' %}" alt="" class="rounded-circle">
                 <div>
                   <h4>David Muldon</h4>
                   <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
@@ -385,11 +386,16 @@
                   <i class="bi bi-circle"></i><span>Products Master</span>
                 </a>
             </li>
-{#            <li>#}
-{#                <a href="{% url 'grn_entries' %}">#}
-{#                  <i class="bi bi-circle"></i><span>Receive</span>#}
-{#                </a>#}
-{#            </li>#}
+            <li>
+                <a href="{% url 'purchasing' %}">
+                  <i class="bi bi-circle"></i><span>Purchase Order</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'grn' %}">
+                  <i class="bi bi-circle"></i><span>Receive</span>
+                </a>
+            </li>
             <li>
                 <a href="{% url 'transfer' %}">
                   <i class="bi bi-circle"></i><span>Transfer</span>
@@ -401,11 +407,7 @@
                 </a>
             </li>
 
-            <li>
-                <a href="{% url 'purchasing' %}">
-                  <i class="bi bi-circle"></i><span>Purchase Order</span>
-                </a>
-            </li>
+
 
         </ul>
       </li><!-- End Inventory Nav -->

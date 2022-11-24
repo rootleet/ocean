@@ -65,8 +65,8 @@ urlpatterns = [
     path('inventory/adjustment/new/', views.new_adjustment, name='new_adjustment'),
     path('inventory/transfer/', views.transfer, name='transfer'),
     path('inventory/transfer/new/', views.new_transfer, name='new_transfer'),
-    path('inventory/receiving/', views.grn_entries, name='grn_entries'),
-    path('inventory/receiving/new/', views.new_grn, name='new_grn'),
+    # path('inventory/receiving/', views.grn_entries, name='grn_entries'),
+    # path('inventory/receiving/new/', views.new_grn, name='new_grn'),
 
 
     # accounts urls

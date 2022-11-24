@@ -17,7 +17,7 @@ from admin_panel.models import Notifications, AuthToken, Locations, SuppMaster, 
     ProductPacking
 import json
 
-from inventory.models import PoHd, PoTran, PriceCenter
+from inventory.models import PoHd, PoTran, PriceCenter, GrnHd, DocAppr
 
 # Create your views here.
 api_response = {
@@ -81,7 +81,7 @@ def get_notification(user):
 
 @csrf_exempt
 def api_call(request, module, crud):
-    global f_name
+    global f_name, api_body
     response = {
         'status': 505,
         'message': "No Module "
@@ -144,7 +144,7 @@ def api_call(request, module, crud):
             # save po hd
             try:
                 PoHd(loc=Locations.objects.get(pk=location), supplier=SuppMaster.objects.get(pk=supplier),
-                     remark=remarks, created_by=owner, taxable=taxable, approved_date='1999-01-01',approved_time='00:00:00').save()
+                     remark=remarks, created_by=owner, taxable=taxable).save()
                 response['message'] = PoHd.objects.all().last().pk
                 response['status'] = 200
 
@@ -164,21 +164,22 @@ def api_call(request, module, crud):
 
                 product = ProductMaster.objects.get(barcode=barcode)
 
-                packing = data['packing']
+                packing = ProductPacking.objects.get(pk=data['packing'])
                 qty = data['qty']
                 total_qty = data['total_qty']
                 un_cost = data['un_cost']
                 tot_cost = data['tot_cost']
+                pack_qty = data['pack_qty']
 
                 try:
                     PoTran(entry_no=PoHd.objects.get(pk=entry_no), line=line, product=product, packing=packing,
-                           qty=qty, total_qty=total_qty, un_cost=un_cost, tot_cost=tot_cost).save()
+                           qty=qty, total_qty=total_qty, un_cost=un_cost, tot_cost=tot_cost, pack_qty=pack_qty).save()
                     response['status'] = 200
                     response['message'] = "Data Saved"
 
                 except Exception as e:
                     response['status'] = 505
-                    response['message'] = e
+                    response['message'] = str(e)
 
             else:
                 response['message'] = "Product Does Not Exist"
@@ -222,11 +223,19 @@ def api_call(request, module, crud):
                     trans['trans']['count'] = transactions.count()
 
                     for transaction in transactions:
+                        p_packing = {
+                            'pk': transaction.packing.pk,
+                            'pack_qty': transaction.packing.pack_qty,
+                            'packing_type': transaction.packing.packing_type,
+                            'code': transaction.packing.packing_un.code,
+                            'descr': transaction.packing.packing_un.descr,
+
+                        }
                         this_trans = {
                             'line': transaction.line,
                             'product_descr': transaction.product.descr,
                             'product_barcode': transaction.product.barcode,
-                            'packing': transaction.packing,
+                            'packing': p_packing,
                             'qty': transaction.qty,
                             'total_qty': transaction.total_qty,
                             'un_cost': transaction.un_cost,
@@ -234,72 +243,74 @@ def api_call(request, module, crud):
                         }
                         trans['trans']['transactions'].append(this_trans)
 
+                        # navigators
+                        next_count = PoHd.objects.filter(pk__gt=hd.pk).count()
+                        prev_count = PoHd.objects.filter(pk__lt=hd.pk).count()
+
+                        if prev_count > 0:
+                            prev = PoHd.objects.all().filter(pk__lt=hd.pk)
+                            for x in prev:
+                                prev_p = str(x.pk)
+                        else:
+                            prev_p = 0
+
+                        if next_count > 0:
+                            next_po = PoHd.objects.all().filter(pk__gt=hd.pk)[:1]
+                            for y in next_po:
+                                next_p = str(y.pk)
+                        else:
+                            next_p = 0
+
+                        nav = {
+                            'nav': {
+                                'status': hd.status,
+                                'next_count': next_count,
+                                'next_id': next_p,
+                                'prev_count': prev_count,
+                                'prev_id': prev_p
+                            }
+                        }
+
+                        cost = {
+                            'cost': {
+                                'taxable': hd.taxable,
+                                'taxable_amt': PoTran.objects.filter(entry_no=hd.pk).aggregate(Sum('tot_cost'))[
+                                    'tot_cost__sum'],
+                                'tax_nhis': 0.00,
+                                'tax_gfund': 0.00,
+                                'tax_covid': 0.00,
+                                'tax_vat': 0.00,
+                                'tax_amt': 0.00
+                            }
+                        }
+
+                        if cost['cost']['taxable'] == 1:
+                            # calculate taxes
+                            taxable_amt = cost['cost']['taxable_amt']
+                            cost['cost']['tax_covid'] = round(Decimal(taxable_amt) * Decimal(0.001), 2)
+                            cost['cost']['tax_nhis'] = round(Decimal(taxable_amt) * Decimal(0.025), 2)
+                            cost['cost']['tax_gfund'] = round(Decimal(taxable_amt) * Decimal(0.025), 2)
+
+                            levies = cost['cost']['tax_covid'] + cost['cost']['tax_nhis'] + cost['cost']['tax_gfund']
+                            new_tot_amt = taxable_amt + levies
+
+                            cost['cost']['tax_vat'] = round(Decimal(new_tot_amt) * Decimal(0.125), 2)
+                            cost['cost']['tax_amt'] = round(levies + cost['cost']['tax_vat'], 2)
+
+                        meg.update(header)
+                        meg.update(trans)
+                        meg.update(nav)
+                        meg.update(cost)
+
+                        response['status'] = 200
+                        response['message'] = meg
+
                 else:
-                    pass
+                    response['status'] = 404
+                    response['message'] = "No Transactions"
 
-                transactions = PoTran
 
-                # navigators
-                next_count = PoHd.objects.filter(pk__gt=hd.pk).count()
-                prev_count = PoHd.objects.filter(pk__lt=hd.pk).count()
 
-                if prev_count > 0:
-                    prev = PoHd.objects.all().filter(pk__lt=hd.pk)
-                    for x in prev:
-                        prev_p = str(x.pk)
-                else:
-                    prev_p = 0
-
-                if next_count > 0:
-                    next_po = PoHd.objects.all().filter(pk__gt=hd.pk)[:1]
-                    for y in next_po:
-                        next_p = str(y.pk)
-                else:
-                    next_p = 0
-
-                nav = {
-                    'nav': {
-                        'status': hd.status,
-                        'next_count': next_count,
-                        'next_id': next_p,
-                        'prev_count': prev_count,
-                        'prev_id': prev_p
-                    }
-                }
-
-                cost = {
-                    'cost': {
-                        'taxable': hd.taxable,
-                        'taxable_amt': PoTran.objects.filter(entry_no=hd.pk).aggregate(Sum('tot_cost'))[
-                            'tot_cost__sum'],
-                        'tax_nhis': 0.00,
-                        'tax_gfund': 0.00,
-                        'tax_covid': 0.00,
-                        'tax_vat': 0.00,
-                        'tax_amt': 0.00
-                    }
-                }
-
-                if cost['cost']['taxable'] == 1:
-                    # calculate taxes
-                    taxable_amt = cost['cost']['taxable_amt']
-                    cost['cost']['tax_covid'] = round(Decimal(taxable_amt) * Decimal(0.001), 2)
-                    cost['cost']['tax_nhis'] = round(Decimal(taxable_amt) * Decimal(0.025), 2)
-                    cost['cost']['tax_gfund'] = round(Decimal(taxable_amt) * Decimal(0.025), 2)
-
-                    levies = cost['cost']['tax_covid'] + cost['cost']['tax_nhis'] + cost['cost']['tax_gfund']
-                    new_tot_amt = taxable_amt + levies
-
-                    cost['cost']['tax_vat'] = round(Decimal(new_tot_amt) * Decimal(0.125), 2)
-                    cost['cost']['tax_amt'] = round(levies + cost['cost']['tax_vat'], 2)
-
-                meg.update(header)
-                meg.update(trans)
-                meg.update(nav)
-                meg.update(cost)
-
-                response['status'] = 200
-                response['message'] = meg
 
             else:
                 # if no po, return 404 and response message
@@ -333,7 +344,8 @@ def api_call(request, module, crud):
                             'pack_type': p.packing_type,
                             'pack_qty': p.pack_qty,
                             'pack_code': p.packing_un.code,
-                            'pack_descr': p.packing_un.descr
+                            'pack_descr': p.packing_un.descr,
+                            'pk': p.pk
                         }
                         prod_pack.append(this_p)
                         print(this_p)
@@ -380,16 +392,17 @@ def api_call(request, module, crud):
                 res = GetPo(entry_no)
                 status = res['status']
                 message = res['message']
-                trans = message['trans']['transactions']
-                header = message['header']
-                prices = message['cost']
-                p_status = message['p_status']
-
-                tax = 'NO'
-                if prices['taxable'] == 1:
-                    tax = "YES"
 
                 if status == 200:
+
+                    trans = message['trans']['transactions']
+                    header = message['header']
+                    prices = message['cost']
+                    p_status = message['p_status']
+
+                    tax = 'NO'
+                    if prices['taxable'] == 1:
+                        tax = "YES"
 
                     pdf = FPDF('L', 'mm', 'A4')
                     pdf.add_page()
@@ -399,77 +412,79 @@ def api_call(request, module, crud):
                     pdf.set_font('Arial', 'BU', 25)
                     pdf.cell(280, 5, "PURCHASE ORDER", 0, 1, 'C')
                     pdf.ln(10)
-                    pdf.set_font('Arial', 'B', 12)
+                    pdf.set_font('Arial', 'B', 10)
                     pdf.cell(30, 5, "Entry : ", 0, 0, 'L')
-                    pdf.set_font('Arial', '', 10)
+                    pdf.set_font('Arial', '', 8)
                     pdf.cell(150, 5, header['entry_no'], 0, 0, 'L')
 
-                    pdf.set_font('Arial', 'B', 12)
+                    pdf.set_font('Arial', 'B', 10)
                     pdf.cell(35, 5, "Date : ", 0, 0, 'L')
-                    pdf.set_font('Arial', '', 10)
+                    pdf.set_font('Arial', '', 8)
                     pdf.cell(30, 5, str(header['entry_date']), 0, 1, 'L')
 
-                    pdf.set_font('Arial', 'B', 12)
+                    pdf.set_font('Arial', 'B', 10)
                     pdf.cell(30, 5, "Created By : ", 0, 0, 'L')
-                    pdf.set_font('Arial', '', 10)
+                    pdf.set_font('Arial', '', 8)
                     pdf.cell(150, 5, header['owner'], 0, 0, 'L')
 
-                    pdf.set_font('Arial', 'B', 12)
+                    pdf.set_font('Arial', 'B', 10)
                     pdf.cell(35, 5, "Location : ", 0, 0, 'L')
-                    pdf.set_font('Arial', '', 10)
+                    pdf.set_font('Arial', '', 8)
                     pdf.cell(30, 5, header['loc_descr'], 0, 1, 'L')
 
-                    pdf.set_font('Arial', 'B', 12)
+                    pdf.set_font('Arial', 'B', 10)
                     pdf.cell(30, 5, "Supplier : ", 0, 0, 'L')
-                    pdf.set_font('Arial', '', 10)
+                    pdf.set_font('Arial', '', 8)
                     pdf.cell(150, 5, header['supp_descr'], 0, 0, 'L')
 
-                    pdf.set_font('Arial', 'B', 12)
+                    pdf.set_font('Arial', 'B', 10)
                     pdf.cell(35, 5, "Taxable : ", 0, 0, 'L')
-                    pdf.set_font('Arial', '', 10)
+                    pdf.set_font('Arial', '', 8)
                     pdf.cell(30, 5, tax, 0, 1, 'L')
 
-                    pdf.set_font('Arial', 'B', 12)
+                    pdf.set_font('Arial', 'B', 10)
                     pdf.cell(30, 5, "Remarks : ", 0, 0, 'L')
-                    pdf.set_font('Arial', '', 10)
+                    pdf.set_font('Arial', '', 8)
                     pdf.cell(30, 5, header['remark'], 0, 0, 'L')
 
                     pdf.cell(120, 5, '', 0, 0, 'L')
-                    pdf.set_font('Arial', 'B', 12)
+                    pdf.set_font('Arial', 'B', 10)
                     pdf.cell(35, 5, "Inv Amount : ", 0, 0, 'L')
-                    pdf.set_font('Arial', '', 10)
+                    pdf.set_font('Arial', '', 8)
                     pdf.cell(30, 5, str(prices['taxable_amt']), 0, 1, 'L')
 
                     pdf.cell(180, 5, '', 0, 0, 'L')
-                    pdf.set_font('Arial', 'B', 12)
+                    pdf.set_font('Arial', 'B', 10)
                     pdf.cell(35, 5, "Tax Amount : ", 0, 0, 'L')
-                    pdf.set_font('Arial', '', 10)
+                    pdf.set_font('Arial', '', 8)
                     pdf.cell(30, 5, str(prices['tax_amt']), 0, 1, 'L')
 
                     pdf.cell(180, 5, '', 0, 0, 'L')
-                    pdf.set_font('Arial', 'B', 12)
+                    pdf.set_font('Arial', 'B', 10)
                     pdf.cell(35, 5, "Total Amount : ", 0, 0, 'L')
-                    pdf.set_font('Arial', '', 10)
+                    pdf.set_font('Arial', '', 8)
                     pdf.cell(30, 5, str(Decimal(prices['tax_amt']) + Decimal(prices['taxable_amt'])), 0, 1, 'L')
 
                     pdf.ln(10)
 
-                    pdf.set_font('Arial', 'B', 10)
+                    pdf.set_font('Arial', 'B', 8)
                     # table head
-                    pdf.cell(10, 5, "SN", 1, 0, 'L')
-                    pdf.cell(60, 5, "BARCODE", 1, 0, 'L')
-                    pdf.cell(70, 5, "DESCRIPTION", 1, 0, 'L')
-                    pdf.cell(50, 5, "PACKING", 1, 0, 'L')
-                    pdf.cell(20, 5, "QTY", 1, 0, 'L')
-                    pdf.cell(30, 5, "UNIT COST", 1, 0, 'L')
-                    pdf.cell(40, 5, "TOTAL COST", 1, 1, 'L')
+                    pdf.cell(10, 5, "Line", 1, 0, 'L')
+                    pdf.cell(60, 5, "Barcode", 1, 0, 'L')
+                    pdf.cell(70, 5, "Description", 1, 0, 'L')
+                    pdf.cell(25, 5, "Packing", 1, 0, 'L')
+                    pdf.cell(25, 5, "Pack Quantity", 1, 0, 'L')
+                    pdf.cell(20, 5, "Quantity", 1, 0, 'L')
+                    pdf.cell(30, 5, "Cost", 1, 0, 'L')
+                    pdf.cell(40, 5, "Total Cost", 1, 1, 'L')
 
-                    pdf.set_font('Arial', '', 8)
+                    pdf.set_font('Arial', '', 6)
                     for transaction in trans:
                         pdf.cell(10, 5, f"{transaction['line']}", 1, 0, 'L')
                         pdf.cell(60, 5, f"{transaction['product_barcode']}", 1, 0, 'L')
                         pdf.cell(70, 5, f"{transaction['product_descr']}", 1, 0, 'L')
-                        pdf.cell(50, 5, f"{transaction['packing']}", 1, 0, 'L')
+                        pdf.cell(25, 5, f"{transaction['packing']['code']}", 1, 0, 'L')
+                        pdf.cell(25, 5, f"{transaction['packing']['tran_pack_qty']}", 1, 0, 'L')
                         pdf.cell(20, 5, f"{transaction['qty']}", 1, 0, 'L')
                         pdf.cell(30, 5, f"{transaction['un_cost']}", 1, 0, 'L')
                         pdf.cell(40, 5, f"{transaction['tot_cost']}", 1, 1, 'L')
@@ -505,6 +520,98 @@ def api_call(request, module, crud):
                 else:
                     resp = res
                 return JsonResponse(resp, safe=False)
+
+        # get suppliers
+        elif crud == 'getSuppliers':
+            s_r = []
+            suppliers = SuppMaster.objects.all()
+            for supp in suppliers:
+                this_sup = {
+                    'company': supp.company,
+                    'contact_person': supp.contact_person,
+                    'purch_group': supp.purch_group,
+                    'email': supp.email,
+                    'mobile': supp.mobile,
+                    'pk': supp.pk,
+
+                }
+                s_r.append(this_sup)
+
+            response['message'] = s_r
+            response['status'] = 200
+
+        # get locations
+        elif crud == 'getLocs':
+            l_r = []
+            locations = Locations.objects.all()
+            for location in locations:
+                this_loc = {
+                    'code': location.code,
+                    'descr': location.descr
+                }
+                l_r.append(this_loc)
+            response['message'] = l_r
+            response['status'] = 200
+
+        # get product packing
+        elif crud == 'prodPack':
+            pk = api_body['pk']
+
+            if ProductPacking.objects.filter(pk=pk).count() == 1:
+                packing = ProductPacking.objects.get(pk=pk)
+                response['status'] = 200
+                response['message'] = {
+                    'product': {
+                        'barcode': packing.product.barcode
+                    },
+                    'packing_un': {
+                        'code': packing.packing_un.code, 'descr': packing.packing_un.descr
+                    },
+                    'pack_qty': packing.pack_qty,
+                    'packing_type': packing.packing_type
+                }
+            else:
+                response['status'] = 404
+                response['message'] = "Packing Not Found"
+
+    elif module == 'doc_approve':
+        document = api_body['doc']
+        entry = api_body['entry']
+        user = api_body['user']
+        doc_found = 0
+        doc_setup = {
+            'grn': GrnHd.objects.filter(pk=entry),
+            'po': PoHd.objects.filter(pk=entry)
+        }
+
+        if document in doc_setup:
+
+            doc = doc_setup[document]
+            if doc.count() == 1:
+                response['status'] = 200
+                for docx in doc:
+                    doc_key = docx.pk
+                    if DocAppr.objects.filter(doc_type=document, entry_no=doc_key).exists():
+                        response['message'] = "Document already approved"
+                    else:
+
+                        DocAppr(entry_no=doc_key, doc_type=document,
+                                approved_by=User.objects.get(pk=user)).save()  # approval
+                        # transaction
+                        docx.status = 1
+                        docx.save()  # make approved
+
+                        response['message'] = "Approved"
+
+            else:
+                response['status'] = 404
+                response['message'] = f"{document} entry {entry} not found: COUNT {doc.count()}"
+
+
+
+
+        else:
+            response['message'] = f"UNKNOWN DOCUMENT TYPE {document}"
 
     return JsonResponse(response, safe=False)
 
