@@ -230,6 +230,32 @@ class Grn {
                     un_cost = tran['un_cost']
                     let sn = line
 
+                    // get product details
+                    let product = JSON.parse(apiv2('product','get_product',{'barcode':barcode}))['message']
+                    let prod_pack = product['prod_pack']
+                    let packoptions = ''
+
+                    for (let j = 0; j < prod_pack.length; j++) {
+                        let p_pack = prod_pack[j]
+                        let p_pk = p_pack['pk']
+                        let p_code = p_pack['pack_code']
+                        let p_type = p_pack['pack_type']
+
+
+                        if (p_pk === pack_pk)
+                        {
+                            packoptions += `<option selected value="${p_pk}">${p_type} - ${p_code}</option>`
+                        } else
+                        {
+                            packoptions += `<option value="${p_pk}">${p_type} - ${p_code}</option>`
+                        }
+
+                    }
+
+                    console.log('product details')
+                    console.table(prod_pack)
+                    console.log('product details')
+
 
                     // get packing
                     packing_option = ''
@@ -239,7 +265,7 @@ class Grn {
                                 <td>${sn} <input type="hidden" id="pack_${sn}" value=""> </td>
                                 <td id="barcode_${sn}">${barcode}</td>
                                 <td id="descr_${sn}">${descr}</td>
-                                <td><select onchange="productMaster.TranPack(this.value,${sn});productMaster.TranRowCalc('${sn}')" name="" id="packing_${sn}" class="anton-form-tool form-control-sm">${packing_option}</select></td>
+                                <td><select onchange="productMaster.TranPack(this.value,${sn});productMaster.TranRowCalc('${sn}')" name="" id="packing_${sn}" class="anton-form-tool form-control-sm">${packoptions}</select></td>
                                 <td><input type="number" readonly style="width: 50px" value="${pack_qty}" id="pack_qty_${sn}"></td>
                                 <td><input type="number" onchange="productMaster.TranRowCalc('${sn}')" style="width: 100px" class="anton-form-tool form-control-sm" id="tran_qty_${sn}" value="${qty}"></td>
                                 
