@@ -17,7 +17,7 @@ from admin_panel.models import Notifications, AuthToken, Locations, SuppMaster, 
     ProductPacking
 import json
 
-from inventory.models import PoHd, PoTran, PriceCenter, GrnHd, DocAppr
+from inventory.models import PoHd, PoTran, PriceCenter, GrnHd, DocAppr, GrnTran
 
 # Create your views here.
 api_response = {
@@ -197,7 +197,7 @@ def api_call(request, module, crud):
 
                 header = {
                     'header': {
-                        'entry_no': f"PO{hd.loc.code}{hd.pk}",
+                        'entry_no': hd.pk,
                         'loc_code': hd.loc.code,
                         'loc_descr': hd.loc.descr,
                         'supp_pk': hd.supplier.pk,
@@ -316,6 +316,62 @@ def api_call(request, module, crud):
                 # if no po, return 404 and response message
                 response['status'] = 404
                 response['message'] = "Po Entry Not Found"
+
+    # grn
+    elif module == 'grn':
+        if crud == 'newHd':
+
+            try:
+                supplier = api_body['supplier']
+                location = api_body['location']
+                type = api_body['type']
+                taxable_amt = api_body['taxable_amt']
+                tax_amt = api_body['tax_amt']
+                tot_amt = api_body['tot_amt']
+                remark = api_body['remark']
+                owner = User.objects.get(pk=api_body['owner'])
+                tax = api_body['taxable']
+                ref = api_body['ref']
+                GrnHd(type=type, supplier=SuppMaster.objects.get(pk=supplier),
+                      loc=Locations.objects.get(pk=location), taxable=tax, created_by=owner,ref=ref).save()
+                response['message'] = GrnHd.objects.all().last().pk
+                response['status'] = 200
+            except Exception as e:
+                response['status'] = 505
+                response['message'] = str(e)
+
+        if crud == 'newTran':
+            data = api_body
+            entry_no = data['entry_no']
+
+            line = data['line']
+
+            barcode = data['barcode']
+            if ProductMaster.objects.filter(barcode=barcode).exists():
+
+                product = ProductMaster.objects.get(barcode=barcode)
+
+                packing = ProductPacking.objects.get(pk=data['packing'])
+                qty = data['qty']
+                total_qty = data['total_qty']
+                un_cost = data['un_cost']
+                tot_cost = data['tot_cost']
+                pack_qty = data['pack_qty']
+
+                try:
+                    GrnTran(entry_no=GrnHd.objects.get(pk=entry_no), line=line, product=product, packing=packing,
+                           qty=qty, total_qty=total_qty, un_cost=un_cost, tot_cost=tot_cost, pack_qty=pack_qty).save()
+                    response['status'] = 200
+                    response['message'] = "Data Saved"
+
+                except Exception as e:
+                    response['status'] = 505
+                    response['message'] = str(e)
+
+            else:
+                response['message'] = "Product Does Not Exist"
+
+
 
     # products master
     elif module == 'product':
@@ -546,6 +602,7 @@ def api_call(request, module, crud):
             locations = Locations.objects.all()
             for location in locations:
                 this_loc = {
+                    'pk':location.pk,
                     'code': location.code,
                     'descr': location.descr
                 }

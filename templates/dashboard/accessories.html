@@ -144,6 +144,41 @@
         <!-- LOCATIONS -->
         <button onclick="windowPopUp('{% url 'loc_master' %}','Location Master',700,500)" class="btn btn-info" >Location Master</button>
 
+        <!-- ASSETS -->
+        <button class="btn btn-info" data-bs-toggle="modal" data-bs-target="#assets">Assets Group</button>
+        <div class="modal fade" id="assets">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <strong class="modal-title">Assets Category</strong>
+                    </div>
+                    <form action="{% url 'newgroup' %}" method="post" class="modal-body p-2">
+                        {% csrf_token %}
+                        <table class="table table-sm table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Description</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><input autocomplete="off" required type="text"placeholder="New Group" name="descr" class="form-control anton-form-tool"></td>
+                                    <td><button class="btn btn-success rounded-0">SAVE</button></td>
+                                </tr>
+                                {% for ass in assgrps %}
+                                <tr>
+                                    <td>{{ ass.descr }}</td>
+                                    <td><button class="btn btn-danger" type="button">DELETE</button></td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </form>
+                </div>
+            </div>
+        </div>
+
     </div>
 
 {% endblock %}

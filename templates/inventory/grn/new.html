@@ -31,8 +31,19 @@
         <form class="card h-75">
             <div class="card-header">
 
-                <button onclick="po.save()" type="button" data-toggle="modal"  class="btn btn-success btn-sm">SAVE</button>
-                <button  type="button" data-toggle="modal" data-target="#addItem" class="btn btn-warning btn-sm">INSERT ROW</button>
+                <div class="w-100 d-flex flex-wrap">
+                    <div class="w-50">
+                        <button onclick="grn.SaveNew()" type="button" data-toggle="modal"  class="btn btn-success btn-sm">SAVE</button>
+                        <button  type="button" data-toggle="modal" data-target="#addItem" class="btn btn-warning btn-sm">INSERT ROW</button>
+                    </div>
+
+                    <div class="w-50 d-flex flex-wrap justify-content-end">
+                        <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#po">RETIRE PO</button>
+                    </div>
+                </div>
+
+
+
 
             </div>
             <div class="panel-sub-heading">
@@ -72,14 +83,17 @@
                         </div>
 
                         <div class="col-sm-3">
-                            <label class="w-100">Remark
-                                <textarea id="remark" class="anton-form-tool w-100" cols="30" rows="5"></textarea>
-                            </label>
-                        </div>
-
-                        <div class="col-sm-3">
                             <div class="w-100 h-100 d-flex flex-wrap align-content-center justify-content-center">
-                                <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#po">RETIRE PO</button>
+
+                                <label class="w-100">Taxable Amount <br>
+                                    <input type="text" id="invoice_amt" disabled class="anton-form-tool">
+                                </label>
+                                <label class="w-100">Tax Amount<br>
+                                    <input type="text" id="tax_amt" disabled class="anton-form-tool">
+                                </label>
+                                <label class="w-100">Total Amount<br>
+                                    <input type="text" id="tot_amt" disabled class="anton-form-tool">
+                                </label>
                                 <div class="modal fade" id="po">
                                     <div class="modal-dialog modal-lg">
                                         <div class="modal-content">
@@ -126,6 +140,14 @@
                             </div>
                         </div>
 
+                        <div class="col-sm-3">
+                            <label class="w-100">Remark
+                                <textarea id="remark" class="anton-form-tool w-100" cols="30" rows="5"></textarea>
+                            </label>
+                        </div>
+
+
+
                     </div>
                 </div>
             </div>
@@ -146,16 +168,16 @@
                             </tr>
                         </thead>
                         <tbody id="tbody">
-                            <tr class="row_">
-                                <td>1</td>
-                                <td><input type="text" id="barcode_" value="barcode" readonly class="anton-form-tool"></td>
-                                <td><input type="text" id="descr_" value="descr" readonly class="anton-form-tool"></td>
-                                <td><input type="text" id="packing_" value="pack" readonly class="anton-form-tool"></td>
-                                <td><input type="text" id="pack_descr_" value="pack descr" readonly class="anton-form-tool"></td>
-                                <td><input type="number" style="width: 70px" id="qty_" value="1" class="anton-form-tool"></td>
-                                <td><input type="number" style="width: 70px" id="uni_cost_" value="1" class="anton-form-tool"></td>
-                                <td><input type="number" style="width: 70px" id="tot_cost_" value="1" class="anton-form-tool"></td>
-                            </tr>
+{#                            <tr class="row_">#}
+{#                                <td>1</td>#}
+{#                                <td><input type="text" id="barcode_" value="barcode" readonly class="anton-form-tool"></td>#}
+{#                                <td><input type="text" id="descr_" value="descr" readonly class="anton-form-tool"></td>#}
+{#                                <td><input type="text" id="packing_" value="pack" readonly class="anton-form-tool"></td>#}
+{#                                <td><input type="text" id="pack_descr_" value="pack descr" readonly class="anton-form-tool"></td>#}
+{#                                <td><input type="number" style="width: 70px" id="qty_" value="1" class="anton-form-tool"></td>#}
+{#                                <td><input type="number" style="width: 70px" id="uni_cost_" value="1" class="anton-form-tool"></td>#}
+{#                                <td><input type="number" style="width: 70px" id="tot_cost_" value="1" class="anton-form-tool"></td>#}
+{#                            </tr>#}
                         </tbody>
                     </table>
                 </div>

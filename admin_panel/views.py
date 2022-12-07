@@ -24,6 +24,7 @@ from blog.models import *
 from community.models import *
 from django.views.decorators.csrf import csrf_exempt
 
+from inventory.models import AssetGroup
 from meeting.models import MeetingHD, MeetingTalkingPoints, MeetingTrans
 from ocean.settings import EMAIL_HOST_USER
 
@@ -409,7 +410,8 @@ def accessories(request):
         'nav': True,
         'comm_tags': tags.objects.all(),
         'providers': Providers.objects.all(),
-        'notomem': NotificationGroups.objects.all()
+        'notomem': NotificationGroups.objects.all(),
+        'assgrps':AssetGroup.objects.all()
     }
     return render(request, 'dashboard/accessories.html', context=context)
 

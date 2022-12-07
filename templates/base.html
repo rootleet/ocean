@@ -14,11 +14,13 @@
   <link href="{% static 'assets/img/favicon.png' %}" rel="icon">
   <link href="{% static 'assets/img/apple-touch-icon.png' %}" rel="apple-touch-icon">
 
-  <!-- Google Fonts -->
-{#  <link href="https://fonts.gstatic.com" rel="preconnect">#}
-{#  <link #}
-{#          href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" #}
-{#          rel="stylesheet">#}
+  <!-- Google Fonts
+
+  <link href="https://fonts.gstatic.com" rel="preconnect">
+
+  <link
+    href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+    rel="stylesheet"> !-->
 
   <!-- Vendor CSS Files -->
   <link href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
@@ -31,37 +33,37 @@
 
   <!-- Template Main CSS File -->
   <link href="{% static 'assets/css/style.css' %}" rel="stylesheet">
-<link href="{% static 'general/css/recorder.css' %}" rel="stylesheet">
+  <link href="{% static 'general/css/recorder.css' %}" rel="stylesheet">
 
 
 
 
-     <script src="{% static 'blog/js/jquery.min.js' %}"></script>
-    <script src="{% static 'blog/js/popper.min.js' %}"></script>
-    <script src="{% static 'blog/js/bootstrap.min.js' %}"></script>
- <script src="{% static 'general/js/cust.js' %}"></script>
-    <script src="{% static 'general/js/admin.js' %}"></script>
-<script src="{% static 'general/js/error_handler.js' %}"></script>
-<script src="{% static 'general/js/sweetalert2@11' %}"></script>
-<script src="{% static 'general/js/all.js' %}"></script>
-    <script src="{% static 'general/js/prod_master.js' %}"></script>
+  <script src="{% static 'blog/js/jquery.min.js' %}"></script>
+  <script src="{% static 'blog/js/popper.min.js' %}"></script>
+  <script src="{% static 'blog/js/bootstrap.min.js' %}"></script>
+  <script src="{% static 'general/js/cust.js' %}"></script>
+  <script src="{% static 'general/js/admin.js' %}"></script>
+  <script src="{% static 'general/js/error_handler.js' %}"></script>
+  <script src="{% static 'general/js/sweetalert2@11' %}"></script>
+  <script src="{% static 'general/js/all.js' %}"></script>
+  <script src="{% static 'general/js/prod_master.js' %}"></script>
 
-    <script src="{% static 'general/js/classes/products.js' %}"></script>
-    <script src="{% static 'general/js/classes/adjustment.js' %}"></script>
-    <script src="{% static 'general/js/classes/grn.js' %}"></script>
-    <script src="{% static 'general/js/classes/transfer.js' %}"></script>
-<script src="{% static 'general/js/classes/issues.js' %}"></script>
-<script src="{% static 'general/js/classes/recording.js' %}"></script>
-<script src="{% static 'general/js/classes/meeting.js' %}"></script>
-<script src="{% static 'general/js/record.js' %}"></script>
-    <script src="{% static 'general/js/classes/user.js' %}"></script>
-    <script src="{% static 'general/js/classes/po.js' %}"></script>
+  <script src="{% static 'general/js/classes/products.js' %}"></script>
+  <script src="{% static 'general/js/classes/adjustment.js' %}"></script>
+  <script src="{% static 'general/js/classes/grn.js' %}"></script>
+  <script src="{% static 'general/js/classes/transfer.js' %}"></script>
+  <script src="{% static 'general/js/classes/issues.js' %}"></script>
+  <script src="{% static 'general/js/classes/recording.js' %}"></script>
+  <script src="{% static 'general/js/classes/meeting.js' %}"></script>
+  <script src="{% static 'general/js/record.js' %}"></script>
+  <script src="{% static 'general/js/classes/user.js' %}"></script>
+  <script src="{% static 'general/js/classes/po.js' %}"></script>
 
 
-<script>
+  <script>
     var pClass = new Products()
 
-</script>
+  </script>
 
   <!-- =======================================================
   * Template Name: NiceAdmin - v2.4.1
@@ -72,10 +74,10 @@
 </head>
 
 <body>
-<input type="hidden" id="autos_url" value="{% url 'autos' 'ajax' %}">
-<input type="hidden" id="search_url" value="{% url 'search' %}">
-<input type="hidden" value="{{ request.user.pk }}" id="mypk">
-{% if nav == True %}
+  <input type="hidden" id="autos_url" value="{% url 'autos' 'ajax' %}">
+  <input type="hidden" id="search_url" value="{% url 'search' %}">
+  <input type="hidden" value="{{ request.user.pk }}" id="mypk">
+  {% if nav == True %}
   <!-- ======= Header ======= -->
   <header id="header" class="header fixed-top d-flex align-items-center">
 
@@ -120,16 +122,16 @@
               <hr class="dropdown-divider">
             </li>
 
-              {% for notification in notifications.unread %}
-                  <li class="notification-item">
-                      <i class="bi bi-exclamation-circle text-warning"></i>
-                      <div>
-                        <h4>{{ notification.title }}</h4>
-                        <p>{{ notification.descr }}</p>
-                        <p>{{ notification.created_date }} <span class="text-info">{{ notification.created_time }}</span></p>
-                      </div>
-                  </li>
-              {% endfor %}
+            {% for notification in notifications.unread %}
+            <li class="notification-item">
+              <i class="bi bi-exclamation-circle text-warning"></i>
+              <div>
+                <h4>{{ notification.title }}</h4>
+                <p>{{ notification.descr }}</p>
+                <p>{{ notification.created_date }} <span class="text-info">{{ notification.created_time }}</span></p>
+              </div>
+            </li>
+            {% endfor %}
 
             <li class="notification-item">
               <i class="bi bi-exclamation-circle text-warning"></i>
@@ -337,8 +339,8 @@
           <i class="bi bi-megaphone"></i><span>Community</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
         <ul id="Community-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-            <li>
-                <a href="{% url 'open-ticket' %}">
+          <li>
+            <a href="{% url 'open-ticket' %}">
               <i class="bi bi-circle"></i><span>Tickets</span>
             </a>
           </li>
@@ -351,13 +353,13 @@
         </ul>
       </li><!-- End Community Nav -->
 
-    <li class="nav-item">
+      <li class="nav-item">
         <a class="nav-link collapsed" data-bs-target="#Meetings-nav" data-bs-toggle="collapse" href="#">
           <i class="bi bi-megaphone"></i><span>Meetings</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
         <ul id="Meetings-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-            <li>
-                <a href="{% url 'meeting' %}">
+          <li>
+            <a href="{% url 'meeting' %}">
               <i class="bi bi-circle"></i><span>My Meetings</span>
             </a>
           </li>
@@ -368,50 +370,56 @@
           </li>
 
         </ul>
-      </li> <!--END OF MEETINGS -->
+      </li>
+      <!--END OF MEETINGS -->
 
-        {% if user.is_superuser %}
-            <li class="nav-item">
+      {% if user.is_superuser %}
+      <li class="nav-item">
         <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
           <i class="bi bi-archive"></i><span>Inventory</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
         <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
           <li>
+            <a href="{% url 'assets' %}">
+              <i class="bi bi-circle"></i><span>Assets</span>
+            </a>
+          </li>
+          <li>
             <a href="{% url 'inventory_tools' %}">
               <i class="bi bi-circle"></i><span>Tools</span>
             </a>
           </li>
-            <li>
-                <a href="{% url 'inventory' %}">
-                  <i class="bi bi-circle"></i><span>Products Master</span>
-                </a>
-            </li>
-            <li>
-                <a href="{% url 'purchasing' %}">
-                  <i class="bi bi-circle"></i><span>Purchase Order</span>
-                </a>
-            </li>
-            <li>
-                <a href="{% url 'grn' %}">
-                  <i class="bi bi-circle"></i><span>Receive</span>
-                </a>
-            </li>
-            <li>
-                <a href="{% url 'transfer' %}">
-                  <i class="bi bi-circle"></i><span>Transfer</span>
-                </a>
-            </li>
-            <li>
-                <a href="{% url 'adjustment' %}">
-                  <i class="bi bi-circle"></i><span>Adjustment</span>
-                </a>
-            </li>
+          <li>
+            <a href="{% url 'inventory' %}">
+              <i class="bi bi-circle"></i><span>Products Master</span>
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'purchasing' %}">
+              <i class="bi bi-circle"></i><span>Purchase Order</span>
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'grn' %}">
+              <i class="bi bi-circle"></i><span>GRN Entries</span>
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'transfer' %}">
+              <i class="bi bi-circle"></i><span>Transfer</span>
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'adjustment' %}">
+              <i class="bi bi-circle"></i><span>Adjustment</span>
+            </a>
+          </li>
 
 
 
         </ul>
       </li><!-- End Inventory Nav -->
-            <li class="nav-item">
+      <li class="nav-item">
         <a class="nav-link collapsed" data-bs-target="#task-nav" data-bs-toggle="collapse" href="#">
           <i class="bi bi-calendar-check"></i><span>Task Manager</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
@@ -421,7 +429,7 @@
               <i class="bi bi-circle"></i><span>Create</span>
             </a>
           </li>
-            <li>
+          <li>
             <a href="{% url 'all-ticket' %}">
               <i class="bi bi-circle"></i><span>Tickets</span>
             </a>
@@ -435,7 +443,7 @@
 
         </ul>
       </li><!-- End Task Manage Nav -->
-            <li class="nav-item">
+      <li class="nav-item">
         <a class="nav-link collapsed" data-bs-target="#csetup-nav" data-bs-toggle="collapse" href="#">
           <i class="bi bi-gear"></i><span>Company Setup</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
@@ -464,7 +472,7 @@
 
         </ul>
       </li><!-- End Company Setup Nav -->
-        {% endif %}
+      {% endif %}
 
 
 
@@ -473,18 +481,18 @@
     </ul>
 
   </aside><!-- End Sidebar-->
-{% endif %}
+  {% endif %}
 
   <main id="main" class="main">
 
     <div class="pagetitle">
       <h1>{{ page.title }}</h1>
       <nav>
-{#        <ol class="breadcrumb">#}
-{#          <li class="breadcrumb-item"><a href="index.html">Home</a></li>#}
-{#          <li class="breadcrumb-item">Pages</li>#}
-{#          <li class="breadcrumb-item active">Blank</li>#}
-{#        </ol>#}
+        {# <ol class="breadcrumb">#}
+          {# <li class="breadcrumb-item"><a href="index.html">Home</a></li>#}
+          {# <li class="breadcrumb-item">Pages</li>#}
+          {# <li class="breadcrumb-item active">Blank</li>#}
+          {# </ol>#}
       </nav>
     </div><!-- End Page Title -->
 
@@ -498,7 +506,8 @@
 
 
 
-  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
+      class="bi bi-arrow-up-short"></i></a>
 
   <!-- Vendor JS Files -->
   <script src="{% static 'assets/vendor/apexcharts/apexcharts.min.js' %}"></script>
@@ -515,9 +524,9 @@
 
 
 
-<script>
+  <script>
 
-</script>
+  </script>
 </body>
 
 </html>
@@ -526,17 +535,16 @@
 
 
 <script>
-    let sw_message = ''
+  let sw_message = ''
 
 
-    {% for message in messages %}
+  {% for message in messages %}
 
-        sw_message += "{{ message }}"
+  sw_message += "{{ message }}"
 
-    {% endfor %}
+  {% endfor %}
 
 
 
 
 </script>
-

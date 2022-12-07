@@ -109,7 +109,8 @@ class GrnTran(models.Model):
     entry_no = models.ForeignKey('GrnHd', on_delete=models.CASCADE)
     line = models.IntegerField()
     product = models.ForeignKey('admin_panel.ProductMaster', on_delete=models.CASCADE)
-    packing = models.TextField()
+    packing = models.ForeignKey('admin_panel.ProductPacking', on_delete=models.CASCADE)
+    pack_qty = models.TextField()
     qty = models.DecimalField(max_digits=65, decimal_places=2)
     total_qty = models.IntegerField()
     un_cost = models.DecimalField(max_digits=60, decimal_places=2)
@@ -123,3 +124,28 @@ class DocAppr(models.Model):
 
     approved_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     approved_on = models.DateTimeField(auto_now_add=True)
+
+
+class AssetGroup(models.Model):
+    descr = models.TextField()
+
+    created_on = models.DateTimeField(auto_now_add=True)
+
+
+class Assets(models.Model):
+    group = models.ForeignKey('inventory.AssetGroup', on_delete=models.CASCADE)
+    brand = models.TextField()
+
+    descr = models.TextField()
+    sku = models.CharField(max_length=60,unique=True)
+    model = models.TextField()
+    manufacturer = models.TextField()
+
+    storage = models.TextField()
+    memory = models.TextField()
+    processor = models.TextField()
+
+    details = models.TextField()
+    image = models.FileField(upload_to=f'static/general/img/products/')
+
+    created_on = models.DateTimeField(auto_now_add=True)

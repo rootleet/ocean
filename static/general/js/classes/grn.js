@@ -1,120 +1,157 @@
+
+
 class Grn {
     SaveNew(){
 
-        // validate
-        let loc,loc_to,remarks,er_msg,er_count,rows
+        swal_success('SAVING GRN TRANSACTION')
+        /*
+        * VALIDATE GRN ENTRIES
+        * MAKE SURE SUPPLIER IS SELECTED AND EXIST
+        * VALIDATE LOCATION
+        * VALID TYPE AND REFERENCE
+        * VALIDATE TAX COMPONENT
+        * VALIDATE REMARKS*/
 
+        let tran_list = $('#tbody tr').length
+        let supplier,loc,type,ref,taxable_amt,tax_amt,tot_amt,remark,err_count,err_msg
+        supplier = $('#supplier').val()
         loc = $('#loc').val()
-        remarks = $('#remarks').val()
+        type = $('#type').val()
+        ref = $('#ref').val()
+        taxable_amt = $('#invoice_amt').val()
+        tax_amt = $('#tax_amt').val()
+        tot_amt = $('#tot_amt').val()
+        remark = $('#remark').val()
+        err_msg = ""
+        err_count = 0
 
-        // alert(loc_fr)
-
-        er_count = 0;
-        er_msg = ''
-
-        if(loc.length < 1)
-        {
-            er_count ++
-            er_msg += `<p>Select Location</p>`
+        if(
+            supplier.length < 1 ||
+            loc.length < 1 ||
+            type.length < 1 ||
+            ref.length < 1 ||
+            taxable_amt.length < 1 ||
+            tax_amt.length < 1 ||
+            tot_amt.length < 1 ||
+            remark.length < 1
+        ){
+            err_count ++
+            err_msg = "Invalid HEater"
         }
 
-        if(remarks.length < 1)
+        if(err_count > 0)
         {
-            er_count ++
-            er_msg += `<p>Remarks cannot be empty</p>`
-        }
+            swal_response('','',err_msg)
+        } else  {
 
-        // alert(er_count)
-
-        if(er_count < 1)
-        {
-
-            // validate rows
-            rows = $('#tBody tr').length
-            if(rows > 0)
+            if(tran_list > 0)
             {
-                let tran_err_count = 0;
-                let tran_err_msg = ''
+                let tran_err_count = 0
+                let tran_err_msg = 'error%% '
+                for (let i = 1; i <= tran_list ; i++) {
 
-                for (let i = 0; i < rows; i++) {
+                        let row,barcode,descr,packing,pack_descr,tran_qty,un_cost,tot_cost
+                        row = $(`#row_${i}`)
+                        barcode = $(`#barcode_${i}`)
+                        descr = $(`#descr_${i}`)
+                        packing = $(`#packing_${i}`)
+                        pack_descr = $(`#pack_descr_${i}`)
+                        tran_qty = $(`#tran_qty_${i}`)
+                        un_cost = $(`#un_cost_${i}`)
+                        tot_cost = $(`#tot_cost_${i}`)
 
-                    let qty,total
-
-                    // get row ids
-                    let qty_id = `#qty_${i}`
-                    let row_id = `#row_${i}`
-                    let total_id = `#total_${i}`
-
-                    qty = $(qty_id).val()
-                    total = $(total_id).val()
-
-                    if(total == 0)
-                    {
-                        // append quantity error
+                        if(tran_qty.val() <= 0){
                         tran_err_count ++
-                        tran_err_msg += `<p>line number ${row_id}  : Cannot Make a transfer of 0</p>`
-                    }
-
-
-                }
-                if(tran_err_count > 0)
-                {
-                    swal_response('error',"VALIDATION FAILED",tran_err_msg)
-                } else
-                {
-                    // transact
-                    let hd = JSON.parse(api_call('grn', 'new_hd', {'loc':loc,'remark':remarks}))
-
-                    if(hd['status'] === 200)
-                    {
-                        // proceed
-                        let ret_hd = hd['message']
-                        for (let xi = 0; xi < rows; xi++)
-                        {
-                            //insert each line
-                            let qty_id,row_id,total_id,qty,total,barcode_id,pack_id,barcode,pack
-                            qty_id = `#qty_${xi}`
-                            row_id = `#row_${xi}`
-                            total_id = `#total_${xi}`
-                            barcode_id = `#barcode_${xi}`
-                            pack_id = `#pack_${xi}`
-
-
-                            barcode = $(barcode_id).val()
-
-                            qty = $(qty_id).val()
-                            total = $(total_id).val()
-                            pack = $(pack_id).val()
-
-                            let data = {'parent':ret_hd,"line":xi,"product":barcode,"packing":pack,"quantity":qty,"total":total}
-
-                            api_call('transfer','new_tran',data)
-
+                        tran_err_msg += `<p>Line ${i} quantity is invalid</p>`
+                        }
+                        if(un_cost.val() <= 0){
+                            tran_err_count ++
+                            tran_err_msg += `<p>Line ${i} unit cost is invalid</p>`
+                        }
+                        if(tot_cost.val() <= 0){
+                            tran_err_count ++
+                            tran_err_msg += `<p>Line ${i} total cost is invalid</p>`
                         }
 
-                        location.href='/admin_panel/inventory/transfer/'
+                }
 
+                if(tran_err_count <= 0){
+                    let data = {
+                'supplier':supplier,
+                'location':loc,
+                'type':type,
+                'taxable_amt':taxable_amt,
+                'tax_amt':tax_amt,
+                'tot_amt':tot_amt,
+                'remark':remark,
+                'taxable':$('#taxable').val(),
+                'owner':$('#mypk').val(),
+                'ref':$('#ref').val()
+            }
+                    console.table(data)
 
-                    } else
+                    let status,message,grnhd = JSON.parse(apiv2('grn','newHd',data))
+                    status = grnhd['status']
+                    message = grnhd['message']
+                    console.table(grnhd)
+                    if(status === 200)
                     {
-                        swal_response('error',"",`could not create transfer header ${hd['message']}`)
+                        
+                        let entry_no = message
+                        for (let i = 1; i <= tran_list ; i++) {
+
+                            let row, barcode, descr, packing, pack_descr, tran_qty, un_cost, tot_cost,pack_qty
+                            row = $(`#row_${i}`)
+                            barcode = $(`#barcode_${i}`)
+                            descr = $(`#descr_${i}`)
+                            packing = $(`#packing_${i}`)
+                            pack_descr = $(`#pack_descr_${i}`)
+                            tran_qty = $(`#tran_qty_${i}`)
+                            un_cost = $(`#un_cost_${i}`)
+                            tot_cost = $(`#tot_cost_${i}`)
+                            pack_qty = $(`#pack_qty_${i}`)
+
+                            let data = {
+                                "entry_no":entry_no,
+                                "line":i,
+                                "barcode":barcode.text(),
+                                "packing":packing.val(),
+                                'pack_qty':pack_qty.val(),
+                                "qty":tran_qty.val(),
+                                "total_qty":packing.val() *  tran_qty.val() ,
+                                "un_cost":un_cost.val(),
+                                "tot_cost":tot_cost.val()
+                            }
+
+                            let exe = apiv2('grn','newTran',data)
+                            console.table(data)
+                            console.table(JSON.parse(exe))
+
+
+                        }
+                        // location.href = '/inventory/grn/'
+
+                    } else {
+                        error_handler(`error%%${message}`)
                     }
 
                 }
 
 
-            } else
-            {
-                swal_response('error','VALIDATION','Cannot save an empty transaction')
+
+
+
+
+            } else {
+                error_handler(`error%%Cannot save empty document`)
             }
 
         }
-        else
-        {
-            // alert('there is an error')
-            swal_response('error','VALIDATION FAILED',er_msg)
-        }
 
+
+
+        // start validations
+        // let supp_req = apiv2('')
 
     }
 
@@ -128,12 +165,16 @@ class Grn {
             let response = po_response['message']
             let header,cost,trans
             header = response['header']
+            console.table(header)
             cost = response['cost']
             trans = response['trans']
 
             // load header
             $('#type').val("PO")
             $('#ref').val(header['entry_no'])
+            $('#invoice_amt').val(cost['taxable_amt'] - cost['tax_amt'])
+            $('#tot_amt').val(cost['taxable_amt'])
+            $('#tax_amt').val(cost['tax_amt'])
 
             let  tax_htm= ''
             if(cost['taxable'] === 1)
@@ -234,6 +275,8 @@ class Grn {
                     let product = JSON.parse(apiv2('product','get_product',{'barcode':barcode}))['message']
                     let prod_pack = product['prod_pack']
                     let packoptions = ''
+
+                    console.table(product)
 
                     for (let j = 0; j < prod_pack.length; j++) {
                         let p_pack = prod_pack[j]

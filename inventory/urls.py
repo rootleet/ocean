@@ -18,7 +18,10 @@ from django.urls import path, include
 from . import views
 
 urlpatterns = [
-    path('', views.inventory, name='inventory'),
+    path('/', views.inventory, name='inventory'),
+    path('assets/', views.assets, name='assets'),
+    path('assets/newgroup/',views.newgroup,name='newgroup'),
+    path('assets/save-new',views.assets_new,name='assets_new'),
     path('purchasing/', views.purchasing, name='purchasing'),
     path('purchasing/new/', views.new_purchasing_order, name='new_purchasing_order'),
     path('grn/', views.grn, name='grn'),

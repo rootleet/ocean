@@ -1,0 +1,132 @@
+{% extends 'dashboard/products/prod_base.html' %}
+{% load static %}
+
+{% block prod %}
+    <div  class="w-100 h-100 card">
+
+        <div class="card-header">
+            <div class="w-100 h-100 d-flex flex-wrap">
+                <div class="w-50 h-100"></div>
+                <div class="w-50 h-100 d-flex flex-wrap justify-content-end">
+                    <button data-bs-toggle="modal" data-bs-target="#newAsset" class="btn btn-info">CREATE ASSET</button>
+                    <div class="modal fade" id="newAsset">
+                        <div class="modal-dialog modal-lg">
+                            <form method="post" enctype="multipart/form-data" action="{% url 'assets_new' %}" class="modal-content">
+                                {% csrf_token %}
+                                <div class="modal-header">
+                                    <strong class="modal-title">New Asset</strong>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="container">
+                                        <div class="row">
+
+                                            <!-- group and brand -->
+                                            <div class="col-sm-6 mb-2">
+                                                <label for="">Group</label><select name="group" id="" class="form-control rounded-0">
+                                                    {% for grp in assgrp %}
+                                                    <option value="{{ grp.pk }}">{{ grp.descr }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+
+                                            <div class="col-sm-6 mb-2">
+                                                <label class="w-100">Brand
+                                                    <input autocomplete="off" type="text" required name="brand" class="form-control rounded-0">
+                                                </label>
+                                            </div>
+
+                                            <div class="col-sm-6 mb-2">
+                                                <label class="w-100">SKU
+                                                    <input autocomplete="off" type="text" required name="sku" class="form-control rounded-0">
+                                                    <small class="text-info">Unique tag</small>
+                                                </label>
+                                            </div>
+
+                                            <!-- DESCR -->
+                                            <div class="col-sm-6 mb-2">
+                                                <label class="w-100">Description
+                                                    <input autocomplete="off" type="text" required name="descr" class="form-control rounded-0">
+                                                </label>
+                                            </div>
+
+                                            <!--  model and manufacturer -->
+                                            <div class="col-sm-6 mb-2">
+                                                <label class="w-100">Model
+                                                    <input autocomplete="off" type="text" required name="model" class="form-control rounded-0">
+                                                </label>
+                                            </div>
+                                            <div class="col-sm-6 mb-2">
+                                                <label class="w-100">Manufacturer
+                                                    <input autocomplete="off" type="text" required name="manufacturer" class="form-control rounded-0">
+                                                </label>
+                                            </div>
+
+                                            <!-- Processor -->
+                                            <div class="col-sm-12 mb-2">
+                                                <label class="w-100">Processor
+                                                    <input autocomplete="off" type="text" required name="processor" class="form-control rounded-0">
+                                                </label>
+                                            </div>
+
+
+                                            <!--  storage and memory -->
+                                            <div class="col-sm-6 mb-2">
+                                                <label class="w-100">Storage
+                                                    <input autocomplete="off" type="text" required name="storage" class="form-control rounded-0">
+                                                </label>
+                                            </div>
+                                            <div class="col-sm-6 mb-2">
+                                                <label class="w-100">Memory
+                                                    <input autocomplete="off" type="text" required name="memory" class="form-control rounded-0">
+                                                </label>
+                                            </div>
+
+                                            <!-- DETAILS -->
+                                            <div class="col-sm-12 p-2">
+                                                <textarea name="details" placeholder="More Details" id="" class="form-control rounded-0" rows="5"></textarea>
+                                            </div>
+
+                                            <!-- IMAGE -->
+                                            <input type="file" name="image" required accept="image/*" id="id_image">
+
+                                        </div>
+
+
+                                    </div>
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button type="button" data-dismiss="modal" class="btn btn-warning">CANCEL</button>
+                                    <button type="submit" class="btn btn-success">SAVE</button>
+                                </div>
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-body p-2">
+            <div class="container-fluid p-0">
+                <div class="w-100 h-100 d-flex flex-wrap">
+                    {% for asset in assets %}
+                    <div class="asset_card m-2">
+                            <div class="card h-100">
+                                <div class="w-100 d-flex flex-wrap align-content-center justify-content-center h-75">
+                                    <img src="{{ asset.image.url }}" class="card-img-top w-50 mx-auto" alt="">
+                                </div>
+                                <div class="w-100 h-25">
+                                    <p class="ellipsis text-center">{{ asset.descr }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="card-footer"></div>
+
+    </div>
+{% endblock %}
