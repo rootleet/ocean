@@ -226,7 +226,7 @@ class ProductMaster(models.Model):
     edited_on = models.DateTimeField(auto_now=True)
     status = models.IntegerField(default=1)
 
-    price_center = models.ForeignKey('inventory.PriceCenter', on_delete=models.CASCADE)
+    # price_center = models.ForeignKey('inventory.PriceCenter', on_delete=models.CASCADE)
 
     def stock(self):
         if ProductTrans.objects.filter(product=self).aggregate(Sum('tran_qty'))['tran_qty__sum'] is None:
