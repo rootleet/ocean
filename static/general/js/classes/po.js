@@ -118,11 +118,11 @@ class Po {
 
                             apiv2('po','newTran',data)
                             console.table(data)
-                            alert("DATA INSERTED")
+                            // alert("DATA INSERTED")
 
                         }
 
-                        location.href = '/inventory/purchasing/'
+                        // location.href = '/inventory/purchasing/'
 
                     } else {
                         swal_response('info',"",header_resp['message'])
