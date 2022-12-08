@@ -18,7 +18,8 @@ def GetPo(entry):
     if PoHd.objects.filter(pk=entry).exists():
         # if po exist
         hd = PoHd.objects.get(pk=entry)
-        appr = DocAppr.objects.get(doc_type='po', entry_no=hd.pk)
+
+
 
         header = {
             'header': {
@@ -136,7 +137,9 @@ def GetPo(entry):
             }
         }
 
+
         if hd.status == 1:
+            appr = DocAppr.objects.get(doc_type='po', entry_no=hd.pk)
             # get approve details
             p_status['p_status']['approved_by'] = appr.approved_by.first_name
             p_status['p_status']['approved_date'] = appr.approved_on.date()
