@@ -122,7 +122,7 @@ class Po {
 
                         }
 
-                        // location.href = '/inventory/purchasing/'
+                        location.href = '/inventory/purchasing/'
 
                     } else {
                         swal_response('info',"",header_resp['message'])
