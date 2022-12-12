@@ -19,8 +19,6 @@ def GetPo(entry):
         # if po exist
         hd = PoHd.objects.get(pk=entry)
 
-
-
         header = {
             'header': {
                 'entry_no': f"PO{hd.loc.code}{hd.pk}",
@@ -51,10 +49,10 @@ def GetPo(entry):
             for transaction in transactions:
                 tran_pac = transaction.packing
                 packing = {
-                    'code':tran_pac.packing_un.code,
-                    'descr':tran_pac.packing_un.descr,
-                    'pack_un_qty':tran_pac.pack_qty,
-                    'tran_pack_qty':transaction.pack_qty
+                    'code': tran_pac.packing_un.code,
+                    'descr': tran_pac.packing_un.descr,
+                    'pack_un_qty': tran_pac.pack_qty,
+                    'tran_pack_qty': transaction.pack_qty
                 }
                 this_trans = {
                     'line': transaction.line,
@@ -110,7 +108,8 @@ def GetPo(entry):
                 'tax_gfund': 0.00,
                 'tax_covid': 0.00,
                 'tax_vat': 0.00,
-                'tax_amt': 0.00
+                'tax_amt': 0.00,
+                'levies': 0.00
             }
         }
 
@@ -122,6 +121,7 @@ def GetPo(entry):
             cost['cost']['tax_gfund'] = round(Decimal(taxable_amt) * Decimal(0.025), 2)
 
             levies = cost['cost']['tax_covid'] + cost['cost']['tax_nhis'] + cost['cost']['tax_gfund']
+            cost['cost']['levies'] = levies
             new_tot_amt = taxable_amt + levies
 
             cost['cost']['tax_vat'] = round(Decimal(new_tot_amt) * Decimal(0.125), 2)
@@ -136,7 +136,6 @@ def GetPo(entry):
                 'approved_time': ''
             }
         }
-
 
         if hd.status == 1:
             appr = DocAppr.objects.get(doc_type='po', entry_no=hd.pk)
