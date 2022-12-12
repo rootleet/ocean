@@ -280,7 +280,8 @@ def api_call(request, module, crud):
                                 'tax_gfund': 0.00,
                                 'tax_covid': 0.00,
                                 'tax_vat': 0.00,
-                                'tax_amt': 0.00
+                                'tax_amt': 0.00,
+                                'levies': 0.00
                             }
                         }
 
@@ -292,6 +293,7 @@ def api_call(request, module, crud):
                             cost['cost']['tax_gfund'] = round(Decimal(taxable_amt) * Decimal(0.025), 2)
 
                             levies = cost['cost']['tax_covid'] + cost['cost']['tax_nhis'] + cost['cost']['tax_gfund']
+                            cost['cost']['levies'] = levies
                             new_tot_amt = taxable_amt + levies
 
                             cost['cost']['tax_vat'] = round(Decimal(new_tot_amt) * Decimal(0.125), 2)
