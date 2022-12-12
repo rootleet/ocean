@@ -287,7 +287,7 @@ def api_call(request, module, crud):
                         if cost['cost']['taxable'] == 1:
                             # calculate taxes
                             taxable_amt = cost['cost']['taxable_amt']
-                            cost['cost']['tax_covid'] = round(Decimal(taxable_amt) * Decimal(0.001), 2)
+                            cost['cost']['tax_covid'] = round(Decimal(taxable_amt) * Decimal(0.01), 2)
                             cost['cost']['tax_nhis'] = round(Decimal(taxable_amt) * Decimal(0.025), 2)
                             cost['cost']['tax_gfund'] = round(Decimal(taxable_amt) * Decimal(0.025), 2)
 
