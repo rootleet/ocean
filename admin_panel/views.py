@@ -1948,6 +1948,14 @@ def new_grn(request):
 @login_required()
 def profile(request):
     user = request.user
+    if UserAddOns.objects.filter(user=user.pk).exists():
+        pass
+    else:
+        use_ad_on = UserAddOns(user=User.objects.get(pk=user.pk),
+                               company='',
+                               app_version=VersionHistory.objects.get(version=settings.APP_VERSION),
+                               profile_pic='static/assets/img/users/default.png')
+        use_ad_on.save()
     context = {
         'user': user,
         'ad_on': UserAddOns.objects.get(user=user.pk),
