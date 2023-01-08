@@ -10,3 +10,4 @@ tuto1.pdf
 /api/migrations/
 /meeting/migrations/
 /inventory/migrations/
+*.pdf

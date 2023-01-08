@@ -63,7 +63,7 @@ function api_call(module,action,data) {
 function apiv2(module,action,data) {
     // console.log(JSON.stringify(data))
     let link = `/api/${module}/${action}/`
-    console.table(data)
+    console.table(link)
     var result = 0;
     $.ajax({
         url:link,

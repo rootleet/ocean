@@ -59,7 +59,7 @@ def grn(request):
         context = {
             'page': page,
             'nav': True,
-            'po': GrnHd.objects.all().last().pk
+            'entry': GrnHd.objects.all().last().pk
         }
         return render(request, 'inventory/grn/view.html', context=context)
     else:

@@ -160,6 +160,8 @@ def GetPo(entry):
 
     return response
 
+def GetGrn():
+    pass
 
 class ApiClass:
     pass

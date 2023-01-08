@@ -339,6 +339,110 @@ class Grn {
         }
     }
 
+    loadGrn(entry_no){
+        let hd_req = apiv2('grn','get',{"entry":entry_no})
+        let hd_res = JSON.parse(hd_req)
+
+        if(hd_res['status'] === 200)
+        {
+
+            let message = hd_res['message']
+
+            let header,trans
+            header = message['header']
+            trans = message['trans']
+
+            $('#loc').val(`${header['loc_code']} - ${header['loc_descr']}`)
+            $('#supplier').val(header['supp_descr'])
+            $('#ent_date').val(header['entry_date'])
+            $('#ent_num').val(header['entry_no'])
+            $('#ent_rm').val(header['remark'])
+            $('#t_owner').val(header['owner'])
+            $('#print').val(header['pk'])
+            $('#approve').val(header['pk'])
+            console.table(trans)
+            if(trans['count'] > 0)
+            {
+                // make trans row
+                let transactions = trans['transactions']
+                let row = ''
+                for (let i = 0; i < transactions.length; i++) {
+                    let tran = transactions[i]
+                    let packing = tran['packing']
+                    console.table(packing)
+
+                    row += `<tr>
+                                <td>${tran['line']}</td>
+                                <td>${tran['product_barcode']}</td>
+                                <td>${tran['product_descr']}</td>
+                                <td>${packing['code']}</td>
+                                <td>${packing['pack_qty']}</td>
+                                <td>${tran['qty']}</td>
+                                <td>${tran['un_cost']}</td>
+                                <td>${tran['tot_cost']}</td>
+                            </tr>`
+
+                }
+
+                $('#tbody').html(row)
+            }
+
+            // navs
+            let nav = message['nav']
+            let appr = message['appr']
+            if(appr['status'] === 0)
+            {
+                // not approved
+                $('#approve').prop('disabled',false)
+            } else if(nav['status'] === 1)
+            {
+                // approved
+                $('#approve').prop('disabled',true)
+
+            } else {
+                // unknown status
+                $('#approve').prop('disabled',true)
+            }
+
+            if(nav['next_count'] > 0)
+            {
+                // there is next
+                $('#next').prop('disabled',false)
+                $('#next').val(parseInt(nav['next_id']))
+            } else {
+                // no next
+                $('#next').prop('disabled',true)
+            }
+
+            if(nav['prev_count'] > 0)
+            {
+                // there is prev
+                $('#prev').prop('disabled',false)
+                $('#prev').val(parseInt(nav['prev_id']))
+            } else {
+                // no prev
+                $('#prev').prop('disabled',true)
+            }
+
+            // prices
+            let prices = message['cost']
+            if(prices['taxable'] === 1 )
+            {
+                $('#taxable').val("YES")
+            } else {
+                $('#taxable').val("NO")
+            }
+            $('#taxable_amt').val(prices['taxable_amt'])
+            $('#tax_amt').val(prices['tax_amt'])
+            $('#tot_amt').val((parseFloat(prices['taxable_amt']) + parseFloat(prices['tax_amt'])).toFixed(2))
+
+
+        } else
+        {
+            swal_response('error',"DOCUMENT ERROR",hd_res['message'])
+        }
+    }
+
 }
 
 const grn = new Grn()
