@@ -27,6 +27,7 @@ class PoHd(models.Model):
     created_on = models.DateTimeField(auto_now_add=True)
     edited_on = models.DateTimeField(auto_now=True)
     status = models.IntegerField(default=0)
+    open = models.IntegerField(default=1)
 
     def trans(self):
         return PoTran.objects.get(entry_no=self.pk)

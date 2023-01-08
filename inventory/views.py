@@ -74,7 +74,7 @@ def new_grn(request):
         'nav': True,
         'suppliers': SuppMaster.objects.all(),
         'locs': Locations.objects.all(),
-        'po': PoHd.objects.filter(status=1)
+        'po': PoHd.objects.filter(open=1)
     }
     return render(request, 'inventory/grn/new.html', context=context)
 

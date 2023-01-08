@@ -129,7 +129,13 @@ class Grn {
 
 
                         }
-                        // location.href = '/inventory/grn/'
+                        // close po
+                        if(type === 'PO')
+                        {
+                            apiv2('close_doc','null',{'entry':ref,'user':$('#mypk').val(),'doc':'po'})
+                        }
+
+                        location.href = '/inventory/grn/'
 
                     } else {
                         error_handler(`error%%${message}`)

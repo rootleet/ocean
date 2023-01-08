@@ -822,6 +822,31 @@ def api_call(request, module, crud):
         else:
             response['message'] = f"UNKNOWN DOCUMENT TYPE {document}"
 
+    # close document
+    elif module == 'close_doc':
+        document = api_body['doc']
+        entry = api_body['entry']
+        user = api_body['user']
+        doc_found = 0
+        doc_setup = {
+            'grn': GrnHd.objects.filter(pk=entry),
+            'po': PoHd.objects.filter(pk=entry)
+        }
+
+        if document in doc_setup:
+
+            doc = doc_setup[document]
+            if doc.count() == 1:
+                response['status'] = 200
+                for docx in doc:
+                    doc_key = docx.pk
+                    docx.open = 0
+                    docx.save()
+                    response['message'] = "Document Closed"
+            else:
+                response['status'] = 404
+                response['message'] = f"{document} entry {entry} not found: COUNT {doc.count()}"
+
     return JsonResponse(response, safe=False)
 
 
