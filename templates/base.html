@@ -74,6 +74,34 @@
 </head>
 
 <body>
+    <!-- MODALS -->
+    <div id="g_modal" class="modal fade">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="g_modal_title"></h5>
+                </div>
+                <div class="modal-body">
+                    <div class="w-100" id="g_modal_body">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal" id="loader">
+        <div class="w-100 bg_trans_80 h-100 d-flex flex-wrap align-content-center justify-content-center">
+            <img src="{% static 'general/img/icons/2.gif' %}" alt="" class="img-fluid">
+            <div class="w-100 text-center">
+                <br>
+                <small class="text-info" id="error_msg"></small>
+            </div>
+        </div>
+    </div>
+    <script>
+        $('#loader').modal('show')
+    </script>
+
   <input type="hidden" id="autos_url" value="{% url 'autos' 'ajax' %}">
   <input type="hidden" id="search_url" value="{% url 'search' %}">
   <input type="hidden" value="{{ request.user.pk }}" id="mypk">
@@ -522,11 +550,13 @@
   <!-- Template Main JS File -->
   <script src="{% static 'assets/js/main.js' %}"></script>
 
+    <script>
+
+        $('#loader').delay(5000).modal('hide')
+
+    </script>
 
 
-  <script>
-
-  </script>
 </body>
 
 </html>
