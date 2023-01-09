@@ -7,56 +7,56 @@
         <div class="panel-sub-heading">
             <button onclick="location.href='{% url 'new-product' %}'" class="btn btn-sm btn-info">NEW</button>
         </div>
-        <div class="card-body container w-100">
-                    <div style="height: 8%; background: #0C0C0C; color:#f3f3f3;" class="row no-gutters">
-                        <strong class="col-sm-1 pt-3 pb-2 h-100 border-right">IMAGE</strong>
-                        <strong class="col-sm-2 pt-3 pb-2 h-100 border-right">BARCODE</strong>
-                        <strong class="col-sm-3 pt-3 pb-2 h-100 border-right">DESCRIPTION</strong>
-                        <strong class="col-sm-2 pt-3 pb-2 h-100 border-right">SUPPLIER</strong>
-                        <strong class="col-sm-2 pt-3 pb-2 h-100 border-right">STOCK</strong>
-                        <strong class="col-sm-2 pt-3 pb-2 h-100">TOOLS</strong>
-                    </div>
 
-                    <div style="height: 90%; overflow: auto" class="row border border-dark no-gutters">
-
-                        {% for product in products %}
-
-                            <div class="col-sm-1 border pt-2 pb-2 border-dark">
-                                <div style="height: 40px; width: 40px; overflow: hidden">
-                                    <img src="../../../{{ product.prod_img }}" width="100%" alt="">
-                                </div>
-                            </div>
-                            <div class="col-sm-2 border pt-2 pb-2 border-dark">
-                                <div style="height: 40px; overflow: hidden">
-                                    {{ product.barcode }}
-                                </div>
-                            </div>
-                            <div class="col-sm-3 border pt-2 pb-2 border-dark">
-                                <div style="height: 40px; overflow: hidden">
-                                    {{ product.descr }}
-                                </div>
-                            </div>
-                            <div class="col-sm-2 border pt-2 pb-2 border-dark">
-                                <div style="height: 40px; overflow: hidden">
-                                    {{ product.supplier.company }}
-                                </div>
-                            </div>
-                            <div class="col-sm-2 border pt-2 pb-2 border-dark">
-                                <div style="height: 40px; overflow: hidden">
-                                    <span onclick="pClass.Stock({{ product.pk }})" class="label label-info">{{ product.stock }}</span>
-                                </div>
-                            </div>
-                            <div class="col-sm-2 border pt-2 pb-2 border-dark">
-                                <div style="height: 40px; overflow: hidden" class="d-flex flex-wrap">
-                                    <kbd class="pointer"><a href="{% url 'adjust_product_qty' product.pk %}">ADJUST</a></kbd>
-                                </div>
-                            </div>
+        <section class="section dashboard">
+            <div class="row">
+                <div class="col-lg-8">
+                    <!-- Top Selling -->
+                    <div class="col-12">
+                      <div class="card top-selling overflow-auto">
 
 
-                        {% endfor %}
 
-                    </div>
+                        <div class="card-body pb-0">
+                          <h5 class="card-title">Products</h5>
+
+                          <table class="table table-borderless">
+                            <thead>
+                              <tr>
+                                <th scope="col">Preview</th>
+                                  <th scope="col">Barcode</th>
+                                <th scope="col">Product</th>
+                                <th scope="col">Supplier</th>
+                                <th scope="col">Stock</th>
+                                  <th scope="col">Action</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                                {% for product in products %}
+                                  <tr>
+                                    <th scope="row"><a href="#"><img src="/{{ product.prod_img }}" alt=""></a></th>
+                                      <td>{{ product.barcode }}</td>
+                                    <td><a href="#" class="text-primary fw-bold">{{ product.shrt_descr }}</a></td>
+
+                                    <td>{{ product.supplier.company }}</td>
+                                      <td onclick="pClass.Stock({{ product.pk }})" class="fw-bold">{{ product.stock }}</td>
+                                  <td><div class="w-100 d-flex flex-wrap">
+                                      <button onclick="location.href='{% url 'adjust_product_qty' product.pk %}'" class="btn btn-xs btn-info">ADJ</button>
+
+                                  </div></td>
+                                  </tr>
+                                {% endfor %}
+                            </tbody>
+                          </table>
+
+                        </div>
+
+                      </div>
+                    </div><!-- End Top Selling -->
                 </div>
+            </div>
+        </section>
+
     </div>
 
 {% endblock %}
