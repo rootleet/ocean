@@ -74,7 +74,7 @@ def new_grn(request):
         'nav': True,
         'suppliers': SuppMaster.objects.all(),
         'locs': Locations.objects.all(),
-        'po': PoHd.objects.filter(open=1)
+        'po': PoHd.objects.filter(status=1, open=1)
     }
     return render(request, 'inventory/grn/new.html', context=context)
 
@@ -90,7 +90,7 @@ def assets(request):
         'locs': Locations.objects.all(),
         'po': PoHd.objects.filter(status=1),
         'assgrp': AssetGroup.objects.all(),
-        'assets':Assets.objects.all()
+        'assets': Assets.objects.all()
     }
 
     return render(request, 'inventory/assets/index.html', context=context)
@@ -108,7 +108,7 @@ def newgroup(request):
 
 def assets_new(request):
     if request.method == 'POST':
-        form = NewAsset(request.POST,request.FILES)
+        form = NewAsset(request.POST, request.FILES)
         if form.is_valid():
             form.save()
             return redirect('assets')
