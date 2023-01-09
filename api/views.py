@@ -498,8 +498,8 @@ def api_call(request, module, crud):
                             }
                         }
 
-                        if DocAppr.objects.filter(entry_no=entry,doc_type='GRN').exists():
-                            approval = DocAppr.objects.get(entry_no=entry,doc_type='GRN')
+                        if DocAppr.objects.filter(entry_no=entry, doc_type='GRN').exists():
+                            approval = DocAppr.objects.get(entry_no=entry, doc_type='GRN')
                             appr['appr']['status'] = 1
                             appr['appr']['by'] = approval.approved_by.username
                             appr['appr']['date'] = approval.approved_on
@@ -807,6 +807,18 @@ def api_call(request, module, crud):
                         DocAppr(entry_no=doc_key, doc_type=document,
                                 approved_by=User.objects.get(pk=user)).save()  # approval
                         # transaction
+                        print(document)
+                        if document == 'grn':
+                            loc = Locations.objects.get(pk=docx.loc.pk)
+                            trans = GrnTran.objects.filter(entry_no=entry)
+                            for tran in trans:
+                                product = tran.product
+
+                                stock_save = ProductTrans(loc=loc, doc='GR', doc_ref=entry, product=product, tran_qty=tran.total_qty)
+                                stock_save.save()
+
+                                print(f"Product {product} STOCK CHANGED")
+
                         docx.status = 1
                         docx.save()  # make approved
 
