@@ -150,3 +150,5 @@ class Assets(models.Model):
     image = models.FileField(upload_to=f'static/general/img/products/')
 
     created_on = models.DateTimeField(auto_now_add=True)
+
+

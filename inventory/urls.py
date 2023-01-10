@@ -18,7 +18,7 @@ from django.urls import path, include
 from . import views
 
 urlpatterns = [
-    path('/', views.inventory, name='inventory'),
+    path('', views.inventory, name='inventory'),
     path('assets/', views.assets, name='assets'),
     path('assets/newgroup/',views.newgroup,name='newgroup'),
     path('assets/save-new',views.assets_new,name='assets_new'),
@@ -26,6 +26,7 @@ urlpatterns = [
     path('purchasing/new/', views.new_purchasing_order, name='new_purchasing_order'),
     path('grn/', views.grn, name='grn'),
     path('grn/new/', views.new_grn, name='new-grn'),
+    path('workstation/',views.workstation,name='workstation')
 
 ]
 

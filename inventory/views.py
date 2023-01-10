@@ -114,3 +114,18 @@ def assets_new(request):
             return redirect('assets')
         else:
             return HttpResponse(form)
+
+
+def workstation(request):
+    page['title'] = 'Workstation'
+    context = {
+        'page': page,
+        'nav': True,
+        'suppliers': SuppMaster.objects.all(),
+        'locs': Locations.objects.all(),
+        'po': PoHd.objects.filter(status=1),
+        'assgrp': AssetGroup.objects.all(),
+        'assets': Assets.objects.all()
+    }
+
+    return render(request, 'inventory/workstation/index.html', context=context)
