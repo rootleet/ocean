@@ -8,7 +8,7 @@ import datetime
 import hashlib
 
 from django.contrib.auth import authenticate, login as auth_login, logout
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 # Create your views here.
 from django.core import serializers
 from django.core.mail import send_mail
@@ -66,6 +66,9 @@ if Sales.objects.filter(day=day).exists():
         discs += s.discount
         n_sales += s.net_sales
 
+    n_sales = Sales.objects.filter(day=day).aggregate(Sum('net_sales'))['net_sales__sum']
+    g_sales = Sales.objects.filter(day=day).aggregate(Sum('gross_sales'))['gross_sales__sum']
+
     sales = {
         'gross_sales': babel.numbers.format_currency(g_sales, "₵ ", locale='en_US'),
         'tax': babel.numbers.format_currency(taxes, "₵ ", locale='en_US'),
@@ -104,6 +107,7 @@ def check_config(pk):
 
 
 @login_required(login_url='/login/')
+
 def index(request):
     # check user config
     # if request.user.is_authenticated:
@@ -125,7 +129,8 @@ def index(request):
         'notifications': notifications,
         'nav': True,
         'page': page,
-        'my_issues': my_issues
+        'my_issues': my_issues,
+        'sales':sales
     }
     return render(request, 'dashboard/index.html', context=context)
 

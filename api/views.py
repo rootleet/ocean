@@ -1,6 +1,7 @@
 import hashlib
 from decimal import Decimal
 
+import babel
 from django.contrib import messages
 from django.contrib.auth import authenticate, login as auth_login, logout
 from django.contrib.auth.models import User
@@ -11,10 +12,11 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from fpdf import FPDF
 
+from admin_panel.views import today
 from .ApiClass import *
 
 from admin_panel.models import Notifications, AuthToken, Locations, SuppMaster, ProductMaster, ProductTrans, \
-    ProductPacking
+    ProductPacking, Sales
 import json
 
 from inventory.models import PoHd, PoTran, PriceCenter, GrnHd, DocAppr, GrnTran
@@ -858,6 +860,80 @@ def api_call(request, module, crud):
             else:
                 response['status'] = 404
                 response['message'] = f"{document} entry {entry} not found: COUNT {doc.count()}"
+
+    # sales
+    elif module == 'sales':
+        day = api_body['day']
+        if crud == 'summary':
+            day = f"{today('year')}-{today('month')}-{today('day')}"
+            if Sales.objects.filter(day=day).exists():
+                Sales.objects.filter(day=day)
+                g_sales = 0
+                taxes = 0
+                discs = 0
+                n_sales = 0
+                total_s = 0
+                for s in Sales.objects.filter(day=day):
+                    g_sales += s.gross_sales
+                    taxes += s.tax
+                    discs += s.discount
+                    n_sales += s.net_sales
+
+                sales = {
+                    'gross_sales': babel.numbers.format_currency(g_sales, "₵ ", locale='en_US'),
+                    'tax': babel.numbers.format_currency(taxes, "₵ ", locale='en_US'),
+                    'discount': babel.numbers.format_currency(discs, "₵ ", locale='en_US'),
+                    'net_sales': babel.numbers.format_currency(n_sales, "₵ ", locale='en_US'),
+                    'total': babel.numbers.format_currency(n_sales - taxes, "₵ ", locale='en_US'),
+                }
+                response['status'] = 202
+                response['message'] = sales
+
+            else:
+                response['status'] = 404
+                sales = {
+                    'gross_sales': 0.00,
+                    'tax': 0.00,
+                    'discount': 0.00,
+                    'net_sales': 0.00
+                }
+                response['message'] = sales
+
+        elif crud == 'loc_wise':
+            day = f"{today('year')}-{today('month')}-{today('day')}"
+            if Sales.objects.filter(day=day).exists():
+                response['status'] = 202
+                sales = Sales.objects.filter(day=day)
+                sales_x = []
+                for sale in sales:
+                    loc = sale.loc_desc
+                    mech_no = sale.mech_no
+                    gross_sales = sale.gross_sales
+                    discount = sale.discount
+                    tax = sale.tax
+
+                    disc_tax = discount + tax
+
+                    net_sales = gross_sales - disc_tax
+
+                    this_sale = {
+                        'loc':loc,
+                        'mech_no': mech_no,
+                        'gross_sales': gross_sales,
+                        'discount': discount,
+                        'tax': tax,
+                        'net_sales': net_sales,
+                    }
+                    sales_x.append(this_sale)
+
+                response['message'] = sales_x
+
+            else:
+                response['status'] = 404
+                response['message'] = f"NO SALES {Sales.objects.filter(day=day).count()}"
+
+
+
 
     return JsonResponse(response, safe=False)
 
