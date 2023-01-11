@@ -18,7 +18,7 @@ from django.contrib import messages
 from django.http import JsonResponse
 from fpdf import FPDF
 
-from admin_panel.form import NewProduct, NewLocation, LogIn, NewTicket, UploadFIle, SignUp
+from admin_panel.form import NewProduct, NewLocation, LogIn, NewTicket, UploadFIle, SignUp, NewOu, NewUM
 from admin_panel.models import *
 from blog.models import *
 from community.models import *
@@ -107,7 +107,6 @@ def check_config(pk):
 
 
 @login_required(login_url='/login/')
-
 def index(request):
     # check user config
     # if request.user.is_authenticated:
@@ -130,7 +129,7 @@ def index(request):
         'nav': True,
         'page': page,
         'my_issues': my_issues,
-        'sales':sales
+        'sales': sales
     }
     return render(request, 'dashboard/index.html', context=context)
 
@@ -416,7 +415,7 @@ def accessories(request):
         'comm_tags': tags.objects.all(),
         'providers': Providers.objects.all(),
         'notomem': NotificationGroups.objects.all(),
-        'assgrps':AssetGroup.objects.all()
+        'assgrps': AssetGroup.objects.all()
     }
     return render(request, 'dashboard/accessories.html', context=context)
 
@@ -2029,6 +2028,8 @@ def all_users(request):
         'nav': True,
         'page': page,
         'users': User.objects.all(),
+        'ous': OrganizationalUnit.objects.all(),
+        'unit_membs': UnitMembers.objects.all()
     }
     return render(request, 'dashboard/company/all-users.html', context=context)
 
@@ -2089,3 +2090,32 @@ def update_profile(request):
         return redirect('profile')
 
 
+def save_ou(request):
+    if request.method == 'POST':
+        form = NewOu(request.POST)
+        if form.is_valid():
+            try:
+                form.save()
+            except Exception as e:
+                messages.success(request, e)
+        else:
+            messages.success(request,"Invalid Form")
+    else:
+        messages.success(request, "Invalid Request Method")
+
+    return redirect('all-users')
+
+def save_um(request):
+    if request.method == 'POST':
+        form = NewUM(request.POST)
+        if form.is_valid():
+            try:
+                form.save()
+            except Exception as e:
+                return HttpResponse(e)
+        else:
+            return HttpResponse(form)
+    else:
+        return HttpResponse("INVALID METHOD")
+
+    return redirect('all-users')

@@ -2,13 +2,13 @@ from django.contrib import messages
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
-from admin_panel.models import ProductMaster, SuppMaster, Locations
+from admin_panel.models import ProductMaster, SuppMaster, Locations, UnitMembers
 from django.contrib.auth import authenticate, login as auth_login, logout
 from django.contrib.auth.decorators import login_required
 
 from admin_panel.views import page
-from inventory.form import NewAssetGroup, NewAsset
-from inventory.models import PoHd, GrnHd, AssetGroup, Assets
+from inventory.form import NewAssetGroup, NewAsset, NewWorkstation
+from inventory.models import PoHd, GrnHd, AssetGroup, Assets, WorkStation
 
 
 # Create your views here.
@@ -123,9 +123,19 @@ def workstation(request):
         'nav': True,
         'suppliers': SuppMaster.objects.all(),
         'locs': Locations.objects.all(),
-        'po': PoHd.objects.filter(status=1),
-        'assgrp': AssetGroup.objects.all(),
-        'assets': Assets.objects.all()
+        'mems': UnitMembers.objects.all(),
+        'assets': Assets.objects.filter(type=1),
+        'wst': WorkStation.objects.all(),
+
     }
 
     return render(request, 'inventory/workstation/index.html', context=context)
+
+def save_workstation(request):
+    if request.method == 'POST':
+        form = NewWorkstation(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('workstation')
+        else:
+            return HttpResponse(form)

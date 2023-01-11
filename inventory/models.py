@@ -134,11 +134,12 @@ class AssetGroup(models.Model):
 
 
 class Assets(models.Model):
+
     group = models.ForeignKey('inventory.AssetGroup', on_delete=models.CASCADE)
     brand = models.TextField()
 
     descr = models.TextField()
-    sku = models.CharField(max_length=60,unique=True)
+    sku = models.CharField(max_length=60, unique=True)
     model = models.TextField()
     manufacturer = models.TextField()
 
@@ -147,8 +148,21 @@ class Assets(models.Model):
     processor = models.TextField()
 
     details = models.TextField()
-    image = models.FileField(upload_to=f'static/general/img/products/')
+    image = models.FileField(upload_to=f'static/general/img/products/',default='static/general/img/products/asset.png')
+    tags = models.TextField(default='NULL')
 
     created_on = models.DateTimeField(auto_now_add=True)
 
 
+class WorkStation(models.Model):
+    sys_uni = models.ForeignKey('inventory.Assets', on_delete=models.CASCADE, related_name='related_sys_uni')
+    monitor = models.ForeignKey('inventory.Assets', on_delete=models.CASCADE,related_name='related_moni')
+    keyboard = models.ForeignKey('inventory.Assets', on_delete=models.CASCADE,related_name='related_kb')
+    mouse = models.ForeignKey('inventory.Assets', on_delete=models.CASCADE,related_name='related_mouse')
+    printer = models.TextField(default='NULL')
+    ups = models.TextField(default='NULL')
+
+    created_date = models.DateField(auto_now_add=True)
+    created_time = models.TimeField(auto_now=True)
+    status = models.IntegerField(default=1)
+    owner = models.ForeignKey('admin_panel.UnitMembers', on_delete=models.CASCADE)

@@ -1,6 +1,7 @@
 from django import forms
 
-from admin_panel.models import ProductMaster, ProductPacking, Locations, TicketHd, Files
+from admin_panel.models import ProductMaster, ProductPacking, Locations, TicketHd, Files, OrganizationalUnit, \
+    UnitMembers
 
 
 class NewProduct(forms.ModelForm):
@@ -63,3 +64,13 @@ class UploadFIle(forms.ModelForm):
     class Meta:
         model = Files
         exclude = ['created_on', 'edited_on']
+
+class NewOu(forms.ModelForm):
+    class Meta:
+        model = OrganizationalUnit
+        exclude = ['created_on', 'edited_on', 'status']
+
+class NewUM(forms.ModelForm):
+    class Meta:
+        model = UnitMembers
+        exclude = ['created_on', 'edited_on', 'status']

@@ -432,3 +432,23 @@ class TaskBranchTran(models.Model):
     created_time = models.TimeField(auto_now=True)
     status = models.IntegerField(default=0)
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
+
+class OrganizationalUnit(models.Model):
+    name = models.CharField(max_length=60, unique=True)
+    description = models.TextField()
+
+    created_date = models.DateField(auto_now_add=True)
+    created_time = models.TimeField(auto_now=True)
+    status = models.IntegerField(default=1)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
+
+class UnitMembers(models.Model):
+    ou = models.ForeignKey('OrganizationalUnit', on_delete=models.CASCADE)
+    name = models.CharField(max_length=60, unique=True)
+
+    created_date = models.DateField(auto_now_add=True)
+    created_time = models.TimeField(auto_now=True)
+    status = models.IntegerField(default=1)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)

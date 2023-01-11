@@ -5,105 +5,215 @@
 
     <div class="w-100 h-100">
 
-        <div class="container-fluid">
+        <div class="container-fluid" style="height: 75vh; overflow: hidden">
+            <div class="row">
+                <div class="col-sm-8">
+                    <div class="card">
+                        <div class="card-header">
+                            <strong class="card-title">Users</strong>
+                        </div>
 
-            <div class="col-sm-8" style="height: 75vh; overflow: hidden">
-                <div class="card">
-                    <div class="card-header">
-                        <strong class="card-title">Users</strong>
-                    </div>
+                        <div class="card-header">
+                            <button data-bs-target="#newUser" data-bs-toggle="modal" class="btn btn-sm btn-info" style="height: fit-content">NEW USER</button>
+                            <div id="newUser" class="modal fade">
+                                <div class="modal-dialog modal-lg">
+                                    <div class="modal-content">
 
-                    <div class="card-header">
-                        <button data-bs-target="#newUser" data-bs-toggle="modal" class="btn btn-sm btn-info" style="height: fit-content">NEW USER</button>
-                        <div id="newUser" class="modal fade">
-                            <div class="modal-dialog modal-lg">
-                                <div class="modal-content">
+                                        <div class="modal-header">
+                                            <strong class="modal-title">Creating User</strong>
+                                        </div>
 
-                                    <div class="modal-header">
-                                        <strong class="modal-title">Creating User</strong>
+                                        <div class="modal-body p-2">
+                                            <form action="{% url 'sign_up' %}" method="post">
+                                                {% csrf_token %}
+
+
+                                                <input type="hidden" name="password" value="1111111">
+
+
+
+
+                                                <div class="container">
+
+
+                                                        <div class="row mb-3">
+                                                            <div class="col-sm-6">
+                                                                <label for="first_name">First Name</label><input name="first_name" type="text" class="form-control" id="first_name" value="">
+                                                            </div>
+                                                            <div class="col-sm-6">
+                                                                <label for="last_name">Last Name</label><input name="last_name" type="text" class="form-control" id="last_name" value="">
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="row mb-3">
+                                                            <div class="col-sm-6">
+                                                                <label for="company">Company</label><input name="company" type="text" class="form-control" id="company" value="">
+                                                            </div>
+                                                            <div class="col-sm-6">
+                                                                <label for="position">Position</label><input name="position" type="text" class="form-control" id="position" value="">
+                                                            </div>
+                                                        </div>
+
+
+                                                        <div class="row mb-3">
+                                                            <div class="col-sm-6">
+                                                                <label for="email">Email</label><input name="email" type="email" class="form-control" id="email" value="">
+                                                            </div>
+                                                            <div class="col-sm-6">
+                                                                <label for="mobile">Phone</label><input name="mobile" type="text" class="form-control" id="mobile" value="">
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+
+
+                                                <button class="btn btn-success">REGISTER</button>
+
+                                            </form>
+                                        </div>
+
                                     </div>
-
-                                    <div class="modal-body p-2">
-                                        <form action="{% url 'sign_up' %}" method="post">
-                                            {% csrf_token %}
-
-
-                                            <input type="hidden" name="password" value="1111111">
-
-
-
-
-                                            <div class="container">
-
-
-                                                    <div class="row mb-3">
-                                                        <div class="col-sm-6">
-                                                            <label for="first_name">First Name</label><input name="first_name" type="text" class="form-control" id="first_name" value="">
-                                                        </div>
-                                                        <div class="col-sm-6">
-                                                            <label for="last_name">Last Name</label><input name="last_name" type="text" class="form-control" id="last_name" value="">
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="row mb-3">
-                                                        <div class="col-sm-6">
-                                                            <label for="company">Company</label><input name="company" type="text" class="form-control" id="company" value="">
-                                                        </div>
-                                                        <div class="col-sm-6">
-                                                            <label for="position">Position</label><input name="position" type="text" class="form-control" id="position" value="">
-                                                        </div>
-                                                    </div>
-
-
-                                                    <div class="row mb-3">
-                                                        <div class="col-sm-6">
-                                                            <label for="email">Email</label><input name="email" type="email" class="form-control" id="email" value="">
-                                                        </div>
-                                                        <div class="col-sm-6">
-                                                            <label for="mobile">Phone</label><input name="mobile" type="text" class="form-control" id="mobile" value="">
-                                                        </div>
-                                                    </div>
-
-                                                </div>
-
-
-                                            <button class="btn btn-success">REGISTER</button>
-
-                                        </form>
-                                    </div>
-
                                 </div>
+                            </div>
+                        </div>
+
+                        <div class="card-body">
+
+                            <table class="table mb-0 table-striped table-hover table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>First Name</th><th>Last Name</th><th>Username</th><th>Status</th><th>Last Login</th><th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for this_user in users %}
+                                        <tr style="cursor: pointer;">
+                                            <td>{{ this_user.first_name }}</td>
+                                            <td>{{ this_user.last_name }}</td>
+                                            <td>{{ this_user.username}}</td>
+                                            <td><span class="text-success">ac</span></td>
+                                            <td>{{ this_user.last_login }}</td>
+                                            <td>
+                                                {% if this_user.is_superuser == False %}
+                                                    <button class="btn btn-danger" onclick="user.Delete('{{ this_user.pk }}')">DEL</button>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-4">
+
+                    <div class="card">
+                        <div class="card-header">
+                            <strong class="card-title">O_MEMBERS</strong>
+                        </div>
+                        <div class="card-header">
+                            <form action="{% url 'save_um' %}" method="post">
+                            {% csrf_token %}
+                                            <input type="hidden" name="owner" value="{{ user.pk }}" class="hidden">
+                              <div class="row">
+                                <div class="col">
+                                    <select name="ou" id="" class="form-control form-control-sm">
+                                        <option selected disabled>SELECT OU</option>
+                                        {% for ou in ous %}
+                                            <option value="{{ ou.pk }}">{{ ou.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col">
+                                  <input type="text" autocomplete="off" class="form-control form-control-sm" placeholder="Name" name="name">
+                                </div>
+                                  <div class="col">
+                                  <input type="submit" class="btn btn-sm btn-success w-100 h-100" >
+                                </div>
+                              </div>
+                            </form>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-sm table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>OU</th>
+                                            <th>NAME</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for mem in unit_membs %}
+                                            <tr>
+                                                <td>{{ mem.ou.name }}</td>
+                                                <td>{{ mem.name }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
 
-                    <div class="card-body">
+                    <div class="card">
+                        <div class="card-header">
+                            <strong class="card-title">O_UNITS</strong>
+                        </div>
 
-                        <table class="table mb-0 table-striped table-hover table-sm">
-                            <thead>
-                                <tr>
-                                    <th>First Name</th><th>Last Name</th><th>Username</th><th>Status</th><th>Last Login</th><th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for this_user in users %}
-                                    <tr style="cursor: pointer;">
-                                        <td>{{ this_user.first_name }}</td>
-                                        <td>{{ this_user.last_name }}</td>
-                                        <td>{{ this_user.username}}</td>
-                                        <td><span class="text-success">ac</span></td>
-                                        <td>{{ this_user.last_login }}</td>
-                                        <td>
-                                            {% if this_user.is_superuser == False %}
-                                                <button class="btn btn-danger" onclick="user.Delete('{{ this_user.pk }}')">DEL</button>
-                                            {% endif %}
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
+                        <div class="card-header">
+                            <button data-bs-target="#newOU" data-bs-toggle="modal" class="btn btn-sm btn-info">NEW</button>
+                            <div class="modal fade" id="newOU">
+                                <div class="modal-dialog">
+                                    <form method="post" action="{% url 'save_ou' %}" class="modal-content">
+                                        <div class="modal-header">
+                                            <span class="modal-title">Create New OU</span>
+                                        </div>
+                                        <div  class="modal-body p-2">
+
+
+                                            {% csrf_token %}
+                                            <input type="hidden" name="owner" value="{{ user.pk }}" class="hidden">
+                                            <label class="w-100">Name
+                                                <input type="text" required name="name" autocomplete="off" class="form-control mb-2 form-control-sm">
+                                            </label>
+                                            <label for="">Description</label><br><textarea required name="description" id="" cols="30" rows="5"
+                                                                            class="form-control form-control-sm"></textarea>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button class="btn btn-warning" data-bs-dismiss="modal" type="button">CANCEL</button>
+                                            <button class="btn btn-success" type="submit">SAVE</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-sm table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>OU</th>
+                                            <th>CREATED_BU</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for ou in ous %}
+                                            <tr>
+                                                <td>{{ ou.name }}</td>
+                                                <td>{{ ou.description }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
+
+
                 </div>
+
             </div>
 
         </div>

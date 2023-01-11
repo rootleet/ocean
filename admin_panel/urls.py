@@ -93,7 +93,9 @@ urlpatterns = [
     path('all-ticket/', views.all_tickets, name='all-ticket'),
     path('save-ticket/', views.make_ticket, name='save-ticket'),
     path('all-users/', views.all_users, name='all-users'),
-    path('update_profile/',views.update_profile,name='update_profile')
+    path('update_profile/',views.update_profile,name='update_profile'),
+    path('save-ou/',views.save_ou,name='save_ou'),
+    path('save_um/',views.save_um,name='save_um')
 
 ]
 

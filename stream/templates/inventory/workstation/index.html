@@ -11,7 +11,7 @@
                     <button data-bs-toggle="modal" data-bs-target="#newAsset" class="btn btn-info">NEW DESK</button>
                     <div class="modal fade" id="newAsset">
                         <div class="modal-dialog modal-lg">
-                            <form method="post" enctype="multipart/form-data" action="{% url 'assets_new' %}" class="modal-content">
+                            <form method="post"  action="{% url 'save_workstation' %}" class="modal-content">
                                 {% csrf_token %}
                                 <div class="modal-header">
                                     <strong class="modal-title">New Asset</strong>
@@ -20,74 +20,75 @@
                                     <div class="container">
                                         <div class="row">
 
-                                            <!-- group and brand -->
-                                            <div class="col-sm-6 mb-2">
-                                                <label for="">Group</label><select name="group" id="" class="form-control rounded-0">
-                                                    {% for grp in assgrp %}
-                                                    <option value="{{ grp.pk }}">{{ grp.descr }}</option>
+                                            <!-- owner -->
+                                            <div class="col-sm-12 mb-2">
+                                                <label for="owner">User</label><br>
+                                                <select name="sys_uni" id="owner" class="form-control form-control-sm rounded-0">
+                                                    {% for mem in mems %}
+                                                        <option value="{{ mem.pk }}">{{ mem.ou.name }} | {{ mem.name }}</option>
                                                     {% endfor %}
                                                 </select>
                                             </div>
 
+                                            <!-- sys_uni -->
                                             <div class="col-sm-6 mb-2">
-                                                <label class="w-100">Brand
-                                                    <input autocomplete="off" type="text" required name="brand" class="form-control rounded-0">
-                                                </label>
+                                                <label for="sys_uni">System Unit</label><br>
+                                                <select name="sys_uni" id="sys_uni" class="form-control form-control-sm rounded-0">
+                                                    {% for ass in assets %}
+                                                        <option value="{{ ass.pk }}">{{ ass.descr }}</option>
+                                                    {% endfor %}
+                                                </select>
                                             </div>
 
+                                            <!-- monitor -->
                                             <div class="col-sm-6 mb-2">
-                                                <label class="w-100">SKU
-                                                    <input autocomplete="off" type="text" required name="sku" class="form-control rounded-0">
-                                                    <small class="text-info">Unique tag</small>
-                                                </label>
+                                                <label for="monitor">Monitor</label><br>
+                                                <select name="monitor" id="monitor" class="form-control form-control-sm rounded-0">
+                                                    {% for ass in assets %}
+                                                        <option value="{{ ass.pk }}">{{ ass.descr }}</option>
+                                                    {% endfor %}
+                                                </select>
                                             </div>
 
-                                            <!-- DESCR -->
+                                            <!-- keyboard -->
                                             <div class="col-sm-6 mb-2">
-                                                <label class="w-100">Description
-                                                    <input autocomplete="off" type="text" required name="descr" class="form-control rounded-0">
-                                                </label>
+                                                <label for="keyboard">Keyboard</label><br>
+                                                <select name="keyboard" id="keyboard" class="form-control form-control-sm rounded-0">
+                                                    {% for ass in assets %}
+                                                        <option value="{{ ass.pk }}">{{ ass.descr }}</option>
+                                                    {% endfor %}
+                                                </select>
                                             </div>
 
-                                            <!--  model and manufacturer -->
+                                            <!-- mouse -->
                                             <div class="col-sm-6 mb-2">
-                                                <label class="w-100">Model
-                                                    <input autocomplete="off" type="text" required name="model" class="form-control rounded-0">
-                                                </label>
+                                                <label for="mouse">Mouse</label><br>
+                                                <select name="mouse" id="mouse" class="form-control form-control-sm rounded-0">
+                                                    {% for ass in assets %}
+                                                        <option value="{{ ass.pk }}">{{ ass.descr }}</option>
+                                                    {% endfor %}
+                                                </select>
                                             </div>
+
+                                            <!-- printer -->
                                             <div class="col-sm-6 mb-2">
-                                                <label class="w-100">Manufacturer
-                                                    <input autocomplete="off" type="text" required name="manufacturer" class="form-control rounded-0">
-                                                </label>
+                                                <label for="printer">Printer</label><br>
+                                                <select name="printer" id="printer" class="form-control form-control-sm rounded-0">
+                                                    {% for ass in assets %}
+                                                        <option value="{{ ass.pk }}">{{ ass.descr }}</option>
+                                                    {% endfor %}
+                                                </select>
                                             </div>
 
-                                            <!-- Processor -->
-                                            <div class="col-sm-12 mb-2">
-                                                <label class="w-100">Processor
-                                                    <input autocomplete="off" type="text" required name="processor" class="form-control rounded-0">
-                                                </label>
-                                            </div>
-
-
-                                            <!--  storage and memory -->
+                                            <!-- ups -->
                                             <div class="col-sm-6 mb-2">
-                                                <label class="w-100">Storage
-                                                    <input autocomplete="off" type="text" required name="storage" class="form-control rounded-0">
-                                                </label>
+                                                <label for="ups">UPS</label><br>
+                                                <select name="ups" id="ups" class="form-control form-control-sm rounded-0">
+                                                    {% for ass in assets %}
+                                                        <option value="{{ ass.pk }}">{{ ass.descr }}</option>
+                                                    {% endfor %}
+                                                </select>
                                             </div>
-                                            <div class="col-sm-6 mb-2">
-                                                <label class="w-100">Memory
-                                                    <input autocomplete="off" type="text" required name="memory" class="form-control rounded-0">
-                                                </label>
-                                            </div>
-
-                                            <!-- DETAILS -->
-                                            <div class="col-sm-12 p-2">
-                                                <textarea name="details" placeholder="More Details" id="" class="form-control rounded-0" rows="5"></textarea>
-                                            </div>
-
-                                            <!-- IMAGE -->
-                                            <input type="file" name="image" required accept="image/*" id="id_image">
 
                                         </div>
 
@@ -109,19 +110,40 @@
 
         <div class="card-body p-2">
             <div class="container-fluid p-0">
-                <div class="w-100 h-100 d-flex flex-wrap">
-                    {% for asset in assets %}
-                    <div class="asset_card m-2">
-                            <div class="card h-100">
-                                <div class="w-100 d-flex flex-wrap align-content-center justify-content-center h-75">
-                                    <img src="{{ asset.image.url }}" class="card-img-top w-50 mx-auto" alt="">
-                                </div>
-                                <div class="w-100 h-25">
-                                    <p class="ellipsis text-center">{{ asset.descr }}</p>
-                                </div>
-                            </div>
+                <div class="w-100 h-100">
+                    <div class="card recent-sales overflow-auto">
+
+
+
+                        <div class="card-body">
+
+
+                          <table class="table table-borderless datatable">
+                            <thead>
+                              <tr>
+                                <th scope="col">OWNER</th>
+                                <th scope="col">SYS_UNIT</th>
+                                <th scope="col">MONITOR</th>
+                                <th scope="col">MOU / KBOARD</th>
+                                  <th>ACTION</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                                {% for ws in wst %}
+                                  <tr>
+                                    <td>Brandon Jacob</td>
+                                    <td><a href="#" class="text-primary">At praesentium minu</a></td>
+                                    <td>$64</td>
+                                      <td>Hello / World</td>
+                                    <td><span class="badge bg-success">Approved</span></td>
+                                  </tr>
+                                {% endfor %}
+                            </tbody>
+                          </table>
+
                         </div>
-                    {% endfor %}
+
+                      </div>
                 </div>
             </div>
         </div>

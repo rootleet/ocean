@@ -20,13 +20,14 @@ from . import views
 urlpatterns = [
     path('', views.inventory, name='inventory'),
     path('assets/', views.assets, name='assets'),
-    path('assets/newgroup/',views.newgroup,name='newgroup'),
-    path('assets/save-new',views.assets_new,name='assets_new'),
+    path('assets/newgroup/', views.newgroup, name='newgroup'),
+    path('assets/save-new', views.assets_new, name='assets_new'),
     path('purchasing/', views.purchasing, name='purchasing'),
     path('purchasing/new/', views.new_purchasing_order, name='new_purchasing_order'),
     path('grn/', views.grn, name='grn'),
     path('grn/new/', views.new_grn, name='new-grn'),
-    path('workstation/',views.workstation,name='workstation')
+    path('workstation/', views.workstation, name='workstation'),
+    path('workstation/save_workstation/', views.save_workstation, name='save_workstation')
 
 ]
 
