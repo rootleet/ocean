@@ -71,7 +71,17 @@
             <div style="height: 450px" class="col-lg-6">
                 <div class="card h-100">
                     <div class="card-header">
-                        <h5 class="card-title">Total Without Tax</h5>
+
+                        <div class="w-100 h-100 d-flex flex-wrap">
+                            <div class="w-50 h-100 d-flex flex-wrap align-content-center">
+                                <h5 class="card-title">Total Without Tax</h5>
+                            </div>
+                            <div class="w-50 h-100 d-flex flex-wrap align-content-center justify-content-end">
+                                <button onclick="sales.salesSummary()" style="border-radius: 0 !important" class="btn btn-info rounded-0">SUMMARY</button>
+                                <button onclick="sales.detailSales()" style="border-radius: 0 !important" class="btn btn-warning rounded-0">DETAILED</button>
+                            </div>
+                        </div>
+
                     </div>
                     <div class="card-body">
                         <div class="w-100 h-100 d-flex flex-wrap align-content-center justify-content-center">
