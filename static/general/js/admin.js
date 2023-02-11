@@ -147,7 +147,7 @@ async function escalate(provider_code) {
         inputLabel: 'Message',
         inputPlaceholder: 'Type your message here...',
         inputAttributes: {
-            'aria-label': 'Type your message here'
+            'aria-label': 'Type your message here' 
         },
         showCancelButton: true
     })
