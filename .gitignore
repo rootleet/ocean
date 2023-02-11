@@ -11,3 +11,10 @@ tuto1.pdf
 /meeting/migrations/
 /inventory/migrations/
 *.pdf
+/venv/
+/admin_panel/migrations/
+/blog/migrations/
+/community/migrations/
+/inventory/migrations/
+/meeting/migrations/
+/stream/migrations/

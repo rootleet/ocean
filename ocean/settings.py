@@ -16,7 +16,6 @@ import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
@@ -81,7 +80,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'ocean.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
@@ -98,8 +96,8 @@ DATABASES = {
         'HOST': 'localhost',
         'PORT': '3306',
         'OPTIONS': {
-             "init_command": "SET foreign_key_checks = 0;",
-             },
+            "init_command": "SET foreign_key_checks = 0;",
+        },
     }
 }
 
@@ -121,7 +119,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-APPEND_SLASH=False
+APPEND_SLASH = False
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
@@ -133,7 +131,6 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
@@ -170,12 +167,13 @@ EMAIL_HOST_USER = "no-reply@snedamotors.com"
 EMAIL_HOST_PASSWORD = "Sunderland@411"
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
+# email config
 
-#email config
+
+# session setting
+SESSION_COOKIE_AGE = 1800  # 3 minutes. "1209600(2 weeks)" by default
+
+SESSION_SAVE_EVERY_REQUEST = True  # "False" by default
+# session settings
 
 
-#session setting
-SESSION_COOKIE_AGE = 1800 # 3 minutes. "1209600(2 weeks)" by default
-
-SESSION_SAVE_EVERY_REQUEST = True # "False" by default
-#session settings

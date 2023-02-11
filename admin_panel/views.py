@@ -54,20 +54,14 @@ def today(what='none'):  # get time
 day = f"{today('year')}-{today('month')}-{today('day')}"
 
 if Sales.objects.filter(day=day).exists():
-    Sales.objects.filter(day=day)
-    g_sales = 0
-    taxes = 0
-    discs = 0
-    n_sales = 0
-    total_s = 0
-    for s in Sales.objects.filter(day=day):
-        g_sales += s.gross_sales
-        taxes += s.tax
-        discs += s.discount
-        n_sales += s.net_sales
 
     n_sales = Sales.objects.filter(day=day).aggregate(Sum('net_sales'))['net_sales__sum']
+
     g_sales = Sales.objects.filter(day=day).aggregate(Sum('gross_sales'))['gross_sales__sum']
+
+    taxes = Sales.objects.filter(day=day).aggregate(Sum('tax'))['tax__sum']
+
+    discs = Sales.objects.filter(day=day).aggregate(Sum('discount'))['discount__sum']
 
     sales = {
         'gross_sales': babel.numbers.format_currency(g_sales, "₵ ", locale='en_US'),
@@ -82,7 +76,8 @@ else:
         'gross_sales': 0.00,
         'tax': 0.00,
         'discount': 0.00,
-        'net_sales': 0.00
+        'net_sales': 0.00,
+        'total': 0.00
     }
 
 
@@ -594,11 +589,14 @@ def update_task(request, entry_uni):
 
 @login_required(login_url='/login/')
 def close_task(request):
+    user = request.user
     if request.method == 'GET':
         form = request.GET
         entry = form['entry']
         remarks = form['remarks']
         task_detail = TaskHD.objects.get(entry_uni=entry)
+        task_type = task_detail.type
+        ref = task_detail.ref
 
         try:
             TaskHD.objects.filter(entry_uni=entry).update(status=1)
@@ -606,8 +604,26 @@ def close_task(request):
             if task_detail.type == 'from_questions':
                 # comment in question
                 answers(user=request.user.pk, question=task_detail.ref, ans=remarks).save()
+
+            elif task_type == 'TIK':
+                target_ticket = TicketHd.objects.get(pk=ref)
+
+                ticket_owner = target_ticket.owner
+                owner_email = ticket_owner.email
+                email_message = f"Ticket has been closed with message '{remarks}'"
+                email_subject = f"Ticket {target_ticket.title} Closed"
+                Emails(sent_from=settings.EMAIL_HOST_USER, sent_to=owner_email, subject=email_subject,
+                       body=email_message, email_type='system', ref='system').save()
+
+                TicketTrans(ticket=target_ticket, tran=remarks, user=user).save()
+
+                t_now = TicketHd.objects.get(pk=ref)
+                t_now.status = 2
+                t_now.save()
+
             return HttpResponse(f'done%% task {entry} close')
         except Exception as e:
+            TaskTrans(entry_uni=entry, tran_title='Closing Remarks', tran_descr=remarks, owner=request.user.pk).delete()
             TaskHD.objects.filter(entry_uni=entry).update(status=0)
             return HttpResponse(f'error%%{e}')
 
@@ -2099,11 +2115,12 @@ def save_ou(request):
             except Exception as e:
                 messages.success(request, e)
         else:
-            messages.success(request,"Invalid Form")
+            messages.success(request, "Invalid Form")
     else:
         messages.success(request, "Invalid Request Method")
 
     return redirect('all-users')
+
 
 def save_um(request):
     if request.method == 'POST':
