@@ -34,8 +34,8 @@ class Sms {
                                             <td>${sender_id}</td>
                                             <td>${api_desc}</td>
                                             <td><div class="w-100 d-flex flex-wrap">
-                                                <button class="btn btn-sm btn-danger rounded-0">DEL</button>
-                                                <button onclick="sms.EditSmsApi('${pk}')" class="btn btn-sm btn-warning rounded-0">EDIT</button>
+                                                <button onclick="sms.DelSmsApi('${api_key}')" class="btn btn-sm btn-danger rounded-0">DEL</button>
+                                                <button onclick="sms.EditSmsApi('${api_key}')" class="btn btn-sm btn-warning rounded-0">EDIT</button>
                                             </div></td>
                                         </tr>`;
 
@@ -46,12 +46,20 @@ class Sms {
 
         } else
         {
-            swal_response("warning","","Invalid Response for sms load screen")
+            $('#smsBody').html(`
+                <div class="w-100 h-100 d-flex flex-wrap align-content-center justify-content-center">
+                <div class="alert alert-info">NO SMS API</div>
+                </div>
+            `)
         }
     }
 
     EditSmsApi(pk){
         alert(`Update ${pk}`)
+    }
+
+    DelSmsApi(pk){
+        alert(`Deleting ${pk}`)
     }
 }
 
