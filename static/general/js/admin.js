@@ -533,6 +533,15 @@ function save_adjustment() {
 
 
 
-// end of adjustment functions
+const isJson = (str) => {
+  try {
+      JSON.parse(str)
+      return true
+  } catch (e) {
+      return false
+  }
+}
 
-// alert('hello')
+const alert = (str) => {
+    Swal.fire(str)
+}

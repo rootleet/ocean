@@ -18,7 +18,7 @@ from django.contrib import messages
 from django.http import JsonResponse
 from fpdf import FPDF
 
-from admin_panel.form import NewProduct, NewLocation, LogIn, NewTicket, UploadFIle, SignUp, NewOu, NewUM
+from admin_panel.form import NewProduct, NewLocation, LogIn, NewTicket, UploadFIle, SignUp, NewOu, NewUM, NewSMSApi
 from admin_panel.models import *
 from blog.models import *
 from community.models import *
@@ -2136,3 +2136,29 @@ def save_um(request):
         return HttpResponse("INVALID METHOD")
 
     return redirect('all-users')
+
+@login_required()
+def sms(request):
+    page['title'] = "SMS Manager"
+    context = {
+        'nav':True,
+        'page':page,
+
+    }
+    return render(request, 'dashboard/sms.html', context=context)
+
+@login_required()
+def new_sms_api(request):
+    if request.method == 'POST':
+        form = NewSMSApi(request.POST)
+        if form.is_valid():
+            try:
+                form.save()
+            except Exception as e:
+                return HttpResponse(e)
+        else:
+            return HttpResponse(form)
+    else:
+        return HttpResponse("INVALID METHOD")
+
+    return redirect('sms')

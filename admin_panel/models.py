@@ -386,7 +386,6 @@ class TicketTrans(models.Model):
     status = models.IntegerField(default=0)
 
 
-
 class Files(models.Model):
     doc = models.CharField(max_length=3)
     cryp_key = models.CharField(max_length=60)
@@ -458,6 +457,17 @@ class OrganizationalUnit(models.Model):
 class UnitMembers(models.Model):
     ou = models.ForeignKey('OrganizationalUnit', on_delete=models.CASCADE)
     name = models.CharField(max_length=60, unique=True)
+
+    created_date = models.DateField(auto_now_add=True)
+    created_time = models.TimeField(auto_now=True)
+    status = models.IntegerField(default=1)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
+
+class SmsApi(models.Model):
+    api_key = models.CharField(max_length=66, unique=True)
+    sender_id = models.TextField()
+    api_desc = models.TextField()
 
     created_date = models.DateField(auto_now_add=True)
     created_time = models.TimeField(auto_now=True)

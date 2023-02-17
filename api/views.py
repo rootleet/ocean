@@ -16,7 +16,7 @@ from admin_panel.views import today
 from .ApiClass import *
 
 from admin_panel.models import Notifications, AuthToken, Locations, SuppMaster, ProductMaster, ProductTrans, \
-    ProductPacking, Sales
+    ProductPacking, Sales, SmsApi
 import json
 
 from inventory.models import PoHd, PoTran, PriceCenter, GrnHd, DocAppr, GrnTran
@@ -816,7 +816,8 @@ def api_call(request, module, crud):
                             for tran in trans:
                                 product = tran.product
 
-                                stock_save = ProductTrans(loc=loc, doc='GR', doc_ref=entry, product=product, tran_qty=tran.total_qty)
+                                stock_save = ProductTrans(loc=loc, doc='GR', doc_ref=entry, product=product,
+                                                          tran_qty=tran.total_qty)
                                 stock_save.save()
 
                                 print(f"Product {product} STOCK CHANGED")
@@ -917,7 +918,7 @@ def api_call(request, module, crud):
                     net_sales = gross_sales - disc_tax
 
                     this_sale = {
-                        'loc':loc,
+                        'loc': loc,
                         'mech_no': mech_no,
                         'gross_sales': gross_sales,
                         'discount': discount,
@@ -932,8 +933,41 @@ def api_call(request, module, crud):
                 response['status'] = 404
                 response['message'] = f"NO SALES {Sales.objects.filter(day=day).count()}"
 
+    # sms
+    elif module == 'sms':
+        if crud == 'get':
+            sender_id = api_body['sender_id']
+            rec = []
+            if sender_id == '*':
+                # all
+                call = SmsApi.objects.filter(id__gt=0)
+            else:
+                call = SmsApi.objects.filter(sender_id=sender_id)
 
+            if call.count() > 0:
+                response['status'] = 200
+                for sms_api in call:
 
+                    this_sender_id = sms_api.sender_id
+                    this_api_key = sms_api.api_key
+                    this_api_desc = sms_api.api_desc
+                    this_api_owner = {
+                        'pk':sms_api.owner.pk,
+                        'username': sms_api.owner.username
+                    }
+                    timestamp = {
+                        'date':sms_api.created_date,
+                        'time': sms_api.created_time
+                    }
+                    status = sms_api.status
+
+                    this = {'sender_id': this_sender_id, 'api_key': this_api_key, 'api_desc': this_api_desc,
+                            'user': this_api_owner,'timestamp':timestamp,'status':status,'pk':sms_api.pk}
+                    rec.append(this)
+                response['message'] = rec
+            else:
+                response['status'] = '404'
+                response['message'] = "No Match Found"
 
     return JsonResponse(response, safe=False)
 

@@ -59,6 +59,7 @@
   <script src="{% static 'general/js/classes/user.js' %}"></script>
   <script src="{% static 'general/js/classes/po.js' %}"></script>
     <script src="{% static 'general/js/classes/sales.js' %}"></script>
+    <script src="{% static 'general/js/classes/sms.js' %}"></script>
 
 
   <script>
@@ -495,6 +496,11 @@
           <li>
             <a href="{% url 'emails' %}">
               <i class="bi bi-circle"></i><span>Emails</span>
+            </a>
+          </li>
+            <li>
+            <a href="{% url 'sms' %}">
+              <i class="bi bi-circle"></i><span>SMS</span>
             </a>
           </li>
           <li>

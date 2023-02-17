@@ -1,13 +1,13 @@
 from django import forms
 
 from admin_panel.models import ProductMaster, ProductPacking, Locations, TicketHd, Files, OrganizationalUnit, \
-    UnitMembers
+    UnitMembers, SmsApi
 
 
 class NewProduct(forms.ModelForm):
     class Meta:
         model = ProductMaster
-        exclude = ['created_on', 'edited_on', 'status', 'created_by','price_center']
+        exclude = ['created_on', 'edited_on', 'status', 'created_by', 'price_center']
 
 
 class NewProductPacking(forms.ModelForm):
@@ -65,12 +65,20 @@ class UploadFIle(forms.ModelForm):
         model = Files
         exclude = ['created_on', 'edited_on']
 
+
 class NewOu(forms.ModelForm):
     class Meta:
         model = OrganizationalUnit
         exclude = ['created_on', 'edited_on', 'status']
 
+
 class NewUM(forms.ModelForm):
     class Meta:
         model = UnitMembers
         exclude = ['created_on', 'edited_on', 'status']
+
+
+class NewSMSApi(forms.ModelForm):
+    class Meta:
+        model = SmsApi
+        exclude = ['created_date', 'created_time', 'status']

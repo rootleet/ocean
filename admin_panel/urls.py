@@ -95,7 +95,10 @@ urlpatterns = [
     path('all-users/', views.all_users, name='all-users'),
     path('update_profile/',views.update_profile,name='update_profile'),
     path('save-ou/',views.save_ou,name='save_ou'),
-    path('save_um/',views.save_um,name='save_um')
+    path('save_um/',views.save_um,name='save_um'),
+
+    path('sms/',views.sms,name='sms'),
+    path('sms/ew_sms_api/',views.new_sms_api,name='new_sms_api')
 
 ]
 
