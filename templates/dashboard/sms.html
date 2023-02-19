@@ -63,7 +63,7 @@
                                         </tr>
                                     </thead>
 
-                                    <tbody>
+                                    <tbody id="smsBody">
                                         <tr data-bs-target="#msag" data-bs-toggle="modal">
                                             <td>SNEDA SHOP</td>
                                             <td>0201998184</td>
@@ -81,6 +81,31 @@
 
                                                     <div class="modal-body">
 
+                                                        <div class="w-100 mb-2 container">
+                                                            <div class="row w-100">
+                                                                <div class="col-sm-4">
+                                                                    <button disabled class="btn btn-success">STATUS</button>
+                                                                </div>
+                                                                <div class="col-sm-6">
+                                                                    <div class="w-100"><small class="w-100"><span>Queued On : </span><i class="text-info">hwllo</i></small></div>
+                                                                    <div class="w-100"><small class="w-100"><span>Last Tried :</span><i class="text-info">world</i></small></div>
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+
+                                                        <hr>
+
+                                                        <div class="card">
+
+                                                            <div class="card-body">
+                                                                <h5 class="card-title">Message</h5>
+                                                                <p>
+                                                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab delectus doloribus eum ipsum iure laborum mollitia nesciunt, quibusdam, sapiente sunt suscipit tempora veniam veritatis! Alias doloremque impedit natus optio similique?
+                                                                </p>
+
+                                                            </div>
+                                                        </div>
                                                     </div>
 
                                                 </div>
@@ -105,52 +130,7 @@
 
                                 <div id="trafficChart" style="min-height: 400px;" class="echart"></div>
 
-                                      <script>
-                                        document.addEventListener("DOMContentLoaded", () => {
-                                          echarts.init(document.querySelector("#trafficChart")).setOption({
-                                            tooltip: {
-                                              trigger: 'item'
-                                            },
-                                            legend: {
-                                              top: '5%',
-                                              left: 'center'
-                                            },
-                                            series: [{
-                                              name: 'Access From',
-                                              type: 'pie',
-                                              radius: ['40%', '70%'],
-                                              avoidLabelOverlap: false,
-                                              label: {
-                                                show: false,
-                                                position: 'center'
-                                              },
-                                              emphasis: {
-                                                label: {
-                                                  show: true,
-                                                  fontSize: '18',
-                                                  fontWeight: 'bold'
-                                                }
-                                              },
-                                              labelLine: {
-                                                show: false
-                                              },
-                                              data: [{
-                                                  value: 1048,
-                                                  name: 'Queued'
-                                                },
-                                                {
-                                                  value: 735,
-                                                  name: 'Sent'
-                                                },
-                                                {
-                                                  value: 735,
-                                                  name: 'Failed'
-                                                }
-                                              ]
-                                            }]
-                                          });
-                                        });
-                                          </script>
+
 
                                 </div>
 
@@ -242,7 +222,9 @@
     </div>
 
     <script>
-        sms.loadScreen()
+
+        sms.loadAllSmsScreens()
+
     </script>
 
 {% endblock %}

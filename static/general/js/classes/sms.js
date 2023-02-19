@@ -14,8 +14,73 @@ class Sms {
     }
     // end of getting queued sms
 
+    // server status
+    ServerStatus()
+    {
+        if(isJson(apiv2('sms','servStat',{'null':null})))
+        {
+            let sstat = JSON.parse(apiv2('sms','servStat',{'null':null}))
+            let status,message
+
+            status = sstat['status']
+            message = sstat['message']
+
+            if(status === 200)
+            {
+                let sent,pending
+                sent = message['sent']
+                pending = message['pending']
+
+                document.addEventListener("DOMContentLoaded", () => {
+                    echarts.init(document.querySelector("#trafficChart")).setOption({
+                        tooltip: {
+                            trigger: 'item'
+                        },
+                        legend: {
+                            top: '5%',
+                            left: 'center'
+                        },
+                        series: [{
+                            name: 'SMS Status',
+                            type: 'pie',
+                            radius: ['40%', '70%'],
+                            avoidLabelOverlap: false,
+                            label: {
+                                show: true,
+                                position: 'center'
+                            },
+                            emphasis: {
+                                label: {
+                                    show: true,
+                                    fontSize: '18',
+                                    fontWeight: 'bold'
+                                }
+                                },
+                            labelLine: {
+                                show: false
+                            },
+                            data: [{
+                                value: pending,
+                                name: 'Pending',
+                            },
+                                {
+                                    value:sent,
+                                    name: 'Sent'
+                                }
+                                ]
+                        }]
+                    });
+                });
+
+            }
+
+        }
+
+    }
+    // server status
+
     // start of loading sms apis to screen
-    loadScreen(){
+    loadApisScreen(){
 
         if(isJson(this.getApi()))
         {
@@ -124,7 +189,118 @@ class Sms {
     }
     // end of que a sms
 
+    // loading sms scree
+    loadSmsScreen(){
+        let tr = ''
+        let modals = ''
+        if(isJson(this.sms('*')))
+        {
+            let all_sms = JSON.parse(this.sms('*'))
 
+            let status,message
+            status = all_sms['status']
+            message = all_sms['message']
+
+            if(status === 200)
+            {
+
+                // response is valid
+                for (let mi = 0; mi < message.length; mi++) {
+                    let msg = message[mi]
+                    let from,to,mess,timestamp,status,last_tried,status_htm
+                    from = msg['api']['sender_id']
+                    to = msg['to']
+                    mess = msg['message']
+                    status = msg['status']
+                    timestamp = `${msg['timestamp']['created_date']} ${msg['timestamp']['created_time']}`
+                    last_tried = `${msg['timestamp']['tried_date']} ${msg['timestamp']['tried_time']}`
+
+                    if(status === 1)
+                    {
+                        status_htm = `<small class="text-success">sent</small>`
+                    } else {
+                        status_htm = `<small class="text-info">pending</small>`
+                    }
+
+                    tr += `
+                        <tr data-bs-target="#msag${mi}" data-bs-toggle="modal">
+                                            <td>${from}</td>
+                                            <td>${to}</td>
+                                            <td>${timestamp}</td>
+                                            <td>${status_htm}</td>
+                                        </tr>
+                                        
+                    `
+
+                    modals += `<div class="modal fade" id="msag${mi}" backdrop="false">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title">
+                                                            From ${from} to ${to}
+                                                        </h5>
+                                                    </div>
+
+                                                    <div class="modal-body">
+
+                                                        <div class="w-100 mb-2 container">
+                                                            <div class="row w-100">
+                                                                <div class="col-sm-4">
+                                                                    <button class="btn btn-success">STATUS</button>
+                                                                </div>
+                                                                <div class="col-sm-8">
+                                                                    <div class="w-100"><small class="w-100"><span>Queued On : </span><i class="text-info">${timestamp}</i></small></div>
+                                                                    <div class="w-100"><small class="w-100"><span>Last Tried :</span><i class="text-info">${last_tried}</i></small></div>
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+
+                                                        <hr>
+
+                                                        <div class="card">
+
+                                                            <div class="card-body">
+                                                                <h5 class="card-title">Message</h5>
+                                                                <p>
+                                                                ${mess}
+                                                                </p>
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>`
+
+                }
+
+            } else {
+                swal_response('warning',status,message)
+                tr = message
+            }
+
+        } else {
+            swal_response('error','PROCEDURE ERROR',`Response for all sms is not a valid Json`)
+            tr = 'There response is an invalid JSON'
+        }
+
+        $('#smsBody').html(tr) // append modals
+        $('#smsBody').append(modals) // append modals
+
+    }
+    // loading sms screen
+
+    // load all screens
+    loadAllSmsScreens()
+    {
+
+        this.loadSmsScreen();
+        this.ServerStatus();
+        this.loadApisScreen();
+    }
+    // end load all screens
 
 }
 

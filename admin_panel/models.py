@@ -491,7 +491,7 @@ class Sms(models.Model):
 
 # log sms responses
 class SmsResponse(models.Model):
-    sms = models.OneToOneField(Sms, on_delete=models.CASCADE)
+    sms = models.ForeignKey(Sms, on_delete=models.CASCADE)
     resp_code = models.TextField()
     resp_msg = models.TextField()
 

@@ -1,3 +1,4 @@
+import datetime
 import hashlib
 from decimal import Decimal
 
@@ -1012,7 +1013,8 @@ def api_call(request, module, crud):
 
                     status = sms.status
 
-                    rec.append({'api':api,'to':to,'message':message,'timestamp':timestamp,'resp':sms_resp,'status':status})
+                    rec.append({'api': api, 'to': to, 'message': message, 'timestamp': timestamp, 'resp': sms_resp,
+                                'status': status})
                 response['message'] = rec
             else:
                 response['status'] = 404
@@ -1034,6 +1036,60 @@ def api_call(request, module, crud):
                 response['status'] = 505
                 response['message'] = str(e)
         # end of que a sms
+
+        # get messages status
+        elif crud == 'servStat':
+            sent_messages = Sms.objects.filter(status=1).count()
+            pending_messages = Sms.objects.filter(status=0).count()
+            response['status'] = 200
+            response['message'] = {'sent': sent_messages, 'pending': pending_messages}
+        # end of get messages status
+
+        # send all pending sms
+        elif crud == 'sendSms':
+            import requests
+            pending_messages = Sms.objects.filter(status=0)[:1]
+            for pending in pending_messages:
+                try:
+                    pk = pending.pk
+                    to = pending.to
+                    text = pending.message
+                    sender_id = pending.api.sender_id
+                    api_key = pending.api.api_key
+                    endPoint = f"https://apps.mnotify.net/smsapi?key={api_key}&to={to}&msg={text}&sender_id=SNEDA SHOP"
+                    resp = requests.post(endPoint)
+                    data = resp.json()
+
+                    status = data['status']
+                    code = data['code']
+                    resp_msg = data['message']
+
+                    if code == '1000':
+                        # success
+                        sent = Sms.objects.get(pk=pk)
+                        sent.status = 1
+                        sent.save()
+
+                    # tried
+                    import datetime
+                    current_time = datetime.datetime.now()
+                    tim = f"{current_time.hour}:{current_time.minute}:{current_time.second}"
+                    dat = f"{current_time.year}-{current_time.month}-{current_time.day}"
+                    sent = Sms.objects.get(pk=pk)
+                    sent.last_tried_time = tim
+                    sent.last_tried_date = dat
+                    sent.save()
+
+                    # insert sent status
+                    SmsResponse(sms=Sms.objects.get(pk=pk), resp_code=code, resp_msg=resp_msg).save()
+
+                    response['status'] = 200
+                    response['message'] = data
+                except Exception as e:
+                    response['status'] = 505
+                    response['message'] = str(e)
+
+        # end of sending pending sms
 
     return JsonResponse(response, safe=False)
 
