@@ -624,6 +624,12 @@ def close_task(request):
 
                 TicketTrans(ticket=target_ticket, tran=remarks, user=user).save()
 
+                ticket_owner_adone = UserAddOns.objects.get(user=User.objects.get(pk=ticket_owner.pk))
+                sms_api = SmsApi.objects.get(sender_id='SNEDA SHOP')
+                text = f"Issue : {target_ticket.title}. Status : Closed. Message : {email_message}"
+
+                Sms(api=sms_api, to=ticket_owner_adone.phone, message=text).save()
+
                 t_now = TicketHd.objects.get(pk=ref)
                 t_now.status = 2
                 t_now.save()
