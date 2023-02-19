@@ -1,9 +1,20 @@
 class Sms {
+
+    // start of getting all sms apis
     getApi(id='*'){
         let data = {"sender_id":id}
-        return apiv2('sms', 'get', data)
+        return apiv2('sms', 'getApis', data)
     }
+    // end of getting all sms apis
 
+    // start of getting queued sms
+    sms(sms_id='*'){
+        let data = {"sms_id":sms_id}
+        return apiv2('sms', 'getMessages', data)
+    }
+    // end of getting queued sms
+
+    // start of loading sms apis to screen
     loadScreen(){
 
         if(isJson(this.getApi()))
@@ -14,6 +25,7 @@ class Sms {
 
             st = response['status']
             msg = response['message']
+
             let tr = ''
             if(st === 200)
             {
@@ -53,7 +65,7 @@ class Sms {
             `)
         }
     }
-
+    // end of loading sms apis to screen
     EditSmsApi(pk){
         alert(`Update ${pk}`)
     }
@@ -61,6 +73,59 @@ class Sms {
     DelSmsApi(pk){
         alert(`Deleting ${pk}`)
     }
+
+    // start of que a sms
+    QueSMS(){
+        let api,to,message,err_c = 0,err_m = ''
+
+        api = $('#api').val()
+        to = $('#to').val()
+        message = $('#message').val()
+
+        if(api.length < 0)
+        {
+            err_c ++
+            err_m += ` | INVALID API KEY ${api}`
+        }
+        if(to.length < 0)
+        {
+            err_c ++
+            err_m += ` | INVALID RECIPIENT ${to}`
+        }
+        if(message.length < 0)
+        {
+            err_c ++
+            err_m += ` | INVALID MESSAGE ${message}`
+        }
+
+        if(err_c > 0)
+        {
+            // there is an error
+            swal_response('error','PROCEDURE ERROR',err_m)
+        } else {
+            // api call
+            let data = {'api':api,'to':to,'message':message}
+            let api_response = apiv2('sms','que',data)
+
+            if(isJson(api_response)){
+                let xxl = JSON.parse(api_response)
+                swal_response('info',xxl['status'],xxl['message'])
+                $('#newSMS').modal('hide')
+                $('#api').val('')
+                $('#to').val('')
+                $('#message').val('')
+            } else {
+                swal_response('error',"UNCOMPLETED TRANSACTION",`API returned an invalid json ${api_response}`)
+            }
+        }
+
+
+
+    }
+    // end of que a sms
+
+
+
 }
 
 const sms = new Sms()

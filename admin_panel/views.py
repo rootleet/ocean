@@ -2143,6 +2143,7 @@ def sms(request):
     context = {
         'nav':True,
         'page':page,
+        'apis':SmsApi.objects.filter(status=1)
 
     }
     return render(request, 'dashboard/sms.html', context=context)

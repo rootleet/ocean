@@ -533,14 +533,14 @@ function save_adjustment() {
 
 
 
-const isJson = (str) => {
-  try {
-      JSON.parse(str)
-      return true
-  } catch (e) {
-      return false
-  }
-}
+    const isJson = (str) => {
+      try {
+          JSON.parse(str)
+          return true
+      } catch (e) {
+          return false
+      }
+    }
 
 const alert = (str) => {
     Swal.fire(str)

@@ -16,7 +16,7 @@ from admin_panel.views import today
 from .ApiClass import *
 
 from admin_panel.models import Notifications, AuthToken, Locations, SuppMaster, ProductMaster, ProductTrans, \
-    ProductPacking, Sales, SmsApi
+    ProductPacking, Sales, SmsApi, Sms, SmsResponse
 import json
 
 from inventory.models import PoHd, PoTran, PriceCenter, GrnHd, DocAppr, GrnTran
@@ -91,7 +91,8 @@ def api_call(request, module, crud):
     try:
         api_body = json.loads(request.body)
     except Exception as e:
-        pass
+        response['message'] = 'NO API BODY'
+        return JsonResponse(response, safe=False)
 
     if module == 'notif':
         user = api_body['user']
@@ -935,7 +936,8 @@ def api_call(request, module, crud):
 
     # sms
     elif module == 'sms':
-        if crud == 'get':
+        # start of getting all sms apis
+        if crud == 'getApis':
             sender_id = api_body['sender_id']
             rec = []
             if sender_id == '*':
@@ -947,27 +949,91 @@ def api_call(request, module, crud):
             if call.count() > 0:
                 response['status'] = 200
                 for sms_api in call:
-
                     this_sender_id = sms_api.sender_id
                     this_api_key = sms_api.api_key
                     this_api_desc = sms_api.api_desc
                     this_api_owner = {
-                        'pk':sms_api.owner.pk,
+                        'pk': sms_api.owner.pk,
                         'username': sms_api.owner.username
                     }
                     timestamp = {
-                        'date':sms_api.created_date,
+                        'date': sms_api.created_date,
                         'time': sms_api.created_time
                     }
                     status = sms_api.status
 
                     this = {'sender_id': this_sender_id, 'api_key': this_api_key, 'api_desc': this_api_desc,
-                            'user': this_api_owner,'timestamp':timestamp,'status':status,'pk':sms_api.pk}
+                            'user': this_api_owner, 'timestamp': timestamp, 'status': status, 'pk': sms_api.pk}
                     rec.append(this)
                 response['message'] = rec
             else:
-                response['status'] = '404'
+                response['status'] = 404
                 response['message'] = "No Match Found"
+        # end of getting all sms apis
+
+        # start of getting queued sms
+        if crud == 'getMessages':
+            sms_id = api_body['sms_id']
+            rec = []
+            if sms_id == '*':
+                # all
+                sms_fetch = Sms.objects.filter(id__gt=0)
+            else:
+                sms_fetch = Sms.objects.filter(id=sms_id)
+
+            if sms_fetch.count() > 0:
+                response['status'] = 200
+                for sms in sms_fetch:
+                    api = {'sender_id': sms.api.sender_id}
+                    to = sms.to
+                    message = sms.message
+                    timestamp = {
+                        'tried_date': sms.last_tried_date,
+                        'tried_time': sms.last_tried_time,
+                        'created_date': sms.created_date,
+                        'created_time': sms.created_time
+                    }
+
+                    # sms response
+                    sms_resp_count = SmsResponse.objects.filter(sms=sms.pk).count()
+                    if sms_resp_count == 1:
+                        sms_response = SmsResponse.objects.get(sms=sms.pk)
+                        sms_resp = {
+                            'code': sms_response.resp_code,
+                            'message': sms_response.resp_msg
+                        }
+                    else:
+
+                        sms_resp = {
+                            'code': f'NONE {sms_resp_count}',
+                            'message': f'NONE {sms_resp_count}'
+                        }
+                    # end of sms response
+
+                    status = sms.status
+
+                    rec.append({'api':api,'to':to,'message':message,'timestamp':timestamp,'resp':sms_resp,'status':status})
+                response['message'] = rec
+            else:
+                response['status'] = 404
+                response['message'] = "No Match Found"
+        # end of getting queued sms
+
+        # start of que a sms
+        elif crud == 'que':  # que message
+            sms_api = api_body['api']
+            to = api_body['to']
+            message = api_body['message']
+
+            try:
+                core_api = SmsApi.objects.get(pk=sms_api)
+                Sms(api=core_api, to=to, message=message).save()
+                response['status'] = 200
+                response['message'] = "Message Added To Queuq"
+            except Exception as e:
+                response['status'] = 505
+                response['message'] = str(e)
+        # end of que a sms
 
     return JsonResponse(response, safe=False)
 
