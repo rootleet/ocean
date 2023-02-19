@@ -541,7 +541,14 @@ def new_task(request):
                        type=type, domain=tags.objects.get(pk=domain)).save()
                 if type == 'TIK':
                     xticket = TicketHd.objects.get(pk=ref)
+                    useradon = UserAddOns.objects.get(user=User.objects.get(pk=xticket.owner.pk))
                     xticket.status = 1
+                    sms_api = SmsApi.objects.get(sender_id='SNEDA SHOP')
+
+                    text = f"Issues '{xticket.title}' has been logged by System Administrator. Issue will be checked " \
+                           f"and resolved on time"
+
+                    Sms(api=sms_api, to=useradon.phone, message=text).save()
 
                     notification = Notifications(owner=User.objects.get(pk=xticket.owner.pk), type=2,
                                                  title='Ticket Longed',
@@ -2137,16 +2144,18 @@ def save_um(request):
 
     return redirect('all-users')
 
+
 @login_required()
 def sms(request):
     page['title'] = "SMS Manager"
     context = {
-        'nav':True,
-        'page':page,
-        'apis':SmsApi.objects.filter(status=1)
+        'nav': True,
+        'page': page,
+        'apis': SmsApi.objects.filter(status=1)
 
     }
     return render(request, 'dashboard/sms.html', context=context)
+
 
 @login_required()
 def new_sms_api(request):

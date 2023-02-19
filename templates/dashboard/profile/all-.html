@@ -51,6 +51,7 @@
                             <table class="table table-hover overflow-auto table-sm table-bordered border-info">
                                 <thead class="thead-dark">
                                     <tr>
+                                        <th>Owner</th>
                                         <th>Title</th>
                                         <th>Description</th>
                                         <th>Status</th>
@@ -61,6 +62,7 @@
                                 <tbody>
                                     {% for ticket in my_tickets %}
                                         <tr>
+                                            <td>{{ ticket.owner.username }}</td>
                                             <td>{{ ticket.title }}</td>
                                             <td>{{ ticket.descr | slice:':30' }}</td>
                                             <td>{{ ticket.status }}

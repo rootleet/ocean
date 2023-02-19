@@ -103,19 +103,56 @@
                                   <!-- List group with Advanced Contents -->
                                   <div class="list-group">
                                       {% for task in tasks %}
-                                        <a
-{#                                                onclick="windowPopUp('{% url 'view_task' task.entry_uni %}','TASK MANAGER',900,600)" #}
-                                                onclick="location.href='{% url 'view_task' task.entry_uni %}'"
-                                                style="cursor: pointer;"
-                                                class="list-group-item list-group-item-action" aria-current="true"
-                                        >
-                                          <div class="d-flex w-100 justify-content-between">
-                                            <strong class="mb-1">{{ task.title }}</strong>
-                                            <small>{{ task.added_on }}</small>
+
+                                          <div class="card shadow mb-3">
+                                            <div class="card-header">
+                                                <div class="w-100 h-100 d-flex flex-wrap">
+                                                    <div class="w-50 h-100">
+                                                        <div class="d-flex">
+                                                            <small class="mr-2">@{{ task.owner.username }}</small> &emsp14;&emsp14; <small>{{ task.added_on }}</small>
+                                                        </div>
+                                                        <div class="w-100"><small class="card-title ellipsis m-0 p-0">{{ task.title }}</small></div>
+                                                        <kbd class="bg-info rounded-0">{{ task.provider.descr }}</kbd> <kbd class="bg-primary rounded-0">{{ task.domain.tag_dec }}</kbd>
+                                                    </div>
+                                                    <div class="w-50 h-100 d-flex flex-wrap justify-content-end align-content-center">
+
+                                                        <div class="dropdown">
+                                                          <span class="pointer" data-toggle="dropdown">
+                                                              <i class="bi bi-three-dots-vertical"></i>
+                                                          </span>
+                                                          <div class="dropdown-menu p-1">
+                                                              <a class="dropdown-item text-primary bi pointer" onclick="location.href='{% url 'view_task' task.entry_uni %}'"> View</a>
+
+                                                          </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="card-body p-4">
+
+                                                {{ task.description | safe }}
+                                                <hr>
+
+                                            </div>
                                           </div>
-                                          <p class="m-0">{{ task.description | safe | slice:':30' }} ...</p>
-                                            <kbd class="bg-info">{{ task.provider.descr }}</kbd> <kbd class="bg-primary">{{ task.domain.tag_dec }}</kbd>
-                                        </a>
+
+{#                                        <a#}
+{##}
+{#                                                onclick="location.href='{% url 'view_task' task.entry_uni %}'"#}
+{#                                                style="cursor: pointer;"#}
+{#                                                class="list-group-item list-group-item-action" aria-current="true"#}
+{#                                        >#}
+{#                                          <div class="d-flex w-100 justify-content-between">#}
+{#                                            <strong class="mb-1">{{ task.title }}</strong>#}
+{#                                            <div class="d-flex flex-wrap">#}
+{#                                                <small>{{ task.added_on }}</small> |#}
+{#                                                <small>@{{ task.added_on }}</small>#}
+{#                                            </div>#}
+{#                                          </div>#}
+{#                                          <p class="m-0">{{ task.description | safe | slice:':30' }} ...</p>#}
+{#                                            <kbd class="bg-info">{{ task.provider.descr }}</kbd> <kbd class="bg-primary">{{ task.domain.tag_dec }}</kbd>#}
+{#                                        </a>#}
                                       {% endfor %}
 
                                   </div><!-- End List group Advanced Content -->
