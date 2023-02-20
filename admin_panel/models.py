@@ -420,6 +420,16 @@ class UserAddOns(models.Model):
     app_version = models.ForeignKey('appconfig.VersionHistory', on_delete=models.CASCADE)
     profile_pic = models.FileField(upload_to=f'static/general/img/users/')
 
+    def settings(self):
+        return UserSettings.objects.get(user=self.user)
+
+
+class UserSettings(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    prim_noif = models.TextField(default='email')
+
+
+
 
 class TaskBranchHD(models.Model):
     task = models.ForeignKey('TaskHD', on_delete=models.CASCADE)

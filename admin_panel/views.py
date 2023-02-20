@@ -2178,3 +2178,22 @@ def new_sms_api(request):
         return HttpResponse("INVALID METHOD")
 
     return redirect('sms')
+
+
+def update_user_settings(request):
+    if request.method == 'POST':
+        form = request.POST
+        pk = form['user']
+        prim_noif = form['prim_noif']
+        user = User.objects.get(pk=pk)
+
+        if UserSettings.objects.filter(user=user).exists():
+            # update
+            setting = UserSettings.objects.get(user=user)
+            setting.prim_noif = prim_noif
+            setting.save()
+        else:
+            # insert
+            UserSettings(user=user, prim_noif=prim_noif).save()
+
+        return redirect('profile')

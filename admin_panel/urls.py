@@ -33,7 +33,7 @@ urlpatterns = [
     path('save-tag', views.new_tag, name='save-tag'),
     path('add_to_task', views.add_to_task, name='add_to_task'),
     path('task/<task_id>/view/', views.view_task, name='view_task'),
-    path('task/<task>/<br>/',views.issues_branch,name='view_branch'),
+    path('task/<task>/<br>/', views.issues_branch, name='view_branch'),
     path('add_task_update', views.add_task_update, name='add_task_update'),
     path('new_task', views.new_task, name='new_task'),
     path('update_task/<entry_uni>', views.update_task, name='update_task'),
@@ -68,7 +68,6 @@ urlpatterns = [
     # path('inventory/receiving/', views.grn_entries, name='grn_entries'),
     # path('inventory/receiving/new/', views.new_grn, name='new_grn'),
 
-
     # accounts urls
     path('accounts/', views.accounts, name='accounts'),
     path('accounts/tax-master/', views.tax_master, name='tax_master'),
@@ -83,6 +82,7 @@ urlpatterns = [
     path('adminapi/<module>/<action>/', views.api, name='api'),
     path('profile/', views.profile, name='profile'),
     path('logout_view/', views.logout_view, name='logout'),
+    path('update_user_settings/', views.update_user_settings, name='update_user_settings'),
 
     path('login/', views.login, name='login'),
     path('register/', views.new_user, name='new-user'),
@@ -93,12 +93,12 @@ urlpatterns = [
     path('all-ticket/', views.all_tickets, name='all-ticket'),
     path('save-ticket/', views.make_ticket, name='save-ticket'),
     path('all-users/', views.all_users, name='all-users'),
-    path('update_profile/',views.update_profile,name='update_profile'),
-    path('save-ou/',views.save_ou,name='save_ou'),
-    path('save_um/',views.save_um,name='save_um'),
+    path('update_profile/', views.update_profile, name='update_profile'),
+    path('save-ou/', views.save_ou, name='save_ou'),
+    path('save_um/', views.save_um, name='save_um'),
 
-    path('sms/',views.sms,name='sms'),
-    path('sms/ew_sms_api/',views.new_sms_api,name='new_sms_api')
+    path('sms/', views.sms, name='sms'),
+    path('sms/ew_sms_api/', views.new_sms_api, name='new_sms_api')
 
 ]
 
