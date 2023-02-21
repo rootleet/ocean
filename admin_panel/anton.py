@@ -1,13 +1,13 @@
 from django.contrib.auth.models import User
 
-from admin_panel.models import UserAddOns, UserSettings, Emails, Sms, SmsApi
+from admin_panel.models import UserAddOns, Emails, Sms, SmsApi
 from ocean import settings
 
 
 def push_notification(user_pk, subject='', message=''):
     user = User.objects.get(pk=user_pk)
     adon = UserAddOns.objects.get(user=user)
-    setting = UserSettings.objects.get(user=user)
+    setting = 'UserSettings.objects.get(user=user)'
 
     if setting.prim_noif == 'email':
         # send email
