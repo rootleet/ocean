@@ -18,8 +18,8 @@ from django.contrib import messages
 from django.http import JsonResponse
 from fpdf import FPDF
 
-#from admin_panel.anton import push_notification
-from admin_panel.form import NewProduct, NewLocation, LogIn, NewTicket, UploadFIle, SignUp, NewOu, NewUM#, NewSMSApi
+from admin_panel.anton import push_notification
+from admin_panel.form import NewProduct, NewLocation, LogIn, NewTicket, UploadFIle, SignUp, NewOu, NewUM, NewSMSApi
 from admin_panel.models import *
 from blog.models import *
 from community.models import *

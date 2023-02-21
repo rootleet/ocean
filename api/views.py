@@ -17,7 +17,7 @@ from admin_panel.views import today
 from .ApiClass import *
 
 from admin_panel.models import Notifications, AuthToken, Locations, SuppMaster, ProductMaster, ProductTrans, \
-    ProductPacking, Sales#, SmsApi, Sms, SmsResponse
+    ProductPacking, Sales, SmsApi, Sms, SmsResponse
 import json
 
 from inventory.models import PoHd, PoTran, PriceCenter, GrnHd, DocAppr, GrnTran
