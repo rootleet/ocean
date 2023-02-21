@@ -376,14 +376,14 @@ class TicketHd(models.Model):
     status = models.IntegerField(default=0)
 
 
-class TicketTrans(models.Model):
-    ticket = models.ForeignKey('TicketHd', on_delete=models.CASCADE)
-    tran = models.TextField()
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-
-    created_on = models.DateTimeField(auto_now_add=True)
-    edited_on = models.DateTimeField(auto_now=True)
-    status = models.IntegerField(default=0)
+# class TicketTrans(models.Model):
+#     ticket = models.ForeignKey('TicketHd', on_delete=models.CASCADE)
+#     tran = models.TextField()
+#     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+#
+#     created_on = models.DateTimeField(auto_now_add=True)
+#     edited_on = models.DateTimeField(auto_now=True)
+#     status = models.IntegerField(default=0)
 
 
 class Files(models.Model):
