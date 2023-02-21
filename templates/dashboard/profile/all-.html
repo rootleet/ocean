@@ -91,6 +91,7 @@
                                                 <div class="modal-content">
                                                     <div class="modal-body">
                                                         <form method="post" id="" action="{% url 'new_task' %}">
+                                                            <input type="hidden" name="owner" value="{{ ticket.owner.pk }}">
                                                             <input type="hidden" name="type" value="TIK">
                                                             <input type="hidden" name="ref" value="{{ ticket.pk }}">
                                                             {% csrf_token %}

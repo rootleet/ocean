@@ -18,6 +18,7 @@ from django.contrib import messages
 from django.http import JsonResponse
 from fpdf import FPDF
 
+from admin_panel.anton import push_notification
 from admin_panel.form import NewProduct, NewLocation, LogIn, NewTicket, UploadFIle, SignUp, NewOu, NewUM, NewSMSApi
 from admin_panel.models import *
 from blog.models import *
@@ -526,7 +527,8 @@ def new_task(request):
             pass
 
         domain = form['domain']
-        owner = request.user.pk
+        own = form['owner']
+        owner = User.objects.get(pk=own)
 
         md_mix = f"{title} {owner} {body} {body}{request.user.pk}{request.user.username}"
         hash_object = hashlib.md5(md_mix.encode())
@@ -541,14 +543,17 @@ def new_task(request):
                        type=type, domain=tags.objects.get(pk=domain)).save()
                 if type == 'TIK':
                     xticket = TicketHd.objects.get(pk=ref)
-                    useradon = UserAddOns.objects.get(user=User.objects.get(pk=xticket.owner.pk))
+                    useradon = UserAddOns.objects.get(user=owner)
                     xticket.status = 1
                     sms_api = SmsApi.objects.get(sender_id='SNEDA SHOP')
 
                     text = f"Issues '{xticket.title}' has been logged by System Administrator. Issue will be checked " \
                            f"and resolved on time"
+                    subject = f"Ticket {xticket.title} Closed"
 
-                    Sms(api=sms_api, to=useradon.phone, message=text).save()
+                    push_notification(owner.pk, subject, text)
+
+                    # Sms(api=sms_api, to=useradon.phone, message=text).save()
 
                     notification = Notifications(owner=User.objects.get(pk=xticket.owner.pk), type=2,
                                                  title='Ticket Longed',
@@ -616,19 +621,14 @@ def close_task(request):
                 target_ticket = TicketHd.objects.get(pk=ref)
 
                 ticket_owner = target_ticket.owner
-                owner_email = ticket_owner.email
-                email_message = f"Ticket has been closed with message '{remarks}'"
-                email_subject = f"Ticket {target_ticket.title} Closed"
-                Emails(sent_from=settings.EMAIL_HOST_USER, sent_to=owner_email, subject=email_subject,
-                       body=email_message, email_type='system', ref='system').save()
+                remark = f"Ticket has been closed with message '{remarks}'"
+                subject = f"Ticket {target_ticket.title} Closed"
 
                 TicketTrans(ticket=target_ticket, tran=remarks, user=user).save()
+                text = f"Issue : {target_ticket.title}. Status : Closed. Message : {remark}"
 
-                ticket_owner_adone = UserAddOns.objects.get(user=User.objects.get(pk=ticket_owner.pk))
-                sms_api = SmsApi.objects.get(sender_id='SNEDA SHOP')
-                text = f"Issue : {target_ticket.title}. Status : Closed. Message : {email_message}"
-
-                Sms(api=sms_api, to=ticket_owner_adone.phone, message=text).save()
+                # Sms(api=sms_api, to=ticket_owner_adone.phone, message=text).save()
+                push_notification(ticket_owner.pk, subject, text)
 
                 t_now = TicketHd.objects.get(pk=ref)
                 t_now.status = 2
