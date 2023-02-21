@@ -429,8 +429,6 @@ class UserSettings(models.Model):
     prim_noif = models.TextField(default='email')
 
 
-
-
 class TaskBranchHD(models.Model):
     task = models.ForeignKey('TaskHD', on_delete=models.CASCADE)
     br_name = models.TextField()

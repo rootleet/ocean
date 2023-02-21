@@ -552,7 +552,7 @@ def new_task(request):
                     subject = f"Ticket {xticket.title} Closed"
 
                     push_notification(owner.pk, subject, text)
-                    push_notification(owner.pk, subject, text)
+
 
                     # Sms(api=sms_api, to=useradon.phone, message=text).save()
 
