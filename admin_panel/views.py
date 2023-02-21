@@ -18,8 +18,8 @@ from django.contrib import messages
 from django.http import JsonResponse
 from fpdf import FPDF
 
-from admin_panel.anton import push_notification
-from admin_panel.form import NewProduct, NewLocation, LogIn, NewTicket, UploadFIle, SignUp, NewOu, NewUM, NewSMSApi
+#from admin_panel.anton import push_notification
+from admin_panel.form import NewProduct, NewLocation, LogIn, NewTicket, UploadFIle, SignUp, NewOu, NewUM#, NewSMSApi
 from admin_panel.models import *
 from blog.models import *
 from community.models import *
@@ -551,6 +551,7 @@ def new_task(request):
                            f"and resolved on time"
                     subject = f"Ticket {xticket.title} Closed"
 
+                    push_notification(owner.pk, subject, text)
                     push_notification(owner.pk, subject, text)
 
                     # Sms(api=sms_api, to=useradon.phone, message=text).save()

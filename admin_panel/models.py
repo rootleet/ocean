@@ -474,18 +474,18 @@ class UnitMembers(models.Model):
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
 
-class SmsApi(models.Model):
-    api_key = models.CharField(max_length=66, unique=True)
-    sender_id = models.TextField()
-    api_desc = models.TextField()
-
-    created_date = models.DateField(auto_now_add=True)
-    created_time = models.TimeField(auto_now=True)
-    status = models.IntegerField(default=1)
-    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-
-
-# sms queued
+# class SmsApi(models.Model):
+#     api_key = models.CharField(max_length=66, unique=True)
+#     sender_id = models.TextField()
+#     api_desc = models.TextField()
+#
+#     created_date = models.DateField(auto_now_add=True)
+#     created_time = models.TimeField(auto_now=True)
+#     status = models.IntegerField(default=1)
+#     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+#
+#
+# # sms queued
 # class Sms(models.Model):
 #     api = models.ForeignKey('SmsApi', on_delete=models.CASCADE)
 #     to = models.CharField(max_length=20, null=False)

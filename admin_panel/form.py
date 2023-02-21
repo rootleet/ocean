@@ -1,7 +1,7 @@
 from django import forms
 
 from admin_panel.models import ProductMaster, ProductPacking, Locations, TicketHd, Files, OrganizationalUnit, \
-    UnitMembers, SmsApi
+    UnitMembers#, SmsApi
 
 
 class NewProduct(forms.ModelForm):
@@ -77,9 +77,9 @@ class NewUM(forms.ModelForm):
         model = UnitMembers
         exclude = ['created_on', 'edited_on', 'status']
 
-
-class NewSMSApi(forms.ModelForm):
-    class Meta:
-        model = SmsApi
-        exclude = ['created_date', 'created_time', 'status']
+#
+# class NewSMSApi(forms.ModelForm):
+#     class Meta:
+#         model = SmsApi
+#         exclude = ['created_date', 'created_time', 'status']
 
