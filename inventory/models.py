@@ -137,6 +137,7 @@ class Assets(models.Model):
 
     group = models.ForeignKey('inventory.AssetGroup', on_delete=models.CASCADE)
     brand = models.TextField()
+    type = models.IntegerField(default=0)
 
     descr = models.TextField()
     sku = models.CharField(max_length=60, unique=True)
