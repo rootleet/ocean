@@ -69,7 +69,7 @@ class TaskHD(models.Model):  ## task model
     type = models.TextField()
     ref = models.TextField()
     #owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    owner = models.IntegerField(default=1)
+    # owner = models.IntegerField(default=1)
     title = models.TextField()
     description = models.TextField()
     added_on = models.DateTimeField(auto_now=True)
@@ -77,18 +77,18 @@ class TaskHD(models.Model):  ## task model
     status = models.IntegerField(default=0)
     domain = models.ForeignKey('community.tags', on_delete=models.CASCADE)
 
-    def url(self):
-        return self.title.lower().replace(' ', '-')
-
-    def owner_name(self):
-        return User.objects.get(pk=self.owner).username
-
-    def question(self):
-        return questions.object.get(uni=self.ref)
-
-    def provider(self):
-        domain = self.domain.provider
-        return domain
+    # def url(self):
+    #     return self.title.lower().replace(' ', '-')
+    #
+    # def owner_name(self):
+    #     return User.objects.get(pk=self.owner).username
+    #
+    # def question(self):
+    #     return questions.object.get(uni=self.ref)
+    #
+    # def provider(self):
+    #     domain = self.domain.provider
+    #     return domain
 
 
 # task transactions
