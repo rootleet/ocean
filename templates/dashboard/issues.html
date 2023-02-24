@@ -108,6 +108,32 @@
                                     </div>
                                 </form>
                             </div>
+    <div id="newSMS" class="modal fade">
+                                        <div class="modal-dialog modal-dialog-centered">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <strong class="modal-title">SEND SMS</strong>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <label for="api">API</label>
+                                                    <select name="api" id="api" class="form-control mb-2">
+                                                        {% for api in apis %}
+                                                            <option value="{{ api.pk }}">{{ api.sender_id }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                    <label for="to">To</label><input type="tel" name="to" autocomplete="off" required class="form-control mb-2" id="to">
+
+                                                    <label for="message">Message</label><textarea name="message" id="message" cols="30" rows="5"
+                                                                                           class="form-control"></textarea>
+
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button class="btn btn-warning" type="button" data-bs-dismiss="modal"><i class="bi bi-window-x"></i></button>
+                                                    <button onclick="sms.QueSMS()" class="btn btn-success"><i class="bi bi-send-plus"></i></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
 
         <div class="card">
             <div class="card-body p-0">
@@ -132,7 +158,7 @@
                     </div>
 {#                    {% if taskHd.status == 0 %}#}
 {#                    <button data-bs-toggle="modal" data-bs-target="#updateModal" class="btn btn-info btn-sm m-2">UPDATE</button>#}
-{##}
+{##}c
 {#                        <button onclick="close_issue('{{ taskHd.entry_uni }}')" class="btn btn-danger btn-sm m-2">CLOSE</button>#}
 {##}
 {#                    <button data-toggle="modal" data-target="#changeDomain" class="btn btn-primary btn-sm m-2">CHANGE DOMAIN</button>#}
@@ -146,11 +172,19 @@
                       <div class="dropdown-menu">
                           {% if taskHd.status == 0 %}
                             <a class="dropdown-item text-info bi bi-list" data-bs-toggle="modal" href="#updateModal"> Update</a>
+                              <div class="dropdown-divider"></div>
                             <a class="dropdown-item text-primary bi bi-toggles2" data-toggle="modal" href="#changeDomain"> Domain Switch</a>
+                              <div class="dropdown-divider"></div>
                           {% endif %}
                             <a class="dropdown-item text-info bi bi-send" href="{% url 'send_mail' taskHd.entry_uni %}"> Send Mail</a>
+                            <div class="dropdown-divider"></div>
+                            <a href="#newSMS" data-bs-toggle="modal" class="dropdown-item text-info bi bi-send">NEW SMS</a>
+                            <div class="dropdown-divider"></div>
+
+
                           {% if taskHd.status == 0 %}
                             <a class="dropdown-item pointer text-danger bi bi-lock" onclick="close_issue('{{ taskHd.entry_uni }}')"> Close</a>
+                              <div class="dropdown-divider"></div>
                           {% endif %}
                       </div>
                     </div>
