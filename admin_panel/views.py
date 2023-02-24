@@ -573,7 +573,8 @@ def new_task(request):
 
     else:
         context = {
-            'domain': tags.objects.all()
+            'domain': tags.objects.all(),
+            'users':User.objects.all()
         }
         return render(request, 'dashboard/new_task.html', context=context)
 

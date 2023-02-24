@@ -25,7 +25,18 @@
                                 </label>
                             </div>
 
-                            <div class="col-sm-9">
+                            <div class="col-sm-3">
+                                <label style="width: 100%">Owner :
+                                    <select name="owner" id="owner" class="form-control rounded-0" required>
+                                        <option value="0">Select Owner</option>
+                                        {% for us in users %}
+                                            <option value="{{ us.pk }}">{{ us.get_full_name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </label>
+                            </div>
+
+                            <div class="col-sm-6">
                                 <label style="width: 100%">Title :
                                     <input type="text" required name="title" class="form-control rounded-0 mb-3">
                                 </label>
