@@ -91,9 +91,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'ocean',
-        'USER': 'root',
-        'PASSWORD': 'Sunderland@411',
-        'HOST': 'localhost',
+        'USER': 'sa',
+        'PASSWORD': 'sa@123456',
+        'HOST': '192.168.2.5',
         'PORT': '3306',
         'OPTIONS': {
             "init_command": "SET foreign_key_checks = 0;",

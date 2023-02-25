@@ -506,3 +506,36 @@ class SmsResponse(models.Model):
     created_date = models.DateField(auto_now_add=True)
     created_time = models.TimeField(auto_now=True)
     status = models.IntegerField(default=0)
+
+
+class BillHeader(models.Model):
+    loc_id = models.TextField()
+    loc_desc = models.TextField()
+    bill_date = models.TextField()
+    bill_end_time = models.TextField()
+    clrk_code = models.TextField()
+    mech_no = models.IntegerField()
+    bill_no = models.IntegerField()
+    bill_amt = models.DecimalField(max_digits=60, decimal_places=2)
+    tax = models.DecimalField(max_digits=60, decimal_places=2)
+    paid_amt = models.DecimalField(max_digits=60, decimal_places=2)
+    bal_amt = models.DecimalField(max_digits=60, decimal_places=2)
+    billRef = models.TextField()
+    bill_type = models.CharField(max_length=3)
+    pay_mode = models.CharField(max_length=3)
+
+    created_date = models.DateField(auto_now_add=True)
+    created_time = models.TimeField(auto_now=True)
+
+
+class BillTran(models.Model):
+    mech_no = models.IntegerField()
+    bill_no = models.IntegerField()
+    tran_code = models.TextField()
+    tran_desc = models.TextField()
+    tran_amt = models.DecimalField(max_digits=60, decimal_places=2)
+    tax_amount = models.DecimalField(max_digits=60, decimal_places=2)
+    billRef = models.TextField()
+
+    created_date = models.DateField(auto_now_add=True)
+    created_time = models.TimeField(auto_now=True)
