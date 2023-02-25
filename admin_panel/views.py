@@ -125,7 +125,9 @@ def index(request):
         'nav': True,
         'page': page,
         'my_issues': my_issues,
-        'sales': sales
+        'sales': sales,
+        'usadons': UserAddOns.objects.filter(user=request.user.pk),
+        'ussettings':UserSettings.objects.filter(user=request.user.pk)
     }
     return render(request, 'dashboard/index.html', context=context)
 
@@ -488,7 +490,7 @@ def view_task(request, task_id):
         'taskTran': TaskTrans.objects.filter(entry_uni=task_id),
         'domains': tags.objects.all(),
         'branches': TaskBranchHD.objects.filter(task=TaskHD.objects.get(entry_uni=task_id)),
-        'apis':SmsApi.objects.all()
+        'apis': SmsApi.objects.all()
     }
     return render(request, 'dashboard/issues.html', context=context)
 
@@ -554,7 +556,6 @@ def new_task(request):
 
                     push_notification(owner.pk, subject, text)
 
-
                     # Sms(api=sms_api, to=useradon.phone, message=text).save()
 
                     notification = Notifications(owner=User.objects.get(pk=xticket.owner.pk), type=2,
@@ -575,7 +576,7 @@ def new_task(request):
     else:
         context = {
             'domain': tags.objects.all(),
-            'users':User.objects.all()
+            'users': User.objects.all()
         }
         return render(request, 'dashboard/new_task.html', context=context)
 
@@ -2183,6 +2184,7 @@ def new_sms_api(request):
     return redirect('sms')
 
 
+@login_required()
 def update_user_settings(request):
     if request.method == 'POST':
         form = request.POST

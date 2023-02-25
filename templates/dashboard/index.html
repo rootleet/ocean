@@ -4,6 +4,8 @@
 
 {% block body %}
 
+
+
     <div class="container-fluid">
         <div class="row" style="min-height:  400px">
 
@@ -11,7 +13,7 @@
             <div class="col-lg-6">
               <div class="card">
                 <div class="card-body">
-                  <h5 class="card-title">Pie Chart</h5>
+                  <h5 class="card-title">Pie Chart {{ ussettings.count }}</h5>
 
                   <!-- Pie Chart -->
                   <div id="pieChart" style="min-height: 400px;" class="echart"></div>
@@ -575,5 +577,35 @@
       </div>
     {% endif %}
     </section>
+
+    {% if ussettings.count == 0 %}
+        <div class="modal hide fade in" id="message"  data-keyboard="false" data-backdrop="static">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <strong class="modal-title">System Information</strong>
+                    </div>
+                    <div class="modal-body">
+                        <p class="card-text">
+                            You profile is not configured yet. Make sure you vist your <a href="{% url 'profile' %}">profile</a> to finish setup.
+                        </p>
+                        <ol>
+                            <li><strong>General Information</strong>: provide your details required in <code>Edit Profile</code> tab</li>
+                            <li><strong>Primary Contact</strong>: Specify your primary contact method for notifications in <code>Settings Tab</code> tab</li>
+                        </ol>
+                        <hr>
+                        <div class="w-100 text-center">
+                            <button onclick="location.href='{% url 'profile'%}'" class="btn btn-info rounded-0 w-100">My Profile</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            $('#message').modal('show')
+
+        </script>
+    {% endif %}
 
 {% endblock %}
