@@ -18,14 +18,16 @@
                                         <h5 class="card-title">Messages Que</h5>
                                     </div>
                                     <div class="w-50 h-100 d-flex flex-wrap align-content-center justify-content-end">
-                                        <button data-bs-target="#newSMS" data-bs-toggle="modal" class="btn btn-info">NEW SMS</button>
+                                        <button onclick="sms.newSms()" class="btn btn-info">NEW SMS</button>
                                     </div>
 
-                                    <div id="newSMS" class="modal fade">
+                                    <form method="post" enctype="multipart/form-data" action="{% url 'bulk_sms' %}" id="bulkSms" class="modal fade">
+                                        {% csrf_token %}
                                         <div class="modal-dialog modal-dialog-centered">
                                             <div class="modal-content">
                                                 <div class="modal-header">
                                                     <strong class="modal-title">SEND SMS</strong>
+                                                    <a target="_blank" href="https://www.dropbox.com/s/rzk209mvbix9nb0/ocean_message_contact_list.csv?dl=0" class="close">Download Template</a>
                                                 </div>
                                                 <div class="modal-body">
                                                     <label for="api">API</label>
@@ -34,10 +36,12 @@
                                                             <option value="{{ api.pk }}">{{ api.sender_id }}</option>
                                                         {% endfor %}
                                                     </select>
-                                                    <label for="to">To</label><input type="tel" name="to" autocomplete="off" required class="form-control mb-2" id="to">
+                                                    <input type="file" accept="text/csv" name="file" class="form-control">
 
                                                     <label for="message">Message</label><textarea name="message" id="message" cols="30" rows="5"
                                                                                            class="form-control"></textarea>
+
+                                                    <input type="hidden" name="owner" value="{{ user.pk }}" class="hidden">
 
                                                 </div>
                                                 <div class="modal-footer">
@@ -46,7 +50,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </form>
 
                                 </div>
 

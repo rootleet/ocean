@@ -7,6 +7,8 @@ from community.models import questions, QuestionTags
 from blog.models import Providers
 from django.db.models import Sum
 from appconfig.models import *
+from datetime import datetime
+
 
 
 # Create your models here.
@@ -506,6 +508,17 @@ class SmsResponse(models.Model):
     created_date = models.DateField(auto_now_add=True)
     created_time = models.TimeField(auto_now=True)
     status = models.IntegerField(default=0)
+
+
+class BulkSms(models.Model):
+    api = models.ForeignKey('SmsApi', on_delete=models.CASCADE)
+    file = models.FileField(upload_to=f"static/files/{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}")
+    message = models.TextField()
+
+    created_date = models.DateField(auto_now_add=True)
+    created_time = models.TimeField(auto_now=True)
+    status = models.IntegerField(default=0)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
 
 class BillHeader(models.Model):

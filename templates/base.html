@@ -577,16 +577,26 @@
 
 
 <script>
-  let sw_message = ''
+    {% for message in messages %}
+        Swal.fire({
+            icon: "{{ message.tags }}",
+            text: "{{ message }}",
+            showConfirmButton: false,
+            timer: 3000
+        });
+    {% endfor %}
 
-
-  {% for message in messages %}
-
-  sw_message += "{{ message }}"
-
-  {% endfor %}
-
-
-
-
+    // Clear messages after they have been displayed
+    {% if messages %}
+        setTimeout(function(){
+            {% for message in messages %}
+                {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+                    Swal.showValidationMessage("{{ message }}");
+                {% endif %}
+            {% endfor %}
+            {% if messages|length > 0 %}
+                Swal.close();
+            {% endif %}
+        }, 0);
+    {% endif %}
 </script>

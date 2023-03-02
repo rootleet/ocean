@@ -98,7 +98,8 @@ urlpatterns = [
     path('save_um/', views.save_um, name='save_um'),
 
     path('sms/', views.sms, name='sms'),
-    path('sms/ew_sms_api/', views.new_sms_api, name='new_sms_api')
+    path('sms/ew_sms_api/', views.new_sms_api, name='new_sms_api'),
+    path('sms/bulk_sms/',views.bulk_sms,name='bulk_sms')
 
 ]
 

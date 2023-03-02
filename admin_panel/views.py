@@ -19,7 +19,8 @@ from django.http import JsonResponse
 from fpdf import FPDF
 
 from admin_panel.anton import push_notification
-from admin_panel.form import NewProduct, NewLocation, LogIn, NewTicket, UploadFIle, SignUp, NewOu, NewUM, NewSMSApi
+from admin_panel.form import NewProduct, NewLocation, LogIn, NewTicket, UploadFIle, SignUp, NewOu, NewUM, NewSMSApi, \
+    NewBulkSms
 from admin_panel.models import *
 from blog.models import *
 from community.models import *
@@ -127,7 +128,7 @@ def index(request):
         'my_issues': my_issues,
         'sales': sales,
         'usadons': UserAddOns.objects.filter(user=request.user.pk),
-        'ussettings':UserSettings.objects.filter(user=request.user.pk)
+        'ussettings': UserSettings.objects.filter(user=request.user.pk)
     }
     return render(request, 'dashboard/index.html', context=context)
 
@@ -2202,3 +2203,48 @@ def update_user_settings(request):
             UserSettings(user=user, prim_noif=prim_noif).save()
 
         return redirect('profile')
+
+
+@login_required()
+def bulk_sms(request):
+    if request.method == 'POST':
+        if request.method == 'POST':
+            form = NewBulkSms(request.POST, request.FILES)
+            if form.is_valid():
+                try:
+                    form.save()
+
+                    # get last saved
+                    last_bulk = BulkSms.objects.last()
+                    file = last_bulk.file
+                    import csv
+                    success = 0
+                    failed = 0
+                    total = 0
+                    with open(file.path, newline='') as csvfile:
+                        reader = csv.reader(csvfile)
+                        header = next(reader)  # read the first row as the header
+                        for row in reader:
+                            # do something with each row
+                            total = + 1
+                            number = row[0]
+                            if len(number) == 10:
+                                print(f"{number} is valid")
+                                Sms(api=last_bulk.api, message=last_bulk.message, to=number).save()
+                                success = + 1
+                                print(row)
+                            else:
+                                print(f"{number} is not a valid number")
+                                failed = +1
+                                print(row)
+                    m = f"Total : {total}, Success : {success}, Failed : {failed} "
+                    messages.success(request, m)
+                    return redirect('sms')
+                except Exception as e:
+                    return HttpResponse(e)
+            else:
+                return HttpResponse(form)
+        else:
+            return HttpResponse("INVALID METHOD")
+
+        return redirect('sms')

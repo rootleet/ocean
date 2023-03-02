@@ -1,5 +1,90 @@
 class Sms {
 
+    async newSms() {
+        /* inputOptions can be an object or Promise */
+        const inputOptions = new Promise((resolve) => {
+            setTimeout(() => {
+                resolve({
+                    '1': 'Single',
+                    '2': 'Multiple',
+                })
+            }, 1000)
+        })
+
+        const {value: choice} = await Swal.fire({
+            title: 'Recipient Type',
+            input: 'radio',
+            inputOptions: inputOptions,
+            inputValidator: (value) => {
+                if (!value) {
+                    return 'You need to choose something!'
+                }
+            }
+        })
+
+        if (choice) {
+
+            // get sms api
+            let av_api = this.getApi('*')
+
+            if(isJson(av_api))
+            {
+                let status,message,resp
+
+                resp = JSON.parse(av_api)
+                status = resp['status']
+                message = resp['message']
+
+                if(status === 200)
+                {
+
+                    let options = ''
+                    let html = ''
+                    for (let ap = 0; ap < message.length; ap++) {
+                        let this_ap = message[ap]
+                        // ctable(message[ap])
+                        options += `<option value="${this_ap['pk']}">${this_ap['sender_id']}</option>`
+                    }
+
+                    console.log(options)
+
+                    if(choice == '1')
+                    {
+
+                        Swal.fire({html:"Send Single"})
+
+                        html += `<label for="api">API</label><select id="api" class="form-control rounded-0 mb-2">${options}</select>
+                                <input placeholder="recipient" id="to" class="form-control rounded-0 mb-2" type="tel" required /> 
+                                <textarea placeholder="Message" id="message" class="form-control mb-2 rounded-0" rows="5"></textarea>
+                                <button class="btn btn-sm btn-success" onclick="sms.QueSMS()">SEND</button>`
+                        Swal.fire({html:html,title:"Send SMS"})
+
+
+                    } else if(choice == '2'){
+
+                        $('#bulkSms').modal('show')
+
+                    } else
+                    {
+
+                        Swal.fire({html: `You selected: ${choice}`})
+
+                    }
+
+                } else
+                {
+                    Swal.fire({html:"Wrong API Response"})
+                }
+
+            } else {
+                Swal.fire({html:"API response is not a valid JSON"})
+            }
+
+
+
+        }
+    }
+
     // start of getting all sms apis
     getApi(id='*'){
         let data = {"sender_id":id}

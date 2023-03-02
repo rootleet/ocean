@@ -17,7 +17,7 @@ from admin_panel.views import today
 from .ApiClass import *
 
 from admin_panel.models import Notifications, AuthToken, Locations, SuppMaster, ProductMaster, ProductTrans, \
-    ProductPacking, Sales, SmsApi, Sms, SmsResponse
+    ProductPacking, Sales, SmsApi, Sms, SmsResponse, BulkSms
 import json
 
 from inventory.models import PoHd, PoTran, PriceCenter, GrnHd, DocAppr, GrnTran
@@ -1090,6 +1090,38 @@ def api_call(request, module, crud):
                     response['message'] = str(e)
 
         # end of sending pending sms
+
+        # BULK QUE
+        elif crud == 'bulkQue':
+            pending_bulk = BulkSms.objects.filter(status=0)
+            r = []
+            for pending in pending_bulk:
+                api = pending.api
+                message = pending.message
+                file = pending.file.path
+                owner = pending.owner
+
+                import csv
+
+                with open(file, newline='') as csvfile:
+                    reader = csv.reader(csvfile)
+                    header = next(reader)  # read the first row as the header
+                    for row in reader:
+                        # do something with each row
+
+                        print(row)
+
+                this_r = {
+                    'file': file
+                }
+
+                r.append(this_r)
+
+                print(pending)
+
+            response['message'] = str(r)
+
+        # END BULK QUE
 
     return JsonResponse(response, safe=False)
 
