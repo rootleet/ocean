@@ -55,7 +55,7 @@ class Sms {
 
                         html += `<label for="api">API</label><select id="api" class="form-control rounded-0 mb-2">${options}</select>
                                 <input placeholder="recipient" id="to" class="form-control rounded-0 mb-2" type="tel" required /> 
-                                <textarea placeholder="Message" id="message" class="form-control mb-2 rounded-0" rows="5"></textarea>
+                                <textarea placeholder="Message" id="single_message" class="form-control mb-2 rounded-0" rows="5"></textarea>
                                 <button class="btn btn-sm btn-success" onclick="sms.QueSMS()">SEND</button>`
                         Swal.fire({html:html,title:"Send SMS"})
 
@@ -230,7 +230,7 @@ class Sms {
 
         api = $('#api').val()
         to = $('#to').val()
-        message = $('#message').val()
+        message = $('#single_message').val()
 
         if(api.length < 0)
         {
@@ -263,7 +263,7 @@ class Sms {
                 $('#newSMS').modal('hide')
                 $('#api').val('')
                 $('#to').val('')
-                $('#message').val('')
+                $('#single_message').val('')
             } else {
                 swal_response('error',"UNCOMPLETED TRANSACTION",`API returned an invalid json ${api_response}`)
             }
