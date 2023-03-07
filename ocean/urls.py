@@ -23,5 +23,6 @@ urlpatterns = [
     path('stream/', include('stream.urls')),
     path('api/', include('api.urls')),
     path('meeting/', include('meeting.urls')),
-    path('inventory/', include('inventory.urls'))
+    path('inventory/', include('inventory.urls')),
+    path('dolphine/', include('dolphine.urls'))
 ]

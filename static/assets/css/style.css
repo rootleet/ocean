@@ -1721,3 +1721,22 @@ a:hover
   width: 200px;
   height: 200px;
 }
+
+/*DOLPHINE*/
+#dolphone
+{
+  height: 100vh !important;
+  overflow: hidden !important;
+}
+
+.upload_box
+{
+  height: 20%;
+  width: 100%;
+}
+
+.recent_files
+{
+  height: 75% !important;
+  width: 100% !important;
+}

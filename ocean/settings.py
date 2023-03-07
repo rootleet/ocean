@@ -46,7 +46,8 @@ INSTALLED_APPS = [
     'api.apps.ApiConfig',
     'meeting.apps.MeetingConfig',
     'appconfig.apps.AppconfigConfig',
-    'inventory.apps.InventoryConfig'
+    'inventory.apps.InventoryConfig',
+    'dolphine.apps.DolphineConfig'
 
 ]
 
@@ -91,9 +92,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'ocean',
-        'USER': 'sa',
-        'PASSWORD': 'sa@123456',
-        'HOST': '192.168.2.5',
+        'USER': 'anton',
+        'PASSWORD': '258963',
+        'HOST': 'localhost',
         'PORT': '3306',
         'OPTIONS': {
             "init_command": "SET foreign_key_checks = 0;",
