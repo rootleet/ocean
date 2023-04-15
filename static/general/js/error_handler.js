@@ -35,6 +35,13 @@ function swal_response(icon='info',title = 'SWAL RESPONSE',text ='') {
     })
 }
 
+const al = (icon='info',message='') => {
+    Swal.fire({
+        'icon':icon,
+        'text':message
+    })
+}
+
 // error handler
 function error_handler(response)
 {

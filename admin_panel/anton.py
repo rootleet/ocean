@@ -3,6 +3,33 @@ from django.contrib.auth.models import User
 from admin_panel.models import UserAddOns, UserSettings, Emails, Sms, SmsApi
 from ocean import settings
 
+import re
+
+
+def is_valid_password(password):
+    # Check if password is at least 8 characters long
+    if len(password) < 8:
+        return False
+
+    # Check if password contains at least one uppercase letter
+    if not re.search(r'[A-Z]', password):
+        return False
+
+    # Check if password contains at least one lowercase letter
+    if not re.search(r'[a-z]', password):
+        return False
+
+    # Check if password contains at least one digit
+    if not re.search(r'\d', password):
+        return False
+
+    # Check if password contains at least one special character
+    if not re.search(r'[!@#$%^&*]', password):
+        return False
+
+    # If all checks pass, the password is considered valid
+    return True
+
 
 def push_notification(user_pk, subject='', message=''):
     user = User.objects.get(pk=user_pk)

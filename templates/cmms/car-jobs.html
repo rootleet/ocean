@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+
+{% block body %}
+    <div style="height: 80vh" class="w-100">
+        <!-- HEADER -->
+        <div class="h-25 container-fluid">
+            <div class="row h-100 d-flex flex-wrap justify-content-between">
+                <div class="col-sm-5 h-100">
+                    <div class="card bg-primary-light h-100">
+                        <div class="card-header">
+                            <strong class="card-title">Customer Details</strong>
+                        </div>
+                        <div id="custBody" class="card-body">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-5 h-100">
+                    <div class="card bg-info-light h-100">
+                        <div class="card-header">
+                            <strong class="card-title">Car Details</strong>
+                        </div>
+                        <div id="assetBody" class="card-body">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- WO TRANS -->
+        <div class="h-75 container-fluid pt-2">
+
+            <div class="modal fade" id="followUps">
+                <div class="modal-dialog modal-lg modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <strong class="modal-title">Followup History</strong>
+                            <button class="close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            <table class="table table-bordered table-sm table-hover table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Person</th><th>Date</th><th>Title</th><th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="fTbody">
+                                    <tr>
+                                        <td>James</td>
+                                        <td>Date</td>
+                                        <td>Hello World</td>
+                                        <td><i class="fa fa-reply pointer" onclick="al('info','hello world')"></i></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card bg-danger-light h-100">
+                <div class="card-header">
+                    <strong class="card-title">Work Order History</strong>
+                    <button id="carFollups">HELLo</button>
+                </div>
+                <div class="card-body p-2 overflow-auto">
+                    <table class="table table-striped table-bordered table-hover table-sm">
+                        <thead>
+                            <tr>
+                                <th>Work Request</th>
+                                <th>Work Order</th>
+                                <th>Invoice</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody">
+
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer">
+                    <select style="width: 75px" name="" id="" class="form-control">
+                        <option value="10">10</option>
+                        <option value="10">30</option>
+                        <option value="10">50</option>
+                        <option value="10">100</option>
+                    </select>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}
+

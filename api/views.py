@@ -3,6 +3,7 @@ import hashlib
 from decimal import Decimal
 
 import babel
+import pyodbc
 from django.contrib import messages
 from django.contrib.auth import authenticate, login as auth_login, logout
 from django.contrib.auth.models import User
@@ -14,6 +15,7 @@ from django.views.decorators.csrf import csrf_exempt
 from fpdf import FPDF
 
 from admin_panel.views import today
+from cmms.models import FollowUp
 from .ApiClass import *
 
 from admin_panel.models import Notifications, AuthToken, Locations, SuppMaster, ProductMaster, ProductTrans, \
@@ -1122,6 +1124,145 @@ def api_call(request, module, crud):
             response['message'] = str(r)
 
         # END BULK QUE
+
+    # cmms
+    elif module == 'cmms':
+        menu = api_body['menu']
+        header = menu['header']
+
+        if header == 'carjob':
+            response['message'] = menu['data']
+
+
+
+            # get car number and also records
+            data = menu['data']
+            carno = data['carno']
+            limit = data['records']
+
+            # check if car exit with car number
+            server = '192.168.2.4\MOTOR'
+            database = 'PROC_CMMS_V1'
+            username = 'sa'
+            password = 'sa@123456'
+            driver = '{ODBC Driver 17 for SQL Server}'  # Change this to the driver you're using
+            connection_string = f"DRIVER={driver};SERVER={server};DATABASE={database};UID={username};PWD={password}"
+            connection = pyodbc.connect(connection_string)
+            cursor = connection.cursor()
+
+            asset_count = cursor.execute(f"select count(*) from asset_mast where asset_no = '{carno}'").fetchone()[0]
+            if asset_count == 1:
+                frame = {
+                    'customer': {
+                        'name': '',
+                        'contact': ''
+                    },
+                    'asset': {
+                        'code': '',
+                        'name': '',
+                        'asset_no': '',
+                        'chassis': ''
+                    },
+                    'jobs': {
+                        'count': 0,
+                        'records': ''
+                    }
+                }
+                # get cat and sustomer details
+                # execute the SQL query
+                cursor.execute(
+                    f"SELECT am.ASSET_CODE, am.asset_desc, am.asset_no, am.asset_ref_no, cm.cust_code, cm.cust_name, cm.cust_contact, cm.pay_type FROM asset_mast am RIGHT JOIN customer_master cm ON cm.cust_code = am.cust_code WHERE am.asset_no = '{carno}'")
+
+                # assign each column to a variable
+                result = cursor.fetchone()  # assuming you only expect one row of result
+                asset_code, asset_desc, asset_no, asset_ref_no, cust_code, cust_name, cust_contact, pay_type = result
+                frame['customer']['name'] = cust_name.strip()
+                frame['customer']['contact'] = cust_contact.strip()
+                asset = frame['asset']
+                asset['code'] = asset_code.strip()
+                asset['name'] = asset_desc.strip()
+                asset['asset_no'] = asset_no.strip()
+                asset['chassis'] = asset_ref_no.strip()
+                
+                # check if there is wo for asset
+                wo_count = cursor.execute(f"SELECT COUNT(*) from wo_hd where asset_code = '{asset_code}'").fetchone()[0]
+                result_list = []
+                if wo_count > 0 :
+                    wo = cursor.execute(f"SELECT top({limit}) created_by, wo.wo_no, wo.wreq_no, invoice_entry, wo.wo_date FROM wo_hd wo RIGHT JOIN w_request wr ON wr.wreq_no = wo.wreq_no WHERE wo.asset_code = '{asset_code}' order by wo.wo_date desc")
+                    # create a list to store the objects
+
+                    for row in cursor.fetchall():
+                        obj = {}  # create an empty object
+                        obj['created_by'] = row[0].strip()
+                        obj['wo_no'] = row[1].strip()
+                        obj['wreq_no'] = row[2].strip()
+                        obj['invoice_entry'] = row[3].strip()
+                        obj['wo_date'] = row[4]
+                        result_list.append(obj)
+
+                jobs = frame['jobs']
+                jobs['count'] = wo_count
+                jobs['records'] = result_list
+
+                response['message'] = frame
+                response['status'] = 200
+            else:
+                response['status'] = 202
+                response['message'] = f"Car not found ({asset_count} records for {carno})"
+
+        elif header == 'followup':
+            data = menu['data']
+            carno = data['carno']
+
+            followup = FollowUp.objects.filter(carno=carno)
+            fcount = followup.count()
+            record = []
+
+            frame = {
+                'count':fcount,
+                'records':record
+            }
+
+            if fcount > 0:
+                for obj in followup:
+                    record.append({
+                        'title':obj.title,
+                        'message':obj.message,
+                        'created_date':obj.created_date,
+                        'created_time':obj.created_time,
+                        'owner':obj.owner.username
+                    })
+
+            frame = {
+                'count': fcount,
+                'records': record
+            }
+            response['status'] = 200
+            response['message'] = frame
+
+        elif header == 'newfollowup':
+            data = menu['data']
+            carno = data['carno']
+            title = data['title']
+            message = data['message']
+            owner = data['owner']
+
+
+            try:
+                if User.objects.filter(pk=owner).exists():
+                    user = User.objects.get(pk=owner)
+                    FollowUp(carno=carno,title=title,message=message,owner=user).save()
+                    response['status'] = 202
+                    response['message'] = 'ADDED'
+                else:
+                    response['status'] = 505
+                    response['message'] = "UNDER DOES NOT EXIST"
+            except Exception as e:
+                response['status'] = 505
+                response['message'] = str(e)
+
+        else:
+            response['message'] = 'CMMS'
 
     return JsonResponse(response, safe=False)
 

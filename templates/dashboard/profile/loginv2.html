@@ -64,8 +64,8 @@
                   <form id="regular_form" method="post" action="{% url 'login_process' %}"  class="row g-3 needs-validation" novalidate>
                     {% csrf_token %}
                     <div class="col-12">
-                      <label for="yourPassword" class="form-label"><small>Username</small></label>
-                      <input autocomplete="off" type="text" name="username" class="form-control" id="yourPassword" required>
+                      <label for="yourPassword" class="form-label"><small>Email Address</small></label>
+                      <input autocomplete="off" type="email" name="email" class="form-control" id="yourPassword" required>
                       <div class="invalid-feedback">Please enter your password!</div>
                     </div>
 

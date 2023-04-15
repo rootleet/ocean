@@ -81,6 +81,8 @@ urlpatterns = [
 
     path('adminapi/<module>/<action>/', views.api, name='api'),
     path('profile/', views.profile, name='profile'),
+    path('profile/restpwrod/<token>/', views.resetpasswordview, name='resetpasswordview'),
+    path('profile/resetpword/',views.resetpassword,name='resetpassword'),
     path('logout_view/', views.logout_view, name='logout'),
     path('update_user_settings/', views.update_user_settings, name='update_user_settings'),
 
@@ -88,7 +90,7 @@ urlpatterns = [
     path('register/', views.new_user, name='new-user'),
     path('sign_up/', views.sign_up, name='sign_up'),
     path('logout_view/', views.logout_view, name='logout'),
-    path('login-process', views.login_process, name='login_process'),
+    path('login-process', views.login_view, name='login_process'),
     path('open-ticket/', views.ticket, name='open-ticket'),
     path('all-ticket/', views.all_tickets, name='all-ticket'),
     path('save-ticket/', views.make_ticket, name='save-ticket'),

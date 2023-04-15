@@ -47,7 +47,8 @@ INSTALLED_APPS = [
     'meeting.apps.MeetingConfig',
     'appconfig.apps.AppconfigConfig',
     'inventory.apps.InventoryConfig',
-    'dolphine.apps.DolphineConfig'
+    'dolphine.apps.DolphineConfig',
+    'cmms.apps.CmmsConfig'
 
 ]
 
@@ -177,4 +178,9 @@ SESSION_COOKIE_AGE = 1800  # 3 minutes. "1209600(2 weeks)" by default
 SESSION_SAVE_EVERY_REQUEST = True  # "False" by default
 # session settings
 
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'ocean.auth.EmailBackend',
+]
 

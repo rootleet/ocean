@@ -24,5 +24,6 @@ urlpatterns = [
     path('api/', include('api.urls')),
     path('meeting/', include('meeting.urls')),
     path('inventory/', include('inventory.urls')),
-    path('dolphine/', include('dolphine.urls'))
+    path('dolphine/', include('dolphine.urls')),
+    path('cmms/',include('cmms.urls'))
 ]

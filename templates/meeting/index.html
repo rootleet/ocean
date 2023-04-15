@@ -9,7 +9,9 @@
             <div class="col-sm-12 round m-0 p-0 h-100">
                 <div class="card h-100 rounded-0 shadow-none">
                     <div class="card-header">
+                        {% if perms.meeting.view_meetinghd %}
                         <button onclick="location.href='{% url 'new_meeting' %}'" class="btn btn-info">CREATE MEETING</button>
+                        {% endif %}
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">

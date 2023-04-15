@@ -10,7 +10,6 @@ from appconfig.models import *
 from datetime import datetime
 
 
-
 # Create your models here.
 
 class LoggedIssue(models.Model):
@@ -421,9 +420,19 @@ class UserAddOns(models.Model):
     phone = models.CharField(max_length=14, unique=True)
     app_version = models.ForeignKey('appconfig.VersionHistory', on_delete=models.CASCADE)
     profile_pic = models.FileField(upload_to=f'static/general/img/users/')
+    pword_reset = models.IntegerField(default=1)
 
     def settings(self):
         return UserSettings.objects.get(user=self.user)
+
+
+class PasswordResetToken(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    token = models.TextField()
+
+    created_date = models.DateField(auto_now_add=True)
+    created_time = models.TimeField(auto_now=True)
+    valid = models.IntegerField(1)
 
 
 class UserSettings(models.Model):

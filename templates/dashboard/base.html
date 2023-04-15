@@ -359,6 +359,29 @@
 
         </ul>
       </li><!-- End Community Nav -->
+
+        <!-- CMMS -->
+    <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#cmms-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-megaphone"></i><span>CMMS</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="cmms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+            <li>
+                <a href="{% url 'open-ticket' %}">
+              <i class="bi bi-circle"></i><span>Tickets</span>
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'all-issues' %}">
+              <i class="bi bi-circle"></i><span>Questions</span>
+            </a>
+          </li>
+
+        </ul>
+      </li>
+
+        <!-- END OF CMMD -->
+
         {% if user.is_superuser %}
             <li class="nav-item">
         <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">

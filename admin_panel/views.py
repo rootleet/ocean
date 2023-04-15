@@ -7,7 +7,7 @@ import babel.numbers
 import datetime
 import hashlib
 
-from django.contrib.auth import authenticate, login as auth_login, logout
+from django.contrib.auth import authenticate, login as auth_login, logout, get_user_model
 from django.contrib.auth.decorators import login_required, permission_required
 # Create your views here.
 from django.core import serializers
@@ -18,7 +18,7 @@ from django.contrib import messages
 from django.http import JsonResponse
 from fpdf import FPDF
 
-from admin_panel.anton import push_notification
+from admin_panel.anton import push_notification, is_valid_password
 from admin_panel.form import NewProduct, NewLocation, LogIn, NewTicket, UploadFIle, SignUp, NewOu, NewUM, NewSMSApi, \
     NewBulkSms
 from admin_panel.models import *
@@ -133,6 +133,47 @@ def index(request):
     return render(request, 'dashboard/index.html', context=context)
 
 
+def login_view(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        next = request.POST.get('next')
+        User = get_user_model()
+
+        user = User.objects.filter(email=email)
+
+        if user.count() == 1:
+            us = User.objects.get(email=email)
+            username = us.username
+            auth = authenticate(request, username=username, password=password)
+
+            if hasattr(auth, 'is_active'):
+                auth_login(request, auth)
+                return redirect(next)
+            else:
+                messages.error(request,
+                               f"There is an error logging in, please check your credentials again or contact Administrator")
+                return redirect('login')
+
+            # auth_login(request, auth)
+            # return redirect(next)
+
+        else:
+            messages.error(request,
+                           f"Invalid Email Address")
+            return redirect('login')
+
+        # user = authenticate(request, email=email, password=password)
+        # if user is not None:
+        #     auth_login(request, user)
+        #     return redirect(next)
+        # else:
+        #     messages.error(request,
+        #                    f"There is an error logging in, please check your credentials again or contact Administrator")
+        #     return redirect('login')
+    # return render(request, 'login.html')
+
+
 def login_process(request):
     if request.method == 'POST':
         form = LogIn(request.POST)
@@ -240,15 +281,21 @@ def sign_up(request):
                     use_ad_on = UserAddOns(user=new_user_instance, company=company,
                                            app_version=VersionHistory.objects.get(version=settings.APP_VERSION),
                                            position=position, phone=mobile)
+
+                    md_mix = f" {first_name} {last_name} {username} "
+                    hash_object = hashlib.md5(md_mix.encode())
+                    resettoken = hash_object.hexdigest()
+
+                    respwrd = PasswordResetToken(user=new_user_instance, token=resettoken, valid=1)
                     use_ad_on.save()
+                    respwrd.save()
 
                     subject = 'ACCESS TO OCEAN'
                     message = f'Hi {first_name} {last_name}, thank you for registering in ocean. your username is {username} and password is {pass_w} logn at ocean t explore the power in collaboration '
                     message = f"Hello {first_name} {last_name}, an account has been created for you buy sneda at ocean. " \
-                              f"<br>Use this platform to report and track your IT related " \
-                              f"issues.<br><strong>Username</strong> : {username}<br><strong>Password</strong> : " \
-                              f"{pass_w}<br><strong>Access</strong>: <a href='http://ocean.snedaghana.loc'>Link</a> " \
-                              f"<br><strong>API TOKEN</strong> {api_token}"
+                              f"<br>Use this platform to report and track your IT related." \
+                              f"Reset your password and login with the link below <br>" \
+                              f"http://ocean.snedaghana.loc/profile/restpwrod/{resettoken}/ "
                     email_from = settings.EMAIL_HOST_USER
                     try:
                         Emails(sent_from=email_from, sent_to=email, subject=subject, body=message, email_type='system',
@@ -2248,3 +2295,61 @@ def bulk_sms(request):
             return HttpResponse("INVALID METHOD")
 
         return redirect('sms')
+
+
+def resetpasswordview(request, token):
+    # get token
+    resetoken = PasswordResetToken.objects.filter(token=token)
+    if resetoken.count() == 1:
+        # get details
+        tken = PasswordResetToken.objects.get(token=token)
+        user = tken.user
+
+        context = {
+            'user_pk': user.pk
+        }
+        return render(request, 'profile/resetpassword.html', context=context)
+
+    return HttpResponse(token)
+
+
+def resetpassword(request):
+    if request.method == 'POST':
+        form = request.POST
+        password = form.get('password')
+        compass = form.get('compass')
+        user_pk = form.get('user')
+
+        if password == compass:
+            if is_valid_password(password):
+
+                User = get_user_model()
+
+                # Get the user object
+                user = User.objects.get(pk=user_pk)
+
+                # Set the new password
+                user.set_password(password)
+
+                # Save the user object to update the password
+                user.save()
+
+                # update reset password and set token valid to no
+                restoken = PasswordResetToken.objects.get(user=user)
+                adon = UserAddOns.objects.get(user=user)
+
+                restoken.valid = 0
+                adon.pword_reset = 0
+
+                restoken.save()
+                adon.save()
+
+                return redirect('login')
+            else:
+                messages.success(request,
+                                 "Password must be At least 8 characters long, Contains at least one uppercase letter, Contains at least one lowercase letter, Contains at least one digit, Contains at least one special character (e.g., !,@,#,$,%,&,*)")
+                return redirect(request.META.get('HTTP_REFERER'))
+
+        else:
+            messages.success(request, "PASSWORD MUST MATCH")
+            return redirect(request.META.get('HTTP_REFERER'))
