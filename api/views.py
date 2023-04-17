@@ -1141,7 +1141,7 @@ def api_call(request, module, crud):
             limit = data['records']
 
             # check if car exit with car number
-            server = '192.168.2.4\\MOTOR'
+            server = '192.168.2.4,1237'
             database = 'PROC_CMMS_V1'
             username = 'sa'
             password = 'sa@123456'
