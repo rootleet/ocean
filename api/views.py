@@ -3,7 +3,6 @@ import hashlib
 from decimal import Decimal
 
 import babel
-import pymssql
 import pyodbc
 from django.contrib import messages
 from django.contrib.auth import authenticate, login as auth_login, logout
@@ -1147,16 +1146,12 @@ def api_call(request, module, crud):
             username = 'sa'
             password = 'sa@123456'
             driver = '{ODBC Driver 17 for SQL Server}'  # Change this to the driver you're using
-            #connection_string = f"DRIVER={driver};SERVER={server};DATABASE={database};UID={username};PWD={password}"
-            conn = pymssql.connect(server=server, database=database, user=username,
-                                   password=password)
+            connection_string = f"DRIVER={driver};SERVER={server};DATABASE={database};UID={username};PWD={password}"
+            connection = pyodbc.connect(connection_string)
+            cursor = connection.cursor()
 
-            # connection = pyodbc.connect(connection_string)
-            cursor = conn.cursor()
-
-            cursor.execute(f"select count(*) from asset_mast where asset_no = '{carno}'")
-            row = cursor.fetchone()
-            if row[0] == 1:
+            asset_count = cursor.execute(f"select count(*) from asset_mast where asset_no = '{carno}'").fetchone()[0]
+            if asset_count == 1:
                 frame = {
                     'customer': {
                         'name': '',
@@ -1190,8 +1185,7 @@ def api_call(request, module, crud):
                 asset['chassis'] = asset_ref_no.strip()
                 
                 # check if there is wo for asset
-                cursor.execute(f"SELECT COUNT(*) from wo_hd where asset_code = '{asset_code}'")
-                wo_count = cursor.fetchone()[0]
+                wo_count = cursor.execute(f"SELECT COUNT(*) from wo_hd where asset_code = '{asset_code}'").fetchone()[0]
                 result_list = []
                 if wo_count > 0 :
                     wo = cursor.execute(f"SELECT top({limit}) created_by, wo.wo_no, wo.wreq_no, invoice_entry, wo.wo_date FROM wo_hd wo RIGHT JOIN w_request wr ON wr.wreq_no = wo.wreq_no WHERE wo.asset_code = '{asset_code}' order by wo.wo_date desc")
@@ -1216,7 +1210,6 @@ def api_call(request, module, crud):
                 response['status'] = 202
                 response['message'] = f"Car not found ({asset_count} records for {carno})"
 
-            conn.close()
         elif header == 'followup':
             data = menu['data']
             carno = data['carno']
