@@ -387,7 +387,7 @@
       </li><!-- End Community Nav -->
 
 
-
+    {{ request.user.groups.all.0.permissions }}
     {% if perms.cmms.view_followup %}
 
     <!-- CMMS -->

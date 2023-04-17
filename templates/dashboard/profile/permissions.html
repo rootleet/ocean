@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+
+{% block body %}
+
+    <div class="container-fluid">
+        <table class="table table-sm table-bordered table-striped table-hover table-responsive">
+            <thead>
+    <tr>
+      <th>Permission</th>
+      <th>Has Permission</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for permission in perms %}
+        {% if request.user.perms.permission.codename %}
+        <tr>
+          <td>{{ permission.name }}</td>
+          <td>GREAT</td>
+        </tr>
+        {% endif %}
+    {% endfor %}
+  </tbody>
+        </table>
+    </div>
+
+{% endblock %}

@@ -76,6 +76,7 @@ class Cmms {
                     wotr = "NO WO TRANS"
                 }
                 $('#tbody').html(wotr)
+                $('#carFollups').show()
 
 
             } else {
@@ -103,7 +104,44 @@ class Cmms {
         return apiv2('cmms','none',data)
     }
 
+    SaveFollowup(){
+        let carno = $('#searchQuery').val()
+        if(carno.length > 0){
+            let title, message
+            title = $('#ftitle').val();
+            message = $('#freply').val();
 
+            if(title.length < 1){
+                al('error',"Please provide feedback title")
+            } else if (message.length < 1)
+            {
+                al('error',"Please provide feedback response")
+            } else {
+
+                // save
+                let data = {
+                    "menu": {
+                        "header":"newfollowup",
+                        "data":{
+                            "carno":carno,
+                            "title":title,
+                            "message":message,
+                            "owner":1
+                        }
+                    }
+                }
+
+                apiv2('cmms','null',data)
+                cmms.carFollowUps(carno)
+                $('#newFolloup').modal('hide')
+                al('success',"Response logged")
+
+            }
+
+
+
+        }
+    }
 
 }
 

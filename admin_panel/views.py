@@ -9,6 +9,7 @@ import hashlib
 
 from django.contrib.auth import authenticate, login as auth_login, logout, get_user_model
 from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.models import Permission
 # Create your views here.
 from django.core import serializers
 from django.core.mail import send_mail
@@ -2353,3 +2354,18 @@ def resetpassword(request):
         else:
             messages.success(request, "PASSWORD MUST MATCH")
             return redirect(request.META.get('HTTP_REFERER'))
+
+
+def permissions(request,username):
+    from django.contrib.auth.models import  ContentType
+    # Fetch all model permissions for the auth app
+    # app_label = 'auth'
+    # content_type = ContentType.objects.get(app_label=app_label)
+    perms = Permission.objects.all()
+
+    context = {
+        'perms': perms,
+        'user': request.user,
+
+    }
+    return render(request,'dashboard/profile/permissions.html',context=context)

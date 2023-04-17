@@ -95,8 +95,9 @@
                                             <td>{{ this_user.last_login }}</td>
                                             <td>
                                                 {% if this_user.is_superuser == False %}
-                                                    <button class="btn btn-danger" onclick="user.Delete('{{ this_user.pk }}')">DEL</button>
+                                                    <i class="pointer bx bx-recycle text-danger mr-2" onclick="user.Delete('{{ this_user.pk }}')"></i>
                                                 {% endif %}
+                                                <i title="Permissions" class="pointer bx bx-key text-warning" onclick="location.href='{% url 'user_permissions' this_user.username %}'"></i>
                                             </td>
                                         </tr>
                                     {% endfor %}

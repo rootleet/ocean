@@ -82,7 +82,7 @@ urlpatterns = [
     path('adminapi/<module>/<action>/', views.api, name='api'),
     path('profile/', views.profile, name='profile'),
     path('profile/restpwrod/<token>/', views.resetpasswordview, name='resetpasswordview'),
-    path('profile/resetpword/',views.resetpassword,name='resetpassword'),
+    path('profile/resetpword/', views.resetpassword, name='resetpassword'),
     path('logout_view/', views.logout_view, name='logout'),
     path('update_user_settings/', views.update_user_settings, name='update_user_settings'),
 
@@ -98,10 +98,11 @@ urlpatterns = [
     path('update_profile/', views.update_profile, name='update_profile'),
     path('save-ou/', views.save_ou, name='save_ou'),
     path('save_um/', views.save_um, name='save_um'),
+    path('permissions/<username>/', views.permissions, name='user_permissions'),
 
     path('sms/', views.sms, name='sms'),
     path('sms/ew_sms_api/', views.new_sms_api, name='new_sms_api'),
-    path('sms/bulk_sms/',views.bulk_sms,name='bulk_sms')
+    path('sms/bulk_sms/', views.bulk_sms, name='bulk_sms')
 
 ]
 

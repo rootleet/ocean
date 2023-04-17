@@ -1,5 +1,6 @@
 // car jobs trigger
 $(document).ready(function() { // wait for the document to finish loading
+    $('#carFollups').hide()
   $("#carJob").click(function() {
       // $('#loader').modal('show')
       let carno = $('#searchQuery').val()
@@ -50,5 +51,14 @@ $(document).ready(function() { // wait for the document to finish loading
           al('error','Please provide car numbeer')
       }
   });
+
+  // new follow up message
+    $('#newFolloupButton').click(function () {
+        let carno = $('#searchQuery').val()
+        if(carno.length > 0){
+            $('newFolloup').modal('show')
+        }
+    });
+
 });
 
