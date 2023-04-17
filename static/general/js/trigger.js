@@ -39,8 +39,9 @@ $(document).ready(function() { // wait for the document to finish loading
                                     </tr>`
                       }
                       $('#fTbody').html(ftr)
-                      $('#followUps').modal('show')
+
                   }
+                  $('#followUps').modal('show')
               } else {
                   al('error',fols['message'])
               }
