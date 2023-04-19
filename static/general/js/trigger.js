@@ -25,10 +25,12 @@ $(document).ready(function() { // wait for the document to finish loading
             let fols = JSON.parse(follows)
               let status = fols['status']
               if(status === 200){
+                  let ftr = ''
                   let message = fols['message']
+
                   if(message['count'] > 0 ){
                       let records = message['records']
-                      let ftr = ''
+
                       for (let r = 0; r < records.length; r++) {
                             let record = records[r]
                             ftr += `<tr>
@@ -38,9 +40,10 @@ $(document).ready(function() { // wait for the document to finish loading
                                         <td><i class="fa fa-reply pointer" onclick="al('info','${record['message']}')"></i></td>
                                     </tr>`
                       }
-                      $('#fTbody').html(ftr)
+
 
                   }
+                  $('#fTbody').html(ftr)
                   $('#followUps').modal('show')
               } else {
                   al('error',fols['message'])
