@@ -60,6 +60,7 @@
   <script src="{% static 'general/js/classes/po.js' %}"></script>
     <script src="{% static 'general/js/classes/sales.js' %}"></script>
     <script src="{% static 'general/js/classes/sms.js' %}"></script>
+    <script src="{% static 'general/js/dolphine.js' %}"></script>
 
 
   <script>
@@ -78,58 +79,7 @@
 <body>
 
     <div class="container-fluid p-3" id="dolphone">
-        <div class="row h-100 overflow-hidden">
-            <!-- LEFT PANE -->
-            <div class="col-sm-3 h-100"></div>
-
-            <!-- CENTER -->
-            <div class="col-sm-6 text-muted h-100">
-
-                <div class="upload_box card">
-                    <div class="w-100 h-100 d-flex flex-wrap align-content-center justify-content-center">
-                        <div class="w-100 text-center">
-                            <i class="bx display-3 bx-cloud-upload text-primary"></i>
-                        </div>
-                        <div class="w-100 text-center">
-                            <p>Drag and drop files, or <span class="text-primary pointer">Browse</span></p>
-                        </div>
-                        <small class="text-muted">Support zip and rar files</small>
-                    </div>
-                </div>
-
-                <div class="card recent_files">
-                    <div class="card-header">
-                        <h5 class="card-title p-0 m-0">
-                            Recent Files
-                        </h5>
-                    </div>
-                    <div class="card-body p-2">
-                        <table class="table">
-                            <thead class="bg-dark text-light">
-                                <tr>
-                                    <th>Name</th><th>Folder</th><th>Owner</th><th>Size</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>test_file.zip</td>
-                                    <td>Test Folder</td>
-                                    <td>Reza</td>
-                                    <td>12MB</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-            </div>
-
-            <!-- RIGHT PANE -->
-            <div class="col-sm-3 h-100">
-
-            </div>
-
-        </div>
+        {% block main %}{% endblock %}
     </div>
 
 
