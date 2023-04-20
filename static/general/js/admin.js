@@ -318,7 +318,7 @@ $(function() {
                 let link_res = ""
                 for (let i = 0; i < res.length; i++) {
                     this_row = res[i]['fields']
-                    link_res += `<a href="/admin_panel/view_task/${this_row.entry_uni}/" class="list-group-item">${this_row.title}</a>`
+                    link_res += `<a href="/task/${this_row.entry_uni}/" class="list-group-item">${this_row.title}</a>`
                 }
                 $('#searchRes').html(link_res)
             }
