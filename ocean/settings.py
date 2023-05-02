@@ -137,22 +137,20 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
-# # STATIC_ROOT = ''
+# STATIC_ROOT = ''
 # STATIC_URL = '/static/'
 # # Add these new lines
-# STATICFILES_DIRS = [
+# STATICFILES_DIRS = (
 #     os.path.join(BASE_DIR, 'static'),
-# ]
-# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-# # STATIC_ROOT = '/home/repositories/ocean/static/'
+# )
+#
+# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-STATICFILES_DIRS = [
-    '/home/repositories/ocean/static/',
-]
+STATIC_URL = '/static/'
+
+STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
 
 STATIC_ROOT = '/home/repositories/ocean/static/'
-
-
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
