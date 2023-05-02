@@ -146,7 +146,7 @@ USE_TZ = True
 #
 # STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-STATIC_URL = '/statics/'
+STATIC_URL = '/static/'
 
 STATIC_ROOT = '/home/repositories/ocean/static'
 
