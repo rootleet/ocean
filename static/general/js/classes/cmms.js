@@ -143,6 +143,31 @@ class Cmms {
         }
     }
 
+    async groupTax(carNumber) {
+      const data = {
+        menu: {
+          header: 'taxUpdate',
+          data: {},
+        },
+      };
+
+      try {
+        const resp = apiv2('cmms', 'null', data);
+        $('#loader').modal('hide');
+        if (isJson(JSON.stringify(resp))) {
+          const r = JSON.parse(resp);
+          al('info', r.message);
+        } else {
+          al('error', 'INVALID RESPONSE RESPONSE');
+        }
+      } catch (error) {
+        console.error(error);
+        al('error', 'An error occurred while processing the request.');
+      }
+}
+
+
+
 }
 
 const cmms = new Cmms()

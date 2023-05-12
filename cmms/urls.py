@@ -19,7 +19,8 @@ from . import views
 
 urlpatterns = [
     path('', views.base, name='cmms'),
-    path('car-jobs/',views.carjobs,name='car-jobs')
+    path('car-jobs/',views.carjobs,name='car-jobs'),
+    path('tools/',views.tools,name='cmms-tools')
 
 ]
 

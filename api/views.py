@@ -16,6 +16,7 @@ from fpdf import FPDF
 
 from admin_panel.views import today
 from cmms.models import FollowUp
+from ocean.settings import DB_SERVER, DB_NAME, DB_USER, DB_PORT, DB_PASSWORD
 from .ApiClass import *
 
 from admin_panel.models import Notifications, AuthToken, Locations, SuppMaster, ProductMaster, ProductTrans, \
@@ -23,6 +24,7 @@ from admin_panel.models import Notifications, AuthToken, Locations, SuppMaster, 
 import json
 
 from inventory.models import PoHd, PoTran, PriceCenter, GrnHd, DocAppr, GrnTran
+from .extras import cmm_connect
 
 # Create your views here.
 api_response = {
@@ -1141,10 +1143,10 @@ def api_call(request, module, crud):
             limit = data['records']
 
             # check if car exit with car number
-            server = '192.168.2.4,1237'
-            database = 'PROC_CMMS_V1'
-            username = 'sa'
-            password = 'sa@123456'
+            server = f"{DB_SERVER},{DB_PORT}"
+            database = DB_NAME
+            username = DB_USER
+            password = DB_PASSWORD
             driver = '{ODBC Driver 17 for SQL Server}'  # Change this to the driver you're using
             connection_string = f"DRIVER={driver};SERVER={server};DATABASE={database};UID={username};PWD={password}"
             connection = pyodbc.connect(connection_string)
@@ -1257,6 +1259,21 @@ def api_call(request, module, crud):
                 else:
                     response['status'] = 505
                     response['message'] = "UNDER DOES NOT EXIST"
+            except Exception as e:
+                response['status'] = 505
+                response['message'] = str(e)
+
+        elif header == 'taxUpdate':
+            db = cmm_connect()
+            cursor = db.cursor()
+            try:
+                cursor.execute("Exec dbo.UpdateTaxCode")
+                rows_affected = cursor.rowcount
+                cursor.commit()
+                db.commit()
+                db.close()
+                response['status'] = 200
+                response['message'] = f"{rows_affected} Tax Updated"
             except Exception as e:
                 response['status'] = 505
                 response['message'] = str(e)

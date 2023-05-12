@@ -7,6 +7,7 @@ from django.shortcuts import render
 def base(request):
     return None
 
+
 @login_required(login_url='/login/')
 def carjobs(request):
     page = {
@@ -20,3 +21,10 @@ def carjobs(request):
         'searchButton': 'carJob'
     }
     return render(request, 'cmms/car-jobs.html', context=context)
+
+
+def tools(request):
+    context = {
+        'nav': True
+    }
+    return render(request, 'cmms/tools.html', context=context)
