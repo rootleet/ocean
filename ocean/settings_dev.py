@@ -177,3 +177,10 @@ SESSION_SAVE_EVERY_REQUEST = True  # "False" by default
 # session settings
 
 
+# CMMS DATA PARAMETERS
+DB_SERVER = '127.0.0.1'
+#DB_PORT = '1237'
+DB_PORT = '1433'
+DB_USER = 'sa'
+DB_PASSWORD = 'sa@123456'
+DB_NAME = 'PROC_CMMS_V1'
