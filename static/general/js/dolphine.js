@@ -53,6 +53,7 @@ $(document).ready(function() {
       contentType: false,
       success: function(response) {
         alert(response);
+        location.reload()
       },
       error: function(xhr, status, error) {
         alert('Error uploading files: ' + error);
