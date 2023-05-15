@@ -1,5 +1,5 @@
 from decimal import Decimal
-
+from jsonfield import JSONField
 from django.conf import settings
 from django.db import models
 from django.db.models import Sum
@@ -134,7 +134,6 @@ class AssetGroup(models.Model):
 
 
 class Assets(models.Model):
-
     group = models.ForeignKey('inventory.AssetGroup', on_delete=models.CASCADE)
     brand = models.TextField()
     type = models.IntegerField(default=0)
@@ -149,7 +148,7 @@ class Assets(models.Model):
     processor = models.TextField()
 
     details = models.TextField()
-    image = models.FileField(upload_to=f'static/general/img/products/',default='static/general/img/products/asset.png')
+    image = models.FileField(upload_to=f'static/general/img/products/', default='static/general/img/products/asset.png')
     tags = models.TextField(default='NULL')
 
     created_on = models.DateTimeField(auto_now_add=True)
@@ -157,9 +156,9 @@ class Assets(models.Model):
 
 class WorkStation(models.Model):
     sys_uni = models.ForeignKey('inventory.Assets', on_delete=models.CASCADE, related_name='related_sys_uni')
-    monitor = models.ForeignKey('inventory.Assets', on_delete=models.CASCADE,related_name='related_moni')
-    keyboard = models.ForeignKey('inventory.Assets', on_delete=models.CASCADE,related_name='related_kb')
-    mouse = models.ForeignKey('inventory.Assets', on_delete=models.CASCADE,related_name='related_mouse')
+    monitor = models.ForeignKey('inventory.Assets', on_delete=models.CASCADE, related_name='related_moni')
+    keyboard = models.ForeignKey('inventory.Assets', on_delete=models.CASCADE, related_name='related_kb')
+    mouse = models.ForeignKey('inventory.Assets', on_delete=models.CASCADE, related_name='related_mouse')
     printer = models.TextField(default='NULL')
     ups = models.TextField(default='NULL')
 
@@ -167,3 +166,31 @@ class WorkStation(models.Model):
     created_time = models.TimeField(auto_now=True)
     status = models.IntegerField(default=1)
     owner = models.ForeignKey('admin_panel.UnitMembers', on_delete=models.CASCADE)
+
+
+class Computer(models.Model):
+    ram_type = models.CharField(max_length=255)
+    ram_size = models.PositiveIntegerField()
+    cpu = models.CharField(max_length=255)
+    storage_type = models.CharField(max_length=255)
+    storage_size = models.CharField(max_length=255)
+    used_storage = models.CharField(max_length=255)
+    remaining_storage = models.CharField(max_length=255)
+    ip_address = models.CharField(max_length=255)
+    mac_address = models.CharField(max_length=255)
+    manufacturer = models.CharField(max_length=255)
+    model = models.CharField(max_length=255)
+    os = models.CharField(max_length=255)
+    sku = models.CharField(max_length=255)
+    printer = models.TextField()
+    logged_on_user = models.CharField(max_length=255)
+    computer_name = models.CharField(max_length=255)
+
+    created_date = models.DateField(auto_now_add=True)
+    created_time = models.TimeField(auto_now_add=True)
+
+    updated_date = models.DateField(auto_now=True)
+    updated_time = models.TimeField(auto_now=True)
+
+    def __str__(self):
+        return self.mac_address
