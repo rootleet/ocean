@@ -39,7 +39,7 @@
                                     {% for file in files %}
                                     <tr>
                                         <td>
-                                            <i onclick="location.href='{% url 'download_file' file.enc %}'" class="fa pointer fa-download"></i>
+                                            <i onclick="location.href='{% url 'download_file' file.enc %}'" class="fa pointer fa-download"></i> &spar;
                                             {{ file.filename }}</td>
                                         <td>{{ file.time }}</td>
                                         <td>{{ file.size | filesizeformat }}</td>
