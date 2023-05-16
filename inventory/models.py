@@ -177,7 +177,7 @@ class Computer(models.Model):
     used_storage = models.CharField(max_length=255)
     remaining_storage = models.CharField(max_length=255)
     ip_address = models.CharField(max_length=255)
-    mac_address = models.CharField(max_length=255)
+    mac_address = models.CharField(max_length=255,unique=True)
     manufacturer = models.CharField(max_length=255)
     model = models.CharField(max_length=255)
     os = models.CharField(max_length=255)
@@ -191,6 +191,26 @@ class Computer(models.Model):
 
     updated_date = models.DateField(auto_now=True)
     updated_time = models.TimeField(auto_now=True)
+    status = models.IntegerField(default=1)
 
     def __str__(self):
         return self.mac_address
+
+
+class ComputerMoreInfo(models.Model):
+    computer = models.ForeignKey('Computer', on_delete=models.CASCADE)
+    department = models.ForeignKey('admin_panel.Department', on_delete=models.SET_NULL,null=True)
+
+    monitor = models.TextField()
+
+    keyword = models.TextField()
+    mouse = models.TextField()
+
+    ups = models.TextField()
+
+    created_date = models.DateField(auto_now_add=True)
+    created_time = models.TimeField(auto_now_add=True)
+
+    updated_date = models.DateField(auto_now=True)
+    updated_time = models.TimeField(auto_now=True)
+    status = models.IntegerField(default=1)

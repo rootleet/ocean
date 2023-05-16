@@ -116,6 +116,7 @@ def assets_new(request):
             return HttpResponse(form)
 
 
+@login_required(login_url='/login/')
 def workstation(request):
     page['title'] = 'Workstation'
     context = {
@@ -131,6 +132,7 @@ def workstation(request):
 
     return render(request, 'inventory/workstation/index.html', context=context)
 
+
 def save_workstation(request):
     if request.method == 'POST':
         form = NewWorkstation(request.POST)
@@ -139,3 +141,7 @@ def save_workstation(request):
             return redirect('workstation')
         else:
             return HttpResponse(form)
+
+
+def view_workstation(request, mac_addr):
+    return HttpResponse(mac_addr)

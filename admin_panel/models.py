@@ -561,3 +561,15 @@ class BillTran(models.Model):
 
     created_date = models.DateField(auto_now_add=True)
     created_time = models.TimeField(auto_now=True)
+
+
+class Department(models.Model):
+    name = models.TextField()
+    description = models.TextField()
+
+    created_date = models.DateField(auto_now_add=True)
+    created_time = models.TimeField(auto_now_add=True)
+
+    updated_date = models.DateField(auto_now=True)
+    updated_time = models.TimeField(auto_now=True)
+    status = models.IntegerField(default=1)

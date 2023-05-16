@@ -123,12 +123,12 @@
                               <tr>
                                 <th scope="col">OWNER</th>
                                 <th scope="col">SYS_UNIT</th>
-                                <th scope="col">MONITOR</th>
-                                <th scope="col">MOU / KBOARD</th>
+                                <th scope="col">NETWORK</th>
+                                <th scope="col">RAM / STORAGE</th>
                                   <th>ACTION</th>
                               </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="devsBody">
                                 {% for ws in wst %}
                                   <tr>
                                     <td>Brandon Jacob</td>
@@ -151,4 +151,60 @@
         <div class="card-footer"></div>
 
     </div>
+
+    <script>
+        let data = {
+            'module':'dev_mgmt',
+            'data':{
+                'pk':'*'
+            }
+        }
+
+        // get devices
+        let devices = api.view(data)
+
+        if(isJson(JSON.stringify(devices))){
+            // get pats
+            let status_code,status,message
+            status_code = devices['status_code']
+            status = devices['status']
+            message = devices['message']
+
+            if(status_code === 200){
+                // get device details
+                let count, devs
+                count = message['count']
+                devs = message['devices']
+
+                if(count > 0){
+                    let devs_row = ''
+                    // load devices
+                    for (let d = 0; d < count; d++) {
+                        let dev = devs[d]
+                        let system = dev['system']
+                        let network = dev['network']
+                        let ram = dev['ram']
+                        let storage = dev['storage']
+                        devs_row += `<tr>
+                                    <td>${system['logged_on_user']}</td>
+                                    <td>${system['model']}</td>
+                                    <td>${network['ip_address']}</td>
+                                      <td>${ram['ram_size']} / ${storage['size']}</td>
+                                    <td><span class="badge bg-success"><a href="/inventory/workstation/view/${network['mac_address']}/">DETAILS</a></span></td>
+                                  </tr>`
+                        ctable(dev)
+                    }
+                    $('#devsBody').html(devs_row)
+
+                }  else {
+                    alert("NO DEVICES FOUND")
+                }
+            }
+
+
+        } else {
+            al('warning','INVALID RESPONSE TYPE')
+        }
+
+    </script>
 {% endblock %}

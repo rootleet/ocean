@@ -83,7 +83,6 @@ def api_function(request):
                     computer.computer_name = computer_name
                     computer.save()
 
-
                 response["status_code"] = 200
                 response["status"] = "OK"
 
@@ -114,17 +113,69 @@ def api_function(request):
                 response["status_code"] = 400
                 response["status"] = "Bad Request"
                 response["message"] = f"Missing required field: {e.args[0]}"
-        elif method == "GET":
+        elif method == "VIEW":
             try:
                 module = body["module"]
-                # code to handle GET request and fetch data
                 response["status_code"] = 200
                 response["status"] = "OK"
                 response["message"] = "Data retrieved successfully"
+                # code to handle GET request and fetch data
+                if module == 'dev_mgmt':
+                    frame = {
+                        'count': 0,
+                        'devices': []
+                    }
+                    devs = []
+                    pk = data.get('pk')
+                    if pk == '*':
+                        devices = Computer.objects.filter(id__gt=0)
+                    else:
+                        devices = Computer.objects.filter(pk=pk)
+                    frame['count'] = devices.count()
+                    for device in devices:
+                        # Loop through each item in the list
+                        printers = device.printer.replace('[', '').replace(']', '').split(',')
+                        printer_list = []
+                        for printer in printers:
+                            printer_list.append(printer.replace("'", '').strip())
+                        computer = {
+                            'ram': {
+                                "ram_type": device.ram_type,
+                                "ram_size": device.ram_size
+                            },
+                            "cpu": device.cpu,
+                            'storage': {
+                                'type': device.storage_type,
+                                'size': device.storage_size,
+                                'used': device.used_storage,
+                                'remaining': device.remaining_storage
+                            },
+                            'network': {
+                                'ip_address': device.ip_address,
+                                'mac_address': device.mac_address
+                            },
+                            'system': {
+                                'computer_name': device.computer_name,
+                                'logged_on_user': device.logged_on_user,
+                                "manufacturer": device.manufacturer,
+                                "model": device.model,
+                                "os": device.os,
+                                "sku": device.sku,
+                            },
+                            'printers': printer_list
+                        }
+
+                        devs.append(computer)
+
+                    frame['devices'] = devs
+
+                    response['message'] = frame
+
             except KeyError as e:
                 response["status_code"] = 400
                 response["status"] = "Bad Request"
                 response["message"] = f"Missing required field: {e.args[0]}"
+
         else:
             response["status_code"] = 405
             response["status"] = "Method Not Allowed"
