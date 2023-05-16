@@ -38,12 +38,13 @@
                                 <tbody>
                                     {% for file in files %}
                                     <tr>
-                                        <td>{{ file.filename }}</td>
+                                        <td>
+                                            <i onclick="location.href='{% url 'download_file' file.enc %}'" class="fa pointer fa-download"></i>
+                                            {{ file.filename }}</td>
                                         <td>{{ file.time }}</td>
                                         <td>{{ file.size | filesizeformat }}</td>
                                         <td>
                                             <div class="w-100 d-flex flex-wrap justify-content-between">
-                                                <i onclick="location.href='{% url 'download_file' file.enc %}'" class="fa pointer fa-download"></i>
                                                 <i class="fa pointer text-info fa-eye mr-2"></i>
                                                 <i onclick="location.href='{% url 'delete_file' file.enc %}'" class="fa text-danger pointer fa-trash"></i>
                                             </div>
