@@ -5,8 +5,8 @@
     <div class="container">
         <div class="modal fade" id="openTicket">
             <div class="modal-dialog modal-dialog-centered modal-xl">
-                <form method="post" enctype="multipart/form-data" action="{% url 'save-ticket' %}" class="modal-content">
-                    <input type="hidden" name="owner" value="{{ user.pk }}">
+                <div  class="modal-content">
+                    <input type="hidden" name="owner" id="owner" value="{{ user.pk }}">
                     {% csrf_token %}
                     <div class="modal-header">
                         <strong class="modal-title">NEW TICKET</strong>
@@ -14,7 +14,7 @@
                     <div class="modal-body p-2">
                         <div class="w-100 p-2">
                             <label class="w-100 mb-2">Title
-                                <input type="text" name="title" required class="form-control rounded-0">
+                                <input type="text" name="title" id="title" required class="form-control rounded-0">
                             </label>
                         <label for="description">Description</label><textarea  name="descr" id="description" cols="30" rows="10" class="form-control mb-2 rounded-0"></textarea>
 
@@ -25,9 +25,9 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" data-bs-dismiss="modal" class="btn-warning btn rounded-0">CANCEL</button>
-                        <button type="submit" class="btn btn-success rounded-0">SAVE</button>
+                        <button type="button" onclick="ticket.newTicket()" class="btn btn-success rounded-0">SAVE</button>
                     </div>
-                </form>
+                </div>
             </div>
         </div>
         <div class="card mt-5" style="height: 75vh; overflow: hidden">

@@ -492,6 +492,7 @@ class SmsApi(models.Model):
     created_time = models.TimeField(auto_now=True)
     status = models.IntegerField(default=1)
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    is_default = models.IntegerField(default=0)
 
 
 # sms queued

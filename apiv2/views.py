@@ -1,3 +1,5 @@
+from django.contrib.auth.models import User
+from django.contrib.messages.context_processors import messages
 from django.http import JsonResponse
 from django.shortcuts import render
 
@@ -6,6 +8,7 @@ import json
 
 from django.views.decorators.csrf import csrf_exempt
 
+from admin_panel.models import TicketHd, SmsApi, Sms
 from inventory.models import Computer
 
 
@@ -82,6 +85,23 @@ def api_function(request):
                     computer.logged_on_user = logged_on_user
                     computer.computer_name = computer_name
                     computer.save()
+
+                elif module == 'ticket':
+                    owner = data.get('owner')
+                    title = data.get('title')
+                    descr = data.get('descr')
+
+                    own = User.objects.get(pk=owner)
+                    ticket = TicketHd(title=title, descr=descr, owner=own)
+
+                    if ticket.save():
+                        # sms
+                        smsapi = SmsApi.objects.get(default=1)
+                        Sms(api=smsapi, to='0201998184',
+                            message=f"There is an issue with title {title} reported by {own.username}").save()
+                        
+
+                    response['message'] = "Ticked Reported"
 
                 response["status_code"] = 200
                 response["status"] = "OK"
