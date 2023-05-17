@@ -28,7 +28,7 @@ class Ticket {
 
             alert(resp['message'])
 
-            location.reload()
+            // location.reload()
 
         } else {
             al('error',"Unexpected Response")
