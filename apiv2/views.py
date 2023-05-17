@@ -97,7 +97,7 @@ def api_function(request):
                         own = User.objects.get(pk=owner)
                         TicketHd(title=title, descr=descr, owner=own).save()
                         # sms
-                        smsapi = SmsApi.objects.get(default=1)
+                        smsapi = SmsApi.objects.get(is_default=1)
                         Sms(api=smsapi, to='0201998184',
                             message=f"There is an issue with title {title} reported by {own.username}").save()
 
