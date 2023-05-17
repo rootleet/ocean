@@ -94,16 +94,24 @@ def api_function(request):
                     own = User.objects.get(pk=owner)
                     ticket = TicketHd(title=title, descr=descr, owner=own)
 
-                    if ticket.save():
+                    try:
                         # sms
                         smsapi = SmsApi.objects.get(default=1)
                         Sms(api=smsapi, to='0201998184',
                             message=f"There is an issue with title {title} reported by {own.username}").save()
 
-                    response['message'] = "Ticked Reported"
+                        response['message'] = "Ticked Reported"
 
-                response["status_code"] = 200
-                response["status"] = "OK"
+                        response["status_code"] = 200
+                        response["status"] = "OK"
+
+                    except  Exception as e:
+                        response['message'] = str(e)
+
+                        response["status_code"] = 500
+                        response["status"] = "error"
+
+
 
             except KeyError as e:
                 response["status_code"] = 400

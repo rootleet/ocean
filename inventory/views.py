@@ -144,4 +144,10 @@ def save_workstation(request):
 
 
 def view_workstation(request, mac_addr):
-    return HttpResponse(mac_addr)
+    page['title'] = 'Workstation'
+    context = {
+        'page': page,
+        'nav': True
+
+    }
+    return render(request, 'inventory/workstation/view.html',context=context)
