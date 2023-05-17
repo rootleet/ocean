@@ -99,7 +99,6 @@ def api_function(request):
                         smsapi = SmsApi.objects.get(default=1)
                         Sms(api=smsapi, to='0201998184',
                             message=f"There is an issue with title {title} reported by {own.username}").save()
-                        
 
                     response['message'] = "Ticked Reported"
 
