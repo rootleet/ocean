@@ -1,19 +1,19 @@
 
-{% extends 'blog/base.html' %}
+{% extends 'base.html' %}
 {% load static %}
 
 {% block body %}
 
 
     <div class="container bg-light" style="padding-top: 50px">
-        <div class="article-header mb-5 text-light" style="background: url('../{{ article.image }}')">
+        <div class="article-header mb-5 text-light" style="background: url('{{ article.image.url }}')">
             <div class="w-100 h-100 bg_trans_30 d-flex flex-wrap align-content-center justify-content-center">
                 <h1 class="font-weight-bolder">{{ article.title }}</h1>
             </div>
         </div>
         <div class="row d-flex flex-wrap justify-content-between no-gutters">
             <!-- ARTICLE -->
-            <section class="col-sm-8 text-justify" style="font-size: large">
+            <section class="col-sm-12 text-justify" style="font-size: large">
 
                 {{ article.article | safe }} {% if user.is_superuser %}
                         <a class="" href="{% url 'edit_article' article.uni %}">Edit</a>
@@ -22,31 +22,31 @@
             </section>
 
             <!-- ASIDE -->
-            <aside class="col-sm-3">
-                <div class="card custom_shadow">
-                    <div class="card-header">
-                        <strong class="card-title">Conversation Box</strong>
-                        <i onclick="var d = $('#messages');d.scrollTop(d.prop('scrollHeight'))" class="float-right text-danger post" id="new" style="display: none">new!!</i>
-                    </div>
-                    <div id="messages" class="card-body overflow-auto" style="height: 250px">
-
-
-
-                    </div>
-                    <input type="hidden" value="{% url 'load_convo' %}" id="load_convo_url">
-                    <div class="card-footer">
-                        {% if user.is_active %}
-                            <form action="{% url 'article_convo' %}" method="post" id="general_form">
-                            {% csrf_token %}
-                                <input type="hidden" value="{{ article.pk }}" id="article_pk" name="article">
-                                <input type="text" class="form-control rounded-0" placeholder="Type...." autocomplete="off" required id="convo_message" name="convo_message">
-                            </form>
-                        {% else %}
-                            <a href="{% url 'login' %}?next={{ request.get_full_path }}" class="btn w-100 btn-info">JOIN CONVERSATION</a>
-                        {% endif %}
-                    </div>
-                </div>
-            </aside>
+{#            <aside class="col-sm-3">#}
+{#                <div class="card custom_shadow">#}
+{#                    <div class="card-header">#}
+{#                        <strong class="card-title">Conversation Box</strong>#}
+{#                        <i onclick="var d = $('#messages');d.scrollTop(d.prop('scrollHeight'))" class="float-right text-danger post" id="new" style="display: none">new!!</i>#}
+{#                    </div>#}
+{#                    <div id="messages" class="card-body overflow-auto" style="height: 250px">#}
+{##}
+{##}
+{##}
+{#                    </div>#}
+{#                    <input type="hidden" value="{% url 'load_convo' %}" id="load_convo_url">#}
+{#                    <div class="card-footer">#}
+{#                        {% if user.is_active %}#}
+{#                            <form action="{% url 'article_convo' %}" method="post" id="general_form">#}
+{#                            {% csrf_token %}#}
+{#                                <input type="hidden" value="{{ article.pk }}" id="article_pk" name="article">#}
+{#                                <input type="text" class="form-control rounded-0" placeholder="Type...." autocomplete="off" required id="convo_message" name="convo_message">#}
+{#                            </form>#}
+{#                        {% else %}#}
+{#                            <a href="{% url 'login' %}?next={{ request.get_full_path }}" class="btn w-100 btn-info">JOIN CONVERSATION</a>#}
+{#                        {% endif %}#}
+{#                    </div>#}
+{#                </div>#}
+{#            </aside>#}
 
 
         </div>

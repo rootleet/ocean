@@ -52,6 +52,7 @@ def article(request, title):
         'page_title': 'Ocean | Article | ' + str(title),
         'search_form': search_form,
         'article': this_article,
+        'nav':True
     }
 
     if ArticleView.objects.filter(article=this_article.uni, user=user_id).count() < 1:
@@ -112,7 +113,8 @@ def new_article(request):
     context = {
         'page_title': 'Ocean | The Power In Sharing | New Article',
         'form': form,
-        'meta_dat': meta_data
+        'meta_dat': meta_data,
+        'nav':True
     }
     return render(request, 'blog/new-article.html', context=context)
 

@@ -26,5 +26,6 @@ urlpatterns = [
     path('inventory/', include('inventory.urls')),
     path('dolphine/', include('dolphine.urls')),
     path('cmms/', include('cmms.urls')),
-    path('apiv2/', include('apiv2.urls'))
+    path('apiv2/', include('apiv2.urls')),
+    path('blog/',include('blog.urls'))
 ]

@@ -1,34 +1,17 @@
-
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="{% static 'blog/css/bootstrap.min.css' %}">
-    <link rel="stylesheet" href="{% static 'blog/css/main.css' %}">
-    {% if page_title %}
-       <title> {{ page_title }} </title>
-    {% else %}
-        <title>Ocean | Power Of Sharing</title>
-    {% endif %}
 
-</head>
-<body class="bg-light">
+{% block body %}
 
-    <div class="container-fluid py-5" style="min-height: 100vh">
-        <!-- ARTICLE -->
-            <form action="{% url 'save_article' %}" method="post" enctype="multipart/form-data">
-                {% csrf_token %}
-
-                <div class="w-100 d-flex flex-wrap justify-content-between">
-                    <div class="input-group w-50 mb-2">
-                        <div class="input-group-prepend bg-light border-0">
-                            <span class="input-group-text bg-light border-0 text-danger">Post Title</span>
-                        </div>
-                        <input type="text" autocomplete="off" required name="page_title" class="form-control rounded-0 border-danger">
-                    </div>
-
-                    <div class="input-group w-25 mb-2">
+    <form action="{% url 'save_article' %}" method="post" enctype="multipart/form-data" class="card w-100">
+    {% csrf_token %}
+        <div class="card-header">
+            <div class="d-flex flex-wrap">
+                <div class="w-50">
+                    <input type="text" placeholder="Title" autocomplete="off" required name="page_title" class="form-control rounded-0 border-danger">
+                </div>
+                <div class="w-25">
+                    <div class="input-group">
                         <div class="input-group-prepend bg-light border-0">
                             <span class="input-group-text bg-light border-0 text-danger">Meta</span>
                         </div>
@@ -39,20 +22,55 @@
                         <option value="0" selected>Others</option>
                         </select>
                     </div>
-
-                    <input type="file" accept="image/jpeg" name="post_img">
-
-                    <button type="submit" class="btn btn-success rounded-0 h-fit">Publish</button>
-
                 </div>
-
-                 <textarea name="article_desc" style="height: 50vh" class="form-control" id="update_details"></textarea>
-                    <script src="{% static 'blog/js/htmeditor.min.js' %}"      htmeditor_textarea="update_details"      full_screen="no"      editor_height="500"     run_local="no">
+                <div class="w-25 pl-2"><input type="file" class="form-control rounded-0" accept="image/jpeg" name="post_img"></div>
+            </div>
+        </div>
+        <div class="card-body p-2">
+            <textarea name="article_desc" style="height: 50vh" class="form-control" id="update_details"></textarea>
+                    <script src="{% static 'blog/js/htmeditor.min.js' %}"      htmeditor_textarea="update_details"      full_screen="no"      editor_height="600"     run_local="no">
                     </script>
+        </div>
+        <div class="card-footer">
+            <button type="submit" class="btn btn-success rounded-0 h-fit">Publish</button>
+        </div>
+    </form>
 
+{#    <div class="container-fluid py-5" style="min-height: 100vh">#}
+{#        <!-- ARTICLE -->#}
+{#            <form action="{% url 'save_article' %}" method="post" enctype="multipart/form-data">#}
+{#                {% csrf_token %}#}
+{##}
+{#                <div class="w-100 d-flex flex-wrap justify-content-between">#}
+{#                    <div class="input-group w-50 mb-2">#}
+{#                        <div class="input-group-prepend bg-light border-0">#}
+{#                            <span class="input-group-text bg-light border-0 text-danger">Post Title</span>#}
+{#                        </div>#}
+{#                        <input type="text" autocomplete="off" required name="page_title" class="form-control rounded-0 border-danger">#}
+{#                    </div>#}
+{##}
+{#                    <div class="input-group w-25 mb-2">#}
+{#                        <div class="input-group-prepend bg-light border-0">#}
+{#                            <span class="input-group-text bg-light border-0 text-danger">Meta</span>#}
+{#                        </div>#}
+{#                        <select name="meta" class="form-control rounded-0 border-danger" id="">#}
+{#                            {% for meta in meta_dat %}#}
+{#                                <option value="{{ meta.tag_code }}">{{ meta.tag_dec }}</option>#}
+{#                            {% endfor %}#}
+{#                        <option value="0" selected>Others</option>#}
+{#                        </select>#}
+{#                    </div>#}
+{##}
+{#                    <input type="file" accept="image/jpeg" name="post_img">#}
+{##}
+{#                    <button type="submit" class="btn btn-success rounded-0 h-fit">Publish</button>#}
+{##}
+{#                </div>#}
+{##}
+{##}
+{##}
+{##}
+{#            </form>#}
+{#    </div>#}
 
-            </form>
-    </div>
-
-</body>
-</html>
+{% endblock %}
