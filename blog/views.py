@@ -24,11 +24,11 @@ all_meta = article_meta.objects.all()
 # Create your views here.
 @login_required()
 def index(request):
-    artcs = articles.objects.all().order_by('-id')[:10]
+    artcs = articles.objects.all().order_by('-id')[:200]
     groups = article_meta.objects.all()
 
     context = {
-        'nav':True,
+        'nav': True,
         'page_title': 'Ocean | The Power In Sharing',
         'search_form': search_form,
         'artcs': artcs,
@@ -52,7 +52,7 @@ def article(request, title):
         'page_title': 'Ocean | Article | ' + str(title),
         'search_form': search_form,
         'article': this_article,
-        'nav':True
+        'nav': True
     }
 
     if ArticleView.objects.filter(article=this_article.uni, user=user_id).count() < 1:
@@ -114,7 +114,7 @@ def new_article(request):
         'page_title': 'Ocean | The Power In Sharing | New Article',
         'form': form,
         'meta_dat': meta_data,
-        'nav':True
+        'nav': True
     }
     return render(request, 'blog/new-article.html', context=context)
 
@@ -164,7 +164,6 @@ def save_article(request):
 
 
 def load_meta(request, meta):
-
     all_articles = articles.objects.filter(meta=meta)
     cats = tags.objects.all()
     context = {
@@ -173,7 +172,6 @@ def load_meta(request, meta):
         'tags': cats
     }
     return render(request, 'blog/meta-load.html', context=context)
-
 
 
 def login(request):
@@ -282,12 +280,13 @@ def edit_save(request):
 
 
 def finder(request):
-    all_articles = articles.objects.all()[:20]
-    cats  = tags.objects.all()
+    all_articles = articles.objects.all()[:50]
+    cats = tags.objects.all()
     context = {
         'page_title': 'Articles',
         'articles': all_articles,
-        'tags':cats
+        'tags': cats,
+        'nav':True
     }
     return render(request, 'blog/finder.html', context=context)
 
@@ -388,11 +387,10 @@ def load_convo(request):
         return HttpResponse('error%%Unknown Method')
 
 
-
 from django.template import RequestContext
 
 
 def handler404(request, *args, **argv):
-    response = render(request,'404.html', {})
+    response = render(request, '404.html', {})
     response.status_code = 404
     return response
