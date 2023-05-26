@@ -1,4 +1,4 @@
-{% extends 'blog/base.html' %}
+{% extends 'base.html' %}
 {% load static %}
 
 {% block body %}
@@ -7,7 +7,36 @@
 
 
         {% for article in articles %}
-                hello
+                <div  class="col-sm-3 col-md-6 col-lg-4 p-2 mb-2">
+
+                            <!-- Card -->
+                            <div class="card p-2 mb-5 shadow">
+
+                              <!-- Card image -->
+                              <div class="view overlay">
+                                <img class="card-img-top custom_shadow" src="{{ article.image.url }}"
+                                  alt="Card image cap">
+                                <a href="#!">
+                                  <div class="mask rgba-white-slight"></div>
+                                </a>
+                              </div>
+
+                              <!-- Card content -->
+                              <div class="card-body">
+
+                                <!-- Title -->
+                                <h4 class="card-title ellipsis">{{ article.title }}</h4>
+                                <!-- Text -->
+                                <p class="card-text font-weight-lighter">{{ article.article | safe | slice:':50' }}</p>
+                                <!-- Button -->
+                                <a href="{% url 'article' article.title  %}" class="btn btn-primary rounded-0">READ</a>
+
+                              </div>
+
+                            </div>
+                            <!-- Card -->
+
+                        </div>
         {% endfor %}
     </div>
 {% endblock %}
