@@ -1,10 +1,44 @@
-{% extends 'blog/base.html' %}
+{% extends 'base.html' %}
 {% load static %}
 
 {% block body %}
+    <div class="modal fade" id="uploadVideo">
+                                        <div class="modal-dialog">
+                                            <form method="post" action="{% url 'upload_video' %}" enctype="multipart/form-data" id="upload_file_form" class="modal-content">
+                                                <div class="modal-body">
+                                                    {% csrf_token %}
+                                                    <progress class="progress">
 
-    <div class="container pt-5">
-        <div class="row">
+                                                    </progress>
+                                                    <br>
+                                                    <input type="text" name="title" placeholder="Video Title" required class="form-control rounded-o mb-3">
+                                                    <textarea name="description" required placeholder="Video Description" class="form-control mb-3" id="" cols="30" rows="5"></textarea>
+                                                     <div class="custom-file">
+                                                        <input accept="video/mp4" type="file" class="custom-file-input" name="video_file" id="customFile">
+                                                        <label class="custom-file-label" for="customFile">Choose file</label>
+                                                      </div>
+                                                    <script>
+                                                        $(".custom-file-input").on("change", function() {
+                                                          var fileName = $(this).val().split("\\").pop();
+                                                          $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+                                                        });
+                                                    </script>
+
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="submit" class="btn btn-success">UPLOAD</button>
+                                                    <button class="btn btn-warning" type="button" data-dismiss="modal">CANCEL</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+    <div class="container" style="height: 85vh">
+        <div style="height: 10%">
+            {% if user.is_superuser %}
+            <button data-bs-toggle="modal" data-bs-target="#uploadVideo" class="btn btn-info">UPLOAD</button>
+            {% endif %}
+        </div>
+        <div style="height: 90%; overflow: auto" class="row">
             {% for video in videos %}
                 <div  class="col-sm-3 col-md-6 col-lg-4 p-2 mb-2">
 
@@ -37,6 +71,6 @@
             {% endfor %}
 
         </div>
-    </div>
+    </>
 
 {% endblock %}

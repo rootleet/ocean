@@ -18,7 +18,9 @@ from django.shortcuts import render
 def index(request):
     videos = Videos.objects.all()
     context = {
-        'videos':videos
+        'videos': videos,
+        'nav': True,
+
     }
     return render(request, 'streams/index.html', context=context)
 
@@ -61,6 +63,6 @@ def watch(request, key):
     if Videos.objects.filter(key=key).exists():
         video = Videos.objects.get(key=key)
         context = {
-            'video':video
+            'video': video
         }
         return render(request, 'streams/watch.html', context=context)
