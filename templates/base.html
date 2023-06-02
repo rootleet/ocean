@@ -550,6 +550,12 @@
 
         </ul>
       </li><!-- End Company Setup Nav -->
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{% url 'apps-center' %}">
+          <i class="bi bi-app"></i>
+          <span>Apps Center</span>
+        </a>
+      </li> <!-- END OF APPS -->
       {% endif %}
 
 
@@ -567,6 +573,8 @@
           <span>Blog</span>
         </a>
       </li>
+
+
 
     </ul>
 
@@ -619,34 +627,21 @@
     </script>
 
 
+{% if messages %}
+  <script>
+    {% for message in messages %}
+      Swal.fire({
+        icon: '{{ message.tags }}',
+        title: '{{ message }}',
+        showConfirmButton: false,
+        timer: 3000
+      });
+    {% endfor %}
+  </script>
+{% endif %}
+
 </body>
 
 </html>
 
 
-
-
-<script>
-    {% for message in messages %}
-        Swal.fire({
-            icon: "{{ message.tags }}",
-            text: "{{ message }}",
-            showConfirmButton: false,
-            timer: 3000
-        });
-    {% endfor %}
-
-    // Clear messages after they have been displayed
-    {% if messages %}
-        setTimeout(function(){
-            {% for message in messages %}
-                {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
-                    Swal.showValidationMessage("{{ message }}");
-                {% endif %}
-            {% endfor %}
-            {% if messages|length > 0 %}
-                Swal.close();
-            {% endif %}
-        }, 0);
-    {% endif %}
-</script>

@@ -21,3 +21,5 @@ tuto1.pdf
 /static/files/
 /dolphine/migrations/
 /cmms/migrations/
+/appscenter/migrations/
+/static/appversion/

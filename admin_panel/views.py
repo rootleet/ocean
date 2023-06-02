@@ -141,10 +141,24 @@ def login_view(request):
         next = request.POST.get('next')
         User = get_user_model()
 
+        ini = email
+        # check if ini is an email or key
+        if len(ini.split('@')) > 1:
+            # email
+            auth_req_user = User.objects.filter(email=ini)
+            check_w = 'email'
+        else:
+            auth_req_user = User.objects.filter(username=ini)
+            check_w = 'Username'
+
         user = User.objects.filter(email=email)
 
-        if user.count() == 1:
-            us = User.objects.get(email=email)
+        if auth_req_user.count() == 1:
+            if check_w == 'email':
+                us = User.objects.get(email=ini)
+            else:
+                us = User.objects.get(username=ini)
+            # us = User.objects.get(email=email)
             username = us.username
             auth = authenticate(request, username=username, password=password)
 
@@ -161,7 +175,7 @@ def login_view(request):
 
         else:
             messages.error(request,
-                           f"Invalid Email Address")
+                           f"Account does not exist with {check_w}")
             return redirect('login')
 
         # user = authenticate(request, email=email, password=password)
@@ -2369,3 +2383,5 @@ def permissions(request,username):
 
     }
     return render(request,'dashboard/profile/permissions.html',context=context)
+
+

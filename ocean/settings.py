@@ -49,7 +49,8 @@ INSTALLED_APPS = [
     'inventory.apps.InventoryConfig',
     'dolphine.apps.DolphineConfig',
     'cmms.apps.CmmsConfig',
-    'apiv2.apps.Apiv2Config'
+    'apiv2.apps.Apiv2Config',
+    'appscenter.apps.AppscenterConfig'
 
 ]
 

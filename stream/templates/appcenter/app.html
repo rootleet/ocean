@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body %}
+    <div class="modal" id="update">
+        <form method="post" action="{% url 'save_app_update' %}" enctype="multipart/form-data" class="modal-dialog">
+            {% csrf_token %}
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title">
+                        <strong class="modal-title">UPDATE {{ app.name }}</strong>
+                    </div>
+                </div>
+
+                <div class="modal-body">
+                    <input type="hidden" name="app" value="{{ app.pk }}">
+                    <input type="hidden" name="version_no" value="{{ next_version }}">
+                    <input  required type="file" name="files" class="form-control mb-2" accept="application/zip">
+
+                    <label for="description">Description</label><textarea required name="description" class="form-control" id="description" cols="30" rows="10"></textarea>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-success w-100">UPDATE</button>
+                </div>
+
+            </div>
+        </form>
+    </div>
+    <div style="height: 85vh">
+
+        <div class="h-25 p-2 w-100">
+            <div class="w-100 h-100 card">
+                <div class="card-body">
+                    <div class="w-100 d-flex flex-wrap">
+                        <button class="btn btn-info m-2" data-bs-target="#update" data-bs-toggle="modal">UPDATE</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="h-75 p-2 w-100">
+            <div class="w-100 h-100 card">
+                <div class="card-body">
+                    <table class="table table-borderless datatable">
+                            <thead>
+                              <tr>
+                                <th scope="col">COMPUTER</th>
+                                <th scope="col">IP</th>
+                                <th scope="col">VERSION</th>
+
+                              </tr>
+                            </thead>
+                            <tbody id="devsBody">
+                                {% for assign in assigns %}
+                                  <tr class="{% if assign.version == assign.app.version %}bg-info{% endif %}">
+                                    <td>{{ assign.mach.computer_name }}</td>
+                                    <td>{{ assign.mach.ip_address }}</td>
+                                    <td>{{ assign.version }}</td>
+                                  </tr>
+                                {% endfor %}
+                            </tbody>
+                          </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+{% endblock %}

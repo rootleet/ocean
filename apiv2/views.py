@@ -1,3 +1,5 @@
+import hashlib
+
 from django.contrib.auth.models import User
 from django.contrib.messages.context_processors import messages
 from django.http import JsonResponse
@@ -9,6 +11,7 @@ import json
 from django.views.decorators.csrf import csrf_exempt
 
 from admin_panel.models import TicketHd, SmsApi, Sms
+from appscenter.models import AppsGroup, App, AppAssign, VersionControl
 from inventory.models import Computer
 
 
@@ -91,8 +94,6 @@ def api_function(request):
                     title = data.get('title')
                     descr = data.get('descr')
 
-
-
                     try:
                         own = User.objects.get(pk=owner)
                         TicketHd(title=title, descr=descr, owner=own).save()
@@ -112,6 +113,72 @@ def api_function(request):
                         response["status_code"] = 500
                         response["status"] = "error"
 
+                elif module == 'appcenter':
+                    task = data.get('task')
+
+                    if task == 'newgrp':
+                        # save new app group
+                        name = data.get('name')
+
+                        from datetime import datetime
+
+                        # Get the current time
+                        current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+                        # Concatenate the current time and the variable
+                        data_to_hash = current_time + name
+
+                        # Create an MD5 hash object
+                        md5_hash = hashlib.md5()
+
+                        # Update the hash object with the data to be hashed
+                        md5_hash.update(data_to_hash.encode('utf-8'))
+
+                        # Generate the MD5 hash
+                        uni = md5_hash.hexdigest()
+
+                        if AppsGroup.objects.filter(name=name).exists():
+                            response['status_code'] = 200
+                            response['status'] = "exist"
+                            response['message'] = "Group Already Exist"
+                        else:
+                            AppsGroup(name=name, uni=uni).save()
+                            response['status_code'] = 202
+                            response['status'] = "success"
+                            response['message'] = "Group Added"
+
+                    elif task == 'assign':
+                        app = data.get('app')
+                        mach = data.get('mach')
+
+                        app_count = App.objects.filter(pk=app).count()
+                        mach_count = Computer.objects.filter(mac_address=mach).count()
+
+                        if app_count != 1:
+                            response['status_code'] = 404
+                            response['status'] = 'not found'
+                            response['message'] = "Application Not Found"
+                        elif mach_count != 1:
+                            response['status_code'] = 404
+                            response['status'] = 'not found'
+                            response['message'] = "PC Not Found"
+                        else:
+
+                            # insert into assign
+                            app_f = App.objects.get(pk=app)
+                            mach_f = Computer.objects.get(mac_address=mach)
+
+                            # check if pc pc app exist
+                            if AppAssign.objects.filter(app=app_f, mach=mach_f).exists():
+                                response['status_code'] = 200
+                                response['status'] = 'success'
+                                response['message'] = "App already assigned to PC"
+                            else:
+                                AppAssign(app=app_f, mach=mach_f).save()
+
+                                response['status_code'] = 202
+                                response['status'] = 'success'
+                                response['message'] = "App Assigned"
 
 
             except KeyError as e:
@@ -123,17 +190,45 @@ def api_function(request):
                 module = body["module"]
                 data = body["data"]
                 # code to handle PATCH request and update data
-                response["status_code"] = 200
-                response["status"] = "OK"
-                response["message"] = "Data updated successfully"
+                if module == 'appcenter':
+                    task = data.get('task')
+                    if task == 'mark_update':
+                        mac = data.get('mac')
+                        app = data.get('app')
+
+                        try:
+                            pc = Computer.objects.get(mac_address=mac)
+                            application = App.objects.get(pk=app)
+
+                            assignment, created = AppAssign.objects.get_or_create(app=application, mach=pc)
+                            assignment.version = application.version
+                            assignment.save()
+                            response['message'] = "Update history updated"
+                        except Exception as e:
+                            response['status_code'] = 404
+                            response['message'] = f"COULD NOT UPDATE ASSIGN {str(e)}"
+                    else:
+                        response['message'] = 'no task'
+
             except KeyError as e:
                 response["status_code"] = 400
                 response["status"] = "Bad Request"
                 response["message"] = f"Missing required field: {e.args[0]}"
+
         elif method == "DELETE":
             try:
                 module = body["module"]
                 # code to handle DELETE request and delete data
+                if module == 'appcenter':
+                    task = data.get('task')
+                    if task == 'delgrp':
+                        pk = data.get('pk')
+                        AppsGroup.objects.get(pk=pk).delete()
+
+                    elif task == 'delapp':
+                        pk = data.get('pk')
+                        App.objects.get(pk=pk).delete()
+
                 response["status_code"] = 200
                 response["status"] = "OK"
                 response["message"] = "Data deleted successfully"
@@ -198,6 +293,82 @@ def api_function(request):
                     frame['devices'] = devs
 
                     response['message'] = frame
+
+                elif module == 'appcenter':
+                    task = data.get('task')
+                    pk = data.get('pk')
+                    arr = []
+                    if task == 'grp':
+
+                        if pk == '*':
+                            grps = AppsGroup.objects.all()
+                        else:
+                            grps = AppsGroup.objects.filter(pk=pk)
+
+                        for grp in grps:
+                            name = grp.name
+                            uni = grp.uni
+
+                            arr.append({'name': name, 'uni': uni, 'pk': grp.pk})
+
+                    elif task == 'app':
+                        if pk == '*':
+                            apps = App.objects.all()
+                        else:
+                            apps = App.objects.filter(pk=pk)
+
+                        for app in apps:
+                            name = app.name
+                            uni = app.uni
+
+                            arr.append({
+                                'name': name,
+                                'uni': uni,
+                                'pk': app.pk,
+                                'icon': app.icon.url,
+                                'root': app.root,
+                                'version': app.version,
+                                'group': {
+                                    'name': app.group.name
+                                }
+                            })
+
+                    elif task == 'update':
+                        mach_addr = data.get('mac')
+
+                        # check all my apps and updates
+                        if Computer.objects.filter(mac_address=mach_addr).count() == 1:
+                            pc = Computer.objects.get(mac_address=mach_addr)
+                            # check apps for pc
+                            myapps = AppAssign.objects.filter(mach=pc)
+                            for apps in myapps:
+
+                                app = apps.app
+                                app_ver = app.version
+                                app_root = app.root
+
+                                my_ver = apps.version
+
+                                if app_ver > my_ver:
+                                    # get update
+                                    update = VersionControl.objects.get(app=app, version_no=app_ver)
+                                    obj = {
+                                        'apppk':app.pk,
+                                        'name': app.name,
+                                        'update': 'Y',
+                                        'file': update.files.url,
+                                        'root': app_root, 'app_ver': app_ver, 'my_ver': my_ver
+                                    }
+                                    arr.append(obj)
+                                else:
+                                    arr.append(
+                                        {'update': 'N', 'app_ver': app_ver, 'my_ver': my_ver, 'name': app.name, })
+
+                                pass
+
+                    response['message'] = arr
+
+
 
             except KeyError as e:
                 response["status_code"] = 400
