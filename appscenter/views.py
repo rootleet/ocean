@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, HttpResponse
 
 from django.shortcuts import render, redirect
@@ -7,6 +8,7 @@ from appconfig.form import NewApp, NewVersion
 from appscenter.models import AppsGroup, App, AppAssign
 
 
+@login_required()
 # Create your views here.
 def index(request):
     context = {
@@ -18,6 +20,7 @@ def index(request):
     return render(request, 'appcenter/index.html', context=context)
 
 
+@login_required()
 def save_new_app(request):
     if request.method == 'POST':
         form = NewApp(request.POST, request.FILES)
@@ -32,6 +35,7 @@ def save_new_app(request):
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
+@login_required()
 def app(request, pk):
     this_app = App.objects.get(pk=pk)
     assign = AppAssign.objects.filter(app=this_app)
@@ -39,11 +43,11 @@ def app(request, pk):
         'nav': True,
         'app': this_app,
         'next_version': this_app.version + 1,
-        'assigns':assign
+        'assigns': assign
     }
     return render(request, 'appcenter/app.html', context=context)
 
-
+@login_required()
 def save_app_update(request):
     # return HttpResponse("HELLo WORLD")
     if request.method == 'POST':
