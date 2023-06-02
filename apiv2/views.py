@@ -366,9 +366,7 @@ def api_function(request):
 
                                 pass
                         else:
-                            response['status_code'] = 404
-                            response['status'] = 'ok'
-                            response['message'] = "Device not found"
+                            arr = "COMPUTER NOT FOUND"
                     response['message'] = arr
 
 
