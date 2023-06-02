@@ -365,7 +365,10 @@ def api_function(request):
                                         {'update': 'N', 'app_ver': app_ver, 'my_ver': my_ver, 'name': app.name, })
 
                                 pass
-
+                        else:
+                            response['status_code'] = 404
+                            response['status'] = 'ok'
+                            response['message'] = "Device not found"
                     response['message'] = arr
 
 
