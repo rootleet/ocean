@@ -7,8 +7,9 @@ from django.contrib.auth import authenticate, login as auth_login, logout
 from django.contrib.auth.decorators import login_required
 
 from admin_panel.views import page
+from appscenter.models import App
 from inventory.form import NewAssetGroup, NewAsset, NewWorkstation
-from inventory.models import PoHd, GrnHd, AssetGroup, Assets, WorkStation
+from inventory.models import PoHd, GrnHd, AssetGroup, Assets, WorkStation, Computer
 
 
 # Create your views here.
@@ -145,9 +146,12 @@ def save_workstation(request):
 
 def view_workstation(request, mac_addr):
     page['title'] = 'Workstation'
+    apps = App.objects.all()
     context = {
         'page': page,
-        'nav': True
+        'nav': True,
+        'apps': apps,
+        'dev': Computer.objects.get(mac_address=mac_addr)
 
     }
-    return render(request, 'inventory/workstation/view.html',context=context)
+    return render(request, 'inventory/workstation/view.html', context=context)

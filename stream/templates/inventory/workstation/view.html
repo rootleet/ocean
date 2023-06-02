@@ -3,6 +3,38 @@
 
 {% block prod %}
 
+    <div class="w-100" style="height: 80vh">
+
+        <div class="modal" id="appAsign">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <label for="app">SELECT APP</label>
+                        <select name="app" id="app" class="form-control mb-2">
+                            {% for app in apps %}
+                                <option value="{{ app.pk }}">{{ app.name }}</option>
+                            {% endfor %}
+                        </select>
+                        <label for="pc">Device</label><input id="pc" type="text" required readonly value="{{ dev.mac_address }}" class="form-control">
+                    </div>
+                    <div class="modal-footer">
+                        <button onclick="app.assign()" class="btn btn-success w-100">ASSIGN</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="w-100 h-25 p-2">
+            <div class="w-100 h-100 card">
+                <div class="card-body">
+                    <div class="w-100 h-100">
+                        <button data-bs-target="#appAsign" data-bs-toggle="modal" class="btn btn-sm btn-info">ASSIGN APP</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
     <div class="card">
         <div class="card-body">
             System
