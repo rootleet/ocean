@@ -19,7 +19,7 @@ class AppsGroup(models.Model):
 class App(models.Model):
     group = models.ForeignKey('AppsGroup', on_delete=models.CASCADE)
     name = models.TextField()
-    uni = models.CharField(max_length=60, unique=True)
+    uni = models.CharField(max_length=60)
     description = models.TextField()
     icon = models.FileField(upload_to=f"static/files/{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}")
     root = models.TextField()

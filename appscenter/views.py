@@ -24,7 +24,6 @@ def index(request):
 def save_new_app(request):
     if request.method == 'POST':
         form = NewApp(request.POST, request.FILES)
-
         try:
 
             form.save()
