@@ -11,10 +11,35 @@ from appscenter.models import AppsGroup, App, AppAssign
 @login_required()
 # Create your views here.
 def index(request):
+    import hashlib
+    import time
+
+    # Assuming you have access to the `request` object with the user information
+    username = request.user.username
+
+    # Get the current time as a string
+    current_time = str(time.time())
+
+    # Concatenate the username and current time
+    data = username + current_time
+
+    # Create an MD5 hash object
+    md5_hash = hashlib.md5()
+
+    # Convert the data string to bytes
+    data_bytes = data.encode('utf-8')
+
+    # Update the MD5 hash object with the data bytes
+    md5_hash.update(data_bytes)
+
+    # Get the hexadecimal representation of the MD5 hash
+    md5_hex = md5_hash.hexdigest()
+
     context = {
         'nav': True,
         'appgroups': AppsGroup.objects.filter(status=1),
-        'apps': App.objects.all()
+        'apps': App.objects.all(),
+        'md':md5_hex
     }
 
     return render(request, 'appcenter/index.html', context=context)
