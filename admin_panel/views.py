@@ -745,7 +745,7 @@ def export_task(request):
                         trans = TaskTrans.objects.filter(entry_uni=uni)
                         if trans.count() > 0:
                             last = trans.last()
-                            tran_time = last.created_on
+                            tran_time = str(last.created_on)
                             last_tran = f"{re.sub(clean, '', last.tran_descr)}"
                         else:
                             tran_time = 'NONE'
@@ -765,7 +765,7 @@ def export_task(request):
                         pdf.set_font('','')
                         ## pdf.set_text_color(229, 152, 102)
                         pdf.multi_cell(0, 5, f"Last Transaction : {re.sub(clean, '', last_tran)}", 0, 'L')
-                        pdf.multi_cell(0, 5, f"Transaction Time : {re.sub(clean, '', tran_time)}", 0, 'L')
+                        pdf.multi_cell(0, 5, f"Transaction Time : {tran_time}", 0, 'L')
                         tcount += 1
                         pdf.ln(2)
 
