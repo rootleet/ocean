@@ -759,14 +759,14 @@ def export_task(request):
 
                         pdf.set_font('Arial', '', 8)
                         pdf.set_text_color(23, 32, 42)
-                        pdf.set_font('','B')
-                        pdf.multi_cell(0, 5, f"Description : {re.sub(clean, '', taskhd.description[0:300])} ", 0, 'L')
+                        pdf.set_font('', 'B')
+                        pdf.multi_cell(0, 5, f"Description : {re.sub(clean, '', taskhd.description)} ", 0, 'L')
                         pdf.ln(1)
-                        pdf.set_font('','')
+                        pdf.set_font('', '')
                         ## pdf.set_text_color(229, 152, 102)
                         pdf.multi_cell(0, 5, f"Last Transaction : {re.sub(clean, '', last_tran)}", 0, 'L')
                         pdf.ln(1)
-                        pdf.multi_cell(0, 5, f"TIme  - {tran_time}", 0, 'L')
+                        pdf.multi_cell(0, 5, f"Transaction Time : {tran_time}", 0, 'L')
                         tcount += 1
                         pdf.ln(2)
 
@@ -2376,8 +2376,8 @@ def resetpassword(request):
             return redirect(request.META.get('HTTP_REFERER'))
 
 
-def permissions(request,username):
-    from django.contrib.auth.models import  ContentType
+def permissions(request, username):
+    from django.contrib.auth.models import ContentType
     # Fetch all model permissions for the auth app
     # app_label = 'auth'
     # content_type = ContentType.objects.get(app_label=app_label)
@@ -2388,6 +2388,4 @@ def permissions(request,username):
         'user': request.user,
 
     }
-    return render(request,'dashboard/profile/permissions.html',context=context)
-
-
+    return render(request, 'dashboard/profile/permissions.html', context=context)
