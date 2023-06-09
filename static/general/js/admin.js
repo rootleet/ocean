@@ -272,6 +272,8 @@ async function task_export(document) {
                     {
                         let text = `view <a target="_blank" href="/static/general/docs/${spl[1]}.pdf">file</a>`
                         swal_response('success','FILE READY',text)
+                    } else {
+                        alert("THERE IS AN ISSUE")
                     }
                 }
             })
