@@ -765,6 +765,7 @@ def export_task(request):
                         pdf.set_font('','')
                         ## pdf.set_text_color(229, 152, 102)
                         pdf.multi_cell(0, 5, f"Last Transaction : {re.sub(clean, '', last_tran)}", 0, 'L')
+                        pdf.ln(1)
                         pdf.multi_cell(0, 5, f"TIme  - {tran_time}", 0, 'L')
                         tcount += 1
                         pdf.ln(2)
