@@ -10,7 +10,7 @@ import json
 
 from django.views.decorators.csrf import csrf_exempt
 
-from admin_panel.models import TicketHd, SmsApi, Sms
+from admin_panel.models import TicketHd, SmsApi, Sms, TaskHD, TaskTrans
 from appscenter.models import AppsGroup, App, AppAssign, VersionControl
 from inventory.models import Computer
 
@@ -353,7 +353,7 @@ def api_function(request):
                                     # get update
                                     update = VersionControl.objects.get(app=app, version_no=app_ver)
                                     obj = {
-                                        'apppk':app.pk,
+                                        'apppk': app.pk,
                                         'name': app.name,
                                         'update': 'Y',
                                         'file': update.files.url,
@@ -369,7 +369,77 @@ def api_function(request):
                             arr = "COMPUTER NOT FOUND"
                     response['message'] = arr
 
+                if module == 'taskmanager':
+                    task = data.get('task')
+                    file_format = data.get('format')
+                    domain = data.get('domain')
+                    status = data.get('status', 0)
 
+
+                    if file_format == 'excel':
+                        import openpyxl
+                        workbook = openpyxl.Workbook()
+                        sheet = workbook.active
+
+                        # Write headers
+                        sheet['A1'] = 'DOMAIN'
+                        sheet['B1'] = 'TITLE'
+                        sheet['C1'] = 'DESCRIPTION'
+                        sheet['D1'] = 'LAST TRANSACTION DATE'
+                        sheet['E1'] = 'LAST TRANSACTION'
+
+
+                    if domain == '*':
+                        task_hd = TaskHD.objects.filter(status=status)
+                    else:
+                        task_hd = TaskHD.objects.filter(status=status, domain_id=domain)
+                    arr = []
+                    for hd in task_hd:
+                        entry_uni = hd.entry_uni
+                        type = hd.type
+                        ref = hd.ref
+                        title = hd.title
+                        description = hd.description
+                        added_on = hd.added_on
+                        edited_on = hd.edited_on
+                        domain = hd.domain.tag_dec
+
+                        trans_filter = TaskTrans.objects.filter(entry_uni=entry_uni)
+
+                        if file_format == 'json':
+                            trans = []
+                            for tran in trans_filter:
+                                trans.append({'tran_title': tran.tran_title, 'tran_descr': tran.tran_descr})
+                            arr.append({
+                                'uni': entry_uni, 'type': type, 'ref': ref, 'title': title,
+                                'desc': description, 'add_date': added_on, 'edit_date': edited_on,
+                                'domain': domain, 'trans': trans
+                            })
+
+                            response['message'] = arr
+
+                        elif file_format == 'excel':
+                            row = 2
+                            for task in task_hd:
+                                tran_time = 'NONE'
+                                tran_desc = 'NONE'
+                                trans_count = TaskTrans.objects.filter(entry_uni=task.entry_uni)
+                                if trans_count.count() > 0:
+                                    tran = trans_count.last()
+                                    tran_time = str(tran.created_on)
+                                    tran_desc = tran.tran_descr
+
+
+                                sheet[f'A{row}'] = task.domain.tag_dec
+                                sheet[f'B{row}'] = task.title
+                                sheet[f'C{row}'] = task.description
+                                sheet[f'D{row}'] = tran_time
+                                sheet[f'E{row}'] = tran_desc
+                                row+=1
+
+                            file_name = f"static/general/docs/issues.xlsx"
+                            workbook.save(file_name)
+                            response['message'] = file_name
 
             except KeyError as e:
                 response["status_code"] = 400
