@@ -492,6 +492,7 @@ class Grn {
     }
 
     loadGrDocs(entry_no){
+
         let data = {
             "module":"doc",
             "data":{
