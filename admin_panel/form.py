@@ -2,6 +2,7 @@ from django import forms
 
 from admin_panel.models import ProductMaster, ProductPacking, Locations, TicketHd, Files, OrganizationalUnit, \
     UnitMembers, SmsApi, BulkSms
+from dolphine.models import Documents
 
 
 class NewProduct(forms.ModelForm):
@@ -88,3 +89,12 @@ class NewBulkSms(forms.ModelForm):
     class Meta:
         model = BulkSms
         exclude = ['created_date', 'created_time', 'status']
+
+
+# forms.py
+
+class ImageUploadForm(forms.ModelForm):
+    class Meta:
+        model = Documents
+        exclude = []
+    # image = forms.ImageField()

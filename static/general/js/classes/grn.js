@@ -39,6 +39,16 @@ class Grn {
             err_msg = "Invalid HEater"
         }
 
+        var fileInput = $('#image-input')[0];
+        var file = fileInput.files[0];
+
+        if(file){
+
+        } else {
+            err_count ++
+            err_msg += ` Please select a file`
+        }
+
         if(err_count > 0)
         {
             swal_response('','',err_msg)
@@ -134,6 +144,38 @@ class Grn {
                         {
                             apiv2('close_doc','null',{'entry':ref,'user':$('#mypk').val(),'doc':'po'})
                         }
+
+
+                        // uplaod file
+
+
+
+                        // Create a FormData object to store the file data
+                        var formData = new FormData();
+                        formData.append('file', file);
+                        formData.append('entry_no',entry_no)
+                        formData.append('doc','GR')
+
+                        // Send the file data to the server using AJAX
+                        $.ajax({
+                          url: '/doc_upload/',  // Replace with the actual server endpoint for uploading
+                          type: 'POST',
+                          data: formData,
+                          processData: false,
+                          contentType: false,
+                          success: function(response) {
+                            // Handle the server response after successful upload
+                            console.log('Upload successful');
+                            // Additional code here
+                          },
+                          error: function(xhr, status, error) {
+                            // Handle the error response
+                            console.error('Upload error: ' + error);
+                            // Additional code here
+                          }
+                        });
+
+
 
                         location.href = '/inventory/grn/'
 
@@ -447,6 +489,51 @@ class Grn {
         {
             swal_response('error',"DOCUMENT ERROR",hd_res['message'])
         }
+    }
+
+    loadGrDocs(entry_no){
+        let data = {
+            "module":"doc",
+            "data":{
+                "entry_no":entry_no,
+                "doc":"GR"
+            }
+        }
+
+        let view = api.view(data)
+
+        if(view['status_code'] === 200){
+            let message = view['message']
+            let count = message['count']
+            let files = message['files']
+
+            let imgss = ''
+
+            if (count < 1){
+                imgss = "NO DOCUMENTS"
+                $('#g_modal_size').removeClass('modal-lg')
+            } else {
+                $('#g_modal_size').addClass('modal-lg')
+                let imgs = ''
+                for (let im = 0; im < files.length ; im++) {
+                    let file = files[im]['url']
+                    imgss += `<div class="col-sm-3 m-2"><div class="card w-100">
+                            <div class="card-body text-center p-2">
+                            <img src="${file}" alt="" class="img-fluid img-thumbnail"><br>
+                            <button onclick="windowPopUp('${file}','GRN DOCUMENT',900,1000)" class="w-100 btn btn-info rounded-0 mt-1">VIEW</button></div></div></div>`
+
+                }
+            }
+
+            let container = `
+            <div class="container"><div class="row d-flex flex-wrap justify-content-center">${imgss}</div></div>
+            `
+            $('#g_modal_title').text("GRN DOCUMENTS")
+            $('#g_modal_body').html(container)
+            $('#g_modal').modal('show')
+            console.log(container)
+        }
+
     }
 
 }

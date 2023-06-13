@@ -65,6 +65,7 @@ urlpatterns = [
     path('inventory/adjustment/new/', views.new_adjustment, name='new_adjustment'),
     path('inventory/transfer/', views.transfer, name='transfer'),
     path('inventory/transfer/new/', views.new_transfer, name='new_transfer'),
+    path('doc_upload/',views.upload_doc,name='doc_upload'),
     # path('inventory/receiving/', views.grn_entries, name='grn_entries'),
     # path('inventory/receiving/new/', views.new_grn, name='new_grn'),
 
@@ -74,6 +75,7 @@ urlpatterns = [
     path('accounts/bank-master/', views.bank_master, name='bank-master'),
     path('accounts/bank_master/post/', views.bank_posts, name='bank-post'),
     path('accounts/suppliers/', views.suppliers, name='suppliers'),
+
 
     # company setup
     path('company/locations/', views.loc_master, name='loc_master'),

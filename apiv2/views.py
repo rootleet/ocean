@@ -13,6 +13,7 @@ from django.views.decorators.csrf import csrf_exempt
 from admin_panel.models import TicketHd, SmsApi, Sms, TaskHD, TaskTrans
 from appscenter.models import AppsGroup, App, AppAssign, VersionControl
 from community.models import tags
+from dolphine.models import Documents
 from inventory.models import Computer
 
 
@@ -370,7 +371,7 @@ def api_function(request):
                             arr = "COMPUTER NOT FOUND"
                     response['message'] = arr
 
-                if module == 'taskmanager':
+                elif module == 'taskmanager':
                     import re
                     clean = re.compile('<.*?>')
 
@@ -445,7 +446,7 @@ def api_function(request):
                     else:
                         response['status_code'] = 404
                         response['message'] = "No Data To Retrieve"
-                if module == 'domain':
+                elif module == 'domain':
                     arr = []
                     domains = tags.objects.all()
 
@@ -453,6 +454,23 @@ def api_function(request):
                         arr.append({'pk': domain.pk, 'desc': domain.tag_dec})
 
                     response['message'] = arr
+
+                elif module == 'doc':
+                    entry_no = data.get('entry_no')
+                    doc = data.get('doc')
+
+                    docs = Documents.objects.filter(doc=doc,entry_no=entry_no)
+                    arr = []
+                    for d in docs:
+                        arr.append({
+                            'url':d.file.url
+                        })
+
+                    response['message'] = {
+                        'count':docs.count(),
+                        'files':arr
+                    }
+
 
             except KeyError as e:
                 response["status_code"] = 400

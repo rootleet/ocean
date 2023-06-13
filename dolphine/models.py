@@ -33,3 +33,9 @@ class Files(models.Model):
             os.remove(self.file.path)
         # Call the parent class's delete() method to delete the object from the database.
         super(Files, self).delete(*args, **kwargs)
+
+
+class Documents(models.Model):
+    doc = models.CharField(max_length=3)
+    entry_no = models.TextField()
+    file = models.FileField(upload_to='static/uploads/%Y/%m/%d/')

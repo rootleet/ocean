@@ -2,7 +2,7 @@ from datetime import datetime
 
 from django.db import models
 
-from inventory.models import Computer
+from inventory.models import Computer, ComputerGroup
 from ocean import settings
 
 
@@ -18,6 +18,7 @@ class AppsGroup(models.Model):
 
 class App(models.Model):
     group = models.ForeignKey('AppsGroup', on_delete=models.CASCADE)
+    containers = models.ManyToManyField('AppContainer')
     name = models.TextField()
     uni = models.CharField(max_length=60, unique=True)
     description = models.TextField()
@@ -52,4 +53,9 @@ class AppAssign(models.Model):
     updated_time = models.TimeField(auto_now_add=True)
 
 
+class AppContainer(models.Model):
+    name = models.CharField(max_length=255)
+    computers = models.ManyToManyField(ComputerGroup)
 
+    def __str__(self):
+        return self.name

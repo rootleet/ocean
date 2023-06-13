@@ -2389,3 +2389,27 @@ def permissions(request, username):
 
     }
     return render(request, 'dashboard/profile/permissions.html', context=context)
+
+
+
+# views.py
+
+from .form import ImageUploadForm
+
+@csrf_exempt
+def upload_doc(request):
+    if request.method == 'POST':
+        form = ImageUploadForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            # image_file = form.cleaned_data['file']
+            # doc = form.cleaned_data['doc']
+            # entry = form.cleaned_data['entry_no']
+            # Perform operations with the image file (e.g., save it, process it)
+            # Your code here
+
+            return HttpResponse("GRN SAVED")  # Show a success page
+    else:
+        form = ImageUploadForm()
+        return HttpResponse(form)
+

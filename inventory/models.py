@@ -169,6 +169,7 @@ class WorkStation(models.Model):
 
 
 class Computer(models.Model):
+    group = models.ForeignKey('ComputerGroup', on_delete=models.SET_NULL, null=True)
     ram_type = models.CharField(max_length=255)
     ram_size = models.PositiveIntegerField()
     cpu = models.CharField(max_length=255)
@@ -214,3 +215,11 @@ class ComputerMoreInfo(models.Model):
     updated_date = models.DateField(auto_now=True)
     updated_time = models.TimeField(auto_now=True)
     status = models.IntegerField(default=1)
+
+
+class ComputerGroup(models.Model):
+    name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.name
+
