@@ -436,7 +436,7 @@ def api_function(request):
                                     sheet[f'B{row}'] = task.title
                                     sheet[f'C{row}'] = f"{re.sub(clean,'',task.description)}"
                                     sheet[f'D{row}'] = tran_time
-                                    sheet[f'E{row}'] = tran_desc
+                                    sheet[f'E{row}'] = f"{re.sub(clean,'',tran_desc)}"
                                     row += 1
 
                                 file_name = f"static/general/docs/issues.xlsx"
