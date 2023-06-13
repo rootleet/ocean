@@ -151,7 +151,7 @@ class Issues {
                     Swal.fire({
                         'icon':'success',
                         'text':"Download file with the link below",
-                        'html':`Download file with the link below <br><a href="${view['message']}" target="_blank">LINK</a>`
+                        'html':`Download file with the link below <br><a href="/${view['message']}" target="_blank">LINK</a>`
                     })
                 } else {
                     Swal.fire({
