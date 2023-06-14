@@ -82,7 +82,7 @@ class NewUM(forms.ModelForm):
 class NewSMSApi(forms.ModelForm):
     class Meta:
         model = SmsApi
-        exclude = ['created_date', 'created_time', 'status']
+        exclude = ['created_date', 'created_time', 'status','is_default']
 
 
 class NewBulkSms(forms.ModelForm):
