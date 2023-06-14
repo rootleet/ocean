@@ -1052,7 +1052,7 @@ def api_call(request, module, crud):
         # send all pending sms
         elif crud == 'sendSms':
             import requests
-            pending_messages = Sms.objects.filter(status=0)[:1]
+            pending_messages = Sms.objects.filter(status=0)
             for pending in pending_messages:
                 try:
                     pk = pending.pk
@@ -1066,7 +1066,7 @@ def api_call(request, module, crud):
 
                     status = data['status']
                     code = data['code']
-                    resp_msg = data['message']
+                    resp_msg = f"{data['message']} - {endPoint}"
 
                     if code == '1000':
                         # success
