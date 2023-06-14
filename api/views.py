@@ -1060,7 +1060,7 @@ def api_call(request, module, crud):
                     text = pending.message
                     sender_id = pending.api.sender_id
                     api_key = pending.api.api_key
-                    endPoint = f"https://apps.mnotify.net/smsapi?key={api_key}&to={to}&msg='{text}'&sender_id={sender_id}"
+                    endPoint = f"https://apps.mnotify.net/smsapi?key={api_key}&to={to}&msg={text}&sender_id={sender_id}"
                     resp = requests.post(endPoint)
                     data = resp.json()
 
