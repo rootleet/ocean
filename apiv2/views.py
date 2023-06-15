@@ -8,9 +8,11 @@ from django.shortcuts import render
 # Create your views here.
 import json
 
+import os
+
 from django.views.decorators.csrf import csrf_exempt
 
-from admin_panel.models import TicketHd, SmsApi, Sms, TaskHD, TaskTrans, ProductMaster, ProductPacking
+from admin_panel.models import TicketHd, SmsApi, Sms, TaskHD, TaskTrans, ProductMaster, ProductPacking, ProductTrans
 from api.extras import get_stock, suppler_details, cardex
 from appscenter.models import AppsGroup, App, AppAssign, VersionControl
 from community.models import tags
@@ -231,6 +233,29 @@ def api_function(request):
                     elif task == 'delapp':
                         pk = data.get('pk')
                         App.objects.get(pk=pk).delete()
+
+                elif module == 'product':
+                    barcode = data.get('barcode')
+                    if ProductMaster.objects.filter(barcode=barcode).exists():
+                        prod = ProductMaster.objects.get(barcode=barcode)
+                        img = prod.prod_img.path
+                        name = prod.descr
+
+                        stock = ProductTrans.objects.filter(product=prod)
+                        packing = ProductPacking.objects.filter(product=prod)
+
+                        packing.delete()
+                        stock.delete()
+                        prod.delete()
+
+                        if os.path.exists(img):
+                            # Delete the file
+                            os.remove(img)
+
+                        response['message'] = f"{name} deleted!"
+                    else:
+                        response['message'] = f"No product Exist with barcode {barcode}"
+                        response['status_code'] = 404
 
                 response["status_code"] = 200
                 response["status"] = "OK"
