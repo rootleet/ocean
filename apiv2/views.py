@@ -10,7 +10,7 @@ import json
 
 from django.views.decorators.csrf import csrf_exempt
 
-from admin_panel.models import TicketHd, SmsApi, Sms, TaskHD, TaskTrans, ProductMaster
+from admin_panel.models import TicketHd, SmsApi, Sms, TaskHD, TaskTrans, ProductMaster, ProductPacking
 from api.extras import get_stock, suppler_details, cardex
 from appscenter.models import AppsGroup, App, AppAssign, VersionControl
 from community.models import tags
@@ -505,6 +505,38 @@ def api_function(request):
 
                         legend['cardex'] = cardex(prod_id=product.pk)
 
+                        # packing
+
+                        if ProductPacking.objects.filter(product=product,packing_type='A').count() == 1:
+                            AssignPacking = ProductPacking.objects.get(product=product, packing_type='A')
+                            assign = {
+                                'pack_um': AssignPacking.packing_un.code,
+                                'descr': AssignPacking.packing_un.descr,
+                                'qty': AssignPacking.pack_qty
+                            }
+                        else:
+                            assign = {
+                                'pack_um': "NONE",
+                                'descr': "NONE"
+                            }
+
+                        if ProductPacking.objects.filter(product=product,packing_type='P').count() == 1:
+                            PurchasePacking = ProductPacking.objects.get(product=product, packing_type='P')
+                            purchase = {
+                                'pack_um': PurchasePacking.packing_un.code,
+                                'descr': PurchasePacking.packing_un.descr,
+                                'qty': PurchasePacking.pack_qty
+                            }
+                        else:
+                            purchase = {
+                                'pack_um': "NONE",
+                                'descr': "NONE"
+                            }
+
+                        legend['packing'] = {
+                            'assign':assign,'purchase':purchase
+                        }
+
                         # nav
                         nextProducts = ProductMaster.objects.filter(pk__gt=product.pk)
                         lessProducts = ProductMaster.objects.filter(pk__lt=product.pk)
@@ -512,14 +544,14 @@ def api_function(request):
                         legend['nav'] = {}
                         if nextProducts.count() > 0:
                             legend['nav']['next'] = 'Y'
-                            legend['nav']['next_prod'] = nextProducts.first().pk
+                            legend['nav']['next_prod'] = nextProducts.first().barcode
                         else:
                             legend['nav']['next'] = 'N'
                             legend['nav']['next_prod'] = 'N'
 
                         if lessProducts.count() > 0:
                             legend['nav']['prev'] = 'Y'
-                            legend['nav']['prev_prod'] = lessProducts.last().pk
+                            legend['nav']['prev_prod'] = lessProducts.last().barcode
                         else:
                             legend['nav']['prev'] = 'N'
                             legend['nav']['prev_prod'] = 'N'

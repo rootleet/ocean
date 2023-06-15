@@ -9,8 +9,8 @@
                     <button class="btn btn-sm"><i class="bi bi-plus-square-fill text-success"></i></button>
                     <button class="btn btn-sm"><i class="bi bi-recycle text-danger"></i></button>
                     <button class="btn btn-sm"><i class="bi bi-pencil-fill text-warning"></i></button>
-                    <button id="prev_nav" disabled class="btn btn-sm"><i class="bi bi-skip-backward-fill text-info"></i></button>
-                    <button id="next_nav" class="btn btn-sm"><i class="bi bi-skip-forward-fill text-info"></i></button>
+                    <button id="prev_nav" onclick="productMaster.loadProdMastScreen(this.value)" disabled class="btn btn-sm"><i class="bi bi-skip-backward-fill text-info"></i></button>
+                    <button onclick="productMaster.loadProdMastScreen(this.value)" id="next_nav" class="btn btn-sm"><i class="bi bi-skip-forward-fill text-info"></i></button>
                 </div>
                 <div class="w-50 h-100 d-flex flex-wrap align-content-center justify-content-end">
                     <strong class="card-title">PRODUCT MASTER</strong>
@@ -23,16 +23,16 @@
                 <div class="row h-50 w-100">
                     <!-- GROUPS -->
                     <div class="col-sm-4">
-                        <label for="group">GROUP</label><input type="text" id="group" readonly class="form-control mb-2 rounded-0">
-                        <label for="sub_group">SUB GROUP</label><input type="text" id="sub_group" readonly class="form-control mb-2 rounded-0">
-                        <label for="barcode">BARCODE</label><input type="text" id="barcode" readonly class="form-control mb-2 rounded-0">
-                        <label for="description">DESCRIPTION</label><input type="text" id="description" readonly class="form-control mb-2 rounded-0">
+                        <label for="group" class="text-info">GROUP</label><input type="text" id="group" readonly class="form-control mb-2 rounded-0">
+                        <label for="sub_group" class="text-info">SUB GROUP</label><input type="text" id="sub_group" readonly class="form-control mb-2 rounded-0">
+                        <label for="barcode" class="text-info">BARCODE</label><input type="text" id="barcode" readonly class="form-control mb-2 rounded-0">
+                        <label for="description" class="text-info">DESCRIPTION</label><input type="text" id="description" readonly class="form-control mb-2 rounded-0">
                     </div>
 
                     <!-- PACKING -->
                     <div class="col-sm-4">
-                        <label for="pack_unit">PACKING UNIT</label><input type="text" id="pack_unit" readonly class="form-control mb-2 rounded-0">
-                        <label for="pack_qty">PACKING QUANTITY</label><input type="text" id="pack_qty" readonly class="form-control mb-2 rounded-0">
+                        <label for="pack_unit" class="text-info">PACKING UNIT</label><input type="text" id="pack_unit" readonly class="form-control mb-2 rounded-0">
+                        <label for="pack_qty" class="text-info">PACKING QUANTITY</label><input type="text" id="pack_qty" readonly class="form-control mb-2 rounded-0">
                     </div>
 
                     <!-- IMAGE -->
@@ -42,35 +42,56 @@
 
                 </div>
 
-                <div class="h-50 card">
-                    <div class="card-header">
-                        <div class="w-100 d-flex flex-wrap">
-                            <kbd class="pointer rounded-0 bg-primary">PRICING</kbd>
-                            <kbd class="pointer rounded-0">STOCK</kbd>
-                            <kbd class="pointer rounded-0 bg-info">CARDEX</kbd>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-sm-3">
-                                <label for="tax_group">TAX GROUP</label><input id="tax_group" readonly type="text" class="form-control rounded-0 form-control-sm mb-2">
-                                <label for="last_cost_price">LAST COST PRICE</label><input id="last_cost_price" readonly type="text" class="form-control rounded-0 form-control-sm mb-2">
-                            </div>
+                <div class="h-50 card bg-info p-2">
 
-                            <!-- STOCK -->
-                            <div style="display: none" class="col-sm-6">
-                                <table class="table-sm table table-bordered">
-                                    <thead>
-                                        <tr><th>LOC ID</th><th>LOC DESC</th><th>STOCK</th></tr>
-                                    </thead>
-                                    <tbody id="stock_table">
+                    <div class="card-body bg-light p-0 h-100">
+                        <!-- Nav tabs -->
+                        <ul class="nav nav-tabs">
+                          <li class="nav-item">
+                            <a class="nav-link active" data-toggle="tab" href="#pricing">PRICING</a>
+                          </li>
+                          <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#stock">STOCK</a>
+                          </li>
+                          <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#cardex">CARDEX</a>
+                          </li>
+                        </ul>
 
-                                    </tbody>
-                                </table>
-                            </div>
+                        <!-- Tab panes -->
+                        <div class="tab-content p-2">
+                          <div class="tab-pane container active" id="pricing">
+                              <div class="row">
 
-                            <!-- CARDEX -->
-                            <div style="display: none" class="col-sm-12">
+                                  <div class="col-sm-3">
+                                        <label for="tax_group">TAX GROUP</label><input id="tax_group" readonly type="text" class="form-control rounded-0 form-control-sm mb-2">
+                                        <label for="last_cost_price">LAST COST PRICE</label><input id="last_cost_price" readonly type="text" class="form-control rounded-0 form-control-sm mb-2">
+                                    </div>
+
+                              </div>
+                          </div>
+                          <div class="tab-pane container fade" id="stock">
+
+                              <div class="row">
+                                  <!-- STOCK -->
+                                  <div class="col-sm-6">
+                                    <table class="table-sm table table-bordered">
+                                        <thead>
+                                            <tr><th>LOC ID</th><th>LOC DESC</th><th>STOCK</th></tr>
+                                        </thead>
+                                        <tbody id="stock_table">
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                              </div>
+
+                          </div>
+                          <div class="tab-pane container fade" id="cardex">
+                              <div class="row">
+
+                                  <!-- CARDEX -->
+                                  <div class="col-sm-12">
                                 <table class="table-sm table table-bordered">
                                     <thead>
                                         <tr><th>DATE</th><th>DOC TYPE</th><th>ENTRY</th><th>LOC ID</th><th>LOC DESC</th><th>QTY</th></tr>
@@ -80,6 +101,9 @@
                                     </tbody>
                                 </table>
                             </div>
+
+                              </div>
+                          </div>
                         </div>
                     </div>
                 </div>
