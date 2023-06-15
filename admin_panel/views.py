@@ -1108,8 +1108,7 @@ def tax_master(request):
             try:
 
                 if TaxMaster.objects.filter(tax_code=tax_code).count() == 0:
-                    TaxMaster(tax_code=tax_code, tax_description=tax_description, tax_rate=rate,
-                              created_by=request.user.pk).save()
+                    TaxMaster(tax_code=tax_code, tax_description=tax_description, tax_rate=rate).save()
                     messages.success(request, 'done%%New Tax Added')
 
                 else:
