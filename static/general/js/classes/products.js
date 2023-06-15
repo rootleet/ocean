@@ -239,6 +239,7 @@ class Products {
                 let supplier = response['supplier']
                 let cardex = response['cardex']
                 let nav = response['nav']
+                let packing = response['packing']
 
                 // nav
                 if(nav['next'] === 'Y'){
@@ -271,8 +272,12 @@ class Products {
                 $('#description').val(product['descr'])
 
                 // packing
-                $('#pack_unit').val()
-                $('#pack_qty').val()
+                let pur = packing['purchase']
+                let ass = packing['assign']
+                $('#pur_unit').val(`${pur['pack_um']} - ${pur['descr']}`)
+                $('#pur_qty').val(pur['qty'])
+                $('#iss_un').val(`${ass['pack_um']} - ${ass['descr']}`)
+                $('#iss_qty').val(ass['qty'])
 
                 //image
                 $('#prd_img').prop('src',product['image'])

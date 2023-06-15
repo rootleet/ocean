@@ -358,7 +358,7 @@ $(function() {
                 let link_res = ""
                 for (let i = 0; i < res.length; i++) {
                     this_row = res[i]['fields']
-                    link_res += `<div class="list-group-item d-flex flex-wrap"> <button  onclick="productMaster.FillTranList('${this_row.barcode}')" class="btn btn-sm btn-info">ADD</button> ${this_row.barcode} | ${this_row.descr}</div>`
+                    link_res += `<div class="list-group-item d-flex flex-wrap"> <button  onclick="add_adj_tran_list('${this_row.barcode}')" class="btn btn-sm btn-info">ADD</button> ${this_row.barcode} | ${this_row.descr}</div>`
                 }
                 $('#searchRes').html(link_res)
             }
@@ -378,7 +378,6 @@ function add_adj_tran_list(barcode) {
 
     // check if barcode exist
     let rows = $('#tBody tr').length
-    let barcode_id = `barcode_${rows}`
     let exist = 0;
 
     for (let i = 0; i <= rows; i++) {
@@ -394,6 +393,7 @@ function add_adj_tran_list(barcode) {
 
     if(exist === 0)
     {
+        let rows =+ 1
         // get packing details
         packing = JSON.parse(pClass.GetProductPacking(barcode))
         let options = ''
@@ -407,15 +407,17 @@ function add_adj_tran_list(barcode) {
 
 
         let qty_id = `qty_${rows}`
+        let barcode_id = `barcode_${rows}`
         let pack_qty = `pack_${rows}`
         let total = `total_${rows}`
         let tr = `<tr id="row${rows}">
-                                    <td>${rows}</td>
-                                    <td><input id="${barcode_id}" type="text" class="anton-form" readonly value="${barcode}"></td>
-                                    <td><input type="text" class="anton-form" readonly value="${p_descr}"></td>
-                                    <td><select  class="anton-select" name="" id="${pack_qty}">${options}</select></td>
-                                    <td><input onkeyup="row_cal(${rows})" id="${qty_id}" value="0" class="anton-form" type="number"></td>
-                                    <td><input id="${total}" readonly value="0" class="anton-form" type="number"></td>
+        
+                                    
+                                    <td><input id="${barcode_id}" type="text" class="form-control form-control-sm rounded-0" readonly value="${barcode}"></td>
+                                    <td><input type="text" class="form-control form-control-sm rounded-0" readonly value="${p_descr}"></td>
+                                    <td><select  class="form-control form-control-sm rounded-0" name="" id="${pack_qty}">${options}</select></td>
+                                    <td><input onkeyup="row_cal(${rows})" id="${qty_id}" value="0" class="form-control form-control-sm rounded-0" type="number"></td>
+                                    <td><input id="${total}" readonly value="0" class="form-control form-control-sm rounded-0" type="number"></td>
                                 </tr>`
 
         $('#tBody').append(tr)
@@ -479,12 +481,13 @@ function save_adjustment() {
             {
                 //insert into adjustment hd
 
-                let paren = new_adj_hd({'remark': remarks,'loc':loc})
+                paren = new_adj_hd({'remark': remarks,'loc':loc})
 
-                if( paren > 0)
+                if( 1 > 0)
                 {
-
-                    for (let xi = 0; xi < rows; xi++)
+                    console.log('NO ERROR')
+                    console.log(rows)
+                    for (let xi = 1; xi <= rows; xi++)
                     {
                         // todo insert each line
                         let qty_id,row_id,total_id,qty,total,barcode_id,pack_id,barcode,pack
@@ -501,13 +504,13 @@ function save_adjustment() {
                         total = $(total_id).val()
                         pack = $(pack_id).val()
 
-
+                        ctable([xi,barcode,pack,qty,total])
 
                         new_adj_tran(paren,xi,barcode,pack,qty,total)
                     }
 
                     // reload page
-                    location.href='/admin_panel/inventory/adjustment/'
+                    location.href='/inventory/adjustment/'
 
                 } else {
                     error_handler(`error%%Cannot Create Header ${paren}`)
