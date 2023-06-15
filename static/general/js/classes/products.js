@@ -345,7 +345,7 @@ class Products {
                 text: message,
                 icon: status_code === 200 ? 'success' : 'warning',
               });
-              location.reload()
+
             })
             .catch((error) => {
               Swal.fire({
@@ -355,6 +355,7 @@ class Products {
               });
               console.error(error);
             });
+            location.reload()
         }
       });
     }
