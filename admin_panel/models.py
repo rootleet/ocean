@@ -153,11 +153,7 @@ class TaxMaster(models.Model):
     tax_code = models.CharField(unique=True, max_length=2)
     tax_description = models.TextField()
     tax_rate = models.DecimalField(max_digits=10, decimal_places=2)
-    created_by = models.IntegerField(default=0)
-    created_on = models.DateField(auto_now_add=True)
-    added_time = models.TimeField(auto_now_add=True)
-    edited_on = models.DateField(auto_now=True)
-    edited_time = models.TimeField(auto_now=True)
+
     status = models.IntegerField(default=1)
 
 
