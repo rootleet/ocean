@@ -244,7 +244,7 @@ class Products {
                 if(nav['next'] === 'Y'){
                     // enable next
                     $('#next_nav').prop('disabled',false)
-                    $('#next_nav').val(nex['next_prod'])
+                    $('#next_nav').val(nav['next_prod'])
                 } else
                 {
                     // disable next
@@ -254,7 +254,7 @@ class Products {
                 if(nav['prev'] === 'Y'){
                     // enable next
                     $('#prev_nav').prop('disabled',false)
-                    $('#prev_nav').val(nex['next_prod'])
+                    $('#prev_nav').val(nav['prev_prod'])
                 } else
                 {
                     // disable next
