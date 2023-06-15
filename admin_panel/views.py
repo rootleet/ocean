@@ -1237,6 +1237,7 @@ def new_products(request):
         'page_title': 'Products Master | New',
         'groups': groups, 'taxes': taxes, 'packs': packs, 'supps': supps
     }
+    return render(request, 'dashboard/products/newV2.html', context=context)
     return render(request, 'dashboard/products/new.html', context=context)
 
 
@@ -1318,7 +1319,7 @@ def save_new_product(request):
 
                 messages.error(request, 'done%%Item Added')
 
-            return redirect('products')
+            return redirect('inventory')
 
         except Exception as e:
             messages.error(request, f'error%%{e}')

@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body %}
+    <div class="card" style="height: 100%!important">
+        <div class="card-header">
+            <div class="w-100 h-100 d-flex flex-wrap">
+                <div class="w-50 h-100 d-flex flex-wrap align-content-center">
+                    <button form="prodForm" type="submit"  class="btn btn-sm"><i class="bi bi-save-fill text-success"></i></button>
+                    <button type="button" onclick="location.href='{% url 'products' %}'" class="btn btn-sm"><i class="bi bi-door-closed text-warning"></i></button>
+                </div>
+                <div class="w-50 h-100 d-flex flex-wrap align-content-center justify-content-end">
+                    <strong class="card-title">PRODUCT MASTER</strong>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-body p-1 pb-3">
+            <form id="prodForm" method="post" enctype="multipart/form-data" action="{% url 'save-new-product' %}" class="container-fluid h-100 overflow-hidden">
+                <div class="row h-50 w-100">
+                {% csrf_token %}
+                    <!-- GROUPS -->
+                    <div class="col-sm-4">
+
+                        <label for="group" class="text-info">GROUP</label>
+                        <select onchange="getty()" id="group" name="group" class="form-control mb-2 rounded-0">
+                            <option value="0">SELECT GROUP</option>
+                            {% for grp in groups %}
+                                <option value="{{ grp.pk }}">{{ grp.descr }}</option>
+                            {% endfor %}
+                        </select>
+                        <label for="sub_group" class="text-info">SUB GROUP</label>
+                        <select disabled required name="sub_group" id="sub_group" class="form-control mb-2 rounded-0"></select>
+                        <label for="barcode" class="text-info">BARCODE</label><input name="barcode" type="text" id="barcode" required class="form-control mb-2 rounded-0">
+                        <label for="description" class="text-info">DESCRIPTION</label>
+                        <input onkeyup="$('#shrt_descr').val(this.value)" type="text" name='descr' autocomplete="off" id="description" required class="form-control mb-2 rounded-0">
+
+                    </div>
+
+                    <!-- PACKING -->
+                    <div class="col-sm-4">
+
+                        <label for="pack_unit" class="text-info">PURCHASING PACKING UNIT</label>
+                        <select name="purch_un" id="pack_unit" class="form-control rounded-0 mb-2">
+                            {% for pack in packs %}
+                                <option value="{{ pack.pk }}">{{ pack.descr }}</option>
+                            {% endfor %}
+                        </select>
+                        <label for="pack_qty" class="text-info">PURCHASING PACKING QUANTITY</label><input name="purch_qty" type="number" id="pack_qty" required class="form-control mb-2 rounded-0">
+
+                        <label for="pack_unit" class="text-danger">ISSUE PACKING UNIT</label>
+                        <select name="ass_un" id="pack_unit" class="form-control rounded-0 mb-2">
+                            {% for pack in packs %}
+                                <option value="{{ pack.pk }}">{{ pack.descr }}</option>
+                            {% endfor %}
+                        </select>
+                        <label for="pack_qty" class="text-danger">ISSUE PACKING QUANTITY</label><input type="number" name="ass_qty" min="1" id="pack_qty" required class="form-control mb-2 rounded-0">
+
+                    </div>
+
+                    <!-- SUPPLIER IMAGE -->
+                    <div class="col-sm-4">
+                        <label for="shrt_descr" class="text-info">SHORT DESCRIPTION</label><input autocomplete="off" maxlength="10" type="text" class="form-control rounded-0 mb-2" name="shrt_descr" id="shrt_descr">
+
+                        <label for="pack_unit" class="text-info">SUPPLIER</label>
+                        <select name="supplier" id="pack_unit" class="form-control rounded-0 mb-2">
+                            {% for su in supps %}
+                                <option value="{{ su.pk }}">{{ su.company }}</option>
+                            {% endfor %}
+                        </select>
+
+                        <div class="custom-file mb-2">
+                            <input type="file" name="prod_img" accept="image/jpeg, image/png" class="custom-file-input" id="imgInp">
+                            <label for="" class="custom-file-label">SELECT IMAGE</label>
+                        </div>
+
+                    </div>
+
+                    <!-- IMAGE -->
+                    <div class="col-sm-4 text-center">
+                    </div>
+
+                </div>
+
+                <div class="h-50 card p-2">
+
+                    <div class="card-body bg-light h-100 overflow-hidden">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <label for="tax_group">TAX GROUP</label>
+                                    <select name="tax" id="tax_group" class="form-control rounded-0">
+                                        {% for tax in taxes %}
+                                            <option value="{{ tax.pk }}">{{ tax.tax_code }} - {{ tax.tax_description }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+                                <div class="col-sm-3">
+                                    <img id="blah" class="img-fluid img-thumbnail" src="#" alt="" />
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    </div>
+
+    <script>
+                                                            // Add the following code if you want the name of the file appear on select
+                                                            $(".custom-file-input").on("change", function() {
+                                                              var fileName = $(this).val().split("\\").pop();
+                                                              $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+                                                            });
+                                                            imgInp.onchange = evt => {
+                                                              const [file] = imgInp.files
+                                                              if (file) {
+                                                                blah.src = URL.createObjectURL(file)
+                                                              }
+                                                            }
+                                                        </script>
+
+{% endblock %}

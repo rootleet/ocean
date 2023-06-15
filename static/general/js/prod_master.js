@@ -11,11 +11,13 @@ function getty(){
     }
     else
     {
-        let value = $('#prod_group').val()
+        let value = $('#group').val()
         var form_data = {
             'function':'prod_subs',
             'group':value
         }
+
+        console.log(form_data)
 
         var opts = '';
 
