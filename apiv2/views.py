@@ -10,7 +10,8 @@ import json
 
 from django.views.decorators.csrf import csrf_exempt
 
-from admin_panel.models import TicketHd, SmsApi, Sms, TaskHD, TaskTrans
+from admin_panel.models import TicketHd, SmsApi, Sms, TaskHD, TaskTrans, ProductMaster
+from api.extras import get_stock, suppler_details, cardex
 from appscenter.models import AppsGroup, App, AppAssign, VersionControl
 from community.models import tags
 from dolphine.models import Documents
@@ -403,7 +404,7 @@ def api_function(request):
                             type = hd.type
                             ref = hd.ref
                             title = hd.title
-                            description = f"{re.sub(clean,'',hd.description)}"
+                            description = f"{re.sub(clean, '', hd.description)}"
                             added_on = hd.added_on
                             edited_on = hd.edited_on
                             domain = hd.domain.tag_dec
@@ -435,9 +436,9 @@ def api_function(request):
 
                                     sheet[f'A{row}'] = task.domain.tag_dec
                                     sheet[f'B{row}'] = task.title
-                                    sheet[f'C{row}'] = f"{re.sub(clean,'',task.description)}"
+                                    sheet[f'C{row}'] = f"{re.sub(clean, '', task.description)}"
                                     sheet[f'D{row}'] = tran_time
-                                    sheet[f'E{row}'] = f"{re.sub(clean,'',tran_desc)}"
+                                    sheet[f'E{row}'] = f"{re.sub(clean, '', tran_desc)}"
                                     row += 1
 
                                 file_name = f"static/general/docs/issues.xlsx"
@@ -459,17 +460,73 @@ def api_function(request):
                     entry_no = data.get('entry_no')
                     doc = data.get('doc')
 
-                    docs = Documents.objects.filter(doc=doc,entry_no=entry_no)
+                    docs = Documents.objects.filter(doc=doc, entry_no=entry_no)
                     arr = []
                     for d in docs:
                         arr.append({
-                            'url':d.file.url
+                            'url': d.file.url
                         })
 
                     response['message'] = {
-                        'count':docs.count(),
-                        'files':arr
+                        'count': docs.count(),
+                        'files': arr
                     }
+
+                elif module == 'product':
+                    barcode = data.get('barcode')
+                    legend = {}
+                    count = ProductMaster.objects.filter(barcode=barcode).count()
+                    legend['count'] = count
+                    if count == 1:
+                        product = ProductMaster.objects.get(barcode=barcode)
+                        legend['product'] = {
+                            'barcode': barcode,
+                            'descr': product.descr,
+                            'shrt_descr': product.shrt_descr,
+                            'image': product.prod_img.url,
+                        }
+                        legend['group'] = {
+                            'group': product.group.descr,
+                            'sub_grp': product.sub_group.descr
+                        }
+                        legend['supplier'] = {
+                            'supp_pk': product.supplier.pk,
+                            'supp_name': product.supplier.company,
+                        }
+                        legend['stock'] = get_stock(prod_pk=product.pk)
+
+                        legend['tax'] = {
+                            'tax_code':product.tax.tax_code,
+                            'tax_desc':product.tax.tax_description,
+                            'tax_rate':product.tax.tax_rate
+                        }
+
+                        legend['supplier'] = suppler_details(prod_id=product.pk)
+
+                        legend['cardex'] = cardex(prod_id=product.pk)
+
+                        # nav
+                        nextProducts = ProductMaster.objects.filter(pk__gt=product.pk)
+                        lessProducts = ProductMaster.objects.filter(pk__lt=product.pk)
+
+                        legend['nav'] = {}
+                        if nextProducts.count() > 0:
+                            legend['nav']['next'] = 'Y'
+                            legend['nav']['next_prod'] = nextProducts.first().pk
+                        else:
+                            legend['nav']['next'] = 'N'
+                            legend['nav']['next_prod'] = 'N'
+
+                        if lessProducts.count() > 0:
+                            legend['nav']['prev'] = 'Y'
+                            legend['nav']['prev_prod'] = lessProducts.last().pk
+                        else:
+                            legend['nav']['prev'] = 'N'
+                            legend['nav']['prev_prod'] = 'N'
+
+
+                    response['message'] = legend
+
 
 
             except KeyError as e:

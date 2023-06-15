@@ -225,6 +225,87 @@ class Products {
 
         swal_response('info',status,message)
     }
+
+    loadProdMastScreen(barcode){
+        let fetch = api.view({'module':'product','data':{'barcode':barcode}})
+        if(fetch['status_code'] === 200){
+            let response = fetch['message']
+            let count = response['count']
+            if(count === 1){
+                let group = response['group']
+                let product = response['product']
+                let stock = response['stock']
+                let tax = response['tax']
+                let supplier = response['supplier']
+                let cardex = response['cardex']
+                let nav = response['nav']
+
+                // nav
+                if(nav['next'] === 'Y'){
+                    // enable next
+                    $('#next_nav').prop('disabled',false)
+                    $('#next_nav').val(nex['next_prod'])
+                } else
+                {
+                    // disable next
+                    $('#next_nav').prop('disabled',true)
+                }
+
+                if(nav['prev'] === 'Y'){
+                    // enable next
+                    $('#prev_nav').prop('disabled',false)
+                    $('#prev_nav').val(nex['next_prod'])
+                } else
+                {
+                    // disable next
+                    $('#prev_nav').prop('disabled',true)
+                }
+
+
+                // load group
+                $('#group').val(group['group'])
+                $('#sub_group').val(group['sub_grp'])
+
+                // load produc details
+                $('#barcode').val(product['barcode'])
+                $('#description').val(product['descr'])
+
+                // packing
+                $('#pack_unit').val()
+                $('#pack_qty').val()
+
+                //image
+                $('#prd_img').prop('src',product['image'])
+
+                //tax
+                $('#tax_group').val(tax['tax_code'])
+                $('#last_cost_price').val(supplier['last_rec_price'])
+
+                // stock
+                let stktr = ''
+                for (let s = 0; s < stock['trans'].length ; s++) {
+                    let st = stock['trans'][s]
+                    stktr += `<tr><td>${st['loc_id']}</td><td>${st['loc_desc']}</td><td>${st['stock']}</td></tr>`
+                }
+                $('#stock_table').html(stktr)
+
+                // cardex
+                let cadtr = ''
+                for (let c = 0; c < cardex.length ; c++) {
+                    let cad = cardex[c]
+                    cadtr += `<tr><td>${cad['date']}</td><td>${cad['doc_type']}</td><td>${cad['entry_no']}</td><td>${cad['loc_id']}</td><td>${cad['loc_desc']}</td><td>${cad['qty']}</td></tr>`
+                }
+                $('#cardex_table').html(cadtr)
+
+            }
+
+
+
+            ctable(response)
+        }
+
+    }
+
 }
 
 const productMaster = new Products()

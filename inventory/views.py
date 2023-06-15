@@ -20,10 +20,13 @@ def inventory(request):
         # redirect to new products creation
         messages.error(request, f"done%%Inventory is empty, Create an item")
         return redirect('new-product')
+    product = ProductMaster.objects.filter().last()
     context = {
         'nav': True,
-        'page_title': 'Inventory | View', 'products': ProductMaster.objects.all()
+        'page_title': 'Inventory | View',
+        'barcode': product.barcode
     }
+    return render(request, 'dashboard/products/prodctMaster.html', context=context)
     return render(request, 'dashboard/products/view.html', context=context)
 
 

@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body %}
+    <div class="card" style="height: 100%!important">
+        <div class="card-header">
+            <div class="w-100 h-100 d-flex flex-wrap">
+                <div class="w-50 h-100 d-flex flex-wrap align-content-center">
+                    <button class="btn btn-sm"><i class="bi bi-plus-square-fill text-success"></i></button>
+                    <button class="btn btn-sm"><i class="bi bi-recycle text-danger"></i></button>
+                    <button class="btn btn-sm"><i class="bi bi-pencil-fill text-warning"></i></button>
+                    <button id="prev_nav" disabled class="btn btn-sm"><i class="bi bi-skip-backward-fill text-info"></i></button>
+                    <button id="next_nav" class="btn btn-sm"><i class="bi bi-skip-forward-fill text-info"></i></button>
+                </div>
+                <div class="w-50 h-100 d-flex flex-wrap align-content-center justify-content-end">
+                    <strong class="card-title">PRODUCT MASTER</strong>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-body p-1 pb-3">
+            <div class="container-fluid h-100 overflow-hidden">
+                <div class="row h-50 w-100">
+                    <!-- GROUPS -->
+                    <div class="col-sm-4">
+                        <label for="group">GROUP</label><input type="text" id="group" readonly class="form-control mb-2 rounded-0">
+                        <label for="sub_group">SUB GROUP</label><input type="text" id="sub_group" readonly class="form-control mb-2 rounded-0">
+                        <label for="barcode">BARCODE</label><input type="text" id="barcode" readonly class="form-control mb-2 rounded-0">
+                        <label for="description">DESCRIPTION</label><input type="text" id="description" readonly class="form-control mb-2 rounded-0">
+                    </div>
+
+                    <!-- PACKING -->
+                    <div class="col-sm-4">
+                        <label for="pack_unit">PACKING UNIT</label><input type="text" id="pack_unit" readonly class="form-control mb-2 rounded-0">
+                        <label for="pack_qty">PACKING QUANTITY</label><input type="text" id="pack_qty" readonly class="form-control mb-2 rounded-0">
+                    </div>
+
+                    <!-- IMAGE -->
+                    <div class="col-sm-4 text-center">
+                        <img style="width: 150px !important" id="prd_img" onclick="windowPopUp(this.src,'IMAGE PREV',600,600)" src="{% static 'assets/img/card.jpg' %}" alt="" class="img-fluid img-thumbnail pointer">
+                    </div>
+
+                </div>
+
+                <div class="h-50 card">
+                    <div class="card-header">
+                        <div class="w-100 d-flex flex-wrap">
+                            <kbd class="pointer rounded-0 bg-primary">PRICING</kbd>
+                            <kbd class="pointer rounded-0">STOCK</kbd>
+                            <kbd class="pointer rounded-0 bg-info">CARDEX</kbd>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <label for="tax_group">TAX GROUP</label><input id="tax_group" readonly type="text" class="form-control rounded-0 form-control-sm mb-2">
+                                <label for="last_cost_price">LAST COST PRICE</label><input id="last_cost_price" readonly type="text" class="form-control rounded-0 form-control-sm mb-2">
+                            </div>
+
+                            <!-- STOCK -->
+                            <div style="display: none" class="col-sm-6">
+                                <table class="table-sm table table-bordered">
+                                    <thead>
+                                        <tr><th>LOC ID</th><th>LOC DESC</th><th>STOCK</th></tr>
+                                    </thead>
+                                    <tbody id="stock_table">
+
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <!-- CARDEX -->
+                            <div style="display: none" class="col-sm-12">
+                                <table class="table-sm table table-bordered">
+                                    <thead>
+                                        <tr><th>DATE</th><th>DOC TYPE</th><th>ENTRY</th><th>LOC ID</th><th>LOC DESC</th><th>QTY</th></tr>
+                                    </thead>
+                                    <tbody id="cardex_table">
+                                        <tr><td>02/02/2222</td><td>GR</td><td>1</td><td>001</td><td>WAREHOUSE</td><td>12</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+
+
+        productMaster.loadProdMastScreen('{{ barcode }}')
+    </script>
+{% endblock %}
