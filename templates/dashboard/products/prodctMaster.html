@@ -7,7 +7,7 @@
             <div class="w-100 h-100 d-flex flex-wrap">
                 <div class="w-50 h-100 d-flex flex-wrap align-content-center">
                     <button onclick="location.href='{% url 'new-product' %}'" class="btn btn-sm"><i class="bi bi-plus-square-fill text-success"></i></button>
-                    <button class="btn btn-sm"><i class="bi bi-recycle text-danger"></i></button>
+                    <button onclick="productMaster.deleteProduct($('#barcode').val())" class="btn btn-sm"><i class="bi bi-recycle text-danger"></i></button>
                     <button class="btn btn-sm"><i class="bi bi-pencil-fill text-warning"></i></button>
                     <button id="prev_nav" onclick="productMaster.loadProdMastScreen(this.value)" disabled class="btn btn-sm"><i class="bi bi-skip-backward-fill text-info"></i></button>
                     <button onclick="productMaster.loadProdMastScreen(this.value)" id="next_nav" class="btn btn-sm"><i class="bi bi-skip-forward-fill text-info"></i></button>

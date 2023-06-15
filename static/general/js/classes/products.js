@@ -311,6 +311,56 @@ class Products {
 
     }
 
+    // delete
+    // Function to handle the delete action
+    deleteProduct(barcode) {
+      Swal.fire({
+        title: 'Are you sure?',
+        text: 'Are you sure you want to delete the product?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Delete',
+        confirmButtonColor: '#dc3545',
+        cancelButtonText: 'Cancel',
+        cancelButtonColor: '#28a745',
+        reverseButtons: true,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // Prepare the data object
+          const data = {
+            module: 'product',
+            data: {
+              barcode: barcode,
+            },
+          };
+
+          // Make the API request
+          api.delete(data)
+            .then((response) => {
+              const { status_code, message } = response;
+
+              // Show the alert based on the API response
+              Swal.fire({
+                title: status_code === 200 ? 'Success' : 'Warning',
+                text: message,
+                icon: status_code === 200 ? 'success' : 'warning',
+              });
+              location.reload()
+            })
+            .catch((error) => {
+              Swal.fire({
+                title: 'Error',
+                text: 'An error occurred while deleting the product.',
+                icon: 'error',
+              });
+              console.error(error);
+            });
+        }
+      });
+    }
+
+
+
 }
 
 const productMaster = new Products()
