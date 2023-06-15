@@ -28,10 +28,10 @@ def get_stock(prod_pk, legend=None):
         pk = location.pk
 
         # get stock sum
-        if ProductTrans.objects.filter(pk=prod_pk).aggregate(Sum('tran_qty'))['tran_qty__sum'] is None:
+        if ProductTrans.objects.filter(pk=prod_pk,loc=location).aggregate(Sum('tran_qty'))['tran_qty__sum'] is None:
             qty = 0
         else:
-            qty = ProductTrans.objects.filter(pk=prod_pk).aggregate(Sum('tran_qty'))['tran_qty__sum']
+            qty = ProductTrans.objects.filter(pk=prod_pk,loc=location).aggregate(Sum('tran_qty'))['tran_qty__sum']
 
         arr.append({'loc_id': location.code, 'loc_desc': location.descr, 'stock': qty})
 
