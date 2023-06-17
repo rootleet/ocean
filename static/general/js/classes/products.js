@@ -361,7 +361,33 @@ class Products {
     }
 
 
+    productsPreview(str,doc_type = 'NONE') {
+        let data = {
+            "module":"product",
+            "data":{
+                "barcode":"123",
+                "range":"all"
+            }
+        }
+        let this_fetch = api.view(data)
+        if(this_fetch['status_code'] === 200){
+            let message,count,products;
+            message = this_fetch['message']
+            count = message['count']
+            products = message['products']
 
+            // clog(products)
+
+            for (let p = 0; p < count; p++) {
+                let product_d = products[p]
+                let product,packing
+                product = product_d['product']
+                packing = product_d['packing']
+                clog(product)
+                clog(packing)
+            }
+        }
+    }
 }
 
 const productMaster = new Products()

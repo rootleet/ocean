@@ -337,8 +337,11 @@ $(function() {
 //below is adjustment functions
 
 $(function() {
-    $("#adj_item_search").on("change paste keyup", function() {
+    $("#product_list").on("change paste keyup", function() {
         let query = $(this).val()
+        let doc = $('docType').val()
+
+        productMaster.productsPreview()
 
         let form_date = {
            'for':'item_for_adjust',
@@ -369,6 +372,8 @@ $(function() {
     })
 }
 )
+
+
 
 function add_adj_tran_list(barcode) {
     let product,packing,p_descr,this_pack=''

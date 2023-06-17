@@ -97,7 +97,7 @@ function ctable(str){
 }
 
 function clog(str) {
-    console.log(str)
+    console.table(str)
 }
 
 function windowPopUp(url, title, w, h)

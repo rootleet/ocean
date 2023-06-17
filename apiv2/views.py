@@ -2,6 +2,7 @@ import hashlib
 
 from django.contrib.auth.models import User
 from django.contrib.messages.context_processors import messages
+from django.db.models import Q
 from django.http import JsonResponse
 from django.shortcuts import render
 
@@ -499,89 +500,160 @@ def api_function(request):
 
                 elif module == 'product':
                     barcode = data.get('barcode')
+                    find_range = data.get('range') or "single"
+
                     legend = {}
-                    count = ProductMaster.objects.filter(barcode=barcode).count()
-                    legend['count'] = count
-                    if count == 1:
-                        product = ProductMaster.objects.get(barcode=barcode)
-                        legend['product'] = {
-                            'barcode': barcode,
-                            'descr': product.descr,
-                            'shrt_descr': product.shrt_descr,
-                            'image': product.prod_img.url,
-                        }
-                        legend['group'] = {
-                            'group': product.group.descr,
-                            'sub_grp': product.sub_group.descr
-                        }
-                        legend['supplier'] = {
-                            'supp_pk': product.supplier.pk,
-                            'supp_name': product.supplier.company,
-                        }
-                        legend['stock'] = get_stock(prod_pk=product.pk)
-
-                        legend['tax'] = {
-                            'tax_code':product.tax.tax_code,
-                            'tax_desc':product.tax.tax_description,
-                            'tax_rate':product.tax.tax_rate
-                        }
-
-                        legend['supplier'] = suppler_details(prod_id=product.pk)
-
-                        legend['cardex'] = cardex(prod_id=product.pk)
-
-                        # packing
-
-                        if ProductPacking.objects.filter(product=product,packing_type='A').count() == 1:
-                            AssignPacking = ProductPacking.objects.get(product=product, packing_type='A')
-                            assign = {
-                                'pack_um': AssignPacking.packing_un.code,
-                                'descr': AssignPacking.packing_un.descr,
-                                'qty': AssignPacking.pack_qty
+                    if find_range == 'single':
+                        count = ProductMaster.objects.filter(barcode=barcode).count()
+                        legend['count'] = count
+                        if count == 1:
+                            product = ProductMaster.objects.get(barcode=barcode)
+                            legend['product'] = {
+                                'barcode': barcode,
+                                'descr': product.descr,
+                                'shrt_descr': product.shrt_descr,
+                                'image': product.prod_img.url,
                             }
-                        else:
-                            assign = {
-                                'pack_um': "NONE",
-                                'descr': "NONE"
+                            legend['group'] = {
+                                'group': product.group.descr,
+                                'sub_grp': product.sub_group.descr
+                            }
+                            legend['supplier'] = {
+                                'supp_pk': product.supplier.pk,
+                                'supp_name': product.supplier.company,
+                            }
+                            legend['stock'] = get_stock(prod_pk=product.pk)
+
+                            legend['tax'] = {
+                                'tax_code':product.tax.tax_code,
+                                'tax_desc':product.tax.tax_description,
+                                'tax_rate':product.tax.tax_rate
                             }
 
-                        if ProductPacking.objects.filter(product=product,packing_type='P').count() == 1:
-                            PurchasePacking = ProductPacking.objects.get(product=product, packing_type='P')
-                            purchase = {
-                                'pack_um': PurchasePacking.packing_un.code,
-                                'descr': PurchasePacking.packing_un.descr,
-                                'qty': PurchasePacking.pack_qty
+                            legend['supplier'] = suppler_details(prod_id=product.pk)
+
+                            legend['cardex'] = cardex(prod_id=product.pk)
+
+                            # packing
+
+                            if ProductPacking.objects.filter(product=product,packing_type='A').count() == 1:
+                                AssignPacking = ProductPacking.objects.get(product=product, packing_type='A')
+                                assign = {
+                                    'pack_um': AssignPacking.packing_un.code,
+                                    'descr': AssignPacking.packing_un.descr,
+                                    'qty': AssignPacking.pack_qty
+                                }
+                            else:
+                                assign = {
+                                    'pack_um': "NONE",
+                                    'descr': "NONE"
+                                }
+
+                            if ProductPacking.objects.filter(product=product,packing_type='P').count() == 1:
+                                PurchasePacking = ProductPacking.objects.get(product=product, packing_type='P')
+                                purchase = {
+                                    'pack_um': PurchasePacking.packing_un.code,
+                                    'descr': PurchasePacking.packing_un.descr,
+                                    'qty': PurchasePacking.pack_qty
+                                }
+                            else:
+                                purchase = {
+                                    'pack_um': "NONE",
+                                    'descr': "NONE"
+                                }
+
+                            legend['packing'] = {
+                                'assign':assign,'purchase':purchase
                             }
-                        else:
-                            purchase = {
-                                'pack_um': "NONE",
-                                'descr': "NONE"
+
+                            # nav
+                            nextProducts = ProductMaster.objects.filter(pk__gt=product.pk)
+                            lessProducts = ProductMaster.objects.filter(pk__lt=product.pk)
+
+                            legend['nav'] = {}
+                            if nextProducts.count() > 0:
+                                legend['nav']['next'] = 'Y'
+                                legend['nav']['next_prod'] = nextProducts.first().barcode
+                            else:
+                                legend['nav']['next'] = 'N'
+                                legend['nav']['next_prod'] = 'N'
+
+                            if lessProducts.count() > 0:
+                                legend['nav']['prev'] = 'Y'
+                                legend['nav']['prev_prod'] = lessProducts.last().barcode
+                            else:
+                                legend['nav']['prev'] = 'N'
+                                legend['nav']['prev_prod'] = 'N'
+                    else:
+                        match = barcode
+                        products = ProductMaster.objects.filter(Q(barcode__in=barcode) | Q(pk__in=barcode) | Q(descr__in=barcode))
+                        legend['count'] = products.count()
+
+                        arr = []
+                        for product in products:
+                            obj = {}
+
+                            obj['product'] = {
+                                'barcode': barcode,
+                                'descr': product.descr,
+                                'shrt_descr': product.shrt_descr,
+                                'image': product.prod_img.url,
                             }
 
-                        legend['packing'] = {
-                            'assign':assign,'purchase':purchase
-                        }
+                            obj['group'] = {
+                                'group': product.group.descr,
+                                'sub_grp': product.sub_group.descr
+                            }
+                            obj['supplier'] = {
+                                'supp_pk': product.supplier.pk,
+                                'supp_name': product.supplier.company,
+                            }
+                            obj['stock'] = get_stock(prod_pk=product.pk)
 
-                        # nav
-                        nextProducts = ProductMaster.objects.filter(pk__gt=product.pk)
-                        lessProducts = ProductMaster.objects.filter(pk__lt=product.pk)
+                            obj['tax'] = {
+                                'tax_code': product.tax.tax_code,
+                                'tax_desc': product.tax.tax_description,
+                                'tax_rate': product.tax.tax_rate
+                            }
 
-                        legend['nav'] = {}
-                        if nextProducts.count() > 0:
-                            legend['nav']['next'] = 'Y'
-                            legend['nav']['next_prod'] = nextProducts.first().barcode
-                        else:
-                            legend['nav']['next'] = 'N'
-                            legend['nav']['next_prod'] = 'N'
+                            obj['supplier'] = suppler_details(prod_id=product.pk)
 
-                        if lessProducts.count() > 0:
-                            legend['nav']['prev'] = 'Y'
-                            legend['nav']['prev_prod'] = lessProducts.last().barcode
-                        else:
-                            legend['nav']['prev'] = 'N'
-                            legend['nav']['prev_prod'] = 'N'
+                            obj['cardex'] = cardex(prod_id=product.pk)
 
+                            # packing
 
+                            if ProductPacking.objects.filter(product=product, packing_type='A').count() == 1:
+                                AssignPacking = ProductPacking.objects.get(product=product, packing_type='A')
+                                assign = {
+                                    'pack_um': AssignPacking.packing_un.code,
+                                    'descr': AssignPacking.packing_un.descr,
+                                    'qty': AssignPacking.pack_qty
+                                }
+                            else:
+                                assign = {
+                                    'pack_um': "NONE",
+                                    'descr': "NONE"
+                                }
+
+                            if ProductPacking.objects.filter(product=product, packing_type='P').count() == 1:
+                                PurchasePacking = ProductPacking.objects.get(product=product, packing_type='P')
+                                purchase = {
+                                    'pack_um': PurchasePacking.packing_un.code,
+                                    'descr': PurchasePacking.packing_un.descr,
+                                    'qty': PurchasePacking.pack_qty
+                                }
+                            else:
+                                purchase = {
+                                    'pack_um': "NONE",
+                                    'descr': "NONE"
+                                }
+                            obj['packing'] = {
+                                'assign': assign, 'purchase': purchase
+                            }
+
+                            arr.append(obj)
+
+                        legend['products'] = arr
                     response['message'] = legend
 
 
