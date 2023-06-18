@@ -28,12 +28,12 @@
             </div>
         </div>
 
-        <form class="card h-75">
+        <form class="card h-100">
             <div class="card-header">
 
                 <button onclick="po.save()" type="button" data-toggle="modal"  class="btn btn-success btn-sm">SAVE</button>
-                <button  type="button" data-toggle="modal" data-target="#addItem" class="btn btn-warning btn-sm">INSERT ROW</button>
-
+{#                <button  type="button" data-toggle="modal" data-target="#addItem" class="btn btn-warning btn-sm">INSERT ROW</button>#}
+                <button type="button" onclick="productMaster.productSearcScreen('PO')" class="btn btn-info btn-sm">INSERT</button>
             </div>
             <div class="panel-sub-heading">
                 <div class="w-100 container-fluid">
@@ -73,27 +73,38 @@
                             </label>
                         </div>
 
+                        <input type="hidden" id="owner" value="{{ user.pk }}">
+
                     </div>
                 </div>
             </div>
 
-            <div class="card-body" style="overflow: hidden; height: 50vh">
+            <div class="card-body p-2" style="overflow: hidden;">
                 <div class="w-100 h-100" style="overflow: auto">
                     <table class="table table-bordered table-hover table-striped table-sm">
                         <thead>
                             <tr>
-                                <th>line</th>
-                                <th>barcode</th>
-                                <th>descr</th>
-                                <th>packing</th>
-                                <th>pack_qty</th>
-                                <th>tan_qty</th>
-                                <th>un_cost</th>
-                                <th>tot_cost</th>
+                                <th>LINE</th>
+                                <th>BARCODE</th>
+                                <th>DESCRIPTION</th>
+                                <th>PACKING</th>
+                                <th>PACK QTY</th>
+                                <th>TRAN QTY</th>
+                                <th>UNIT COST</th>
+                                <th>TOTAL COST</th>
                             </tr>
                         </thead>
                         <tbody id="tBody">
-
+{#                            <tr id="row_1" class="pointer">#}
+{#                                <td id="line_1">1</td>#}
+{#                                <td id="barcode_1">barcode</td>#}
+{#                                <td id="descriptopn_1">description</td>#}
+{#                                <td id="packing_1">pack</td>#}
+{#                                <td id="pack_qty_q"><input style="width: 100px" type="number" min="1" class="form-control form-control-sm rounded-0"></td>#}
+{#                                <td id="tran_qty_1"><input style="width: 100px" type="number" min="1" class="form-control form-control-sm rounded-0"></td>#}
+{#                                <td id="unit_cost_1"><input style="width: 100px" type="number" min="1" class="form-control form-control-sm rounded-0"></td>#}
+{#                                <td id="total_cost_1"><input style="width: 100px" type="number" min="1" class="form-control form-control-sm rounded-0"></td>#}
+{#                            </tr>#}
                         </tbody>
                     </table>
                 </div>

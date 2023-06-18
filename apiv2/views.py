@@ -18,7 +18,7 @@ from api.extras import get_stock, suppler_details, cardex
 from appscenter.models import AppsGroup, App, AppAssign, VersionControl
 from community.models import tags
 from dolphine.models import Documents
-from inventory.models import Computer
+from inventory.models import Computer, PoHd, PoTran
 
 
 @csrf_exempt
@@ -186,6 +186,42 @@ def api_function(request):
                                 response['status'] = 'success'
                                 response['message'] = "App Assigned"
 
+                elif module == 'document':
+                    doc_type = data.get('doc_type')
+                    header = data.get('header')
+                    transactions = data.get('transactions')
+
+                    if doc_type == 'PO':
+                        # saving purchase order
+                        PoHd(loc_id=header['location'], supplier_id=header['supplier'], remark=header['remarks'],
+                             taxable=header['taxable'], created_by_id=header['owner']).save()
+
+                        ## get last po
+                        just_saved = PoHd.objects.last()
+
+                    for transaction in transactions:
+                        line = transaction['line']
+                        barcode = transaction['barcode']
+                        product = ProductMaster.objects.get(barcode=barcode)
+                        packing = transaction['packing']
+                        pack_qty = transaction['pack_qty']
+                        qty = transaction['tran_qty']
+                        print(pack_qty)
+                        total_qty = float(pack_qty) * float(qty)
+
+                        un_cost = transaction['cost']
+                        tot_cost = transaction['total_cost']
+
+                        PoTran(entry_no=just_saved, line=line, product=product, packing=packing, pack_qty=pack_qty,
+                               qty=qty, total_qty=total_qty, un_cost=un_cost, tot_cost=tot_cost).save()
+
+                    response['message'] = {
+                        'document': doc_type,
+                        'entry': just_saved.pk
+                    }
+
+                response['status_code'] = 202
+                response['status'] = "success"
 
             except KeyError as e:
                 response["status_code"] = 400
@@ -509,7 +545,7 @@ def api_function(request):
                         if count == 1:
                             product = ProductMaster.objects.get(barcode=barcode)
                             legend['product'] = {
-                                'barcode': barcode,
+                                'barcode': product.barcode,
                                 'descr': product.descr,
                                 'shrt_descr': product.shrt_descr,
                                 'image': product.prod_img.url,
@@ -525,9 +561,9 @@ def api_function(request):
                             legend['stock'] = get_stock(prod_pk=product.pk)
 
                             legend['tax'] = {
-                                'tax_code':product.tax.tax_code,
-                                'tax_desc':product.tax.tax_description,
-                                'tax_rate':product.tax.tax_rate
+                                'tax_code': product.tax.tax_code,
+                                'tax_desc': product.tax.tax_description,
+                                'tax_rate': product.tax.tax_rate
                             }
 
                             legend['supplier'] = suppler_details(prod_id=product.pk)
@@ -536,7 +572,7 @@ def api_function(request):
 
                             # packing
 
-                            if ProductPacking.objects.filter(product=product,packing_type='A').count() == 1:
+                            if ProductPacking.objects.filter(product=product, packing_type='A').count() == 1:
                                 AssignPacking = ProductPacking.objects.get(product=product, packing_type='A')
                                 assign = {
                                     'pack_um': AssignPacking.packing_un.code,
@@ -549,7 +585,7 @@ def api_function(request):
                                     'descr': "NONE"
                                 }
 
-                            if ProductPacking.objects.filter(product=product,packing_type='P').count() == 1:
+                            if ProductPacking.objects.filter(product=product, packing_type='P').count() == 1:
                                 PurchasePacking = ProductPacking.objects.get(product=product, packing_type='P')
                                 purchase = {
                                     'pack_um': PurchasePacking.packing_un.code,
@@ -563,7 +599,7 @@ def api_function(request):
                                 }
 
                             legend['packing'] = {
-                                'assign':assign,'purchase':purchase
+                                'assign': assign, 'purchase': purchase
                             }
 
                             # nav
@@ -586,7 +622,8 @@ def api_function(request):
                                 legend['nav']['prev_prod'] = 'N'
                     else:
                         match = barcode
-                        products = ProductMaster.objects.filter(Q(barcode__in=barcode) | Q(pk__in=barcode) | Q(descr__in=barcode))
+                        products = ProductMaster.objects.filter(
+                            Q(barcode__icontains=barcode) | Q(descr__icontains=barcode))
                         legend['count'] = products.count()
 
                         arr = []
@@ -594,7 +631,7 @@ def api_function(request):
                             obj = {}
 
                             obj['product'] = {
-                                'barcode': barcode,
+                                'barcode': product.barcode,
                                 'descr': product.descr,
                                 'shrt_descr': product.shrt_descr,
                                 'image': product.prod_img.url,
@@ -669,8 +706,10 @@ def api_function(request):
             response["message"] = f"Invalid HTTP method: {method}"
 
     except Exception as e:
+        import traceback
+
         response["status_code"] = 400
         response["status"] = "Error"
-        response["message"] = f"{e}"
+        response["message"] = f"{e} {traceback.print_exc(limit=1)}"
 
     return JsonResponse(response)

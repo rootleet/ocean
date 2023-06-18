@@ -360,32 +360,190 @@ class Products {
       });
     }
 
+    productSearcScreen(doc_type='none'){
+        let inp = `<input type="text" id="prod_check" onkeyup="trigger()" class="form-control w-100 form-control-sm rounded-0" placeholder="Search String">`
+        genMod.setTitle(inp)
+        genMod.setSize('large')
+        $('#g_modal_size').removeClass('modal-dialog-centered')
+        genMod.show()
+    }
+
 
     productsPreview(str,doc_type = 'NONE') {
         let data = {
             "module":"product",
             "data":{
-                "barcode":"123",
+                "barcode":str,
                 "range":"all"
             }
         }
         let this_fetch = api.view(data)
-        if(this_fetch['status_code'] === 200){
+        if(this_fetch['status_code'] === 200 ){
             let message,count,products;
             message = this_fetch['message']
             count = message['count']
             products = message['products']
-
+            // ctable(message)
             // clog(products)
+            let tr = ''
+            if(count > 0 && str.length > 0){
+                for (let p = 0; p < count; p++) {
 
-            for (let p = 0; p < count; p++) {
-                let product_d = products[p]
-                let product,packing
-                product = product_d['product']
-                packing = product_d['packing']
-                clog(product)
-                clog(packing)
+                    if (p === 10) {
+                        break;
+                    }
+
+                    let product_d = products[p]
+                    let product,packing
+                    product = product_d['product']
+                    packing = product_d['packing']
+                    // clog(product)
+                    // clog(packing)
+
+                    tr += `<tr ondblclick="productMaster.addToTrans('${product['barcode']}')" class="pointer" >
+                                
+                                <td><img style="width: 50px !important" src="${product['image']}" alt="" class="img-fluid"></td>
+                                <td>${product['barcode']}</td>
+                                <td>${product['shrt_descr']}</td>
+                            </tr>`
+
+                }
+            } else  {
+                tr = `<tr><td>NO DATA</td></tr>`
             }
+
+            let tab = `
+            <table class="table table-sm table-bordered table-hover">
+                <thead><tr><th>IMAGE</th><th>BARCODE</th><th>DESCRIPTION</th></tr></thead>
+                <tbody>${tr}</tbody>
+            </table>
+            `
+            // sh_modal('PRODUCT SEARCH','lg',tab,'')
+
+            genMod.setBody(tab)
+            // genMod.show()
+        }
+    }
+
+    addToTrans(barcode){
+
+        // validate if item exist
+        let item_exist = 0;
+        for (let ex = 0; ex <= $('#tBody tr').length ; ex++) {
+            let bc = $(`#barcode_${ex}`).text()
+
+            if(bc == barcode){
+                item_exist = 1
+                al('info',`ITEM EXIST on line ${ex}`)
+                break;
+            }
+        }
+
+
+
+        if(item_exist === 0){
+            let data = {
+            "module":"product",
+            "data":{
+                "barcode":barcode,
+                "range":"single"
+            }
+        }
+            let this_fetch = api.view(data)
+            let message = this_fetch['message']
+            let count = message['count']
+            let product = message
+
+            let descr,packing,supplier,unit_cost,total_cost
+            // console.table(data)
+            // console.table(this_fetch)
+
+            descr = product['product']['shrt_descr']
+
+            packing = product['packing']
+            let pur,ass
+            pur = packing['purchase']
+            ass = packing['assign']
+            let p_option = `
+                <option selected value="${pur['qty']}">${pur['qty']} * 1 ${pur['pack_um']} (${pur['descr']})</option>
+                <option value="${ass['qty']}">${ass['qty']} * 1 ${ass['pack_um']} (${ass['descr']})</option>
+            `
+            console.table(p_option)
+            unit_cost = product['supplier']['last_rec_price']
+
+            // get row details
+            let line = $('#tBody tr').length + 1
+
+            // set ids
+
+            let row = `
+            <tr id="row_${line}" class="pointer">
+                                    <td id="line_${line}">${line}</td>
+                                    <td id="barcode_${line}">${barcode}</td>
+                                    <td id="descriptopn_${line}">${descr}</td>
+                                    <td>
+                                            <select onchange="productMaster.tranCalculate(${line})" name="" id="packing_${line}" class="form-control form-control-sm">${p_option}</select>
+                                    </td>
+                                    <td><input onkeyup="productMaster.tranCalculate(${line})" id="pack_qty_${line}" value="${pur['qty']}" style="width: 100px" type="text" min="1" class="form-control form-control-sm rounded-0"></td>
+                                    <td><input onkeyup="productMaster.tranCalculate(${line})"  id="tran_qty_${line}" value="0" style="width: 100px"  type="text" min="1" class="form-control form-control-sm rounded-0"></td>
+                                    <td><input onkeyup="productMaster.tranCalculate(${line})"  id="unit_cost_${line}" value="${unit_cost}" style="width: 100px" type="text" class="form-control form-control-sm rounded-0"></td>
+                                    <td><input readonly id="total_cost_${line}" style="width: 100px" type="text" min="1" class="form-control form-control-sm rounded-0"></td>
+                                </tr>
+            `
+
+            $('#tBody').append(row)
+        }
+
+
+    }
+
+    tranCalculate(row){
+
+        // get values
+        let pack_qty,tran_qty,unit_cost,total_cost
+        pack_qty = $(`#pack_qty_${row}`)
+        tran_qty = $(`#tran_qty_${row}`)
+        unit_cost = $(`#unit_cost_${row}`)
+        total_cost = $(`#total_cost_${row}`)
+
+
+
+        let pack_tran = pack_qty.val() * tran_qty.val()
+
+        let total = pack_tran * unit_cost.val()
+
+        total_cost.val(total.toFixed(2))
+
+    }
+
+    validateTransactions() {
+        for (let vrow = 1; vrow <= $('#tBody tr').length ; vrow++) {
+            let pack_qty,tran_qty,unit_cost,total_cost
+            let errcount = 0;
+            let errormessage = '';
+            pack_qty = $(`#pack_qty_${vrow}`)
+            tran_qty = $(`#tran_qty_${vrow}`)
+            unit_cost = $(`#unit_cost_${vrow}`)
+            total_cost = $(`#total_cost_${vrow}`)
+
+            if (pack_qty.val() !== '' && pack_qty.val() != '0' &&
+            tran_qty.val() != '' && tran_qty.val() != '0' &&
+            unit_cost.val() != '' && unit_cost.val() !=='0' &&
+            total_cost.val() != '' && total_cost.val() != '0') {
+            // All variables are not empty or zero
+                $(`#row_${vrow}`).removeClass('bg-danger')
+            } else {
+                // At least one variable is empty or zero
+                $(`#row_${vrow}`).addClass('bg-danger')
+                errcount ++
+                errormessage += `<small class="text-danger">Check Line ${vrow}</small><br>`
+                console.log('One or more variables are empty or zero.');
+            }
+
+            return {
+                'err_count' : errcount, 'message':errormessage
+            }
+
         }
     }
 }

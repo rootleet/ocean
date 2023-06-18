@@ -74,7 +74,7 @@ class PoTran(models.Model):
     entry_no = models.ForeignKey('PoHd', on_delete=models.CASCADE)
     line = models.IntegerField()
     product = models.ForeignKey('admin_panel.ProductMaster', on_delete=models.CASCADE)
-    packing = models.ForeignKey('admin_panel.ProductPacking', on_delete=models.CASCADE)
+    packing = models.TextField()
     pack_qty = models.DecimalField(max_digits=65, decimal_places=2)
     qty = models.DecimalField(max_digits=65, decimal_places=2)
     total_qty = models.IntegerField()

@@ -30,6 +30,19 @@ function log_issue(uni) {
 
 }
 
+
+function trigger() {
+    const input = document.getElementById('prod_check');
+
+    input.addEventListener('keydown', function(event) {
+      if (event.keyCode === 13) {
+        productMaster.productsPreview($("#prod_check").val())
+      }
+    });
+
+}
+
+
 function api_call(module,action,data) {
     // console.log(JSON.stringify(data))
     let link = `/adminapi/${module}/${action}/`
@@ -554,5 +567,65 @@ function save_adjustment() {
     }
 
 const alert = (str) => {
-    Swal.fire(str)
+    Swal.fire({
+        'html':`<small>${str}</small>`
+    })
 }
+
+function sh_modal(title,size,body,footer){
+    $('#g_modal_title').html(title);
+    switch (size) {
+        case 'lg':
+            $('#g_modal_size').addClass('modal-lg')
+            break
+        default:
+
+
+    }
+    $('#g_modal_body').html(body)
+
+    $('#g_modal').modal('show')
+}
+
+class SysMod {
+      // Store the jQuery objects of the modal elements
+      constructor() {
+        this.gen_modal = $('#g_modal');
+        this.gen_title = $('#g_modal_title');
+        this.gen_size = $('#g_modal_size');
+        this.mod_body = $('#g_modal_body');
+      }
+
+      // Set the title of the modal
+      setTitle(title) {
+        $('#g_modal_title').html(title);
+      }
+
+      // Set the size of the modal based on the given size
+      setSize(size) {
+        switch (size) {
+          case 'large':
+            $('#g_modal_size').addClass('modal-lg');
+            break;
+          default:
+            // Add more cases for different sizes if needed
+        }
+      }
+
+      // Set the body content of the modal
+      setBody(body) {
+        $('#g_modal_body').html(body);
+      }
+
+      // Show the modal
+      show() {
+        $('#g_modal').modal('show');
+      }
+
+          // Hide the modal
+      hide() {
+        $('#g_modal').modal('hide');
+      }
+}
+
+const genMod = new SysMod()
