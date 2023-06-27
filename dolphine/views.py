@@ -15,7 +15,7 @@ from cryptography.fernet import Fernet
 @login_required(login_url='/login/')
 def dolphine(request):
     context = {
-        'files': Files.objects.filter(owner=request.user)
+        'files': Files.objects.filter(owner=request.user).order_by('-pk')
     }
     return render(request, 'dolphine/landing.html', context=context)
 
