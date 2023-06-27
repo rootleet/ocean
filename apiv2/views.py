@@ -536,7 +536,7 @@ def api_function(request):
                                     sheet[f"F{row}"] = tran_supp
                                     row += 1
 
-                                file_name = f"static/general/docs/issues.xlsx"
+                                file_name = f"static/general/docs/{datetime.now()}issues.xlsx"
                                 workbook.save(file_name)
                                 response['message'] = file_name
                     else:

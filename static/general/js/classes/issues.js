@@ -75,7 +75,7 @@ class Issues {
 
 
     Export(){
-        let d_opt = ''
+        let d_opt = `<option value="*">ALL</option>`
         let domains = api.view({"module":"domain"})['message']
 
         for (let d = 0; d < domains.length ; d++) {
