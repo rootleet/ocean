@@ -1,4 +1,5 @@
 import hashlib
+from datetime import datetime,date
 
 from django.contrib.auth.models import User
 from django.contrib.messages.context_processors import messages
@@ -536,7 +537,7 @@ def api_function(request):
                                     sheet[f"F{row}"] = tran_supp
                                     row += 1
 
-                                file_name = f"static/general/docs/{datetime.now()}issues.xlsx"
+                                file_name = f"static/general/docs/{date.today()}_issues.xlsx"
                                 workbook.save(file_name)
                                 response['message'] = file_name
                     else:
