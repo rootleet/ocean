@@ -55,6 +55,7 @@ def save_new_app(request):
             messages.success(request, "APP SAVED")
         except Exception as e:
             messages.error(request, e)
+            return HttpResponse(form)
 
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 

@@ -67,18 +67,18 @@
                     <table class="table table-sm table-bordered table-hover table-striped">
                         <thead>
                             <tr>
-                                <th>sn</th>
-                                <th>barcode</th>
-                                <th>description</th>
-                                <th>packing</th>
-                                <th>pack_qty</th>
-                                <th>tran_qty</th>
-                                <th>un_cost</th>
-                                <th>tot_cost</th>
+                                <th>LN</th>
+                                <th>BARCODE</th>
+                                <th>DESCRIPTION</th>
+                                <th>PACK</th>
+                                <th>PACK QTY</th>
+                                <th>TRAN QTY</th>
+                                <th>UNIT COST</th>
+                                <th>TOTAL COST</th>
 
                             </tr>
                         </thead>
-                        <tbody id="tbody">
+                        <tbody id="tBody">
 
                         </tbody>
                     </table>
@@ -88,7 +88,7 @@
         </div>
 
         <script>
-            po.loadTrans({{ po }})
+            docs.view('PO',{{ po }})
         </script>
 
     </div>

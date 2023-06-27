@@ -96,6 +96,10 @@ class TaskTrans(models.Model):
     entry_uni = models.TextField()
     tran_title = models.TextField()
     tran_descr = models.TextField()
+
+    entry_date = models.DateField()
+    support_by = models.TextField(default='not set')
+
     created_on = models.DateTimeField(auto_now=True)
     owner = models.IntegerField(default=0)
 

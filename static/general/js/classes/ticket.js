@@ -38,6 +38,33 @@ class Ticket {
 
 
     }
+
+    updateTask(){
+        let title,details,update_time,support_by,owner,data,task
+
+        task = $('#task').val()
+        title = $('#title').val()
+        details = $('#details').val()
+        update_time = $('#time').val()
+        support_by = $('#supp_by').val()
+        owner = $('#pk').val();
+
+        data = {
+            'module':'task',
+            'do':'update',
+            'data':{
+                'task':task,'title':title,'detail':details,'date':update_time,'support_by':support_by,'owner':owner
+            }
+        }
+
+        let save = api.put(data)
+
+        location.reload()
+        al('info',save['message'])
+
+
+    }
+
 }
 
 const ticket = new Ticket();

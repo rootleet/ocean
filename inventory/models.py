@@ -41,6 +41,9 @@ class PoHd(models.Model):
         else:
             return PoTran.objects.filter(entry_no=self).aggregate(Sum('tot_cost'))['tot_cost__sum']
 
+    def is_taxable(self):
+        return 'YES' if self.taxable == 1 else 'NO'
+
     def tax_amt(self):
 
         tax_details = {
@@ -52,16 +55,17 @@ class PoHd(models.Model):
         }
 
         if self.taxable == 1:
-            taxable_amt = self.total_amt()
-            tax_details['tax_covid'] = round(Decimal(taxable_amt) * Decimal(0.001), 2)
-            tax_details['tax_nhis'] = round(Decimal(taxable_amt) * Decimal(0.025), 2)
-            tax_details['tax_gfund'] = round(Decimal(taxable_amt) * Decimal(0.025), 2)
+            total = self.total_amt()
+            tax_details['tax_covid'] = round(Decimal(total) * Decimal(0.001), 2)
+            tax_details['tax_nhis'] = round(Decimal(total) * Decimal(0.025), 2)
+            tax_details['tax_gfund'] = round(Decimal(total) * Decimal(0.025), 2)
 
             levies = tax_details['tax_covid'] + tax_details['tax_nhis'] + tax_details['tax_gfund']
-            new_tot_amt = taxable_amt + levies
+            new_tot_amt = total + levies
 
-            tax_details['tax_vat'] = round(Decimal(new_tot_amt) * Decimal(0.125), 2)
+            tax_details['tax_vat'] = round(Decimal(total) * Decimal(0.219), 2)
             tax_details['tax_amt'] = round(levies + tax_details['tax_vat'], 2)
+            tax_details['taxable_amt'] = total - tax_details['tax_vat']
 
         return tax_details
 

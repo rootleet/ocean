@@ -22,7 +22,7 @@ class App(models.Model):
     name = models.TextField()
     uni = models.CharField(max_length=60, unique=True)
     description = models.TextField()
-    icon = models.FileField(upload_to=f"static/files/{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}")
+    file = models.FileField(upload_to=f"static/files/{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}")
     root = models.TextField()
 
     created_date = models.DateField(auto_now_add=True)

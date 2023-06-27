@@ -2,7 +2,7 @@ import hashlib
 
 from django.contrib.auth.models import User
 from django.contrib.messages.context_processors import messages
-from django.db.models import Q
+from django.db.models import Q, Sum
 from django.http import JsonResponse
 from django.shortcuts import render
 
@@ -23,6 +23,7 @@ from inventory.models import Computer, PoHd, PoTran
 
 @csrf_exempt
 def api_function(request):
+    global header
     method = request.method
     response = {"status_code": "", "status": "", "message": ""}
 
@@ -30,6 +31,7 @@ def api_function(request):
         body = json.loads(request.body)
         module = body.get('module')
         data = body.get('data')
+
     except json.JSONDecodeError as e:
         response["status_code"] = 400
         response["status"] = "Bad Request"
@@ -40,6 +42,9 @@ def api_function(request):
 
         if method == "PUT":
             try:
+                response['status_code'] = 202
+                response['status'] = "success"
+                response['message'] = "INITIALIZED"
                 module = body["module"]
                 data = body["data"]
 
@@ -220,8 +225,30 @@ def api_function(request):
                         'entry': just_saved.pk
                     }
 
-                response['status_code'] = 202
-                response['status'] = "success"
+                elif module == 'task':
+
+                    todo = body.get('do')
+
+                    if todo == 'update':
+
+                        task = data.get('task')
+                        title = data.get('title')
+                        details = data.get('detail')
+                        update_date = data.get('date')
+                        support_by = data.get('support_by')
+                        owner = data.get('owner')
+
+                        taskHd = TaskHD.objects.filter(pk=task)
+                        if taskHd.count() == 1:
+                            task = taskHd.last()
+                            update = TaskTrans(entry_uni=task.entry_uni, tran_title=title, tran_descr=details,
+                                               entry_date=update_date, support_by=support_by,owner=owner)
+                            update.save()
+
+                            response['message'] = "Task Updated!!"
+                        else:
+                            response['message'] = "Task not found!!"
+
 
             except KeyError as e:
                 response["status_code"] = 400
@@ -454,11 +481,14 @@ def api_function(request):
                         sheet['C1'] = 'DESCRIPTION'
                         sheet['D1'] = 'LAST TRANSACTION DATE'
                         sheet['E1'] = 'LAST TRANSACTION'
+                        sheet['F1'] = "SUPPORTED BY"
 
                     if domain == '*':
+                        domain_name = "ALL"
                         task_hd = TaskHD.objects.filter(status=status)
                     else:
                         task_hd = TaskHD.objects.filter(status=status, domain_id=domain)
+
                     arr = []
                     if task_hd.count() > 0:
                         for hd in task_hd:
@@ -490,17 +520,20 @@ def api_function(request):
                                 for task in task_hd:
                                     tran_time = 'NONE'
                                     tran_desc = 'NONE'
+                                    tran_supp = "NONE"
                                     trans_count = TaskTrans.objects.filter(entry_uni=task.entry_uni)
                                     if trans_count.count() > 0:
                                         tran = trans_count.last()
-                                        tran_time = str(tran.created_on)
+                                        tran_time = str(tran.entry_date)
                                         tran_desc = tran.tran_descr
+                                        tran_supp = tran.support_by
 
                                     sheet[f'A{row}'] = task.domain.tag_dec
                                     sheet[f'B{row}'] = task.title
                                     sheet[f'C{row}'] = f"{re.sub(clean, '', task.description)}"
                                     sheet[f'D{row}'] = tran_time
                                     sheet[f'E{row}'] = f"{re.sub(clean, '', tran_desc)}"
+                                    sheet[f"F{row}"] = tran_supp
                                     row += 1
 
                                 file_name = f"static/general/docs/issues.xlsx"
@@ -693,7 +726,96 @@ def api_function(request):
                         legend['products'] = arr
                     response['message'] = legend
 
+                elif module == 'sys_doc':
+                    document = data.get('doc')
+                    entry = data.get('entry')
+                    ret = {}
+                    if document == 'PO':
+                        d_count = PoHd.objects.filter(pk=entry).count()
+                        hd = PoHd.objects.get(pk=entry)
 
+                    if d_count == 1:
+                        ret['header'] = {
+                            'pk': hd.pk,
+                        }
+                        arr = []
+                        # get trans
+                        if document == 'PO':
+                            trans = PoTran.objects.filter(entry_no=hd)
+
+                        # loop through trans
+                        for tran in trans:
+                            line = tran.line
+                            product = tran.product
+                            packing = tran.packing
+                            pack_qty = tran.pack_qty
+                            qty = tran.qty
+                            total_qty = tran.total_qty
+                            un_cost = tran.un_cost
+                            tot_cost = tran.tot_cost
+
+                            obj = {
+                                'line': line, 'packing': packing, 'pack_qty': pack_qty, 'qty': qty,
+                                'total_qty': total_qty, 'un_cost': un_cost, 'tot_cost': tot_cost
+                            }
+
+                            arr.append(obj)
+                            print(obj)
+
+                        ret['trans'] = arr
+
+                    response['message'] = ret
+
+                elif module == 'document':
+                    doc = data.get('doc')
+                    entry = data.get('entry')
+                    arr = []
+                    if doc == 'PO':
+                        header = PoHd.objects.filter(pk=entry)
+                    if header.count() == 1:
+                        hd = header.last()
+                        head = {
+                            'pk': hd.pk,
+                            'location': {
+                                'loc_id': hd.loc.code,
+                                'descr': hd.loc.descr
+                            },
+                            'supplier': {
+                                'id': hd.supplier.company
+                            },
+                            'date': hd.created_on, 'owner': hd.created_by.username,
+                            'taxable': hd.is_taxable(), 'remarks': hd.remark
+                        }
+                        trans = {}
+
+                        if doc == 'PO':
+                            trans = PoTran.objects.filter(entry_no=hd)
+                            head['extras'] = {
+                                'trans': PoTran.objects.filter(entry_no=hd).count(),
+                                'total': hd.total_amt(),
+                                'taxable_amount': 0.00,
+                                'tax': hd.tax_amt(),
+
+                            }
+
+                        for tran in trans:
+                            arr.append({
+                                'line': tran.line,
+                                'product': {
+                                    'barcode': tran.product.barcode,
+                                    'name': tran.product.descr
+                                },
+                                'packing': tran.packing,
+                                'pack_qty': tran.pack_qty,
+                                'qty': tran.qty,
+                                'total_qty': tran.total_qty,
+                                'un_cost': tran.un_cost,
+                                'tot_cost': tran.tot_cost
+                            })
+
+                    response['message'] = {
+                        'header': head, 'trans': arr
+                    }
 
             except KeyError as e:
                 response["status_code"] = 400

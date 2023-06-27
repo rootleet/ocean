@@ -135,6 +135,41 @@
                                         </div>
                                     </div>
 
+        <div class="modal" id="updateModalV2">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <strong class="modal-title">Update</strong>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" value="{{ taskHd.pk }}" id="task">
+                        <input type="hidden" value="{{ user.pk }}" id="pk">
+
+                        <label for="title">Title</label><input type="text" id="title" class="form-control mb-2 rounded-0">
+
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-sm-6 pr-1">
+                                    <label for="time">Date</label><input type="date" class="form-control rounded-0" id="time">
+                                </div>
+                                <div class="col-sm-6 pl-1">
+                                    <label for="supp_by">Supported By</label><input type="text" class="form-control rounded-0" id="supp_by">
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr>
+                        <label for="details">Details</label><textarea name="details" id="details" class="form-control rounded-0" cols="30" rows="10"></textarea>
+
+                    </div>
+
+                    <div class="modal-footer">
+                        <button onclick="ticket.updateTask()" class="btn btn-success rounded-0">COMMIT</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="card">
             <div class="card-body p-0">
 
@@ -172,6 +207,7 @@
                       <div class="dropdown-menu">
                           {% if taskHd.status == 0 %}
                             <a class="dropdown-item text-info bi bi-list" data-bs-toggle="modal" href="#updateModal"> Update</a>
+                              <a class="dropdown-item text-info bi bi-list" data-bs-toggle="modal" href="#updateModalV2"> Update V2</a>
                               <div class="dropdown-divider"></div>
                             <a class="dropdown-item text-primary bi bi-toggles2" data-toggle="modal" href="#changeDomain"> Domain Switch</a>
                               <div class="dropdown-divider"></div>

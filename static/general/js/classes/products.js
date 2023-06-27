@@ -465,8 +465,8 @@ class Products {
             pur = packing['purchase']
             ass = packing['assign']
             let p_option = `
-                <option selected value="${pur['qty']}">${pur['qty']} * 1 ${pur['pack_um']} (${pur['descr']})</option>
-                <option value="${ass['qty']}">${ass['qty']} * 1 ${ass['pack_um']} (${ass['descr']})</option>
+                <option selected value="${pur['qty']}">${pur['pack_um']}</option>
+                <option value="${ass['qty']}">${ass['pack_um']}</option>
             `
             console.table(p_option)
             unit_cost = product['supplier']['last_rec_price']
