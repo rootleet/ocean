@@ -408,8 +408,8 @@ class Cmms {
             message = response['message']
             trans = message['trans']
             header = message['header']
-            let g_count,g_sys,g_dif
-            g_count = 0;g_sys=0;g_dif=0
+            let g_count,g_sys,g_dif,v_dif
+            g_count = 0;g_sys=0;g_dif=0,v_dif=0
             $('#g_modal_title').html(`STOCK COMPARE as of ${formattedDate}<br><strong>LOC : </strong> ${header['location']} <br><strong>REMARKS : </strong> ${header['remark']}`)
             let tr = ''
             let counted,not_counted
@@ -422,13 +422,15 @@ class Cmms {
                 barcode = element['barcode']
                 item_ref = element['item_ref']
                 name = element['desription']
-                count_qty = element['counted']
-                av_qty = element['av_qty']
-                qty_diff = element['qty_diff']
+                count_qty = parseFloat(element['counted']).toFixed(2)
+                av_qty = parseFloat(element['av_qty']).toFixed(2)
+                qty_diff = parseFloat(element['qty_diff']).toFixed(2)
+                let diff_val = parseFloat(element['diff_val']).toFixed(2)
 
                 g_count += parseFloat(count_qty)
                 g_sys += parseFloat(av_qty)
                 g_dif += parseFloat(qty_diff)
+                v_dif += parseFloat(diff_val)
 
                 let text = ''
                 if(qty_diff < 0){
@@ -436,7 +438,10 @@ class Cmms {
                 }
 
 
-                tr += `<tr class='${text}'><td><small><i class="bi-check-square"></i></small><td><small>${item_ref}</small></td><td><small>${barcode}</small></td><td><small>${name}</small></td><td><small>${count_qty}</small></td><td><small>${av_qty}</small></td><td><small>${qty_diff}</small></td></tr>`
+                tr += `<tr class='${text}'>
+                            <td><small><i class="bi-check-square"></i></small><td><small>${item_ref}</small></td><td><small>${barcode}</small></td><td><small>${name}</small></td><td><small>${count_qty}</small></td><td><small>${av_qty}</small></td><td><small>${qty_diff}</small></td>
+                            <td><small>${diff_val}</small></td>
+                        </tr>`
 
 
             }
@@ -447,13 +452,15 @@ class Cmms {
                 barcode = element['barcode']
                 item_ref = element['item_ref']
                 name = element['desription']
-                count_qty = element['counted']
-                av_qty = element['av_qty']
-                qty_diff = element['qty_diff']
+                count_qty = parseFloat(element['counted']).toFixed(2)
+                av_qty = parseFloat(element['av_qty']).toFixed(2)
+                qty_diff = parseFloat(element['qty_diff']).toFixed(2)
+                let diff_val = parseFloat(element['diff_val']).toFixed(2)
 
                 g_count += parseFloat(count_qty)
                 g_sys += parseFloat(av_qty)
                 g_dif += parseFloat(qty_diff)
+                v_dif += parseFloat(diff_val)
 
                 let text = ''
                 if(qty_diff < 0){
@@ -461,17 +468,20 @@ class Cmms {
                 }
 
 
-                tr += `<tr class='${text}'><td><small><i class="bi-square"></i></small><td><small>${item_ref}</small></td><td><small>${barcode}</small></td><td><small>${name}</small></td><td><small>${count_qty}</small></td><td><small>${av_qty}</small></td><td><small>${qty_diff}</small></td></tr>`
+                tr += `<tr class='${text}'>
+                            <td><small><i class="bi-square"></i></small><td><small>${item_ref}</small></td><td><small>${barcode}</small></td><td><small>${name}</small></td><td><small>${count_qty}</small></td><td><small>${av_qty}</small></td><td><small>${qty_diff}</small></td>
+                            <td><small>${diff_val}</small></td>
+                       </tr>`
 
 
             }
 
             html = `<table class='table table-bordered table-sm table-responsive'>
             <thead>
-              <tr><th>CH</th><th>ITEM REF</th><th>BARCODE</th><th>DESCRIPTION</th><th>COUNTED</th><th>SYSTEM</th><th>DIFFERENCE</th></tr>
+              <tr><th>CH</th><th>ITEM REF</th><th>BARCODE</th><th>DESCRIPTION</th><th>PHY</th><th>SYS</th><th>QTY DIFF</th><th>VAL DIFF</th></tr>
             </thead>
             <tbody class="dataTable">
-            <tr class='text-primary'><td colspan='4'>SUMMARY</td><td><small>${g_count}</small></td><td><small>${g_sys}</small></td><td><small>${g_dif}</small></td></tr>
+            <tr class='text-primary'><td colspan='4'>SUMMARY</td><td><small>${g_count}</small></td><td><small>${g_sys}</small></td><td><small>${g_dif}</small></td><td><small>${v_dif.toFixed(2)}</small></td></tr>
               ${tr}
             </tbody>
           </table>`
