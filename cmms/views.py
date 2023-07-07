@@ -160,56 +160,60 @@ def api(request):
 
                                 itemRref = row[6].strip()
                                 name = row[7].strip()
-                                av_qty = row[15].strip()
-                                # print()
-                                # print(f"RAW : {av_qty}")
-                                if len(av_qty) > 0:
-                                    a_q = Decimal(av_qty.split('*')[0])
-                                else:
-                                    a_q = 0.00
+                                group_code = row[5].strip()
+                                print(group_code)
+                                if group_code == 'FILTERS':
 
-                                # print(f"{av_qty} / {a_q}")
+                                    av_qty = row[15].strip()
+                                    # print()
+                                    # print(f"RAW : {av_qty}")
+                                    if len(av_qty) > 0:
+                                        a_q = Decimal(av_qty.split('*')[0])
+                                    else:
+                                        a_q = 0.00
 
-                                item_q = cursor.execute(
-                                    f"SELECT barcode,sell_price from product_master where item_ref = '{itemRref}'")
-                                item = item_q.fetchone()
-                                barcode = item[0]
-                                if item[1] is None:
-                                    sell_price = 0.00
-                                else:
-                                    sell_price = item[1]
+                                    # print(f"{av_qty} / {a_q}")
+                                    # focus on filters
+                                    item_q = cursor.execute(
+                                        f"SELECT barcode,sell_price from product_master where item_ref = '{itemRref}'")
+                                    item = item_q.fetchone()
+                                    barcode = item[0]
+                                    if item[1] is None:
+                                        sell_price = 0.00
+                                    else:
+                                        sell_price = item[1]
 
 
 
-                                # check if there is item with ref
+                                    # check if there is item with ref
 
-                                counted = 0.00
-                                if StockCountTrans.objects.filter(item_ref=itemRref, stock_count_hd=stock_hd).exists():
-                                    counted = StockCountTrans.objects.filter(item_ref=itemRref,
-                                                                             stock_count_hd=stock_hd).aggregate(
-                                        total=Sum('quantity'))['total']
+                                    counted = 0.00
+                                    if StockCountTrans.objects.filter(item_ref=itemRref, stock_count_hd=stock_hd).exists():
+                                        counted = StockCountTrans.objects.filter(item_ref=itemRref,
+                                                                                 stock_count_hd=stock_hd).aggregate(
+                                            total=Sum('quantity'))['total']
 
-                                diff_qty = Decimal(counted) - Decimal(a_q)
-                                obj = {
-                                    'item_ref': itemRref,
-                                    'barcode': barcode,
-                                    'desription': name,
-                                    'counted': counted,
-                                    'av_qty': Decimal(str(a_q)),
-                                    'qty_diff': diff_qty,
-                                    'sell_price':sell_price,
-                                    'diff_val': diff_qty * Decimal(sell_price),
+                                    diff_qty = Decimal(counted) - Decimal(a_q)
+                                    obj = {
+                                        'item_ref': itemRref,
+                                        'barcode': barcode,
+                                        'desription': name,
+                                        'counted': counted,
+                                        'av_qty': Decimal(str(a_q)),
+                                        'qty_diff': diff_qty,
+                                        'sell_price':sell_price,
+                                        'diff_val': diff_qty * Decimal(sell_price),
+                                    }
+                                    if counted > 0:
+                                        arr.append(obj)
+                                    else:
+                                        not_arr.append(obj)
+
+                                response['message'] = {
+                                    'header': header, 'trans': {'counted': arr, 'not_counted': not_arr}
                                 }
-                                if counted > 0:
-                                    arr.append(obj)
-                                else:
-                                    not_arr.append(obj)
-
-                            response['message'] = {
-                                'header': header, 'trans': {'counted': arr, 'not_counted': not_arr}
-                            }
-                            response['status_code'] = 200
-                            response['status'] = 'success'
+                                response['status_code'] = 200
+                                response['status'] = 'success'
                         else:
                             response['message'] = "NO OPEN STOCK"
                             response['status_code'] = 404
