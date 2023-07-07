@@ -374,21 +374,45 @@ class Cmms {
 
     // compare
     compare(pk) {
+        let groups = cmms.productGroups()
+        console.table(groups)
+        let g_opt = ''
+        if(groups['status_code'] === 200){
+            let g_message,g_count,g_grps
+            g_message = groups['message']
+            g_grps = g_message['groups']
+            g_count = g_message['counts']
+
+            for (let i = 0; i < g_count; i++) {
+                let el = g_grps[i]
+                g_opt += `<option value="${el['code']}">${el['name']}</option>`
+            }
+
+        }
         Swal.fire({
       title: 'Select Date',
-      html: '<input type="date" id="swal-date" class="swal2-input">',
+      html: `<select class="form-control w-50 mx-auto mb-2" id="group">${g_opt}</select><input type="date" id="swal-date" class="swal2-input">`,
       showCancelButton: true,
       confirmButtonText: 'OK',
       preConfirm: () => {
         const selectedDate = $('#swal-date').val();
+        const selectedGroup = $('#group').val()
         if (selectedDate === '') {
           Swal.showValidationMessage('Please select a date');
         }
-        return selectedDate;
+        if (selectedGroup === '') {
+          Swal.showValidationMessage('Please select Group');
+        }
+        return {
+            'date':selectedDate,
+            'group':selectedGroup
+        };
       }
     }).then((result) => {
       if (result.isConfirmed) {
-        const selectedDate = result.value;
+          console.table(result)
+        const selectedDate = result.value.date;
+        const selectedGroup = result.value.group
         const formattedDate = new Date(selectedDate).toISOString().split('T')[0];
 
         let payload = {
@@ -396,9 +420,11 @@ class Cmms {
           "data": {
             "stage": "export",
             "compare": "final_compare",
-            "as_of": formattedDate,"pk":pk
+            "as_of": formattedDate,"pk":pk,'group':selectedGroup
           }
         };
+
+        console.table(payload)
 
         let response = api.call('VIEW',payload,'/cmms/api/')
         // console.table(response)
@@ -500,6 +526,17 @@ class Cmms {
 
         
        
+    }
+
+    // get groups
+    productGroups(){
+        let payload = {
+            'module':'groups',
+            'data':{}
+        }
+
+        return api.call('VIEW', payload, '/cmms/api/')
+
     }
 
 }

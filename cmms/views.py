@@ -106,6 +106,26 @@ def api(request):
                 cursor.close()
                 connection.close()
 
+            elif module == 'groups':
+                cursor = db()
+                query = "select Group_code,group_des from group_master order by group_des"
+                cursor.execute(query)
+                rows = cursor.fetchall()
+                arr = []
+                grp_counts = 0
+                for row in rows:
+                    grp_counts += 1
+                    group_code = row[0].strip()
+                    group_name = row[1].strip()
+                    arr.append({'code': group_code, 'name': group_name})
+
+                response['message'] = {
+                    'counts': grp_counts, 'groups': arr
+                }
+                response['status_code'] = 200
+                response['status'] = 'success'
+
+
             elif module == 'stock':
                 stage = data.get('stage')
                 if stage == 'active':
@@ -144,6 +164,7 @@ def api(request):
                         if open_st == 1:
                             pk = data.get('pk')
                             stock_hd = StockCountHD.objects.get(pk=pk)
+                            group = data.get('group')
                             as_of = data.get('as_of')
                             query = f"exec dbo.item_avail_loc_date N'{stock_hd.loc}',N'%',N'%',N'%',N'%',N'%',N'%',N'%',N'%',N'%',N'%',N'%',N'%',N'%',N'1%',N'%',N'%',N'%',N'family_id',1,N'SNEDA MOTORS',N'ITEM AVAILABILITY BY FAMILY \
                                 As of ({as_of})',N'dd/mm/yyyy',N'#,###,###.00','{as_of}',N'1'"
@@ -161,8 +182,8 @@ def api(request):
                                 itemRref = row[6].strip()
                                 name = row[7].strip()
                                 group_code = row[4].strip()
-                                print(group_code)
-                                if group_code == '0109':
+                                print(group)
+                                if group_code == group:
 
                                     av_qty = row[15].strip()
                                     # print()
@@ -183,12 +204,11 @@ def api(request):
                                     else:
                                         sell_price = item[1]
 
-
-
                                     # check if there is item with ref
 
                                     counted = 0.00
-                                    if StockCountTrans.objects.filter(item_ref=itemRref, stock_count_hd=stock_hd).exists():
+                                    if StockCountTrans.objects.filter(item_ref=itemRref,
+                                                                      stock_count_hd=stock_hd).exists():
                                         counted = StockCountTrans.objects.filter(item_ref=itemRref,
                                                                                  stock_count_hd=stock_hd).aggregate(
                                             total=Sum('quantity'))['total']
@@ -201,7 +221,7 @@ def api(request):
                                         'counted': counted,
                                         'av_qty': Decimal(str(a_q)),
                                         'qty_diff': diff_qty,
-                                        'sell_price':sell_price,
+                                        'sell_price': sell_price,
                                         'diff_val': diff_qty * Decimal(sell_price),
                                     }
                                     if counted > 0:
