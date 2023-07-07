@@ -1,8 +1,8 @@
 class Api {
 
-    call(method,data){
+    call(method,data,link='/apiv2/'){
         // console.log(JSON.stringify(data))
-        let link = `/apiv2/`
+        // let link = interface
         // console.table(link)
         var result = 0;
         $.ajax({

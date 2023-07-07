@@ -1,0 +1,54 @@
+{% extends 'cmms\base.html' %}
+
+{% block cmms %}
+ <div class="w-100 h-100">
+  <div class='card'>
+    <div class='card-header'>
+      {% if open %}
+      <button onclick='cmms.closeStock()' class='btn btn-danger mr-2'>CLOSE</button>
+      <button onclick='cmms.compare()' class='btn btn-info mr-2'>COMPARE</button>
+      {% else %}
+      <button onclick='cmms.newStock()' class='btn btn-success mr-2'>NEW STOCK COUNT</button>
+      {% endif %}
+    </div>
+    <div class='card-body p-2'>
+      <table class='table table-bordered'>
+        <thead>
+          <tr>
+            <th>NUMBER</th>
+            <th>LOC</th>
+            <th>QTY</th>
+            <th>VALUE</th>
+            <th>REMARKS</th>
+            <th>STATUS</th>
+            <th>ACTION</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for stock in stocks %}
+          <tr>
+            <td>{{stock.entry_no}}</td>
+            <td>{{stock.loc}}</td>
+            <td>{{stock.qty}}</td>
+            <td>{{stock.value}}</td>
+            <td>{{stock.remark}}</td>
+            <td>
+              <kbd class='{{ stock.op.class }}'>{{ stock.op.text }}</kbd>
+            </td>
+            <td>
+              <div class='w-100 d-flex flex-wrap'>
+                <kbd class='pointer'>COMPARE</kbd>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+    
+
+
+ </div>
+{% endblock %}
