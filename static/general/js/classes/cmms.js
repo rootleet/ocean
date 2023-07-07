@@ -430,7 +430,7 @@ class Cmms {
                 g_dif += parseFloat(qty_diff)
 
                 let text = ''
-                if(qty_diff <= 0){
+                if(qty_diff < 0){
                     text = 'text-danger'
                 }
 
@@ -455,7 +455,7 @@ class Cmms {
                 g_dif += parseFloat(qty_diff)
 
                 let text = 'text-muted'
-                if(qty_diff <= 0){
+                if(qty_diff < 0){
                     text = 'text-danger'
                 }
 
@@ -480,7 +480,7 @@ class Cmms {
         }
 
         // Rest of your code here
-        $('#g_modal_size').addClass('modal-lg');
+        $('#g_modal_size').addClass('modal-xlg');
         $('#g_modal_title').text(`STOCK COMPARE as of ${formattedDate}`);
         $('#g_modal_body').html(html);
         $('#g_modal').modal('show');
