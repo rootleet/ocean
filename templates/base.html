@@ -400,26 +400,11 @@
 
     <!-- CMMS -->
     <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#cmms-nav" data-bs-toggle="collapse" href="#">
-          <i class="bi bi-megaphone"></i><span>CMMS</span><i class="bi bi-chevron-down ms-auto"></i>
+        <a class="nav-link collapsed" href="{% url 'car-jobs' %}">
+          <i class="bi bi-tools"></i>
+          <span>CMMS</span>
         </a>
-        <ul id="cmms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-            <li>
-                <a href="{% url 'car-jobs' %}">
-              <i class="bi bi-circle"></i><span>Car Jobs</span>
-            </a>
-          </li>
-
-            <li>
-                <a href="{% url 'cmms-tools' %}">
-              <i class="bi bi-circle"></i><span>Tools</span>
-            </a>
-          </li>
-
-        </ul>
       </li>
-
-        <!-- END OF CMMD -->
         {% endif %}
 
       <li class="nav-item">
