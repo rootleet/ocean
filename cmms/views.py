@@ -138,14 +138,16 @@ def api(request):
                         open_st = StockCountHD.objects.filter(status=1).count()
                         is_open = False
                         if open_st == 1:
-                            stock_hd = StockCountHD.objects.get(status=1)
+                            pk = data.get('pk')
+                            stock_hd = StockCountHD.objects.get(pk=pk)
                             as_of = data.get('as_of')
                             query = f"exec dbo.item_avail_loc_date N'{stock_hd.loc}',N'%',N'%',N'%',N'%',N'%',N'%',N'%',N'%',N'%',N'%',N'%',N'%',N'%',N'1%',N'%',N'%',N'%',N'family_id',1,N'SNEDA MOTORS',N'ITEM AVAILABILITY BY FAMILY \
                                 As of ({as_of})',N'dd/mm/yyyy',N'#,###,###.00','{as_of}',N'1'"
                             cursor = db()
                             cursor.execute(query)
                             header = {
-                                'location':stock_hd.loc
+                                'location':stock_hd.loc,
+                                'remark':stock_hd.remark
                             }
                             arr = []
                             not_arr = []

@@ -373,7 +373,7 @@ class Cmms {
     }
 
     // compare
-    compare() {
+    compare(pk) {
         Swal.fire({
       title: 'Select Date',
       html: '<input type="date" id="swal-date" class="swal2-input">',
@@ -396,7 +396,7 @@ class Cmms {
           "data": {
             "stage": "export",
             "compare": "final_compare",
-            "as_of": formattedDate
+            "as_of": formattedDate,"pk":pk
           }
         };
 
@@ -410,7 +410,7 @@ class Cmms {
             header = message['header']
             let g_count,g_sys,g_dif
             g_count = 0;g_sys=0;g_dif=0
-            $('#g_modal_title').append(` <strong>LOC : </strong> ${header['location']}`)
+            $('#g_modal_title').html(`STOCK COMPARE as of ${formattedDate}<br><strong>LOC : </strong> ${header['location']} <br><strong>REMARKS : </strong> ${header['remark']}`)
             let tr = ''
             let counted,not_counted
             counted = trans['counted']
@@ -482,7 +482,6 @@ class Cmms {
 
         // Rest of your code here
         $('#g_modal_size').addClass('modal-xl');
-        $('#g_modal_title').text(`STOCK COMPARE as of ${formattedDate}`);
         $('#g_modal_body').html(html);
         $('#g_modal').modal('show');
         // Rest of your code here
