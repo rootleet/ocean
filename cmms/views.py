@@ -239,7 +239,11 @@ def api(request):
                     if row:
                         barcode = row[0].strip()
                         name = row[2].strip()
-                        sell_price = row[3]
+                        if row[3] is None:
+                            sell_price = 0.00
+                        else:
+                            sell_price = row[3]
+                        print(sell_price)
                         val = Decimal(qty) * Decimal(sell_price)
                         hd = StockCountHD.objects.get(status=1)
                         StockCountTrans(stock_count_hd=hd,item_ref=item_ref,barcode=barcode,name=name,sell_price=sell_price,quantity=qty,owner=myName,value=val).save()
