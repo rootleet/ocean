@@ -435,7 +435,7 @@ class Cmms {
                 }
 
 
-                tr += `<tr class='${text}'><td><small>YES</small><td><small>${item_ref}</small></td><td><small>${barcode}</small></td><td><small>${name}</small></td><td><small>${count_qty}</small></td><td><small>${av_qty}</small></td><td><small>${qty_diff}</small></td></tr>`
+                tr += `<tr class='${text}'><td><small><i class="bi-check-square"></i></small><td><small>${item_ref}</small></td><td><small>${barcode}</small></td><td><small>${name}</small></td><td><small>${count_qty}</small></td><td><small>${av_qty}</small></td><td><small>${qty_diff}</small></td></tr>`
 
 
             }
@@ -460,7 +460,7 @@ class Cmms {
                 }
 
 
-                tr += `<tr class='${text}'><td><small>NO</small><td><small>${item_ref}</small></td><td><small>${barcode}</small></td><td><small>${name}</small></td><td><small>${count_qty}</small></td><td><small>${av_qty}</small></td><td><small>${qty_diff}</small></td></tr>`
+                tr += `<tr class='${text}'><td><small><i class="bi-square"></i></small><td><small>${item_ref}</small></td><td><small>${barcode}</small></td><td><small>${name}</small></td><td><small>${count_qty}</small></td><td><small>${av_qty}</small></td><td><small>${qty_diff}</small></td></tr>`
 
 
             }
