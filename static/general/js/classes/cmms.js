@@ -279,6 +279,7 @@ class Cmms {
                     // add item
                     Swal.fire({
                         'title': 'STOCK RECORD',
+                        showConfirmButton: false,
                         'html': `<div style='text-align:left'><strong>BARCODE</strong> : <small class='text-info'>${barcode}</small><br><strong>NAME</strong> : <small class='text-info'>${name}</small></div>
                         <hr><input id='item_ref' value='${item_ref}' class='form-control mb-2' readonly>
                         <input min='1' id='take_qty' class='form-control mb-2' type='number'>
