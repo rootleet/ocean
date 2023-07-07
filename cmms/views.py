@@ -251,6 +251,8 @@ def api(request):
                         response['status_code'] = 200
                         response['status'] = 'success'
                         response['message'] = f"ITEM {name} Added"
+                        cursor.close()
+                        
                     else:
                         response['status_code'] = 404
                         response['status'] = 'error'

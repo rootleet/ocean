@@ -373,24 +373,36 @@ class Cmms {
 
     // compare
     compare() {
-        let html = 'FETCHING'
-        $('#g_modal_size').addClass('modal-lg')
-        $('#g_modal_title').text('STOCK COMPARE')
-        $('#g_modal_body').html(html)
-        $('#g_modal').modal('show')
-        let payload = {
-            "module": "stock",
-            "data": {
-                "stage": "export",
-                "compare": "final_compare",
-                "as_of": "2023-01-01"
-            }
+        Swal.fire({
+      title: 'Select Date',
+      html: '<input type="date" id="swal-date" class="swal2-input">',
+      showCancelButton: true,
+      confirmButtonText: 'OK',
+      preConfirm: () => {
+        const selectedDate = $('#swal-date').val();
+        if (selectedDate === '') {
+          Swal.showValidationMessage('Please select a date');
         }
+        return selectedDate;
+      }
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const selectedDate = result.value;
+        const formattedDate = new Date(selectedDate).toISOString().split('T')[0];
+
+        let payload = {
+          "module": "stock",
+          "data": {
+            "stage": "export",
+            "compare": "final_compare",
+            "as_of": formattedDate
+          }
+        };
 
         let response = api.call('VIEW',payload,'/cmms/api/')
         // console.table(response)
         let message,trans,header
-        
+        let html = '';
         if(response['status_code'] === 200){
             message = response['message']
             trans = message['trans']
@@ -412,7 +424,7 @@ class Cmms {
                 count_qty = element['counted']
                 av_qty = element['av_qty']
                 qty_diff = element['qty_diff']
-                
+
                 g_count += parseFloat(count_qty)
                 g_sys += parseFloat(av_qty)
                 g_dif += parseFloat(qty_diff)
@@ -421,11 +433,11 @@ class Cmms {
                 if(qty_diff <= 0){
                     text = 'text-danger'
                 }
-                
-                
+
+
                 tr += `<tr class='${text}'><td><small>YES</small><td><small>${item_ref}</small></td><td><small>${barcode}</small></td><td><small>${name}</small></td><td><small>${count_qty}</small></td><td><small>${av_qty}</small></td><td><small>${qty_diff}</small></td></tr>`
 
-                
+
             }
 
             for (let n_index = 0; n_index < not_counted.length; n_index++) {
@@ -446,11 +458,11 @@ class Cmms {
                 if(qty_diff <= 0){
                     text = 'text-danger'
                 }
-                
-                
+
+
                 tr += `<tr class='${text}'><td><small>NO</small><td><small>${item_ref}</small></td><td><small>${barcode}</small></td><td><small>${name}</small></td><td><small>${count_qty}</small></td><td><small>${av_qty}</small></td><td><small>${qty_diff}</small></td></tr>`
 
-                
+
             }
 
             html = `<table class='table table-bordered table-sm table-responsive'>
@@ -466,8 +478,16 @@ class Cmms {
         } else {
             html = "THERE IS AN ERROR"
         }
-        
-        $('#g_modal_body').html(html)
+
+        // Rest of your code here
+        $('#g_modal_size').addClass('modal-lg');
+        $('#g_modal_title').text(`STOCK COMPARE as of ${formattedDate}`);
+        $('#g_modal_body').html(html);
+        $('#g_modal').modal('show');
+        // Rest of your code here
+      }
+    });
+
         
        
     }
