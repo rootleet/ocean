@@ -20,8 +20,6 @@ from cmms.extra import db
 # Create your views here.
 def base(request):
     return None
-
-
 @login_required(login_url='/login/')
 def carjobs(request):
     page = {
