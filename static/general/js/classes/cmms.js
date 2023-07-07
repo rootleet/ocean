@@ -454,7 +454,7 @@ class Cmms {
                 g_sys += parseFloat(av_qty)
                 g_dif += parseFloat(qty_diff)
 
-                let text = 'text-muted'
+                let text = ''
                 if(qty_diff < 0){
                     text = 'text-danger'
                 }
@@ -469,7 +469,7 @@ class Cmms {
             <thead>
               <tr><th>CH</th><th>ITEM REF</th><th>BARCODE</th><th>DESCRIPTION</th><th>COUNTED</th><th>SYSTEM</th><th>DIFFERENCE</th></tr>
             </thead>
-            <tbody>
+            <tbody class="dataTable">
             <tr class='text-primary'><td colspan='4'>SUMMARY</td><td><small>${g_count}</small></td><td><small>${g_sys}</small></td><td><small>${g_dif}</small></td></tr>
               ${tr}
             </tbody>
@@ -480,7 +480,7 @@ class Cmms {
         }
 
         // Rest of your code here
-        $('#g_modal_size').addClass('modal-xlg');
+        $('#g_modal_size').addClass('modal-xl');
         $('#g_modal_title').text(`STOCK COMPARE as of ${formattedDate}`);
         $('#g_modal_body').html(html);
         $('#g_modal').modal('show');
