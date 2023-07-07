@@ -160,9 +160,9 @@ def api(request):
 
                                 itemRref = row[6].strip()
                                 name = row[7].strip()
-                                group_code = row[5].strip()
+                                group_code = row[4].strip()
                                 print(group_code)
-                                if group_code == 'FILTERS':
+                                if group_code == '0109':
 
                                     av_qty = row[15].strip()
                                     # print()
