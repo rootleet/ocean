@@ -391,12 +391,16 @@ class Cmms {
         }
         Swal.fire({
       title: 'Select Date',
-      html: `<select class="form-control w-50 mx-auto mb-2" id="group">${g_opt}</select><input type="date" id="swal-date" class="swal2-input">`,
+      html: `<select class="form-control w-50 mx-auto mb-2" id="preview">
+                <option value="preview">PREVIEW</option>
+                <option value="excel">EXCEL</option>
+            </select><select class="form-control w-50 mx-auto mb-2" id="group">${g_opt}</select><input type="date" id="swal-date" class="swal2-input">`,
       showCancelButton: true,
       confirmButtonText: 'OK',
       preConfirm: () => {
         const selectedDate = $('#swal-date').val();
         const selectedGroup = $('#group').val()
+        const preview = $('#preview').val()
         if (selectedDate === '') {
           Swal.showValidationMessage('Please select a date');
         }
@@ -405,7 +409,8 @@ class Cmms {
         }
         return {
             'date':selectedDate,
-            'group':selectedGroup
+            'group':selectedGroup,
+            'preview':preview
         };
       }
     }).then((result) => {
@@ -413,6 +418,7 @@ class Cmms {
           console.table(result)
         const selectedDate = result.value.date;
         const selectedGroup = result.value.group
+        const selectPreview = result.value.preview
         const formattedDate = new Date(selectedDate).toISOString().split('T')[0];
 
         let payload = {
@@ -421,7 +427,7 @@ class Cmms {
               "stage":"export",
             "compare":"final_compare",
             "as_of":formattedDate,
-            "doc":"preview",
+            "doc":selectPreview,
             "pk":pk,
             "group":selectedGroup
           }
@@ -434,89 +440,95 @@ class Cmms {
         let message,trans,header
         let html = '';
         if(response['status_code'] === 200){
-            message = response['message']
-            trans = message['trans']
-            header = message['header']
-            let g_count,g_sys,g_dif,v_dif
-            g_count = 0;g_sys=0;g_dif=0,v_dif=0
-            $('#g_modal_title').html(`STOCK COMPARE as of ${formattedDate}<br><strong>LOC : </strong> ${header['location']} <br><strong>REMARKS : </strong> ${header['remark']}`)
-            let tr = ''
-            let counted,not_counted
-            counted = trans['counted']
-            not_counted = trans['not_counted']
+            if(selectPreview === 'preview'){
 
-            for (let c_index = 0; c_index < counted.length; c_index++) {
-                let element = counted[c_index];
-                let barcode,item_ref,name,count_qty,av_qty,qty_diff
-                barcode = element['barcode']
-                item_ref = element['item_ref']
-                name = element['desription']
-                count_qty = parseFloat(element['counted']).toFixed(2)
-                av_qty = parseFloat(element['av_qty']).toFixed(2)
-                qty_diff = parseFloat(element['qty_diff']).toFixed(2)
-                let diff_val = parseFloat(element['diff_val']).toFixed(2)
+                message = response['message']
+                trans = message['trans']
+                header = message['header']
+                let g_count,g_sys,g_dif,v_dif
+                g_count = 0;g_sys=0;g_dif=0,v_dif=0
+                $('#g_modal_title').html(`STOCK COMPARE as of ${formattedDate}<br><strong>LOC : </strong> ${header['location']} <br><strong>REMARKS : </strong> ${header['remark']}`)
+                let tr = ''
+                let counted,not_counted
+                counted = trans['counted']
+                not_counted = trans['not_counted']
 
-                g_count += parseFloat(count_qty)
-                g_sys += parseFloat(av_qty)
-                g_dif += parseFloat(qty_diff)
-                v_dif += parseFloat(diff_val)
+                for (let c_index = 0; c_index < counted.length; c_index++) {
+                    let element = counted[c_index];
+                    let barcode,item_ref,name,count_qty,av_qty,qty_diff
+                    barcode = element['barcode']
+                    item_ref = element['item_ref']
+                    name = element['desription']
+                    count_qty = parseFloat(element['counted']).toFixed(2)
+                    av_qty = parseFloat(element['av_qty']).toFixed(2)
+                    qty_diff = parseFloat(element['qty_diff']).toFixed(2)
+                    let diff_val = parseFloat(element['diff_val']).toFixed(2)
 
-                let text = ''
-                if(qty_diff < 0){
-                    text = 'text-danger'
+                    g_count += parseFloat(count_qty)
+                    g_sys += parseFloat(av_qty)
+                    g_dif += parseFloat(qty_diff)
+                    v_dif += parseFloat(diff_val)
+
+                    let text = ''
+                    if(qty_diff < 0){
+                        text = 'text-danger'
+                    }
+
+
+                    tr += `<tr class='${text}'>
+                                <td><small><i class="bi-check-square"></i></small><td><small>${item_ref}</small></td><td><small>${barcode}</small></td><td><small>${name}</small></td><td><small>${count_qty}</small></td><td><small>${av_qty}</small></td><td><small>${qty_diff}</small></td>
+                                <td><small>${diff_val}</small></td>
+                            </tr>`
+
+
                 }
 
+                for (let n_index = 0; n_index < not_counted.length; n_index++) {
+                    let element = not_counted[n_index];
+                    let barcode,item_ref,name,count_qty,av_qty,qty_diff
+                    barcode = element['barcode']
+                    item_ref = element['item_ref']
+                    name = element['desription']
+                    count_qty = parseFloat(element['counted']).toFixed(2)
+                    av_qty = parseFloat(element['av_qty']).toFixed(2)
+                    qty_diff = parseFloat(element['qty_diff']).toFixed(2)
+                    let diff_val = parseFloat(element['diff_val']).toFixed(2)
 
-                tr += `<tr class='${text}'>
-                            <td><small><i class="bi-check-square"></i></small><td><small>${item_ref}</small></td><td><small>${barcode}</small></td><td><small>${name}</small></td><td><small>${count_qty}</small></td><td><small>${av_qty}</small></td><td><small>${qty_diff}</small></td>
-                            <td><small>${diff_val}</small></td>
-                        </tr>`
+                    g_count += parseFloat(count_qty)
+                    g_sys += parseFloat(av_qty)
+                    g_dif += parseFloat(qty_diff)
+                    v_dif += parseFloat(diff_val)
+
+                    let text = ''
+                    if(qty_diff < 0){
+                        text = 'text-danger'
+                    }
 
 
-            }
+                    tr += `<tr class='${text}'>
+                                <td><small><i class="bi-square"></i></small><td><small>${item_ref}</small></td><td><small>${barcode}</small></td><td><small>${name}</small></td><td><small>${count_qty}</small></td><td><small>${av_qty}</small></td><td><small>${qty_diff}</small></td>
+                                <td><small>${diff_val}</small></td>
+                           </tr>`
 
-            for (let n_index = 0; n_index < not_counted.length; n_index++) {
-                let element = not_counted[n_index];
-                let barcode,item_ref,name,count_qty,av_qty,qty_diff
-                barcode = element['barcode']
-                item_ref = element['item_ref']
-                name = element['desription']
-                count_qty = parseFloat(element['counted']).toFixed(2)
-                av_qty = parseFloat(element['av_qty']).toFixed(2)
-                qty_diff = parseFloat(element['qty_diff']).toFixed(2)
-                let diff_val = parseFloat(element['diff_val']).toFixed(2)
 
-                g_count += parseFloat(count_qty)
-                g_sys += parseFloat(av_qty)
-                g_dif += parseFloat(qty_diff)
-                v_dif += parseFloat(diff_val)
-
-                let text = ''
-                if(qty_diff < 0){
-                    text = 'text-danger'
                 }
 
-
-                tr += `<tr class='${text}'>
-                            <td><small><i class="bi-square"></i></small><td><small>${item_ref}</small></td><td><small>${barcode}</small></td><td><small>${name}</small></td><td><small>${count_qty}</small></td><td><small>${av_qty}</small></td><td><small>${qty_diff}</small></td>
-                            <td><small>${diff_val}</small></td>
-                       </tr>`
-
-
+                html = `<table class='table table-bordered table-sm table-responsive'>
+                <thead>
+                  <tr><th>CH</th><th>ITEM REF</th><th>BARCODE</th><th>DESCRIPTION</th><th>PHY</th><th>SYS</th><th>QTY DIFF</th><th>VAL DIFF</th></tr>
+                </thead>
+                <tbody class="dataTable">
+                <tr class='text-primary'><td colspan='4'>SUMMARY</td><td><small>${g_count}</small></td><td><small>${g_sys}</small></td><td><small>${g_dif}</small></td><td><small>${v_dif.toFixed(2)}</small></td></tr>
+                  ${tr}
+                </tbody>
+              </table>`
+            }  else if (selectPreview === 'excel'){
+                html = `<a target="_blank" href='${response['message']}'>DOWNLOAD FILE</a>`
             }
-
-            html = `<table class='table table-bordered table-sm table-responsive'>
-            <thead>
-              <tr><th>CH</th><th>ITEM REF</th><th>BARCODE</th><th>DESCRIPTION</th><th>PHY</th><th>SYS</th><th>QTY DIFF</th><th>VAL DIFF</th></tr>
-            </thead>
-            <tbody class="dataTable">
-            <tr class='text-primary'><td colspan='4'>SUMMARY</td><td><small>${g_count}</small></td><td><small>${g_sys}</small></td><td><small>${g_dif}</small></td><td><small>${v_dif.toFixed(2)}</small></td></tr>
-              ${tr}
-            </tbody>
-          </table>`
 
         } else {
-            html = "THERE IS AN ERROR"
+            $('#g_modal_title').html("Download File")
+            html = response['message']
         }
 
         // Rest of your code here
