@@ -1,4 +1,6 @@
 import json
+from datetime import date
+
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
@@ -73,171 +75,234 @@ def api(request):
         data = body.get('data')
 
         if method == 'VIEW':
-            if module == 'product':
-                scope = data.get('range')
-                barcode = data.get('barcode')
+            try:
+                if module == 'product':
+                    scope = data.get('range')
+                    barcode = data.get('barcode')
 
-                if scope == 'single':
-                    q = f"SELECT barcode,item_ref,item_des1 FROM product_master WHERE barcode = '{barcode}'"
-                else:
-                    q = "SELECT barcode,item_ref,item_des1  FROM product_master"
-
-                server = f"{DB_SERVER},{DB_PORT}"
-                database = DB_NAME
-                username = DB_USER
-                password = DB_PASSWORD
-                driver = '{ODBC Driver 17 for SQL Server}'  # Change this to the driver you're using
-                connection_string = f"DRIVER={driver};SERVER={server};DATABASE={database};UID={username};PWD={password}"
-                connection = pyodbc.connect(connection_string)
-                cursor = connection.cursor()
-
-                cursor.execute(q)
-                count = 0
-                arr = []
-                for part in cursor.fetchall():
-                    count += 1
-                    obj = {'barcode': part[0].strip(), 'item_ref': part[1].strip(), 'name': part[2].strip()}
-                    arr.append(obj)
-
-                resp = {'count': count, 'trans': arr}
-                response['status_code'] = 200
-                response['status'] = 'success'
-                response['message'] = resp
-                cursor.close()
-                connection.close()
-
-            elif module == 'groups':
-                cursor = db()
-                query = "select Group_code,group_des from group_master order by group_des"
-                cursor.execute(query)
-                rows = cursor.fetchall()
-                arr = []
-                grp_counts = 0
-                for row in rows:
-                    grp_counts += 1
-                    group_code = row[0].strip()
-                    group_name = row[1].strip()
-                    arr.append({'code': group_code, 'name': group_name})
-
-                response['message'] = {
-                    'counts': grp_counts, 'groups': arr
-                }
-                response['status_code'] = 200
-                response['status'] = 'success'
-
-
-            elif module == 'stock':
-                stage = data.get('stage')
-                if stage == 'active':
-                    # check for active
-                    if StockCountHD.objects.filter(status=1).exists():
-                        active = StockCountHD.objects.get(status=1)
-                        trans = StockCountTrans.objects.filter(stock_count_hd=active).order_by('-pk')
-                        arr = []
-                        for tran in trans:
-                            obj = {
-                                'item_ref': tran.item_ref,
-                                'barcode': tran.barcode,
-                                'name': tran.name,
-                                'quantity': tran.quantity,
-                                'price': tran.sell_price,
-                                'value': tran.quantity * tran.sell_price,
-                                'owner': tran.owner
-                            }
-                            arr.append(obj)
-                        response['message'] = {
-                            'count': trans.count(), 'trans': arr
-                        }
-                        response['status_code'] = 200
-                        response['status'] = 'success'
+                    if scope == 'single':
+                        q = f"SELECT barcode,item_ref,item_des1 FROM product_master WHERE barcode = '{barcode}'"
                     else:
-                        response['message'] = 'NO DATA'
-                        response['status_code'] = 404
-                        response['status'] = 'error'
+                        q = "SELECT barcode,item_ref,item_des1  FROM product_master"
 
-                if stage == 'export':
-                    style = data.get('compare')
-                    if style == 'final_compare':
-                        # check if there is open stock
-                        open_st = StockCountHD.objects.filter(status=1).count()
-                        is_open = False
-                        if open_st == 1:
-                            pk = data.get('pk')
-                            stock_hd = StockCountHD.objects.get(pk=pk)
-                            group = data.get('group')
-                            as_of = data.get('as_of')
-                            query = f"exec dbo.item_avail_loc_date N'{stock_hd.loc}',N'%',N'%',N'%',N'%',N'%',N'%',N'%',N'%',N'%',N'%',N'%',N'%',N'%',N'1%',N'%',N'%',N'%',N'family_id',1,N'SNEDA MOTORS',N'ITEM AVAILABILITY BY FAMILY \
-                                As of ({as_of})',N'dd/mm/yyyy',N'#,###,###.00','{as_of}',N'1'"
-                            cursor = db()
-                            cursor.execute(query)
-                            header = {
-                                'location': stock_hd.loc,
-                                'remark': stock_hd.remark
-                            }
+                    server = f"{DB_SERVER},{DB_PORT}"
+                    database = DB_NAME
+                    username = DB_USER
+                    password = DB_PASSWORD
+                    driver = '{ODBC Driver 17 for SQL Server}'  # Change this to the driver you're using
+                    connection_string = f"DRIVER={driver};SERVER={server};DATABASE={database};UID={username};PWD={password}"
+                    connection = pyodbc.connect(connection_string)
+                    cursor = connection.cursor()
+
+                    cursor.execute(q)
+                    count = 0
+                    arr = []
+                    for part in cursor.fetchall():
+                        count += 1
+                        obj = {'barcode': part[0].strip(), 'item_ref': part[1].strip(), 'name': part[2].strip()}
+                        arr.append(obj)
+
+                    resp = {'count': count, 'trans': arr}
+                    response['status_code'] = 200
+                    response['status'] = 'success'
+                    response['message'] = resp
+                    cursor.close()
+                    connection.close()
+
+                elif module == 'groups':
+                    cursor = db()
+                    query = "select Group_code,group_des from group_master order by group_des"
+                    cursor.execute(query)
+                    rows = cursor.fetchall()
+                    arr = []
+                    grp_counts = 0
+                    for row in rows:
+                        grp_counts += 1
+                        group_code = row[0].strip()
+                        group_name = row[1].strip()
+                        arr.append({'code': group_code, 'name': group_name})
+
+                    response['message'] = {
+                        'counts': grp_counts, 'groups': arr
+                    }
+                    response['status_code'] = 200
+                    response['status'] = 'success'
+
+
+                elif module == 'stock':
+                    stage = data.get('stage')
+                    if stage == 'active':
+                        # check for active
+                        if StockCountHD.objects.filter(status=1).exists():
+                            active = StockCountHD.objects.get(status=1)
+                            trans = StockCountTrans.objects.filter(stock_count_hd=active).order_by('-pk')
                             arr = []
-                            not_arr = []
-                            rows = cursor.fetchall()
-                            for row in rows:
-
-                                itemRref = row[6].strip()
-                                name = row[7].strip()
-                                group_code = row[4].strip()
-                                print(group)
-                                if group_code == group:
-
-                                    av_qty = row[15].strip()
-                                    # print()
-                                    # print(f"RAW : {av_qty}")
-                                    if len(av_qty) > 0:
-                                        a_q = Decimal(av_qty.split('*')[0])
-                                    else:
-                                        a_q = 0.00
-
-                                    # print(f"{av_qty} / {a_q}")
-                                    # focus on filters
-                                    item_q = cursor.execute(
-                                        f"SELECT barcode,sell_price from product_master where item_ref = '{itemRref}'")
-                                    item = item_q.fetchone()
-                                    barcode = item[0]
-                                    if item[1] is None:
-                                        sell_price = 0.00
-                                    else:
-                                        sell_price = item[1]
-
-                                    # check if there is item with ref
-
-                                    counted = 0.00
-                                    if StockCountTrans.objects.filter(item_ref=itemRref,
-                                                                      stock_count_hd=stock_hd).exists():
-                                        counted = StockCountTrans.objects.filter(item_ref=itemRref,
-                                                                                 stock_count_hd=stock_hd).aggregate(
-                                            total=Sum('quantity'))['total']
-
-                                    diff_qty = Decimal(counted) - Decimal(a_q)
-                                    obj = {
-                                        'item_ref': itemRref,
-                                        'barcode': barcode,
-                                        'desription': name,
-                                        'counted': counted,
-                                        'av_qty': Decimal(str(a_q)),
-                                        'qty_diff': diff_qty,
-                                        'sell_price': sell_price,
-                                        'diff_val': diff_qty * Decimal(sell_price),
-                                    }
-                                    if counted > 0:
-                                        arr.append(obj)
-                                    else:
-                                        not_arr.append(obj)
-
-                                response['message'] = {
-                                    'header': header, 'trans': {'counted': arr, 'not_counted': not_arr}
+                            for tran in trans:
+                                obj = {
+                                    'item_ref': tran.item_ref,
+                                    'barcode': tran.barcode,
+                                    'name': tran.name,
+                                    'quantity': tran.quantity,
+                                    'price': tran.sell_price,
+                                    'value': tran.quantity * tran.sell_price,
+                                    'owner': tran.owner
                                 }
+                                arr.append(obj)
+                            response['message'] = {
+                                'count': trans.count(), 'trans': arr
+                            }
+                            response['status_code'] = 200
+                            response['status'] = 'success'
+                        else:
+                            response['message'] = 'NO DATA'
+                            response['status_code'] = 404
+                            response['status'] = 'error'
+
+                    if stage == 'export':
+                        style = data.get('compare')
+                        if style == 'final_compare':
+                            doc = data.get('doc')
+                            if doc == 'excel':
+                                import openpyxl
+                                workbook = openpyxl.Workbook()
+                                sheet = workbook.active
+                                # make sheet head
+                                sheet[f'A1'] = "ITEM REFERENCE"
+                                sheet[f'B1'] = "BARCODED"
+                                sheet[f'C1'] = "DESCRIPTION"
+                                sheet[f'D1'] = "PHYSICAL QUANTITY"
+                                sheet[f'E1'] = "SYSTEM QUANTITY"
+                                sheet[f'F1'] = "QUANTITY DIFFERENCE"
+                                sheet[f'G1'] = "SELLING PRICE"
+                                sheet[f'H1'] = "VALUE DIFFERENCE"
+
+                                tot_phy = Decimal(0.00)
+                                tot_sys = Decimal(0.00)
+                                tot_qdif = Decimal(0.00)
+                                tot_vdif = Decimal(0.00)
+
+                            # check if there is open stock
+                            pk = data.get('pk')
+                            open_st = StockCountHD.objects.filter(pk=pk).count()
+                            is_open = False
+                            if open_st == 1:
+
+                                stock_hd = StockCountHD.objects.get(pk=pk)
+                                group = data.get('group')
+                                as_of = data.get('as_of')
+                                query = f"exec dbo.item_avail_loc_date N'{stock_hd.loc}',N'%',N'%',N'%',N'%',N'%',N'%',N'%',N'%',N'%',N'%',N'%',N'%',N'%',N'1%',N'%',N'%',N'%',N'family_id',1,N'SNEDA MOTORS',N'ITEM AVAILABILITY BY FAMILY \
+                                    As of ({as_of})',N'dd/mm/yyyy',N'#,###,###.00','{as_of}',N'1'"
+                                cursor = db()
+                                cursor.execute(query)
+                                header = {
+                                    'location': stock_hd.loc,
+                                    'remark': stock_hd.remark
+                                }
+                                arr = []
+                                not_arr = []
+                                row_c = 2
+                                rows = cursor.fetchall()
+                                for row in rows:
+
+                                    itemRref = row[6].strip()
+                                    name = row[7].strip()
+                                    group_code = row[4].strip()
+                                    group_name = row[5].strip()
+
+                                    if group_code == group:
+
+                                        row_c += 1
+                                        av_qty = row[15].strip()
+                                        # print()
+                                        # print(f"RAW : {av_qty}")
+                                        if len(av_qty) > 0:
+                                            a_q = Decimal(av_qty.split('*')[0])
+                                        else:
+                                            a_q = 0.00
+
+                                        # print(f"{av_qty} / {a_q}")
+                                        # focus on filters
+                                        item_q = cursor.execute(
+                                            f"SELECT barcode,sell_price from product_master where item_ref = '{itemRref}'")
+                                        item = item_q.fetchone()
+                                        barcode = item[0].strip()
+                                        if item[1] is None:
+                                            sell_price = 0.00
+                                        else:
+                                            sell_price = item[1]
+
+                                        # check if there is item with ref
+
+                                        counted = 0.00
+                                        if StockCountTrans.objects.filter(item_ref=itemRref,
+                                                                          stock_count_hd=stock_hd).exists():
+                                            counted = StockCountTrans.objects.filter(item_ref=itemRref,
+                                                                                     stock_count_hd=stock_hd).aggregate(
+                                                total=Sum('quantity'))['total']
+
+                                        diff_qty = Decimal(counted) - Decimal(a_q)
+                                        obj = {
+                                            'item_ref': itemRref,
+                                            'barcode': barcode,
+                                            'desription': name,
+                                            'counted': counted,
+                                            'av_qty': Decimal(str(a_q)),
+                                            'qty_diff': diff_qty,
+                                            'sell_price': sell_price,
+                                            'diff_val': diff_qty * Decimal(sell_price),
+                                        }
+
+
+
+                                        if doc == 'preview':
+                                            if counted > 0:
+                                                arr.append(obj)
+                                            else:
+                                                not_arr.append(obj)
+
+
+                                        elif doc == 'excel':
+
+                                            sheet[f'A{row_c}'] = itemRref
+                                            sheet[f'B{row_c}'] = barcode
+                                            sheet[f'C{row_c}'] = name
+                                            sheet[f'D{row_c}'] = counted
+                                            sheet[f'E{row_c}'] = Decimal(str(a_q))
+                                            sheet[f'F{row_c}'] = diff_qty
+                                            sheet[f'G{row_c}'] = sell_price
+                                            sheet[f'H{row_c}'] = diff_qty * Decimal(sell_price)
+
+                                            tot_phy += Decimal(counted)
+                                            tot_sys += Decimal(str(a_q))
+                                            tot_qdif += Decimal(diff_qty)
+                                            tot_vdif += Decimal(diff_qty) * Decimal(sell_price)
+
+                                if doc == 'preview':
+                                    response['message'] = {
+                                        'header': header, 'trans': {'counted': arr, 'not_counted': not_arr}
+                                    }
+                                elif doc == 'excel':
+                                    sheet[f'A2'] = "SUMMARY"
+                                    sheet['D2'] = tot_phy
+                                    sheet['E2'] = tot_sys
+                                    sheet['F2'] = tot_qdif
+                                    sheet['G2'] = "-"
+                                    sheet['H2'] = tot_vdif
+                                    file = f"static/general/tmp/{date.today()}_{stock_hd.loc}_{group}.xlsx"
+                                    workbook.save(file)
+                                    response['message'] = file
+
                                 response['status_code'] = 200
                                 response['status'] = 'success'
-                        else:
-                            response['message'] = "NO OPEN STOCK"
-                            response['status_code'] = 404
-                            response['status'] = 'limit'
+                            else:
+                                response['message'] = "NO OPEN STOCK"
+                                response['status_code'] = 404
+                                response['status'] = 'limit'
+
+            except Exception as e:
+                response['status'] = 'error'
+                response['status_code'] = 505
+                response['message'] = str(e)
 
         elif method == 'PUT':
             if module == 'stock':
@@ -315,6 +380,6 @@ def api(request):
     except json.JSONDecodeError as e:
         response["status_code"] = 400
         response["status"] = "Bad Request"
-        response["message"] = f"Error decoding JSON: {e.msg}"
+        response["message"] = f"Error decoding JSON: {str(e)}"
 
     return JsonResponse(response)

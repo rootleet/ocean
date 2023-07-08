@@ -418,9 +418,12 @@ class Cmms {
         let payload = {
           "module": "stock",
           "data": {
-            "stage": "export",
-            "compare": "final_compare",
-            "as_of": formattedDate,"pk":pk,'group':selectedGroup
+              "stage":"export",
+            "compare":"final_compare",
+            "as_of":formattedDate,
+            "doc":"preview",
+            "pk":pk,
+            "group":selectedGroup
           }
         };
 
