@@ -523,11 +523,12 @@ class Cmms {
                 </tbody>
               </table>`
             }  else if (selectPreview === 'excel'){
-                html = `<a target="_blank" href='${response['message']}'>DOWNLOAD FILE</a>`
+                $('#g_modal_title').html("Download File")
+                html = `<a target="_blank" href='/${response['message']}'>DOWNLOAD FILE</a>`
             }
 
         } else {
-            $('#g_modal_title').html("Download File")
+
             html = response['message']
         }
 
