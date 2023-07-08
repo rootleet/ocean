@@ -189,10 +189,15 @@ def api(request):
 
                                 stock_hd = StockCountHD.objects.get(pk=pk)
                                 group = data.get('group')
+                                cursor = db()
+                                # get group from database
+                                g_q = f"select group_des from group_master where group_code = '{group}'"
+                                cursor.execute(g_q)
+                                g_name = cursor.fetchone()[0]
                                 as_of = data.get('as_of')
                                 query = f"exec dbo.item_avail_loc_date N'{stock_hd.loc}',N'%',N'%',N'%',N'%',N'%',N'%',N'%',N'%',N'%',N'%',N'%',N'%',N'%',N'1%',N'%',N'%',N'%',N'family_id',1,N'SNEDA MOTORS',N'ITEM AVAILABILITY BY FAMILY \
                                     As of ({as_of})',N'dd/mm/yyyy',N'#,###,###.00','{as_of}',N'1'"
-                                cursor = db()
+
                                 cursor.execute(query)
                                 header = {
                                     'location': stock_hd.loc,
@@ -288,7 +293,7 @@ def api(request):
                                     sheet['F2'] = tot_qdif
                                     sheet['G2'] = "-"
                                     sheet['H2'] = tot_vdif
-                                    file = f"static/general/tmp/{date.today()}_{stock_hd.loc}_{group}.xlsx"
+                                    file = f"static/general/tmp/{date.today()}_{stock_hd.loc}_{g_name.strip().replace(' ','_')}.xlsx"
                                     workbook.save(file)
                                     response['message'] = file
 
