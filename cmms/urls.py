@@ -23,7 +23,8 @@ urlpatterns = [
     path('tools/',views.tools,name='cmms-tools'),
     path('api/',views.api,name='cmms_api'),
     path('stock/',views.stock,name='stock'),
-    path('stock/count/',views.stock_count,name='stock-count')
+    path('stock/count/',views.stock_count,name='stock-count'),
+    path('compare/<pk>/<as_of>',views.compare,name='compare')
 
 ]
 

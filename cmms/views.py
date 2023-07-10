@@ -62,6 +62,9 @@ def stock_count(request):
     }
     return render(request, 'cmms/stock-take.html', context=context)
 
+@login_required()
+def compare(request,pk,as_of):
+    return render(request,'cmms/compare.html',context={})
 
 @csrf_exempt
 def api(request):
