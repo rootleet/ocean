@@ -192,7 +192,7 @@ DB_SERVER = '192.168.2.4'
 DB_PORT = '1237'
 DB_USER = 'sa'
 DB_PASSWORD = 'sa@123456'
-DB_NAME = 'CMMS'
+DB_NAME = 'PROC_CMMS_V1'
 
 # DB_SERVER = 'localhost'
 # DB_PORT = '1433'
