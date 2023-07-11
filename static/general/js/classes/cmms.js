@@ -349,7 +349,7 @@ class Cmms {
                     };
 
                     let response = api.call('PUT', payload, '/cmms/api/');
-                    console.table(response)
+                    // console.table(response)
                     location.reload()
                     alert(response['message']);
                 }
@@ -375,7 +375,7 @@ class Cmms {
     // compare
     compare(pk) {
         let groups = cmms.productGroups()
-        console.table(groups)
+        // console.table(groups)
         let g_opt = ''
         if(groups['status_code'] === 200){
             let g_message,g_count,g_grps
@@ -415,7 +415,7 @@ class Cmms {
       }
     }).then((result) => {
       if (result.isConfirmed) {
-          console.table(result)
+          // console.table(result)
         const selectedDate = result.value.date;
         const selectedGroup = result.value.group
         const selectPreview = result.value.preview
@@ -433,7 +433,7 @@ class Cmms {
           }
         };
 
-        console.table(payload)
+        // console.table(payload)
 
         let response = api.call('VIEW',payload,'/cmms/api/')
         // console.table(response)
@@ -482,7 +482,7 @@ class Cmms {
 
 
                 }
-
+                let this_tr = ''
                 for (let n_index = 0; n_index < not_counted.length; n_index++) {
                     let element = not_counted[n_index];
                     let barcode,item_ref,name,count_qty,av_qty,qty_diff
@@ -505,37 +505,47 @@ class Cmms {
                     }
 
 
-                    tr += `<tr class='${text}'>
-                                <td><small><i class="bi-square"></i></small><td><small>${item_ref}</small></td><td><small>${barcode}</small></td><td><small>${name}</small></td><td><small>${count_qty}</small></td><td><small>${av_qty}</small></td><td><small>${qty_diff}</small></td>
+                    let this_tr = `<tr class='${text}'>
+                                <td><small><i class="bi-square"></i> <i class="bi bi-command"></i></small><td><small>${item_ref}</small></td><td><small>${barcode}</small></td><td><small>${name}</small></td><td><small>${count_qty}</small></td><td><small>${av_qty}</small></td><td><small>${qty_diff}</small></td>
                                 <td><small>${diff_val}</small></td>
                            </tr>`
+                    tr += this_tr
+                    if(n_index === 1){
+                        console.table(this_tr)
+                    }
+
 
 
                 }
 
-                html = `<table class='table table-bordered table-sm table-responsive'>
+
+                html = `<table class='table table-bordered table-striped table-hover table-sm table-responsive datatable'>
                 <thead>
                   <tr><th>CH</th><th>ITEM REF</th><th>BARCODE</th><th>DESCRIPTION</th><th>PHY</th><th>SYS</th><th>QTY DIFF</th><th>VAL DIFF</th></tr>
                 </thead>
-                <tbody class="dataTable">
+                <tbody >
                 <tr class='text-primary'><td colspan='4'>SUMMARY</td><td><small>${g_count}</small></td><td><small>${g_sys}</small></td><td><small>${g_dif}</small></td><td><small>${v_dif.toFixed(2)}</small></td></tr>
                   ${tr}
                 </tbody>
               </table>`
+
+
             }  else if (selectPreview === 'excel'){
                 $('#g_modal_title').html("Download File")
                 html = `<a target="_blank" href='/${response['message']}'>DOWNLOAD FILE</a>`
             }
 
-        } else {
+        }
+        else {
 
             html = response['message']
         }
 
         // Rest of your code here
-        $('#g_modal_size').addClass('modal-xl');
-        $('#g_modal_body').html(html);
-        $('#g_modal').modal('show');
+        // $('#g_modal_size').addClass('modal-xl');
+        // $('#g_modal_body').html(html);
+        $('#devsBody').html(html);
+        // $('#g_modal').modal('show');
         // Rest of your code here
       }
     });
@@ -554,6 +564,251 @@ class Cmms {
         return api.call('VIEW', payload, '/cmms/api/')
 
     }
+
+    compareAlone(formattedDate,selectPreview,pk,selectedGroup){
+        let payload = {
+          "module": "stock",
+          "data": {
+              "stage":"export",
+            "compare":"final_compare",
+            "as_of":formattedDate,
+            "doc":selectPreview,
+            "pk":pk,
+            "group":selectedGroup
+          }
+        };
+
+        // console.table(payload)
+
+        let response = api.call('VIEW',payload,'/cmms/api/')
+        // console.table(response)
+        let message,trans,header
+        let html = '';
+        if(response['status_code'] === 200){
+            if(selectPreview === 'preview'){
+
+                message = response['message']
+                trans = message['trans']
+                header = message['header']
+                let g_count,g_sys,g_dif,v_dif
+                g_count = 0;g_sys=0;g_dif=0,v_dif=0
+                $('#g_modal_title').html(`STOCK COMPARE as of ${formattedDate}<br><strong>LOC : </strong> ${header['location']} <br><strong>REMARKS : </strong> ${header['remark']}`)
+                let tr = ''
+                let counted,not_counted
+                counted = trans['counted']
+                not_counted = trans['not_counted']
+                console.table(trans)
+
+                for (let c_index = 0; c_index < counted.length; c_index++) {
+                    let element = counted[c_index];
+                    let barcode,item_ref,name,count_qty,av_qty,qty_diff,comment,comment_class
+                    barcode = element['barcode']
+                    item_ref = element['item_ref']
+                    name = element['desription']
+                    comment = element['comment']
+                    count_qty = parseFloat(element['counted']).toFixed(2)
+                    av_qty = parseFloat(element['av_qty']).toFixed(2)
+                    qty_diff = parseFloat(element['qty_diff']).toFixed(2)
+                    let diff_val = parseFloat(element['diff_val']).toFixed(2)
+                    let pk = element['pk']
+
+                    g_count += parseFloat(count_qty)
+                    g_sys += parseFloat(av_qty)
+                    g_dif += parseFloat(qty_diff)
+                    v_dif += parseFloat(diff_val)
+
+                    comment_class = 'bi-bell-slash'
+                    if(comment.length > 0){
+                        // there is comment
+                        comment_class = 'bi-bell'
+                    }
+
+                    let text = ''
+                    if(qty_diff < 0){
+                        text = 'text-danger'
+                    }
+
+
+                    tr += `<tr class='${text}'>
+                                <td><small><i class="bi-check-square"></i> <i class="bi ${comment_class}" onclick="cmms.countComment('${pk}','${comment}')"></small><td><small>${item_ref}</small></td><td><small>${barcode}</small></td><td><small>${name}</small></td><td><small>${count_qty}</small></td><td><small>${av_qty}</small></td><td><small>${qty_diff}</small></td>
+                                <td><small>${diff_val}</small></td>
+                            </tr>`
+
+
+                }
+                let this_tr = ''
+                for (let n_index = 0; n_index < not_counted.length; n_index++) {
+                    let element = not_counted[n_index];
+                    let barcode,item_ref,name,count_qty,av_qty,qty_diff,comment,comment_class
+                    barcode = element['barcode']
+                    item_ref = element['item_ref']
+                    name = element['desription']
+                    comment = element['comment']
+                    count_qty = parseFloat(element['counted']).toFixed(2)
+                    av_qty = parseFloat(element['av_qty']).toFixed(2)
+                    qty_diff = parseFloat(element['qty_diff']).toFixed(2)
+                    let diff_val = parseFloat(element['diff_val']).toFixed(2)
+                    let pk = element['pk']
+
+                    g_count += parseFloat(count_qty)
+                    g_sys += parseFloat(av_qty)
+                    g_dif += parseFloat(qty_diff)
+                    v_dif += parseFloat(diff_val)
+
+                    let text = ''
+                    if(qty_diff < 0){
+                        text = 'text-danger'
+                    }
+
+                    comment_class = 'bi-bell-slash'
+                    if(comment.length > 0){
+                        // there is comment
+                        comment_class = 'bi-bell'
+                    }
+
+
+                    let this_tr = `<tr class='${text}'>
+                                <td><small><i class="bi-square"></i> <i class="bi ${comment_class} pointer" onclick="cmms.countComment('${pk}','${comment}')"></i></small><td><small>${item_ref}</small></td><td><small>${barcode}</small></td><td><small>${name}</small></td><td><small>${count_qty}</small></td><td><small>${av_qty}</small></td><td><small>${qty_diff}</small></td>
+                                <td><small>${diff_val}</small></td>
+                           </tr>`
+                    tr += this_tr
+                    if(n_index === 1){
+                        console.table(this_tr)
+                    }
+
+
+
+                }
+
+
+                html = `<table class='table table-striped table-hover table-sm table-responsive datatable'>
+                <thead>
+                  <tr><th>CH</th><th>ITEM REF</th><th>BARCODE</th><th>DESCRIPTION</th><th>PHY</th><th>SYS</th><th>QTY DIFF</th><th>VAL DIFF</th></tr>
+                </thead>
+                <tbody >
+                <tr class='text-primary'><td colspan='4'>SUMMARY</td><td><small>${g_count}</small></td><td><small>${g_sys}</small></td><td><small>${g_dif}</small></td><td><small>${v_dif.toFixed(2)}</small></td></tr>
+                  ${tr}
+                </tbody>
+              </table>`
+                $('#tot_count').text(g_count)
+                $('#sys_count').text(g_sys)
+                $('#qty_diff').text(g_dif)
+                $('#val_diff').text(v_dif.toFixed(2))
+
+
+
+            }
+            else if (selectPreview === 'excel'){
+                $('#g_modal_title').html("Download File")
+                html = `<a target="_blank" href='/${response['message']}'>DOWNLOAD FILE</a>`
+            }
+
+        }
+        else {
+
+            html = response['message']
+        }
+
+        // Rest of your code here
+        // $('#g_modal_size').addClass('modal-xl');
+        // $('#g_modal_body').html(html);
+        $('#devsBody').html(html);
+        // $('#g_modal').modal('show');
+        // Rest of your code here
+    }
+
+    countComment(pk,aleady_comment=''){
+        Swal.fire({
+        title: 'Enter Comment',
+        input: 'textarea',
+            inputValue:aleady_comment,
+        inputAttributes: {
+          required: 'true',
+          placeholder: 'Enter your comment here...'
+        },
+        showCancelButton: true,
+        confirmButtonText: 'Submit',
+        preConfirm: (comment) => {
+          // Validate the input
+          if (!comment) {
+            Swal.showValidationMessage('Please enter a comment');
+          } else {
+            // Make API call with the payload
+            const payload = {
+                "module":"stock",
+                "data":{
+                    'stage':'comment',
+                    "comment_pk": pk,
+                    "comment": comment
+                }
+            };
+            let response = api.call('PUT',payload,'/cmms/api/')
+              alert(response['message'])
+          }
+        }
+      });
+    }
+
+
+    compareTrigger(pk) {
+        let groups = cmms.productGroups()
+        // console.table(groups)
+        let g_opt = ''
+        if(groups['status_code'] === 200){
+            let g_message,g_count,g_grps
+            g_message = groups['message']
+            g_grps = g_message['groups']
+            g_count = g_message['counts']
+
+            for (let i = 0; i < g_count; i++) {
+                let el = g_grps[i]
+                g_opt += `<option value="${el['code']}">${el['name']}</option>`
+            }
+
+        }
+        Swal.fire({
+      title: 'Select Date',
+      html: `<select class="form-control w-50 mx-auto mb-2" id="group">${g_opt}</select><input type="date" id="swal-date" class="swal2-input">`,
+      showCancelButton: true,
+      confirmButtonText: 'OK',
+      preConfirm: () => {
+        const selectedDate = $('#swal-date').val();
+        const selectedGroup = $('#group').val()
+
+        if (selectedDate === '') {
+          Swal.showValidationMessage('Please select a date');
+        }
+        if (selectedGroup === '') {
+          Swal.showValidationMessage('Please select Group');
+        }
+        return {
+            'date':selectedDate,
+            'group':selectedGroup,
+
+        };
+      }
+    }).then((result) => {
+      if (result.isConfirmed) {
+          // console.table(result)
+        const selectedDate = result.value.date;
+        const selectedGroup = result.value.group
+
+        const formattedDate = new Date(selectedDate).toISOString().split('T')[0];
+
+
+        // console.table(payload)
+
+        let link = `/cmms/compare/${pk}/${formattedDate}/${selectedGroup}/`;
+        window.location.href = link
+      }
+    });
+
+
+
+    }
+
+
+
 
 }
 

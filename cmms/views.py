@@ -62,9 +62,16 @@ def stock_count(request):
     }
     return render(request, 'cmms/stock-take.html', context=context)
 
+
 @login_required()
-def compare(request,pk,as_of):
-    return render(request,'cmms/compare.html',context={})
+def compare(request, pk, as_of,group):
+    return render(request, 'cmms/compare.html', context={
+        'nav': True,
+        'as_of': as_of,
+        'pk': pk,
+        'group': group
+    })
+
 
 @csrf_exempt
 def api(request):
@@ -148,7 +155,8 @@ def api(request):
                                     'quantity': tran.quantity,
                                     'price': tran.sell_price,
                                     'value': tran.quantity * tran.sell_price,
-                                    'owner': tran.owner
+                                    'owner': tran.owner,
+                                    'comment': tran.comment
                                 }
                                 arr.append(obj)
                             response['message'] = {
@@ -178,6 +186,7 @@ def api(request):
                                 sheet[f'F1'] = "QUANTITY DIFFERENCE"
                                 sheet[f'G1'] = "SELLING PRICE"
                                 sheet[f'H1'] = "VALUE DIFFERENCE"
+                                sheet[f'I1'] = "COMMENT"
 
                                 tot_phy = Decimal(0.00)
                                 tot_sys = Decimal(0.00)
@@ -242,11 +251,17 @@ def api(request):
                                         # check if there is item with ref
 
                                         counted = 0.00
+                                        el_pk = 0
+                                        comment = 'not counted'
                                         if StockCountTrans.objects.filter(item_ref=itemRref,
                                                                           stock_count_hd=stock_hd).exists():
                                             counted = StockCountTrans.objects.filter(item_ref=itemRref,
                                                                                      stock_count_hd=stock_hd).aggregate(
                                                 total=Sum('quantity'))['total']
+                                            oc_item = StockCountTrans.objects.filter(item_ref=itemRref,
+                                                                                     stock_count_hd=stock_hd).last()
+                                            comment = oc_item.comment
+                                            el_pk = oc_item.pk
 
                                         diff_qty = Decimal(counted) - Decimal(a_q)
                                         obj = {
@@ -258,9 +273,9 @@ def api(request):
                                             'qty_diff': diff_qty,
                                             'sell_price': sell_price,
                                             'diff_val': diff_qty * Decimal(sell_price),
+                                            'comment': comment,
+                                            'pk':el_pk
                                         }
-
-
 
                                         if doc == 'preview':
                                             if counted > 0:
@@ -279,6 +294,7 @@ def api(request):
                                             sheet[f'F{row_c}'] = diff_qty
                                             sheet[f'G{row_c}'] = sell_price
                                             sheet[f'H{row_c}'] = diff_qty * Decimal(sell_price)
+                                            sheet[f'I{row_c}'] = comment
 
                                             tot_phy += Decimal(counted)
                                             tot_sys += Decimal(str(a_q))
@@ -296,7 +312,7 @@ def api(request):
                                     sheet['F2'] = tot_qdif
                                     sheet['G2'] = "-"
                                     sheet['H2'] = tot_vdif
-                                    file = f"static/general/tmp/{date.today()}_{stock_hd.loc}_{g_name.strip().replace(' ','_')}.xlsx"
+                                    file = f"static/general/tmp/{date.today()}_{stock_hd.loc}_{g_name.strip().replace(' ', '_')}.xlsx"
                                     workbook.save(file)
                                     response['message'] = file
 
@@ -371,6 +387,18 @@ def api(request):
                         response['status_code'] = 404
                         response['status'] = 'error'
                         response['message'] = f"could not find item with ref {item_ref}"
+                elif stage == 'comment':
+                    comment_pk = data.get('comment_pk')
+                    comment = data.get('comment')
+
+                    if StockCountTrans.objects.filter(pk=comment_pk).count() == 1:
+                        # update
+                        coun = StockCountTrans.objects.get(pk=comment_pk)
+                        coun.comment = comment
+                        coun.save()
+                        response['message'] = "Comment Updated"
+                    else:
+                        response['message'] = f"No count with pk as {comment_pk}"
 
         elif method == 'PATCH':
             if module == 'stock':

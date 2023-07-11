@@ -55,6 +55,7 @@ class StockCountTrans(models.Model):
     quantity = models.DecimalField(max_digits=10, decimal_places=3)
     sell_price = models.DecimalField(max_digits=10, decimal_places=3)
     value = models.DecimalField(max_digits=10, decimal_places=3)
+    comment = models.TextField(default='null')
     
     owner = models.TextField(default='Ananymouse')
 

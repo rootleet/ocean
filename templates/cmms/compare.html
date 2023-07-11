@@ -1,0 +1,121 @@
+{% extends 'cmms/base.html' %}
+
+{% block cmms %}
+ <div class="w-100 h-100">
+
+    <div style="height: 20%" class="pb-3 w-100">
+        <div class="container-fluid p-0 h-100">
+            <div class="row h-100">
+                <!-- COUNT -->
+                <div class="col-sm-3 h-100">
+                    <div class="card bg-primary h-100">
+                        <div class="card-header bg-primary">
+                            <strong class="card-title text-light">TOTAL COUNT</strong>
+                            <kbd onclick="exportExcel()" class="pointer">EXPORT</kbd>
+                        </div>
+                        <div class="card-body bg-light">
+                            <div class="w-100 text-primary h-100 d-flex flex-wrap align-content-center justify-content-center">
+                                <strong id="tot_count"></strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- SYSTEM -->
+                <div class="col-sm-3 h-100">
+                    <div class="card h-100 bg-secondary">
+                        <div class="card-header bg-secondary">
+                            <strong class="card-title text-light">SYS QTY</strong>
+                        </div>
+                        <div class="card-body bg-light">
+                            <div class="w-100 h-100 text-secondary d-flex flex-wrap align-content-center justify-content-center">
+                                <strong id="sys_count"></strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- QTY DIFF -->
+                <div class="col-sm-3 h-100">
+                    <div class="card bg-warning h-100">
+                        <div class="card-header bg-info">
+                            <strong class="card-title text-dark">QTY DIFF</strong>
+                        </div>
+                        <div class="card-body bg-light">
+                            <div class="w-100 h-100 text-info d-flex flex-wrap align-content-center justify-content-center">
+                                <strong id="qty_diff"></strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- VALUE DIFFERENT -->
+                <div class="col-sm-3 h-100">
+                    <div class="card bg-danger h-100">
+                        <div class="card-header bg-danger">
+                            <strong class="card-title text-light">VAL DIFF</strong>
+                        </div>
+                        <div class="card-body bg-light">
+                            <div class="w-100 text-danger h-100 d-flex flex-wrap align-content-center justify-content-center">
+                                <strong id="val_diff"></strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div style="height: 80%" class="card w-100 overflow-auto">
+
+        <div class="h-100 p-0">
+                <div class="w-100 h-100">
+                    <div class="card p-2 h-100 recent-sales overflow-auto">
+
+
+
+                        <div id="devsBody" class="card-body h-100 overflow-hidden">
+
+
+                        </div>
+
+
+
+                      </div>
+                </div>
+            </div>
+
+    </div>
+
+ </div>
+
+    <script>
+        let fdate = new Date(`{{ as_of }}`).toISOString().split('T')[0];
+        let pk = `{{ pk }}`
+        let group = `{{ group }}`
+
+        cmms.compareAlone(fdate,'preview',pk,group)
+
+        function exportExcel(){
+
+            let payload = {
+              "module": "stock",
+              "data": {
+                  "stage":"export",
+                "compare":"final_compare",
+                "as_of":fdate,
+                "doc":'excel',
+                "pk":pk,
+                "group":group
+              }
+            };
+
+            let response = api.call('VIEW',payload,'/cmms/api/')
+            if(response['status_code'] === 200){
+                alert(`<a href="/${response['message']}">DOWNLOAD FILE</a>`)
+            } else {
+                alert(response['message'])
+            }
+
+
+    }
+
+    </script>
+{% endblock %}
