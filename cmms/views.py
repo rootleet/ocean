@@ -213,7 +213,8 @@ def api(request):
                                 cursor.execute(query)
                                 header = {
                                     'location': stock_hd.loc,
-                                    'remark': stock_hd.remark
+                                    'remark': stock_hd.remark,
+                                    'group':g_name
                                 }
                                 arr = []
                                 not_arr = []
