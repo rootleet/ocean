@@ -635,7 +635,7 @@ class Cmms {
 
 
                     tr += `<tr class='${text}'>
-                                <td><small><i class="bi-check-square"></i> <i title="${tooltip}" class="bi ${comment_class}" onclick="cmms.countComment('${pk}','${comment}')"></small><td><small>${item_ref}</small></td><td><small>${barcode}</small></td><td><small>${name}</small></td><td><small>${count_qty}</small></td><td><small>${av_qty}</small></td><td><small>${qty_diff}</small></td>
+                                <td><small><i class="bi-check-square"></i> <i title="${tooltip}" class="bi ${comment_class}" onclick="cmms.countComment('${pk}','${comment}','${barcode}')"></small><td><small>${item_ref}</small></td><td><small>${barcode}</small></td><td><small>${name}</small></td><td><small>${count_qty}</small></td><td><small>${av_qty}</small></td><td><small>${qty_diff}</small></td>
                                 <td><small>${diff_val}</small></td>
                             </tr>`
 
@@ -675,7 +675,7 @@ class Cmms {
 
 
                     let this_tr = `<tr class='${text}'>
-                                <td><small><i class="bi-square"></i> <i title="${tooltip}" class="bi ${comment_class} pointer" onclick="cmms.countComment('${pk}','${comment}')"></i></small><td><small>${item_ref}</small></td><td><small>${barcode}</small></td><td><small>${name}</small></td><td><small>${count_qty}</small></td><td><small>${av_qty}</small></td><td><small>${qty_diff}</small></td>
+                                <td><small><i class="bi-square"></i> <i title="${tooltip}" class="bi ${comment_class} pointer" onclick="cmms.countComment('${pk}','${comment}','${barcode}')"></i></small><td><small>${item_ref}</small></td><td><small>${barcode}</small></td><td><small>${name}</small></td><td><small>${count_qty}</small></td><td><small>${av_qty}</small></td><td><small>${qty_diff}</small></td>
                                 <td><small>${diff_val}</small></td>
                            </tr>`
                     tr += this_tr
@@ -727,9 +727,9 @@ class Cmms {
         // Rest of your code here
     }
 
-    countComment(pk,aleady_comment=''){
+    countComment(pk,aleady_comment='', barcode = ''){
         Swal.fire({
-        title: 'Enter Comment',
+        title: `Enter Comment for ${barcode}`,
         input: 'textarea',
             inputValue:aleady_comment,
         inputAttributes: {
