@@ -590,6 +590,9 @@ class Cmms {
                 message = response['message']
                 trans = message['trans']
                 header = message['header']
+                let remark = header['remark'];
+                let loc = header['location'];
+                let group = header['group']
                 let g_count,g_sys,g_dif,v_dif
                 g_count = 0;g_sys=0;g_dif=0,v_dif=0
                 $('#g_modal_title').html(`STOCK COMPARE as of ${formattedDate}<br><strong>LOC : </strong> ${header['location']} <br><strong>REMARKS : </strong> ${header['remark']}`)
@@ -698,6 +701,9 @@ class Cmms {
                 $('#sys_count').text(g_sys)
                 $('#qty_diff').text(g_dif)
                 $('#val_diff').text(v_dif.toFixed(2))
+                $('#remark').val(remark)
+                $('#loc').text(loc)
+                $('#group').text(group)
 
 
 
