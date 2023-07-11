@@ -391,11 +391,13 @@ def api(request):
                 elif stage == 'comment':
                     comment_pk = data.get('comment_pk')
                     comment = data.get('comment')
+                    issue = data.get('issue')
 
                     if StockCountTrans.objects.filter(pk=comment_pk).count() == 1:
                         # update
                         coun = StockCountTrans.objects.get(pk=comment_pk)
                         coun.comment = comment
+                        coun.issue = issue
                         coun.save()
                         response['message'] = "Comment Updated"
                     else:
