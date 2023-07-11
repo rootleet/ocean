@@ -7,11 +7,11 @@
         <div class="container-fluid p-0 h-100">
             <div class="row h-100">
                 <!-- COUNT -->
-                <div class="col-sm-3 h-100">
+                <div class="col-sm-2 h-100">
                     <div class="card bg-primary h-100">
                         <div class="card-header bg-primary">
                             <strong class="card-title text-light">TOTAL COUNT</strong>
-                            <kbd onclick="exportExcel()" class="pointer">EXPORT</kbd>
+
                         </div>
                         <div class="card-body bg-light">
                             <div class="w-100 text-primary h-100 d-flex flex-wrap align-content-center justify-content-center">
@@ -21,7 +21,7 @@
                     </div>
                 </div>
                 <!-- SYSTEM -->
-                <div class="col-sm-3 h-100">
+                <div class="col-sm-2 h-100">
                     <div class="card h-100 bg-secondary">
                         <div class="card-header bg-secondary">
                             <strong class="card-title text-light">SYS QTY</strong>
@@ -34,7 +34,7 @@
                     </div>
                 </div>
                 <!-- QTY DIFF -->
-                <div class="col-sm-3 h-100">
+                <div class="col-sm-2 h-100">
                     <div class="card bg-warning h-100">
                         <div class="card-header bg-info">
                             <strong class="card-title text-dark">QTY DIFF</strong>
@@ -48,7 +48,7 @@
                 </div>
 
                 <!-- VALUE DIFFERENT -->
-                <div class="col-sm-3 h-100">
+                <div class="col-sm-2 h-100">
                     <div class="card bg-danger h-100">
                         <div class="card-header bg-danger">
                             <strong class="card-title text-light">VAL DIFF</strong>
@@ -60,6 +60,25 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- TOOLS AND DETAILS -->
+                <div class="col-sm-4 h-100">
+                    <div class="card p-0 h-100">
+                        <div class="card-body d-flex flex-wrap align-content-center p-1 h-100">
+                            <table class="table table-bordered m-0 table-sm">
+                                <tr><td><strong>LOC</strong></td><td>111</td></tr>
+                                <tr><td><strong>GROUP</strong></td><td>111</td></tr>
+                                <tr><td><strong>TOOLS</strong></td><td>
+                                    <div class="w-100 d-flex">
+                                        <button onclick="exportExcel()" class="rounded-0 btn btn-sm btn-primary">EXPORT</button>
+                                        <button id="remarks" onclick="alert(this.value)" class="rounded-0 btn btn-sm btn-info">REMARKS</button>
+                                    </div>
+                                </td></tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
