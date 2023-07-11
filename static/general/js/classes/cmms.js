@@ -727,37 +727,47 @@ class Cmms {
         // Rest of your code here
     }
 
-    countComment(pk,aleady_comment='', barcode = ''){
-        Swal.fire({
-        title: `Enter Comment for ${barcode}`,
-        input: 'textarea',
-            inputValue:aleady_comment,
-        inputAttributes: {
-          required: 'true',
-          placeholder: 'Enter your comment here...'
-        },
+    countComment(pk, already_comment = '', barcode = '') {
+      Swal.fire({
+        title: ``,
+        html: `Enter Comment for ${barcode} <hr>
+          <select class="form-control mb-2 mt-2" id="comment-type" required>
+            <option value="">Select Comment Type</option>
+            <option value="wr_entry">Wrong Entry</option>
+            <option value="sys_error">System Error</option>
+            <option value="unknown">Unknown</option>
+          </select>
+          <textarea id="comment-textarea" class="form-control" required placeholder="Enter your comment here...">${already_comment}</textarea>
+        `,
         showCancelButton: true,
         confirmButtonText: 'Submit',
-        preConfirm: (comment) => {
+        preConfirm: () => {
+          const commentType = document.getElementById('comment-type').value;
+          const comment = document.getElementById('comment-textarea').value;
+
           // Validate the input
-          if (!comment) {
-            Swal.showValidationMessage('Please enter a comment');
+          if (!commentType || !comment) {
+            Swal.showValidationMessage('Please select a comment type and enter a comment');
           } else {
             // Make API call with the payload
             const payload = {
-                "module":"stock",
-                "data":{
-                    'stage':'comment',
-                    "comment_pk": pk,
-                    "comment": comment
-                }
+              module: 'stock',
+              data: {
+                stage: 'comment',
+                comment_pk: pk,
+                issue: commentType,
+                comment: comment
+              }
             };
-            let response = api.call('PUT',payload,'/cmms/api/')
+            let response = api.call('PUT', payload, '/cmms/api/')
               alert(response['message'])
           }
         }
       });
     }
+
+
+
 
 
     compareTrigger(pk) {
