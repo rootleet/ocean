@@ -735,6 +735,7 @@ class Cmms {
             <option value="">Select Comment Type</option>
             <option value="wr_entry">Wrong Entry</option>
             <option value="sys_error">System Error</option>
+            <option value="lost">Lost</option>
             <option value="unknown">Unknown</option>
           </select>
           <textarea id="comment-textarea" class="form-control" required placeholder="Enter your comment here...">${already_comment}</textarea>
