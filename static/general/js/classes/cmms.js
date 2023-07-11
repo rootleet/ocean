@@ -618,9 +618,11 @@ class Cmms {
                     v_dif += parseFloat(diff_val)
 
                     comment_class = 'bi-bell-fill text-info'
+                    let tooltip = comment;
                     if(comment.length < 0 || comment === 'null'){
                         // there is comment
                         comment_class = 'bi-bell'
+                        tooltip = ''
                     }
 
                     let text = ''
@@ -630,7 +632,7 @@ class Cmms {
 
 
                     tr += `<tr class='${text}'>
-                                <td><small><i class="bi-check-square"></i> <i title="${comment}" class="bi ${comment_class}" onclick="cmms.countComment('${pk}','${comment}')"></small><td><small>${item_ref}</small></td><td><small>${barcode}</small></td><td><small>${name}</small></td><td><small>${count_qty}</small></td><td><small>${av_qty}</small></td><td><small>${qty_diff}</small></td>
+                                <td><small><i class="bi-check-square"></i> <i title="${tooltip}" class="bi ${comment_class}" onclick="cmms.countComment('${pk}','${comment}')"></small><td><small>${item_ref}</small></td><td><small>${barcode}</small></td><td><small>${name}</small></td><td><small>${count_qty}</small></td><td><small>${av_qty}</small></td><td><small>${qty_diff}</small></td>
                                 <td><small>${diff_val}</small></td>
                             </tr>`
 
@@ -660,15 +662,17 @@ class Cmms {
                         text = 'text-danger'
                     }
 
-                    comment_class = 'bi-bell-fill text-info'
+                    comment_class = 'bi-bell-fill text-info';
+                    let tooltip = comment;
                     if(comment.length < 0 || comment === 'null'){
                         // there is comment
                         comment_class = 'bi-bell'
+                        tooltip = ''
                     }
 
 
                     let this_tr = `<tr class='${text}'>
-                                <td><small><i class="bi-square"></i> <i title="${comment}" class="bi ${comment_class} pointer" onclick="cmms.countComment('${pk}','${comment}')"></i></small><td><small>${item_ref}</small></td><td><small>${barcode}</small></td><td><small>${name}</small></td><td><small>${count_qty}</small></td><td><small>${av_qty}</small></td><td><small>${qty_diff}</small></td>
+                                <td><small><i class="bi-square"></i> <i title="${tooltip}" class="bi ${comment_class} pointer" onclick="cmms.countComment('${pk}','${comment}')"></i></small><td><small>${item_ref}</small></td><td><small>${barcode}</small></td><td><small>${name}</small></td><td><small>${count_qty}</small></td><td><small>${av_qty}</small></td><td><small>${qty_diff}</small></td>
                                 <td><small>${diff_val}</small></td>
                            </tr>`
                     tr += this_tr
