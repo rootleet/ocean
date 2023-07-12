@@ -346,7 +346,10 @@ def api(request):
                                     sheet['F2'] = tot_qdif
                                     sheet['G2'] = "-"
                                     sheet['H2'] = tot_vdif
-                                    file = f"static/general/tmp/{date.today()}_{stock_hd.loc}_{g_name.strip().replace(' ', '_')}.xlsx"
+                                    from datetime import datetime
+                                    current_datetime = datetime.now()
+                                    formatted_datetime = current_datetime.strftime("%Y%m%d%H%M%S")
+                                    file = f"static/general/tmp/{stock_hd.loc}_{g_name.strip().replace(' ', '_')}_AS_OF_{as_of}_{formatted_datetime}.xlsx"
                                     workbook.save(file)
                                     response['message'] = file
 
