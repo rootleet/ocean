@@ -134,5 +134,12 @@ $(document).ready(function () { // wait for the document to finish loading
         }
       });
 
+    // infographic
+    $('#infographic').click(function () {
+        $('#more').modal('show');
+        maximizeBrowserWindow();
+        setTimeout(exitFullscreen, 3000);
+    });
+
 });
 

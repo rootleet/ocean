@@ -41,15 +41,15 @@
                           type: 'pie',
                           radius: '50%',
                           data: [{
-                              value: 100,
+                              value: {{ wrong_entries }},
                               name: 'WRONG ENTRIES'
                             },
                             {
-                              value: 200,
+                              value: {{ sys_error }},
                               name: 'SYSTEM ERROR'
                             },
                             {
-                              value: 500,
+                              value: {{ lost }},
                               name: 'LOST'
                             },
 
@@ -176,7 +176,7 @@
                                     <div class="w-100 d-flex">
                                         <button onclick="exportExcel()" class="rounded-0 btn btn-sm btn-primary">EXPORT</button>
                                         <button id="remarks" onclick="alert(this.value)" class="rounded-0 btn btn-sm btn-info">REMARKS</button>
-                                        <button data-bs-toggle="modal" data-bs-target="#more" class="btn btn-info btn-info"><i class="bi bi-pie-chart-fill"></i></button>
+                                        <button id="infographic" class="btn btn-info btn-info"><i class="bi bi-pie-chart-fill"></i></button>
                                     </div>
                                 </td></tr>
                             </table>

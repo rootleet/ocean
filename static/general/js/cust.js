@@ -335,6 +335,16 @@ function maximizeBrowserWindow() {
   }
 }
 
+function exitFullscreen() {
+  var doc = window.document;
+
+  var exitFullScreen = doc.exitFullscreen || doc.mozCancelFullScreen || doc.webkitExitFullscreen || doc.msExitFullscreen;
+
+  if (exitFullScreen) {
+    exitFullScreen.call(doc);
+  }
+}
+
 
 
 

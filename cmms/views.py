@@ -64,20 +64,23 @@ def stock_count(request):
 
 
 @login_required()
-def compare(request, pk, as_of,group):
+def compare(request, pk, as_of, group):
     # get counts
-    wrong_entries = StockCountTrans.objects.filter(stock_count_hd_id=pk,issue__in='wr_entry').count()
-    sys_error = StockCountTrans.objects.filter(stock_count_hd_id=pk,issue__in='sys_error').count()
-    lost = StockCountTrans.objects.filter(stock_count_hd_id=pk,issue__in='lost').count()
-    unknown = StockCountTrans.objects.filter(stock_count_hd_id=pk,issue__in='unknown').count()
+    hd = StockCountHD.objects.get(pk=pk)
+    wrong_entries = StockCountTrans.objects.filter(stock_count_hd=hd, issue__in='wr_entry').count()
+    sys_error = StockCountTrans.objects.filter(stock_count_hd=hd, issue__in='sys_error').count()
+    lost = StockCountTrans.objects.filter(stock_count_hd=hd, issue__in='lost').count()
+    unknown = StockCountTrans.objects.filter(stock_count_hd=hd, issue__in='unknown').count()
     return render(request, 'cmms/compare.html', context={
         'nav': True,
         'as_of': as_of,
         'pk': pk,
         'group': group,
-        'entries':{
-            'wrong_entries':wrong_entries
-        }
+        'wrong_entries': wrong_entries,
+        'sys_error': sys_error,
+        'lost': lost,
+        'unknown': unknown,
+
     })
 
 
@@ -222,7 +225,7 @@ def api(request):
                                 header = {
                                     'location': stock_hd.loc,
                                     'remark': stock_hd.remark,
-                                    'group':g_name
+                                    'group': g_name
                                 }
                                 arr = []
                                 not_arr = []
@@ -283,7 +286,7 @@ def api(request):
                                             'sell_price': sell_price,
                                             'diff_val': diff_qty * Decimal(sell_price),
                                             'comment': comment,
-                                            'pk':el_pk
+                                            'pk': el_pk
                                         }
 
                                         if doc == 'preview':
