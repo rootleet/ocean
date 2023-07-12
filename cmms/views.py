@@ -65,11 +65,19 @@ def stock_count(request):
 
 @login_required()
 def compare(request, pk, as_of,group):
+    # get counts
+    wrong_entries = StockCountTrans.objects.filter(stock_count_hd_id=pk,issue__in='wr_entry').count()
+    sys_error = StockCountTrans.objects.filter(stock_count_hd_id=pk,issue__in='sys_error').count()
+    lost = StockCountTrans.objects.filter(stock_count_hd_id=pk,issue__in='lost').count()
+    unknown = StockCountTrans.objects.filter(stock_count_hd_id=pk,issue__in='unknown').count()
     return render(request, 'cmms/compare.html', context={
         'nav': True,
         'as_of': as_of,
         'pk': pk,
-        'group': group
+        'group': group,
+        'entries':{
+            'wrong_entries':wrong_entries
+        }
     })
 
 
