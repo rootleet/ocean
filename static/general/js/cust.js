@@ -321,3 +321,20 @@ function load_convo_message() {
     })
 }
 
+
+// Restore and maximize the browser window
+// Maximize the browser window using Fullscreen API
+function maximizeBrowserWindow() {
+  var doc = window.document;
+  var docEl = doc.documentElement;
+
+  var requestFullScreen = docEl.requestFullscreen || docEl.mozRequestFullScreen || docEl.webkitRequestFullScreen || docEl.msRequestFullscreen;
+
+  if (requestFullScreen) {
+    requestFullScreen.call(docEl);
+  }
+}
+
+
+
+

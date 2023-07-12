@@ -1,6 +1,110 @@
 {% extends 'cmms/base.html' %}
 
 {% block cmms %}
+    <div class="modal" id="more">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <strong class="modal-title">INFOGRAPHIC</strong>
+                </div>
+                <div class="modal-body" style="height: 75vh">
+
+                    <div class="container-fluid">
+        <div class="row" style="min-height:  400px">
+
+            <!-- ISSUES STATS -->
+            <div class="col-lg-6">
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">Pie Chart {{ ussettings.count }}</h5>
+
+                  <!-- Pie Chart -->
+                  <div id="infopie" style="min-height: 400px;" class="echart"></div>
+
+                  <script>
+                    document.addEventListener("DOMContentLoaded", () => {
+                      echarts.init(document.querySelector("#infopie")).setOption({
+                        title: {
+                          text: 'REASON TYPES',
+                          subtext: 'categories of resons',
+                          left: 'center'
+                        },
+                        tooltip: {
+                          trigger: 'item'
+                        },
+                        legend: {
+                          orient: 'vertical',
+                          left: 'left'
+                        },
+                        series: [{
+                          name: 'INFOGRAPHIC OF STOCK COUNT',
+                          type: 'pie',
+                          radius: '50%',
+                          data: [{
+                              value: 100,
+                              name: 'WRONG ENTRIES'
+                            },
+                            {
+                              value: 200,
+                              name: 'SYSTEM ERROR'
+                            },
+                            {
+                              value: 500,
+                              name: 'LOST'
+                            },
+
+                          ],
+                          emphasis: {
+                            itemStyle: {
+                              shadowBlur: 10,
+                              shadowOffsetX: 0,
+                              shadowColor: 'rgba(0, 0, 0, 0.5)'
+                            }
+                          }
+                        }]
+                      });
+                    });
+                  </script>
+                  <!-- End Pie Chart -->
+
+                </div>
+              </div>
+            </div>
+
+            {% if perms.admin_panel.view_sales %}
+            <!-- TOTAL SALES -->
+            <div style="height: 450px" class="col-lg-6">
+                <div class="card h-100">
+                    <div class="card-header">
+
+                        <div class="w-100 h-100 d-flex flex-wrap">
+                            <div class="w-50 h-100 d-flex flex-wrap align-content-center">
+                                <h5 class="card-title">Total Without Tax</h5>
+                            </div>
+                            <div class="w-50 h-100 d-flex flex-wrap align-content-center justify-content-end">
+                                <button onclick="sales.salesSummary()" style="border-radius: 0 !important" class="btn btn-info rounded-0">SUMMARY</button>
+                                <button onclick="sales.detailSales()" style="border-radius: 0 !important" class="btn btn-warning rounded-0">DETAILED</button>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="card-body">
+                        <div class="w-100 h-100 d-flex flex-wrap align-content-center justify-content-center">
+
+                            <strong class="display-1">{{ sales.total }}</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+        </div>
+    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
  <div class="w-100 h-100">
 
     <div style="height: 20%" class="pb-3 w-100">
@@ -72,6 +176,7 @@
                                     <div class="w-100 d-flex">
                                         <button onclick="exportExcel()" class="rounded-0 btn btn-sm btn-primary">EXPORT</button>
                                         <button id="remarks" onclick="alert(this.value)" class="rounded-0 btn btn-sm btn-info">REMARKS</button>
+                                        <button data-bs-toggle="modal" data-bs-target="#more" class="btn btn-info btn-info"><i class="bi bi-pie-chart-fill"></i></button>
                                     </div>
                                 </td></tr>
                             </table>
