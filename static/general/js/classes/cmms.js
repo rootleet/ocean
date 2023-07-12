@@ -582,7 +582,7 @@ class Cmms {
 
         let response = api.call('VIEW',payload,'/cmms/api/')
         // console.table(response)
-        let message,trans,header
+        let message,trans,header,entries,values
         let html = '';
         if(response['status_code'] === 200){
             if(selectPreview === 'preview'){
@@ -590,6 +590,10 @@ class Cmms {
                 message = response['message']
                 trans = message['trans']
                 header = message['header']
+                entries = header['entries']
+                values = header['entries']
+
+
                 let remark = header['remark'];
                 let loc = header['location'];
                 let group = header['group']
@@ -725,6 +729,8 @@ class Cmms {
         $('#devsBody').html(html);
         // $('#g_modal').modal('show');
         // Rest of your code here
+
+        return header;
     }
 
     countComment(pk, already_comment = '', barcode = '') {

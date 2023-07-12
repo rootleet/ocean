@@ -1,105 +1,63 @@
 {% extends 'cmms/base.html' %}
-
+<style>
+    .modal-fullscreen{width:100vw;max-width:none;height:100%;margin:0}
+</style>
 {% block cmms %}
     <div class="modal" id="more">
-        <div class="modal-dialog modal-xl">
-            <div class="modal-content">
+        <div class="modal-dialog modal-dialog-scrollable modal-fullscreen" style="width: 100% !important">
+            <div class="modal-content" style="width: 100% !important">
                 <div class="modal-header">
                     <strong class="modal-title">INFOGRAPHIC</strong>
+                    <button class="close" data-bs-dismiss="modal">X</button>
                 </div>
-                <div class="modal-body" style="height: 75vh">
+                <div class="modal-body">
 
                     <div class="container-fluid">
-        <div class="row" style="min-height:  400px">
 
-            <!-- ISSUES STATS -->
-            <div class="col-lg-6">
-              <div class="card">
-                <div class="card-body">
-                  <h5 class="card-title">Pie Chart {{ ussettings.count }}</h5>
+                        <div class="row" style="min-height:  400px">
 
-                  <!-- Pie Chart -->
-                  <div id="infopie" style="min-height: 400px;" class="echart"></div>
+                            <!-- ISSUES STATS -->
+                            <div class="col-6">
+                              <div class="card">
+                                  <div class="card-header">
+                                      <button class="btn btn-info">CAPTURE</button>
+                                  </div>
+                                <div class="card-body">
+                                  <h5 class="card-title">Pie Chart {{ ussettings.count }}</h5>
 
-                  <script>
-                    document.addEventListener("DOMContentLoaded", () => {
-                      echarts.init(document.querySelector("#infopie")).setOption({
-                        title: {
-                          text: 'REASON TYPES',
-                          subtext: 'categories of resons',
-                          left: 'center'
-                        },
-                        tooltip: {
-                          trigger: 'item'
-                        },
-                        legend: {
-                          orient: 'vertical',
-                          left: 'left'
-                        },
-                        series: [{
-                          name: 'INFOGRAPHIC OF STOCK COUNT',
-                          type: 'pie',
-                          radius: '50%',
-                          data: [{
-                              value: {{ wrong_entries }},
-                              name: 'WRONG ENTRIES'
-                            },
-                            {
-                              value: {{ sys_error }},
-                              name: 'SYSTEM ERROR'
-                            },
-                            {
-                              value: {{ lost }},
-                              name: 'LOST'
-                            },
+                                  <!-- Pie Chart -->
+                                  <div id="infopie" style="min-height: 400px;" class="echart"></div>
 
-                          ],
-                          emphasis: {
-                            itemStyle: {
-                              shadowBlur: 10,
-                              shadowOffsetX: 0,
-                              shadowColor: 'rgba(0, 0, 0, 0.5)'
-                            }
-                          }
-                        }]
-                      });
-                    });
-                  </script>
-                  <!-- End Pie Chart -->
 
-                </div>
-              </div>
-            </div>
+                                  <!-- End Pie Chart -->
 
-            {% if perms.admin_panel.view_sales %}
-            <!-- TOTAL SALES -->
-            <div style="height: 450px" class="col-lg-6">
-                <div class="card h-100">
-                    <div class="card-header">
-
-                        <div class="w-100 h-100 d-flex flex-wrap">
-                            <div class="w-50 h-100 d-flex flex-wrap align-content-center">
-                                <h5 class="card-title">Total Without Tax</h5>
+                                </div>
+                              </div>
                             </div>
-                            <div class="w-50 h-100 d-flex flex-wrap align-content-center justify-content-end">
-                                <button onclick="sales.salesSummary()" style="border-radius: 0 !important" class="btn btn-info rounded-0">SUMMARY</button>
-                                <button onclick="sales.detailSales()" style="border-radius: 0 !important" class="btn btn-warning rounded-0">DETAILED</button>
+
+                            {% if perms.admin_panel.view_sales %}
+                            <!-- TOTAL SALES -->
+                            <div style="height: 450px" class="col-6">
+
+                                <div class="card">
+                                    <div class="card-body">
+                                          <h5 class="card-title">Bar Chart</h5>
+
+                                          <!-- Bar Chart -->
+                                          <div id="barChart" style="min-height: 400px;" class="echart"></div>
+
+
+                                          <!-- End Bar Chart -->
+
+                                        </div>
+                                  </div>
+
                             </div>
+                            {% endif %}
+
                         </div>
 
                     </div>
-                    <div class="card-body">
-                        <div class="w-100 h-100 d-flex flex-wrap align-content-center justify-content-center">
-
-                            <strong class="display-1">{{ sales.total }}</strong>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {% endif %}
-
-        </div>
-    </div>
 
                 </div>
             </div>
@@ -211,11 +169,54 @@
  </div>
 
     <script>
+        let ops = {
+            title: {
+                                  text: 'REASON TYPES',
+                                  subtext: 'categories of resons',
+                                  left: 'center'
+                                },
+                                tooltip: {
+                                  trigger: 'item'
+                                },
+                                legend: {
+                                  orient: 'vertical',
+                                  left: 'left'
+                                },
+                                series: [{
+                                  name: 'INFOGRAPHIC OF STOCK COUNT',
+                                  type: 'pie',
+                                  radius: '50%',
+                                  data: [{
+                                      value: {{ wrong_entries }},
+                                      name: 'WRONG ENTRIES'
+                                    },
+                                    {
+                                      value: {{ sys_error }},
+                                      name: 'SYSTEM ERROR'
+                                    },
+                                    {
+                                      value: {{ lost }},
+                                      name: 'LOST'
+                                    },
+
+                                  ],
+                                  emphasis: {
+                                    itemStyle: {
+                                      shadowBlur: 10,
+                                      shadowOffsetX: 0,
+                                      shadowColor: 'rgba(0, 0, 0, 0.5)'
+                                    }
+                                  }
+                                }]
+                              }
         let fdate = new Date(`{{ as_of }}`).toISOString().split('T')[0];
         let pk = `{{ pk }}`
         let group = `{{ group }}`
 
-        cmms.compareAlone(fdate,'preview',pk,group)
+        let header = cmms.compareAlone(fdate,'preview',pk,group)
+        let entries = header['entries'];
+        let values = header['values']
+        let group_name = header['group']
 
         function exportExcel(){
 
@@ -240,6 +241,80 @@
 
 
     }
+        let arr = [
+            {value: entries['sys_error'], name: 'SYSTEM ERROR'},
+            {value: entries['wr_entry'], name: 'WRONG ENTRIES'},
+            {value: entries['lost'], name: 'LOST'},
+            {value: entries['unknown'], name: 'UNKNOWN'},
+            {value: entries['not_counted'], name: 'NOT COUNTED'}
+        ]
+
+        let ySeries = [values['sys_error'], values['wr_entry'], values['lost'], values['unknown'], values['not_counted']];
+        let xSeries = [`SE ${values['sys_error']}`, `WE ${values['wr_entry']}`, `LO ${values['lost']}`, `UN ${values['unknown']}`, `NC (${values['not_counted']})`];
+
+
+
+
+
+        console.table(ySeries)
+
 
     </script>
+
+    <!-- PIE JS -->
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+                        echarts.init(document.querySelector("#infopie")).setOption(
+                              {
+                                title: {
+                                  text: group_name,
+                                  subtext: 'categories of resons',
+                                  left: 'center'
+                                },
+                                tooltip: {
+                                  trigger: 'item'
+                                },
+                                legend: {
+                                  orient: 'vertical',
+                                  left: 'left'
+                                },
+                                series: [{
+                                  name: 'INFOGRAPHIC OF STOCK COUNT',
+                                  type: 'pie',
+                                  radius: '50%',
+                                  data: arr,
+                                  emphasis: {
+                                    itemStyle: {
+                                      shadowBlur: 10,
+                                      shadowOffsetX: 0,
+                                      shadowColor: 'rgba(0, 0, 0, 0.5)'
+                                    }
+                                  }
+                                }]
+                              }
+                        );
+                    });
+
+        // BAR FOR VALUES
+        document.addEventListener("DOMContentLoaded", () => {
+            echarts.init(document.querySelector("#barChart")).setOption({
+                xAxis: {
+                    type: 'category',
+                    data: xSeries
+                },
+                yAxis: {
+                    type: 'value'
+                },
+                series: [{
+                    data: ySeries,
+                    type: 'bar'
+                }]
+            });
+        });
+        // BAR FOR VALUES END
+
+    </script>
+
+    <!-- END OF PIE JS -->
 {% endblock %}

@@ -1,4 +1,5 @@
 import json
+import traceback
 from datetime import date
 
 from django.contrib.auth.decorators import login_required
@@ -225,10 +226,24 @@ def api(request):
                                 header = {
                                     'location': stock_hd.loc,
                                     'remark': stock_hd.remark,
-                                    'group': g_name
+                                    'group': g_name.strip()
                                 }
                                 arr = []
                                 not_arr = []
+                                entries = {
+                                    'wr_entry': 0,
+                                    'lost': 0,
+                                    'sys_error': 0,
+                                    'unknown': 0,
+                                    'not_counted': 0
+                                }
+                                values = {
+                                    'wr_entry': 0,
+                                    'lost': 0,
+                                    'sys_error': 0,
+                                    'unknown': 0,
+                                    'not_counted': 0
+                                }
                                 row_c = 2
                                 rows = cursor.fetchall()
                                 for row in rows:
@@ -292,8 +307,13 @@ def api(request):
                                         if doc == 'preview':
                                             if counted > 0:
                                                 arr.append(obj)
+                                                if entries.get(comment) is not None:
+                                                    entries[comment] += 1
+                                                    values[comment] += diff_qty * Decimal(sell_price)
                                             else:
                                                 not_arr.append(obj)
+                                                entries['not_counted'] += 1
+                                                values['not_counted'] += diff_qty * Decimal(sell_price)
 
 
                                         elif doc == 'excel':
@@ -314,6 +334,8 @@ def api(request):
                                             tot_vdif += Decimal(diff_qty) * Decimal(sell_price)
 
                                 if doc == 'preview':
+                                    header['entries'] = entries
+                                    header['values'] = values
                                     response['message'] = {
                                         'header': header, 'trans': {'counted': arr, 'not_counted': not_arr}
                                     }
@@ -338,7 +360,11 @@ def api(request):
             except Exception as e:
                 response['status'] = 'error'
                 response['status_code'] = 505
-                response['message'] = str(e)
+                # Get the line number where the exception occurred
+                line_number = traceback.extract_tb(e.__traceback__)[-1].lineno
+
+                # Set the message with the line number
+                response['message'] = f"Error occurred at line {line_number}: {str(e)}"
 
         elif method == 'PUT':
             if module == 'stock':
