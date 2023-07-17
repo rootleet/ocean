@@ -185,6 +185,10 @@ def api(request):
                         style = data.get('compare')
                         if style == 'final_compare':
                             doc = data.get('doc')
+                            tot_phy = Decimal(0.00)
+                            tot_sys = Decimal(0.00)
+                            tot_qdif = Decimal(0.00)
+                            tot_vdif = Decimal(0.00)
                             if doc == 'excel':
                                 import openpyxl
                                 workbook = openpyxl.Workbook()
@@ -200,10 +204,7 @@ def api(request):
                                 sheet[f'H1'] = "VALUE DIFFERENCE"
                                 sheet[f'I1'] = "COMMENT"
 
-                                tot_phy = Decimal(0.00)
-                                tot_sys = Decimal(0.00)
-                                tot_qdif = Decimal(0.00)
-                                tot_vdif = Decimal(0.00)
+
 
                             # check if there is open stock
                             pk = data.get('pk')
