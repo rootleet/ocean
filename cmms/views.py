@@ -33,6 +33,7 @@ def carjobs(request):
         'nav': True,
         'searchButton': 'carJob'
     }
+    messages.info(request,"Please not, you can only filter data as of 1st April 2023 and forward")
     return render(request, 'cmms/car-jobs.html', context=context)
 
 
