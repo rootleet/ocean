@@ -330,13 +330,16 @@ class Cmms {
             title: 'OPEN STOCK TAKE',
             html:
                 '<input id="location" class="swal2-input" placeholder="Location">' +
-                '<input id="remark" class="swal2-input" placeholder="Remark">',
+                '<input id="remark" class="swal2-input" placeholder="Remark">'+
+                `<input type="file" class="swal2-input" name="frozen" id="frozen">`,
             focusConfirm: false,
             preConfirm: () => {
+
                 const loc = $('#location').val();
                 const remark = $('#remark').val();
+                const frozen = $('#frozen').val()
 
-                if (!loc || !remark) {
+                if (!loc || !remark || !frozen) {
                     Swal.showValidationMessage('Please enter both Location and Remark');
                 } else {
                     let payload = {
@@ -344,7 +347,8 @@ class Cmms {
                         "data": {
                             "stage": "hd",
                             "loc": loc,
-                            "remark": remark
+                            "remark": remark,
+                            'frozen':frozen
                         }
                     };
 
@@ -835,8 +839,28 @@ class Cmms {
     }
 
 
+    loadFrozen() {
+        var fileInput = document.getElementById('frozen');
+        var file = fileInput.files[0]
 
+        if(file){
 
+            var reader = new FileReader();
+
+            reader.onload  = function (e) {
+                clog('OK')
+                var content = e.target.result;
+                var rows = content.split('\n')
+                for (let i = 0; i < rows.length; i++) {
+                    console.log(rows[i])
+                }
+                console.log(content)
+            }
+
+        } else {
+            alert("PLEASE SELECT A FILE")
+        }
+    }
 }
 
 const cmms = new Cmms()

@@ -24,7 +24,8 @@ urlpatterns = [
     path('api/', views.api, name='cmms_api'),
     path('stock/', views.stock, name='stock'),
     path('stock/count/', views.stock_count, name='stock-count'),
-    path('compare/<pk>/<as_of>/<group>/', views.compare, name='compare')
+    path('compare/<pk>/<as_of>/<group>/', views.compare, name='compare'),
+    path('stock/new/',views.new_stock_count,name='new-stock-count')
 
 ]
 

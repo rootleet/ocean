@@ -1,0 +1,26 @@
+{% extends 'cmms/base.html' %}
+{% load static %}
+
+{% block cmms %}
+
+    <div class="w-100 h-100">
+        <div class="h-100 card">
+            <div class="card-header">
+                <div class="w-100 h-100 d-flex flex-wrap">
+                    <div class="w-50 h-100 d-flex flex-wrap">
+                        <input type="text" id="loc" class="form-control w-25 rounded-0" placeholder="loc">
+                        <input type="text" id="remark" class="form-control w-75 rounded-0" placeholder="remark">
+                    </div>
+
+                    <div class="w-50 h-100 d-flex flex-wrap justify-content-end">
+                        <input accept="text/csv" id="frozen" type="file" class="form-control w-50 rounded-0" placeholder="loc">
+                        <button onclick="cmms.loadFrozen()" class="btn btn-info btn-sm w-25">LOAD</button>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
