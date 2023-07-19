@@ -840,26 +840,29 @@ class Cmms {
 
 
     loadFrozen() {
-        var fileInput = document.getElementById('frozen');
-        var file = fileInput.files[0]
+        const fileInput = document.getElementById('csvFileInput');
+          const file = fileInput.files[0];
 
-        if(file){
+          const reader = new FileReader();
+          reader.onload = function (e) {
+            const contents = e.target.result;
+            const lines = contents.split('\r');
 
-            var reader = new FileReader();
+            // Process the CSV data
+            for (let line of lines) {
+              const values = line.split(',');
+              let item_id = values[0].replace('\n','');
+              let qty = values[1];
 
-            reader.onload  = function (e) {
-                clog('OK')
-                var content = e.target.result;
-                var rows = content.split('\n')
-                for (let i = 0; i < rows.length; i++) {
-                    console.log(rows[i])
-                }
-                console.log(content)
+
+
+              ctable({
+                  'item_id':item_id,'qty':qty
+              })
             }
+          };
 
-        } else {
-            alert("PLEASE SELECT A FILE")
-        }
+          reader.readAsText(file);
     }
 }
 
