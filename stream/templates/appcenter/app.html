@@ -50,6 +50,7 @@
                                 <th scope="col">IP</th>
                                 <th scope="col">VERSION</th>
                                   <th scope="col">INFO</th>
+                                  <th scope="col">HEART BEAT</th>
 
                               </tr>
                             </thead>
@@ -60,6 +61,7 @@
                                     <td>{{ assign.mach.ip_address }}</td>
                                     <td>{{ assign.version }}</td>
                                     <td><i class="bi bi-info pointer" onclick="alert(`{{ assign.message }}`)"></i></td>
+                                    <td>{{ assign.last_breath }}</td>
                                   </tr>
                                 {% endfor %}
                             </tbody>
