@@ -844,6 +844,6 @@ def api_function(request):
 
         response["status_code"] = 400
         response["status"] = "Error"
-        response["message"] = f"{e} {traceback.print_exc(limit=1)}"
+        response["message"] = f"{e} {traceback.print_exc(limit=1)} - {traceback.format_exc()}"
 
     return JsonResponse(response)
