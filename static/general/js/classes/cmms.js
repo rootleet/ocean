@@ -20,7 +20,7 @@ class Cmms {
                 "module": "product",
                 "data": {
                     "range": range,
-                    "barcode": barcode,
+                    "item_uni": item_uni,
                     'db_col':db_col
                 }
             }
@@ -857,6 +857,7 @@ class Cmms {
 
 
     loadFrozen() {
+        // $('#loader').modal('show')
         const fileInput = document.getElementById('csvFileInput');
           const file = fileInput.files[0];
 
@@ -864,17 +865,54 @@ class Cmms {
           reader.onload = function (e) {
             const contents = e.target.result;
             const lines = contents.split('\r');
-
+            let tr = ''
             // Process the CSV data
             for (let line of lines) {
               const values = line.split(',');
               let item_id = values[0].replace('\n','');
               let qty = values[1];
 
-              let prod = cmms.getProduct('single',item_id,'item_ref')
+              let prod = cmms.getProduct('single',item_id,'item_ref');
+              let status, message;
+              status = prod['status_code'];
+              message = prod['message'];
 
-              ctable(prod)
+              if(status === 200){
+
+                  let count,trans;
+                  count = message['count'];
+                  trans = message['trans'][0];
+                  if(count === 1){
+
+                      let item_ref, barcode,name;
+                      item_ref = trans['item_ref'];
+                      barcode = trans['barcode'];
+                      name = trans['name'];
+
+                      tr += `<tr><td>${item_ref}</td><td>${barcode}</td><td>${name}</td><td>${qty}</td></tr>`
+                      $('#devsBody').append(`<tr><td>${item_ref}</td><td>${barcode}</td><td>${name}</td><td>${qty}</td></tr>`)
+
+
+                  } else {
+                      clog(`${item_id} not found`)
+                  }
+
+              } else {
+                  tr = message
+              }
+
             }
+
+            let table = `<table class='table table-bordered table-striped table-hover table-sm table-responsive datatable'>
+                <thead>
+                  <tr><th>ITEM REF</th><th>BARCODE</th><th>DESCRIPTION</th><th>FROZEN QTY</th></tr>
+                </thead>
+                <tbody >
+                  ${tr}
+                </tbody>
+              </table>`
+
+              // $('#devsBody').html(table)
           };
 
           reader.readAsText(file);
