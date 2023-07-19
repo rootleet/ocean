@@ -53,6 +53,7 @@ class AppAssign(models.Model):
     updated_time = models.TimeField(auto_now_add=True)
 
     message = models.TextField(default='NULL')
+    last_breath = models.TextField(default='NULL')
 
 
 class AppContainer(models.Model):

@@ -455,6 +455,14 @@ def api_function(request):
                                         'file': update.files.url,
                                         'root': app_root, 'app_ver': app_ver, 'my_ver': my_ver
                                     }
+                                    from datetime import datetime
+
+                                    current_datetime = datetime.now()
+                                    formatted_datetime = current_datetime.strftime("%Y-%m-%d %H-%M-%S")
+
+                                    assignment, created = AppAssign.objects.get_or_create(app=apps, mach=pc)
+                                    assignment.last_breath = formatted_datetime
+                                    assignment.save()
                                     arr.append(obj)
                                 else:
                                     arr.append(
