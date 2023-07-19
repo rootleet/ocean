@@ -460,7 +460,7 @@ def api_function(request):
                                     current_datetime = datetime.now()
                                     formatted_datetime = current_datetime.strftime("%Y-%m-%d %H-%M-%S")
 
-                                    assignment, created = AppAssign.objects.get_or_create(app=apps, mach=pc)
+                                    assignment, created = AppAssign.objects.get_or_create(app_id=app.pk, mach=pc)
                                     assignment.last_breath = formatted_datetime
                                     assignment.save()
                                     arr.append(obj)
