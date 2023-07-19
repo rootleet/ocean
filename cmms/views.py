@@ -101,14 +101,16 @@ def api(request):
         module = body.get('module')
         data = body.get('data')
 
+
         if method == 'VIEW':
             try:
                 if module == 'product':
                     scope = data.get('range')
                     barcode = data.get('barcode')
+                    db_col = data.get('db_col') or 'barcode'
 
                     if scope == 'single':
-                        q = f"SELECT barcode,item_ref,item_des1 FROM product_master WHERE barcode = '{barcode}'"
+                        q = f"SELECT barcode,item_ref,item_des1 FROM product_master WHERE {db_col} = '{barcode}'"
                     else:
                         q = "SELECT barcode,item_ref,item_des1  FROM product_master"
 

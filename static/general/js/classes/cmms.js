@@ -14,6 +14,23 @@ class Cmms {
 
     }
 
+    getProduct(range,item_uni,db_col = 'barcode'){
+        // get item details
+            let payload = {
+                "module": "product",
+                "data": {
+                    "range": range,
+                    "barcode": barcode,
+                    'db_col':db_col
+                }
+            }
+
+
+
+            // api call
+            return  api.call('VIEW', payload, '/cmms/api/')
+    }
+
     carJob(carNumber) {
 
         let response = cmms.carMaintainanceLog(carNumber)
@@ -854,11 +871,9 @@ class Cmms {
               let item_id = values[0].replace('\n','');
               let qty = values[1];
 
+              let prod = cmms.getProduct('single',item_id,'item_ref')
 
-
-              ctable({
-                  'item_id':item_id,'qty':qty
-              })
+              ctable(prod)
             }
           };
 
