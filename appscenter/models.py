@@ -52,6 +52,8 @@ class AppAssign(models.Model):
     updated_date = models.DateField(auto_now_add=True)
     updated_time = models.TimeField(auto_now_add=True)
 
+    message = models.TextField(default='NULL')
+
 
 class AppContainer(models.Model):
     name = models.CharField(max_length=255)

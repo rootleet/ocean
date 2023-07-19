@@ -265,6 +265,8 @@ def api_function(request):
                     if task == 'mark_update':
                         mac = data.get('mac')
                         app = data.get('app')
+                        message = data.get('message') or "Current Version Does Not Support Logging"
+
 
                         try:
                             pc = Computer.objects.get(mac_address=mac)
@@ -272,6 +274,7 @@ def api_function(request):
 
                             assignment, created = AppAssign.objects.get_or_create(app=application, mach=pc)
                             assignment.version = application.version
+                            assignment.message = message
                             assignment.save()
                             response['message'] = "Update history updated"
                         except Exception as e:
