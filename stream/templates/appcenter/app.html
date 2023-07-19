@@ -49,6 +49,7 @@
                                 <th scope="col">COMPUTER</th>
                                 <th scope="col">IP</th>
                                 <th scope="col">VERSION</th>
+                                  <th scope="col">INFO</th>
 
                               </tr>
                             </thead>
@@ -58,6 +59,7 @@
                                     <td>{{ assign.mach.computer_name }}</td>
                                     <td>{{ assign.mach.ip_address }}</td>
                                     <td>{{ assign.version }}</td>
+                                    <td><i class="bi bi-info pointer" onclick="alert(`{{ assign.message }}`)"></i></td>
                                   </tr>
                                 {% endfor %}
                             </tbody>
