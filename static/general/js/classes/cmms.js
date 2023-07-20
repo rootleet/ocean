@@ -815,41 +815,41 @@ class Cmms {
 
         }
         Swal.fire({
-      title: 'Select Date',
-      html: `<select class="form-control w-50 mx-auto mb-2" id="group">${g_opt}</select><input type="date" id="swal-date" class="swal2-input">`,
-      showCancelButton: true,
-      confirmButtonText: 'OK',
-      preConfirm: () => {
-        const selectedDate = $('#swal-date').val();
-        const selectedGroup = $('#group').val()
+          title: 'Select Date',
+          html: `<select class="form-control w-50 mx-auto mb-2" id="group">${g_opt}</select><input type="date" id="swal-date" class="swal2-input">`,
+          showCancelButton: true,
+          confirmButtonText: 'OK',
+          preConfirm: () => {
+            const selectedDate = $('#swal-date').val();
+            const selectedGroup = $('#group').val()
 
-        if (selectedDate === '') {
-          Swal.showValidationMessage('Please select a date');
-        }
-        if (selectedGroup === '') {
-          Swal.showValidationMessage('Please select Group');
-        }
-        return {
-            'date':selectedDate,
-            'group':selectedGroup,
+            if (selectedDate === '') {
+              Swal.showValidationMessage('Please select a date');
+            }
+            if (selectedGroup === '') {
+              Swal.showValidationMessage('Please select Group');
+            }
+            return {
+                'date':selectedDate,
+                'group':selectedGroup,
 
-        };
-      }
-    }).then((result) => {
-      if (result.isConfirmed) {
-          // console.table(result)
-        const selectedDate = result.value.date;
-        const selectedGroup = result.value.group
+            };
+          }
+        }).then((result) => {
+          if (result.isConfirmed) {
+              // console.table(result)
+            const selectedDate = result.value.date;
+            const selectedGroup = result.value.group
 
-        const formattedDate = new Date(selectedDate).toISOString().split('T')[0];
+            const formattedDate = new Date(selectedDate).toISOString().split('T')[0];
 
 
-        // console.table(payload)
+            // console.table(payload)
 
-        let link = `/cmms/compare/${pk}/${formattedDate}/${selectedGroup}/`;
-        window.location.href = link
-      }
-    });
+            let link = `/cmms/compare/${pk}/${formattedDate}/${selectedGroup}/`;
+            window.location.href = link
+          }
+        });
 
 
 
@@ -857,65 +857,103 @@ class Cmms {
 
 
     loadFrozen() {
-        // $('#loader').modal('show')
-        const fileInput = document.getElementById('csvFileInput');
-          const file = fileInput.files[0];
+          const file = document.getElementById('csvFileInput').files[0];
+          if(!file) {
+            alert('PLEASE SELECT A FILE');
+            return;
+          }
 
           const reader = new FileReader();
-          reader.onload = function (e) {
-            const contents = e.target.result;
-            const lines = contents.split('\r');
-            let tr = ''
-            // Process the CSV data
-            for (let line of lines) {
-              const values = line.split(',');
-              let item_id = values[0].replace('\n','');
-              let qty = values[1];
+          reader.onload = e => {
+            let tr = '', row_count = 1;
+            for (const line of e.target.result.split('\r')) {
+              const item_id = line.split(',')[0].replace('\n','');
+              const {status_code, message} = cmms.getProduct('single',item_id,'item_ref');
 
-              let prod = cmms.getProduct('single',item_id,'item_ref');
-              let status, message;
-              status = prod['status_code'];
-              message = prod['message'];
-
-              if(status === 200){
-
-                  let count,trans;
-                  count = message['count'];
-                  trans = message['trans'][0];
-                  if(count === 1){
-
-                      let item_ref, barcode,name;
-                      item_ref = trans['item_ref'];
-                      barcode = trans['barcode'];
-                      name = trans['name'];
-
-                      tr += `<tr><td>${item_ref}</td><td>${barcode}</td><td>${name}</td><td>${qty}</td></tr>`
-                      $('#devsBody').append(`<tr><td>${item_ref}</td><td>${barcode}</td><td>${name}</td><td>${qty}</td></tr>`)
-
-
-                  } else {
-                      clog(`${item_id} not found`)
-                  }
-
+              if(status_code === 200 && message.count === 1) {
+                const {item_ref, barcode, name} = message.trans[0];
+                $('#devsBody').append(`<tr id="row_${row_count}"><td id="ref_${row_count}">${item_ref}</td><td id="barcode_${row_count}">${barcode}</td><td>${name}</td><td id="qty_row_${row_count}">${line.split(',')[1]}</td></tr>`);
+                row_count++;
               } else {
-                  tr = message
+                tr = message;
+                $('devBody').html(tr)
+                console.log(`${item_id} not found`);
               }
-
             }
-
-            let table = `<table class='table table-bordered table-striped table-hover table-sm table-responsive datatable'>
-                <thead>
-                  <tr><th>ITEM REF</th><th>BARCODE</th><th>DESCRIPTION</th><th>FROZEN QTY</th></tr>
-                </thead>
-                <tbody >
-                  ${tr}
-                </tbody>
-              </table>`
-
-              // $('#devsBody').html(table)
           };
 
           reader.readAsText(file);
+    }
+
+    saveFrozen(){
+        // Get input field elements
+        let locElement = $('#loc');
+        let remarksElement = $('#remark');
+        let ref_freezeElement = $('#ref_freeze');
+
+        // Check if elements exist
+        if(!locElement.length || !remarksElement.length || !ref_freezeElement.length){
+            alert("One or more necessary elements are missing from the DOM");
+            return;
+        }
+
+        // Get input field values
+        let loc = locElement.val();
+        let remarks = remarksElement.val();
+        let ref_freeze = ref_freezeElement.val();
+
+        // Sanitize input fields to avoid XSS attack. Implementation of this depends on your exact requirement
+
+        // Validate input string lengths
+        if(loc.length < 1 || remarks.length < 1 || ref_freeze.length < 1){
+            alert("Please fill all parts in header");
+            // Replace console.log with custom modal/dialog as per your application style for better user experience
+        } else {
+
+            // make payload
+            let header,trans;
+            header = {
+                loc:loc,
+                remarks:remarks,
+                frozen_ref:ref_freeze
+            }
+
+            trans = []
+
+            let rows = $('#devsBody tr')
+
+            for (let r = 0; r < rows.length; r++) {
+                let line = r+1
+                let ref_id,bc_id,qty_id;
+                ref_id = `ref_${line}`
+                bc_id = `barcode_${line}`
+                qty_id = `qty_row_${line}`
+
+                let tran = {
+                    ref:$(`#${ref_id}`).text(),
+                    barcode:$(`#${bc_id}`).text(),
+                    qty:$(`#${qty_id}`).text()
+                }
+
+                // let tr = rows[r]
+                //
+                // ctable(tran)
+                trans.push(tran)
+            }
+
+            let data = {
+                task:'save_frozen',header:header,trans:trans
+            }
+
+            let payload = {
+                module:'stock',
+                data:data
+
+            }
+
+            ctable(payload)
+
+        }
     }
 }
 
