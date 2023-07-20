@@ -3,8 +3,9 @@ import traceback
 from datetime import date
 
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.http import HttpResponse, JsonResponse
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from ocean.settings import DB_SERVER, DB_NAME, DB_USER, DB_PORT, DB_PASSWORD
 from django.contrib.auth import get_user_model
@@ -54,6 +55,7 @@ def stock(request):
                   context={'nav': True, 'stocks': StockCountHD.objects.all(), 'open': opened})
 
 
+@login_required()
 def new_stock_count(request):
     context = {'nav': True}
     return render(request, 'cmms/new_stock.html', context=context)
@@ -456,26 +458,33 @@ def api(request):
                     if len(trans) > 0:
 
                         try:
-                            loc_id = header.get('location')
+                            loc_id = header.get('loc')
                             frozen_ref = header.get('frozen_ref')
                             remarks = header.get('remarks')
-                            owner = request.user
-                            StockFreezeHd(loc_id=loc_id, ref=frozen_ref, remarks=remarks, owner=owner.pk).save()
+                            us_pk = header.get('owner')
 
-                            this_hd = StockFreezeHd.objects.all().last()
+                            owner = get_object_or_404(User, pk=us_pk)
+                            stock_freeze_hd = StockFreezeHd.objects.create(loc_id=loc_id, ref=frozen_ref, remarks=remarks, owner=owner)
 
-                            for tran in trans:
-                                ref = tran['ref']
-                                barcode = tran['barcode']
-                                qty = tran['qty']
-                                name = tran['name']
 
-                                StockFreezeTrans(entry_id=this_hd, item_ref=ref, barcode=barcode, qty=qty,
-                                                 name=name).save()
+                            try:
+                                for tran in trans:
+                                    ref = tran['ref']
+                                    barcode = tran['barcode']
+                                    qty = tran['qty']
+                                    name = tran['name']
 
-                            response['message'] = this_hd.pk
+                                    StockFreezeTrans.objects.create(entry_id=stock_freeze_hd.pk, item_ref=ref, barcode=barcode, qty=qty, name=name)
+
+                                response['message'] = "SAVED"
+                                response['status_code'] = 200
+                            except Exception as e:
+                                stock_freeze_hd.delete()
+                                response['message'] = str(e)
+
                         except Exception as e:
                             response['message'] = str(e)
+
 
                     else:
 

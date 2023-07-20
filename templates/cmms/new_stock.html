@@ -5,27 +5,41 @@
 
     <div class="w-100 h-100">
         <div class="h-100 card">
-            <div class="card-header">
-                <div class="w-100 h-100 d-flex flex-wrap">
-                    <div class="w-50 h-100 d-flex flex-wrap">
-                        <input type="text" id="loc" class="form-control w-25 rounded-0" placeholder="loc">
-                        <input type="text" id="ref_freeze" class="form-control w-25 rounded-0" placeholder="ref_freeze">
-                        <input type="text" id="remark" class="form-control w-50 rounded-0" placeholder="remark">
+            <div class="card-header bg-header1 h-25">
+                <div class="container-fluid">
+
+                    <div class="row d-flex flex-wrap justify-content-between">
+                        <div class="col-sm-3 h-100">
+                            <label for="loc">LOCATION</label><input type="text" id="loc" class="form-control w-100 rounded-0" placeholder="loc">
+                            <label for="ref_freeze">REFERENCE</label><input type="text" id="ref_freeze" class="form-control mb-2 w-100 rounded-0" placeholder="ref_freeze">
+                            <div class="w-100 d-flex flex-wrap justify-content-end">
+                                <input accept="text/csv" id="csvFileInput" type="file" class="form-control w-75 rounded-0" placeholder="loc">
+                                <button onclick="cmms.loadFrozen()" class="btn btn-info btn-sm w-25">LOAD</button>
+                            </div>
+                        </div>
+
+
+
+                        <div class="col-sm-5">
+                            <label for="remark">REMARKS</label><textarea class="form-control rounded-0" rows="5" name="remark" id="remark"></textarea>
+
+                        </div>
+
+
                     </div>
 
-                    <div class="w-50 h-100 d-flex flex-wrap justify-content-end">
-                        <input accept="text/csv" id="csvFileInput" type="file" class="form-control w-50 rounded-0" placeholder="loc">
-                        <button onclick="cmms.loadFrozen()" class="btn btn-info btn-sm w-25">LOAD</button>
-                    </div>
+
+
+
 
                 </div>
 
             </div>
 
-            <div  class="card-body h-100 p-2 overflow-auto">
+            <div  class="card-body bg-tran1 h-100 p-2 overflow-auto">
                 <table class='table table-bordered table-striped table-hover table-sm table-responsive'>
                 <thead>
-                  <tr><th>ITEM REF</th><th>BARCODE</th><th>DESCRIPTION</th><th>FROZEN QTY</th></tr>
+                  <tr><th>LN</th><th>ITEM REF</th><th>BARCODE</th><th>DESCRIPTION</th><th>FROZEN QTY</th></tr>
                 </thead>
                 <tbody id="devsBody">
 
@@ -33,7 +47,7 @@
                 </table>
             </div>
 
-            <div class="card-footer">
+            <div class="card-footer bg-header1">
                 <button onclick="cmms.saveFrozen()" class="btn btn-success">SAVE FROZEN</button>
             </div>
 

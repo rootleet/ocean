@@ -872,7 +872,14 @@ class Cmms {
 
               if(status_code === 200 && message.count === 1) {
                 const {item_ref, barcode, name} = message.trans[0];
-                $('#devsBody').append(`<tr id="row_${row_count}"><td id="ref_${row_count}">${item_ref}</td><td id="barcode_${row_count}">${barcode}</td><td>${name}</td><td id="qty_row_${row_count}">${line.split(',')[1]}</td></tr>`);
+                $('#devsBody').append(`<tr id="row_${row_count}">
+                    <td>${row_count}</td>
+                    <td><input class="form-control form-control-sm rounded-0" id="ref_${row_count}" type="text" readonly value="${item_ref}"></td>
+                    <td><input class="form-control form-control-sm rounded-0" id="barcode_${row_count}" type="text" readonly value="${barcode}"></td>
+                    <td><input class="form-control form-control-sm rounded-0" id="name_${row_count}" type="text" readonly value="${name}"></td>
+                    <td><input class="form-control form-control-sm rounded-0" id="qty_row_${row_count}" type="number" readonly value="${line.split(',')[1]}"></td>
+                    
+                </tr>`);
                 row_count++;
               } else {
                 tr = message;
@@ -915,7 +922,8 @@ class Cmms {
             header = {
                 loc:loc,
                 remarks:remarks,
-                frozen_ref:ref_freeze
+                frozen_ref:ref_freeze,
+                owner: $('#mypk').val()
             }
 
             trans = []
@@ -924,15 +932,17 @@ class Cmms {
 
             for (let r = 0; r < rows.length; r++) {
                 let line = r+1
-                let ref_id,bc_id,qty_id;
+                let ref_id,bc_id,qty_id,name_id;
                 ref_id = `ref_${line}`
                 bc_id = `barcode_${line}`
                 qty_id = `qty_row_${line}`
+                name_id = `name_${line}`
 
                 let tran = {
-                    ref:$(`#${ref_id}`).text(),
-                    barcode:$(`#${bc_id}`).text(),
-                    qty:$(`#${qty_id}`).text()
+                    ref:$(`#${ref_id}`).val(),
+                    barcode:$(`#${bc_id}`).val(),
+                    qty:$(`#${qty_id}`).val(),
+                    name:$(`#${name_id}`).val()
                 }
 
                 // let tr = rows[r]
@@ -942,7 +952,7 @@ class Cmms {
             }
 
             let data = {
-                task:'save_frozen',header:header,trans:trans
+                stage:'save_frozen',header:header,trans:trans,
             }
 
             let payload = {
@@ -952,6 +962,19 @@ class Cmms {
             }
 
             ctable(payload)
+
+            let response = api.call('PUT',payload,'/cmms/api/')
+            let message,status;
+
+            status = response['status_code']
+
+            if(status === 200){
+                // reload to view
+                alert(response['message'])
+            } else {
+                // show message
+                alert(response['message'])
+            }
 
         }
     }

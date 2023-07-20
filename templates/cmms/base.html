@@ -35,6 +35,7 @@
   <!-- Template Main CSS File -->
   <link href="{% static 'assets/css/style.css' %}" rel="stylesheet">
   <link href="{% static 'general/css/recorder.css' %}" rel="stylesheet">
+    <link href="{% static 'general/css/colors.css' %}" rel="stylesheet">
 
 
 
@@ -388,6 +389,11 @@
           <li>
             <a href="{% url 'stock' %}">
               <i class="bi bi-boxes"></i><span>Stock</span>
+            </a>
+          </li>
+            <li>
+            <a href="{% url 'stock' %}">
+              <i class="bi bi-boxes"></i><span>Frozen</span>
             </a>
           </li>
           <li>

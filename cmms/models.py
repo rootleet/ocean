@@ -81,4 +81,4 @@ class StockFreezeTrans(models.Model):
     item_ref = models.CharField(max_length=100,blank=False,null=False)
     barcode = models.CharField(max_length=100,blank=False,null=False)
     name = models.TextField(blank=False,null=False)
-    quantity = models.DecimalField(max_digits=10, decimal_places=3)
+    qty = models.DecimalField(max_digits=10, decimal_places=3)
