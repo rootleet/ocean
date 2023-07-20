@@ -450,7 +450,25 @@ def api(request):
                         response['message'] = "Comment Updated"
                     else:
                         response['message'] = f"No count with pk as {comment_pk}"
+                elif stage == 'save_frozen':
+                    header = data.get('header')
+                    trans = data.get('trans')
 
+                    if len(trans) < 1:
+
+
+
+                        for tran in trans:
+                            ref = tran['ref']
+                            barcode = tran['barcode']
+                            qty = tran['qty']
+                    else:
+                        response['message'] = "Transactions cannot be empty"
+                        response['status_code'] = 404
+
+
+
+                    response['message'] = trans
         elif method == 'PATCH':
             if module == 'stock':
                 stage = data.get('stage')
