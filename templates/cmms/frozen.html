@@ -10,18 +10,17 @@
 
                     <div class="row d-flex flex-wrap justify-content-between">
                         <div class="col-sm-3 h-100">
-                            <label for="loc">LOCATION</label><input type="text" id="loc" class="form-control w-100 rounded-0" placeholder="loc">
-                            <label for="ref_freeze">REFERENCE</label><input type="text" id="ref_freeze" class="form-control mb-2 w-100 rounded-0" placeholder="ref_freeze">
-                            <div class="w-100 d-flex flex-wrap justify-content-end">
-                                <input accept="text/csv" id="csvFileInput" type="file" class="form-control w-75 rounded-0" placeholder="loc">
-                                <button onclick="cmms.loadFrozen()" class="btn btn-info btn-sm w-25">LOAD</button>
-                            </div>
+                            <label for="loc">ENTRY</label><input type="text" id="entry" readonly class="form-control w-100 rounded-0" placeholder="entry">
+
+                            <label for="loc">LOCATION</label><input type="text" id="loc" readonly class="form-control w-100 rounded-0" placeholder="loc">
+                            <label for="ref_freeze">REFERENCE</label><input type="text" readonly id="ref_freeze" class="form-control mb-2 w-100 rounded-0" placeholder="ref_freeze">
+
                         </div>
 
 
 
                         <div class="col-sm-5">
-                            <label for="remark">REMARKS</label><textarea class="form-control rounded-0" rows="5" name="remark" id="remark"></textarea>
+                            <label for="remark">REMARKS</label><textarea readonly class="form-control rounded-0" rows="5" name="remark" id="remark"></textarea>
 
                         </div>
 
@@ -42,16 +41,108 @@
                   <tr><th>LN</th><th>ITEM REF</th><th>BARCODE</th><th>DESCRIPTION</th><th>FROZEN QTY</th></tr>
                 </thead>
                 <tbody id="devsBody">
-
+{#                    <tr>#}
+{#                        <td>1</td>#}
+{#                        <td>ref</td>#}
+{#                        <td>bcode</td>#}
+{#                        <td>name</td>#}
+{#                        <td>f_qty</td>#}
+{#                    </tr>#}
                 </tbody>
                 </table>
             </div>
 
             <div class="card-footer bg-header1">
-                <button onclick="cmms.saveFrozen()" class="btn btn-success">SAVE FROZEN</button>
+                <div class="w-100 h-100 d-flex">
+                    <button onclick="loadHere(this.value)" id="prev" class="btn btn-info m-1"><i class="bh bi-skip-backward"></i></button>
+                    <button onclick="loadHere(this.value)" id="next" class="btn btn-info m-1"><i class="bh bi-skip-forward"></i></button>
+                </div>
             </div>
 
         </div>
     </div>
+
+
+    <script>
+
+        function loadHere(pk) {
+            $('#devsBody').html('')
+                let payload = {
+                "module":"stock",
+                "data":{
+                    "stage":"frozen",
+                    "pk":pk
+                }
+            }
+
+            let response = api.call('VIEW',payload,'/cmms/api/')
+            let status, message
+            status = response['status_code']
+            message = response['message']
+
+
+
+            if(status === 200){
+                let header,prev,next
+
+
+
+                header = message['header']
+                $('#loc').val(header['loc'])
+                $('#ref_freeze').val(header['ref'])
+                $('#remark').val(header['remarks'])
+
+                prev = header['prev']
+                next = header['next']
+
+                console.table(prev)
+                console.table(next)
+
+                let entry = `FR${header['loc']}${header['pk']}`
+                $('#entry').val(entry)
+
+                if(prev['valid'] === 'Y'){
+                    // enable
+                    $("#prev").prop("disabled", false);
+                    $('#prev').val(prev['pk'])
+                } else {
+                    // disable
+                    $("#prev").prop("disabled", true);
+                }
+
+                if(next['valid'] === 'Y'){
+                    // enable
+                    $("#next").prop("disabled", false);
+                    $('#next').val(next['pk'])
+                } else {
+                    // disable
+                    $("#next").prop("disabled", true);
+                }
+
+                let tr = '';
+
+                for (let i = 0; i < message['trans'].length; i++) {
+                    let line = i
+                    let tran = message['trans'][i]
+
+                    $('#devsBody').append(
+                        `<tr>
+                            <td>${line + 1}</td>
+                            <td>${tran['item_ref']}</td>
+                            <td>bco${tran['barcode']}de</td>
+                            <td>${tran['name']}</td>
+                            <td>${tran['qty']}</td>
+                        </tr>`
+                    )
+                }
+
+            }
+
+        }
+
+        loadHere(`{{ f_pk }}`)
+
+
+    </script>
 
 {% endblock %}

@@ -65,9 +65,9 @@ class StockCountTrans(models.Model):
 
 
 class StockFreezeHd(models.Model):
-    loc_id = models.CharField(max_length=3,blank=False,null=False)
-    ref = models.TextField(blank=False,null=False)
-    remarks = models.TextField(blank=False,null=False)
+    loc_id = models.CharField(max_length=3, blank=False, null=False)
+    ref = models.TextField(blank=False, null=False)
+    remarks = models.TextField(blank=False, null=False)
 
     created_date = models.DateField(auto_now_add=True)
     created_time = models.TimeField(auto_now=True)
@@ -75,10 +75,38 @@ class StockFreezeHd(models.Model):
 
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
+    def trans(self):
+        return {
+            'count': StockFreezeTrans.objects.filter(entry_id=self.pk).count(),
+            'trans': StockFreezeTrans.objects.filter(entry_id=self.pk)
+        }
+
+    def next(self):
+        if StockFreezeHd.objects.filter(pk__gt=self.pk).count() > 0:
+            pk = StockFreezeHd.objects.filter(pk__gt=self.pk).first().pk
+            valid = 'Y'
+        else:
+            valid = 'N'
+            pk = False
+        return {
+            'valid': valid, 'pk': pk, 'counted': StockFreezeHd.objects.filter(pk__gt=self.pk).count()
+        }
+
+    def prev(self):
+        if StockFreezeHd.objects.filter(pk__lt=self.pk).count() > 0:
+            pk = StockFreezeHd.objects.filter(pk__lt=self.pk).last().pk
+            valid = 'Y'
+        else:
+            valid = 'N'
+            pk = False
+        return {
+            'valid': valid, 'pk': pk, 'counted': StockFreezeHd.objects.filter(pk__lt=self.pk).count()
+        }
+
 
 class StockFreezeTrans(models.Model):
-    entry = models.ForeignKey('StockCountHD', on_delete=models.CASCADE)
-    item_ref = models.CharField(max_length=100,blank=False,null=False)
-    barcode = models.CharField(max_length=100,blank=False,null=False)
-    name = models.TextField(blank=False,null=False)
+    entry = models.ForeignKey('StockFreezeHd', on_delete=models.CASCADE)
+    item_ref = models.CharField(max_length=100, blank=False, null=False)
+    barcode = models.CharField(max_length=100, blank=False, null=False)
+    name = models.TextField(blank=False, null=False)
     qty = models.DecimalField(max_digits=10, decimal_places=3)

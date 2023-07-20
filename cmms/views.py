@@ -202,7 +202,7 @@ def api(request):
                             response['status_code'] = 404
                             response['status'] = 'error'
 
-                    if stage == 'export':
+                    elif stage == 'export':
                         style = data.get('compare')
                         if style == 'final_compare':
                             doc = data.get('doc')
@@ -379,6 +379,57 @@ def api(request):
                                 response['message'] = "NO OPEN STOCK"
                                 response['status_code'] = 404
                                 response['status'] = 'limit'
+
+                    elif stage == 'frozen':
+                        pk = data.get('pk')
+
+                        # check if hd exist
+                        hd_x = StockFreezeHd.objects.filter(pk=pk)
+
+                        if hd_x.count() == 1:
+                            response['status_code'] = 200
+
+                            hd = StockFreezeHd.objects.get(pk=pk)
+                            trans = hd.trans()
+
+                            header = {
+                                'pk':hd.pk,
+                                'loc':hd.loc_id,
+                                'remarks':hd.remarks,
+                                'ref':hd.ref,
+                                'time':f"{hd.created_date} {hd.created_time}",
+                                'status':hd.status,
+                                'owner':hd.owner.username,
+                                'next':hd.next(),
+                                'prev':hd.prev()
+                            }
+
+                            tr = []
+
+                            for t in trans['trans']:
+                                print(t)
+                                ref = t.item_ref
+                                barcode = t.barcode
+                                name = t.name
+                                qty = t.qty
+
+                                tr.append({
+                                    'item_ref': ref,
+                                    'barcode': barcode,
+                                    'name': name,
+                                    'qty': qty
+                                })
+
+                            response['message'] = {
+                                    'header':header,
+                                    'count': trans['count'],
+                                    'trans': tr
+                                }
+
+                        else:
+                            response['status_code'] = 404
+                            response['message'] = f"Expected 1 but got {hd_x.count()} counts"
+
 
             except Exception as e:
                 response['status'] = 'error'
