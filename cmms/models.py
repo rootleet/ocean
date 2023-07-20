@@ -71,6 +71,14 @@ class StockFreezeHd(models.Model):
 
     created_date = models.DateField(auto_now_add=True)
     created_time = models.TimeField(auto_now=True)
-    status = models.IntegerField(default=1) # { 1: Pending, 2: Counted, 0: Invalid }
+    status = models.IntegerField(default=1)  # { 1: Pending, 2: Counted, 0: Invalid }
 
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
+
+class StockFreezeTrans(models.Model):
+    entry = models.ForeignKey('StockCountHD', on_delete=models.CASCADE)
+    item_ref = models.CharField(max_length=100)
+    barcode = models.CharField(max_length=100)
+    name = models.TextField()
+    quantity = models.DecimalField(max_digits=10, decimal_places=3)
