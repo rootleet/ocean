@@ -33,7 +33,7 @@ def carjobs(request):
         'nav': True,
         'searchButton': 'carJob'
     }
-    messages.info(request,"Please not, you can only filter data as of 1st April 2023 and forward")
+    messages.info(request, "Please not, you can only filter data as of 1st April 2023 and forward")
     return render(request, 'cmms/car-jobs.html', context=context)
 
 
@@ -53,9 +53,10 @@ def stock(request):
     return render(request, 'cmms/stock.html',
                   context={'nav': True, 'stocks': StockCountHD.objects.all(), 'open': opened})
 
+
 def new_stock_count(request):
     context = {'nav': True}
-    return render(request, 'cmms/new_stock.html',context=context)
+    return render(request, 'cmms/new_stock.html', context=context)
 
 
 @login_required()
@@ -100,7 +101,6 @@ def api(request):
         body = json.loads(request.body)
         module = body.get('module')
         data = body.get('data')
-
 
         if method == 'VIEW':
             try:
@@ -210,8 +210,6 @@ def api(request):
                                 sheet[f'G1'] = "SELLING PRICE"
                                 sheet[f'H1'] = "VALUE DIFFERENCE"
                                 sheet[f'I1'] = "COMMENT"
-
-
 
                             # check if there is open stock
                             pk = data.get('pk')
@@ -455,18 +453,26 @@ def api(request):
                     trans = data.get('trans')
 
                     if len(trans) < 1:
+                        loc_id = header.get('location')
+                        frozen_ref = header.get('frozen_ref')
+                        remarks = header.get('remarks')
+                        owner = request.user
+                        StockFreezeHd(loc_id=loc_id, ref=frozen_ref, remarks=remarks, owner=owner.pk).save()
 
-
+                        this_hd = StockFreezeHd.objects.all().last()
 
                         for tran in trans:
                             ref = tran['ref']
                             barcode = tran['barcode']
                             qty = tran['qty']
+                            name = tran['name']
+
+                            StockFreezeTrans(entry_id=this_hd, item_ref=ref, barcode=barcode, qty=qty,
+                                             name=name).save()
+
                     else:
                         response['message'] = "Transactions cannot be empty"
                         response['status_code'] = 404
-
-
 
                     response['message'] = trans
         elif method == 'PATCH':
@@ -488,5 +494,3 @@ def api(request):
         response["message"] = f"Error decoding JSON: {str(e)}"
 
     return JsonResponse(response)
-
-
