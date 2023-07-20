@@ -65,9 +65,9 @@ class StockCountTrans(models.Model):
 
 
 class StockFreezeHd(models.Model):
-    loc_id = models.CharField(max_length=3)
-    ref = models.TextField()
-    remarks = models.TextField()
+    loc_id = models.CharField(max_length=3,blank=False,null=False)
+    ref = models.TextField(blank=False,null=False)
+    remarks = models.TextField(blank=False,null=False)
 
     created_date = models.DateField(auto_now_add=True)
     created_time = models.TimeField(auto_now=True)
@@ -78,7 +78,7 @@ class StockFreezeHd(models.Model):
 
 class StockFreezeTrans(models.Model):
     entry = models.ForeignKey('StockCountHD', on_delete=models.CASCADE)
-    item_ref = models.CharField(max_length=100)
-    barcode = models.CharField(max_length=100)
-    name = models.TextField()
+    item_ref = models.CharField(max_length=100,blank=False,null=False)
+    barcode = models.CharField(max_length=100,blank=False,null=False)
+    name = models.TextField(blank=False,null=False)
     quantity = models.DecimalField(max_digits=10, decimal_places=3)
