@@ -9,7 +9,8 @@
                 <div class="w-100 h-100 d-flex flex-wrap">
                     <div class="w-50 h-100 d-flex flex-wrap">
                         <input type="text" id="loc" class="form-control w-25 rounded-0" placeholder="loc">
-                        <input type="text" id="remark" class="form-control w-75 rounded-0" placeholder="remark">
+                        <input type="text" id="ref_freeze" class="form-control w-25 rounded-0" placeholder="ref_freeze">
+                        <input type="text" id="remark" class="form-control w-50 rounded-0" placeholder="remark">
                     </div>
 
                     <div class="w-50 h-100 d-flex flex-wrap justify-content-end">
@@ -33,7 +34,7 @@
             </div>
 
             <div class="card-footer">
-                <button class="btn btn-success">SAVE FROZEN</button>
+                <button onclick="cmms.saveFrozen()" class="btn btn-success">SAVE FROZEN</button>
             </div>
 
         </div>
