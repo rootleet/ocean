@@ -60,6 +60,10 @@ def new_stock_count(request):
     context = {'nav': True}
     return render(request, 'cmms/new_stock.html', context=context)
 
+def forezen(request):
+    context = {'nav': True}
+    return render(request, 'cmms/frozen.html', context=context)
+
 
 @login_required()
 def stock_count(request):
@@ -511,3 +515,5 @@ def api(request):
         response["message"] = f"Error decoding JSON: {str(e)}"
 
     return JsonResponse(response)
+
+
