@@ -449,32 +449,40 @@ def api(request):
                     else:
                         response['message'] = f"No count with pk as {comment_pk}"
                 elif stage == 'save_frozen':
+
                     header = data.get('header')
                     trans = data.get('trans')
 
-                    if len(trans) < 1:
-                        loc_id = header.get('location')
-                        frozen_ref = header.get('frozen_ref')
-                        remarks = header.get('remarks')
-                        owner = request.user
-                        StockFreezeHd(loc_id=loc_id, ref=frozen_ref, remarks=remarks, owner=owner.pk).save()
+                    if len(trans) > 0:
 
-                        this_hd = StockFreezeHd.objects.all().last()
+                        try:
+                            loc_id = header.get('location')
+                            frozen_ref = header.get('frozen_ref')
+                            remarks = header.get('remarks')
+                            owner = request.user
+                            StockFreezeHd(loc_id=loc_id, ref=frozen_ref, remarks=remarks, owner=owner.pk).save()
 
-                        for tran in trans:
-                            ref = tran['ref']
-                            barcode = tran['barcode']
-                            qty = tran['qty']
-                            name = tran['name']
+                            this_hd = StockFreezeHd.objects.all().last()
 
-                            StockFreezeTrans(entry_id=this_hd, item_ref=ref, barcode=barcode, qty=qty,
-                                             name=name).save()
+                            for tran in trans:
+                                ref = tran['ref']
+                                barcode = tran['barcode']
+                                qty = tran['qty']
+                                name = tran['name']
+
+                                StockFreezeTrans(entry_id=this_hd, item_ref=ref, barcode=barcode, qty=qty,
+                                                 name=name).save()
+
+                            response['message'] = this_hd.pk
+                        except Exception as e:
+                            response['message'] = str(e)
 
                     else:
-                        response['message'] = "Transactions cannot be empty"
-                        response['status_code'] = 404
 
-                    response['message'] = trans
+                        response['message'] = f" {len(trans)} Transactions cannot be empty"
+                        response['status'] = "EMPTY"
+                        response['status_code'] = 100
+
         elif method == 'PATCH':
             if module == 'stock':
                 stage = data.get('stage')
