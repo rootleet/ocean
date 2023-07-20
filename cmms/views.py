@@ -60,8 +60,16 @@ def new_stock_count(request):
     context = {'nav': True}
     return render(request, 'cmms/new_stock.html', context=context)
 
+
+@login_required()
 def forezen(request):
-    context = {'nav': True}
+    froze = StockFreezeHd.objects.all()
+    if froze.count() < 1:
+        messages.warning(request, "PLEASE FREEZE NEW STOCK")
+        return redirect('/cmms/stock/')
+    else:
+        f_pk = froze.last().pk
+    context = {'nav': True, 'f_pk': f_pk}
     return render(request, 'cmms/frozen.html', context=context)
 
 
@@ -468,8 +476,8 @@ def api(request):
                             us_pk = header.get('owner')
 
                             owner = get_object_or_404(User, pk=us_pk)
-                            stock_freeze_hd = StockFreezeHd.objects.create(loc_id=loc_id, ref=frozen_ref, remarks=remarks, owner=owner)
-
+                            stock_freeze_hd = StockFreezeHd.objects.create(loc_id=loc_id, ref=frozen_ref,
+                                                                           remarks=remarks, owner=owner)
 
                             try:
                                 for tran in trans:
@@ -478,7 +486,8 @@ def api(request):
                                     qty = tran['qty']
                                     name = tran['name']
 
-                                    StockFreezeTrans.objects.create(entry_id=stock_freeze_hd.pk, item_ref=ref, barcode=barcode, qty=qty, name=name)
+                                    StockFreezeTrans.objects.create(entry_id=stock_freeze_hd.pk, item_ref=ref,
+                                                                    barcode=barcode, qty=qty, name=name)
 
                                 response['message'] = "SAVED"
                                 response['status_code'] = 200
@@ -515,5 +524,3 @@ def api(request):
         response["message"] = f"Error decoding JSON: {str(e)}"
 
     return JsonResponse(response)
-
-
