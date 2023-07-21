@@ -61,6 +61,11 @@ def new_stock_count(request):
     return render(request, 'cmms/new_stock.html', context=context)
 
 
+def new_count(request,frozen):
+    context = {'nav': True}
+    return render(request, 'cmms/count.html', context=context)
+
+
 @login_required()
 def forezen(request):
     froze = StockFreezeHd.objects.all()
@@ -75,13 +80,16 @@ def forezen(request):
 
 @login_required()
 def stock_count(request):
-    if StockCountHD.objects.filter(status=1).count() != 1:
-        messages.error(request, 'NO OPEN STOCK COUNT.')
-        return redirect('/cmms/stock/')
+    # if StockCountHD.objects.filter(status=1).count() != 1:
+    #     messages.error(request, 'NO OPEN STOCK COUNT.')
+    #     return redirect('/cmms/stock/')
     context = {
         'nav': True,
+        'page': {
+            'title': "STOCK COUNT"
+        }
     }
-    return render(request, 'cmms/stock-take.html', context=context)
+    return render(request, 'cmms/count.html', context=context)
 
 
 @login_required()
@@ -393,21 +401,21 @@ def api(request):
                             trans = hd.trans()
 
                             header = {
-                                'pk':hd.pk,
-                                'loc':hd.loc_id,
-                                'remarks':hd.remarks,
-                                'ref':hd.ref,
-                                'time':f"{hd.created_date} {hd.created_time}",
-                                'status':hd.status,
-                                'owner':hd.owner.username,
-                                'next':hd.next(),
-                                'prev':hd.prev()
+                                'pk': hd.pk,
+                                'loc': hd.loc_id,
+                                'remarks': hd.remarks,
+                                'ref': hd.ref,
+                                'time': f"{hd.created_date} {hd.created_time}",
+                                'status': hd.status,
+                                'owner': hd.owner.username,
+                                'next': hd.next(),
+                                'prev': hd.prev()
                             }
 
                             tr = []
 
                             for t in trans['trans']:
-                                print(t)
+
                                 ref = t.item_ref
                                 barcode = t.barcode
                                 name = t.name
@@ -421,14 +429,31 @@ def api(request):
                                 })
 
                             response['message'] = {
-                                    'header':header,
-                                    'count': trans['count'],
-                                    'trans': tr
-                                }
+                                'header': header,
+                                'count': trans['count'],
+                                'trans': tr
+                            }
 
                         else:
                             response['status_code'] = 404
                             response['message'] = f"Expected 1 but got {hd_x.count()} counts"
+
+                    elif stage == 'frozen_hd':
+
+                        frozn = StockFreezeHd.objects.filter(status=1).order_by('-pk')
+                        counts = frozn.count()
+                        arr = []
+                        for fr in frozn:
+                            arr.append({
+                                'pk': fr.pk,
+                                'entry': f"FR{fr.loc_id}{fr.pk}",
+                                'remarks':fr.remarks,
+                                'location':fr.loc_id
+                            })
+
+                        response['message'] = arr
+                        response['status_code'] = 200
+
 
 
             except Exception as e:
@@ -484,7 +509,7 @@ def api(request):
                             sell_price = 0.00
                         else:
                             sell_price = row[3]
-                        print(sell_price)
+
                         val = Decimal(qty) * Decimal(sell_price)
                         hd = StockCountHD.objects.get(status=1)
                         StockCountTrans(stock_count_hd=hd, item_ref=item_ref, barcode=barcode, name=name,

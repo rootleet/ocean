@@ -103,6 +103,9 @@ class StockFreezeHd(models.Model):
             'valid': valid, 'pk': pk, 'counted': StockFreezeHd.objects.filter(pk__lt=self.pk).count()
         }
 
+    def ent(self):
+        return f"FR{self.loc_id}{self.pk}"
+
 
 class StockFreezeTrans(models.Model):
     entry = models.ForeignKey('StockFreezeHd', on_delete=models.CASCADE)

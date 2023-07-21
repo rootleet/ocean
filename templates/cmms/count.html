@@ -1,0 +1,127 @@
+{% extends 'cmms/base.html' %}
+{% load static %}
+
+{% block cmms %}
+
+    <div class="w-100 h-100">
+        <div class="h-100 card">
+            <div class="card-header bg-header1 h-25">
+                <div class="container-fluid">
+
+                    <div class="row d-flex flex-wrap justify-content-between">
+                        <div class="col-sm-3 h-100">
+                            <label for="entry">ENTRY</label><input type="text" id="entry" class="form-control mb-2 w-100 rounded-0" placeholder="NEW !!">
+                            <label for="loc">LOCATION</label><input type="text" readonly id="loc" class="form-control w-100 rounded-0" placeholder="loc">
+                            <label for="ref_freeze">REFERENCE</label><input readonly type="text" id="ref_freeze" class="form-control mb-2 w-100 rounded-0" placeholder="ref_freeze">
+
+                        </div>
+
+                        <div class="col-sm-4 d-flex flex-wrap align-content-center justify-content-center">
+                            <button onclick="cmms.newCount()" class="btn btn-info">RERIEVE</button>
+                        </div>
+
+
+
+                        <div class="col-sm-5 d-flex flex-wrap align-content-between">
+                            <label for="remark">REMARKS</label><textarea readonly class="form-control rounded-0" rows="2" name="remark" id="remark"></textarea>
+
+                            <label for="comment">COMMENT</label><textarea class="form-control rounded-0" rows="2" name="comment" id="comment">NO COMMENT</textarea>
+
+                        </div>
+
+
+                    </div>
+
+
+
+
+
+                </div>
+
+            </div>
+
+            <div  class="card-body bg-tran1 h-100 p-2 overflow-auto">
+                <table class='table table-bordered table-striped table-hover table-sm table-responsive'>
+                <thead>
+                  <tr><th>LN</th><th>ITEM REF</th><th>BARCODE</th><th>DESCRIPTION</th><th>FROZEN QTY</th><th>COUNTED</th><th>DIFFERENCE</th></tr>
+                </thead>
+                <tbody id="devsBody">
+
+                </tbody>
+                </table>
+            </div>
+
+            <div class="card-footer bg-header1">
+
+                <button onclick="cmms.saveCount()" class="btn btn-success">SAVE</button>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        function ScreenloadFrozen(pk){
+            let payload = {
+                "module":"stock",
+                "data":{
+                    "stage":"frozen",
+                    "pk":pk
+                }
+            }
+
+            let response = api.call('VIEW',payload,'/cmms/api/')
+            let status, message
+            status = response['status_code']
+            message = response['message']
+
+            if(status === 200){
+                let header,prev,next
+
+                header = message['header']
+                $('#loc').val(header['loc'])
+                $('#remark').val(header['remarks'])
+
+                prev = header['prev']
+                next = header['next']
+
+                let entry = `FR${header['loc']}${header['pk']}`
+                $('#ref_freeze').val(entry)
+
+                let tr = '';
+
+                for (let i = 0; i < message['trans'].length; i++) {
+
+                    let row = i + 1
+
+                    let row_id = `row_${row}`,
+                        ref_id = `ref_${row}`,
+                        bc_id = `bc_${row}`,
+                        name_id = `name_${row}`,
+                        x_id = `x_${row}`,
+                        y_id = `y_${row}`,
+                        z_id = `z_${row}`;
+
+
+
+
+                    let tran = message['trans'][i]
+                    tr += `<tr id="${row_id}">
+                            <td>${row}</td>
+                            <td id="${ref_id}">${tran['item_ref']}</td>
+                            <td id="${bc_id}">${tran['barcode']}</td>
+                            <td id="${name_id}">${tran['name']}</td>
+                            <td ><input onkeyup="lincal.sub(${row})" type="text" id="${y_id}" disabled value="${tran['qty']}"></td>
+                            <td><input onkeyup="lincal.sub(${row})" id="${x_id}" type="text"></td>
+                            <td><input onkeyup="anton.lineXyz(${row})" type="text" id="${z_id}" disabled ></td>
+                        </tr>`
+
+                }
+
+                $('#devsBody').html(tr)
+
+            }
+
+        }
+    </script>
+
+{% endblock %}

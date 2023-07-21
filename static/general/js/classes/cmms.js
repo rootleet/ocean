@@ -978,6 +978,126 @@ class Cmms {
 
         }
     }
+
+    frozenHd(){
+
+        let payload = {
+            "module":"stock",
+            "data":{
+                "stage":"frozen_hd"
+            }
+        }
+
+        return api.call('VIEW',payload,'/cmms/api/')
+
+    }
+
+    // load frozen into count screen
+    getFrozen(pk){
+
+    }
+
+    newCount(){
+
+        let frozen = cmms.frozenHd()
+
+        if(frozen['status_code'] === 200){
+            // loop trans
+            let trans = frozen['message']
+            let opt = {}
+            let tr = ``
+            for (let i = 0; i < trans.length; i++) {
+
+                let tran = trans[i]
+                let pk = tran['pk']
+                tr += `<tr><td><button onclick="ScreenloadFrozen('${pk}')" class="btn btn-sm btn-info">LOAD</button></td><td>${tran['location']}</td><td>${tran['entry']}</td><td>${tran['remarks']}</td></tr>`
+            }
+
+            let tab = `<table class="table table-sm table-bordered">
+                            <thead class="thead-dark">
+                                <tr><th>SEL</th><th>LOC</th><th>ENTRY</th><th>REMARK</th></tr>
+                             </thead>
+                             <tbody>
+                                ${tr}
+                             </tbody>
+                             
+                       </table>`;
+
+            $('#g_modal_body').html(tab)
+            $('#g_modal_size').addClass('modal-lg')
+            $('#g_modal').modal('show')
+
+
+
+            } else {
+                al('error','Could not get frozen')
+            }
+
+
+    }
+
+    saveCount(){
+        // validate header
+        const ids = ["loc", "ref_freeze", "remark", "comment"]
+        if(anton.validateInputs(ids)){
+            // validate transactions
+            let trans = $('#devsBody tr')
+            if(trans.length > 0){
+                let payload_trans = []
+                let payload_header = {
+                    ref: 'HELLO',
+                    comment: "hello"
+                }
+                // there are trans
+                let count = trans.length
+                for (let t = 0; t < count; t++) {
+                    let i = t + 1;
+                    let tran = trans[t]
+                    let ref,bc,name,frozen,counted,diff
+
+                    ref = $(`#ref_${i}`)
+                    bc = $(`#bc_${i}`)
+                    name = $(`#name_${i}`)
+                    frozen = $(`#y_${i}`)
+                    counted = $(`#x_${i}`)
+                    diff = $(`#z_${i}`)
+
+                    let this_tr = {
+                        ref:ref.text(),
+                        barcode:bc.text(),
+                        name:name.text(),
+                        frozen:frozen.val(),
+                        counted:counted.val(),
+                        diff:diff.val()
+                    }
+
+
+                    payload_trans.push(this_tr)
+
+
+                }
+
+                let payload = {
+                    module:'stock',
+                    data:{
+                        stage:'save_cont',
+                        header:payload_header,
+                        trans:payload_trans
+                    }
+                }
+
+                console.table(payload)
+            } else {
+                kasa.warning("There are no transactions")
+            }
+
+        } else {
+           kasa.warning("please fill all required fields in header")
+        }
+    }
+
+
+
 }
 
 const cmms = new Cmms()
