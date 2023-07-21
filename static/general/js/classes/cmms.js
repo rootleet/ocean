@@ -1086,7 +1086,7 @@ class Cmms {
                     }
                 }
 
-                console.table(payload)
+                // todo send payload to server for processinf
             } else {
                 kasa.warning("There are no transactions")
             }
