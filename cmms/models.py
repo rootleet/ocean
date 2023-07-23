@@ -96,7 +96,8 @@ class StockFreezeHd(models.Model):
 
     created_date = models.DateField(auto_now_add=True)
     created_time = models.TimeField(auto_now=True)
-    status = models.IntegerField(default=1)  # { 1: Pending, 2: Counted, 0: Invalid }
+    status = models.IntegerField(default=1)  # { 1: Pending, 2: Counted, 0: Deleted }
+    approve = models.IntegerField(default=0)
 
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
