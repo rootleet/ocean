@@ -796,8 +796,6 @@ class Cmms {
 
 
 
-
-
     compareTrigger(pk) {
         let groups = cmms.productGroups()
         // console.table(groups)
@@ -1010,8 +1008,11 @@ class Cmms {
             for (let i = 0; i < trans.length; i++) {
 
                 let tran = trans[i]
+
                 let pk = tran['pk']
-                tr += `<tr><td><button onclick="ScreenloadFrozen('${pk}')" class="btn btn-sm btn-info">LOAD</button></td><td>${tran['location']}</td><td>${tran['entry']}</td><td>${tran['remarks']}</td></tr>`
+                if(tran['approve'] === 1){
+                    tr += `<tr><td><button onclick="ScreenloadFrozen('${pk}')" class="btn btn-sm btn-info">LOAD</button></td><td>${tran['location']}</td><td>${tran['entry']}</td><td>${tran['remarks']}</td></tr>`
+                }
             }
 
             let tab = `<table class="table table-sm table-bordered">
@@ -1118,6 +1119,19 @@ class Cmms {
         } else {
            kasa.warning("please fill all required fields in header")
         }
+    }
+
+    approve(doc,key){
+        let payload = {
+            'module':'approve',
+            data:{
+                doc:doc,key:key
+            }
+        }
+
+        let response = api.call('PATCH',payload,'/cmms/api/')
+        kasa.info(response['message'])
+
     }
 
 
