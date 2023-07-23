@@ -17,6 +17,9 @@
                                 <div class="w-25">
                                     <label for="key">key</label><input type="text" id="key" readonly class="form-control w-100 rounded-0" placeholder="entry">
                                 </div>
+                                <div class="w-25">
+                                    <label for="stat">STATUS</label><input type="text" id="stat" readonly class="form-control w-100 rounded-0">
+                                </div>
                             </div>
 
                             <label for="loc">LOCATION</label><input type="text" id="loc" readonly class="form-control w-100 rounded-0" placeholder="loc">
@@ -68,7 +71,7 @@
                         <!-- Dropdown Menu -->
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                           <a onclick="printSheet()" class="dropdown-item" href="javascript:void(0);"><i class="bi text-info bi-printer"></i> Print For Count</a>
-                          <a onclick="kasa.info('FUNCTION NOT IMPLEMENTED')" class="dropdown-item" href="javascript:void(0);"><i class="bi bi-check text-success"></i>Approve</a>
+                          <a onclick="cmms.approve('FR',$('#key').val())" class="dropdown-item" href="javascript:void(0);"><i class="bi bi-check text-success"></i>Approve</a>
                           <a onclick="kasa.info('FUNCTION NOT IMPLEMENTED')" class="dropdown-item" href="javascript:void(0);"><i class="bi bi-trash text-danger"></i>Delete</a>
                         </div>
                       </div>
@@ -114,6 +117,7 @@
                 $('#loc').val(header['loc'])
                 $('#ref_freeze').val(header['ref'])
                 $('#remark').val(header['remarks'])
+                $('#stat').val(header['approve'])
 
                 prev = header['prev']
                 next = header['next']
