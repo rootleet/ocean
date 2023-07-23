@@ -23,11 +23,13 @@ urlpatterns = [
     path('tools/', views.tools, name='cmms-tools'),
     path('api/', views.api, name='cmms_api'),
     path('stock/', views.stock, name='stock'),
-    path('stock/count/', views.stock_count, name='stock-count'),
-    path('stock/count/new/<frozen>/',views.new_count,name='new_count'),
+    path('stock/count/', views.view_stock_count, name='stock-count'),
+    path('stock/count/new/', views.new_stock_count, name='stock-count-new'),
+    path('stock/count/new/<frozen>/', views.new_count, name='new_count'),
     path('compare/<pk>/<as_of>/<group>/', views.compare, name='compare'),
-    path('stock/new/',views.new_stock_count,name='new-stock-count'),
-    path('stock/frozen/',views.forezen,name='frozen-stock')
+    path('stock/new/', views.new_stock_count, name='new-stock-count'),
+    path('stock/frozen/', views.forezen, name='frozen-stock'),
+    path('stock/count/edit/<pk>/', views.edit_stock_count, name='edit_stock_count')
 
 ]
 

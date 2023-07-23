@@ -1036,31 +1036,35 @@ class Cmms {
 
     }
 
-    saveCount(){
+    saveCount(task='new'){
         // validate header
-        const ids = ["loc", "ref_freeze", "remark", "comment"]
+        const ids = ["loc", "ref_freeze", "remark", "comment",'ref_pk']
         if(anton.validateInputs(ids)){
             // validate transactions
             let trans = $('#devsBody tr')
             if(trans.length > 0){
                 let payload_trans = []
                 let payload_header = {
-                    ref: 'HELLO',
-                    comment: "hello"
+                    ref: $('#ref_freeze').val(),
+                    comment: $('#comment').val(),
+                    owner_pk:$('#mypk').val(),
+                    count_pk:$('#target_pk').val()
                 }
                 // there are trans
                 let count = trans.length
                 for (let t = 0; t < count; t++) {
                     let i = t + 1;
                     let tran = trans[t]
-                    let ref,bc,name,frozen,counted,diff
+                    let ref,bc,name,frozen,counted,diff,row_comment,row_iss
 
                     ref = $(`#ref_${i}`)
                     bc = $(`#bc_${i}`)
                     name = $(`#name_${i}`)
                     frozen = $(`#y_${i}`)
                     counted = $(`#x_${i}`)
-                    diff = $(`#z_${i}`)
+                    diff = $(`#z_${i}`);
+                    row_comment = $(`#line${i}_comment`).val();
+                    row_iss = $(`#iss_${i}`).val()
 
                     let this_tr = {
                         ref:ref.text(),
@@ -1068,8 +1072,12 @@ class Cmms {
                         name:name.text(),
                         frozen:frozen.val(),
                         counted:counted.val(),
-                        diff:diff.val()
+                        diff:diff.val(),
+                        row_comment:row_comment,
+                        row_iss:row_iss
                     }
+
+
 
 
                     payload_trans.push(this_tr)
@@ -1086,7 +1094,22 @@ class Cmms {
                     }
                 }
 
-                // todo send payload to server for processinf
+                console.table(payload)
+
+                if(task === 'new'){
+                    let response = api.call('PUT',payload,'/cmms/api/')
+                    kasa.info(response['message'])
+                    location.href = '/cmms/stock/count/'
+                } else if (task === 'update'){
+                    let response = api.call('PATCH',payload,'/cmms/api/')
+                    location.href = '/cmms/stock/count/'
+
+                } else {
+                    kasa.error("UNKNOWN METHOD")
+                }
+
+
+
             } else {
                 kasa.warning("There are no transactions")
             }
@@ -1095,6 +1118,8 @@ class Cmms {
            kasa.warning("please fill all required fields in header")
         }
     }
+
+
 
 
 

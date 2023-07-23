@@ -59,6 +59,35 @@ class LineCalculate {
     }
 }
 
+class LineComment {
+    write(line){
+        let name = $(`#name_${line}`).text()
+        let already_comment = $(`#line${line}_comment`).val()
+        Swal.fire({
+        title: ``,
+        html: `Enter Comment for ${name} <hr>
+          
+          <textarea id="comment-textarea" class="form-control" required placeholder="Enter your comment here...">${already_comment}</textarea>
+        `,
+        showCancelButton: true,
+        confirmButtonText: 'Submit',
+        preConfirm: () => {
+          const comment = document.getElementById('comment-textarea').value;
+
+          // Validate the input
+          if (!comment) {
+            Swal.showValidationMessage('Please select a comment type and enter a comment');
+          } else {
+
+              $(`#line${line}_comment`).val(comment)
+              kasa.success("Writing Comment....")
+
+          }
+        }
+      });
+    }
+}
+
 class Kasa {
   alert(icon, message) {
     Swal.fire({
@@ -106,8 +135,17 @@ class Kasa {
   question(message) {
     this.alert('question', message);
   }
+
+  html(message){
+      Swal.fire({
+          html:message
+      })
+  }
+
 }
 
-let kasa = new Kasa()
+
+const linecomment = new LineComment()
+const kasa = new Kasa()
 const anton = new Anton();
 const lincal = new LineCalculate()

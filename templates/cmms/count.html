@@ -43,7 +43,17 @@
             <div  class="card-body bg-tran1 h-100 p-2 overflow-auto">
                 <table class='table table-bordered table-striped table-hover table-sm table-responsive'>
                 <thead>
-                  <tr><th>LN</th><th>ITEM REF</th><th>BARCODE</th><th>DESCRIPTION</th><th>FROZEN QTY</th><th>COUNTED</th><th>DIFFERENCE</th></tr>
+                  <tr>
+                      <th>LN</th>
+                      <th>ITEM REF</th>
+                      <th>BARCODE</th>
+                      <th>DESCRIPTION</th>
+                      <th style="width:160px">FROZEN QTY</th>
+                      <th style="width:160px">COUNTED</th>
+                      <th style="width:160px">DIFFERENCE</th>
+                      <th>DETAIL</th>
+                      <th>COMMENT</th>
+                  </tr>
                 </thead>
                 <tbody id="devsBody">
 
@@ -85,7 +95,7 @@
                 next = header['next']
 
                 let entry = `FR${header['loc']}${header['pk']}`
-                $('#ref_freeze').val(entry)
+                $('#ref_freeze').val(header['pk'])
 
                 let tr = '';
 
@@ -104,23 +114,49 @@
 
 
 
+
+
                     let tran = message['trans'][i]
                     tr += `<tr id="${row_id}">
                             <td>${row}</td>
                             <td id="${ref_id}">${tran['item_ref']}</td>
                             <td id="${bc_id}">${tran['barcode']}</td>
                             <td id="${name_id}">${tran['name']}</td>
-                            <td ><input onkeyup="lincal.sub(${row})" type="text" id="${y_id}" disabled value="${tran['qty']}"></td>
-                            <td><input onkeyup="lincal.sub(${row})" id="${x_id}" type="text"></td>
-                            <td><input onkeyup="anton.lineXyz(${row})" type="text" id="${z_id}" disabled ></td>
-                        </tr>`
+                            <td ><input class="form-control form-control-sm rounded-0" style="width:150px" onkeyup="lincal.sub(${row})" type="text" id="${y_id}" disabled value="${tran['qty']}"></td>
+                            <td><input class="form-control form-control-sm rounded-0" style="width:150px" value="0.00" onkeyup="lincal.sub(${row})" id="${x_id}" type="text"></td>
+                            <td><input class="form-control form-control-sm rounded-0" style="width:150px" onkeyup="anton.lineXyz(${row})" type="text" id="${z_id}" disabled ></td>
+                            <td>
+                                <select class="form-control form-control-sm rounded-0" name="" id="iss_${row}">
+                                    <option selected value="no_iss">Accurate</option>
+                                    <option value="sys_error">System Error</option>
+                                    <option value="wr_entry">Wrong Entry</option>
+                                </select>
+                            </td>
+                            <td>
+                                <button onclick="linecomment.write(${row})" class="btn btn-info btn-sm"><i class="bi bi-bell"></i></button>
+                                <input type="hidden" name="" id="line${row}_comment" value=''>
+                            </td>
+                        </tr>
+                        `
 
                 }
 
                 $('#devsBody').html(tr)
 
+                recalculate();
+
             }
 
+        }
+
+        function recalculate() {
+            let rows = $('#devsBody tr');
+            for (let r = 0; r < rows.length; r++) {
+                let line = r +1;
+                let row = rows[r]
+
+                lincal.sub(line)
+            }
         }
     </script>
 

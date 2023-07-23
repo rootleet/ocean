@@ -7,6 +7,8 @@ from django.contrib.auth.models import User
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render, get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
+from fpdf import FPDF
+
 from ocean.settings import DB_SERVER, DB_NAME, DB_USER, DB_PORT, DB_PASSWORD
 from django.contrib.auth import get_user_model
 import pyodbc
@@ -61,7 +63,7 @@ def new_stock_count(request):
     return render(request, 'cmms/new_stock.html', context=context)
 
 
-def new_count(request,frozen):
+def new_count(request, frozen):
     context = {'nav': True}
     return render(request, 'cmms/count.html', context=context)
 
@@ -79,7 +81,7 @@ def forezen(request):
 
 
 @login_required()
-def stock_count(request):
+def new_stock_count(request):
     # if StockCountHD.objects.filter(status=1).count() != 1:
     #     messages.error(request, 'NO OPEN STOCK COUNT.')
     #     return redirect('/cmms/stock/')
@@ -90,6 +92,36 @@ def stock_count(request):
         }
     }
     return render(request, 'cmms/count.html', context=context)
+
+
+@login_required()
+def view_stock_count(request):
+    if StockCountHD.objects.filter(status=1).count() < 1:
+        messages.error(request, 'NO OPEN STOCK COUNT.')
+        return redirect('/cmms/stock/new/')
+    context = {
+        'nav': True,
+        'page': {
+            'title': "STOCK COUNT VIEW"
+        },
+        'c_pk': StockCountHD.objects.filter(status=1).last().pk
+    }
+    return render(request, 'cmms/count_view.html', context=context)
+
+
+@login_required()
+def edit_stock_count(request, pk):
+    if StockCountHD.objects.filter(status=1).count() < 1:
+        messages.error(request, 'NO OPEN STOCK COUNT.')
+        return redirect('/cmms/stock/new/')
+    context = {
+        'nav': True,
+        'page': {
+            'title': "STOCK COUNT VIEW"
+        },
+        'c_pk': StockCountHD.objects.filter(status=1).last().pk
+    }
+    return render(request, 'cmms/count_edit.html', context=context)
 
 
 @login_required()
@@ -210,7 +242,7 @@ def api(request):
                             response['status_code'] = 404
                             response['status'] = 'error'
 
-                    elif stage == 'export':
+                    elif stage == 'preview':
                         style = data.get('compare')
                         if style == 'final_compare':
                             doc = data.get('doc')
@@ -240,21 +272,29 @@ def api(request):
                             if open_st == 1:
 
                                 stock_hd = StockCountHD.objects.get(pk=pk)
-                                group = data.get('group')
-                                cursor = db()
-                                # get group from database
-                                g_q = f"select group_des from group_master where group_code = '{group}'"
-                                cursor.execute(g_q)
-                                g_name = cursor.fetchone()[0]
-                                as_of = data.get('as_of')
-                                query = f"exec dbo.item_avail_loc_date N'{stock_hd.loc}',N'%',N'%',N'%',N'%',N'%',N'%',N'%',N'%',N'%',N'%',N'%',N'%',N'%',N'1%',N'%',N'%',N'%',N'family_id',1,N'SNEDA MOTORS',N'ITEM AVAILABILITY BY FAMILY \
-                                    As of ({as_of})',N'dd/mm/yyyy',N'#,###,###.00','{as_of}',N'1'"
-
-                                cursor.execute(query)
+                                trans = StockCountTrans.objects.filter(stock_count_hd=stock_hd)
+                                frozen = stock_hd.frozen
                                 header = {
-                                    'location': stock_hd.loc,
-                                    'remark': stock_hd.remark,
-                                    'group': g_name.strip()
+                                    'frozen': {
+                                        'pk': frozen.pk,
+                                        'loc': frozen.loc_id,
+                                        'remarks': frozen.remarks,
+                                        'status': frozen.status,
+                                        'owner': frozen.owner.username,
+                                        'created': f"{frozen.created_date} {frozen.created_time}",
+                                        'entry': frozen.ent(),
+
+                                    },
+                                    'count': {
+                                        'pk': stock_hd.pk,
+                                        'entry': stock_hd.entry_no(),
+                                        'created': stock_hd.created_at,
+                                        'comment': stock_hd.comment,
+                                        'status': stock_hd.status,
+                                        'owner': stock_hd.owner.username,
+                                        'next': stock_hd.next(),
+                                        'prev': stock_hd.prev()
+                                    }
                                 }
                                 arr = []
                                 not_arr = []
@@ -273,99 +313,26 @@ def api(request):
                                     'not_counted': 0
                                 }
                                 row_c = 2
-                                rows = cursor.fetchall()
-                                for row in rows:
-
-                                    itemRref = row[6].strip()
-                                    name = row[7].strip()
-                                    group_code = row[4].strip()
-                                    group_name = row[5].strip()
-
-                                    if group_code == group:
-
-                                        row_c += 1
-                                        av_qty = row[15].strip()
-                                        # print()
-                                        # print(f"RAW : {av_qty}")
-                                        if len(av_qty) > 0:
-                                            a_q = Decimal(av_qty.split('*')[0])
-                                        else:
-                                            a_q = 0.00
-
-                                        # print(f"{av_qty} / {a_q}")
-                                        # focus on filters
-                                        item_q = cursor.execute(
-                                            f"SELECT barcode,sell_price from product_master where item_ref = '{itemRref}'")
-                                        item = item_q.fetchone()
-                                        barcode = item[0].strip()
-                                        if item[1] is None:
-                                            sell_price = 0.00
-                                        else:
-                                            sell_price = item[1]
-
-                                        # check if there is item with ref
-
-                                        counted = 0.00
-                                        el_pk = 0
-                                        comment = 'not counted'
-                                        if StockCountTrans.objects.filter(item_ref=itemRref,
-                                                                          stock_count_hd=stock_hd).exists():
-                                            counted = StockCountTrans.objects.filter(item_ref=itemRref,
-                                                                                     stock_count_hd=stock_hd).aggregate(
-                                                total=Sum('quantity'))['total']
-                                            oc_item = StockCountTrans.objects.filter(item_ref=itemRref,
-                                                                                     stock_count_hd=stock_hd).last()
-                                            comment = oc_item.comment
-                                            el_pk = oc_item.pk
-
-                                        diff_qty = Decimal(counted) - Decimal(a_q)
-                                        obj = {
-                                            'item_ref': itemRref,
-                                            'barcode': barcode,
-                                            'desription': name,
-                                            'counted': counted,
-                                            'av_qty': Decimal(str(a_q)),
-                                            'qty_diff': diff_qty,
-                                            'sell_price': sell_price,
-                                            'diff_val': diff_qty * Decimal(sell_price),
-                                            'comment': comment,
-                                            'pk': el_pk
-                                        }
-
-                                        if doc == 'preview':
-                                            if counted > 0:
-                                                arr.append(obj)
-                                                if entries.get(comment) is not None:
-                                                    entries[comment] += 1
-                                                    values[comment] += diff_qty * Decimal(sell_price)
-                                            else:
-                                                not_arr.append(obj)
-                                                entries['not_counted'] += 1
-                                                values['not_counted'] += diff_qty * Decimal(sell_price)
-
-
-                                        elif doc == 'excel':
-
-                                            sheet[f'A{row_c}'] = itemRref
-                                            sheet[f'B{row_c}'] = barcode
-                                            sheet[f'C{row_c}'] = name
-                                            sheet[f'D{row_c}'] = counted
-                                            sheet[f'E{row_c}'] = Decimal(str(a_q))
-                                            sheet[f'F{row_c}'] = diff_qty
-                                            sheet[f'G{row_c}'] = sell_price
-                                            sheet[f'H{row_c}'] = diff_qty * Decimal(sell_price)
-                                            sheet[f'I{row_c}'] = comment
-
-                                            tot_phy += Decimal(counted)
-                                            tot_sys += Decimal(str(a_q))
-                                            tot_qdif += Decimal(diff_qty)
-                                            tot_vdif += Decimal(diff_qty) * Decimal(sell_price)
+                                for tran in trans:
+                                    comment = "NO COMMENT"
+                                    if len(tran.comment) > 0:
+                                        comment = tran.comment
+                                    arr.append({
+                                        'item_ref': tran.item_ref,
+                                        'barcode': tran.barcode,
+                                        'name': tran.name,
+                                        'froze_qty': tran.froze_qty,
+                                        'counted_qty': tran.counted_qty,
+                                        'diff_qty': tran.diff_qty,
+                                        'comment': comment,
+                                        'issue': tran.issue
+                                    })
 
                                 if doc == 'preview':
                                     header['entries'] = entries
                                     header['values'] = values
                                     response['message'] = {
-                                        'header': header, 'trans': {'counted': arr, 'not_counted': not_arr}
+                                        'header': header, 'trans': arr
                                     }
                                 elif doc == 'excel':
                                     sheet[f'A2'] = "SUMMARY"
@@ -387,6 +354,65 @@ def api(request):
                                 response['message'] = "NO OPEN STOCK"
                                 response['status_code'] = 404
                                 response['status'] = 'limit'
+
+                        elif style == 'count_sheet':
+
+                            doc = data.get('doc')
+                            print(doc)
+
+                            if StockFreezeHd.objects.filter(pk=doc).count() == 1:
+
+                                f_hd = StockFreezeHd.objects.get(pk=doc)
+                                trans = f_hd.trans_only()
+
+                                pdf = FPDF('P', 'mm', 'A4')
+                                pdf.add_page()
+                                pdf.set_font('Arial', 'BU', 10)
+                                pdf.cell(180, 5, "STOCK COUNT SHEET", 0, 1, 'C')
+                                pdf.ln(10)
+
+                                pdf.set_font('Arial', 'B', 10)
+                                pdf.cell(25, 5, "LOCATION : ", 0,0 , 'L')
+                                pdf.set_font('Arial', '', 7)
+                                pdf.cell(80, 5, f" {f_hd.loc_id}", 0, 1, 'L')
+
+                                pdf.set_font('Arial', 'B', 10)
+                                pdf.cell(25, 5, "REMARKS : ", 0, 0, 'L')
+                                pdf.set_font('Arial', '', 7)
+                                pdf.cell(80, 5, f" {f_hd.remarks}", 0, 1, 'L')
+                                pdf.ln(10)
+                                # header
+                                pdf.set_font('Arial', 'B', 10)
+                                pdf.cell(10, 5, f"LN", 1, 0, 'L')
+                                pdf.cell(25, 5, f"ITEM REF", 1, 0, 'L')
+                                pdf.cell(30, 5, f"BARCODE", 1, 0, 'L')
+                                pdf.cell(80, 5, f"NAME", 1, 0, 'L')
+                                pdf.cell(20, 5, f"FROZEN", 1, 0, 'L')
+                                pdf.cell(20, 5, f"COUNTED", 1, 1, 'L')
+
+                                pdf.set_font('Arial', '', 7)
+
+                                line = 0
+
+                                for tran in trans:
+                                    line += 1
+                                    pdf.cell(10, 5, f"{line}", 1, 0, 'L')
+                                    pdf.cell(25, 5, f"{tran.item_ref}", 1, 0, 'L')
+                                    pdf.cell(30, 5, f"{tran.barcode}", 1, 0, 'L')
+                                    pdf.cell(80, 5, f"{tran.name}", 1, 0, 'L')
+                                    pdf.cell(20, 5, f"{tran.qty}", 1, 0, 'L')
+                                    pdf.cell(20,5,f"",1,1,'L')
+
+                                file = f'static/general/tmp/{f_hd.loc_id}.pdf'
+                                pdf.output(file, 'F')
+
+                                response = {
+                                    'status_code': 200, 'message': file, 'status': 'success'
+                                }
+                            else:
+                                response = {
+                                    'status_code': 404, 'message': "ENTRY NOT FOUND", 'status': 'not_found'
+                                }
 
                     elif stage == 'frozen':
                         pk = data.get('pk')
@@ -415,7 +441,6 @@ def api(request):
                             tr = []
 
                             for t in trans['trans']:
-
                                 ref = t.item_ref
                                 barcode = t.barcode
                                 name = t.name
@@ -447,8 +472,8 @@ def api(request):
                             arr.append({
                                 'pk': fr.pk,
                                 'entry': f"FR{fr.loc_id}{fr.pk}",
-                                'remarks':fr.remarks,
-                                'location':fr.loc_id
+                                'remarks': fr.remarks,
+                                'location': fr.loc_id
                             })
 
                         response['message'] = arr
@@ -580,6 +605,65 @@ def api(request):
                         response['message'] = f" {len(trans)} Transactions cannot be empty"
                         response['status'] = "EMPTY"
                         response['status_code'] = 100
+                elif stage == 'save_cont':
+                    header = data.get('header')
+                    trans = data.get('trans')
+                    count_pk = header.get('count_pk')
+                    task = header.get('task')
+
+                    frozen_ref = header.get('ref')
+                    comment = header.get('comment')
+                    owner_pk = header.get('owner_pk')
+                    owner = User.objects.get(pk=owner_pk)
+
+                    if StockFreezeHd.objects.filter(pk=frozen_ref).count() == 1:
+                        try:
+
+                            frozen = StockFreezeHd.objects.get(pk=frozen_ref)
+                            frozen.status = 2
+
+                            if StockCountHD.objects.filter(frozen=frozen, comment=comment, owner=owner).exists():
+                                # delete
+                                StockCountHD.objects.get(frozen=frozen, comment=comment, owner=owner).delete()
+                            StockCountHD(frozen=frozen, comment=comment, owner=owner).save()
+                            count_hd = StockCountHD.objects.get(frozen=frozen, comment=comment, owner=owner)
+
+                            # save trans
+                            for tran in trans:
+                                print(tran)
+                                ref = tran.get('ref')
+                                barcode = tran.get('barcode')
+                                name = tran.get('name')
+                                frozen = tran.get('frozen')
+                                counted = tran.get('counted')
+                                diff = tran.get('diff')
+                                row_comment = tran.get('row_comment')
+                                row_iss = tran.get('row_iss')
+
+                                # save tran
+                                StockCountTrans.objects.create(stock_count_hd=count_hd, item_ref=ref, barcode=barcode,
+                                                               name=name, froze_qty=frozen, counted_qty=counted,
+                                                               diff_qty=diff, comment=row_comment, issue=row_iss)
+
+                            frozen.save()
+                            response['status_code'] = 200
+                            response['status'] = 'success'
+                            response['message'] = "Stock Count Saved"
+
+
+
+                        except Exception as e:
+                            response['status_code'] = 500
+                            response['status'] = 'error'
+                            response['message'] = str(e)
+
+
+
+                    else:
+                        response['statys_code'] = 404
+                        response['message'] = f"CANNOT FIND FROZEN with entry {frozen_ref}"
+
+
 
         elif method == 'PATCH':
             if module == 'stock':
@@ -591,6 +675,41 @@ def api(request):
                         opened.status = 2
                         opened.save()
                         response = {'status': 200, 'status_code': 'success', 'message': "OPENED COUNT closed"}
+
+                if stage == 'save_cont':
+                    header = data.get('header')
+                    count_pk = header.get('count_pk')
+
+                    # print(data)
+                    if StockCountHD.objects.filter(pk=count_pk).count() == 1:
+                        c_hd = StockCountHD.objects.get(pk=count_pk)
+                        c_hd.comment = header.get('comment')
+
+                        trans = data.get('trans')
+
+                        for tran in trans:
+                            print(tran)
+                            ref = tran.get('ref')
+                            barcode = tran.get('barcode')
+                            name = tran.get('name')
+                            frozen = tran.get('frozen')
+                            counted = tran.get('counted')
+                            diff = tran.get('diff')
+                            row_comment = tran.get('row_comment')
+                            row_iss = tran.get('row_iss')
+
+                            # delete this tran and add again
+                            StockCountTrans.objects.get(stock_count_hd=c_hd, item_ref=ref).delete()
+
+                            # save tran
+                            StockCountTrans.objects.create(stock_count_hd=c_hd, item_ref=ref, barcode=barcode,
+                                                           name=name, froze_qty=frozen, counted_qty=counted,
+                                                           diff_qty=diff, comment=row_comment, issue=row_iss)
+                        c_hd.save()
+                        response['message'] = "UPDATE SUCCESSFUL"
+                    else:
+                        var = response['status_code'] = 404
+                        response['message'] = f"CANNOT FIND DOCUMENT with key {count_pk}"
 
 
 
