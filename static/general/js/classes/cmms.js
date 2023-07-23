@@ -971,6 +971,7 @@ class Cmms {
             if(status === 200){
                 // reload to view
                 alert(response['message'])
+                location.href = '/cmms/stock/frozen/'
             } else {
                 // show message
                 alert(response['message'])

@@ -58,7 +58,7 @@ def stock(request):
 
 
 @login_required()
-def new_stock_count(request):
+def new_frozen(request):
     context = {'nav': True}
     return render(request, 'cmms/new_stock.html', context=context)
 
@@ -68,12 +68,13 @@ def new_count(request, frozen):
     return render(request, 'cmms/count.html', context=context)
 
 
+
 @login_required()
 def forezen(request):
     froze = StockFreezeHd.objects.all()
     if froze.count() < 1:
         messages.warning(request, "PLEASE FREEZE NEW STOCK")
-        return redirect('/cmms/stock/')
+        return redirect('/cmms/stock/frozen/new/')
     else:
         f_pk = froze.last().pk
     context = {'nav': True, 'f_pk': f_pk}
