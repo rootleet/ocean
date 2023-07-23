@@ -68,7 +68,6 @@ def new_count(request, frozen):
     return render(request, 'cmms/count.html', context=context)
 
 
-
 @login_required()
 def forezen(request):
     froze = StockFreezeHd.objects.all()
@@ -373,7 +372,7 @@ def api(request):
                                 pdf.ln(10)
 
                                 pdf.set_font('Arial', 'B', 10)
-                                pdf.cell(25, 5, "LOCATION : ", 0,0 , 'L')
+                                pdf.cell(25, 5, "LOCATION : ", 0, 0, 'L')
                                 pdf.set_font('Arial', '', 7)
                                 pdf.cell(80, 5, f" {f_hd.loc_id}", 0, 1, 'L')
 
@@ -402,7 +401,7 @@ def api(request):
                                     pdf.cell(30, 5, f"{tran.barcode}", 1, 0, 'L')
                                     pdf.cell(80, 5, f"{tran.name}", 1, 0, 'L')
                                     pdf.cell(20, 5, f"{tran.qty}", 1, 0, 'L')
-                                    pdf.cell(20,5,f"",1,1,'L')
+                                    pdf.cell(20, 5, f"", 1, 1, 'L')
 
                                 file = f'static/general/tmp/{f_hd.loc_id}.pdf'
                                 pdf.output(file, 'F')
@@ -436,7 +435,8 @@ def api(request):
                                 'status': hd.status,
                                 'owner': hd.owner.username,
                                 'next': hd.next(),
-                                'prev': hd.prev()
+                                'prev': hd.prev(),
+                                'approve':hd.approve
                             }
 
                             tr = []
@@ -474,7 +474,8 @@ def api(request):
                                 'pk': fr.pk,
                                 'entry': f"FR{fr.loc_id}{fr.pk}",
                                 'remarks': fr.remarks,
-                                'location': fr.loc_id
+                                'location': fr.loc_id,
+                                'approve': fr.approve
                             })
 
                         response['message'] = arr
@@ -711,6 +712,36 @@ def api(request):
                     else:
                         var = response['status_code'] = 404
                         response['message'] = f"CANNOT FIND DOCUMENT with key {count_pk}"
+
+            elif module == 'approve':
+                doc = data.get('doc')
+                key = data.get('key')
+
+                if doc == 'FR':
+                    hd = StockFreezeHd.objects.filter(pk=key)
+                    count = hd.count()
+                else:
+                    count = 0
+
+                if count == 1:
+                    try:
+                        head = hd.last()
+                        head.approve = 1
+                        head.save()
+
+                        response['status_code'] = 200
+                        response['status'] = 'success'
+                        response['message'] = "APPROVED"
+                    except Exception as e:
+                        response['status_code'] = 505
+                        response['status'] = 'error'
+                        response['message'] = str(e)
+
+                else:
+                    response['status_code'] = 404
+                    response['status'] = 'error'
+                    response['message'] = f"Count not find matching document ({doc} - {key})"
+
 
 
 
