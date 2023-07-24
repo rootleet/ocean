@@ -70,6 +70,7 @@
                         <button id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-info m-1"><i class="bh bi-grip-horizontal"></i></button>
                         <!-- Dropdown Menu -->
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a href="{% url 'new-frozen' %}"><i class="bi bi-plus text-info"></i> NEW</a>
                           <a onclick="printSheet()" class="dropdown-item" href="javascript:void(0);"><i class="bi text-info bi-printer"></i> Print For Count</a>
                           <a onclick="cmms.approve('FR',$('#key').val())" class="dropdown-item" href="javascript:void(0);"><i class="bi bi-check text-success"></i>Approve</a>
                           <a onclick="kasa.info('FUNCTION NOT IMPLEMENTED')" class="dropdown-item" href="javascript:void(0);"><i class="bi bi-trash text-danger"></i>Delete</a>
