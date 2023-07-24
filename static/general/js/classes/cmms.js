@@ -866,7 +866,7 @@ class Cmms {
             let tr = '', row_count = 1;
             for (const line of e.target.result.split('\r')) {
               const item_id = line.split(',')[0].replace('\n','');
-              const {status_code, message} = cmms.getProduct('single',item_id,'item_ref');
+              const {status_code, message} = cmms.getProduct('single',item_id,'item_code');
 
               if(status_code === 200 && message.count === 1) {
                 const {item_ref, barcode, name} = message.trans[0];
@@ -882,7 +882,7 @@ class Cmms {
               } else {
                 tr = message;
                 $('devBody').html(tr)
-                console.log(`${item_id} not found`);
+                
               }
             }
           };

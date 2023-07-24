@@ -13,8 +13,13 @@ class Anton {
         for (let i = 0; i < ids.length; i++) {
             const value = $(`#${ids[i]}`).val().trim();
             if (value === '') {
-                alert('False');
+                // alert('False');
                 return false;
+                $(`#${ids[i]}`).addClass('border-danger')
+                $(`#${ids[i]}`).removeClass('border-success')
+            } else {
+                $(`#${ids[i]}`).addClass('border-success')
+                $(`#${ids[i]}`).removeClass('border-danger')
             }
         }
         return true;
