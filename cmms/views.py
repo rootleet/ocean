@@ -386,8 +386,8 @@ def api(request):
                                 pdf.cell(10, 5, f"LN", 1, 0, 'L')
                                 pdf.cell(25, 5, f"ITEM REF", 1, 0, 'L')
                                 pdf.cell(30, 5, f"BARCODE", 1, 0, 'L')
-                                pdf.cell(80, 5, f"NAME", 1, 0, 'L')
-                                pdf.cell(20, 5, f"FROZEN", 1, 0, 'L')
+                                pdf.cell(100, 5, f"NAME", 1, 0, 'L')
+                                # pdf.cell(20, 5, f"FROZEN", 1, 0, 'L')
                                 pdf.cell(20, 5, f"COUNTED", 1, 1, 'L')
 
                                 pdf.set_font('Arial', '', 7)
@@ -399,8 +399,8 @@ def api(request):
                                     pdf.cell(10, 5, f"{line}", 1, 0, 'L')
                                     pdf.cell(25, 5, f"{tran.item_ref}", 1, 0, 'L')
                                     pdf.cell(30, 5, f"{tran.barcode}", 1, 0, 'L')
-                                    pdf.cell(80, 5, f"{tran.name}", 1, 0, 'L')
-                                    pdf.cell(20, 5, f"{tran.qty}", 1, 0, 'L')
+                                    pdf.cell(100, 5, f"{tran.name}", 1, 0, 'L')
+                                    # pdf.cell(20, 5, f"{tran.qty}", 1, 0, 'L')
                                     pdf.cell(20, 5, f"", 1, 1, 'L')
 
                                 file = f'static/general/tmp/{f_hd.loc_id}.pdf'
