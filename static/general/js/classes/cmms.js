@@ -882,7 +882,6 @@ class Cmms {
               } else {
                 tr = message;
                 $('devBody').html(tr)
-                
               }
             }
           };
