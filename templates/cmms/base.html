@@ -480,12 +480,7 @@
 {% if messages %}
   <script>
     {% for message in messages %}
-      Swal.fire({
-        icon: '{{ message.tags }}',
-        title: '{{ message }}',
-        showConfirmButton: false,
-        timer: 3000
-      });
+      kasa.info(`{{ message }}`)
     {% endfor %}
   </script>
 {% endif %}
