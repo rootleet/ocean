@@ -36,7 +36,7 @@ def carjobs(request):
         'nav': True,
         'searchButton': 'carJob'
     }
-    messages.info(request, "Please not, you can only filter data as of 1st April 2023 and forward")
+    messages.info(request, "You can now view all data but limited to 100 records")
     return render(request, 'cmms/car-jobs.html', context=context)
 
 
@@ -383,6 +383,7 @@ def api(request):
                                 pdf.ln(10)
                                 # header
                                 pdf.set_font('Arial', 'B', 10)
+                                pdf.cell(10, 5, f"LN", 1, 0, 'L')
                                 pdf.cell(10, 5, f"LN", 1, 0, 'L')
                                 pdf.cell(25, 5, f"ITEM REF", 1, 0, 'L')
                                 pdf.cell(30, 5, f"BARCODE", 1, 0, 'L')
