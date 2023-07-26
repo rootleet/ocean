@@ -185,8 +185,6 @@ AUTHENTICATION_BACKENDS = [
     'ocean.auth.EmailBackend',
 ]
 
-
-
 # CMMS DATA PARAMETERS
 DB_SERVER = '192.168.2.4'
 DB_PORT = '1237'
