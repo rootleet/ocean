@@ -87,6 +87,7 @@ class Cmms {
                                 <td>${wo['wo_no']}</td>
                                 <td>${wo['invoice_entry']}</td>
                                 <td>${wo['wo_date']}</td>
+                                <td>${wo['created_by']}</td>
                             </tr>`
                     }
                 } else {
