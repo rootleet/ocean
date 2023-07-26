@@ -16,7 +16,7 @@ from fpdf import FPDF
 
 from admin_panel.views import today
 from cmms.models import FollowUp
-from ocean.settings import DB_SERVER, DB_NAME, DB_USER, DB_PORT, DB_PASSWORD
+from ocean.settings import DB_SERVER, DB_NAME, DB_USER, DB_PORT, DB_PASSWORD, OLD_DB_NAME
 from .ApiClass import *
 
 from admin_panel.models import Notifications, AuthToken, Locations, SuppMaster, ProductMaster, ProductTrans, \
@@ -1152,6 +1152,10 @@ def api_call(request, module, crud):
             connection = pyodbc.connect(connection_string)
             cursor = connection.cursor()
 
+            old_connection_string = f"DRIVER={driver};SERVER={server};DATABASE={OLD_DB_NAME};UID={username};PWD={password}"
+            old_connection = pyodbc.connect(old_connection_string)
+            old_cursor = old_connection.cursor()
+
             asset_count = cursor.execute(f"select count(*) from asset_mast where asset_no = '{carno}'").fetchone()[0]
             if asset_count == 1:
                 frame = {
@@ -1188,12 +1192,27 @@ def api_call(request, module, crud):
                 
                 # check if there is wo for asset
                 wo_count = cursor.execute(f"SELECT COUNT(*) from wo_hd where asset_code = '{asset_code}'").fetchone()[0]
+                old_wo_count = old_cursor.execute(f"SELECT COUNT(*) from wo_hd where asset_code = '{asset_code}'").fetchone()[0]
                 result_list = []
+
+                if old_wo_count > 0:
+                    old_wo = old_cursor.execute(f"SELECT top({limit}) created_by, wo.wo_no, wo.wreq_no, invoice_entry, wo.wo_date FROM wo_hd wo RIGHT JOIN w_request wr ON wr.wreq_no = wo.wreq_no WHERE wo.asset_code = '{asset_code}' order by wo.wo_date desc")
+                    for old_row in old_cursor.fetchall():
+                        print(old_row)
+                        old_obj = {}  # create an empty object
+                        old_obj['created_by'] = old_row[0].strip()
+                        old_obj['wo_no'] = old_row[1].strip()
+                        old_obj['wreq_no'] = old_row[2].strip()
+                        old_obj['invoice_entry'] = old_row[3]
+                        old_obj['wo_date'] = old_row[4]
+                        result_list.append(old_obj)
+
                 if wo_count > 0 :
                     wo = cursor.execute(f"SELECT top({limit}) created_by, wo.wo_no, wo.wreq_no, invoice_entry, wo.wo_date FROM wo_hd wo RIGHT JOIN w_request wr ON wr.wreq_no = wo.wreq_no WHERE wo.asset_code = '{asset_code}' order by wo.wo_date desc")
                     # create a list to store the objects
-
+                    print('NEW')
                     for row in cursor.fetchall():
+                        print(row)
                         obj = {}  # create an empty object
                         obj['created_by'] = row[0].strip()
                         obj['wo_no'] = row[1].strip()
@@ -1201,6 +1220,8 @@ def api_call(request, module, crud):
                         obj['invoice_entry'] = row[3].strip()
                         obj['wo_date'] = row[4]
                         result_list.append(obj)
+
+
 
                 jobs = frame['jobs']
                 jobs['count'] = wo_count
