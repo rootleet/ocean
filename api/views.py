@@ -1228,7 +1228,7 @@ def api_call(request, module, crud):
 
 
                 jobs = frame['jobs']
-                jobs['count'] = wo_count
+                jobs['count'] = wo_count + old_wo_count
                 jobs['records'] = result_list
 
                 response['message'] = frame
