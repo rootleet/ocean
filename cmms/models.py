@@ -26,6 +26,20 @@ class StockCountHD(models.Model):
 
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
+    def trans(self):
+        return {
+            'count': StockCountTrans.objects.filter(stock_count_hd=self.pk).count(),
+            'trans': StockCountTrans.objects.filter(stock_count_hd=self.pk),
+            'summary': {
+                'total_frozen': StockCountTrans.objects.filter(stock_count_hd=self.pk).aggregate(total_amount=Sum('froze_qty'))['total_amount'],
+                'total_counted': StockCountTrans.objects.filter(stock_count_hd=self.pk).aggregate(total_amount=Sum('counted_qty'))['total_amount'],
+                'qty_difference': StockCountTrans.objects.filter(stock_count_hd=self.pk).aggregate(total_amount=Sum('diff_qty'))['total_amount'],
+                'value_frozen': StockCountTrans.objects.filter(stock_count_hd=self.pk).aggregate(total_amount=Sum('froze_val'))['total_amount'],
+                'value_counted': StockCountTrans.objects.filter(stock_count_hd=self.pk).aggregate(total_amount=Sum('counted_val'))['total_amount'],
+                'value_difference': StockCountTrans.objects.filter(stock_count_hd=self.pk).aggregate(total_amount=Sum('diff_val'))['total_amount']
+            }
+        }
+
     def entry_no(self):
         return f"STK{self.pk}{self.frozen.loc_id}"
 
@@ -68,16 +82,19 @@ class StockCountHD(models.Model):
         }
 
 
-
 class StockCountTrans(models.Model):
     stock_count_hd = models.ForeignKey(StockCountHD, on_delete=models.CASCADE)
     item_ref = models.CharField(max_length=100)
     barcode = models.CharField(max_length=100)
     name = models.TextField()
 
-    froze_qty = models.DecimalField(max_digits=10, decimal_places=3,default=0.00)
-    counted_qty = models.DecimalField(max_digits=10, decimal_places=3,default=0.00)
-    diff_qty = models.DecimalField(max_digits=10, decimal_places=3,default=0.00)
+    froze_qty = models.DecimalField(max_digits=10, decimal_places=3, default=0.00)
+    counted_qty = models.DecimalField(max_digits=10, decimal_places=3, default=0.00)
+    diff_qty = models.DecimalField(max_digits=10, decimal_places=3, default=0.00)
+
+    froze_val = models.DecimalField(max_digits=10, decimal_places=3, default=0.00)
+    counted_val = models.DecimalField(max_digits=10, decimal_places=3, default=0.00)
+    diff_val = models.DecimalField(max_digits=10, decimal_places=3, default=0.00)
 
     quantity = models.DecimalField(max_digits=10, decimal_places=3, default=0.00)
     sell_price = models.DecimalField(max_digits=10, decimal_places=3, default=0.00)
@@ -86,7 +103,6 @@ class StockCountTrans(models.Model):
     issue = models.TextField(default='null')
 
     owner = models.TextField(default='Anonymous')
-
 
 
 class StockFreezeHd(models.Model):
@@ -109,6 +125,7 @@ class StockFreezeHd(models.Model):
 
     def trans_only(self):
         return StockFreezeTrans.objects.filter(entry_id=self.pk)
+
     def next(self):
         if StockFreezeHd.objects.filter(pk__gt=self.pk).count() > 0:
             pk = StockFreezeHd.objects.filter(pk__gt=self.pk).first().pk
