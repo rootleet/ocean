@@ -356,64 +356,180 @@ def api(request):
                                 response['status'] = 'limit'
 
                         elif style == 'count_sheet':
-
+                            print(data)
                             doc = data.get('doc')
+                            key = data.get('key')
                             print(doc)
 
-                            if StockFreezeHd.objects.filter(pk=doc).count() == 1:
+                            if doc == 'fr':
+                                #frozen
+                                if StockFreezeHd.objects.filter(pk=key).count() == 1:
 
-                                f_hd = StockFreezeHd.objects.get(pk=doc)
-                                trans = f_hd.trans_only()
+                                    f_hd = StockFreezeHd.objects.get(pk=key)
+                                    trans = f_hd.trans_only()
 
-                                pdf = FPDF('P', 'mm', 'A4')
-                                pdf.add_page()
-                                pdf.set_font('Arial', 'BU', 10)
-                                pdf.cell(180, 5, "STOCK COUNT SHEET", 0, 1, 'C')
-                                pdf.ln(10)
+                                    pdf = FPDF('P', 'mm', 'A4')
+                                    pdf.add_page()
+                                    pdf.set_font('Arial', 'BU', 10)
+                                    pdf.cell(180, 5, "STOCK COUNT SHEET", 0, 1, 'C')
+                                    pdf.ln(10)
 
-                                pdf.set_font('Arial', 'B', 10)
-                                pdf.cell(25, 5, "LOCATION : ", 0, 0, 'L')
-                                pdf.set_font('Arial', '', 7)
-                                pdf.cell(80, 5, f" {f_hd.loc_id}", 0, 1, 'L')
+                                    pdf.set_font('Arial', 'B', 10)
+                                    pdf.cell(25, 5, "LOCATION : ", 0, 0, 'L')
+                                    pdf.set_font('Arial', '', 7)
+                                    pdf.cell(80, 5, f" {f_hd.loc_id}", 0, 1, 'L')
 
-                                pdf.set_font('Arial', 'B', 10)
-                                pdf.cell(25, 5, "REMARKS : ", 0, 0, 'L')
-                                pdf.set_font('Arial', '', 7)
-                                pdf.cell(80, 5, f" {f_hd.remarks}", 0, 1, 'L')
-                                pdf.ln(10)
-                                # header
-                                pdf.set_font('Arial', 'B', 10)
-                                pdf.cell(10, 5, f"LN", 1, 0, 'L')
-                                pdf.cell(10, 5, f"LN", 1, 0, 'L')
-                                pdf.cell(25, 5, f"ITEM REF", 1, 0, 'L')
-                                pdf.cell(30, 5, f"BARCODE", 1, 0, 'L')
-                                pdf.cell(100, 5, f"NAME", 1, 0, 'L')
-                                # pdf.cell(20, 5, f"FROZEN", 1, 0, 'L')
-                                pdf.cell(20, 5, f"COUNTED", 1, 1, 'L')
+                                    pdf.set_font('Arial', 'B', 10)
+                                    pdf.cell(25, 5, "REMARKS : ", 0, 0, 'L')
+                                    pdf.set_font('Arial', '', 7)
+                                    pdf.cell(80, 5, f" {f_hd.remarks}", 0, 1, 'L')
+                                    pdf.ln(10)
+                                    # header
+                                    pdf.set_font('Arial', 'B', 10)
+                                    pdf.cell(10, 5, f"LN", 1, 0, 'L')
+                                    pdf.cell(10, 5, f"LN", 1, 0, 'L')
+                                    pdf.cell(25, 5, f"ITEM REF", 1, 0, 'L')
+                                    pdf.cell(30, 5, f"BARCODE", 1, 0, 'L')
+                                    pdf.cell(100, 5, f"NAME", 1, 0, 'L')
+                                    # pdf.cell(20, 5, f"FROZEN", 1, 0, 'L')
+                                    pdf.cell(20, 5, f"COUNTED", 1, 1, 'L')
 
-                                pdf.set_font('Arial', '', 7)
+                                    pdf.set_font('Arial', '', 7)
 
-                                line = 0
+                                    line = 0
 
-                                for tran in trans:
-                                    line += 1
-                                    pdf.cell(10, 5, f"{line}", 1, 0, 'L')
-                                    pdf.cell(25, 5, f"{tran.item_ref}", 1, 0, 'L')
-                                    pdf.cell(30, 5, f"{tran.barcode}", 1, 0, 'L')
-                                    pdf.cell(100, 5, f"{tran.name}", 1, 0, 'L')
-                                    # pdf.cell(20, 5, f"{tran.qty}", 1, 0, 'L')
-                                    pdf.cell(20, 5, f"", 1, 1, 'L')
+                                    for tran in trans:
+                                        line += 1
+                                        pdf.cell(10, 5, f"{line}", 1, 0, 'L')
+                                        pdf.cell(25, 5, f"{tran.item_ref}", 1, 0, 'L')
+                                        pdf.cell(30, 5, f"{tran.barcode}", 1, 0, 'L')
+                                        pdf.cell(100, 5, f"{tran.name}", 1, 0, 'L')
+                                        # pdf.cell(20, 5, f"{tran.qty}", 1, 0, 'L')
+                                        pdf.cell(20, 5, f"", 1, 1, 'L')
 
-                                file = f'static/general/tmp/{f_hd.loc_id}.pdf'
-                                pdf.output(file, 'F')
+                                    file = f'static/general/tmp/{f_hd.loc_id}.pdf'
+                                    pdf.output(file, 'F')
 
-                                response = {
-                                    'status_code': 200, 'message': file, 'status': 'success'
-                                }
+                                    response = {
+                                        'status_code': 200, 'message': file, 'status': 'success'
+                                    }
+                                else:
+                                    response = {
+                                        'status_code': 404, 'message': "ENTRY NOT FOUND", 'status': 'not_found'
+                                    }
+                            elif doc == 'stc':
+                                if StockCountHD.objects.filter(pk=key).count() == 1:
+                                    hd = StockCountHD.objects.get(pk=key)
+                                    f_hd = hd.frozen
+                                    trans = hd.trans()
+                                    trans_only = trans['trans']
+
+                                    pdf = FPDF('P', 'mm', 'A4')
+                                    pdf.add_page()
+                                    pdf.set_font('Arial', 'BU', 10)
+                                    pdf.cell(180, 5, "COUNT REPORT", 0, 1, 'C')
+                                    pdf.ln(10)
+
+                                    pdf.set_font('Arial', 'B', 10)
+                                    pdf.cell(25, 5, "LOCATION : ", 0, 0, 'L')
+                                    pdf.set_font('Arial', '', 7)
+                                    pdf.cell(80, 5, f" {f_hd.loc_id}", 0, 1, 'L')
+
+                                    pdf.set_font('Arial', 'B', 10)
+                                    pdf.cell(25, 5, "REMARKS : ", 0, 0, 'L')
+                                    pdf.set_font('Arial', '', 7)
+                                    pdf.cell(80, 5, f" {f_hd.remarks}", 0, 1, 'L')
+                                    pdf.ln(10)
+                                    # header
+                                    pdf.set_font('Arial', 'B', 8)
+                                    pdf.cell(10, 5, f"LN", 1, 0, 'L')
+                                    pdf.cell(20, 5, f"BARCODE", 1, 0, 'L')
+                                    pdf.cell(55, 5, f"NAME", 1, 0, 'L')
+                                    pdf.cell(15, 5, f"SELL", 1, 0, 'L')
+                                    pdf.cell(15, 5, f"FRZN", 1, 0, 'L')
+                                    pdf.cell(15, 5, f"FR VL", 1, 0, 'L')
+                                    pdf.cell(15, 5, f"CT", 1, 0, 'L')
+                                    pdf.cell(15, 5, f"CT VL", 1, 0, 'L')
+                                    pdf.cell(15, 5, f"DIFF", 1, 0, 'L')
+                                    pdf.cell(15, 5, f"DF VL", 1, 1, 'L')
+
+                                    pdf.set_font('Arial', '', 5)
+
+                                    line = 0
+
+                                    for tran in trans_only:
+                                        line += 1
+                                        pdf.cell(10, 5, f"{line}", 1, 0, 'L')
+                                        pdf.cell(20, 5, f"{tran.barcode}", 1, 0, 'L')
+                                        pdf.cell(55, 5, f"{tran.name}", 1, 0, 'L')
+                                        pdf.cell(15, 5, f"{tran.sell_price}", 1, 0, 'L')
+                                        pdf.cell(15, 5, f"{tran.froze_qty}", 1, 0, 'L')
+                                        pdf.cell(15, 5, f"{tran.froze_qty * tran.sell_price}", 1, 0, 'L')
+                                        pdf.cell(15, 5, f"{tran.counted_qty}", 1, 0, 'L')
+                                        pdf.cell(15, 5, f"{tran.counted_qty * tran.sell_price}", 1, 0, 'L')
+                                        pdf.cell(15, 5, f"{tran.diff_qty}", 1, 0, 'L')
+                                        pdf.cell(15, 5, f"{tran.diff_qty * tran.sell_price}", 1, 1, 'L')
+
+                                        # summary
+
+                                    summary = trans['summary']
+
+                                    pdf.set_font('Arial', 'B', 8)
+                                    pdf.cell(100, 5, f"SUMMARY", 1, 0, 'L')
+                                    pdf.cell(15, 5, f"{summary['total_frozen']}", 1, 0, 'L')
+                                    pdf.cell(15, 5, f"{summary['value_frozen']}", 1, 0, 'L')
+                                    pdf.cell(15, 5, f"{summary['total_counted']}", 1, 0, 'L')
+                                    pdf.cell(15, 5, f"{summary['value_counted']}", 1, 0, 'L')
+                                    pdf.cell(15, 5, f"{summary['qty_difference']}", 1, 0, 'L')
+                                    pdf.cell(15, 5, f"{summary['value_difference']}", 1, 1, 'L')
+
+                                    # pdf.ln(10)
+                                    # pdf.set_font('Arial', 'B', 8)
+                                    # pdf.cell(30, 5, f"FROZEN QTY", 1, 0, 'L')
+                                    # pdf.set_font('Arial', '', 5)
+                                    # pdf.cell(30, 5, f"{summary['total_frozen']}", 1, 0, 'L')
+
+                                    # pdf.set_font('Arial', 'B', 8)
+                                    # pdf.cell(30, 5, f"COUNTED QTY", 1, 0, 'L')
+                                    # pdf.set_font('Arial', '', 5)
+                                    # pdf.cell(30, 5, f"{summary['total_counted']}", 1, 0, 'L')
+                                    #
+                                    # pdf.set_font('Arial', 'B', 8)
+                                    # pdf.cell(30, 5, f"DIFF QTY", 1, 0, 'L')
+                                    # pdf.set_font('Arial', '', 5)
+                                    # pdf.cell(25, 5, f"{summary['qty_difference']}", 1, 1, 'L')
+                                    #
+                                    # pdf.set_font('Arial', 'B', 8)
+                                    # pdf.cell(30, 5, f"FROZEN VAL", 1, 0, 'L')
+                                    # pdf.set_font('Arial', '', 5)
+                                    # pdf.cell(30, 5, f"{summary['value_frozen']}", 1, 0, 'L')
+                                    #
+                                    # pdf.set_font('Arial', 'B', 8)
+                                    # pdf.cell(30, 5, f"COUNTED VAL", 1, 0, 'L')
+                                    # pdf.set_font('Arial', '', 5)
+                                    # pdf.cell(30, 5, f"{summary['value_counted']}", 1, 0, 'L')
+                                    #
+                                    # pdf.set_font('Arial', 'B', 8)
+                                    # pdf.cell(30, 5, f"DIFF VAL", 1, 0, 'L')
+                                    # pdf.set_font('Arial', '', 5)
+                                    # pdf.cell(25, 5, f"{summary['value_difference']}", 1, 1, 'L')
+
+
+                                    file = f'static/general/tmp/{f_hd.loc_id}.pdf'
+                                    pdf.output(file, 'F')
+
+                                    response = {
+                                        'status_code': 200, 'message': file, 'status': 'success'
+                                    }
+
+
+                                else:
+                                    response = {
+                                        'status_code': 404, 'message': "ENTRY NOT FOUND", 'status': 'not_found'
+                                    }
                             else:
-                                response = {
-                                    'status_code': 404, 'message': "ENTRY NOT FOUND", 'status': 'not_found'
-                                }
+                                response['message'] = f"UNKNOWN DOCUMENT {doc}"
+
 
                     elif stage == 'frozen':
                         pk = data.get('pk')
@@ -643,10 +759,29 @@ def api(request):
                                 row_comment = tran.get('row_comment')
                                 row_iss = tran.get('row_iss')
 
+                                # get this item value
+                                cursor= db()
+
+                                q = f"SELECT sell_price FROM product_master where barcode = '{barcode}'"
+                                value = cursor.execute(q).fetchone()[0]
+                                if value is None:
+                                    value = 0.00
+
+                                print({'VAL': value, 'diff': Decimal(str(diff)), 'frozen': Decimal(str(frozen)),
+                                       'counted': Decimal(counted)})
+
+                                diff_val = Decimal(value) * Decimal(diff)
+                                froze_val = Decimal(value) * Decimal(frozen)
+                                counted_val = Decimal(value) * Decimal(counted)
+
+                                cursor.close()
+
+
+
                                 # save tran
                                 StockCountTrans.objects.create(stock_count_hd=count_hd, item_ref=ref, barcode=barcode,
                                                                name=name, froze_qty=frozen, counted_qty=counted,
-                                                               diff_qty=diff, comment=row_comment, issue=row_iss)
+                                                               diff_qty=diff, comment=row_comment, issue=row_iss,froze_val=froze_val,diff_val=diff_val,counted_val=counted_val)
 
                             frozen.save()
                             response['status_code'] = 200
@@ -690,24 +825,40 @@ def api(request):
 
                         trans = data.get('trans')
 
+
+                        # delete all trans
+                        # delete this tran and add again
+                        StockCountTrans.objects.filter(stock_count_hd=c_hd).delete()
+
+
                         for tran in trans:
-                            print(tran)
                             ref = tran.get('ref')
-                            barcode = tran.get('barcode')
+                            barcode = tran.get('barcode').strip()
                             name = tran.get('name')
                             frozen = tran.get('frozen')
-                            counted = tran.get('counted')
+                            counted = str(tran.get('counted'))
                             diff = tran.get('diff')
                             row_comment = tran.get('row_comment')
                             row_iss = tran.get('row_iss')
 
-                            # delete this tran and add again
-                            StockCountTrans.objects.get(stock_count_hd=c_hd, item_ref=ref).delete()
+                            cursor = db()
+                            q = f"SELECT sell_price FROM product_master where barcode = '{barcode}'"
+                            value = cursor.execute(q).fetchone()[0]
+                            if value is None:
+                                value = 0.00
+
+                            diff_val = Decimal(value) * Decimal(diff)
+                            froze_val = Decimal(value) * Decimal(frozen)
+                            counted_val = Decimal(value) * Decimal(counted)
+
+                            cursor.close()
+
+
 
                             # save tran
                             StockCountTrans.objects.create(stock_count_hd=c_hd, item_ref=ref, barcode=barcode,
                                                            name=name, froze_qty=frozen, counted_qty=counted,
-                                                           diff_qty=diff, comment=row_comment, issue=row_iss)
+                                                           diff_qty=diff, comment=row_comment, issue=row_iss,diff_val=diff_val,froze_val=froze_val,counted_val=counted_val,sell_price=value)
                         c_hd.save()
                         response['message'] = "UPDATE SUCCESSFUL"
                     else:
