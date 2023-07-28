@@ -147,6 +147,33 @@ class Kasa {
       })
   }
 
+  confirm(message,reload=0,to='/'){
+       Swal.fire({
+        title: 'Confirmation',
+        text: message,
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'OK',
+        cancelButtonText: 'Cancel',
+        reverseButtons: true, // To swap the positions of "Cancel" and "OK" buttons
+      }).then((result) => {
+        // Check if the user clicked "OK"
+        if (result.isConfirmed) {
+          if(reload === 1){
+              location.href = to
+          } else {
+              kasa.info('Thanks')
+          }
+
+        } else {
+          // Put your code here for when the user cancels
+          // For example, you can show a message or handle the cancel action
+          // Your code goes here...
+          Swal.fire('Cancelled', 'You cancelled the action', 'error');
+        }
+      });
+  }
+
 }
 
 

@@ -1100,8 +1100,9 @@ class Cmms {
 
                 if(task === 'new'){
                     let response = api.call('PUT',payload,'/cmms/api/')
-                    kasa.info(response['message'])
-                    location.href = '/cmms/stock/count/'
+                    // kasa.info(response['message'])
+
+                    kasa.confirm(response['message'],1,'/cmms/stock/count/')
                 } else if (task === 'update'){
                     let response = api.call('PATCH',payload,'/cmms/api/')
                     location.href = '/cmms/stock/count/'
