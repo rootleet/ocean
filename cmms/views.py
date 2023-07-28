@@ -453,10 +453,19 @@ def api(request):
                                     pdf.cell(15, 5, f"DIFF", 1, 0, 'L')
                                     pdf.cell(15, 5, f"DF VL", 1, 1, 'L')
 
-                                    pdf.set_font('Arial', '', 5)
+
 
                                     line = 0
+                                    summary = trans['summary']
+                                    pdf.cell(100, 5, f"SUMMARY", 1, 0, 'L')
+                                    pdf.cell(15, 5, f"{summary['total_frozen']}", 1, 0, 'L')
+                                    pdf.cell(15, 5, f"{summary['value_frozen']}", 1, 0, 'L')
+                                    pdf.cell(15, 5, f"{summary['total_counted']}", 1, 0, 'L')
+                                    pdf.cell(15, 5, f"{summary['value_counted']}", 1, 0, 'L')
+                                    pdf.cell(15, 5, f"{summary['qty_difference']}", 1, 0, 'L')
+                                    pdf.cell(15, 5, f"{summary['value_difference']}", 1, 1, 'L')
 
+                                    pdf.set_font('Arial', '', 5)
                                     for tran in trans_only:
                                         line += 1
                                         pdf.cell(10, 5, f"{line}", 1, 0, 'L')
@@ -472,7 +481,7 @@ def api(request):
 
                                         # summary
 
-                                    summary = trans['summary']
+
 
                                     pdf.set_font('Arial', 'B', 8)
                                     pdf.cell(100, 5, f"SUMMARY", 1, 0, 'L')
