@@ -1136,6 +1136,33 @@ class Cmms {
     }
 
 
+    printSheet(compare='count_sheet',doc='fr',key) {
+            let c_payload = {
+                'module':'stock',
+                data:{
+                    stage:'preview',
+                    compare:'count_sheet',
+                    key:key,
+                    doc:doc
+
+                }
+            }
+
+            console.log(c_payload)
+
+            let response = api.call('VIEW',c_payload,'/cmms/api/')
+
+            if(response['status_code'] === 200){
+
+                // kasa.html(`<a target="_blank" href="/${response['message']}">DOWNLOAD FILE</a>`)
+
+                windowPopUp(`/${response['message']}`,'PRINT',1000,1000)
+
+            } else {
+                kasa.warning(response['message'])
+            }
+
+        }
 
 
 
