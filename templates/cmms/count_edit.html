@@ -201,13 +201,13 @@
 
 
                     let tran = trans[i]
-                    tr += `<tr id="${row_id}">
+                    tr += `<tr ondblclick="$(this).remove()" id="${row_id}">
                             <td>${row}</td>
                             <td id="${ref_id}">${tran['item_ref']}</td>
                             <td id="${bc_id}">${tran['barcode']}</td>
                             <td id="${name_id}">${tran['name']}</td>
                             <td ><input class="form-control form-control-sm rounded-0" style="width:150px" onkeyup="lincal.sub(${row})" type="text" id="${y_id}" disabled value="${tran['froze_qty']}"></td>
-                            <td><input class="form-control form-control-sm rounded-0" style="width:150px" value="${tran['counted_qty']}" onkeyup="lincal.sub(${row})" id="${x_id}" type="text"></td>
+                            <td><input class="form-control form-control-sm rounded-0" style="width:150px" value="${tran['counted_qty']}" onkeyup="lincal.sub(${row})" id="${x_id}" type="number"></td>
                             <td><input class="form-control form-control-sm rounded-0" style="width:150px" onkeyup="anton.lineXyz(${row})" value="${tran['diff_qty']}" type="text" id="${z_id}" disabled ></td>
                             <td>
                                 <input type="text" disabled value="${tran['issue']}" id="iss_${row}">

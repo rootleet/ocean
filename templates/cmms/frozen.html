@@ -75,7 +75,7 @@
                           <a onclick="cmms.approve('FR',$('#key').val())" class="dropdown-item" href="javascript:void(0);"><i class="bi bi-check text-success"></i>Approve</a>
                           <a onclick="kasa.info('FUNCTION NOT IMPLEMENTED')" class="dropdown-item" href="javascript:void(0);"><i class="bi bi-trash text-danger"></i>Delete</a>
                         </div>
-                      </div>
+                    </div>
 
 
                     <button onclick="loadHere(this.value)" id="prev" class="btn btn-info m-1"><i class="bh bi-skip-backward"></i></button>
@@ -167,13 +167,15 @@
             }
 
         }
-        function printSheet() {
+        function printSheet(compare='count_sheet',doc='fr') {
             let payload = {
                 'module':'stock',
                 data:{
                     stage:'preview',
                     compare:'count_sheet',
-                    doc:$('#key').val()
+                    key:$('#key').val(),
+                    doc:doc
+
                 }
             }
 
