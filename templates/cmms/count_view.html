@@ -31,6 +31,8 @@
                         </div>
 
                         <div class="col-sm-4 h-fit d-flex flex-wrap">
+                            <button onclick="location.href = `{% url 'new-stock-count' %}`" id="new" title="new" class="btn btn-primary m-1"><i class="bi bi-plus"></i></button>
+
                             <button onclick="location.href = `/cmms/stock/count/edit/${this.value}/`" id="edit" title="Edit" class="btn btn-primary m-1"><i class="bi bi-pencil"></i></button>
                             <button id="delete" title="Delete" class="btn btn-warning m-1"><i class="bi bi-recycle"></i></button>
                             <button onclick="screenLoad(this.value)" id="prev" title="Previous" class="btn btn-info m-1"><i class="bi bi-skip-backward"></i></button>
