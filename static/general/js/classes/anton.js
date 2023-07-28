@@ -11,7 +11,7 @@ class Anton {
 
     validateInputs(ids) {
         for (let i = 0; i < ids.length; i++) {
-            const value = $(`#${ids[i]}`).val().trim();
+            const value = $(`#${ids[i]}`).val();
             if (value === '') {
                 // alert('False');
                 return false;
