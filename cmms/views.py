@@ -283,6 +283,7 @@ def api(request):
                                         'owner': frozen.owner.username,
                                         'created': f"{frozen.created_date} {frozen.created_time}",
                                         'entry': frozen.ent(),
+                                        'posted':frozen.posted()
 
                                     },
                                     'count': {
@@ -293,7 +294,8 @@ def api(request):
                                         'status': stock_hd.status,
                                         'owner': stock_hd.owner.username,
                                         'next': stock_hd.next(),
-                                        'prev': stock_hd.prev()
+                                        'prev': stock_hd.prev(),
+                                        'approved': stock_hd.approve
                                     }
                                 }
                                 arr = []
@@ -492,39 +494,10 @@ def api(request):
                                     pdf.cell(15, 5, f"{summary['qty_difference']}", 1, 0, 'L')
                                     pdf.cell(15, 5, f"{summary['value_difference']}", 1, 1, 'L')
 
-                                    # pdf.ln(10)
-                                    # pdf.set_font('Arial', 'B', 8)
-                                    # pdf.cell(30, 5, f"FROZEN QTY", 1, 0, 'L')
-                                    # pdf.set_font('Arial', '', 5)
-                                    # pdf.cell(30, 5, f"{summary['total_frozen']}", 1, 0, 'L')
-
-                                    # pdf.set_font('Arial', 'B', 8)
-                                    # pdf.cell(30, 5, f"COUNTED QTY", 1, 0, 'L')
-                                    # pdf.set_font('Arial', '', 5)
-                                    # pdf.cell(30, 5, f"{summary['total_counted']}", 1, 0, 'L')
-                                    #
-                                    # pdf.set_font('Arial', 'B', 8)
-                                    # pdf.cell(30, 5, f"DIFF QTY", 1, 0, 'L')
-                                    # pdf.set_font('Arial', '', 5)
-                                    # pdf.cell(25, 5, f"{summary['qty_difference']}", 1, 1, 'L')
-                                    #
-                                    # pdf.set_font('Arial', 'B', 8)
-                                    # pdf.cell(30, 5, f"FROZEN VAL", 1, 0, 'L')
-                                    # pdf.set_font('Arial', '', 5)
-                                    # pdf.cell(30, 5, f"{summary['value_frozen']}", 1, 0, 'L')
-                                    #
-                                    # pdf.set_font('Arial', 'B', 8)
-                                    # pdf.cell(30, 5, f"COUNTED VAL", 1, 0, 'L')
-                                    # pdf.set_font('Arial', '', 5)
-                                    # pdf.cell(30, 5, f"{summary['value_counted']}", 1, 0, 'L')
-                                    #
-                                    # pdf.set_font('Arial', 'B', 8)
-                                    # pdf.cell(30, 5, f"DIFF VAL", 1, 0, 'L')
-                                    # pdf.set_font('Arial', '', 5)
-                                    # pdf.cell(25, 5, f"{summary['value_difference']}", 1, 1, 'L')
 
 
-                                    file = f'static/general/tmp/{f_hd.loc_id}.pdf'
+
+                                    file = f'static/general/tmp/{f_hd.entry_no()}.pdf'
                                     pdf.output(file, 'F')
 
                                     response = {
@@ -882,7 +855,7 @@ def api(request):
                 if doc == 'FR':
                     hd = StockFreezeHd.objects.filter(pk=key)
                     count = hd.count()
-                elif doc == 'SC':
+                elif doc == 'STK':
                     # approved counted stock
                     hd = StockCountHD.objects.filter(pk=key)
                     count = hd.count()
@@ -897,7 +870,7 @@ def api(request):
 
                         response['status_code'] = 200
                         response['status'] = 'success'
-                        response['message'] = "APPROVED"
+                        response['message'] = f"APPROVED {doc} = {key}"
                     except Exception as e:
                         response['status_code'] = 505
                         response['status'] = 'error'
