@@ -497,7 +497,7 @@ def api(request):
 
 
 
-                                    file = f'static/general/tmp/{f_hd.entry_no()}.pdf'
+                                    file = f'static/general/tmp/{hd.entry_no()}.pdf'
                                     pdf.output(file, 'F')
 
                                     response = {
