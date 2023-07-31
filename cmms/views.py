@@ -211,7 +211,6 @@ def api(request):
                     response['status_code'] = 200
                     response['status'] = 'success'
 
-
                 elif module == 'stock':
                     stage = data.get('stage')
                     if stage == 'active':
@@ -283,7 +282,7 @@ def api(request):
                                         'owner': frozen.owner.username,
                                         'created': f"{frozen.created_date} {frozen.created_time}",
                                         'entry': frozen.ent(),
-                                        'posted':frozen.posted()
+                                        'posted': frozen.posted()
 
                                     },
                                     'count': {
@@ -364,7 +363,7 @@ def api(request):
                             print(doc)
 
                             if doc == 'fr':
-                                #frozen
+                                # frozen
                                 if StockFreezeHd.objects.filter(pk=key).count() == 1:
 
                                     f_hd = StockFreezeHd.objects.get(pk=key)
@@ -455,8 +454,6 @@ def api(request):
                                     pdf.cell(15, 5, f"DIFF", 1, 0, 'L')
                                     pdf.cell(15, 5, f"DF VL", 1, 1, 'L')
 
-
-
                                     line = 0
                                     summary = trans['summary']
                                     pdf.cell(100, 5, f"SUMMARY", 1, 0, 'L')
@@ -483,8 +480,6 @@ def api(request):
 
                                         # summary
 
-
-
                                     pdf.set_font('Arial', 'B', 8)
                                     pdf.cell(100, 5, f"SUMMARY", 1, 0, 'L')
                                     pdf.cell(15, 5, f"{summary['total_frozen']}", 1, 0, 'L')
@@ -493,9 +488,6 @@ def api(request):
                                     pdf.cell(15, 5, f"{summary['value_counted']}", 1, 0, 'L')
                                     pdf.cell(15, 5, f"{summary['qty_difference']}", 1, 0, 'L')
                                     pdf.cell(15, 5, f"{summary['value_difference']}", 1, 1, 'L')
-
-
-
 
                                     file = f'static/general/tmp/{hd.entry_no()}.pdf'
                                     pdf.output(file, 'F')
@@ -511,7 +503,6 @@ def api(request):
                                     }
                             else:
                                 response['message'] = f"UNKNOWN DOCUMENT {doc}"
-
 
                     elif stage == 'frozen':
                         pk = data.get('pk')
@@ -535,7 +526,7 @@ def api(request):
                                 'owner': hd.owner.username,
                                 'next': hd.next(),
                                 'prev': hd.prev(),
-                                'approve':hd.approve
+                                'approve': hd.approve
                             }
 
                             tr = []
@@ -575,11 +566,63 @@ def api(request):
                                 'remarks': fr.remarks,
                                 'location': fr.loc_id,
                                 'approve': fr.approve,
-                                'posted':fr.posted()
+                                'posted': fr.posted()
                             })
 
                         response['message'] = arr
                         response['status_code'] = 200
+
+                    elif stage == 'ref_frozen':
+                        try:
+                            server = f"{DB_SERVER},{DB_PORT}"
+                            database = DB_NAME
+                            username = DB_USER
+                            password = DB_PASSWORD
+                            driver = '{ODBC Driver 17 for SQL Server}'  # Change this to the driver you're using
+                            connection_string = f"DRIVER={driver};SERVER={server};DATABASE={database};UID={username};PWD={password}"
+                            connection = pyodbc.connect(connection_string)
+                            cursor = connection.cursor()
+
+                            ref = data.get('ref')
+                            query = f"SELECT item_ref,qty_avail,unit_price,(SELECT barcode from product_master where item_ref = stock_freeze_tran.item_ref ) as 'barcode',(SELECT item_des1 from product_master where item_ref = stock_freeze_tran.item_ref ) as 'name' from stock_freeze_tran where entry_no = '{ref}'"
+                            trans = []
+                            cursor.execute(query)
+                            count = 0
+                            for tran in cursor.fetchall():
+                                count += 1
+                                trans.append({
+                                    'item_ref': str(tran[0].strip()),
+                                    'qty': tran[1],
+                                    'unit_price': tran[2],
+                                    'barcode':str(tran[3]).strip(),
+                                    'name':str(tran[4]).strip()
+                                })
+
+                            # get header
+                            h_q = f"SELECT loc_id,remarks from stock_freeze_hd where entry_no = '{ref}'"
+                            h_row = cursor.execute(h_q).fetchone()
+
+                            if h_row is None:
+                                loc = 'none',
+                                rem = 'none'
+                            else:
+                                loc = str(h_row[0]).strip()
+                                rem = str(h_row[1]).strip()
+
+                            header = {
+                                'loc':loc,'remarks':rem
+                            }
+
+                            response['message'] = {
+                                'header':header,
+                                'count':count,
+                                'trans':trans
+                            }
+
+                            response['status_code'] = 200
+                        except Exception as e:
+                            response['status_code'] = 500
+                            response['message'] = str(e)
 
 
 
@@ -743,7 +786,7 @@ def api(request):
                                 row_iss = tran.get('row_iss')
 
                                 # get this item value
-                                cursor= db()
+                                cursor = db()
 
                                 q = f"SELECT sell_price FROM product_master where barcode = '{barcode}'"
                                 value = cursor.execute(q).fetchone()[0]
@@ -759,12 +802,12 @@ def api(request):
 
                                 cursor.close()
 
-
-
                                 # save tran
                                 StockCountTrans.objects.create(stock_count_hd=count_hd, item_ref=ref, barcode=barcode,
                                                                name=name, froze_qty=frozen, counted_qty=counted,
-                                                               diff_qty=diff, comment=row_comment, issue=row_iss,froze_val=froze_val,diff_val=diff_val,counted_val=counted_val)
+                                                               diff_qty=diff, comment=row_comment, issue=row_iss,
+                                                               froze_val=froze_val, diff_val=diff_val,
+                                                               counted_val=counted_val)
 
                             frozen.save()
                             response['status_code'] = 200
@@ -808,11 +851,9 @@ def api(request):
 
                         trans = data.get('trans')
 
-
                         # delete all trans
                         # delete this tran and add again
                         StockCountTrans.objects.filter(stock_count_hd=c_hd).delete()
-
 
                         for tran in trans:
                             ref = tran.get('ref')
@@ -836,12 +877,12 @@ def api(request):
 
                             cursor.close()
 
-
-
                             # save tran
                             StockCountTrans.objects.create(stock_count_hd=c_hd, item_ref=ref, barcode=barcode,
                                                            name=name, froze_qty=frozen, counted_qty=counted,
-                                                           diff_qty=diff, comment=row_comment, issue=row_iss,diff_val=diff_val,froze_val=froze_val,counted_val=counted_val,sell_price=value)
+                                                           diff_qty=diff, comment=row_comment, issue=row_iss,
+                                                           diff_val=diff_val, froze_val=froze_val,
+                                                           counted_val=counted_val, sell_price=value)
                         c_hd.save()
                         response['message'] = "UPDATE SUCCESSFUL"
                     else:
