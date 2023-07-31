@@ -890,6 +890,65 @@ class Cmms {
           reader.readAsText(file);
     }
 
+    syncFrozen(reference){
+        $('#devsBody').html()
+        let payload = {
+            "module":"stock",
+            "data":{
+                "stage":"ref_frozen",
+                "ref":reference
+            }
+        }
+
+        let response = api.call('VIEW',payload,'/cmms/api/')
+        let status, message
+        if(response['status_code'] === 200){
+
+            message = response['message']
+            if(message['count'] > 0 ){
+                let trans = message['trans']
+                let header = message['header']
+                $('#loc').val(header['loc'])
+                $('#remark').val(header['remarks'])
+                for (let i = 0; i < message['count']; i++) {
+                    let tran = trans[i]
+                    let item_ref = tran['item_ref'];
+                    let qty = tran['qty'];
+
+                    // let product = cmms.getProduct('single',item_ref,'item_ref');
+                    let barcode, name;
+                    name = tran['name']
+                    barcode = tran['barcode']
+                    // if(product['status_code'] === 200 && product['message']['count'] === 1){
+                    //     barcode = product['message']['trans'][0]['barcode']
+                    //     name = product['message']['trans'][0]['name']
+                    // } else {
+                    //     barcode = 'unknow';
+                    //     name = 'unknown'
+                    // }
+
+                    let row_count = i + 1;
+                    $('#devsBody').append(`<tr id="row_${row_count}">
+                    <td>${row_count}</td>
+                    <td><input class="form-control form-control-sm rounded-0" id="ref_${row_count}" type="text" readonly value="${item_ref}"></td>
+                    <td><input class="form-control form-control-sm rounded-0" id="barcode_${row_count}" type="text" readonly value="${barcode}"></td>
+                    <td><input class="form-control form-control-sm rounded-0" id="name_${row_count}" type="text" readonly value="${name}"></td>
+                    <td><input class="form-control form-control-sm rounded-0" id="qty_row_${row_count}" type="number" readonly value="${qty}"></td>
+                    
+                </tr>`);
+
+                }
+            } else {
+                kasa.info("There are not items in frozen")
+            }
+
+        } else {
+            kasa.warning(`There is an error ${response['message']}`)
+        }
+
+    }
+
+
     saveFrozen(){
         // Get input field elements
         let locElement = $('#loc');
