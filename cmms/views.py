@@ -601,7 +601,8 @@ def api(request):
                                 'entry': f"FR{fr.loc_id}{fr.pk}",
                                 'remarks': fr.remarks,
                                 'location': fr.loc_id,
-                                'approve': fr.approve
+                                'approve': fr.approve,
+                                'posted':fr.posted()
                             })
 
                         response['message'] = arr
@@ -880,6 +881,10 @@ def api(request):
 
                 if doc == 'FR':
                     hd = StockFreezeHd.objects.filter(pk=key)
+                    count = hd.count()
+                elif doc == 'SC':
+                    # approved counted stock
+                    hd = StockCountHD.objects.filter(pk=key)
                     count = hd.count()
                 else:
                     count = 0
