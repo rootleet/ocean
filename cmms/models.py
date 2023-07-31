@@ -117,6 +117,13 @@ class StockFreezeHd(models.Model):
 
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
+    def posted(self):
+        ret = 0
+        if StockCountHD.objects.filter(frozen=self).count() == 1:
+            ret = 1
+
+        return ret
+
     def trans(self):
         return {
             'count': StockFreezeTrans.objects.filter(entry_id=self.pk).count(),
