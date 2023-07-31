@@ -1135,6 +1135,19 @@ class Cmms {
 
     }
 
+    delete(doc,key){
+        let payload = {
+            'module':'none',
+            data:{
+                doc:doc,key:key
+            }
+        }
+
+        let response = api.call('DELETE',payload,'/cmms/api/')
+        kasa.info(response['message'])
+
+    }
+
 
     printSheet(compare='count_sheet',doc='fr',key) {
             let c_payload = {
