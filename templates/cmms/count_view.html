@@ -12,22 +12,22 @@
                         <div class="col-sm-3 h-100">
                             <div class="w-100 d-flex flex-wrap">
                                 <div class="w-50">
-                                    <label for="entry">ENTRY</label><input type="text" disabled id="entry" class="form-control mb-2 w-100 rounded-0" placeholder="NEW !!">
+                                    <label for="entry">ENTRY</label><input type="text" disabled id="entry" class="form-control form-control-sm mb-1 w-100 rounded-0" placeholder="NEW !!">
                                 </div>
                                 <div class="w-25">
-                                    <label for="key">KEY</label><input disabled type="text" id="key" class="form-control mb-2 w-100 rounded-0">
+                                    <label for="key">KEY</label><input disabled type="text" id="key" class="form-control form-control-sm mb-1 w-100 rounded-0">
                                 </div>
                                 <div class="w-25">
-                                    <label for="entry_status">STATUS</label><input disabled type="text" id="entry_status" class="form-control mb-2 w-100 rounded-0">
+                                    <label for="entry_status">STATUS</label><input disabled type="text" id="entry_status" class="form-control form-control-sm mb-1 w-100 rounded-0">
                                 </div>
                             </div>
-                            <label for="loc">LOCATION</label><input type="text" disabled id="loc" class="form-control w-100 rounded-0 mb-2" placeholder="loc">
+                            <label for="loc">LOCATION</label><input type="text" disabled id="loc" class="form-control w-100 rounded-0 form-control-sm mb-1" placeholder="loc">
                             <div class="w-100 d-flex flex-wrap">
                                 <div class="w-50">
-                                    <label for="ref_freeze">REFERENCE</label><input disabled type="text" id="ref_freeze" class="form-control mb-2 w-100 rounded-0" placeholder="ref_freeze">
+                                    <label for="ref_freeze">REFERENCE</label><input disabled type="text" id="ref_freeze" class="form-control form-control-sm mb-1 w-100 rounded-0" placeholder="ref_freeze">
                                 </div>
                                 <div class="w-25">
-                                    <label for="ref_status">STATUS</label><input disabled type="text" id="ref_status" class="form-control mb-2 w-100 rounded-0">
+                                    <label for="ref_status">STATUS</label><input disabled type="text" id="ref_status" class="form-control form-control-sm mb-1 w-100 rounded-0">
                                 </div>
                             </div>
 
@@ -49,10 +49,10 @@
 
 
 
-                        <div class="col-sm-5 d-flex flex-wrap align-content-between">
-                            <label for="remark">REMARKS</label><textarea disabled class="form-control rounded-0" rows="2" name="remark" id="remark"></textarea>
+                        <div class="col-sm-5">
+                            <label for="remark">REMARKS</label><input type="text" disabled class="form-control form-control-sm rounded-0" name="remark" id="remark">
 
-                            <label for="comment">COMMENT</label><textarea class="form-control rounded-0" disabled rows="2" name="comment" id="comment">NO COMMENT</textarea>
+                            <label for="comment">COMMENT</label><textarea class="form-control rounded-0" disabled rows="1" name="comment" id="comment">NO COMMENT</textarea>
 
                         </div>
 
@@ -98,7 +98,7 @@
                         <button id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-info m-1"><i class="bh bi-grip-horizontal"></i></button>
                         <!-- Dropdown Menu -->
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item" href="{% url 'new-frozen' %}"><i class="bi bi-plus text-info"></i> NEW</a>
+                            <a class="dropdown-item" href="{% url 'new-stock-count' %}"><i class="bi bi-plus text-info"></i> NEW</a>
                           <a onclick="cmms.printSheet('counted','stc',$('#key').val())" class="dropdown-item" href="javascript:void(0);"><i class="bi text-info bi-printer"></i> Print</a>
                           <a onclick="cmms.approve('FR',$('#key').val())" class="dropdown-item" href="javascript:void(0);"><i class="bi bi-check text-success"></i>Approve</a>
                           <a onclick="kasa.info('FUNCTION NOT IMPLEMENTED')" class="dropdown-item" href="javascript:void(0);"><i class="bi bi-trash text-danger"></i>Delete</a>
