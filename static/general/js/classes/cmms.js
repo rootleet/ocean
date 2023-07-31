@@ -1010,7 +1010,7 @@ class Cmms {
                 let tran = trans[i]
 
                 let pk = tran['pk']
-                if(tran['approve'] === 1){
+                if(tran['approve'] === 1 && tran['posted'] === 0){
                     tr += `<tr><td><button onclick="ScreenloadFrozen('${pk}')" class="btn btn-sm btn-info">LOAD</button></td><td>${tran['location']}</td><td>${tran['entry']}</td><td>${tran['remarks']}</td></tr>`
                 }
             }
