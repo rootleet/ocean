@@ -24,6 +24,8 @@ class StockCountHD(models.Model):
     comment = models.TextField()
     status = models.IntegerField(default=1)  # 1, active, #2 closed
 
+    approve = models.IntegerField(default=0)
+
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     def trans(self):
