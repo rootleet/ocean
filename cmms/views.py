@@ -882,6 +882,37 @@ def api(request):
                     response['message'] = f"Count not find matching document ({doc} - {key})"
 
 
+        elif method == 'DELETE':
+            doc = data.get('doc')
+            key = data.get('key')
+
+            if doc == 'FR':
+                hd = StockFreezeHd.objects.filter(pk=key)
+                count = hd.count()
+            elif doc == 'STK':
+                # approved counted stock
+                hd = StockCountHD.objects.filter(pk=key)
+                count = hd.count()
+            else:
+                count = 0
+
+            if count == 1:
+                try:
+                    head = hd.last()
+                    head.delete()
+
+                    response['status_code'] = 200
+                    response['status'] = 'success'
+                    response['message'] = f"DELETED {doc} = {key}"
+                except Exception as e:
+                    response['status_code'] = 505
+                    response['status'] = 'error'
+                    response['message'] = str(e)
+
+            else:
+                response['status_code'] = 404
+                response['status'] = 'error'
+                response['message'] = f"Count not find matching document ({doc} - {key})"
 
 
     except json.JSONDecodeError as e:
