@@ -453,7 +453,7 @@ def api(request):
                                     pdf.cell(15, 5, f"CT VL", 1, 0, 'L')
                                     pdf.cell(15, 5, f"DIFF", 1, 0, 'L')
                                     pdf.cell(15, 5, f"DF VL", 1, 1, 'L')
-
+                                    pdf.set_font('Arial', '', 5)
                                     line = 0
                                     summary = trans['summary']
                                     pdf.cell(100, 5, f"SUMMARY", 1, 0, 'L')
