@@ -164,6 +164,8 @@
                     $('#entry_status').val(`pending (${frozen_hd['status']})`)
                     $('#entry_status').addClass('text-danger')
                     $('#entry_status').removeClass('text-success')
+                    $('#edit').prop('disabled',false)
+                    $('#delete').prop('disabled',false)
                 }
 
                 $('#edit').val(count_hd['pk'])
