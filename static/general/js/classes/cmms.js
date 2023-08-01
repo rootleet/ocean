@@ -1236,6 +1236,28 @@ class Cmms {
 
         }
 
+        stockExport(doc,key,document){
+            let payload = {
+                'module':'stock',
+                'data':{
+                    'stage':'export',
+                    'doc':doc,
+                    'key':key,
+                    document: document
+                }
+            }
+
+            let response = api.call('VIEW',payload,'/cmms/api/')
+            if(response['status_code'] === 200){
+                kasa.html(`<a href="/${response['message']}">DOWNLOAD FILE</a>`)
+            } else {
+
+            }
+            console.table(response)
+
+        }
+
+
 
 
 }
