@@ -1,3 +1,4 @@
+import csv
 import json
 import traceback
 from datetime import date
@@ -594,8 +595,8 @@ def api(request):
                                     'item_ref': str(tran[0].strip()),
                                     'qty': tran[1],
                                     'unit_price': tran[2],
-                                    'barcode':str(tran[3]).strip(),
-                                    'name':str(tran[4]).strip()
+                                    'barcode': str(tran[3]).strip(),
+                                    'name': str(tran[4]).strip()
                                 })
 
                             # get header
@@ -610,13 +611,13 @@ def api(request):
                                 rem = str(h_row[1]).strip()
 
                             header = {
-                                'loc':loc,'remarks':rem
+                                'loc': loc, 'remarks': rem
                             }
 
                             response['message'] = {
-                                'header':header,
-                                'count':count,
-                                'trans':trans
+                                'header': header,
+                                'count': count,
+                                'trans': trans
                             }
 
                             response['status_code'] = 200
@@ -624,7 +625,81 @@ def api(request):
                             response['status_code'] = 500
                             response['message'] = str(e)
 
+                    elif stage == 'export':
+                        doc = data.get('doc')
+                        key = data.get('key')
+                        document = data.get('document')
 
+                        if doc == 'STC':
+                            # count
+                            hd = StockCountHD.objects.filter(pk=key)
+
+                        count = hd.count()
+                        if count == 1:
+                            response['status_code'] = 200
+                            header = hd.last()
+                            trans = header.trans()
+
+                            if document == 'csv' and doc == 'STC':
+                                file_name = f"static/general/tmp/{header.frozen.ref}.csv"
+                                # Header
+                                header = ["ITEM_REF", "FROZEN", "COUNTED", "DIFFERENCE"]
+
+                                with open(file_name, mode="w", newline='') as file:
+                                    writer = csv.writer(file)
+
+                                    # Writing the header
+                                    writer.writerow(header)
+
+                                    for tran in trans['trans']:
+
+                                        writer.writerow(
+                                            [tran.item_ref, tran.froze_qty, tran.counted_qty, tran.diff_qty])
+
+                                response['message'] = file_name
+
+                            elif document == 'excel' and doc == 'STC':
+                                import openpyxl
+                                workbook = openpyxl.Workbook()
+                                sheet = workbook.active
+                                # make sheet head
+                                sheet['A1'] = f"LOCATION : {header.frozen.loc_id}"
+                                sheet['A2'] = f"REFERENCE : {header.frozen.ref}"
+                                sheet['A3'] = f"REMARK : {header.frozen.remarks}"
+
+                                sheet[f'A5'] = "ITEM REFERENCE"
+                                sheet[f'B5'] = "BARCODED"
+                                sheet[f'C5'] = "DESCRIPTION"
+                                sheet[f'D5'] = "FROZEN QTY"
+                                sheet[f'E5'] = "COUNTED QTY"
+                                sheet[f'F5'] = "DIFFERENCE"
+
+                                sheet['A6'] = "SUMMARY"
+                                sheet['D6'] = trans['summary']['total_frozen']
+                                sheet['E6'] = trans['summary']['total_counted']
+                                sheet['F6'] = trans['summary']['qty_difference']
+
+                                row = 7
+                                for tran in trans['trans']:
+                                    row += 1
+                                    sheet[f"A{row}"] = tran.item_ref
+                                    sheet[f"B{row}"] = tran.barcode
+                                    sheet[f"C{row}"] = tran.name
+                                    sheet[f"D{row}"] = tran.froze_qty
+                                    sheet[f"E{row}"] = tran.counted_qty
+                                    sheet[f"F{row}"] = tran.diff_qty
+
+                                from datetime import datetime
+                                current_datetime = datetime.now()
+                                formatted_datetime = current_datetime.strftime("%Y%m%d%H%M%S")
+                                file = f"static/general/tmp/{doc}_{header.frozen.ref}.xlsx"
+                                workbook.save(file)
+                                response['message'] = file
+
+
+                        else:
+                            response['status_code'] = 404
+                            response['message'] = f"ENTRY NOT FOUNC ( {doc} - {key} )"
 
             except Exception as e:
                 response['status'] = 'error'
