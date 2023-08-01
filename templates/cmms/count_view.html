@@ -91,7 +91,7 @@
 
             </div>
 
-            <div class="card-footer bg-header1">
+            <div class="card-footer bg-header1 d-flex flex-wrap">
 
                 <div class="dropdown dropup">
                         <!-- Dropdown Toggle Button -->
@@ -104,6 +104,18 @@
                           <a onclick="cmms.delete('STK',$('#key').val())" class="dropdown-item" href="javascript:void(0);"><i class="bi bi-trash text-danger"></i>Delete</a>
                         </div>
                 </div>
+
+                <div class="dropdown dropup">
+                        <!-- Dropdown Toggle Button -->
+                        <button title="export" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-warning m-1"><i class="bh bi-share"></i></button>
+                        <!-- Dropdown Menu -->
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item"  href="javascript:void(0)"><i class="bi bi-file-pdf text-info"></i> PDF</a>
+                            <a class="dropdown-item" onclick="cmms.stockExport('STC',`${$('#key').val()}`,'excel')" href="javascript:void(0)"><i class="bi bi-file-excel text-info"></i> Excel</a>
+                            <a class="dropdown-item" onclick="cmms.stockExport('STC',`${$('#key').val()}`,'csv')" href="javascript:void(0)"><i class="bi bi-filetype-csv text-info"></i> CSV</a>
+                        </div>
+                </div>
+
 
             </div>
 
