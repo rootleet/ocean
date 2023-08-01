@@ -111,7 +111,7 @@ def view_stock_count(request):
 
 @login_required()
 def edit_stock_count(request, pk):
-    if StockCountHD.objects.filter(status=1).count() < 1:
+    if StockCountHD.objects.filter(pk=pk).count() < 1:
         messages.error(request, 'NO OPEN STOCK COUNT.')
         return redirect('/cmms/stock/new/')
     context = {
@@ -119,7 +119,7 @@ def edit_stock_count(request, pk):
         'page': {
             'title': "STOCK COUNT VIEW"
         },
-        'c_pk': StockCountHD.objects.filter(status=1).last().pk
+        'c_pk': pk
     }
     return render(request, 'cmms/count_edit.html', context=context)
 
