@@ -70,6 +70,7 @@
     <script src="{% static 'general/js/classes/app.js' %}"></script>
     <script src="{% static 'general/js/classes/docs.js' %}"></script>
     <script src="{% static 'general/js/classes/anton.js' %}"></script>
+    <script src="{% static 'general/js/classes/cmms_cust.js' %}"></script>
 
 
   <script>
@@ -101,6 +102,54 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="followUps">
+                <div class="modal-dialog modal-lg modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <strong class="modal-title">Followup History</strong>
+{#                            <button id="newFolloupButton" class="close bx bx-plus btn btn-sm" data-bs-target="#newFolloup" data-bs-toggle="modal"></button>#}
+                        </div>
+                        <div class="modal-body" id="xfact" style="height: 60vh; overflow: auto">
+                            <table class="table table-bordered table-sm table-hover table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Person</th><th>Date</th><th>Title</th><th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="fTbody">
+                                    <tr>
+                                        <td>James</td>
+                                        <td>Date</td>
+                                        <td>Hello World</td>
+                                        <td><i class="fa fa-reply pointer" onclick="al('info','hello world')"></i></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="newFolloup">
+                <div class="modal-dialog modal-dialog-centered modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <strong class="modal-title">NEW FOLLOWUP</strong>
+                        </div>
+                        <div class="modal-body">
+                            <label for="car_no">CAR NUMBER</label><input type="text" readonly id="car_no" name="car_no" class="form-control mb-2 rounded-0">
+                            <label for="ftitle">TItle</label><input type="text" class="form-control mb-2 rounded-0" id="ftitle">
+                            <label for="freply">Response</label><textarea name="" id="freply" cols="30" rows="10"
+                                                                  class="form-control rounded-0"></textarea>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" onclick="cmms.SaveFollowup()" class="btn btn-success">SAVE</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
     <div class="modal" id="loader">
         <div class="w-100 bg_trans_80 h-100 d-flex flex-wrap align-content-center justify-content-center">
             <img src="{% static 'general/img/icons/2.gif' %}" alt="" class="img-fluid">
@@ -475,6 +524,30 @@
           <li>
             <a href='{% url 'stock-count' %}'>
               <i class='bi bi-record'></i> Count
+            </a>
+          </li>
+
+        </ul>
+      </li>
+
+    <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#customer-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-people"></i><span>CUST MGMT</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="customer-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+{#          <li>#}
+{#            <a href="{% url 'stock' %}">#}
+{#              <i class="bi bi-boxes"></i><span>Stock</span>#}
+{#            </a>#}
+{#          </li>#}
+            <li>
+            <a href="{% url 'customer_sales' %}">
+              <i class="bi bi-boxes"></i><span>SALES</span>
+            </a>
+          </li>
+          <li>
+            <a href='{% url 'service_customers' %}'>
+              <i class='bi bi-record'></i> Servicing
             </a>
           </li>
 
