@@ -122,12 +122,59 @@ class Cmms {
         return apiv2('cmms', 'none', data)
     }
 
+    viewFollowups(carno){
+        console.log("GETTING FOLLOWS")
+        if (carno.length > 0) {
+            let follows = cmms.carFollowUps(carno)
+            if (isJson(follows)) {
+                let fols = JSON.parse(follows)
+                let status = fols['status']
+                if (status === 200) {
+                    let ftr = ''
+                    let message = fols['message']
+
+                    if (message['count'] > 0) {
+                        let records = message['records']
+
+                        for (let r = 0; r < records.length; r++) {
+                            let record = records[r]
+                            ftr += `<tr>
+                                        <td>${record['owner']}</td>
+                                        <td>${record['created_date']} ${record['created_time']}</td>
+                                        <td>${record['title']}</td>
+                                        <td><i class="fa fa-reply pointer" onclick="al('info','${record['message']}')"></i></td>
+                                    </tr>`
+                        }
+
+
+                    }
+                    console.log(ftr)
+                    let newFollowTransaction = `<button onclick="cmms_cust.triggerFollowUp('${carno}')" class="close bx bx-plus btn btn-sm"></button>`;
+                    $('#xfact').prepend(newFollowTransaction)
+                    $('#fTbody').html(ftr)
+                    $('#g_modal').modal('hide')
+                    $('#followUps').modal('hide')
+                    $('#followUps').modal('show')
+                } else {
+                    al('error', fols['message'])
+                }
+            } else {
+                al('error', "Follow up response cannot be displayed")
+            }
+        } else {
+            al('error', 'Please provide car numbeer')
+        }
+    }
+
     SaveFollowup() {
-        let carno = $('#searchQuery').val()
+        let carno = $('#car_no').val()
+
         if (carno.length > 0) {
             let title, message
             title = $('#ftitle').val();
             message = $('#freply').val();
+
+            kasa.info(title)
 
             if (title.length < 1) {
                 al('error', "Please provide feedback title")
@@ -150,14 +197,19 @@ class Cmms {
 
                 apiv2('cmms', 'null', data)
                 cmms.carFollowUps(carno)
-                $('#newFolloup').modal('hide')
-                al('success', "Response logged")
+                $('#newFolloup').modal('hide');
+                cmms.viewFollowups(`${carno}`);
 
             }
 
 
 
         }
+
+        else {
+            kasa.info("CAR CANNOT BE EMPTY")
+        }
+
     }
 
     async groupTax(carNumber) {
@@ -1251,9 +1303,8 @@ class Cmms {
             if(response['status_code'] === 200){
                 kasa.html(`<a href="/${response['message']}">DOWNLOAD FILE</a>`)
             } else {
-
+                kasa.error(response['message'])
             }
-            console.table(response)
 
         }
 
