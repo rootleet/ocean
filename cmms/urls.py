@@ -32,11 +32,11 @@ urlpatterns = [
     path('stock/count/edit/<pk>/', views.edit_stock_count, name='edit_stock_count'),
 
 
-    path('customers/sales/',views.customer_sales,name='customer_sales'),
-    path('customers/new_sales_customer/',views.new_sales_customer,name='new_sales_customer'),
-    path('customers/save_sales_customer/',views.save_sales_customer,name='save_sales_customer'),
-    path('customers/sales_transactions/<customer>/',views.sales_customer_transactions,name='sales_customer_transactions'),
-    path('customer/sales/save_sales_transaction/',views.save_sales_transaction,name='save_sales_transaction'),
+    path('sales/customers/',views.customer_sales,name='customer_sales'),
+    path('sales/new-customer/',views.new_sales_customer,name='new_sales_customer'),
+    path('sales/save-customer/',views.save_sales_customer,name='save_sales_customer'),
+    path('sales/<customer>/',views.sales_customer_transactions,name='sales_customer_transactions'),
+    path('sales/save-transaction/',views.save_sales_transaction,name='save_sales_transaction'),
 
     path('customer/service_customers/',views.service_customers,name='service_customers')
 
