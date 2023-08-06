@@ -15,13 +15,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from . import views
+from . import views, api
 
 urlpatterns = [
     path('', views.base, name='cmms'),
     path('car-jobs/', views.carjobs, name='car-jobs'),
     path('tools/', views.tools, name='cmms-tools'),
-    path('api/', views.api, name='cmms_api'),
+    path('api/', api.api, name='cmms_api'),
     path('stock/', views.stock, name='stock'),
     path('stock/count/', views.view_stock_count, name='stock-count'),
     path('stock/frozen/new/', views.new_frozen, name='new-frozen'),
@@ -31,14 +31,14 @@ urlpatterns = [
     path('stock/frozen/', views.forezen, name='frozen-stock'),
     path('stock/count/edit/<pk>/', views.edit_stock_count, name='edit_stock_count'),
 
+    path('sales/customers/', views.customer_sales, name='customer_sales'),
+    path('sales/new-customer/', views.new_sales_customer, name='new_sales_customer'),
+    path('sales/save-customer/', views.save_sales_customer, name='save_sales_customer'),
+    path('sales/<customer>/', views.sales_customer_transactions, name='sales_customer_transactions'),
+    path('sales/save-transaction/', views.save_sales_transaction, name='save_sales_transaction'),
+    path('sales/deals/<customer>', views.service_customers, name='sales-deal'),
 
-    path('sales/customers/',views.customer_sales,name='customer_sales'),
-    path('sales/new-customer/',views.new_sales_customer,name='new_sales_customer'),
-    path('sales/save-customer/',views.save_sales_customer,name='save_sales_customer'),
-    path('sales/<customer>/',views.sales_customer_transactions,name='sales_customer_transactions'),
-    path('sales/save-transaction/',views.save_sales_transaction,name='save_sales_transaction'),
-
-    path('customer/service_customers/',views.service_customers,name='service_customers')
+    path('customer/service_customers/', views.service_customers, name='service_customers')
 
 ]
 
