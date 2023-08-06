@@ -277,4 +277,18 @@ class CmmsCust {
 
 }
 
+class CmmsSales{
+    getCustomer(key='all'){
+        let payload = {
+            module:'cmms_sales_customer',
+            data:{
+                'key':key
+            }
+        }
+
+        return api.call('VIEW',payload,'/cmms/api/')
+    }
+}
+
 const cmms_cust = new CmmsCust()
+const cmms_sales = new CmmsSales()

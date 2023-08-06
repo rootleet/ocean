@@ -2,7 +2,7 @@ import csv
 import json
 import traceback
 from datetime import date
-
+from django.db import IntegrityError
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.http import HttpResponse, JsonResponse
@@ -10,6 +10,7 @@ from django.shortcuts import redirect, render, get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from fpdf import FPDF
 
+from cmms.forms import NewSalesCustomer, NewSaleTransactions
 from ocean.settings import DB_SERVER, DB_NAME, DB_USER, DB_PORT, DB_PASSWORD
 from django.contrib.auth import get_user_model
 import pyodbc
@@ -17,12 +18,22 @@ from cmms.models import *
 from decimal import Decimal
 from django.contrib import messages
 
-from cmms.extra import db
+from cmms.extra import db, DB_CURSOR
 
 
 # Create your views here.
 def base(request):
-    return None
+    page = {
+        'nav': True,
+        'title': "CMMS"
+    }
+
+    context = {
+        'page': page,
+        'nav': True,
+        'searchButton': ''
+    }
+    return render(request, 'cmms/cmms-landing.html', context=context)
 
 
 @login_required(login_url='/login/')
@@ -144,6 +155,98 @@ def compare(request, pk, as_of, group):
         'unknown': unknown,
 
     })
+
+
+@login_required()
+def customer_sales(request):
+    context = {
+        'nav': True,
+        'page': {
+            'title': "SALES CUSTOMERS"
+        },
+        'customers': SalesCustomers.objects.all().order_by('-pk')
+    }
+    return render(request, 'cmms/sales-customer.html', context=context)
+
+
+@login_required()
+def new_sales_customer(request):
+    context = {
+        'nav': True,
+        'page': {
+            'title': "NEW SALES CUSTOMER"
+        }
+    }
+    return render(request, 'cmms/new-sales-customer.html', context=context)
+
+
+@login_required()
+def save_sales_customer(request):
+    if request.method == 'POST':
+        form = NewSalesCustomer(request.POST)
+        mobile = request.POST['mobile']
+        email = request.POST['email']
+        if SalesCustomers.objects.filter(mobile=mobile).exists():
+            messages.error(request, f"Customer exist with number {mobile}")
+        elif SalesCustomers.objects.filter(email=email).exists():
+            messages.error(request, f"Customer exist with number {mobile}")
+        elif form.is_valid():
+            try:
+                form.save()
+                messages.success(request, "CUSTOMER ADDED")
+            except IntegrityError:
+                messages.error(request, "CUSTOMER ALREADY EXISTS")
+            except Exception as e:
+                messages.error(request, str(e))
+        else:
+            # return HttpResponse(form)
+            messages.error(request, "FORM IS INVALID")
+    else:
+        messages.error(request, "WRONG REQUEST METHOD")
+
+    return redirect('customer_sales')
+
+
+def sales_customer_transactions(request, customer):
+    context = {
+        'page': {
+            'title': ""
+        },
+        'cust': SalesCustomers.objects.get(pk=customer)
+    }
+    return render(request, 'cmms/sales_transactions.html', context=context)
+
+@login_required()
+def save_sales_transaction(request):
+    if request.method == 'POST':
+        form = NewSaleTransactions(request.POST)
+        if form.is_valid():
+            try:
+                form.save()
+                messages.error(request, "TRANSACTION SAVED")
+
+            except Exception as e:
+                messages.error(request, str(e))
+            # To return to the previous page
+            previous_page = request.META.get('HTTP_REFERER')
+            return redirect(previous_page)
+        else:
+            messages.error(request, "FORM IS INVALID")
+    else:
+        messages.error(request, "WRONG REQUEST METHOD")
+
+    return redirect('customer_sales')
+
+@login_required()
+def service_customers(request):
+    context = {
+        'nav': True,
+        'page': {
+
+            'title': "SERVICE CUSTOMERS"
+        }
+    }
+    return render(request, 'cmms/service/customers.html', context=context)
 
 
 @csrf_exempt
@@ -633,7 +736,9 @@ def api(request):
                         if doc == 'STC':
                             # count
                             hd = StockCountHD.objects.filter(pk=key)
-
+                        elif doc == 'STR':
+                            # sales transactions
+                            hd = SalesCustomers.objects.filter(pk=key)
                         count = hd.count()
                         if count == 1:
                             response['status_code'] = 200
@@ -652,7 +757,6 @@ def api(request):
                                     writer.writerow(header)
 
                                     for tran in trans['trans']:
-
                                         writer.writerow(
                                             [tran.item_ref, tran.froze_qty, tran.counted_qty, tran.diff_qty])
 
@@ -696,10 +800,240 @@ def api(request):
                                 workbook.save(file)
                                 response['message'] = file
 
+                            elif document == 'excel' and doc == "STR":
+                                import openpyxl
+                                workbook = openpyxl.Workbook()
+                                sheet = workbook.active
+                                # make sheet head
+                                sheet['A1'] = f"DATE"
+                                sheet['B1'] = f"BY"
+                                sheet['C1'] = f"TITLE"
+                                sheet['D1'] = "Description"
+
+                                # loop through transactins
+                                count = 1
+                                for tran in header.trans():
+                                    count += 1
+                                    sheet[f'A{count}'] = f"{tran.created_date} {tran.created_time}"
+                                    sheet[f'B{count}'] = f"{tran.owner.username}"
+                                    sheet[f'C{count}'] = f"{tran.title}"
+                                    sheet[f'D{count}'] = f"{tran.details}"
+
+                                from datetime import datetime
+                                current_datetime = datetime.now()
+                                formatted_datetime = current_datetime.strftime("%Y%m%d%H%M%S")
+                                file = f"static/general/tmp/{doc}_{header.name}.xlsx"
+                                workbook.save(file)
+                                response['message'] = file
 
                         else:
                             response['status_code'] = 404
                             response['message'] = f"ENTRY NOT FOUNC ( {doc} - {key} )"
+
+                elif module == 'customer':
+                    cust_type = data.get('cust_type')
+                    if cust_type == 'cmms_service':
+                        cursor = DB_CURSOR
+                        cust_code = data.get('cust_code') or 'all'
+                        if cust_code == 'all':
+                            cursor.execute("select cust_code,cust_name,cust_contact,email1 from customer_master")
+                        else:
+                            cursor.execute(f"select cust_code,cust_name,cust_contact,email1 from customer_master  where cust_code = {cust_code}")
+                        cust_arr = []
+                        for customer in cursor.fetchall():
+                            cust_arr.append({
+                                'code': str(customer[0]).strip(),
+                                'name': str(customer[1]).strip(),
+                                'phone': str(customer[2]).strip(),
+                                'email': str(customer[3]).strip()
+                            })
+                        response['message'] = cust_arr
+                        response['status_code'] = 200
+
+                elif module == 'cust_asset':
+                    customer = data.get('customer')
+
+                    # check if customer exist
+                    cust_count = DB_CURSOR.execute(
+                        f"SELECT COUNT(*) FROM customer_master where cust_code = '{customer}'").fetchone()[0]
+                    if cust_count == 1:
+                        # customer details
+                        customer_details = DB_CURSOR.execute(
+                            f"select cust_code,cust_name,cust_contact,email1 from customer_master "
+                            f"where cust_code = '{customer}'").fetchone()
+                        header = {
+                            'code': customer,
+                            'name': str(customer_details[1]).strip(),
+                            'phone': str(customer_details[2]).strip()
+                        }
+                        assets_q = f"select ASSET_CODE,asset_desc,asset_no,asset_ref_no,model_no from asset_mast where cust_code = '{customer}'"
+                        asset_arr = []
+                        DB_CURSOR.execute(assets_q)
+
+                        for asset in DB_CURSOR.fetchall():
+                            obj = {
+                                'code': str(asset[0]).strip(),
+                                'name': str(asset[1]).strip(),
+                                'number': str(asset[2]).strip(),
+                                'chassis': str(asset[3]).strip(),
+                                'model': str(asset[4]).strip(),
+                            }
+                            asset_arr.append(obj)
+
+                        response['status_code'] = 200
+                        response['message'] = {
+                            'customer': header, 'assets': asset_arr
+                        }
+                    else:
+                        response['status_code'] = 404
+                        response['message'] = f"NO CUSTOMER WITH CODE {customer}"
+
+                elif module == 'service_history':
+                    asset = data.get('asset')
+                    DB_CURSOR.execute(
+                        f"select Entry_no,Invoice_date,wo_date,tot_amt,tax_amt,net_amt,labor_amount,material_amount from invoice_hd where asset_code = '{asset}' order by Invoice_date desc")
+                    serv_arr = []
+                    for service in DB_CURSOR.fetchall():
+
+                        # get materials
+                        DB_CURSOR.execute(
+                            f"select invoice_type,descr,uom,unit_qty,unit_price,tot_amt,tax_amt,net_amt from invoice_tran where Entry_no = '{service[0]}'")
+                        tran_arr = []
+                        for tran in DB_CURSOR.fetchall():
+                            tobj = {
+                                'type': str(tran[0]).strip(),
+                                'name': str(tran[1]).strip(),
+                                'packing': str(tran[2]).strip(),
+                                'unit_qty': str(tran[3]).strip(),
+                                'unit_price': str(tran[4]).strip(),
+                                'net': str(tran[5]).strip(),
+                                'tax': str(tran[6]).strip(),
+                                'gross': str(tran[7]).strip()
+                            }
+                            tran_arr.append(tobj)
+
+                        obj = {
+                            'invoice': str(service[0]).strip(),
+                            'date': str(service[1]).strip(),
+                            'tot_amt': str(service[3]).strip(),
+                            'tax_amt': str(service[4]).strip(),
+                            'net_amt': str(service[5]).strip(),
+                            'lab_amt': str(service[6]).strip(),
+                            'mat_amt': str(service[7]).strip(),
+                            'trans': tran_arr
+                        }
+                        serv_arr.append(obj)
+
+                    # DB_CURSOR.close()
+                    response['status_code'] = 200
+                    response['message'] = serv_arr
+
+                elif module == 'invoice_detail':
+                    invoice = data.get('invoice')
+                    header = {}
+                    assets = {}
+                    trans = []
+
+                    inv_hd = DB_CURSOR.execute(f"select Entry_no,Invoice_date,tot_amt,tax_amt,net_amt,labor_amount,material_amount,asset_code from invoice_hd where Entry_no= '{invoice}'").fetchone()
+                    header['invoice_no'] = str(inv_hd[0]).strip()
+                    header['date'] = str(inv_hd[1]).strip()
+                    header['net'] = str(inv_hd[2]).strip()
+                    header['tax'] = str(inv_hd[3]).strip()
+                    header['gross'] = str(inv_hd[4]).strip()
+                    header['lab'] = str(inv_hd[5]).strip()
+                    header['mat'] = str(inv_hd[6]).strip()
+
+                    # asset details
+                    asset_code = inv_hd[7]
+                    asset = DB_CURSOR.execute(f"select ASSET_CODE,asset_desc,asset_no,asset_ref_no,model_no,cust_code from asset_mast where ASSET_CODE = '{asset_code}'").fetchone()
+                    assets['code'] = str(asset[0]).strip()
+                    assets['name'] = str(asset[1]).strip()
+                    assets['number'] = str(asset[2]).strip()
+                    assets['chassis'] = str(asset[3]).strip()
+                    assets['model'] = str(asset[4]).strip()
+                    assets['owner'] = str(asset[5]).strip()
+
+
+                    DB_CURSOR.execute(f"select invoice_type,descr,uom,unit_qty,unit_price,tot_amt,tax_amt,net_amt from invoice_tran where Entry_no = '{invoice}'")
+                    for tran in DB_CURSOR.fetchall():
+                        tobj = {
+                            'type': str(tran[0]).strip(),
+                            'name': str(tran[1]).strip(),
+                            'packing': str(tran[2]).strip(),
+                            'unit_qty': str(tran[3]).strip(),
+                            'unit_price': str(tran[4]).strip(),
+                            'net': str(tran[5]).strip(),
+                            'tax': str(tran[6]).strip(),
+                            'gross': str(tran[7]).strip()
+                        }
+                        trans.append(tobj)
+
+                    response['message'] = {
+                        'header':header,'asset':assets,'trans':trans
+                    }
+                    response['status_code'] = 200
+
+                elif module == 'just_costomer':
+                    cust_code = data.get('code')
+                    DB_CURSOR.execute(
+                        f"SELECT cust_name, cust_contact, email1, email2 FROM customer_master WHERE cust_code = '{cust_code}'"
+                    )
+
+                    row = DB_CURSOR.fetchone()
+                    if row:
+                        response = {
+                            'status_code': 200,
+                            'message': {
+                                'name': str(row[0]).strip(),
+                                'phone': str(row[1]).strip(),
+                                'email': str(row[2]).strip()
+                            }
+                        }
+                    else:
+                        response = {
+                            'status_code': 404,
+                            'message': 'Customer not found'
+                        }
+
+                elif module == 'cmms_sales_customer':
+                    key = data.get('key')
+                    arr = []
+
+                    if key == 'all':
+                        customers = SalesCustomers.objects.all()
+                    else:
+                        customers = SalesCustomers.objects.filter(pk=key)
+
+                    if customers.count() > 0:
+                        for customer in customers:
+                            obj = {
+                                'pk':customer.pk,
+                                'company':customer.company,
+                                'name':customer.name,
+                                'mobile':customer.mobile,
+                                'email':customer.email,
+                                'address':customer.address,
+                                'type_of_client':customer.type_of_client,
+                                'timestamp':{
+                                    'created_date':customer.created_date,
+                                    'created_time':customer.created_time,
+                                    'updated_date':customer.updated_date,
+                                    'updated_time':customer.updated_time
+                                },
+                                'status':customer.status,
+                                'owner':{
+                                    'pk':customer.owner.pk,
+                                    'username':customer.owner.username
+                                }
+
+                            }
+                            arr.append(obj)
+
+                        response['status_code'] = 200
+                        response['message'] = arr
+                    else:
+                        response['status_code'] = 404
+                        response['message'] = f"NO CUSTOMER FOUND WITH KEY {key}"
 
             except Exception as e:
                 response['status'] = 'error'

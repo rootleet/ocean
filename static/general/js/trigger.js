@@ -15,6 +15,8 @@ $(document).ready(function () { // wait for the document to finish loading
         $('#loader').delay(3000).modal('hide')
     });
 
+
+
     // get follow-ups
     $('#carFollups').click(function () {
         let carno = $('#searchQuery').val()

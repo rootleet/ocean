@@ -1,0 +1,164 @@
+{% extends 'cmms/base.html' %}
+
+{% load static %}
+
+{% block cmms %}
+    <div class="modal fade" id="custInfo">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="row">
+                <div class="col-sm-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <small class="card-title">Customer Details</small>
+                        </div>
+                        <div class="card-body p-2">
+                            <table class="table table-bordered table-sm">
+                                <tr>
+                                    <td><small>Name</small></td>
+                                    <td><small>{{ cust.name }}</small></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Organization</strong></td>
+                                    <td>{{ cust.company }}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Email</strong></td>
+                                    <td>{{ cust.email }}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Mobile</strong></td>
+                                    <td>{{ cust.mobile }}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Address</strong></td>
+                                    <td><a class="bi bi-info-circle" href="javascript:void(0)" onclick="alert(`{{ cust.address }}`)"></a></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Creation</strong></td>
+                                    <td><strong class="text-info">{{ cust.owner.username }}</strong> {{ cust.created_date }} {{ cust.created_time }}</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <small class="card-title">Other Info</small>
+                        </div>
+                        <div class="card-body p-2">
+                            <table class="table table-bordered table-sm">
+                                <tr>
+                                    <td><strong>Type</strong></td>
+                                    <td>{{ cust.type_of_client }}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Requirement</strong></td>
+                                    <td><a class="bi bi-info-circle" href="javascript:void(0)" onclick="alert(`{{ cust.requirement }}`)"></a></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Purchase Reason</strong></td>
+                                    <td><a class="bi bi-info-circle" href="javascript:void(0)" onclick="alert(`{{ cust.purc_reason }}`)"></a></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Age Of Walk-In</strong></td>
+                                    <td><a class="bi bi-info-circle" href="javascript:void(0)" onclick="alert(`{{ cust.age_of_cur }}`)"></a></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Details Of Walk-In</strong></td>
+                                    <td><a class="bi bi-info-circle" href="javascript:void(0)" onclick="alert(`{{ cust.cur_car_det }}`)"></a></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Status</strong></td>
+                                    <td>{{ cust.status }}</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="update">
+        <div class="modal-dialog">
+            <form method="post" action="{% url 'save_sales_transaction' %}" class="modal-content">
+                {% csrf_token %}
+                <div class="modal-header">
+                    <strong class="modal-title">ADD TRANSACTION</strong>
+                </div>
+                <div class="modal-body p-3">
+                    <input type="hidden" name="owner" value="{{ user.pk }}">
+                    <input type="hidden" name="customer" value="{{ cust.pk }}">
+                    <div class="card mb-3">
+                        <div class="card-body p-2">
+                            <label for="title">Title</label><input type="text" autocomplete="off" required id="title" name="title" class="form-control rounded-0">
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-body p-2">
+                            <label for="details">Details</label><textarea name="details" required id="details" cols="30" rows="5" class="form-control rounded-0"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success rounded-0">SAVE</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="w-100 h-100">
+        <div class="container">
+
+
+            <div class="card w-100">
+                <div class="card-header d-flex flex-wrap">
+                    <button data-bs-target="#custInfo" data-bs-toggle="modal" class="btn rounded-0 mr-2 btn-info">VIEW DETAILS</button>
+                    <button data-bs-target="#update" data-bs-toggle="modal" class="btn mr-2 rounded-0 btn-secondary">UPDATE</button>
+                    <div class="dropdown">
+                      <button class="btn rounded-0 btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        EXPORT
+                      </button>
+                      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="javascript:void(0)" onclick="cmms.stockExport('STR','{{ cust.pk }}','excel')">Excel</a>
+                        <a class="dropdown-item" disabled="" href="#">PDF</a>
+                      </div>
+                    </div>
+                </div>
+
+                <div class="card-body p-0">
+                    <table class="table table-sm datatable">
+                        <thead>
+                            <tr><th>BY</th><th>TITLE</th><th>DATE</th><th>INFO</th></tr>
+                        </thead>
+                        <tbody>
+                            {% for tran in cust.trans %}
+                                <tr >
+                                    <td>{{ tran.owner.username }}</td>
+                                    <td>{{ tran.title }}</td>
+                                    <td>{{ tran.created_date }} {{ tran.created_time }}</td>
+                                    <td><i onclick="alert(`{{ tran.details }}`)" class="text-info pointer bi bi-messenger"></i></td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+    {% if messages %}
+  <script>
+    {% for message in messages %}
+      kasa.info(`{{ message }}`)
+    {% endfor %}
+  </script>
+{% endif %}
+{% endblock %}
+

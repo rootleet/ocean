@@ -33,12 +33,24 @@ class StockCountHD(models.Model):
             'count': StockCountTrans.objects.filter(stock_count_hd=self.pk).count(),
             'trans': StockCountTrans.objects.filter(stock_count_hd=self.pk),
             'summary': {
-                'total_frozen': StockCountTrans.objects.filter(stock_count_hd=self.pk).aggregate(total_amount=Sum('froze_qty'))['total_amount'],
-                'total_counted': StockCountTrans.objects.filter(stock_count_hd=self.pk).aggregate(total_amount=Sum('counted_qty'))['total_amount'],
-                'qty_difference': StockCountTrans.objects.filter(stock_count_hd=self.pk).aggregate(total_amount=Sum('diff_qty'))['total_amount'],
-                'value_frozen': StockCountTrans.objects.filter(stock_count_hd=self.pk).aggregate(total_amount=Sum('froze_val'))['total_amount'],
-                'value_counted': StockCountTrans.objects.filter(stock_count_hd=self.pk).aggregate(total_amount=Sum('counted_val'))['total_amount'],
-                'value_difference': StockCountTrans.objects.filter(stock_count_hd=self.pk).aggregate(total_amount=Sum('diff_val'))['total_amount']
+                'total_frozen':
+                    StockCountTrans.objects.filter(stock_count_hd=self.pk).aggregate(total_amount=Sum('froze_qty'))[
+                        'total_amount'],
+                'total_counted':
+                    StockCountTrans.objects.filter(stock_count_hd=self.pk).aggregate(total_amount=Sum('counted_qty'))[
+                        'total_amount'],
+                'qty_difference':
+                    StockCountTrans.objects.filter(stock_count_hd=self.pk).aggregate(total_amount=Sum('diff_qty'))[
+                        'total_amount'],
+                'value_frozen':
+                    StockCountTrans.objects.filter(stock_count_hd=self.pk).aggregate(total_amount=Sum('froze_val'))[
+                        'total_amount'],
+                'value_counted':
+                    StockCountTrans.objects.filter(stock_count_hd=self.pk).aggregate(total_amount=Sum('counted_val'))[
+                        'total_amount'],
+                'value_difference':
+                    StockCountTrans.objects.filter(stock_count_hd=self.pk).aggregate(total_amount=Sum('diff_val'))[
+                        'total_amount']
             }
         }
 
@@ -167,3 +179,44 @@ class StockFreezeTrans(models.Model):
     barcode = models.CharField(max_length=100, blank=False, null=False)
     name = models.TextField(blank=False, null=False)
     qty = models.DecimalField(max_digits=10, decimal_places=3)
+
+
+class SalesCustomers(models.Model):
+    company = models.TextField()
+    name = models.TextField()
+    mobile = models.CharField(max_length=225, unique=True)
+    email = models.CharField(max_length=225, unique=True)
+    address = models.TextField()
+
+    type_of_client = models.TextField()
+    requirement = models.TextField()
+    purc_reason = models.TextField()
+    age_of_cur = models.TextField()
+    cur_car_det = models.TextField()
+
+    created_date = models.DateField(auto_now_add=True)
+    created_time = models.TimeField(auto_now_add=True)
+    updated_date = models.DateField(auto_now=True)
+    updated_time = models.TimeField(auto_now=True)
+
+    status = models.IntegerField(default=0)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
+    def trans(self):
+        return SalesCustomerTransactions.objects.filter(customer=self.pk).order_by('-pk')
+
+
+class SalesCustomerTransactions(models.Model):
+    customer = models.ForeignKey(SalesCustomers, on_delete=models.CASCADE)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    title = models.TextField()
+    details = models.TextField()
+
+    created_date = models.DateField(auto_now_add=True)
+    created_time = models.TimeField(auto_now_add=True)
+    updated_date = models.DateField(auto_now=True)
+    updated_time = models.TimeField(auto_now=True)
+
+    def date(self):
+        return f"{self.created_date} {self.created_time}"
+
