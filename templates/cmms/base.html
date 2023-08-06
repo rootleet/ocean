@@ -71,6 +71,7 @@
     <script src="{% static 'general/js/classes/docs.js' %}"></script>
     <script src="{% static 'general/js/classes/anton.js' %}"></script>
     <script src="{% static 'general/js/classes/cmms_cust.js' %}"></script>
+    <script src="{% static 'general/js/classes/modal.js' %}"></script>
 
 
   <script>
@@ -89,7 +90,7 @@
 <body>
     <!-- MODALS -->
     <div id="g_modal" class="modal fade">
-        <div id="g_modal_size" class="modal-dialog modal-dialog-centered">
+        <div id="g_modal_size"  class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="g_modal_title"></h5>
@@ -99,6 +100,7 @@
                         
                     </div>
                 </div>
+                <div class="footer" id="g_footer"></div>
             </div>
         </div>
     </div>

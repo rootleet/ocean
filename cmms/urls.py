@@ -15,13 +15,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from . import views, api
+from . import views, cmms_api
 
 urlpatterns = [
     path('', views.base, name='cmms'),
     path('car-jobs/', views.carjobs, name='car-jobs'),
     path('tools/', views.tools, name='cmms-tools'),
-    path('api/', api.api, name='cmms_api'),
+    path('api/', cmms_api.api, name='cmms_api'),
     path('stock/', views.stock, name='stock'),
     path('stock/count/', views.view_stock_count, name='stock-count'),
     path('stock/frozen/new/', views.new_frozen, name='new-frozen'),
@@ -36,7 +36,7 @@ urlpatterns = [
     path('sales/save-customer/', views.save_sales_customer, name='save_sales_customer'),
     path('sales/<customer>/', views.sales_customer_transactions, name='sales_customer_transactions'),
     path('sales/save-transaction/', views.save_sales_transaction, name='save_sales_transaction'),
-    path('sales/deals/<customer>', views.service_customers, name='sales-deal'),
+    path('sales/deals/<customer>/', views.sales_deal, name='sales-deal'),
 
     path('customer/service_customers/', views.service_customers, name='service_customers')
 

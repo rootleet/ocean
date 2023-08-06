@@ -1,0 +1,97 @@
+{% extends 'cmms/base.html' %}
+{% load static %}
+
+{% block cmms %}
+    <div class="modal fade" id="newDeal">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <strong class="modal-title">CREATE NEW DEAL with {{ customer.company }}</strong>
+                </div>
+                <div class="modal-body bg-header1">
+                    <div class="container">
+                        <div class="row d-flex mb-2 flex-wrap justify-content-center">
+                            <div class="col-sm-6">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <strong class="card-title">PURCHASER INFO</strong>
+                                    </div>
+                                    <div class="card-body p-2">
+                                        <input type="hidden" id="sales_rep" name="sales_rep" value="{{ user.pk }}" required autocomplete="off" class="form-control form-control-sm rounded-0 mb-2">
+                                        <input type="hidden" name = 'sales_customer' id="sales_customer" value="{{ customer.pk }}">
+                                        <!-- PRUCASE REP -->
+                                        <label for="pur_rep_name">NAME</label><input type="text" id="pur_rep_name" name="pur_rep_name" required autocomplete="off" class="form-control form-control-sm rounded-0 mb-2">
+                                        <label for="pur_rep_email">EMAIL</label><input type="email" id="pur_rep_email" name="pur_rep_email" required autocomplete="off" class="form-control form-control-sm rounded-0 mb-2">
+                                        <label for="pur_rep_phone">MOBILE</label><input type="text" id="pur_rep_phone" name="pur_rep_phone" required autocomplete="off" class="form-control form-control-sm rounded-0 mb-2">
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <strong class="card-title">ASSET INFO</strong>
+                                    </div>
+                                    <div class="card-body p-2">
+                                        <!-- ASSET -->
+                                        <label for="asset">ASSET</label><input type="text" id="asset" name="asset" required autocomplete="off" class="form-control form-control-sm rounded-0 mb-2">
+                                        <!-- MODEL -->
+                                        <label for="model">MODEL</label><input type="text" id="model" name="model" required autocomplete="off" class="form-control form-control-sm rounded-0 mb-2">
+                                        <!-- STOCK TYPE -->
+                                        <label for="stock_type">STOCK TYPE</label>
+                                        <select name="stock_type" id="stock_type" class="form-control form-control-sm mb-2 rounded-0">
+                                            <option value="1">AVAILABLE</option>
+                                            <option value="0">NOT AVAILABLE</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="card">
+                                    <div class="card-header"><strong class="card-title">REQUIREMENT</strong></div>
+                                    <div class="card-body p-2">
+                                        <textarea name="requirement" id="requirement" cols="30" rows="5" class="form-control mb-2 rounded-0"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button onclick="cmms_sales.saveDeal()" class="btn btn-success">CREATE</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="w-100 h-100 card">
+        <div class="card-header">
+            <button onclick="location.href='{% url 'customer_sales' %}'" class="btn btn-info rounded-0 btn-sm"> <i class="bi bi-arrow-return-left"></i> CUSTOMERS</button>
+            <button data-bs-target="#newDeal" data-bs-toggle="modal" class="btn btn-primary">NEW DEAL</button>
+        </div>
+        <div class="card-body p-2">
+            <table class="table table-sm datatable">
+                <thead class="bg-header1">
+                    <tr><th>SALES REP</th><th>PURCH REP</th><th>ASSET</th><th>CONTACT</th><th>DATA</th><th>STATUS</th><th>ACTIONS</th></tr>
+                </thead>
+                <tbody id="tbody">
+{#                    <tr>#}
+{#                        <th>JANE</th>#}
+{#                        <td>JAMES</td>#}
+{#                        <td>TOYOYA VITZ</td>#}
+{#                        <td>PURCHASE</td>#}
+{#                        <td>12-12-2922</td>#}
+{#                        <td><kbd class="bg-warning">OPEN</kbd></td>#}
+{#                        <td><i title="transactions" onclick="cmms_sales.viewTransactions()" class="bi text-info pointer bi-view-list"></i></td>#}
+{#                    </tr>#}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        cmms_sales.viewDeals(`{{ customer.pk }}`)
+    </script>
+
+{% endblock %}

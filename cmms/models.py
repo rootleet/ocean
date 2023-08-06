@@ -182,17 +182,18 @@ class StockFreezeTrans(models.Model):
 
 
 class SalesCustomers(models.Model):
-    company = models.TextField()
+    company = models.CharField(max_length=225, unique=True)
+    url = models.CharField(max_length=225, unique=True)
     name = models.TextField()
     mobile = models.CharField(max_length=225, unique=True)
     email = models.CharField(max_length=225, unique=True)
     address = models.TextField()
-
     type_of_client = models.TextField()
-    requirement = models.TextField()
-    purc_reason = models.TextField()
-    age_of_cur = models.TextField()
-    cur_car_det = models.TextField()
+
+    # requirement = models.TextField()
+    # purc_reason = models.TextField()
+    # age_of_cur = models.TextField()
+    # cur_car_det = models.TextField()
 
     created_date = models.DateField(auto_now_add=True)
     created_time = models.TimeField(auto_now_add=True)
@@ -204,6 +205,12 @@ class SalesCustomers(models.Model):
 
     def trans(self):
         return SalesCustomerTransactions.objects.filter(customer=self.pk).order_by('-pk')
+
+    def uni(self):
+        return self.company.replace(' ', '-').lower()
+
+    def deals(self):
+        return SalesDeals.objects.filter(customer=self.pk).order_by('-pk')
 
 
 class SalesCustomerTransactions(models.Model):
@@ -220,3 +227,40 @@ class SalesCustomerTransactions(models.Model):
     def date(self):
         return f"{self.created_date} {self.created_time}"
 
+
+class SalesDeals(models.Model):
+    customer = models.ForeignKey(SalesCustomers, on_delete=models.CASCADE)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
+    pur_rep_name = models.TextField()
+    pur_rep_email = models.TextField()
+    pur_rep_phone = models.TextField()
+
+    asset = models.TextField()
+    model = models.TextField()
+    stock_type = models.IntegerField(default=0)
+
+    requirement = models.TextField()
+
+    created_date = models.DateField(auto_now_add=True)
+    created_time = models.TimeField(auto_now_add=True)
+    updated_date = models.DateField(auto_now=True)
+    updated_time = models.TimeField(auto_now=True)
+
+    status = models.IntegerField(default=0) # 0 open, 1 closed, 3 invalid
+
+    def transactions(self):
+        return DealTransactions.objects.filter(deal=self.pk).order_by('-pk')
+
+
+class DealTransactions(models.Model):
+    deal = models.ForeignKey(SalesDeals, on_delete=models.CASCADE)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
+    title = models.TextField()
+    details = models.TextField()
+
+    created_date = models.DateField(auto_now_add=True)
+    created_time = models.TimeField(auto_now_add=True)
+    updated_date = models.DateField(auto_now=True)
+    updated_time = models.TimeField(auto_now=True)

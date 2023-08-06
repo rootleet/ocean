@@ -779,6 +779,7 @@ def api(request):
                         for customer in customers:
                             obj = {
                                 'pk':customer.pk,
+                                'url':customer.url,
                                 'company':customer.company,
                                 'name':customer.name,
                                 'mobile':customer.mobile,
@@ -805,6 +806,97 @@ def api(request):
                     else:
                         response['status_code'] = 404
                         response['message'] = f"NO CUSTOMER FOUND WITH KEY {key}"
+
+                elif module == 'cmms_sales_deals':
+                    cust = data.get('sales_customer')
+                    if SalesCustomers.objects.filter(pk=cust).count() == 1:
+                        customer = SalesCustomers.objects.get(pk=cust)
+                        deals = customer.deals()
+                        deal_arr = []
+                        for deal in deals:
+                            obj = {
+                                'sales_rep':{
+                                    'pk':deal.owner.pk,
+                                    'username':deal.owner.username
+                                },
+                                'purch_rep':{
+                                    'name':deal.pur_rep_name,
+                                    'email':deal.pur_rep_email,
+                                    'phone':deal.pur_rep_phone,
+                                    'company':deal.customer.company
+                                },
+                                'asset':{
+                                    'name':deal.asset,
+                                    'model':deal.model,
+                                    'stock_type':deal.stock_type,
+                                    'requirement':deal.requirement
+                                },
+                                'status':deal.status,
+                                'date': deal.created_date,
+                                'time': deal.created_time,
+                                'pk':deal.pk
+
+                            }
+                            deal_arr.append(obj)
+                        response['status_code'] = 200
+                        response['message'] = deal_arr
+
+                    else:
+                        response['status_code'] = 404
+                        response['message'] = f"CUSTOMER DOES NOT EXIST"
+
+                elif module == 'cmms_sales_deal':
+                    dealkey = data.get('deal')
+
+                    try:
+                        deal = SalesDeals.objects.get(pk=dealkey)
+                        trans = deal.transactions()
+                        transactions = []
+                        for tran in trans:
+                            obj = {
+                                'title':tran.title,
+                                'details':tran.details,
+                                'owner':{
+                                    'pk':tran.owner.pk,
+                                    'username':tran.owner.username
+                                },
+                                'timestamp':{
+                                    'd_created':tran.created_date,
+                                    't_created':tran.created_time
+                                }
+                            }
+                            transactions.append(obj)
+
+                        header = {
+                            'sales_rep':{
+                                    'pk':deal.owner.pk,
+                                    'username':deal.owner.username
+                            },
+                            'purch_rep':{
+                                    'name':deal.pur_rep_name,
+                                    'email':deal.pur_rep_email,
+                                    'phone':deal.pur_rep_phone,
+                                    'company':deal.customer.company
+                            },
+                            'asset':{
+                                    'name':deal.asset,
+                                    'model':deal.model,
+                                    'stock_type':deal.stock_type,
+                                    'requirement':deal.requirement
+                            },
+                            'status':deal.status,
+                            'date': deal.created_date,
+                            'time': deal.created_time
+                        }
+
+                        response['status_code'] = 200
+                        response['message'] = {
+                            'deal':header,'trans':transactions
+                        }
+
+                    except Exception as e:
+                        response['status_code'] = 505
+                        response['message'] = str(e)
 
             except Exception as e:
                 response['status'] = 'error'
@@ -1006,6 +1098,52 @@ def api(request):
                     else:
                         response['statys_code'] = 404
                         response['message'] = f"CANNOT FIND FROZEN with entry {frozen_ref}"
+
+            elif module == 'sales_deal':
+                sales_rep = data.get('sales_rep')
+                sales_cust = data.get('sales_customer')
+
+                pur_rep_name = data.get('pur_rep_name')
+                pur_rep_email = data.get('pur_rep_email')
+                pur_rep_phone = data.get('pur_rep_phone')
+
+                asset = data.get('asset')
+                model = data.get('model')
+
+                stock_type = data.get('stock_type')
+                requirement = data.get('requirement')
+
+                # validate
+                try:
+                    customer = SalesCustomers.objects.get(pk=sales_cust)
+                    owner = User.objects.get(pk=sales_rep)
+
+                    SalesDeals(customer=customer,owner=owner,pur_rep_name=pur_rep_name,pur_rep_phone=pur_rep_phone,pur_rep_email=pur_rep_email,asset=asset,model=model,
+                                      stock_type=stock_type,requirement=requirement).save()
+                    response['status_code'] = 200
+                    response['message'] = "DEAL CREATED"
+                except Exception as e:
+                    response['status_code'] = 505
+                    response['message']  = str(e)
+
+            elif module == 'deal_transaction':
+                dealkey = data.get('deal')
+                title = data.get('title')
+                detail = data.get('detail')
+                ownerkey = data.get('owner')
+
+
+
+                try:
+                    deal = SalesDeals.objects.get(pk=dealkey)
+                    owner = User.objects.get(pk=ownerkey)
+                    DealTransactions(deal=deal,title=title,details=detail,owner=owner).save()
+
+                    response['status_code'] = 200
+                    response['message'] = "TRANSACTION ADDED"
+                except Exception as e:
+                    response['status_code'] = 500
+                    response['message'] = str(e)
 
 
 

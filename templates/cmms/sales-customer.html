@@ -11,39 +11,21 @@
                     <div class="modal-header">
                         <p class="modal-title">Adding New Customer</p>
                     </div>
-                    <div class="modal-body p-2">
+                    <div class="modal-body bg-header1 p-2">
 
                         <div class="container p-0">
-                            <div class="row no-gutters">
-
+                            <div class="row no-gutters d-flex flex-wrap justify-content-center">
+                                {% csrf_token %}
                                 <!-- CONTACT -->
                                 <div class="col-sm-6">
                                     <div class="card">
-                                        <div class="card-header">
-                                            <small class="card-title">Customer Details</small>
-                                        </div>
+{#                                        <div class="card-header">#}
+{#                                            <small class="card-title">Customer Details</small>#}
+{#                                        </div>#}
                                         <div class="card-body p-2">
-                                            <label for="company">Organization</label><input type="text" name="company" id="company" required autocomplete="off" class="form-control form-control-sm rounded-0 mb-2">
-                                            <!-- NAME -->
-                                            <label for="name">Name</label><input type="text" name="name" id="name" required autocomplete="off" class="form-control form-control-sm rounded-0 mb-2">
-                                            <!-- TELEPHONE -->
-                                            <label for="mobile">Contact Number</label><input type="tel" name="mobile" id="mobile" required autocomplete="off" class="form-control form-control-sm rounded-0 mb-2">
-                                            <!-- EMAIL -->
-                                            <label for="email">Email</label><input type="email" name="email" id="email" required autocomplete="off" class="form-control form-control-sm rounded-0 mb-2">
-                                            <!-- ADDRESS -->
-                                            <label for="address">Address</label><textarea required class="form-control form-control-sm rounded-0" name="address" id="address" cols="30" rows="6"></textarea>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-sm-6">
-
-                                    <div class="form-group card mb-2">
-                                        {% csrf_token %}
-                                        <div class="card-header">
-                                            <small class="card-title">Other Infor</small>
-                                        </div>
-                                        <div class="card-body p-2">
+                                            <label for="url">KEY</label><input type="text" readonly name="url" id="url" required autocomplete="off" class="form-control form-control-sm rounded-0 mb-2">
+                                            <input type="hidden" required name="owner" value="{{ user.pk }}">
+                                            <!-- TYPE -->
                                             <label for="type_of_client">Type Of Client</label><select class="form-control form-check-sm rounded-0 mb-2" id="type_of_client" name="type_of_client">
                                               <option value="Private Individual">Private Individual</option>
                                               <option value="Private Company">Private Company</option>
@@ -52,22 +34,52 @@
                                               <option value="Tender">Tender</option>
                                               <option value="Bank Financed">Bank Financed</option>
                                             </select>
-                                            <label for="requirement">Requirement</label><textarea required class="form-control form-control-sm rounded-0" name="requirement" id="requirement" cols="30" rows="2"></textarea>
-                                            <label for="purc_reason">Reason Of Purchase</label><textarea required class="form-control form-control-sm rounded-0" name="purc_reason" id="purc_reason" cols="30" rows="2"></textarea>
-                                            <hr>
-                                            <small class="text-info">optional but vital information</small> <br>
-                                            <label for="age_of_cur">Age Of Current Car</label><input min="0" value="0" type="number" name="age_of_cur" class="form-control mb-2 form-control-sm rounded-0" id="age_of_cur">
-                                            <!-- CAR TYPE -->
-                                            <label for="cur_car_det">Car Detail ( Brand/ Model )</label><input required value="unknown" type="text" name="cur_car_det" class="form-control mb-2 form-control-sm rounded-0" id="cur_car_det">
 
-                                            <input type="hidden" required name="owner" value="{{ user.pk }}">
-
+                                            <label for="company">Organization</label><input onchange="makeurl()" type="text" name="company" id="company" required autocomplete="off" class="form-control form-control-sm rounded-0 mb-2">
+                                            <!-- NAME -->
+                                            <label for="name">Name</label><input type="text" name="name" id="name" required autocomplete="off" class="form-control form-control-sm rounded-0 mb-2">
+                                            <!-- TELEPHONE -->
+                                            <label for="mobile">Contact Number</label><input type="tel" name="mobile" id="mobile" required autocomplete="off" class="form-control form-control-sm rounded-0 mb-2">
+                                            <!-- EMAIL -->
+                                            <label for="email">Email</label><input type="email" name="email" id="email" required autocomplete="off" class="form-control form-control-sm rounded-0 mb-2">
+                                            <!-- ADDRESS -->
+                                            <label for="address">Address</label><textarea required class="form-control mb-2 form-control-sm rounded-0" name="address" id="address" cols="30" rows="4"></textarea>
+                                            <button type="submit" class="btn btn-success">SAVE</button>
                                         </div>
-
-
-
                                     </div>
                                 </div>
+
+{#                                <div class="col-sm-6">#}
+{##}
+{#                                    <div class="form-group card mb-2">#}
+{#                                        #}
+{#                                        <div class="card-header">#}
+{#                                            <small class="card-title">Other Infor</small>#}
+{#                                        </div>#}
+{#                                        <div class="card-body p-2">#}
+{#                                            <label for="type_of_client">Type Of Client</label><select class="form-control form-check-sm rounded-0 mb-2" id="type_of_client" name="type_of_client">#}
+{#                                              <option value="Private Individual">Private Individual</option>#}
+{#                                              <option value="Private Company">Private Company</option>#}
+{#                                              <option value="Government">Government</option>#}
+{#                                              <option value="Walk In">Walk In</option>#}
+{#                                              <option value="Tender">Tender</option>#}
+{#                                              <option value="Bank Financed">Bank Financed</option>#}
+{#                                            </select>#}
+{#                                            <label for="requirement">Requirement</label><textarea required class="form-control form-control-sm rounded-0" name="requirement" id="requirement" cols="30" rows="2"></textarea>#}
+{#                                            <label for="purc_reason">Reason Of Purchase</label><textarea required class="form-control form-control-sm rounded-0" name="purc_reason" id="purc_reason" cols="30" rows="2"></textarea>#}
+{#                                            <hr>#}
+{#                                            <small class="text-info">optional but vital information</small> <br>#}
+{#                                            <label for="age_of_cur">Age Of Current Car</label><input min="0" value="0" type="number" name="age_of_cur" class="form-control mb-2 form-control-sm rounded-0" id="age_of_cur">#}
+{#                                            <!-- CAR TYPE -->#}
+{#                                            <label for="cur_car_det">Car Detail ( Brand/ Model )</label><input required value="unknown" type="text" name="cur_car_det" class="form-control mb-2 form-control-sm rounded-0" id="cur_car_det">#}
+{##}
+{#                                            #}
+{##}
+{#                                        </div>#}
+{##}
+{#                                    </div>#}
+{#                                    #}
+{#                                </div>#}
 
 
                             </div>
@@ -75,9 +87,9 @@
 
                     </div>
 
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-success">SAVE</button>
-                    </div>
+{#                    <div class="modal-footer">#}
+{#                        #}
+{#                    </div>#}
 
                 </form>
             </div>
@@ -118,18 +130,27 @@
             let tr = '';
             for (let i = 0; i < customers['message'].length; i++) {
                 let customer = customers['message'][i]
+                let url = customer['url']
                 tr += `<tr>
                             <td>${customer['name']}</td>
                             <td>${customer['company']}</td>
                             <td>${customer['mobile']}</td>
                             <td>${customer['email']}</td>
-                            <td><i onclick="kasa.info('TRANSACTIONS FUNCTION')" class="bi bi-translate pointer"></i></td>
+                            <td><i onclick="location.href='/cmms/sales/deals/${url}/'" class="bi bi-translate pointer"></i></td>
                         </tr>`
 
             }
             $('#tBody').html(tr)
+        } else if (customers['status_code'] === 404) {
+            $('#newCust').modal('show')
+
         } else {
             kasa.info(customers['message'])
+        }
+
+        function makeurl() {
+            let company = $('#company').val()
+            $('#url').val(company.replace(/\s/g, '-').toLowerCase())
         }
     </script>
 

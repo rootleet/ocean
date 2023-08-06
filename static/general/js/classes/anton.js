@@ -25,6 +25,11 @@ class Anton {
         return true;
     }
 
+    wait(time = 1){
+        setTimeout(function () {
+            console.log(waiting)
+        },time * 1000)
+    }
 
 }
 

@@ -288,6 +288,227 @@ class CmmsSales{
 
         return api.call('VIEW',payload,'/cmms/api/')
     }
+
+    viewTransactions(deal) {
+        amodal.setTitleText("CUSTOMER TRANSACTIONS")
+        amodal.setSize('XL')
+
+        let payload = {
+            'module': 'cmms_sales_deal',
+            data: {
+                'deal': deal
+            }
+        }
+
+        let response = api.call('VIEW', payload, '/cmms/api/');
+        let in_deal, trans;
+
+        if (response['status_code'] === 200) {
+            let message = response['message']
+            in_deal = message['deal']
+            trans = message['trans']
+            console.table(message)
+            // render page
+            let html = `<div class="container-fluid p-2">
+                        <div class="row d-flex flex-wrap">
+                            <div class="col-sm-4">
+                                <div class="card">
+                                    <div class="card-header"><strong class="card-title">ASSET DETAILS</strong></div>
+                                    <div class="card-body p-2">
+                                        <table class="table m-0 table-sm table-bordered">
+                                            <tr><td><strong>ASSET</strong></td><td>${in_deal['asset']['name']}</td></tr>
+                                            <tr><td><strong>STOCK TYPE</strong></td><td>${in_deal['asset']['stock_type']}</td></tr>
+                                            <tr><td><strong>MODEL</strong></td><td>${in_deal['asset']['model']}</td></tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-8">
+                                <div class="card">
+                                    <div class="card-header"><strong class="card-title">REQUIREMENT</strong></div>
+                                    <div class="card-body p-2">
+                                        <p class="card-text">${in_deal['asset']['requirement']}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <hr>
+                        <div class="card">
+                            <div class="card-header clearfix"><button onclick="cmms_sales.newDealTransaction('${deal}')" class="btn btn-info">NEW TRANSACTION</button></div>
+                            <div class="card-body overflow-auto p-2" style="height: 30vh" id="saleTransactions">
+                                <div class="w-100 h-100 d-flex flex-wrap align-content-center justify-content-center"><div class="spinner-border text-primary" role="status"><span class="sr-only">Loading...</span></div></div>
+                            </div>
+                        </div>
+                        
+            
+                    </div>`
+            amodal.setBodyHtml(html)
+            amodal.show()
+
+            // make transactions
+
+            let tran_tr = ''
+            for (let tr = 0; tr < trans.length; tr++) {
+                let tran = trans[tr]
+                tran_tr += `<tr><td>${tran['owner']['username']}</td><td>${tran['title']}</td><td>${tran['timestamp']['d_created']} ${tran['timestamp']['t_created']}</td><th><i onclick="alert('${tran['details']}')" class="bi bi-info-circle text-info pointer"></i></th></tr>`
+            }
+            let neg_html = `<div class="w-100 h-100 d-flex flex-wrap align-content-center justify-content-center"><div class="alert alert-warning">NO TRANSACTION</div></div>`
+
+            if(trans.length > 0 ){
+                neg_html = `
+                    <table class="table table-sm table-bordered datatable">
+                        <thead><tr><th>SALES REP</th><th>TITLE</th><th>DATE</th><th>ACTION</th></tr></thead>
+                        <tbody>
+                            ${tran_tr}
+                        </tbody>
+                    </table>
+                `
+            }
+
+            setTimeout(function () {
+                $('#saleTransactions').html(neg_html)
+            }, 3)
+
+            } else if (response['status_code'] === undefined) {
+                kasa.warning(`UNKNOWN ERROR : PAYLOAD ${JSON.stringify(payload)}`)
+            } else {
+                kasa.warning(response['message'])
+            }
+
+
+
+    }
+    getDeals(customer){
+        let payload = {
+            'module':'cmms_sales_deals',
+            'data':{
+                'sales_customer':customer
+            }
+        }
+
+        return api.call('VIEW',payload,'/cmms/api/')
+
+    }
+
+    viewDeals(customer){
+        let deals = cmms_sales.getDeals(customer)
+        if(deals['status_code'] === 200){
+            let message = deals['message']
+            let tr = ''
+            for (let d = 0; d < message.length; d++) {
+                let asset,buyer,seller, deal = message[d]
+                asset = deal['asset']
+                buyer = deal['purch_rep']
+                seller = deal['sales_rep']
+                let st = ''
+                if(deal['status'] === 0){
+                    st = `<kbd class="bg-warning">OPEN</kbd>`
+                } else if(deal['status'] === 1){
+                    st = `<kbd class="bg-success">CLOSED</kbd>`
+                } else {
+                    st =`<kbd class="bg-light">UNKNOWN STATE</kbd>`
+                }
+
+                tr += `
+                    <tr>
+                        <th>${seller['username']}</th>
+                        <td><i class="bi bi-building"></i> ${buyer['company']} <br> <i class="bi bi-person"></i> ${buyer['name']}</td>
+                        <td><i class="bi bi-car-front"></i> ${asset['name']} <br> <i class="bi bi-calendar"></i> ${asset['model']}</td>
+                        <td><i class="bi bi-phone"></i> ${buyer['phone']} <br> <i class="bi bi-mailbox"></i> ${buyer['email']}</td>
+                        <td>${deal['date']} ${deal['time']}</td>
+                        <td>${st}</td>
+                        <td><i title="transactions" onclick="cmms_sales.viewTransactions('${deal['pk']}')" class="bi text-info pointer bi-view-list"></i></td>
+                    </tr>
+                `
+
+            }
+            $('#tbody').html(tr)
+
+        } else {
+            kasa.info(`${deals['message']}`)
+        }
+    }
+
+    saveDeal(){
+
+        // validate values
+        let ok = anton.validateInputs(['sales_rep','sales_customer','pur_rep_name','pur_rep_email','pur_rep_phone','asset','model','stock_type','requirement'])
+        if(ok){
+            let customer = $('#sales_customer').val()
+            let payload = {
+                "module":"sales_deal",
+                "data":{
+                    "sales_rep":$('#sales_rep').val(),
+                    "sales_customer":customer,
+                    "pur_rep_name":$('#pur_rep_name').val(),
+                    "pur_rep_email":$('#pur_rep_email').val(),
+                    "pur_rep_phone":$('#pur_rep_phone').val(),
+                    "asset":$('#asset').val(),
+                    "model":$('#model').val(),
+                    "stock_type":$('#stock_type').val(),
+                    "requirement":$('#requirement').val()
+                }
+            }
+
+            let request = api.call('PUT',payload,'/cmms/api/')
+            $('#newDeal').modal('hide')
+            kasa.info(request['message'])
+            cmms_sales.viewDeals(customer)
+
+        } else {
+            kasa.info("FILL ALL FIELDS")
+        }
+
+    }
+
+    newDealTransaction(deal){
+        amodal.hide()
+        Swal.fire({
+            title: 'ADD TRANSACTION',
+            html: `<input placeholder="Title" id="tran_title" class="form-control form-control-sm rounded-0 mb-2"> <textarea id="tran_detail" class="form-control form-control-sm" rows="5"></textarea>`,
+            showCancelButton: true,
+            confirmButtonText: 'SAVE',
+            cancelButtonText: 'Cancel',
+            reverseButtons: true, // To swap the positions of "Cancel" and "OK" buttons
+          }).then((result) => {
+            // Check if the user clicked "OK"
+            if (result.isConfirmed) {
+                if(anton.validateInputs(['tran_title','tran_detail','mypk']))
+                {
+                    let title = $('#tran_title').val(),detail=$('#tran_detail').val()
+                    let payload = {
+                        'module':'deal_transaction',
+                        data:{
+                            'deal':deal,
+                            'title':title,
+                            'detail':detail,
+                            'owner':$('#mypk').val()
+                        }
+                    }
+                    let response = api.call('PUT',payload,'/cmms/api/')
+
+                    if(response['status_code'] !== 200){
+                        kasa.warning(response['message'])
+                    } else if(response['status_code'] === undefined){
+                        kasa.error("THERE IS A SYSTEM ERROR")
+                    }
+                    // kasa.info(title)
+                    cmms_sales.viewTransactions(deal)
+
+                } else {
+                    kasa.info("FILL ALL FIELDS")
+                    setTimeout(function () {
+                        cmms_sales.newDealTransaction(deal)
+                    },3000);
+                }
+
+            } else {
+              cmms_sales.viewTransactions(deal)
+            }
+          });
+    }
+
 }
 
 const cmms_cust = new CmmsCust()

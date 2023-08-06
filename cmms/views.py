@@ -248,4 +248,21 @@ def service_customers(request):
     }
     return render(request, 'cmms/service/customers.html', context=context)
 
+@login_required()
+def sales_deal(request,customer):
+    # validate customer
+    if SalesCustomers.objects.filter(url=customer).count() == 1:
+        cust = SalesCustomers.objects.get(url=customer)
+        context = {
+            'nav': True,
+            'page': {
+                'title': f"{cust.company} / DEALS"
+            },
+            'customer':cust
+        }
+
+        return render(request,'cmms/sales-cust.html',context=context)
+    else:
+        messages.error(request,f"NO CUSTOMER WITH URL {customer}")
+        return redirect('customer_sales')
 
