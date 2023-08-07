@@ -381,7 +381,13 @@ def api_function(request):
                                 "os": device.os,
                                 "sku": device.sku,
                             },
-                            'printers': printer_list
+                            'printers': printer_list,
+                            'timestamp':{
+                                'created_date':device.created_date,
+                                'created_time':device.created_time,
+                                'updated_date':device.updated_date,
+                                'updated_time':device.updated_time
+                            }
                         }
 
                         devs.append(computer)

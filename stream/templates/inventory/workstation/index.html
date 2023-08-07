@@ -27,7 +27,9 @@
                                 <th scope="col">OWNER</th>
                                 <th scope="col">SYS_UNIT</th>
                                 <th scope="col">NETWORK</th>
+
                                 <th scope="col">RAM / STORAGE</th>
+                                  <th scope="col">HEART BEAT</th>
                                   <th>ACTION</th>
                               </tr>
                             </thead>
@@ -88,11 +90,13 @@
                         let network = dev['network']
                         let ram = dev['ram']
                         let storage = dev['storage']
+                        let timestamp = dev['timestamp']
                         devs_row += `<tr>
                                     <td>${system['logged_on_user']}</td>
                                     <td>${system['model']}</td>
                                     <td>${network['ip_address']}</td>
                                       <td>${ram['ram_size']} / ${storage['size']}</td>
+                                        <td>${timestamp['updated_date']} ${timestamp['updated_time']}</td>
                                     <td><span class="badge bg-success"><a href="/inventory/workstation/view/${network['mac_address']}/">DETAILS</a></span></td>
                                   </tr>`
                         ctable(dev)
