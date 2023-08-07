@@ -1183,7 +1183,7 @@ def api(request):
                             row_comment = tran.get('row_comment')
                             row_iss = tran.get('row_iss')
 
-                            cursor = db()
+                            cursor = DB_CURSOR
                             q = f"SELECT sell_price FROM product_master where barcode = '{barcode}'"
 
                             if cursor.execute(q).fetchone() is None:
