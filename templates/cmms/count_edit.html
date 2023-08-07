@@ -68,7 +68,7 @@
 
             <div  class="card-body h-100 p-2 bg-header1 overflow-hidden">
                 <div class="w-100 bg-tran1 h-100 overflow-auto">
-                    <table class='table table-bordered table-striped table-hover table-sm table-responsive'>
+                    <table class='table table-bordered table-striped datatable table-hover table-sm table-responsive'>
                 <thead>
                   <tr>
                       <th>LN</th>
@@ -206,15 +206,15 @@
                             <td id="${ref_id}">${tran['item_ref']}</td>
                             <td id="${bc_id}">${tran['barcode']}</td>
                             <td id="${name_id}">${tran['name']}</td>
-                            <td ><input class="form-control form-control-sm rounded-0" style="width:150px" onkeyup="lincal.sub(${row})" type="text" id="${y_id}" disabled value="${tran['froze_qty']}"></td>
-                            <td><input class="form-control form-control-sm rounded-0" style="width:150px" value="${tran['counted_qty']}" onkeyup="lincal.sub(${row})" id="${x_id}" type="number"></td>
-                            <td><input class="form-control form-control-sm rounded-0" style="width:150px" onkeyup="anton.lineXyz(${row})" value="${tran['diff_qty']}" type="text" id="${z_id}" disabled ></td>
+                            <td ><input class="form-control form-control-sm rounded-0" style="width:100px" onkeyup="lincal.sub(${row})" type="text" id="${y_id}" disabled value="${tran['froze_qty']}"></td>
+                            <td><input class="form-control form-control-sm rounded-0" style="width:100px" value="${tran['counted_qty']}" onkeyup="lincal.sub(${row})" id="${x_id}" type="number"></td>
+                            <td><input class="form-control form-control-sm rounded-0" style="width:100px" onkeyup="anton.lineXyz(${row})" value="${tran['diff_qty']}" type="text" id="${z_id}" disabled ></td>
                             <td>
-                                <input type="text" disabled value="${tran['issue']}" id="iss_${row}">
+                                <input type="text" style="width: 100px" disabled value="${tran['issue']}" id="iss_${row}">
 
                             </td>
                             <td>
-                                <button onclick="linecomment.write(${row})" class="btn btn-info btn-sm"><i class="bi bi-bell"></i></button>
+                                <i onclick="linecomment.write(${row})" class="pointer"><i class="bi bi-bell"></i></i>
                                 <input type="hidden" name="" id="line${row}_comment" value='${tran['comment']}'>
 
                             </td>
