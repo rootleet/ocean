@@ -1162,6 +1162,8 @@ def api(request):
                     header = data.get('header')
                     count_pk = header.get('count_pk')
 
+                    print(data)
+
                     # print(data)
                     if StockCountHD.objects.filter(pk=count_pk).count() == 1:
                         c_hd = StockCountHD.objects.get(pk=count_pk)
@@ -1171,7 +1173,6 @@ def api(request):
 
                         # delete all trans
                         # delete this tran and add again
-
 
                         for tran in trans:
 
