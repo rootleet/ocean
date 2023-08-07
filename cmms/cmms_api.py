@@ -1185,9 +1185,11 @@ def api(request):
 
                             cursor = db()
                             q = f"SELECT sell_price FROM product_master where barcode = '{barcode}'"
-                            value = cursor.execute(q).fetchone()[0]
-                            if value is None:
+
+                            if cursor.execute(q).fetchone() is None:
                                 value = 0.00
+                            else:
+                                value = cursor.execute(q).fetchone()[0]
 
                             diff_val = Decimal(value) * Decimal(diff)
                             froze_val = Decimal(value) * Decimal(frozen)
