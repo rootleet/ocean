@@ -1171,9 +1171,10 @@ def api(request):
 
                         # delete all trans
                         # delete this tran and add again
-                        StockCountTrans.objects.filter(stock_count_hd=c_hd).delete()
+
 
                         for tran in trans:
+
                             print(tran)
                             ref = tran.get('ref')
                             barcode = tran.get('barcode').strip()
@@ -1183,7 +1184,7 @@ def api(request):
                             diff = tran.get('diff')
                             row_comment = tran.get('row_comment')
                             row_iss = tran.get('row_iss')
-
+                            StockCountTrans.objects.filter(stock_count_hd=c_hd, item_ref=ref).delete()
                             cursor = DB_CURSOR
                             q = f"SELECT sell_price FROM product_master where barcode = '{barcode}'"
 
