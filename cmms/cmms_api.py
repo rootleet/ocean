@@ -1174,6 +1174,7 @@ def api(request):
                         StockCountTrans.objects.filter(stock_count_hd=c_hd).delete()
 
                         for tran in trans:
+                            print(tran)
                             ref = tran.get('ref')
                             barcode = tran.get('barcode').strip()
                             name = tran.get('name')
