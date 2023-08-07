@@ -201,8 +201,8 @@
 
 
                     let tran = trans[i]
-                    tr += `<tr ondblclick="$(this).remove()" id="${row_id}">
-                            <td>${row}</td>
+                    tr += `<tr id="${row_id}">
+                            <td ondblclick="$('#'${row_id}).remove()">${row}</td>
                             <td id="${ref_id}">${tran['item_ref']}</td>
                             <td id="${bc_id}">${tran['barcode']}</td>
                             <td id="${name_id}">${tran['name']}</td>
