@@ -517,9 +517,9 @@ def api(request):
                             trans = header.trans()
 
                             if document == 'csv' and doc == 'STC':
-                                file_name = f"static/general/tmp/{header.frozen.ref}.csv"
+                                file_name = f"static/general/tmp/{header.frozen.loc_id} - {header.frozen.remarks}.csv"
                                 # Header
-                                header = ["ITEM_REF", "FROZEN", "COUNTED", "DIFFERENCE"]
+                                header = ["ITEM_REF",  "COUNTED"]
 
                                 with open(file_name, mode="w", newline='') as file:
                                     writer = csv.writer(file)
@@ -529,7 +529,7 @@ def api(request):
 
                                     for tran in trans['trans']:
                                         writer.writerow(
-                                            [tran.item_ref, tran.froze_qty, tran.counted_qty, tran.diff_qty])
+                                            [tran.item_ref, tran.counted_qty])
 
                                 response['message'] = file_name
 
