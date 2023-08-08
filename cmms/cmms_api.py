@@ -528,9 +528,8 @@ def api(request):
                                     writer.writerow(header)
 
                                     for tran in trans['trans']:
-                                        if tran.counted_qty > 0:
-                                            writer.writerow(
-                                                [tran.item_ref, tran.counted_qty])
+                                        writer.writerow(
+                                            [tran.item_ref, tran.counted_qty])
 
                                 response['message'] = file_name
 
