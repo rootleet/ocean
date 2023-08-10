@@ -1,4 +1,5 @@
 {% load static %}
+{% load permission_tags %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -396,7 +397,7 @@
       </li><!-- End Community Nav -->
 
 
-    {{ request.user.groups.all.0.permissions }}
+
     {% if perms.cmms.view_followup %}
 
     <!-- CMMS -->
@@ -621,12 +622,7 @@
 {% if messages %}
   <script>
     {% for message in messages %}
-      Swal.fire({
-        icon: '{{ message.tags }}',
-        title: '{{ message }}',
-        showConfirmButton: false,
-        timer: 3000
-      });
+      kasa.info(`{{ message }}`)
     {% endfor %}
   </script>
 {% endif %}
