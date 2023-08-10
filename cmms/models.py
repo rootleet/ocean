@@ -214,9 +214,16 @@ class SalesCustomers(models.Model):
     def deals(self):
         return SalesDeals.objects.filter(customer=self.pk).order_by('-pk')
 
+    def delete(self, *args, **kwargs):
+        related_objects = self.salescustomertransactions_set.all()  # replace 'yourmodel' with the lowercased model name that has the 'customer' field
+        for obj in related_objects:
+            obj.customer = self.name
+            obj.save()
+        super().delete(*args, **kwargs)
+
 
 class SalesCustomerTransactions(models.Model):
-    customer = models.ForeignKey(SalesCustomers, on_delete=models.CASCADE)
+    customer = models.ForeignKey(SalesCustomers,on_delete=models.SET_NULL, null=True, blank=True)
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     title = models.TextField()
     details = models.TextField()
