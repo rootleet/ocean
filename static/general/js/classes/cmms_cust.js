@@ -509,6 +509,21 @@ class CmmsSales{
           });
     }
 
+    // delete customer
+    delete_customer(key){
+        let payload = {
+            'module':'sales_customer',
+            data:{
+                'key':key
+            }
+        }
+
+        let response = api.call('DELETE',payload,'/cmms/api/')
+        kasa.set_message(response['message'])
+        window.reload()
+    }
+
+
 }
 
 const cmms_cust = new CmmsCust()

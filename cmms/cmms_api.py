@@ -1259,37 +1259,43 @@ def api(request):
 
 
         elif method == 'DELETE':
+            module = body.get('module') or 'before'
             doc = data.get('doc')
             key = data.get('key')
+            if module == 'before':
+                if doc == 'FR':
+                    hd = StockFreezeHd.objects.filter(pk=key)
+                    count = hd.count()
+                elif doc == 'STK':
+                    # approved counted stock
+                    hd = StockCountHD.objects.filter(pk=key)
+                    count = hd.count()
+                else:
+                    count = 0
 
-            if doc == 'FR':
-                hd = StockFreezeHd.objects.filter(pk=key)
-                count = hd.count()
-            elif doc == 'STK':
-                # approved counted stock
-                hd = StockCountHD.objects.filter(pk=key)
-                count = hd.count()
-            else:
-                count = 0
+                if count == 1:
+                    try:
+                        head = hd.last()
+                        head.delete()
 
-            if count == 1:
-                try:
-                    head = hd.last()
-                    head.delete()
+                        response['status_code'] = 200
+                        response['status'] = 'success'
+                        response['message'] = f"DELETED {doc} = {key}"
+                    except Exception as e:
+                        response['status_code'] = 505
+                        response['status'] = 'error'
+                        response['message'] = str(e)
 
-                    response['status_code'] = 200
-                    response['status'] = 'success'
-                    response['message'] = f"DELETED {doc} = {key}"
-                except Exception as e:
-                    response['status_code'] = 505
+                else:
+                    response['status_code'] = 404
                     response['status'] = 'error'
-                    response['message'] = str(e)
+                    response['message'] = f"Count not find matching document ({doc} - {key})"
 
-            else:
-                response['status_code'] = 404
-                response['status'] = 'error'
-                response['message'] = f"Count not find matching document ({doc} - {key})"
-
+            elif module == 'sales_customer':
+                customer = SalesCustomers.objects.get(pk=data.get('key'))
+                name = customer.name
+                customer.delete()
+                response['message'] = f"{name} deleted"
 
     except json.JSONDecodeError as e:
         response["status_code"] = 400
