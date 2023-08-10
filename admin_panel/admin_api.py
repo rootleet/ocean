@@ -1,6 +1,7 @@
 import json
 
-from django.contrib.auth.models import User
+from django.contrib import messages
+from django.contrib.auth.models import User, Permission
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
@@ -46,6 +47,12 @@ def index(request):
                     GeoCitySub(name=name, owner=User.objects.get(pk=us_pk), city=GeoCity.objects.get(pk=city)).save()
                     response = success_response
 
+            elif module == 'tools':
+                task = data.get('task')
+                if task == 'set_message':
+                    msg = data.get('message')
+                    messages.success(request,msg)
+
             else:
                 response['status_code'] = 503
                 response['message'] = f"UNKNOWN MODULE ( METHOD : {method}, MODULE : {module} )"
@@ -88,6 +95,22 @@ def index(request):
                 response['message'] = f"UNKNOWN MODULE ( METHOD : {method}, MODULE : {module} )"
 
         elif method == 'PATCH':  # update
+            if module == 'user_permission':
+                key = data.get('user')
+                codename = data.get('codename')
+                task = data.get('task')
+
+                permission = Permission.objects.get(codename=codename)
+                if User.objects.filter(pk=key).count() == 1:
+                    user = User.objects.get(pk=key)
+                    # Grant the permission to the user
+                    if task == 'assign':
+                        user.user_permissions.add(permission)
+                        success_response['message'] = f"{codename} assigned to {user.username}"
+                    elif task == 'remove':
+                        user.user_permissions.remove(permission)
+                        success_response['message'] = f"{codename} removed from {user.username}"
+                    response = success_response
 
             pass
 
