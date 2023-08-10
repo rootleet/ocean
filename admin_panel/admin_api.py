@@ -32,7 +32,7 @@ def index(request):
             if module == 'geo':  # geographical condition
                 part = data.get('part')
 
-                if part == 'city':  # add city
+                if part == 'city' or part == 'region':  # add city
                     name = data.get('name')
                     us_pk = data.get('owner')
 
@@ -56,7 +56,7 @@ def index(request):
             if module == 'geo':  # geographical condition
                 part = data.get('part')
 
-                if part == 'city':  # add city
+                if part == 'city' or part == 'region':  # add city
                     key = data.get('key')
                     cts = []
                     if key == '*':
@@ -64,12 +64,13 @@ def index(request):
                     else:
                         from django.db.models import Q
                         cities = GeoCity.objects.filter(
-                            Q(name__icontains=f"{key}") | Q(pk__icontains=f"{key}")).order_by('name')
+                            Q(name__icontains=f"{key}") | Q(pk=f"{key}")).order_by('name')
                     for city in cities:
                         subj = []
                         for sub in city.subs():
                             subj.append({
-                                'name': sub.name
+                                'name': sub.name,
+                                'pk': sub.pk
                             })
                         obj = {
                             'pk': city.pk,

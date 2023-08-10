@@ -199,7 +199,7 @@ def save_sales_customer(request):
             except Exception as e:
                 messages.error(request, str(e))
         else:
-            # return HttpResponse(form)
+            return HttpResponse(form)
             messages.error(request, "FORM IS INVALID")
     else:
         messages.error(request, "WRONG REQUEST METHOD")
