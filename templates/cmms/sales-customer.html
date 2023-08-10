@@ -23,7 +23,7 @@
 {#                                            <small class="card-title">Customer Details</small>#}
 {#                                        </div>#}
                                         <div class="card-body p-2">
-                                            <label for="url">KEY</label><input type="text" readonly name="url" id="url" required autocomplete="off" class="form-control form-control-sm rounded-0 mb-2">
+                                            <input type="hidden" readonly name="url" id="url" required autocomplete="off" class="form-control form-control-sm rounded-0 mb-2">
                                             <input type="hidden" required name="owner" value="{{ user.pk }}">
                                             <!-- TYPE -->
                                             <label for="type_of_client">Type Of Client</label><select class="form-control form-check-sm rounded-0 mb-2" id="type_of_client" name="type_of_client">
@@ -31,19 +31,42 @@
                                               <option value="Private Company">Private Company</option>
                                               <option value="Government">Government</option>
                                               <option value="Walk In">Walk In</option>
+                                                <option value="Walk In">Phone Call</option>
                                               <option value="Tender">Tender</option>
                                               <option value="Bank Financed">Bank Financed</option>
                                             </select>
 
                                             <label for="company">Organization</label><input onchange="makeurl()" type="text" name="company" id="company" required autocomplete="off" class="form-control form-control-sm rounded-0 mb-2">
+
+                                            <!-- POSITION -->
+                                            <label for="position">POSITION</label>
+                                            <select name="position" id="position" class="form-control mb-2 form-control-sm rounded-0">
+                                                <option value="Director">Director</option>
+                                                <option value="Procurement">Procurement</option>
+                                            </select>
+
+                                            <hr>
+
                                             <!-- NAME -->
                                             <label for="name">Name</label><input type="text" name="name" id="name" required autocomplete="off" class="form-control form-control-sm rounded-0 mb-2">
                                             <!-- TELEPHONE -->
                                             <label for="mobile">Contact Number</label><input type="tel" name="mobile" id="mobile" required autocomplete="off" class="form-control form-control-sm rounded-0 mb-2">
                                             <!-- EMAIL -->
                                             <label for="email">Email</label><input type="email" name="email" id="email" required autocomplete="off" class="form-control form-control-sm rounded-0 mb-2">
+                                            <hr>
                                             <!-- ADDRESS -->
-                                            <label for="address">Address</label><textarea required class="form-control mb-2 form-control-sm rounded-0" name="address" id="address" cols="30" rows="4"></textarea>
+                                            <label for="region">REGION</label>
+                                            <select onchange="getCities(this.value)" name="region" id="region" class="form-control form-control-sm mb-2 rounded-0">
+                                                <option value="0">SELECT CITY</option>
+                                            </select>
+
+                                            <label for="suburb">SUBURB</label>
+                                            <select disabled name="suburb" id="suburb" class="form-control form-control-sm mb-2 rounded-0">
+                                                <option value="0">SELECT SUBURB</option>
+                                            </select>
+
+
+                                            <label for="address">Address</label><textarea required class="form-control mb-2 form-control-sm rounded-0" name="address" id="address" cols="30" rows="2"></textarea>
                                             <button type="submit" class="btn btn-success">SAVE</button>
                                         </div>
                                     </div>
@@ -152,6 +175,68 @@
             let company = $('#company').val()
             $('#url').val(company.replace(/\s/g, '-').toLowerCase())
         }
+
+        // load cities for modal
+        function getCities(city) {
+            let payload_x = {
+                'module':'geo',
+                data:{
+                    'part':'region',
+                    'key':city
+                }
+            }
+
+            let response = api.call('VIEW',payload_x,'/adapi/')
+
+            if(response['status_code'] === 200){
+                let opt = ''
+                let message = response['message'][0];
+
+                let subs = message['subs']
+                if(subs.length > 0){
+                    for (let sb = 0; sb < subs.length ; sb++) {
+                        let sub = subs[sb]
+                        console.table(sub)
+                        if(sb === 0){
+                            opt += `<option selected value="${sub['pk']}">${sub['name']}</option>`
+                        } else {
+                            opt += `<option value="${sub['pk']}">${sub['name']}</option>`
+                        }
+
+                    }
+                    $('#suburb').prop('disabled',false)
+                    $('#suburb').html(opt)
+                } else {
+                    $('#suburb').prop('disabled',true)
+                    kasa.html(`No subs in region, use <a href="javascript:void()" onclick="windowPopUp('{% url 'geo' %}','LOCATIONS',900,600)" >his link</a> to create a sub in region`)
+                }
+
+
+            }
+        }
+
+        function loadRegions(){
+            let payload = {
+                'module':'geo',
+                data:{
+                    'part':'region',
+                    'key':'*'
+                }
+            }
+
+            let response = api.call('VIEW',payload,'/adapi/')
+
+            if(response['status_code'] === 200){
+                options = ''
+                let message = response['message'];
+                for (let r = 0; r < message.length; r++) {
+                    let region = message[r]
+                    options += `<option value="${region['pk']}">${region['name']}</option>`
+                }
+                $('#region').append(options)
+            }
+        }
+        loadRegions()
     </script>
 
 {% endblock %}
