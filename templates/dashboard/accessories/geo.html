@@ -1,0 +1,219 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body %}
+    <div class="card-header">
+        <strong class="card-title">GEO LOCATIONS</strong>
+        <button onclick="newCity()" class="btn btn-info">NEW REGION</button>
+    </div>
+
+    <div class="card-body overflow-hidden p-2">
+        <div class="container h-100 overflow-hidden">
+
+            <div class="row h-100 overflow-hidden no-gutters">
+                <div id="" class="col-sm-3 h-100 overflow-auto shadow p-2">
+                    <div id="cities" class="w-100 h-100 pr-2 overflow-auto">
+
+                    </div>
+                </div>
+
+                <div class="col-sm-9 h-100">
+                    <div class="w-100 h-100 p-2 rounded">
+                        <div class="card h-100">
+                            <div class="card-header d-flex flex-wrap justify-content-end">
+                                <button onclick="newSub(this.value)" id="act_city" disabled class="btn btn-dark">ADD SUB</button>
+                            </div>
+
+                            <div id="subs" class="card-body p-2 overflow-auto">
+                                <div class="d-flex w-100 h-100 flex-wrap align-content-center justify-content-center">
+                                    <div class="alert alert-info">SELECT REGION</div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        function newCity() {
+
+            Swal.fire({
+              title: 'ENTER REGION',
+              input: 'textarea',
+              showCancelButton: true,
+              confirmButtonText: 'Submit',
+              cancelButtonText: 'Cancel',
+              showLoaderOnConfirm: true,
+              preConfirm: (text) => {
+                if(!text || text.trim() === "") {
+                  Swal.showValidationMessage(
+                    `No data entered!`
+                  )
+                }
+                else {
+                  // split the text by newline character to get array of lines
+                  var lines = text.split("\n");
+                  let ok=0,okmsg='',xok=0,xokmsg='';
+
+                  // loop through lines and do whatever you want
+                  for(var i = 0; i < lines.length; i++){
+                    {#console.log(lines[i]);#}
+                    let payload = {
+                        'module':'geo',
+                        'data':{
+                            'part':'city',
+                            'name':lines[i],
+                            'owner':$('#mypk').val()
+                        }
+                    }
+
+                    let response = api.call('PUT',payload,'/adapi/')
+                    {#console.table(response)#}
+                    if(response['status_code'] === 200){
+                        {#kasa.success(response['message'])#}
+                        ok += 1
+                    } else if (response['status_code'] === undefined) {
+                        kasa.error("PROCEDURE ERROR")
+                        xok += 1
+                        xokmsg += `<small class="text-danger">PROCEDURE ERROR</small><br>`
+                    } else {
+                        xok += 1
+                        xokmsg += `<small class="text-danger">${response['message']}</small><br>`
+                    }
+
+                  }
+
+                  let ht = `<div class="text-left">
+                    SUCCESS : ${ok} <br>ERROR : ${xok} <hr>${xokmsg}
+                  </div>`;
+                  kasa.html(ht)
+                }
+              },
+            });
+
+        }
+
+        // load cities
+        function load_cities() {
+            let get_cities_payload = {
+            'module':'geo',
+            data:{
+                part:"city",
+                key:"*"
+            }
+        }
+
+            let cities_response = api.call('VIEW',get_cities_payload,'/adapi/');
+            if(cities_response['status_code'] === 200){
+                let cities = cities_response['message']
+
+                let buttons = ``
+                for (let c = 0; c < cities.length; c++) {
+                    let name = cities[c]['name']
+
+                    buttons += `<button onclick="loadSubs('${name}')" class="w-100 mb-2 btn btn-outline-info" style="text-align: left !important">${name}</button>
+                        `
+                }
+                $('#cities').html(buttons)
+            } else {
+                kasa.error(`COULD NOT LOAD CITIES ${cities_response['message']}`)
+            }
+        }
+
+        function loadSubs(city) {
+             // load cities
+            let sub_cities_payload = {
+                'module':'geo',
+                data:{
+                    part:"city",
+                    key:city
+                }
+            }
+
+            let sub_cities_response = api.call('VIEW',sub_cities_payload,'/adapi/');
+
+            if(sub_cities_response['status_code'] === 200){
+            let sub_cities = sub_cities_response['message']
+            let subs = sub_cities[0]['subs'];
+            let city_key = sub_cities[0]['pk']
+            let sub_row = ``;
+
+            $('#act_city').prop('disabled',false);
+            $('#act_city').val(city_key);
+            {#kasa.info(city_key)#}
+
+
+            console.table(sub_cities);
+            let sub_ht = `<div class="d-flex w-100 h-100 flex-wrap align-content-center justify-content-center">
+                                    <div class="alert alert-info">no subs in ${sub_cities[0]['name']}</div>
+                                </div>`
+            if(subs.length > 0){
+                let tr = ''
+                // go through subs
+                for (let s = 0; s < subs.length; s++) {
+                    let sub = subs[s]
+                    tr += `<tr><td>${sub['name']}</td><td><i class="bi bi-trash-fill text-danger"></i></td></tr>`
+                }
+                sub_ht = `<table class="table table-sm"><thead><tr><th>NAME</th><th>ACTION</th></tr></thead><tbody>${tr}</tbody><table>`
+
+            }
+            $('#subs').html(sub_ht)
+
+
+        } else {
+            kasa.error(`COULD NOT LOAD CITIES ${sub_cities_response['message']}`)
+        }
+
+        }
+
+        function newSub(city) {
+            Swal.fire({
+              title: 'Enter subs',
+              input: 'textarea',
+              inputPlaceholder: 'Enter your subs here',
+              preConfirm: function(subs) {
+                subs = subs.split('\n'); // split by newline to get all lines
+                let ok=0,okmsg='',xok=0,xokmsg='';
+                subs.forEach(function(sub){
+                  // loop through all lines and do something with each line
+                  console.log('Sub:', sub);
+                  console.log('City:', city);
+                  let payload = {
+                    module:'geo',data:{part:'sub','name':sub,'city':city,'owner':$('#mypk').val()}
+                  };
+
+                  let response = api.call('PUT',payload,'/adapi/');
+
+                  if(response['status_code'] === 200){
+                        {#kasa.success(response['message'])#}
+                        ok += 1
+                    } else if (response['status_code'] === undefined) {
+                        kasa.error("PROCEDURE ERROR")
+                        xok += 1
+                        xokmsg += `<small class="text-danger">PROCEDURE ERROR</small><br>`
+                    } else {
+                        xok += 1
+                        xokmsg += `<small class="text-danger">${response['message']}</small><br>`
+                    }
+                });
+                let ht = `<div class="text-left">
+                    SUCCESS : ${ok} <br>ERROR : ${xok} <hr>${xokmsg}
+                  </div>`;
+                kasa.html(ht)
+              }
+            }).then((result) => {
+              console.log(result);
+            });
+        }
+
+        load_cities()
+
+    </script>
+
+{% endblock %}

@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from . import views
+from . import views,  admin_api
 
 urlpatterns = [
     path('', views.index, name='admin_panel'),
@@ -28,7 +28,10 @@ urlpatterns = [
     path('escalate/', views.to_scalate, name='to_escalate'),
     path('escalate/<provider>', views.escalate_detail, name='escalate_detail'),
     path('send-to-provider/', views.send_to_provider, name='send-to-provider'),
+
     path('accessories/', views.accessories, name='accessories'),
+    path('accessories/geo/', views.geo, name='geo'),
+
     path('save-provider', views.new_provider, name='save-provider'),
     path('save-tag', views.new_tag, name='save-tag'),
     path('add_to_task', views.add_to_task, name='add_to_task'),
@@ -65,7 +68,7 @@ urlpatterns = [
     path('inventory/adjustment/new/', views.new_adjustment, name='new_adjustment'),
     path('inventory/transfer/', views.transfer, name='transfer'),
     path('inventory/transfer/new/', views.new_transfer, name='new_transfer'),
-    path('doc_upload/',views.upload_doc,name='doc_upload'),
+    path('doc_upload/', views.upload_doc, name='doc_upload'),
     # path('inventory/receiving/', views.grn_entries, name='grn_entries'),
     # path('inventory/receiving/new/', views.new_grn, name='new_grn'),
 
@@ -75,7 +78,6 @@ urlpatterns = [
     path('accounts/bank-master/', views.bank_master, name='bank-master'),
     path('accounts/bank_master/post/', views.bank_posts, name='bank-post'),
     path('accounts/suppliers/', views.suppliers, name='suppliers'),
-
 
     # company setup
     path('company/locations/', views.loc_master, name='loc_master'),
@@ -105,7 +107,7 @@ urlpatterns = [
     path('sms/', views.sms, name='sms'),
     path('sms/ew_sms_api/', views.new_sms_api, name='new_sms_api'),
     path('sms/bulk_sms/', views.bulk_sms, name='bulk_sms'),
-
+    path('adapi/', admin_api.index, name='adapi')
 
 ]
 

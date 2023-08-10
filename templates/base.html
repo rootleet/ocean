@@ -68,6 +68,7 @@
     <script src="{% static 'general/js/classes/ticket.js' %}"></script>
     <script src="{% static 'general/js/classes/app.js' %}"></script>
     <script src="{% static 'general/js/classes/docs.js' %}"></script>
+    <script src="{% static 'general/js/classes/anton.js' %}"></script>
 
 
 
@@ -583,9 +584,11 @@
     </div><!-- End Page Title -->
 
     <section class="section h-100" style="height: 85vh !important">
-      {% block body %}
+      <div class="w-100 h-100 card overflow-hidden">
+          {% block body %}
 
-      {% endblock %}
+          {% endblock %}
+      </div>
     </section>
 
   </main><!-- End #main -->

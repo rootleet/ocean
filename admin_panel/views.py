@@ -2413,3 +2413,12 @@ def upload_doc(request):
         form = ImageUploadForm()
         return HttpResponse(form)
 
+
+def geo(request):
+    context = {
+        'nav':True,
+        'page':{
+            'title':"GEOS"
+        }
+    }
+    return render(request,'dashboard/accessories/geo.html',context=context)

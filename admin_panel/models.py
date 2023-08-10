@@ -576,3 +576,50 @@ class Department(models.Model):
     updated_date = models.DateField(auto_now=True)
     updated_time = models.TimeField(auto_now=True)
     status = models.IntegerField(default=1)
+
+
+class GeoCity(models.Model):
+    name = models.CharField(unique=True, max_length=255)
+
+    created_date = models.DateField(auto_now_add=True)
+    created_time = models.TimeField(auto_now_add=True)
+    updated_date = models.DateField(auto_now=True)
+    updated_time = models.TimeField(auto_now=True)
+
+    status = models.IntegerField(default=1)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
+    def timestamp(self):
+        return {
+            'created_date': self.created_date,
+            'created_time': self.created_time,
+            'updated_date': self.updated_date,
+            'updated_time': self.updated_time,
+        }
+
+    def subs(self):
+        return GeoCitySub.objects.filter(city=self)
+
+
+class GeoCitySub(models.Model):
+    city = models.ForeignKey(GeoCity, on_delete=models.SET_NULL, null=True, blank=True)
+    name = models.CharField(unique=True, max_length=255)
+
+    created_date = models.DateField(auto_now_add=True)
+    created_time = models.TimeField(auto_now_add=True)
+    updated_date = models.DateField(auto_now=True)
+    updated_time = models.TimeField(auto_now=True)
+
+    status = models.IntegerField(default=1)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = (('city', 'name'),)
+
+    def timestamp(self):
+        return {
+            'created_date': self.created_date,
+            'created_time': self.created_time,
+            'updated_date': self.updated_date,
+            'updated_time': self.updated_time,
+        }
