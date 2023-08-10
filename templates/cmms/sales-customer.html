@@ -128,6 +128,8 @@
                     <th>COMPANY</th>
                     <th>PHONE</th>
                     <th>EMAIL</th>
+                    <th>REGION</th>
+                    <th>SUBURB</th>
                     <th>ACTION</th>
                 </tr>
             </thead>
@@ -155,10 +157,12 @@
                 let customer = customers['message'][i]
                 let url = customer['url']
                 tr += `<tr>
-                            <td>${customer['name']}</td>
-                            <td>${customer['company']}</td>
-                            <td>${customer['mobile']}</td>
-                            <td>${customer['email']}</td>
+                            <td><small>${customer['name']}</small></td>
+                            <td><small>${customer['company']}</small></td>
+                            <td><small>${customer['mobile']}</small></td>
+                            <td><small>${customer['email']}</small></td>
+                            <td><small>${customer['geography']['region']}</small></td>
+                            <td><small>${customer['geography']['suburb']}</small></td>
                             <td><i onclick="location.href='/cmms/sales/deals/${url}/'" class="bi bi-translate pointer"></i></td>
                         </tr>`
 

@@ -782,6 +782,9 @@ def api(request):
 
                     if customers.count() > 0:
                         for customer in customers:
+                            x_region = getattr(customer.region, 'name', 'UNKNOWN') if customer and hasattr(customer, 'region') else 'unknown'
+                            suburb = getattr(customer.suburb, 'name', 'UNKNOWN') if customer and hasattr(customer, 'suburb') else 'unknown'
+
                             obj = {
                                 'pk':customer.pk,
                                 'url':customer.url,
@@ -801,6 +804,10 @@ def api(request):
                                 'owner':{
                                     'pk':customer.owner.pk,
                                     'username':customer.owner.username
+                                },
+                                'geography':{
+                                    'region':x_region,
+                                    'suburb':suburb
                                 }
 
                             }
