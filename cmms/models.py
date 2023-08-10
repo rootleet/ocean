@@ -2,6 +2,8 @@ from django.conf import settings
 from django.db import models
 from django.db.models import Sum
 
+from admin_panel.models import GeoCity, GeoCitySub
+
 
 # follow-ups
 class FollowUp(models.Model):
@@ -190,10 +192,10 @@ class SalesCustomers(models.Model):
     address = models.TextField()
     type_of_client = models.TextField()
 
-    # requirement = models.TextField()
-    # purc_reason = models.TextField()
-    # age_of_cur = models.TextField()
-    # cur_car_det = models.TextField()
+    position = models.TextField(default='none')
+
+    region = models.ForeignKey(GeoCity, on_delete=models.SET_NULL, null=True, blank=True)
+    suburb = models.ForeignKey(GeoCitySub, on_delete=models.SET_NULL, null=True, blank=True)
 
     created_date = models.DateField(auto_now_add=True)
     created_time = models.TimeField(auto_now_add=True)
