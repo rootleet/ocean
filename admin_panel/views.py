@@ -2384,8 +2384,9 @@ def permissions(request, username):
     perms = Permission.objects.all()
 
     context = {
-        'perms': perms,
-        'user': request.user,
+        'nav':True,
+        'permissions': Permission.objects.values('id', 'name', 'codename').order_by('id'),
+        'current_user': User.objects.get(username=username),
 
     }
     return render(request, 'dashboard/profile/permissions.html', context=context)
