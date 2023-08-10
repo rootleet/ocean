@@ -67,42 +67,12 @@
 
 
                                             <label for="address">Address</label><textarea required class="form-control mb-2 form-control-sm rounded-0" name="address" id="address" cols="30" rows="2"></textarea>
-                                            <button type="submit" class="btn btn-success">SAVE</button>
+                                            <button type="submit" class="btn btn-success bi bi-save2-fill"> SAVE</button>
                                         </div>
                                     </div>
                                 </div>
 
-{#                                <div class="col-sm-6">#}
-{##}
-{#                                    <div class="form-group card mb-2">#}
-{#                                        #}
-{#                                        <div class="card-header">#}
-{#                                            <small class="card-title">Other Infor</small>#}
-{#                                        </div>#}
-{#                                        <div class="card-body p-2">#}
-{#                                            <label for="type_of_client">Type Of Client</label><select class="form-control form-check-sm rounded-0 mb-2" id="type_of_client" name="type_of_client">#}
-{#                                              <option value="Private Individual">Private Individual</option>#}
-{#                                              <option value="Private Company">Private Company</option>#}
-{#                                              <option value="Government">Government</option>#}
-{#                                              <option value="Walk In">Walk In</option>#}
-{#                                              <option value="Tender">Tender</option>#}
-{#                                              <option value="Bank Financed">Bank Financed</option>#}
-{#                                            </select>#}
-{#                                            <label for="requirement">Requirement</label><textarea required class="form-control form-control-sm rounded-0" name="requirement" id="requirement" cols="30" rows="2"></textarea>#}
-{#                                            <label for="purc_reason">Reason Of Purchase</label><textarea required class="form-control form-control-sm rounded-0" name="purc_reason" id="purc_reason" cols="30" rows="2"></textarea>#}
-{#                                            <hr>#}
-{#                                            <small class="text-info">optional but vital information</small> <br>#}
-{#                                            <label for="age_of_cur">Age Of Current Car</label><input min="0" value="0" type="number" name="age_of_cur" class="form-control mb-2 form-control-sm rounded-0" id="age_of_cur">#}
-{#                                            <!-- CAR TYPE -->#}
-{#                                            <label for="cur_car_det">Car Detail ( Brand/ Model )</label><input required value="unknown" type="text" name="cur_car_det" class="form-control mb-2 form-control-sm rounded-0" id="cur_car_det">#}
-{##}
-{#                                            #}
-{##}
-{#                                        </div>#}
-{##}
-{#                                    </div>#}
-{#                                    #}
-{#                                </div>#}
+
 
 
                             </div>
@@ -117,7 +87,7 @@
                 </form>
             </div>
         </div>
-        <button data-bs-target="#newCust" data-bs-toggle="modal" class="btn btn-info">NEW CUSTOMER</button>
+        <i data-bs-target="#newCust" title="Add New Customer" data-bs-toggle="modal" class="pointer text-info bi bi-plus-square"></i>
 {#        <button onclick="location.href='{% url 'new_sales_customer' %}'" class="btn btn-info">REGISTER CUSTOMER</button>#}
     </div>
     <div class="card-body overflow-hidden">
@@ -163,7 +133,12 @@
                             <td><small>${customer['email']}</small></td>
                             <td><small>${customer['geography']['region']}</small></td>
                             <td><small>${customer['geography']['suburb']}</small></td>
-                            <td><i onclick="location.href='/cmms/sales/deals/${url}/'" class="bi bi-translate pointer"></i></td>
+                            <td>
+                                <i onclick="location.href='/cmms/sales/deals/${url}/'" class="bi bi-translate mr-5 pointer"></i>
+                                {% if user.is_superuser %}
+                                <i onclick="if(confirm('ARE YOU SURE')){cmms_sales.delete_customer('${customer['pk']}')}" class="bi bi-trash-fill pointer text-danger"></i>
+                                {% endif %}
+                            </td>
                         </tr>`
 
             }

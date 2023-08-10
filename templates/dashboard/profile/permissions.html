@@ -1,27 +1,55 @@
 {% extends 'base.html' %}
+{% load permission_tags %}
 
 
 {% block body %}
-
-    <div class="container-fluid">
-        <table class="table table-sm table-bordered table-striped table-hover table-responsive">
-            <thead>
-    <tr>
-      <th>Permission</th>
-      <th>Has Permission</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for permission in perms %}
-        {% if request.user.perms.permission.codename %}
-        <tr>
-          <td>{{ permission.name }}</td>
-          <td>GREAT</td>
-        </tr>
-        {% endif %}
-    {% endfor %}
-  </tbody>
-        </table>
+    <div class="card-header">
+        <strong class="card-title">PERMISSIONS FOR {{ current_user.get_full_name }}</strong>
     </div>
+    <div class="card-body h-100 p-2">
+        <div class="h-100 overflow-auto">
+
+            <table class="table datatable table-striped table-hover table-sm table-sm">
+              <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Codename</th>
+                  <th>PERMITED</th>
+              </tr>
+              {% for permission in permissions %}
+              <tr>
+                <td>{{ permission.id }}</td>
+                <td>{{ permission.name }}</td>
+                <td>{{ permission.codename }}</td>
+              <td>
+                    {% if current_user|has_permission:permission.codename %}
+                        <i onclick="permission('remove',`{{ permission.codename }}`)" class="bi pointer bi-check-square text-success"></i>
+                    {% else %}
+                        <i onclick="permission('assign',`{{ permission.codename }}`)" class="bi bi-square pointer text-danger"></i>
+                    {% endif %}
+                </td>
+              </tr>
+              {% endfor %}
+            </table>
+
+        </div>
+    </div>
+
+    <script>
+        function permission(task='assign',codename=''){
+            let payload = {
+                module:'user_permission',
+                data: {
+                    'user':`{{ current_user.pk }}`,
+                    'codename':codename,
+                    'task':task
+                }
+            }
+
+            kasa.set_message(`${api.call('PATCH',payload,'/adapi/')['message']}`)
+            window.reload()
+
+        }
+    </script>
 
 {% endblock %}
