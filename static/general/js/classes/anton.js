@@ -146,6 +146,18 @@ class Kasa {
     this.alert('question', message);
   }
 
+  set_message(message){
+      let payload = {
+          'module':'tools',
+          'data':{
+              'task':'set_message',
+              'message':message
+          }
+      }
+
+      api.call('PUT',payload,'/adapi/')
+  }
+
   html(message){
       Swal.fire({
           html:message
