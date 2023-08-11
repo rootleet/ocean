@@ -115,9 +115,11 @@
 
                 let buttons = ``
                 for (let c = 0; c < cities.length; c++) {
+                    console.table(cities)
                     let name = cities[c]['name']
+                    let pk = cities[c]['pk'];
 
-                    buttons += `<button onclick="loadSubs('${name}')" class="w-100 mb-2 btn btn-outline-info" style="text-align: left !important">${name}</button>
+                    buttons += `<button onclick="loadSubs('${pk}')" class="w-100 mb-2 btn btn-outline-info" style="text-align: left !important">${name}</button>
                         `
                 }
                 $('#cities').html(buttons)
