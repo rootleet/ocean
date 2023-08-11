@@ -93,7 +93,7 @@ def index(request):
 
                             if code == '1000':
                                 reminder.resp_code = code
-                                reminder.resp_message = resp_msg
+                                reminder.resp_message = f"{resp_msg} to {phone}"
 
                                 reminder.status = 99
                                 reminder.save()
