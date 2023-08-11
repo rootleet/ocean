@@ -636,5 +636,8 @@ class Reminder(models.Model):
     updated_date = models.DateField(auto_now=True)
     updated_time = models.TimeField(auto_now=True)
 
-    status = models.IntegerField(default=1)  # 1 active, 0 not
+    status = models.IntegerField(default=1)  # 1 active, 0 not, 99 done
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, blank=True, null=True)
+
+    resp_code = models.TextField(default='null')
+    resp_message = models.TextField(default='null')

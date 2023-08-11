@@ -1,11 +1,12 @@
 import json
 
+import requests
 from django.contrib import messages
 from django.contrib.auth.models import User, Permission
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
-from admin_panel.models import GeoCity, GeoCitySub, Reminder
+from admin_panel.models import GeoCity, GeoCitySub, Reminder, SmsApi, UserAddOns
 
 
 @csrf_exempt
@@ -52,6 +53,63 @@ def index(request):
                 if task == 'set_message':
                     msg = data.get('message')
                     messages.success(request, msg)
+
+                elif task == 'check_reminders':
+                    reminders = Reminder.objects.filter(status=1).order_by('rem_date', 'rem_time')
+                    for reminder in reminders:
+                        rem_time = reminder.rem_time
+                        rem_date = reminder.rem_date
+                        owner = reminder.owner
+
+                        add_on = UserAddOns.objects.get(user=owner)
+
+                        from datetime import datetime
+
+                        # Assuming 'rem_time' is a time object and 'rem_date' is a date object
+                        rem_datetime = datetime.combine(rem_date, rem_time)
+
+                        # Get current date and time
+                        current_datetime = datetime.now()
+                        sent = 0
+                        not_sent = 0
+                        # Compare
+                        if rem_datetime <= current_datetime:
+                            # send
+                            print(
+                                f"The reminder {rem_datetime} datetime is less than or equal to the current datetime {current_datetime}")
+                            sms_api = SmsApi.objects.get(is_default=1)
+                            api_key = sms_api.api_key
+                            sender = sms_api.sender_id
+                            phone = add_on.phone
+                            message = f"Title : {reminder.title} \nDate : {reminder.rem_date} \nTime : {reminder.rem_time} \nDetails : {reminder.message}"
+
+                            endPoint = f"https://apps.mnotify.net/smsapi?key={api_key}&to={phone}&msg={message}&sender_id={sender}"
+                            resp = requests.post(endPoint)
+                            data = resp.json()
+
+                            # status = data['status']
+                            code = data['code']
+                            resp_msg = data['message']
+
+                            if code == '1000':
+                                reminder.resp_code = code
+                                reminder.resp_message = resp_msg
+
+                                reminder.status = 99
+                                reminder.save()
+
+                                sent += 1
+                            else:
+                                not_sent +=1
+                        else:
+                            # dont send
+                            not_sent += 1
+
+                        success_response['message'] = {
+                            'sent':sent,'pending':not_sent
+                        }
+
+                        response = success_response
 
             elif module == 'reminder':
                 owner_pk = data.get('owner')
@@ -111,7 +169,7 @@ def index(request):
                 reminder_user = User.objects.get(pk=owner)
 
                 if key == '*':
-                    reminders = Reminder.objects.filter(owner=reminder_user).order_by('rem_date','rem_time')
+                    reminders = Reminder.objects.filter(owner=reminder_user).order_by('rem_date', 'rem_time')
                 elif key == 'status':
                     reminders = Reminder.objects.filter(owner=reminder_user, status=status)
                 else:
@@ -121,16 +179,16 @@ def index(request):
 
                 for reminder in reminders:
                     obj = {
-                        'pk':reminder.pk,
-                        'title':reminder.title,
-                        'message':reminder.message,
-                        'date':reminder.rem_date,
-                        'time':reminder.rem_time,
-                        'status':reminder.status,
-                        'owner':{
-                            'pk':reminder.owner.pk,
-                            'username':reminder.owner.username,
-                            'name':f"{reminder.owner.first_name} {reminder.owner.last_name}"
+                        'pk': reminder.pk,
+                        'title': reminder.title,
+                        'message': reminder.message,
+                        'date': reminder.rem_date,
+                        'time': reminder.rem_time,
+                        'status': reminder.status,
+                        'owner': {
+                            'pk': reminder.owner.pk,
+                            'username': reminder.owner.username,
+                            'name': f"{reminder.owner.first_name} {reminder.owner.last_name}"
                         }
 
                     }
@@ -191,7 +249,6 @@ def index(request):
 
                 reminder.save()
                 response = success_response
-
 
             pass
 

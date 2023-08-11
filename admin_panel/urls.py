@@ -95,9 +95,12 @@ urlpatterns = [
     path('sign_up/', views.sign_up, name='create_account'),
     path('logout_view/', views.logout_view, name='logout'),
     path('login-process', views.login_view, name='login_process'),
+
     path('open-ticket/', views.ticket, name='open-ticket'),
     path('all-ticket/', views.all_tickets, name='all-ticket'),
     path('save-ticket/', views.make_ticket, name='save-ticket'),
+    path('reminder/', views.reminder, name='reminder'),
+
     path('all-users/', views.all_users, name='all-users'),
     path('update_profile/', views.update_profile, name='update_profile'),
     path('save-ou/', views.save_ou, name='save_ou'),

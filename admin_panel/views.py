@@ -2448,3 +2448,4 @@ def reminder(request):
         }
     }
     return render(request, 'dashboard/profile/reminder.html', context=context)
+
