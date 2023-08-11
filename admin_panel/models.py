@@ -623,3 +623,18 @@ class GeoCitySub(models.Model):
             'updated_date': self.updated_date,
             'updated_time': self.updated_time,
         }
+
+
+class Reminder(models.Model):
+    title = models.CharField(max_length=255, null=False)
+    message = models.TextField(null=False)
+    rem_date = models.DateField(null=False)
+    rem_time = models.TimeField(null=False)
+
+    created_date = models.DateField(auto_now_add=True)
+    created_time = models.TimeField(auto_now_add=True)
+    updated_date = models.DateField(auto_now=True)
+    updated_time = models.TimeField(auto_now=True)
+
+    status = models.IntegerField(default=1)  # 1 active, 0 not
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, blank=True, null=True)
