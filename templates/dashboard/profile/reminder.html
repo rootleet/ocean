@@ -73,12 +73,7 @@
                         // disable
                         r_bg = `<kbd class='bg-info'>ENABLED</kbd>`
                         enable_dis = `<a onclick="reminder.disable(${reminder['pk']})" class="dropdown-item text-warning" href="javascript:void(0)">DISABLE</a>`
-                    } else if (reminder['status'] === 0){
-                        r_bg = `<kbd class='bg-warning'>DISABLED</kbd>`
-                        // enable
-                        enable_dis = `<a onclick="reminder.enable(${reminder['pk']})" class="dropdown-item text-success" href="javascript:void(0)">ENABLE</a>`
-                    }
-                    tr += `
+                        tr += `
 
                     <tr class="">
                         <td><i onclick="kasa.html('${reminder['message']}')" class="pointer bi bi-eye-fill text-info"></i> ${reminder['title']}</td>
@@ -99,6 +94,13 @@
                     </tr>
 
                     `
+                    }
+                    //else if (reminder['status'] === 0){
+                      //  r_bg = `<kbd class='bg-warning'>DISABLED</kbd>`
+                        // enable
+                      //  enable_dis = `<a onclick="reminder.enable(${reminder['pk']})" class="dropdown-item text-success" href="javascript:void(0)">ENABLE</a>`
+                    //}
+
                 }
 
                 $('#tBody').html(tr)
