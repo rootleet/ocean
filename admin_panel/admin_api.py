@@ -95,7 +95,7 @@ def index(request):
                                 reminder.resp_code = code
                                 reminder.resp_message = resp_msg
 
-                                reminder.status = 0
+                                reminder.status = 99
                                 reminder.save()
 
                                 sent += 1
