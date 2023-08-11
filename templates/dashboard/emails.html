@@ -5,12 +5,17 @@
 
     <div class="w-100 h-100">
 
-        <div class="container-fluid">
+        <div class="card-header">
+            <strong class="card-title">MAILS</strong>
+        </div>
 
-            <div class="row">
+        <div class="card-body">
+            <div class="container-fluid h-100">
+
+            <div class="row h-100">
 
                 <!-- EMAIL GROUPS -->
-                <div class="col-sm-6">
+                <div style="display: none !important" class="col-sm-6">
                     <div class="panel panel-danger" style="height: 40vh; overflow: hidden !important">
                     <div class="card-header">
                         <h4>Mailing Groups</h4>
@@ -97,7 +102,7 @@
                 </div>
 
                 <!-- EMAIL ADDRESSES -->
-                <div class="col-sm-6">
+                <div style="display: none !important" class="col-sm-6">
                     <div class="panel panel-warning" style="height: 40vh; overflow: hidden !important">
                     <div class="card-header">
                         <h4>Mailing Addresses</h4>
@@ -196,76 +201,50 @@
                 </div>
 
                 <!-- EMAIL LIST -->
-                <div class="col-sm-12">
-                    <div class="panel panel-success" style="height: 40vh; overflow: hidden !important">
-                    <div class="card-header">
-                        <h4>Email List</h4>
-                        <ul class="links">
-                            <li>
-                                <a href="#">
-                                    <i class="fa fa-navicon"></i>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div style="text-align: left" class="panel-sub-heading">
-                        <div style="width: 100%;" class="d-flex flex-wrap">
-                            <span onclick="location.href=''" class="btn btn-sm btn-info">NEW USER</span>
-
-
-                        </div>
-                    </div>
-                    <div class="card-body"  style="height: 75%!important ;overflow: auto!important">
-                        <div class="table-responsive">
-                            <table class="table table-bordered table-success no-margin">
-                                <input type="hidden" id="close_url" value="{% url 'close_task' %}">
-                                                    <thead>
-                                                        <tr>
-                                                            <th style="width: 10%">From</th>
-                                                            <th style="width: 10%">TO</th>
-                                                            <th style="width: 30%">Subject</th>
-                                                            <th style="width: 10%">Type</th>
-                                                            <th style="width: 5%">Reference</th>
-                                                            <th style="width: 5%">Status</th>
-                                                            <th style="width: 25%">Date</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        {% for email in emails %}
-                                                            <tr data-bs-toggle="modal" data-bs-target="#mail{{ email.pk }}" >
-                                                                <td title="{{ email.sent_from }}">{{ email.sent_from | slice:":10" }}</td>
-                                                                <td title="{{ email.sent_to }}">{{ email.sent_to | slice:":20" }}</td>
-                                                                <td title="{{ email.subject }}">{{ email.subject | slice:":40" }}</td>
-                                                                <td>{{ email.email_type }}</td>
-                                                                <td>{{ email.ref }}</td>
-                                                                <td>{{ email.status }}</td>
-                                                                <td>{{ email.scheduled_on }}</td>
+                <table class="table table-sm datatable ">
+                                                        <thead>
+                                                            <tr>
+                                                                <th style="width: 10%">From</th>
+                                                                <th style="width: 10%">TO</th>
+                                                                <th style="width: 30%">Subject</th>
+                                                                <th style="width: 10%">Type</th>
+                                                                <th style="width: 5%">Reference</th>
+                                                                <th style="width: 5%">Status</th>
+                                                                <th style="width: 25%">Date</th>
                                                             </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {% for email in emails %}
+                                                                <tr onclick="kasa.html(`{{ email.body }}`)" >
+                                                                    <td title="{{ email.sent_from }}">{{ email.sent_from | slice:":10" }}</td>
+                                                                    <td title="{{ email.sent_to }}">{{ email.sent_to | slice:":20" }}</td>
+                                                                    <td title="{{ email.subject }}">{{ email.subject | slice:":40" }}</td>
+                                                                    <td>{{ email.email_type }}</td>
+                                                                    <td>{{ email.ref }}</td>
+                                                                    <td>{{ email.status }}</td>
+                                                                    <td>{{ email.scheduled_on }}</td>
+                                                                </tr>
 
-                                                            <div class="modal fade" id="mail{{ email.pk }}">
-                                                                <div class="modal-dialog">
-                                                                    <div class="modal-content">
-                                                                        <div class="modal-body p-2">
-                                                                            {{ email.body }}
+                                                                <div class="modal fade" id="mail{{ email.pk }}">
+                                                                    <div class="modal-dialog">
+                                                                        <div class="modal-content">
+                                                                            <div class="modal-body p-2">
+                                                                                {{ email.body }}
+                                                                            </div>
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                            </div>
 
-                                                        {% endfor %}
+                                                            {% endfor %}
 
-                                                    </tbody>
-                                                </table>
-                        </div>
-                    </div>
-
-
-                </div>
-                </div>
+                                                        </tbody>
+                                                    </table>
 
             </div>
 
         </div>
+        </div>
+
 
 
 
