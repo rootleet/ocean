@@ -163,6 +163,9 @@ def login_view(request):
             auth = authenticate(request, username=username, password=password)
 
             if hasattr(auth, 'is_active'):
+
+
+
                 auth_login(request, auth)
                 return redirect(next)
             else:
@@ -279,7 +282,7 @@ def sign_up(request):
                     number = '{:03d}'.format(random.randrange(1, 99))
                     username = '{}{}'.format(last_name, number)
                 else:
-                    username = last_name.replace(' ','').lower()
+                    username = last_name.replace(' ', '').lower()
 
                 pass_num = '{:03d}'.format(random.randrange(1, 999999))
                 pass_w = '{}{}'.format(f"{last_name}", pass_num)
@@ -2068,7 +2071,6 @@ def profile(request):
                                profile_pic='static/assets/img/users/default.png')
         use_ad_on.save()
 
-
     context = {
         'user': user,
         'ad_on': UserAddOns.objects.get(user=user.pk),
@@ -2333,7 +2335,10 @@ def resetpasswordview(request, token):
         tken = PasswordResetToken.objects.get(token=token)
         user = tken.user
 
-
+        # check if link is valid
+        if tken.valid == 0:
+            messages.info(request,'RESET TOKEN IS EXPIRED')
+            return redirect('login')
 
         context = {
             'user_pk': user.pk
@@ -2350,12 +2355,8 @@ def resetpassword(request):
         compass = form.get('compass')
         user_pk = form.get('user')
 
-
-
         if password == compass:
             if is_valid_password(password):
-
-
 
                 # Get the user object
                 current_user = User.objects.get(pk=user_pk)
@@ -2366,6 +2367,7 @@ def resetpassword(request):
                 # Save the user object to update the password
                 current_user.save()
                 # return HttpResponse(password)
+
                 # update reset password and set token valid to no
                 restoken = PasswordResetToken.objects.get(user=current_user)
                 adon = UserAddOns.objects.get(user=current_user)
@@ -2395,7 +2397,7 @@ def permissions(request, username):
     perms = Permission.objects.all()
 
     context = {
-        'nav':True,
+        'nav': True,
         'permissions': Permission.objects.values('id', 'name', 'codename').order_by('id'),
         'current_user': User.objects.get(username=username),
 
@@ -2403,10 +2405,10 @@ def permissions(request, username):
     return render(request, 'dashboard/profile/permissions.html', context=context)
 
 
-
 # views.py
 
 from .form import ImageUploadForm
+
 
 @csrf_exempt
 def upload_doc(request):
@@ -2428,9 +2430,21 @@ def upload_doc(request):
 
 def geo(request):
     context = {
-        'nav':True,
-        'page':{
-            'title':"GEOS"
+        'nav': True,
+        'page': {
+            'title': "GEOS"
         }
     }
-    return render(request,'dashboard/accessories/geo.html',context=context)
+    return render(request, 'dashboard/accessories/geo.html', context=context)
+
+
+def reminder(request):
+    context = {
+        'nav': True,
+        'ticket_count': TicketHd.objects.filter(owner=request.user).count(),
+        'my_tickets': TicketHd.objects.filter(owner=request.user),
+        'page': {
+            'title': 'My Reminders'
+        }
+    }
+    return render(request, 'dashboard/profile/reminder.html', context=context)

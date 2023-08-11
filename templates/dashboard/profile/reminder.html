@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body %}
+    <div class="card-header">
+        <strong class="card-title bi bi-alarm-fill"> MY REMINDERS</strong>
+    </div>
+    <div class="card-body">
+        <table class="table-sm table datatable">
+            <thead>
+                <tr>
+                    <th>TITLE</th>
+                    <th>DATE</th>
+                    <th>TIME</th>
+                    <th>STATUS</th>
+                    <th>ACTION</th>
+                </tr>
+            </thead>
+
+            <tbody id="tBody">
+{#                <tr>#}
+{#                    <td><i onclick="kasa.html('HELLO WORLD')" class="pointer bi bi-eye-fill text-info"></i> Break Fast</td>#}
+{#                    <td>12-09-102</td>#}
+{#                    <td>10:00</td>#}
+{#                    <td>#}
+{#                        <div class="dropdown">#}
+{#                          <i class="pointer text-info bi bi-view-list"  id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">#}
+{##}
+{#                          </i>#}
+{#                          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">#}
+{#                            <a class="dropdown-item text-info" href="#">EDIT</a>#}
+{#                            <a class="dropdown-item text-warning" href="#">CANCEL</a>#}
+{#                            <a class="dropdown-item text-success" href="#">ENABLE</a>#}
+{#                          </div>#}
+{#                        </div>#}
+{#                    </td>#}
+{#                </tr>#}
+            </tbody>
+
+
+        </table>
+    </div>
+
+    <div class="card-footer">
+        <button onclick="reminder.newReminder()" class="btn btn-info">NEW</button>
+    </div>
+
+
+    <script>
+        function load_my_reminder(){
+            let payload = {
+                'module':'reminder',
+                'data':{
+                    owner:$('#mypk').val(),
+                    key:'*',
+
+                }
+            }
+
+            let response = api.call('VIEW',payload,'/adapi/')
+
+            if(response['status_code'] === 200){
+                let message = response['message']
+
+
+
+                let tr = ''
+                for (let r = 0; r < message.length ; r++) {
+                    let reminder = message[r]
+                    let enable_dis = '',r_bg = ''
+
+                    if (reminder['status'] === 1){
+                        // disable
+                        r_bg = `<kbd class='bg-info'>ENABLED</kbd>`
+                        enable_dis = `<a onclick="reminder.disable(${reminder['pk']})" class="dropdown-item text-warning" href="javascript:void(0)">DISABLE</a>`
+                    } else if (reminder['status'] === 0){
+                        r_bg = `<kbd class='bg-warning'>DISABLED</kbd>`
+                        // enable
+                        enable_dis = `<a onclick="reminder.enable(${reminder['pk']})" class="dropdown-item text-success" href="javascript:void(0)">ENABLE</a>`
+                    }
+                    tr += `
+
+                    <tr class="">
+                        <td><i onclick="kasa.html('${reminder['message']}')" class="pointer bi bi-eye-fill text-info"></i> ${reminder['title']}</td>
+                        <td>${reminder['date']}</td>
+                        <td>${reminder['time']}</td>
+                        <td>${r_bg}</td>
+                        <td>
+                            <div class="dropdown">
+                              <i class="pointer text-info bi bi-view-list"  id="dropdownMenuButton${reminder['pk']}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+
+                              </i>
+                              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton${reminder['pk']}">
+                                <a onclick="reminder.editReminder(${reminder['pk']})" class="dropdown-item text-info" href="javascript:void(0)">EDIT</a>
+                                ${enable_dis}
+                              </div>
+                            </div>
+                        </td>
+                    </tr>
+
+                    `
+                }
+
+                $('#tBody').html(tr)
+            } else {
+                kasa.error(response['message'])
+            }
+        }
+
+
+        setInterval(function() {
+          load_my_reminder()
+          console.log('This message is logged every 3 seconds');
+        }, 3000);  // 3000 milliseconds = 3 seconds
+    </script>
+{% endblock %}

@@ -71,6 +71,7 @@
     <script src="{% static 'general/js/classes/app.js' %}"></script>
     <script src="{% static 'general/js/classes/docs.js' %}"></script>
     <script src="{% static 'general/js/classes/anton.js' %}"></script>
+    <script src="{% static 'general/js/classes/reminder.js' %}"></script>
 
 
 
@@ -386,6 +387,11 @@
           <li>
             <a href="{% url 'open-ticket' %}">
               <i class="bi bi-circle"></i><span>Tickets</span>
+            </a>
+          </li>
+            <li>
+            <a href="{% url 'reminder' %}">
+              <i class="bi bi-alarm-fill"></i><span>Reminder</span>
             </a>
           </li>
 {#          <li>#}
