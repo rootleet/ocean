@@ -5,7 +5,7 @@ from django.contrib.auth.models import User, Permission
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
-from admin_panel.models import GeoCity, GeoCitySub
+from admin_panel.models import GeoCity, GeoCitySub, Reminder
 
 
 @csrf_exempt
@@ -51,7 +51,21 @@ def index(request):
                 task = data.get('task')
                 if task == 'set_message':
                     msg = data.get('message')
-                    messages.success(request,msg)
+                    messages.success(request, msg)
+
+            elif module == 'reminder':
+                owner_pk = data.get('owner')
+                title = data.get('title')
+                message = data.get('message')
+                date = data.get('date')
+                time = data.get('time')
+
+                Reminder(title=title, message=message, rem_date=date, rem_time=time,
+                         owner=User.objects.get(pk=owner_pk)).save()
+                success_response['message'] = "Reminder Scheduled"
+                response = success_response
+
+                # save reminder
 
             else:
                 response['status_code'] = 503
@@ -90,6 +104,42 @@ def index(request):
                     success_response['message'] = cts
                     response = success_response
 
+            elif module == 'reminder':
+                key = data.get('key')
+                owner = data.get('owner')
+                status = data.get('status')
+                reminder_user = User.objects.get(pk=owner)
+
+                if key == '*':
+                    reminders = Reminder.objects.filter(owner=reminder_user).order_by('rem_date','rem_time')
+                elif key == 'status':
+                    reminders = Reminder.objects.filter(owner=reminder_user, status=status)
+                else:
+                    reminders = Reminder.objects.filter(owner=reminder_user, pk=key)
+
+                rem = []
+
+                for reminder in reminders:
+                    obj = {
+                        'pk':reminder.pk,
+                        'title':reminder.title,
+                        'message':reminder.message,
+                        'date':reminder.rem_date,
+                        'time':reminder.rem_time,
+                        'status':reminder.status,
+                        'owner':{
+                            'pk':reminder.owner.pk,
+                            'username':reminder.owner.username,
+                            'name':f"{reminder.owner.first_name} {reminder.owner.last_name}"
+                        }
+
+                    }
+
+                    rem.append(obj)
+
+                success_response['message'] = rem
+                response = success_response
+
             else:
                 response['status_code'] = 503
                 response['message'] = f"UNKNOWN MODULE ( METHOD : {method}, MODULE : {module} )"
@@ -111,6 +161,37 @@ def index(request):
                         user.user_permissions.remove(permission)
                         success_response['message'] = f"{codename} removed from {user.username}"
                     response = success_response
+
+            elif module == 'reminder':
+                date = data.get('date')
+                time = data.get('time')
+                title = data.get('title')
+                message = data.get('message')
+                key = data.get('pk')
+                status = data.get('status')
+                task = data.get('task')
+
+                reminder = Reminder.objects.get(pk=key)
+                if task == 'all':
+                    reminder.rem_time = time
+                    reminder.rem_date = date
+                    reminder.title = title
+                    reminder.message = message
+                    success_response['message'] = "Reminder Updated"
+                elif task == 'status':
+
+                    if status == 'enable':
+                        reminder.status = 1
+                        success_response['message'] = "Reminder Disabled"
+                    elif status == 'disable':
+                        reminder.status = 0
+                        success_response['message'] = "Reminder Enabled"
+                    else:
+                        success_response['message'] = f"Unknown status ({status}) set to reminder"
+
+                reminder.save()
+                response = success_response
+
 
             pass
 
