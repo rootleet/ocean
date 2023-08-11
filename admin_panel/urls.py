@@ -92,7 +92,7 @@ urlpatterns = [
 
     path('login/', views.login, name='login'),
     path('register/', views.new_user, name='new-user'),
-    path('sign_up/', views.sign_up, name='sign_up'),
+    path('sign_up/', views.sign_up, name='create_account'),
     path('logout_view/', views.logout_view, name='logout'),
     path('login-process', views.login_view, name='login_process'),
     path('open-ticket/', views.ticket, name='open-ticket'),

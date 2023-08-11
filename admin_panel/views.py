@@ -273,9 +273,13 @@ def sign_up(request):
 
             else:
 
-                # generate username
-                number = '{:03d}'.format(random.randrange(1, 9999))
-                username = '{}{}'.format(last_name, number)
+                # username
+                if User.objects.filter(username=last_name).exists():
+                    # generate username
+                    number = '{:03d}'.format(random.randrange(1, 99))
+                    username = '{}{}'.format(last_name, number)
+                else:
+                    username = last_name.replace(' ','').lower()
 
                 pass_num = '{:03d}'.format(random.randrange(1, 999999))
                 pass_w = '{}{}'.format(f"{last_name}", pass_num)
@@ -289,38 +293,39 @@ def sign_up(request):
                 api_token = hash_object.hexdigest()
 
                 try:
-                    new_user_instance.save()
-                    new_user_instance.is_active = False
-                    AuthToken(user=new_user_instance, token=api_token).save()
 
-                    use_ad_on = UserAddOns(user=new_user_instance, company=company,
+                    new_user_instance.is_active = False
+                    new_user_instance.save()
+
+                    created_account = User.objects.get(username=username)
+                    AuthToken(user=created_account, token=api_token).save()
+
+                    use_ad_on = UserAddOns(user=created_account, company=company,
                                            app_version=VersionHistory.objects.get(version=settings.APP_VERSION),
                                            position=position, phone=mobile)
 
                     md_mix = f" {first_name} {last_name} {username} "
                     hash_object = hashlib.md5(md_mix.encode())
                     resettoken = hash_object.hexdigest()
+                    respwrd = PasswordResetToken(user=created_account, token=resettoken, valid=1)
 
-                    respwrd = PasswordResetToken(user=new_user_instance, token=resettoken, valid=1)
                     use_ad_on.save()
                     respwrd.save()
 
                     subject = 'ACCESS TO OCEAN'
                     message = f'Hi {first_name} {last_name}, thank you for registering in ocean. your username is {username} and password is {pass_w} logn at ocean t explore the power in collaboration '
                     message = f"Hello {first_name} {last_name}, an account has been created for you buy sneda at ocean. " \
-                              f"<br>Use this platform to report and track your IT related." \
+                              f"<br>Use this platform for productivity." \
                               f"Reset your password and login with the link below <br>" \
-                              f"http://ocean.snedaghana.loc/profile/restpwrod/{resettoken}/ "
+                              f"<a target='_blank' href='http://ocean.snedaghana.loc/profile/restpwrod/{resettoken}/'>http://ocean.snedaghana.loc/profile/restpwrod/{resettoken}/</a> "
                     email_from = settings.EMAIL_HOST_USER
-                    try:
-                        Emails(sent_from=email_from, sent_to=email, subject=subject, body=message, email_type='system',
-                               ref='system').save()
-                        # send_mail(subject, message, email_from, recipient_list)
-                        # messages.error(request, "Please check your email to activate your account")
+                    Emails(sent_from=email_from, sent_to=email, subject=subject, body=message, email_type='system',
+                           ref='system').save()
 
-                        return redirect('all-users')
-                    except Exception as e:
-                        return HttpResponse(e)
+                    # send_mail(subject, message, email_from, recipient_list)
+                    # messages.error(request, "Please check your email to activate your account")
+
+                    return redirect('all-users')
                 except Exception as e:
                     new_user_instance.delete()
                     messages.error(request, f"error%%Error Saving User {e}")
@@ -908,7 +913,7 @@ def emails(request):
         'pahe': page,
         'comm_tags': tags.objects.all(),
         'email_groups': EmailGroup.objects.all(),
-        'emails': Emails.objects.all(),
+        'emails': Emails.objects.all().order_by('-id'),
         'email_address': NotificationGroups.objects.all()
     }
     return render(request, 'dashboard/emails.html', context=context)
@@ -2062,6 +2067,8 @@ def profile(request):
                                app_version=VersionHistory.objects.get(version=settings.APP_VERSION),
                                profile_pic='static/assets/img/users/default.png')
         use_ad_on.save()
+
+
     context = {
         'user': user,
         'ad_on': UserAddOns.objects.get(user=user.pk),
@@ -2326,6 +2333,8 @@ def resetpasswordview(request, token):
         tken = PasswordResetToken.objects.get(token=token)
         user = tken.user
 
+
+
         context = {
             'user_pk': user.pk
         }
@@ -2341,23 +2350,25 @@ def resetpassword(request):
         compass = form.get('compass')
         user_pk = form.get('user')
 
+
+
         if password == compass:
             if is_valid_password(password):
 
-                User = get_user_model()
+
 
                 # Get the user object
-                user = User.objects.get(pk=user_pk)
+                current_user = User.objects.get(pk=user_pk)
 
                 # Set the new password
-                user.set_password(password)
-
+                current_user.set_password(password)
+                current_user.is_active = True
                 # Save the user object to update the password
-                user.save()
-
+                current_user.save()
+                # return HttpResponse(password)
                 # update reset password and set token valid to no
-                restoken = PasswordResetToken.objects.get(user=user)
-                adon = UserAddOns.objects.get(user=user)
+                restoken = PasswordResetToken.objects.get(user=current_user)
+                adon = UserAddOns.objects.get(user=current_user)
 
                 restoken.valid = 0
                 adon.pword_reset = 0
