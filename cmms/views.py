@@ -18,7 +18,7 @@ from cmms.models import *
 from decimal import Decimal
 from django.contrib import messages
 
-from cmms.extra import db, DB_CURSOR
+from cmms.extra import db
 
 
 # Create your views here.
