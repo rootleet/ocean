@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from . import views
+from . import views, reports
 
 urlpatterns = [
     path('', views.meeting, name='meeting'),
@@ -23,12 +23,14 @@ urlpatterns = [
     path('open/<meeting>/', views.meeting_config, name='open_meeting'),
     path('save_meeting', views.save_meeting, name='save_meeting'),
     path('config_meeting/<meeting>/', views.meeting_config, name='config_meeting'),
-    path('add_participant/',views.add_participant,name='add_participant'),
-    path('add_talking_point',views.add_talking_point,name='add_talking_point'),
-    path('attach/',views.attach,name='attach'),
-    path('remove_participant/<meet>/<pk>',views.remove_participant,name='remove_participant'),
-    path('remove_point/<meet><pk>',views.remove_point,name='remove_point'),
+    path('add_participant/', views.add_participant, name='add_participant'),
+    path('add_talking_point', views.add_talking_point, name='add_talking_point'),
+    path('attach/', views.attach, name='attach'),
+    path('remove_participant/<meet>/<pk>', views.remove_participant, name='remove_participant'),
+    path('remove_point/<meet><pk>', views.remove_point, name='remove_point'),
     path('open/<meeting>/', views.end_meeting, name='end_meeting'),
+
+    path('reports/', reports.interface, name='meetings_report')
 
 ]
 

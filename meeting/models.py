@@ -23,6 +23,13 @@ class MeetingHD(models.Model):
     status = models.IntegerField(default=0)
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
+    def owner_details(self):
+        return {
+            'username': self.owner.username,
+            'pk': self.owner.pk,
+            'full_name': f"{self.owner.first_name} {self.owner.last_name}"
+        }
+
     def m_stat(self):
         if self.status == 0:
             return {
@@ -87,7 +94,7 @@ class MeetingParticipant(models.Model):
 
     def myself(self):
         return {
-            'name':self.name.full_name,
-            'pk':self.name.pk
+            'name': self.name.full_name,
+            'pk': self.name.pk
         }
     # owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)

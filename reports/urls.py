@@ -15,9 +15,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from . import views,reports_api
+from . import views, reports_api
 
 urlpatterns = [
     path('', views.index, name='reports'),
-    path('api/',reports_api.interface,name='reports_api')
+    path('api/', reports_api.interface, name='reports_api')
 ]

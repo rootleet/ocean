@@ -193,7 +193,21 @@ class Kasa {
 
 }
 
+class reportCard {
+    setBody(data){
+        $('#reportCardBody').html(data)
+    }
 
+    setTitle(title){
+        $('#reportCardTitle').text(title)
+    }
+
+    setFooter(footer){
+        $('#reportCardFooter').html(data)
+    }
+}
+
+const card = new reportCard()
 const linecomment = new LineComment()
 const kasa = new Kasa()
 const anton = new Anton();

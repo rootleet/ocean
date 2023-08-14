@@ -54,9 +54,6 @@ def index(request):
                 # Get the digest (hash value) in hexadecimal form
                 uni = result.hexdigest()
 
-
-
-
                 MeetingHD(uni=uni, title=title, descr=descr, start_date=start_date, start_time=start_time,
                           end_date=end_date, end_time=end_time, owner=User.objects.get(pk=owner)).save()
 
@@ -88,10 +85,10 @@ def index(request):
                 key = data.get('key')
                 meet = []
                 if part == 'mine':
-                    meetings = MeetingHD.objects.filter(owner=User.objects.get(pk=key))
+                    meetings = MeetingHD.objects.filter(owner=User.objects.get(pk=key)).order_by('-p')
 
                 elif part == 'live' or part == 'single':
-                    meetings = MeetingHD.objects.filter(pk=key)
+                    meetings = MeetingHD.objects.filter(pk=key).order_by('-p')
 
                 for meeting in meetings:
                     # load participant
@@ -138,7 +135,8 @@ def index(request):
                         'status': meeting.status,
                         'participants': p_arr,
                         'points': points_list,
-                        'attachments':attachments
+                        'attachments': attachments,
+                        'owner': meeting.owner_details()
                     }
                     meet.append(obj)
 

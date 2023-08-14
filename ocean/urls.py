@@ -28,6 +28,7 @@ urlpatterns = [
     path('cmms/', include('cmms.urls')),
     path('apiv2/', include('apiv2.urls')),
     path('blog/',include('blog.urls')),
-    path('appscenter/',include('appscenter.urls'))
+    path('appscenter/',include('appscenter.urls')),
+    path('reports/',include('reports.urls'))
 
 ]

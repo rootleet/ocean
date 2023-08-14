@@ -1,0 +1,16 @@
+{% extends 'reports/base.html' %}
+{% load static %}
+
+{% block reports %}
+
+    <div class="card h-100">
+        <div class="card-header"><strong class="title" id="reportCardTitle"></strong></div>
+        <div class="card-body p-2 overflow-auto" id="reportCardBody">
+            <div class="w-100 h-100 d-flex flex-wrap justify-content-center align-content-center">
+                <div class="alert alert-info">SELECT REPORT</div>
+            </div>
+        </div>
+        <div class="card-footer" id="reportCardFooter"></div>
+    </div>
+
+{% endblock %}

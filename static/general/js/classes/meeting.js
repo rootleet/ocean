@@ -275,6 +275,210 @@ class Meeting {
         amodal.show()
     }
 
+    reportForm(){
+        let form = `<div class="w-50 p-2 shadow mx-auto">
+                        <label for="start_date" class="w-100 text-info">Date From <small class="text-danger">*</small></label>
+                        <input type="date" id="start_date" class="form-control w-100 form-control-sm mb-2">
+                        <label for="end_date" class="text-info">Date To <small class="text-danger">*</small></label><br>
+                        <input type="date" id="end_date" class="form-control form-control-sm mb-2">
+                        <label for="status" class="text-info">Status</label><br>
+                        <select id="status" name="status" class="form-control form-control-sm mb-2">
+                                <option value="*">All</option>
+                                <option value="0">Pending</option>
+                                <option value="1">Live</option>
+                                <option value="3">Close</option>
+                        </select>
+                        
+                        <label for="document" class="text-info">Document</label><br>
+                        <select id="document" name="document" class="form-control form-control-sm mb-2">
+                                <option value="view">Preview</option>
+                                <option value="excel">EXCEL</option>
+                                <option disabled value="pdf">PDF</option>
+                        </select>
+                        
+                        <button onclick="meeting.report()" class="btn btn-info w-100">SUBMIT</button>
+                    </div>`
+        card.setBody(form)
+        card.setTitle("MEETINGS REPORT")
+    }
+
+    report(){
+
+        // validate fields
+        let fields = ['start_date','end_date','status','document']
+        if(anton.validateInputs(fields)){
+          // get fields
+            let start_date,end_date,status,document;
+            start_date = $('#start_date').val()
+            end_date = $('#end_date').val()
+            status = $('#status').val()
+            document = $('#document').val()
+
+            let data = {};
+            data['start_date'] = start_date
+            data['end_date'] = end_date
+            data['status'] = status
+            data['document'] = document;
+
+            let payload = {
+                module:'header',
+                data:data
+            };
+
+            let response = api.call('VIEW',payload,'/meeting/reports/');
+
+            let html = '';
+
+            if(response['status_code'] === 200){
+                    let header, message, count, transactions
+                    message = response['message'];
+
+                    if(document === 'view') {
+                        header = message['header'];
+                        count = header['count'];
+                        transactions = message['transactions']
+                        // console.table(transactions)
+                        if (count > 0) {
+
+                            let tr = ''
+
+                            for (let me = 0; me < count; me++) {
+                                let attachments, participants, points, meeting = transactions[me]
+                                let times = meeting['start_end'];
+                                let owner = meeting['owner'];
+                                let duration = `${times['start_date']} ${times['start_time']} to ${times['end_date']} ${times['end_time']}`;
+                                let stat = meeting['m_stat']
+
+                                tr += `<tr><td>${meeting['title']}</td><td>${duration}</td><td>${owner['full_name']}</td><td><kbd class="${stat['class']}">${stat['text']}</kbd></td></tr>`
+
+                            }
+
+                            html = `<table class="table table-sm datatable table-bordered"><thead><tr><th>Title</th><th>Duration</th><th>OWNER</th><th>STATUS</th></tr></thead>
+                        <tbody>${tr}</tbody></table>`
+
+                        } else {
+                            html = `<div class="w-100 h-100 d-flex flex-wrap justify-content-center align-content-center">
+                            <div class="alert alert-danger">NO DATA</div>
+                        </div>`
+                        }
+                    } else if (document === 'excel'){
+                        kasa.html(`<a href="/${message}">DOWNLOAD FILE</a>`)
+                    }
+
+                }
+            else {
+                    html = `<div class="w-100 h-100 d-flex flex-wrap justify-content-center align-content-center">
+                            <div class="alert alert-danger">There is an error loading data ${response['message']}</div>
+                        </div>`
+                }
+
+            $('#reportCardBody').html(html)
+
+
+        }
+        else{
+            kasa.warning("FILL ALL REQUIRED FIELDS")
+        }
+
+        // Swal.fire({
+        //     title: 'MEETINGS REPORT',
+        //     html: `
+        //     <div>
+        //       <label>Start Date:</label>
+        //       <input id="swal-input1" class="swal2-input" type="date">
+        //     </div>
+        //     <div>
+        //       <label>End Date:</label>
+        //       <input id="swal-input2" class="swal2-input" type="date">
+        //     </div>
+        //     <div>
+        //       <label>Status:</label>
+        //       <select id="swal-input3" class="swal2-select">
+        //         <option value="*">All</option>
+        //         <option value="0">Pending</option>
+        //         <option value="1">Live</option>
+        //         <option value="3">Close</option>
+        //       </select>
+        //     </div>`,
+        //     focusConfirm: false,
+        //     showCancelButton: true,
+        //     confirmButtonText: 'View',
+        //     cancelButtonText: 'Close',
+        //     preConfirm: () => {
+        //         const start_date = document.getElementById('swal-input1').value;
+        //         const end_date = document.getElementById('swal-input2').value;
+        //         const status = document.getElementById('swal-input3').value;
+        //
+        //         if(!start_date || !end_date || !status){
+        //             Swal.showValidationMessage('Please fill all fields');
+        //         }
+        //
+        //         return {
+        //             start_date: start_date,
+        //             end_date: end_date,
+        //             status: status,
+        //         }
+        //     }
+        // }).then(result => {
+        //     if (result.isConfirmed) {
+        //         let data = {}
+        //         data['start_date'] = result.value.start_date
+        //         data['end_date'] = result.value.end_date
+        //         data['status'] = result.value.status
+        //
+        //         let payload = {
+        //             module:'header',
+        //             data:data
+        //         }
+        //
+        //         let response = api.call('VIEW',payload,'/meeting/reports/')
+        //
+        //
+        //         let html = ''
+        //
+        //         if(response['status_code'] === 200){
+        //             let header,message,count,transactions
+        //             message = response['message']
+        //             header = message['header']
+        //             count = header['count']
+        //             transactions = message['transactions']
+        //             // console.table(transactions)
+        //             if (count > 0){
+        //
+        //                 let tr = ''
+        //
+        //                 for (let me = 0; me < count; me++) {
+        //                     let attachments,participants,points, meeting = transactions[me]
+        //                     let times = meeting['start_end'];
+        //                     let owner = meeting['owner'];
+        //                     let duration = `${times['start_date']} ${times['start_time']} to ${times['end_date']} ${times['end_time']}`;
+        //                     let stat = meeting['m_stat']
+        //
+        //                     tr += `<tr><td>${meeting['title']}</td><td>${duration}</td><td>${owner['full_name']}</td><td><kbd class="${stat['class']}">${stat['text']}</kbd></td></tr>`
+        //
+        //                 }
+        //
+        //                 html = `<table class="table table-sm datatable table-bordered"><thead><tr><th>Title</th><th>Duration</th><th>OWNER</th><th>STATUS</th></tr></thead>
+        //                 <tbody>${tr}</tbody></table>`
+        //
+        //             } else {
+        //                 html = `<div class="w-100 h-100 d-flex flex-wrap justify-content-center align-content-center">
+        //                     <div class="alert alert-danger">NO DATA</div>
+        //                 </div>`
+        //             }
+        //
+        //         }
+        //         else {
+        //             html = `<div class="w-100 h-100 d-flex flex-wrap justify-content-center align-content-center">
+        //                     <div class="alert alert-danger">There is an error loading data ${response['message']}</div>
+        //                 </div>`
+        //         }
+        //         // console.log(html)
+        //         $('#reportCardBody').html(html)
+        //     }
+        // });
+    }
+
 
 }
 
