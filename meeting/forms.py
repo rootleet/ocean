@@ -24,4 +24,4 @@ class NewMeetingTalkingPoint(forms.ModelForm):
 class NewMeetingParticipant(forms.ModelForm):
     class Meta:
         model = MeetingParticipant
-        exclude = ['created_date', 'created_time', 'status']
+        exclude = ['created_date', 'created_time', 'status','name']

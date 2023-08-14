@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
+from django.views.decorators.csrf import csrf_exempt
 
 from admin_panel.models import Files, Emails
 from admin_panel.views import page
@@ -77,14 +78,14 @@ def save_meeting(request):
 @login_required(login_url='/login/')
 def meeting_config(request, meeting):
     meet = MeetingHD.objects.get(uni=meeting)
-    page['title'] = meet.title
+    page['title'] = f"MEETING / {meet.title}"
     context = {
         'nav': True,
         'page': page,
         'meeting': meet,
         'users': User.objects.all()
     }
-    return render(request, 'meeting/configure.html', context=context)
+    return render(request, 'meeting/live.html', context=context)
 
 
 @login_required()
@@ -144,15 +145,16 @@ def remove_point(request, meet, pk):
     tp.delete()
     return redirect('config_meeting', meet)
 
-
+@csrf_exempt
 def attach(request):
     if request.method == 'POST':
         form = request.POST
         cryp_key = form['cryp_key']
-        doc = 'MET'
+        doc = form['doc']
         media = request.FILES['media']
 
-        Files(cryp_key=cryp_key, doc=doc, media=media).save()
+
+        Files(cryp_key=cryp_key, doc='MET', media=media).save()
 
         return HttpResponse('UPLOADED')
 
