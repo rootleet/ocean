@@ -18,7 +18,7 @@ from cmms.models import *
 from decimal import Decimal
 from django.contrib import messages
 
-from cmms.extra import db, DB_CURSOR
+from cmms.extra import db
 
 @csrf_exempt
 def api(request):
@@ -609,7 +609,7 @@ def api(request):
                 elif module == 'customer':
                     cust_type = data.get('cust_type')
                     if cust_type == 'cmms_service':
-                        cursor = DB_CURSOR
+                        cursor = db()
                         cust_code = data.get('cust_code') or 'all'
                         if cust_code == 'all':
                             cursor.execute("select cust_code,cust_name,cust_contact,email1 from customer_master")
@@ -630,11 +630,11 @@ def api(request):
                     customer = data.get('customer')
 
                     # check if customer exist
-                    cust_count = DB_CURSOR.execute(
+                    cust_count = db().execute(
                         f"SELECT COUNT(*) FROM customer_master where cust_code = '{customer}'").fetchone()[0]
                     if cust_count == 1:
                         # customer details
-                        customer_details = DB_CURSOR.execute(
+                        customer_details = db().execute(
                             f"select cust_code,cust_name,cust_contact,email1 from customer_master "
                             f"where cust_code = '{customer}'").fetchone()
                         header = {
@@ -644,9 +644,9 @@ def api(request):
                         }
                         assets_q = f"select ASSET_CODE,asset_desc,asset_no,asset_ref_no,model_no from asset_mast where cust_code = '{customer}'"
                         asset_arr = []
-                        DB_CURSOR.execute(assets_q)
+                        db().execute(assets_q)
 
-                        for asset in DB_CURSOR.fetchall():
+                        for asset in db().fetchall():
                             obj = {
                                 'code': str(asset[0]).strip(),
                                 'name': str(asset[1]).strip(),
@@ -666,16 +666,16 @@ def api(request):
 
                 elif module == 'service_history':
                     asset = data.get('asset')
-                    DB_CURSOR.execute(
+                    db().execute(
                         f"select Entry_no,Invoice_date,wo_date,tot_amt,tax_amt,net_amt,labor_amount,material_amount from invoice_hd where asset_code = '{asset}' order by Invoice_date desc")
                     serv_arr = []
-                    for service in DB_CURSOR.fetchall():
+                    for service in db().fetchall():
 
                         # get materials
-                        DB_CURSOR.execute(
+                        db().execute(
                             f"select invoice_type,descr,uom,unit_qty,unit_price,tot_amt,tax_amt,net_amt from invoice_tran where Entry_no = '{service[0]}'")
                         tran_arr = []
-                        for tran in DB_CURSOR.fetchall():
+                        for tran in db().fetchall():
                             tobj = {
                                 'type': str(tran[0]).strip(),
                                 'name': str(tran[1]).strip(),
@@ -700,7 +700,7 @@ def api(request):
                         }
                         serv_arr.append(obj)
 
-                    # DB_CURSOR.close()
+                    # db().close()
                     response['status_code'] = 200
                     response['message'] = serv_arr
 
@@ -710,7 +710,7 @@ def api(request):
                     assets = {}
                     trans = []
 
-                    inv_hd = DB_CURSOR.execute(f"select Entry_no,Invoice_date,tot_amt,tax_amt,net_amt,labor_amount,material_amount,asset_code from invoice_hd where Entry_no= '{invoice}'").fetchone()
+                    inv_hd = db().execute(f"select Entry_no,Invoice_date,tot_amt,tax_amt,net_amt,labor_amount,material_amount,asset_code from invoice_hd where Entry_no= '{invoice}'").fetchone()
                     header['invoice_no'] = str(inv_hd[0]).strip()
                     header['date'] = str(inv_hd[1]).strip()
                     header['net'] = str(inv_hd[2]).strip()
@@ -721,7 +721,7 @@ def api(request):
 
                     # asset details
                     asset_code = inv_hd[7]
-                    asset = DB_CURSOR.execute(f"select ASSET_CODE,asset_desc,asset_no,asset_ref_no,model_no,cust_code from asset_mast where ASSET_CODE = '{asset_code}'").fetchone()
+                    asset = db().execute(f"select ASSET_CODE,asset_desc,asset_no,asset_ref_no,model_no,cust_code from asset_mast where ASSET_CODE = '{asset_code}'").fetchone()
                     assets['code'] = str(asset[0]).strip()
                     assets['name'] = str(asset[1]).strip()
                     assets['number'] = str(asset[2]).strip()
@@ -730,8 +730,8 @@ def api(request):
                     assets['owner'] = str(asset[5]).strip()
 
 
-                    DB_CURSOR.execute(f"select invoice_type,descr,uom,unit_qty,unit_price,tot_amt,tax_amt,net_amt from invoice_tran where Entry_no = '{invoice}'")
-                    for tran in DB_CURSOR.fetchall():
+                    db().execute(f"select invoice_type,descr,uom,unit_qty,unit_price,tot_amt,tax_amt,net_amt from invoice_tran where Entry_no = '{invoice}'")
+                    for tran in db().fetchall():
                         tobj = {
                             'type': str(tran[0]).strip(),
                             'name': str(tran[1]).strip(),
@@ -751,11 +751,11 @@ def api(request):
 
                 elif module == 'just_costomer':
                     cust_code = data.get('code')
-                    DB_CURSOR.execute(
+                    db().execute(
                         f"SELECT cust_name, cust_contact, email1, email2 FROM customer_master WHERE cust_code = '{cust_code}'"
                     )
 
-                    row = DB_CURSOR.fetchone()
+                    row = db().fetchone()
                     if row:
                         response = {
                             'status_code': 200,
@@ -1198,7 +1198,7 @@ def api(request):
                             row_comment = tran.get('row_comment')
                             row_iss = tran.get('row_iss')
                             StockCountTrans.objects.filter(stock_count_hd=c_hd, item_ref=ref).delete()
-                            cursor = DB_CURSOR
+                            cursor = db()
                             q = f"SELECT sell_price FROM product_master where barcode = '{barcode}'"
 
                             if cursor.execute(q).fetchone() is None:

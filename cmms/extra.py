@@ -14,4 +14,4 @@ def db(host=DB_SERVER, port=DB_PORT, db=DB_NAME, user=DB_USER, password=DB_PASSW
     return connection.cursor()
 
 
-DB_CURSOR = db()
+# DB_CURSOR = db()
