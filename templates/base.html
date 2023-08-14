@@ -37,6 +37,8 @@
   <!-- Template Main CSS File -->
   <link href="{% static 'assets/css/style.css' %}" rel="stylesheet">
   <link href="{% static 'general/css/recorder.css' %}" rel="stylesheet">
+    <link rel="manifest" href="{% static 'general/manifest.json' %}">
+
 
 
 
@@ -72,6 +74,8 @@
     <script src="{% static 'general/js/classes/docs.js' %}"></script>
     <script src="{% static 'general/js/classes/anton.js' %}"></script>
     <script src="{% static 'general/js/classes/reminder.js' %}"></script>
+    <script src="{% static 'general/js/classes/contact.js' %}"></script>
+    <script src="{% static 'general/js/classes/modal.js' %}"></script>
 
 
 
@@ -80,12 +84,22 @@
 
   </script>
 
-  <!-- =======================================================
-  * Template Name: NiceAdmin - v2.4.1
-  * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
-  * Author: BootstrapMade.com
-  * License: https://bootstrapmade.com/license/
-  ======================================================== -->
+    <style>
+        .install-button {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+        .tox-promotion{
+            display: none !important;
+        }
+    </style>
 </head>
 
 <body>
@@ -593,6 +607,8 @@
 
     <section class="section h-100" style="height: 85vh !important">
       <div class="w-100 h-100 card overflow-hidden">
+          <button id="install-button" class="install-button">Install App</button>
+
           {% block body %}
 
           {% endblock %}
@@ -633,6 +649,62 @@
     {% endfor %}
   </script>
 {% endif %}
+
+    <script>
+        let deferredPrompt;
+
+window.addEventListener('beforeinstallprompt', (event) => {
+    // Prevent the default prompt
+    console.log('beforeinstallprompt event fired');
+    event.preventDefault();
+
+    // Stash the event so it can be triggered later
+    deferredPrompt = event;
+
+    // Automatically trigger the install prompt
+    deferredPrompt.prompt();
+
+    // Wait for the user to respond to the prompt
+    deferredPrompt.userChoice.then((choiceResult) => {
+        if (choiceResult.outcome === 'accepted') {
+            console.log('User accepted the install prompt');
+        } else {
+            console.log('User dismissed the install prompt');
+        }
+
+        // Reset the deferredPrompt for future prompts
+        deferredPrompt = null;
+    });
+});
+
+window.addEventListener('load', () => {
+    const installButton = document.getElementById('install-button');
+    if (deferredPrompt) {
+        installButton.style.display = 'block';
+
+        installButton.addEventListener('click', () => {
+            // Show the browser's install prompt
+            deferredPrompt.prompt();
+
+            // Wait for the user to respond to the prompt
+            deferredPrompt.userChoice.then((choiceResult) => {
+                if (choiceResult.outcome === 'accepted') {
+                    console.log('User accepted the install prompt');
+                } else {
+                    console.log('User dismissed the install prompt');
+                }
+
+                // Reset the deferredPrompt for future prompts
+                deferredPrompt = null;
+
+                // Hide the custom install button
+                installButton.style.display = 'none';
+            });
+        });
+    }
+});
+
+    </script>
 
 </body>
 

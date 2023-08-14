@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body %}
+    <div class="card-header">
+        <strong class="card-title">{{ meeting.title }}</strong>
+    </div>
+    <div class="card-body p-2">
+        <div class="container-fluid h-100">
+            <div class="row overflow-hidden h-100">
+                <div class="col-sm-8 p-2 d-flex flex-wrap align-content-between justify-content-center">
+                    {% if meeting.status == 1 %}
+                        <textarea id="document" class="tinymce-editor">
+
+
+                        </textarea>
+                    {% elif meeting.status == 3 %}
+
+                        <div class="w-100">
+                            {{ meeting.document | safe }}
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+                <div class="col-sm-4 pt-2">
+
+                    <div id="accordion">
+
+                          <div class="card">
+
+                            <div class="card-body">
+
+                              <!-- Accordion without outline borders -->
+                              <div class="accordion accordion-flush" id="accordionFlushExample">
+
+                              <div class="accordion-item">
+                                  <h2 class="accordion-header" id="flush-headingThree">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-meeting" aria-expanded="false" aria-controls="flush-collapseThree">
+                                      DESCRIPTION
+                                    </button>
+                                  </h2>
+                                  <div id="flush-meeting" class="accordion-collapse p-2 collapse" aria-labelledby="flush-headingThree" data-bs-parent="#accordionFlushExample">
+                                    {{ meeting.descr }}
+                                  </div>
+                                </div>
+
+                                <div class="accordion-item">
+                                  <h2 class="accordion-header" id="flush-headingOne">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                                      AGENDAS
+                                    </button>
+                                  </h2>
+                                  <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+                                    <ol>
+                                        {% for point in meeting.talking_points %}
+                                            <li>{{ point.title }}</li>
+                                        {% endfor %}
+                                    </ol>
+                                  </div>
+                                </div>
+
+                                <div class="accordion-item">
+                                  <h2 class="accordion-header" id="flush-headingTwo">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+                                      PARTICIPANTS
+                                    </button>
+                                  </h2>
+                                  <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
+                                    <ol>
+                                        {% for participant in meeting.participants %}
+                                            <li>{{ participant.name.full_name }}</li>
+                                        {% endfor %}
+                                    </ol>
+                                  </div>
+                                </div>
+
+                                <div class="accordion-item">
+                                  <h2 class="accordion-header" id="flush-headingThree">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-attachments" aria-expanded="false" aria-controls="flush-collapseThree">
+                                      ATTACHMENTS
+                                    </button>
+                                  </h2>
+                                  <div id="flush-attachments" class="accordion-collapse collapse" aria-labelledby="flush-headingThree" data-bs-parent="#accordionFlushExample">
+                                    <ol style="font-size: small">
+                                        {% for attach in meeting.attachments %}
+                                            <li class="nav-link"><a onclick="location.href='{{ attach.media.url }}'" class="bx bx-download" href="javascript:void(0)"></a> {{ attach.file_name }}</li>
+                                        {% endfor %}
+                                    </ol>
+                                  </div>
+                                </div>
+                              </div>
+
+                            </div>
+
+                          </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="card-footer">
+        <button onclick="location.href='{% url 'meeting' %}'" class="btn btn-info bx bxs-backpack"> ALL MEETINGS</button>
+        {% if meeting.status == 1 %}
+            <button onclick="meeting.endMeeting(`{{ meeting.uni }}`)" class="btn btn-warning"> END MEETING</button>
+        {% endif %}
+    </div>
+
+    <script>
+
+        let data = {}
+        data['part'] = 'live'
+        data['key'] = {{ meeting.pk }};
+
+        let payload = {
+                'module':'meetings',
+                data:data
+        }
+
+        let response = api.call('VIEW',payload,'/apiv2/meeting/')
+
+        console.table(response)
+
+        if(response['status_code'] === 200){
+            let meeting = response['message'][0]
+
+        }
+
+    </script>
+
+{% endblock %}

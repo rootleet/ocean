@@ -83,13 +83,7 @@
                                                 <label for="">Description</label><textarea name="descr" class="form-control form-control-lg" required id="" cols="30" rows="5"></textarea>
                                                 <input type="hidden" name="owner" value="{{ user.pk }}">
 
-                                                <script>
-                                                // Add the following code if you want the name of the file appear on select
-                                                $(".custom-file-input").on("change", function() {
-                                                  var fileName = $(this).val().split("\\").pop();
-                                                  $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
-                                                });
-                                                </script>
+
 
                                                 <hr>
                                             <button class="btn btn-success" type="submit">SAVE</button>
@@ -296,7 +290,7 @@
         </div>
     </div>
 
-    <script type="text/javascript" src="https://code.jquery.com/jquery.min.js"></script>
+
         <script src="https://markjivko.com/dist/recorder.js"></script>
     <script>
         meeting.liveTrans()

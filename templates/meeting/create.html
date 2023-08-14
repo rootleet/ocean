@@ -3,48 +3,41 @@
 
 {% block body %}
 
-    <div class="container-fluid h-100">
-        <div class="row no-gutters" style="height: 90vh">
+{#    <div class="card-header rounded-0">#}
+{#        <div class="w-100 d-flex flex-wrap justify-content-between">#}
+{#            <div class="w-50 h-100">#}
+{#                <strong class="">Creating Meeting</strong>#}
+{#            </div>#}
+{##}
+{#            <div class="w-50 h-100 d-flex flex-wrap justify-content-end">#}
+{##}
+{#                <button form="saveMeeting" class="btn btn-success">SAVE</button>#}
+{##}
+{#            </div>#}
+{##}
+{#        </div>#}
+{##}
+{#    </div>#}
+    <div class="card-body overflow-hidden p-2">
 
+        <div class="container-fluid h-100 overflow-hidden">
 
-            <!-- MEETING BODY -->
-            <div class="col-sm-12 m-0 p-0 h-100">
-                <div class="card rounded-0 shadow-none h-100">
-                    <div class="card-header rounded-0">
-                        <div class="w-100 d-flex flex-wrap justify-content-between">
-                            <div class="w-50 h-100">
-                                <strong class="">Creating Meeting</strong>
-                            </div>
-
-                            <div class="w-50 h-100 d-flex flex-wrap justify-content-end">
-
-                                <button form="saveMeeting" class="btn btn-success">SAVE</button>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-                    <div class="card-body p-2">
-
-                        <div class="container-fluid">
-
-                            <div class="row d-flex flex-wrap justify-content-center">
+            <div class="row h-100 overflow-hidden d-flex flex-wrap justify-content-center">
                                 <!-- DETAILS -->
-                                <form id="saveMeeting" method="post" action="{% url 'save_meeting' %}" class="col-sm-4">
+                <div id="saveMeeting" method="post" action="{% url 'save_meeting' %}" class="col-sm-6">
                                     {% csrf_token %}
                                     <card class="card border border-info">
                                         <div class="card-header">
                                             <strong class="card-title">Details</strong>
                                         </div>
                                         <div class="card-body p-2">
-                                            <input type="hidden" name="owner" value="{{ user.pk }}">
-                                            <input type="text" readonly name="uni" class="form-control form-control-lg" value="{{ m_uni }}">
+                                            <input type="hidden" id="owner" name="owner" value="{{ user.pk }}">
+                                            <input type="hidden" readonly name="uni" class="form-control form-control-lg" value="{{ m_uni }}">
                                             <!-- TITLE -->
                                             <div class="input-group input-group-sm mb-2">
 
                                                 <label class="w-100">Title
-                                                    <input type="text" autocomplete="off" required name="title" class="form-control form-control-lg">
+                                                    <input type="text" id="title" autocomplete="off" required name="title" class="form-control form-control-lg">
                                                 </label>
                                             </div>
                                             <hr>
@@ -54,12 +47,12 @@
                                                 <div class="w-100 d-flex justify-content-between">
                                                     <div class="w-50">
                                                         <label class="w-100">Start Date
-                                                            <input name="start_date" type="date" class="form-control form-control-lg">
+                                                            <input name="start_date" id="start_date" type="date" class="form-control form-control-lg">
                                                         </label>
                                                     </div>
                                                     <div class="w-25">
                                                         <label class="w-100">Start Time
-                                                            <input name="start_time" type="time" class="form-control form-control-lg">
+                                                            <input name="start_time" id="start_time" type="time" class="form-control form-control-lg">
                                                         </label>
                                                     </div>
                                                 </div>
@@ -70,12 +63,12 @@
                                                 <div class="w-100 d-flex justify-content-between">
                                                     <div class="w-50">
                                                         <label class="w-100">End Date
-                                                            <input name="end_date" type="date" class="form-control form-control-lg">
+                                                            <input name="end_date" id="end_date" type="date" class="form-control form-control-lg">
                                                         </label>
                                                     </div>
                                                     <div class="w-25">
                                                         <label class="w-100">End Time
-                                                            <input name="end_time" type="time" class="form-control form-control-lg">
+                                                            <input name="end_time" id="end_time" type="time" class="form-control form-control-lg">
                                                         </label>
                                                     </div>
                                                 </div>
@@ -84,26 +77,159 @@
 
                                             <!-- DETAILS -->
                                             <div class="input-group input-group-sm mb-2">
-                                                <label class="w-100" for="">Description</label><textarea name="descr" id="" cols="30" rows="10"
-                                                                                class="form-control form-control-lg rounded"></textarea>
+                                                <label class="w-100" for="descr">Description</label>
+                                                <textarea name="descr" id="descr" cols="30" rows="10" class="form-control form-control-lg rounded">
+
+                                                </textarea>
                                             </div>
 
                                         </div>
                                     </card>
-                                </form>
+                                </div>
+
+                <div class="col-sm-6 h-100 overflow-hidden d-flex flex-wrap align-content-between">
+                    <div class="h-50 w-100 p-1">
+                        <div class="card h-100 overflow-hidden">
+                            <div class="card-header">
+                             <div class="w-100 d-flex flex-wrap justify-content-between">
+                                <div class="w-50 h-100">
+                                    <strong class="card-title">SELECT PARTICIPANTS</strong>
+                                </div>
+
+                                <div class="w-50 h-100 d-flex flex-wrap justify-content-end">
+
+                                    <button onclick="contact.create()" class="btn btn-info">CREATE</button>
+
+                                </div>
 
                             </div>
 
 
-
-
                         </div>
+                            <div id="contacts" class="card-body overflow-auto p-2">
+                                <div class="h-50 overflow-auto p-2">
+                                    <div class="w-100 shadow p-2 d-flex flex-wrap">
+                                    <div style="height: 50px" class="w-75 p-2 d-flex flex-wrap align-content-end">
+                                        <label>
+                                            <input type="checkbox">
+                                            <strong>NAME</strong>
+                                        </label>
+                                    </div>
 
+                                    <div class="w-25 p-2 d-flex flex-wrap justify-content-end">
+
+                                        <div class="" style="width: 50px">
+                                            <img src="{% static 'assets/img/users/default.png' %}" alt="" class="img-fluid rounded-circle">
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+
+                    <div style="height: 45%" class="p-1 w-100">
+                         <div class="h-100 card overflow-hidden">
+                            <div class="card-header">
+                                <small class="text-info">ISSUES</small>
+                                <input type="text" class="form-control" placeholder="Type and hit enter" id="list">
+                                <input type="hidden" id="values">
+                            </div>
+                            <div class="card-body overflow-auto p-2">
+
+                                <div class="w-100 overflow-auto">
+                                    <table class="table table-responsive">
+                                    <tbody id="vals_container"></tbody>
+                                </table>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
+
             </div>
 
+
+
         </div>
+
     </div>
+
+    <div class="card-footer">
+        <button onclick="meeting.saveMeeting()" class="btn btn-success">SAVE</button>
+    </div>
+
+    <script>
+        function myContacts() {
+            let payload = {
+                data:{
+                    'key':'*',
+                    'owner':{{ request.user.pk }}
+                }
+            }
+
+            let response = api.call('VIEW',payload,'/apiv2/contact/')
+            let html = ``
+            if(response['status_code'] === 200){
+                let contacts = response['message']
+                if(contacts.length > 0){
+
+                    for (let c = 0; c < contacts.length; c++) {
+                        let contact  = contacts[c];
+                        let pk = contact['pk']
+                        let r = c +1;
+                        let row = `
+
+                        <legend class="w-100 border border-info rounded-1 p-2 d-flex mb-2 flex-wrap">
+                            <div style="height: 50px" class="w-75 p-2 d-flex flex-wrap align-content-end">
+                                <label>
+                                    <input value = '${pk}' id='contact_r${r}' type="checkbox">
+                                    <strong>${contact['name']}</strong>
+                                </label>
+                            </div>
+
+                            <div class="w-25 p-2 d-flex flex-wrap justify-content-end">
+
+                                <div class="" style="width: 50px">
+                                    <img src="{% static 'assets/img/users/default.png' %}" alt="" class="img-fluid rounded-circle">
+                                </div>
+                            </div>
+                        </legend>
+
+                        `
+                        html += row
+                    }
+
+                } else {
+                    html = `<div class="w-100 h-100 d-flex flex-wrap align-content-center justify-content-center"><div class="alter alert-info">CREATE CONTACT</div></div>`
+                }
+            } else {
+                html = `<div class="w-100 h-100 d-flex flex-wrap align-content-center justify-content-center"><div class="alter alert-info">CANNOT LOAD CONTACT</div></div>`
+            }
+
+            $('#contacts').html(html)
+
+        }
+
+        myContacts()
+
+        document.getElementById('list').addEventListener('focus', function(e){
+            e.target.addEventListener('keydown', function(e) {
+                if (e.keyCode === 13) {
+                   let value = $('#list').val();
+                   if(value.length > 0){
+                       let row = $('#vals_container tr').length + 1;
+                        $('#vals_container').append(`<tr ><td>${row}</td><td id="iss_${row}">${value}</td></tr>`)
+                   }
+
+                    $('#list').val('')
+
+                }
+            });
+        });
+
+    </script>
 
 {% endblock %}

@@ -15,7 +15,7 @@
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table class="table-sm table table-hover table-striped">
+                            <table class="table-sm table datatable table-striped">
                                 <thead>
                                     <tr>
                                         <th>Title</th>
@@ -23,16 +23,31 @@
                                         <th>Start Time</th>
                                         <th>End TIme</th>
                                         <th>Status</th>
+                                        <th>ACTION</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody id="tBody">
                                     {% for meeting in meetings %}
-                                        <tr data-bs-toggle="modal" class="pointer" data-bs-target="#medDetail{{ meeting.uni }}">
+                                        <tr data-bs-toggle="modal" data-bs-target="#edDetail{{ meeting.uni }}">
                                             <td>{{ meeting.title }}</td>
                                             <td>{{ meeting.created_date }} {{ meeting.created_time }}</td>
                                             <td>{{ meeting.start_date }} {{ meeting.start_time }}</td>
                                             <td>{{ meeting.end_date }} {{ meeting.end_time }}</td>
-                                            <td><span class="{{ meeting.m_stat.class }}">{{ meeting.m_stat.text }}</span></td>
+                                            <td>
+                                                <kbd class="bg-info">PENDING</kbd>
+                                            </td>
+                                            <td>
+                                                <div class="dropdown dropleft">
+                                                  <i class="bi bi-view-list text-info pointer" id="dropdownMenuButton{{ meeting.pk }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
+                                                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ meeting.pk }}">
+                                                    <a class="dropdown-item" href="javascript:void(0)"><i class="bi bi-door-open text-primary"></i> START</a>
+                                                    <a class="dropdown-item" href="javascript:void(0)"><i class="bx bx-trash text-warning"></i>CANCEL</a>
+                                                      <a class="dropdown-item" href="javascript:void(0)"><i class="bx bx-time text-info"></i> POSTPONE</a>
+                                                      <a class="dropdown-item" href="javascript:void(0)"><i class="bx bx-user text-dark"></i> PARTICIPANTS</a>
+                                                  </div>
+                                                </div>
+
+                                            </td>
                                         </tr>
 
                                         <div class="modal fade" id="medDetail{{ meeting.uni }}">
@@ -69,5 +84,77 @@
 
         </div>
     </div>
+
+    <script>
+        function myMeetings() {
+            let data = {}
+            data['part'] = 'mine'
+            data['key'] = {{ request.user.pk }};
+
+            let payload = {
+                'module':'meetings',
+                data:data
+            }
+
+            let response = api.call('VIEW',payload,'/apiv2/meeting/')
+            console.table(response)
+            if(response['status_code'] === 200){
+                let meetings = response['message']
+                let tr = ''
+                for (let meet = 0; meet < meetings.length; meet ++){
+
+                    let meeting = meetings[meet]
+
+                    let status = meeting['status']
+                    let st = ''
+                    let sts = ''
+                    let open = ''
+                    if(status === 1){
+                        // meeting on going
+                        sts = `<kbd onclick="location.href = '/meeting/config_meeting/${meeting['uni']}/'" title='JOIN' class="text-danger pointer bg-light bx bx-broadcast"> live</kbd>`
+                        st = `<a class="dropdown-item" onclick="meeting.endMeeting('${meeting['uni']}')" href="javascript:void(0)"><i class="bi bi-door-open text-danger"></i> END</a>`
+                    } else if (status === 0){
+                        sts = `<kbd class="bg-info">pending</kbd>`
+                        // start meeting
+
+                        st = `<a class="dropdown-item" onclick="meeting.startMeeting('${meeting['uni']}')" href="javascript:void(0)"><i class="bi bi-door-open text-primary"></i> START</a>`
+                    }
+                    if(status !== 3) {
+                        tr += `
+                        <tr>
+                                            <td>${meeting['title']}</td>
+                                            <td>${meeting['created_date']}</td>
+                                            <td>${meeting['start_end']['start_date']} ${meeting['start_end']['start_time']}</td>
+                                            <td>${meeting['start_end']['end_date']} ${meeting['start_end']['end_time']}</td>
+                                            <td>
+                                                ${sts}
+                                            </td>
+                                            <td>
+                                                <div class="dropdown dropleft">
+                                                  <i class="bi bi-view-list text-info pointer" id="dropdownMenuButton${meeting['uni']}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
+                                                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton${meeting['uni']}">
+                                                    ${st}
+                                                    <a class="dropdown-item" href="javascript:void(0)"><i class="bx bx-trash text-warning"></i>CANCEL</a>
+                                                      <a class="dropdown-item" href="javascript:void(0)"><i class="bx bx-time text-info"></i> POSTPONE</a>
+                                                      <a class="dropdown-item" href="javascript:void(0)"><i class="bx bx-user text-dark"></i> PARTICIPANTS</a>
+                                                      <a class="dropdown-item" onclick="meeting.viewAttach('${meeting['pk']}')" href="javascript:void(0)"><i class="bx bx-file text-success"></i> ATTACHMENTS</a>
+                                                  </div>
+                                                </div>
+
+                                            </td>
+                                        </tr>
+                    `;
+                    }
+                }
+                $('#tBody').html(tr)
+
+            } else {
+                kasa.error("CANNOT LOAD MEETING")
+            }
+
+        }
+
+        myMeetings()
+    </script>
 
 {% endblock %}
