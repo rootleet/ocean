@@ -1,3 +1,4 @@
+import os.path
 import pathlib
 
 from django.conf import settings
@@ -398,7 +399,8 @@ class Files(models.Model):
     created_time = models.TimeField(auto_now_add=True)
 
     def file_name(self):
-        return pathlib.PureWindowsPath(self.media.name).stem
+        return os.path.basename(self.media.name)
+    
 
 
 class AuthToken(models.Model):
@@ -641,3 +643,20 @@ class Reminder(models.Model):
 
     resp_code = models.TextField(default='null')
     resp_message = models.TextField(default='null')
+
+
+class Contacts(models.Model):
+    full_name = models.TextField()
+    email = models.CharField(max_length=100,unique=False,null=False)
+    phone = models.TextField(max_length=100,unique=False,null=False)
+
+    created_date = models.DateField(auto_now_add=True)
+    created_time = models.TimeField(auto_now_add=True)
+    updated_date = models.DateField(auto_now=True)
+    updated_time = models.TimeField(auto_now=True)
+
+    status = models.IntegerField(default=1)  # 1 active, 0 not, 99 done
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, blank=True, null=True)
+
+    class Meta:
+        unique_together = (('owner', 'phone'), ('owner', 'email'))

@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.db import models
 
-from admin_panel.models import Files
+from admin_panel.models import Files, Contacts
 
 
 # Create your models here.
@@ -15,16 +15,19 @@ class MeetingHD(models.Model):
     end_date = models.DateField()
     end_time = models.TimeField()
 
+    document = models.TextField(default='NULL')
+
     created_date = models.DateField(auto_now_add=True)
     created_time = models.TimeField(auto_now=True)
+
     status = models.IntegerField(default=0)
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     def m_stat(self):
         if self.status == 0:
             return {
-                'class':f"btn btn-sm btn-danger",
-                'text':"NOT STARTED"
+                'class': f"btn btn-sm btn-danger",
+                'text': "NOT STARTED"
             }
         elif self.status == 1:
             return {
@@ -43,7 +46,7 @@ class MeetingHD(models.Model):
             }
 
     def attachments(self):
-        return Files.objects.filter(doc='MET', cryp_key=self.uni)
+        return Files.objects.filter(doc='MET', cryp_key=self.pk)
 
     def participants(self):
         return MeetingParticipant.objects.filter(meeting=self.pk)
@@ -74,11 +77,17 @@ class MeetingTalkingPoints(models.Model):
 
 
 class MeetingParticipant(models.Model):
-    meeting = models.ForeignKey('MeetingHD', on_delete=models.CASCADE)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    meeting = models.ForeignKey('MeetingHD', on_delete=models.SET_NULL, null=True, blank=True)
+    name = models.ForeignKey(Contacts, on_delete=models.SET_NULL, null=True, blank=True)
     present = models.IntegerField(default=0)
 
     created_date = models.DateField(auto_now_add=True)
     created_time = models.TimeField(auto_now=True)
     status = models.IntegerField(default=0)
+
+    def myself(self):
+        return {
+            'name':self.name.full_name,
+            'pk':self.name.pk
+        }
     # owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
