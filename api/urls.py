@@ -21,4 +21,5 @@ urlpatterns = [
     path('',views.index),
     path('<module>/<crud>/', views.api_call, name='api_call')
 
+
 ]
