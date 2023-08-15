@@ -50,7 +50,9 @@ INSTALLED_APPS = [
     'dolphine.apps.DolphineConfig',
     'cmms.apps.CmmsConfig',
     'apiv2.apps.Apiv2Config',
-    'appscenter.apps.AppscenterConfig'
+    'appscenter.apps.AppscenterConfig',
+    'reports.apps.ReportsConfig',
+    'taskmanager.apps.TaskmanagerConfig'
 
 ]
 
@@ -192,8 +194,12 @@ DB_USER = 'sa'
 DB_PASSWORD = 'sa@123456'
 DB_NAME = 'CMMS'
 
-# OLD_DB_SERVER = '192.168.2.4'
-# OLD_DB_PORT = '1433'
+OLD_DB_SERVER = '192.168.2.4'
+OLD_DB_PORT = '1433'
 # DB_USER = 'sa'
 # DB_PASSWORD = 'sa@123456'
 OLD_DB_NAME = 'PROC_CMMS_V1'
+# DB_SERVER = '127.0.0.1'
+# #DB_PORT = '1237'
+# DB_PORT = '1433'
+# DB_NAME = 'PROC_CMMS_V1'
