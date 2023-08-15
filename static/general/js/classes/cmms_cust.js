@@ -212,6 +212,7 @@ class CmmsCust {
                     }
 
                 } else {
+                    // console.table(response)
                     kasa.error(`There is an error getting assets : ${message}`);
                 }
             },3000

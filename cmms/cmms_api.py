@@ -614,7 +614,7 @@ def api(request):
                         if cust_code == 'all':
                             cursor.execute("select cust_code,cust_name,cust_contact,email1 from customer_master")
                         else:
-                            cursor.execute(f"select cust_code,cust_name,cust_contact,email1 from customer_master  where cust_code = {cust_code}")
+                            cursor.execute(f"select cust_code,cust_name,cust_contact,email1 from customer_master  where cust_code = '{cust_code}'")
                         cust_arr = []
                         for customer in cursor.fetchall():
                             cust_arr.append({
@@ -644,9 +644,11 @@ def api(request):
                         }
                         assets_q = f"select ASSET_CODE,asset_desc,asset_no,asset_ref_no,model_no from asset_mast where cust_code = '{customer}'"
                         asset_arr = []
-                        db().execute(assets_q)
+                        asset_cursor = db()
+                        asset_cursor.execute(assets_q)
+                        # db().execute(assets_q)
 
-                        for asset in db().fetchall():
+                        for asset in asset_cursor.fetchall():
                             obj = {
                                 'code': str(asset[0]).strip(),
                                 'name': str(asset[1]).strip(),
@@ -1023,10 +1025,12 @@ def api(request):
                                 response['status_code'] = 200
                             except Exception as e:
                                 stock_freeze_hd.delete()
-                                response['message'] = str(e)
+                                line_number = traceback.extract_tb(e.__traceback__)[-1].lineno
+                                response['message'] = f"Error occurred at line {line_number}: {str(e)}"
 
                         except Exception as e:
-                            response['message'] = str(e)
+                            line_number = traceback.extract_tb(e.__traceback__)[-1].lineno
+                            response['message'] = f"Error occurred at line {line_number}: {str(e)}"
 
 
                     else:
@@ -1103,7 +1107,8 @@ def api(request):
                         except Exception as e:
                             response['status_code'] = 500
                             response['status'] = 'error'
-                            response['message'] = str(e)
+                            line_number = traceback.extract_tb(e.__traceback__)[-1].lineno
+                            response['message'] = f"Error occurred at line {line_number}: {str(e)}"
 
 
 
