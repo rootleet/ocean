@@ -30,6 +30,14 @@ class App(models.Model):
     status = models.IntegerField(default=1)
     version = models.IntegerField(default=0)
 
+    def latest_version(self):
+        return VersionControl.objects.filter(app=self).order_by('-pk')[:1]
+    def lastest_url(self):
+        if VersionControl.objects.filter(app=self).exists():
+            file = VersionControl.objects.filter(app=self).last()
+            return file.files.url
+        else:
+            return '#'
 
 class VersionControl(models.Model):
     app = models.ForeignKey('App', on_delete=models.CASCADE)
