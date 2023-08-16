@@ -531,7 +531,7 @@ def api(request):
                                         if tran.counted_qty > 0:
                                             counted_qty = tran.counted_qty
                                         else:
-                                            counted_qty = 666
+                                            counted_qty = tran.counted_qty
 
                                         writer.writerow(
                                             [tran.item_ref, counted_qty])
