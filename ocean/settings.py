@@ -52,8 +52,7 @@ INSTALLED_APPS = [
     'apiv2.apps.Apiv2Config',
     'appscenter.apps.AppscenterConfig',
     'reports.apps.ReportsConfig',
-
-
+    'taskmanager.apps.TaskmanagerConfig'
 ]
 
 MIDDLEWARE = [
