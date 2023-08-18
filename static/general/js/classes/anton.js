@@ -207,6 +207,27 @@ class reportCard {
     }
 }
 
+class Report {
+    export(doc,key,format){
+        let payload = {
+            'module':'',
+            'data':{
+                doc:doc,
+                key:key,
+                output:format
+            }
+        }
+        return  api.call('POST',payload,'/reports/api/')
+
+    }
+
+    download(doc,key,format){
+        kasa.html(`<a target="_blank" href="/${rops.export(doc,key,format)['message']}">DOWNLOAD</a>`)
+    }
+
+}
+
+const rops = new Report()
 const card = new reportCard()
 const linecomment = new LineComment()
 const kasa = new Kasa()

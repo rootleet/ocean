@@ -9,7 +9,6 @@ from appscenter.models import AppsGroup, App, AppAssign
 
 
 @login_required()
-# Create your views here.
 def index(request):
     import hashlib
     import time

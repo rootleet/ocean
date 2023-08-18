@@ -1,0 +1,62 @@
+{% extends 'taskmanager/base.html' %}
+{% load static %}
+
+{% block taskwindow %}
+    <form method="post" class="modal fade" id="close">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <input type="hidden" name = 'title' value="close_task">
+                <div class="modal-body p-2">
+                    <textarea name="description" id="" class="form-control form-control-sm rounded-0" cols="30" rows="10"></textarea>
+                </div>
+                <div class="modal-footer">
+
+                </div>
+
+            </div>
+        </div>
+    </form>
+    <div class="card-header">
+        <div class="w-100 d-flex flex-wrap">
+
+            <button onclick="rops.download('TSK','{{ task.uni }}','PDF')" style="border-radius: 0 !important" class="btn btn-info btn-warning"> <i class="fa fa-file-pdf"></i> PRINT</button>
+            {% if task.status == 1 %}
+                <button onclick="location.href='{% url 'task_update' task.uni %}'" style="border-radius: 0 !important" class="btn btn-info">UPDATE</button>
+                <button onclick="location.href='{% url 'close_task' task.uni %}'" style="border-radius: 0 !important" class="btn btn-info btn-danger">CLOSE</button>
+            {% endif %}
+        </div>
+    </div>
+    <div class="card-body p-5 overflow-auto">
+
+        <div class="border border-1 p-2">
+            <strong class="m-0 p-0">{{ task.title }}</strong><br>
+            <small class="text-muted">Created By {{ task.owner.username }} on {{ task.created_date }} {{ task.created_time }}</small>
+            <hr>
+            {{ task.description | safe }}
+        </div>
+
+        <div class="accordion accordion-flush" id="accordionFlushExample">
+
+            {% for tran in task.transaction %}
+                <div class="accordion-item">
+                  <h2 class="accordion-header" id="flush-headingOne">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse{{ tran.pk }}" aria-expanded="false" aria-controls="flush-collapseOne">
+                      <strong>{{ tran.title }} - <small class="text-muted"> by {{ tran.owner.username }} on {{ tran.created_time }} {{ tran.created_time }}</small></strong>
+
+                    </button>
+                  </h2>
+                  <div id="flush-collapse{{ tran.pk }}" class="accordion-collapse collapse p-2" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+                    <div class="accordion-body">
+                        {{ tran.description | safe}}
+                    </div>
+                  </div>
+                </div>
+            {% endfor %}
+        </div>
+
+    </div>
+
+    <script>
+
+    </script>
+{% endblock %}
