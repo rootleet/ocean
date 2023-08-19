@@ -380,106 +380,34 @@ class Meeting {
             kasa.warning("FILL ALL REQUIRED FIELDS")
         }
 
-        // Swal.fire({
-        //     title: 'MEETINGS REPORT',
-        //     html: `
-        //     <div>
-        //       <label>Start Date:</label>
-        //       <input id="swal-input1" class="swal2-input" type="date">
-        //     </div>
-        //     <div>
-        //       <label>End Date:</label>
-        //       <input id="swal-input2" class="swal2-input" type="date">
-        //     </div>
-        //     <div>
-        //       <label>Status:</label>
-        //       <select id="swal-input3" class="swal2-select">
-        //         <option value="*">All</option>
-        //         <option value="0">Pending</option>
-        //         <option value="1">Live</option>
-        //         <option value="3">Close</option>
-        //       </select>
-        //     </div>`,
-        //     focusConfirm: false,
-        //     showCancelButton: true,
-        //     confirmButtonText: 'View',
-        //     cancelButtonText: 'Close',
-        //     preConfirm: () => {
-        //         const start_date = document.getElementById('swal-input1').value;
-        //         const end_date = document.getElementById('swal-input2').value;
-        //         const status = document.getElementById('swal-input3').value;
-        //
-        //         if(!start_date || !end_date || !status){
-        //             Swal.showValidationMessage('Please fill all fields');
-        //         }
-        //
-        //         return {
-        //             start_date: start_date,
-        //             end_date: end_date,
-        //             status: status,
-        //         }
-        //     }
-        // }).then(result => {
-        //     if (result.isConfirmed) {
-        //         let data = {}
-        //         data['start_date'] = result.value.start_date
-        //         data['end_date'] = result.value.end_date
-        //         data['status'] = result.value.status
-        //
-        //         let payload = {
-        //             module:'header',
-        //             data:data
-        //         }
-        //
-        //         let response = api.call('VIEW',payload,'/meeting/reports/')
-        //
-        //
-        //         let html = ''
-        //
-        //         if(response['status_code'] === 200){
-        //             let header,message,count,transactions
-        //             message = response['message']
-        //             header = message['header']
-        //             count = header['count']
-        //             transactions = message['transactions']
-        //             // console.table(transactions)
-        //             if (count > 0){
-        //
-        //                 let tr = ''
-        //
-        //                 for (let me = 0; me < count; me++) {
-        //                     let attachments,participants,points, meeting = transactions[me]
-        //                     let times = meeting['start_end'];
-        //                     let owner = meeting['owner'];
-        //                     let duration = `${times['start_date']} ${times['start_time']} to ${times['end_date']} ${times['end_time']}`;
-        //                     let stat = meeting['m_stat']
-        //
-        //                     tr += `<tr><td>${meeting['title']}</td><td>${duration}</td><td>${owner['full_name']}</td><td><kbd class="${stat['class']}">${stat['text']}</kbd></td></tr>`
-        //
-        //                 }
-        //
-        //                 html = `<table class="table table-sm datatable table-bordered"><thead><tr><th>Title</th><th>Duration</th><th>OWNER</th><th>STATUS</th></tr></thead>
-        //                 <tbody>${tr}</tbody></table>`
-        //
-        //             } else {
-        //                 html = `<div class="w-100 h-100 d-flex flex-wrap justify-content-center align-content-center">
-        //                     <div class="alert alert-danger">NO DATA</div>
-        //                 </div>`
-        //             }
-        //
-        //         }
-        //         else {
-        //             html = `<div class="w-100 h-100 d-flex flex-wrap justify-content-center align-content-center">
-        //                     <div class="alert alert-danger">There is an error loading data ${response['message']}</div>
-        //                 </div>`
-        //         }
-        //         // console.log(html)
-        //         $('#reportCardBody').html(html)
-        //     }
-        // });
+
     }
 
 
+    viewParticipants(meeting) {
+        let payload = {}
+        let data = {}
+        payload['module'] = 'meetings'
+        data['part'] = 'single';
+        data['key'] = meeting
+        payload['data'] = data
+
+        let response = api.call('VIEW',payload,'/apiv2/meeting/')
+
+
+        amodal.setTitleText("PARTICIPANTS")
+
+        let participants = response['message'][0]['participants']
+        let tr = ''
+        for (let at = 0; at < participants.length; at++) {
+            let participant = participants[at]
+            tr += `<tr><td><i class="bx bx-user-circle text-info"></i> ${participant['name']}</td><td><i class="pointer bi bi-trash-fill text-danger" onclick="kasa.info('Pending Feature')" title="Delete"></i></td></tr>`
+        }
+        let html = `<table class="table table-sm">${tr}</table>`
+        amodal.setBodyHtml(html)
+        amodal.show()
+        console.table(participants)
+    }
 }
 
 const meeting = new Meeting();

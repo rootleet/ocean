@@ -136,7 +136,7 @@
                                                     ${st}
                                                     <a class="dropdown-item" href="javascript:void(0)"><i class="bx bx-trash text-warning"></i>CANCEL</a>
                                                       <a class="dropdown-item" href="javascript:void(0)"><i class="bx bx-time text-info"></i> POSTPONE</a>
-                                                      <a class="dropdown-item" href="javascript:void(0)"><i class="bx bx-user text-dark"></i> PARTICIPANTS</a>
+                                                      <a class="dropdown-item" onclick="meeting.viewParticipants('${meeting['pk']}')" href="javascript:void(0)"><i class="bx bx-user text-dark"></i> PARTICIPANTS</a>
                                                       <a class="dropdown-item" onclick="meeting.viewAttach('${meeting['pk']}')" href="javascript:void(0)"><i class="bx bx-file text-success"></i> ATTACHMENTS</a>
                                                   </div>
                                                 </div>
@@ -149,7 +149,7 @@
                 $('#tBody').html(tr)
 
             } else {
-                kasa.error("CANNOT LOAD MEETING")
+                alert(`CANNOT LOAD MEETING : ${response['message']}`)
             }
 
         }

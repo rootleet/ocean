@@ -1,5 +1,6 @@
 import hashlib
 import json
+import sys
 
 from django.contrib.auth.models import User
 from django.http import JsonResponse
@@ -85,10 +86,10 @@ def index(request):
                 key = data.get('key')
                 meet = []
                 if part == 'mine':
-                    meetings = MeetingHD.objects.filter(owner=User.objects.get(pk=key)).order_by('-p')
+                    meetings = MeetingHD.objects.filter(owner=User.objects.get(pk=key)).order_by('-pk')
 
                 elif part == 'live' or part == 'single':
-                    meetings = MeetingHD.objects.filter(pk=key).order_by('-p')
+                    meetings = MeetingHD.objects.filter(pk=key).order_by('-pk')
 
                 for meeting in meetings:
                     # load participant
@@ -168,7 +169,10 @@ def index(request):
                 response = success_response
 
     except Exception as e:
+        error_type, error_instance, traceback = sys.exc_info()
+        tb_path = traceback.tb_frame.f_code.co_filename
+        line_number = traceback.tb_lineno
         response["status_code"] = 500
-        response["message"] = f"{str(e)}"
+        response["message"] = f"An error of type {error_type} occurred on line {line_number} in file {tb_path}. Details: {e}"
 
     return JsonResponse(response)

@@ -46,7 +46,11 @@ INSTALLED_APPS = [
     'api.apps.ApiConfig',
     'meeting.apps.MeetingConfig',
     'appconfig.apps.AppconfigConfig',
-    'inventory.apps.InventoryConfig'
+    'inventory.apps.InventoryConfig',
+    'dolphine.apps.DolphineConfig',
+    'cmms.apps.CmmsConfig',
+    'apiv2.apps.Apiv2Config',
+    'appscenter.apps.AppscenterConfig'
 
 ]
 

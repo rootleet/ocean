@@ -129,12 +129,13 @@ def remove_participant(request, meet, pk):
     met = MeetingHD.objects.get(uni=meet)
 
     # check emails not sent
-    not_sent_mails = Emails.objects.filter(ref=meet,email_type='meeting_invitation',status=0,sent_to=participant.user.email)
+    not_sent_mails = Emails.objects.filter(ref=meet, email_type='meeting_invitation', status=0,
+                                           sent_to=participant.user.email)
     if not_sent_mails.count() > 0:
         not_sent_mails.delete()
     else:
         em_msg = f"Your invitation a meeting has been canceled <br><strong>Title</strong>: {met.title} <br> " \
-                             f"<strong>Time</strong>: {met.start_date} {met.start_time} to {met.end_date} {met.end_time} "
+                 f"<strong>Time</strong>: {met.start_date} {met.start_time} to {met.end_date} {met.end_time} "
         Emails(sent_to=participant.user.email, sent_from=settings.EMAIL_HOST_USER, subject="MEETING CANCELLATION",
                body=em_msg, email_type='meeting_invitation', ref=meet).save()
     return redirect('config_meeting', meet)
@@ -145,6 +146,7 @@ def remove_point(request, meet, pk):
     tp.delete()
     return redirect('config_meeting', meet)
 
+
 @csrf_exempt
 def attach(request):
     if request.method == 'POST':
@@ -153,10 +155,9 @@ def attach(request):
         doc = form['doc']
         media = request.FILES['media']
 
-
         Files(cryp_key=cryp_key, doc='MET', media=media).save()
 
-        return HttpResponse('UPLOADED')
+        return redirect(request.META.get('HTTP_REFERER'))
 
 
 def end_meeting(request, meeting):

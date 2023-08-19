@@ -2411,6 +2411,7 @@ from .form import ImageUploadForm
 
 
 @csrf_exempt
+@login_required()
 def upload_doc(request):
     if request.method == 'POST':
         form = ImageUploadForm(request.POST, request.FILES)
@@ -2427,7 +2428,7 @@ def upload_doc(request):
         form = ImageUploadForm()
         return HttpResponse(form)
 
-
+@login_required()
 def geo(request):
     context = {
         'nav': True,
@@ -2437,7 +2438,7 @@ def geo(request):
     }
     return render(request, 'dashboard/accessories/geo.html', context=context)
 
-
+@login_required()
 def reminder(request):
     context = {
         'nav': True,
