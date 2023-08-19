@@ -18,7 +18,7 @@ class Tasks(models.Model):
     owner = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True)
 
     def transaction(self):
-        return TaskTransactions.objects.filter(task=self).order_by('-pk')
+        return TaskTransactions.objects.filter(task=self)
 
     def task_inline(self):
         if TaskTransactions.objects.filter(task=self).count() > 0:
