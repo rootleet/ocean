@@ -1,0 +1,43 @@
+{% extends 'reports/base.html' %}
+{% load static %}
+
+{% block reports %}
+
+    <div class="card w-100 h-100">
+        <div class="card-header">
+            <strong class="card-title">DESIGN REPORT FORM</strong>
+        </div>
+
+        <div class="card-body p-2">
+            <div id="editor"></div>
+        </div>
+
+        <div class="card-footer">
+            <button onclick="previewForm()" class="btn btn-info">PREVIEW</button>
+
+        </div>
+
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/ace-builds@1.24.1/src-min-noconflict/ace.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ace-builds@1.24.1/css/ace.min.css">
+
+    <script>
+        var editor = ace.edit("editor");
+        editor.setTheme("ace/theme/monokai");
+        editor.session.setMode("ace/mode/html");
+        
+        function previewForm() {
+            let frame =  ace.edit("editor");
+            let html = frame.getValue()
+
+            amodal.setBodyHtml(html)
+            amodal.setTitleText("FORM PREVIEW")
+            amodal.setFooterHtml(`<button onclick="phorm.saveNew()" class="btn btn-success m-2">SAVE</button>`)
+            amodal.show()
+
+        }
+    </script>
+
+{% endblock %}
