@@ -5,6 +5,7 @@ from django.views.decorators.csrf import csrf_exempt
 from fpdf import FPDF
 
 from meeting.models import MeetingHD
+from reports.models import ReportForms, ReportLegend, LegendSubs
 from taskmanager.models import Tasks
 
 
@@ -69,7 +70,30 @@ def interface(request):
             success_response['message'] = fil_name
             response = success_response
 
+        elif doc == 'SAVE_FORM':
+            ReportForms(key=key, code=output, description=key).save()
 
+            success_response['message'] = "Form Saved"
+            response = success_response
+
+        elif doc == 'SAVE_REPORT_LEGEND':
+            ReportLegend(name=key, description=output).save()
+
+            success_response['message'] = "Legend Saved"
+            response = success_response
+
+        elif doc == 'SAVE_REPORT_LEGEND_SUB':
+            description = data.get('description')
+            action = data.get('action')
+            legend = data.get('legend')
+            name = data.get('name')
+
+            lg = ReportLegend.objects.get(pk=legend)
+
+            LegendSubs(legend=lg, description=description,action=action,name=name).save()
+
+            success_response['message'] = "Legend Saved"
+            response = success_response
 
 
     except Exception as e:

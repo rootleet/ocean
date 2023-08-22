@@ -1027,12 +1027,16 @@ def api_call(request, module, crud):
 
         # start of que a sms
         elif crud == 'que':  # que message
-            sms_api = api_body['api']
-            to = api_body['to']
-            message = api_body['message']
+            sms_api = api_body.get('api')
+            to = api_body.get('to')
+            message = api_body.get('message')
 
             try:
-                core_api = SmsApi.objects.get(pk=sms_api)
+                if SmsApi.objects.filter(pk=sms_api).exists():
+                    core_api = SmsApi.objects.get(pk=sms_api)
+                else:
+                    core_api = SmsApi.objects.get(is_default=1)
+
                 Sms(api=core_api, to=to, message=message).save()
                 response['status'] = 200
                 response['message'] = "Message Added To Queuq"
