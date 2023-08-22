@@ -32,7 +32,7 @@ class Modal {
     }
 
     setTitleText(title){
-        $('#g_modal_title').text(title)
+        $('#g_modal_title').html(title)
     }
 
     setFooterHtml(html){

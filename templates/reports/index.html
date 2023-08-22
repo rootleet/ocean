@@ -4,7 +4,7 @@
 {% block reports %}
 
     <div class="card h-100">
-        <div class="card-header"><strong class="title" id="reportCardTitle"></strong>
+        <div class="card-header" id="reportCardTitle">
             <button class="btn btn-info" onclick="phorm.newReportLegend()">NEW LEGEND</button>
         </div>
         <div class="card-body p-2 overflow-auto" id="reportCardBody">
@@ -16,8 +16,10 @@
                         {{ legend.pk }} {{ legend.name }}
                       </button>
                       <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        {% if user.is_superuser %}
                           <a class="dropdown-item" onclick="phorm.newReportLegendSub({{ legend.pk }})" href="javascript:void(0)"><small>new sub</small></a>
                             <div class="dropdown-divider"></div>
+                          {% endif %}
                           {% for sub in legend.subs %}
                             <a class="dropdown-item" onclick="{{ sub.action }}" href="javascript:void(0)">{{ sub.name }}</a>
                           {% endfor %}
