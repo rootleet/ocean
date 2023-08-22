@@ -19,5 +19,6 @@ from . import views, reports_api
 
 urlpatterns = [
     path('', views.index, name='reports'),
-    path('api/', reports_api.interface, name='reports_api')
+    path('api/', reports_api.interface, name='reports_api'),
+    path('design/',views.designer,name='form-designer')
 ]

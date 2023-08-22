@@ -72,6 +72,8 @@
     <script src="{% static 'general/js/classes/anton.js' %}"></script>
     <script src="{% static 'general/js/classes/cmms_cust.js' %}"></script>
     <script src="{% static 'general/js/classes/modal.js' %}"></script>
+    <script src="{% static 'general/js/classes/reports.js' %}"></script>
+    <script src="{% static 'general/js/classes/forms.js' %}"></script>
 
 
   <script>
@@ -79,12 +81,16 @@
 
   </script>
 
-  <!-- =======================================================
-  * Template Name: NiceAdmin - v2.4.1
-  * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
-  * Author: BootstrapMade.com
-  * License: https://bootstrapmade.com/license/
-  ======================================================== -->
+    <style type="text/css" media="screen">
+    #editor {
+
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        height: 100% !important;
+    }
+</style>
 </head>
 
 <body>
@@ -497,8 +503,18 @@
 
 
       <li class="nav-item">
+        <a onclick="location.href='{% url 'reports' %}'" class="nav-link collapsed" href="javascript:void(0)">
+          <i class="bi bi-people"></i><span>REPORTS</span>
+        </a>
+      </li>
+    <li class="nav-item">
         <a onclick="meeting.reportForm()" class="nav-link collapsed" href="javascript:void(0)">
           <i class="bi bi-people"></i><span>MEETINGS</span>
+        </a>
+      </li>
+    <li class="nav-item">
+        <a onclick="location.href='{% url 'form-designer' %}'" class="nav-link collapsed" href="javascript:void(0)">
+          <i class="bi bi-paint-bucket"></i><span>FORM DESIGNER</span>
         </a>
       </li>
 
