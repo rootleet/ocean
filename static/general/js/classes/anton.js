@@ -202,12 +202,15 @@ class reportCard {
         $('#reportCardTitle').text(title)
     }
 
+    getBody(){
+        return $('#reportCardBody').html()
+    }
     setFooter(footer){
-        $('#reportCardFooter').html(data)
+        $('#reportCardFooter').html(footer)
     }
 }
 
-class Report {
+class ReportCard {
     export(doc,key,format){
         let payload = {
             'module':'',
@@ -227,7 +230,7 @@ class Report {
 
 }
 
-const rops = new Report()
+const rops = new ReportCard()
 const card = new reportCard()
 const linecomment = new LineComment()
 const kasa = new Kasa()
