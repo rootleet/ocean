@@ -12,10 +12,10 @@
                 {% for legend in legends %}
                     <!-- MEETINGS -->
                     <div class="dropdown m-2">
-                      <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton{{legend.pk}}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         {{ legend.pk }} {{ legend.name }}
                       </button>
-                      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ legend.pk }}">
                         {% if user.is_superuser %}
                           <a class="dropdown-item" onclick="phorm.newReportLegendSub({{ legend.pk }})" href="javascript:void(0)"><small>new sub</small></a>
                             <div class="dropdown-divider"></div>
