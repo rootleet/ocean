@@ -56,7 +56,7 @@
                                 <th>{{ location.ip_address }}</th>
                                 <td>{{ location.descr }}</td>
                                 <th>{{ location.server_location }}</th>
-                                <td><a onclick="setEvat({{ location.pk }})" href="javascript:void(0)">{{ location.evat_key }}</a></td>
+                                <td><a onclick="setEvat({{ location.pk }})" href="javascript:void(0)">{{ location.evat }}</a></td>
                                 <td><a onclick="deleteLocation({{ location.pk }})" href="javascript:void(0)" class="bx text-danger bx-trash"></a></td>
                             </tr>
                         {% endfor %}

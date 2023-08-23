@@ -337,7 +337,7 @@ class Locations(models.Model):
         credentials = EvatCredentials.objects.filter(pk=self.evat_key)
 
         if credentials.count() == 1:
-            key = credentials.last()
+            key = EvatCredentials.objects.get(pk=self.evat_key)
             return key.server_location
         else:
             return "NOT SET"
