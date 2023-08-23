@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body %}
+    <div class="card-header">
+        <strong class="card-title bi bi-alarm-fill"> EVAT KEYS</strong>
+    </div>
+    <div class="card-body">
+        <table class="table-sm table datatable">
+            <thead>
+                <tr>
+                    <th>SERVER LOCATION</th>
+                    <th>IP ADDRESS</th>
+                    <th>TIN</th>
+                    <th>NAMES</th>
+                    <th>SECURITY_KEY</th>
+                    <th>STATUS</th>
+                </tr>
+            </thead>
+
+            <tbody id="tBody">
+            loading....
+{#                <tr>#}
+{#                    <td><i onclick="kasa.html('HELLO WORLD')" class="pointer bi bi-eye-fill text-info"></i> Break Fast</td>#}
+{#                    <td>12-09-102</td>#}
+{#                    <td>10:00</td>#}
+{#                    <td>#}
+{#                        <div class="dropdown">#}
+{#                          <i class="pointer text-info bi bi-view-list"  id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">#}
+{##}
+{#                          </i>#}
+{#                          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">#}
+{#                            <a class="dropdown-item text-info" href="#">EDIT</a>#}
+{#                            <a class="dropdown-item text-warning" href="#">CANCEL</a>#}
+{#                            <a class="dropdown-item text-success" href="#">ENABLE</a>#}
+{#                          </div>#}
+{#                        </div>#}
+{#                    </td>#}
+{#                </tr>#}
+            </tbody>
+
+
+        </table>
+    </div>
+
+    <div class="card-footer">
+        <button onclick="newKey()" class="btn btn-info">NEW</button>
+    </div>
+
+
+    <script>
+        function load_my_reminder(){
+            let payload = {
+                'module':'evat_credentials',
+                'data':{}
+            }
+
+            let response = api.call('VIEW',payload,'/adapi/')
+
+            if(response['status_code'] === 200){
+                let message = response['message']
+
+                if (message.length > 0)
+                {
+                    let tr = ''
+                    for (let r = 0; r < message.length ; r++) {
+                        let key = message[r]
+
+                        tr += `
+
+                        <tr class="">
+                            <td>${key['server_location']}</td>
+                            <td>${key['server_ip']}</td>
+                            <td>${key['company_tin']}</td>
+                            <td>${key['company_name']}</td>
+                            <td>${key['company_security_key']}</td>
+                            <td>${key['status']}</td>
+                        </tr>
+
+                        `
+                    }
+
+                    $('#tBody').html(tr)
+                } else {
+                    $('#tBody').html(`<small class="text-danger">NO KEYS</small>`)
+                }
+            } else {
+                kasa.error(response['message'])
+            }
+        }
+
+        load_my_reminder()
+
+        function newKey() {
+            Swal.fire({
+          title: 'ADDING CREDENTIALS',
+          html: `
+            <small class="text-info text-left">SERVER IP ADDRESS</small>
+            <input id="server_ip" type="text" autocomplete="off" placeholder="SERVER IP ADDRESS" class="form-control rounded-0 mb-2">
+            <small class="text-info text-left">PHYSICAL LOCATION</small>
+            <input id="server_location" autocomplete="off" type="text" placeholder="SERVER PHYSICAL LOCATION" class="form-control rounded-0 mb-2">
+            <small class="text-info text-left">company_tin</small>
+            <input id="company_tin" autocomplete="off" placeholder="COMPANY TIN" type="text" class="form-control rounded-0 mb-2">
+            <small class="text-info text-left">company_NAME</small>
+            <input id="company_name" autocomplete="off" class="form-control rounded-0 mb-2" placeholder="COMPANY NAME">
+            <small class="text-info text-left">company_security_key</small>
+            <input id="company_security_key" autocomplete="off" class="form-control rounded-0 mb-2" placeholder="SECURITY KEY">
+
+          `,
+
+          focusConfirm: false,
+          confirmButtonText: 'Submit',
+            showCancelButton: true,
+            cancelButtonText:'CANCEL',
+            confirmButtonColor:'#19541b',
+          preConfirm: () => {
+            const server_ip = document.getElementById('server_ip').value
+            const server_location = document.getElementById('server_location').value;
+            const company_tin = document.getElementById('company_tin').value;
+            const company_name = document.getElementById('company_name').value;
+            const company_security_key = document.getElementById('company_security_key').value;
+
+            if (!server_ip || !server_location || !company_tin || !company_name || !company_security_key) {
+              Swal.showValidationMessage(`Please fill all fields`)
+            }
+
+            return {server_ip: server_ip, server_location: server_location, company_tin: company_tin, company_name: company_name, company_security_key:company_security_key}
+          },
+        }).then((result) => {
+              if (result.isConfirmed) {
+                  let data = result.value
+                  data['owner'] = $('#mypk').val()
+                  let payload = {
+                      'module':'evat_credentials',
+                      data:data
+                  };
+                  let response = api.call('PUT',payload,'/adapi/')
+                  kasa.info(response['message'])
+                  console.table(payload)
+                console.log(result.value)
+              }
+            })
+        }
+
+    </script>
+{% endblock %}

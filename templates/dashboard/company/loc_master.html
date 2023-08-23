@@ -10,7 +10,7 @@
             </div>
 
             <div class="panel-sub-heading">
-                <button data-toggle="modal" href="#newLocation" class="btn btn-info">NEW</button>
+                <button disabled data-toggle="modal" href="#newLocation" class="btn btn-info">NEW</button>
                 <div class="modal fade" id="newLocation" data-backdrop="false">
                     <div class="modal-dialog">
                         <form method="post" action="{% url 'post_form' %}" class="modal-content text-left">
@@ -39,20 +39,25 @@
                         </form>
                     </div>
                 </div>
+                <button class="btn btn-primary" onclick="newLocation()">SWAL NEW</button>
             </div>
 
             <div class="card-body p-2">
-                <table class="table table-sm">
+                <table class="table datatable table-sm">
                     <thead>
                         <tr>
-                            <th>CODE</th><th>DESCRIPTION</th>
+                            <th>CODE</th><th>IP</th><th>DESCRIPTION</th><th>GEO</th><th>EVAT CONFIG</th><th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for location in locations %}
                             <tr>
                                 <td>{{ location.code }}</td>
+                                <th>{{ location.ip_address }}</th>
                                 <td>{{ location.descr }}</td>
+                                <th>{{ location.server_location }}</th>
+                                <td><a onclick="setEvat({{ location.pk }})" href="javascript:void(0)">{{ location.evat_key }}</a></td>
+                                <td><a onclick="deleteLocation({{ location.pk }})" href="javascript:void(0)" class="bx text-danger bx-trash"></a></td>
                             </tr>
                         {% endfor %}
                     </tbody>
@@ -61,5 +66,135 @@
 
         </div>
     </div>
+
+    <script>
+        function newLocation() {
+            Swal.fire({
+              title: 'NEW LOCATION',
+              html: `
+                <input id="code" type="number" autocomplete="off" placeholder="CODE" class="form-control rounded-0 mb-2">
+                <input id="descr" type="text" autocomplete="off" placeholder="DESCRIPTION" class="form-control rounded-0 mb-2">
+                <input id="server_ip" type="text" autocomplete="off" placeholder="SERVER IP ADDRESS" class="form-control rounded-0 mb-2">
+                <input id="server_location" autocomplete="off" type="text" placeholder="SERVER PHYSICAL LOCATION" class="form-control rounded-0 mb-2">
+                <input id="db" autocomplete="off" placeholder="DATABASE NAME" type="text" class="form-control rounded-0 mb-2">
+                <input id="db_user" autocomplete="off" class="form-control rounded-0 mb-2" placeholder="DB USER">
+                <input id="db_password" type="password" autocomplete="off" class="form-control rounded-0 mb-2" placeholder="DB PASSWORD">
+
+              `,
+
+              focusConfirm: false,
+              confirmButtonText: 'Submit',
+                showCancelButton: true,
+                cancelButtonText:'CANCEL',
+                confirmButtonColor:'#19541b',
+              preConfirm: () => {
+                const server_ip = document.getElementById('server_ip').value
+                const server_location = document.getElementById('server_location').value;
+                const code = document.getElementById('code').value;
+                const descr = document.getElementById('descr').value;
+                const db = document.getElementById('db').value;
+                const db_user = document.getElementById('db_user').value;
+                const db_password = document.getElementById('db_password').value;
+
+                if (!server_ip || !server_location || !code || !descr || !db || !db_user || !db_password) {
+                  Swal.showValidationMessage(`Please fill all fields`)
+                }
+
+                return {server_ip: server_ip, server_location: server_location, code: code, descr: descr, db_user:db_user,db_password:db_password,db:db}
+              },
+            }).then((result) => {
+                  if (result.isConfirmed) {
+                      let data = result.value
+                      data['owner'] = $('#mypk').val()
+                      let payload = {
+                          'module':'location',
+                          data:data
+                      };
+                      let response = api.call('PUT',payload,'/adapi/')
+                      kasa.info(response['message'])
+                      console.table(payload)
+                    console.log(result.value)
+                  }
+                })
+        }
+
+        function setEvat(location) {
+
+            let payload = {
+                'module':'evat_credentials',
+                'data':{}
+            }
+
+            let response = api.call('VIEW',payload,'/adapi/');
+
+            if(response['status_code'] === 200){
+
+                let keys = response['message'];
+
+                if(keys.length > 0){
+                    let ops = {}
+                    for (let i = 0; i < keys.length; i++) {
+                        let key = keys[i]
+                        ops[key['pk']] = key['server_location']
+                    }
+                    Swal.fire({
+                      title: 'CHANGE EVAT CREDENTIAL',
+                      input: 'select',
+                      inputOptions: ops,
+                      inputPlaceholder: 'Select an option',
+                      showCancelButton: true,
+                      inputValidator: (value) => {
+                        return new Promise((resolve) => {
+                          if (value !== '') {
+                            resolve();
+                          } else {
+                            resolve('Please select an option');
+                          }
+                        })
+                      }
+                    }).then((result) => {
+                      if (result.isConfirmed) {
+                          let data = {
+                              'evat_key':result.value,
+                              'loc_key':location
+                          };
+                          let payload = {
+                              'module':'change_evat_engine',
+                              data:data
+                          };
+
+                          let response = api.call('PATCH',payload,'/adapi/')
+                          kasa.info(response['message'])
+                      }
+                    });
+
+                } else {
+                    kasa.info("CREATE EVAT CREDENTIALS")
+                }
+
+            } else {
+                kasa.error(`CANNOT LOAD CREDENTIALS : ${response['message']}`)
+            }
+
+
+        }
+
+        function deleteLocation(pk) {
+            let payload = {
+                'module':'location',
+                data: {
+                    'pk':pk
+                }
+            }
+
+            if(confirm("ARE YOU SURE")){
+                kasa.confirm(
+                    api.call('DELETE',payload,'/adapi/')['message'],1,'/company/locations/'
+                )
+            }
+
+        }
+
+    </script>
 
 {% endblock %}

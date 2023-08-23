@@ -6,7 +6,7 @@ from django.contrib.auth.models import User, Permission
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
-from admin_panel.models import GeoCity, GeoCitySub, Reminder, SmsApi, UserAddOns
+from admin_panel.models import GeoCity, GeoCitySub, Reminder, SmsApi, UserAddOns, EvatCredentials, Locations
 
 
 @csrf_exempt
@@ -100,13 +100,13 @@ def index(request):
 
                                 sent += 1
                             else:
-                                not_sent +=1
+                                not_sent += 1
                         else:
                             # dont send
                             not_sent += 1
 
                         success_response['message'] = {
-                            'sent':sent,'pending':not_sent
+                            'sent': sent, 'pending': not_sent
                         }
 
                         response = success_response
@@ -124,6 +124,44 @@ def index(request):
                 response = success_response
 
                 # save reminder
+
+            elif module == 'evat_credentials':
+                server_ip = data.get('server_ip')
+                server_location = data.get('server_location')
+                company_tin = data.get('company_tin')
+                company_name = data.get('company_name')
+                company_security_key = data.get('company_security_key')
+                owner = data.get('owner')
+
+                creating_user = User.objects.get(pk=owner)
+                inv_req = f"http://{server_ip}/EvatAPI/api/EvatRequest"
+                z_rez = f"http://{server_ip}/EvatAPI/api/EvatZreport"
+
+                EvatCredentials(server_ip=server_ip, server_location=server_location, company_tin=company_tin,
+                                company_name=company_name, company_security_key=company_security_key,
+                                owner=creating_user, z_rez=z_rez, inv_req=inv_req).save()
+
+                success_response['message'] = "Credential Saved"
+                response = success_response
+
+                pass
+
+            elif module == 'location':
+                print(data)
+                server_ip = data.get('server_ip')
+                server_location = data.get('server_location')
+                code = data.get('code')
+                descr = data.get('descr')
+                db_user = data.get('db_user')
+                db_password = data.get('db_password')
+                db = data.get('db')
+                owner = data.get('owner')
+                creating_user = User.objects.get(pk=owner)
+                Locations(server_location=server_location, ip_address=server_ip, code=code, descr=descr,
+                          db_user=db_user, db=db, db_password=db_password, owner=creating_user).save()
+
+                success_response = "LOCATION SAVED"
+                response = success_response
 
             else:
                 response['status_code'] = 503
@@ -198,6 +236,25 @@ def index(request):
                 success_response['message'] = rem
                 response = success_response
 
+            elif module == 'evat_credentials':
+                keys = EvatCredentials.objects.all()
+                arr = []
+                for key in keys:
+                    arr.append({
+                        'pk': key.pk,
+                        'server_ip': key.server_ip,
+                        'server_location': key.server_location,
+                        'company_tin': key.company_tin,
+                        'company_name': key.company_name,
+                        'company_security_key': key.company_security_key,
+                        'inv_req': key.inv_req,
+                        'z_rez': key.z_rez,
+                        'status': key.stat()
+                    })
+
+                success_response['message'] = arr
+                response = success_response
+
             else:
                 response['status_code'] = 503
                 response['message'] = f"UNKNOWN MODULE ( METHOD : {method}, MODULE : {module} )"
@@ -250,11 +307,71 @@ def index(request):
                 reminder.save()
                 response = success_response
 
-            pass
+            elif module == 'change_evat_engine':
+                evat_key = data.get('evat_key')
+                loc_key = data.get('loc_key')
+
+                location = Locations.objects.get(pk=loc_key)
+                evat_engine = EvatCredentials.objects.get(pk=evat_key)
+
+                server_ip = location.ip_address
+                db = location.db
+                db_user = location.db_user
+                db_pass = location.db_password
+
+                company_name = evat_engine.company_name
+                company_tin = evat_engine.company_tin
+                company_security_key = evat_engine.company_security_key
+                inv_req = evat_engine.inv_req
+                z_rez = evat_engine.z_rez
+
+                # connect to db
+                import pyodbc
+
+                # Create a connection string
+                connection_str = (
+                    "DRIVER={ODBC Driver 17 for SQL Server};"
+                    f"SERVER={server_ip};"
+                    f"DATABASE={db};"
+                    f"UID={db_user};"
+                    f"PWD={db_pass};"
+                )
+                # Create a connection
+                connection = pyodbc.connect(connection_str)
+
+                cursor = connection.cursor()
+                cursor.execute(f"update sys_settings set sec_value = '{company_name}' where sec_key = 'COMPANY_NAMES'")
+
+                cursor.execute(f"update sys_settings set sec_value = '{company_tin}' where sec_key = 'COMPANY_TIN'")
+
+                cursor.execute(
+                    f"update sys_settings set sec_value = '{company_security_key}' where sec_key = 'COMPANY_SECURITY_KEY'")
+
+                cursor.execute(f"update sys_settings set sec_value = '{inv_req}' where sec_key = 'Evat_InvoiceReqApi'")
+
+                cursor.execute(f"update sys_settings set sec_value = '{z_rez}' where sec_key = 'Evat_ZRepApi_url'")
+
+                cursor.commit()
+                cursor.close()
+
+                connection.close()
+
+                success_response['message'] = f"{location.descr} evat set to {evat_engine.server_location}"
+
+                location.evat_key = evat_key
+                location.save()
+
+                response = success_response
+
 
         elif method == 'DELETE':  # delete
 
-            pass
+            if module == 'location':
+                pk = data.get('pk')
+                Locations.objects.get(pk=pk).delete()
+
+                success_response['message'] = "LOCATION DELETED"
+                response = success_response
 
         else:
             response['status_code'] = 503
@@ -263,5 +380,6 @@ def index(request):
     except Exception as e:
         response["status_code"] = 500
         response["message"] = f"{str(e)}"
+        print(str(e))
 
     return JsonResponse(response)

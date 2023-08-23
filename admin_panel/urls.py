@@ -110,7 +110,9 @@ urlpatterns = [
     path('sms/', views.sms, name='sms'),
     path('sms/ew_sms_api/', views.new_sms_api, name='new_sms_api'),
     path('sms/bulk_sms/', views.bulk_sms, name='bulk_sms'),
-    path('adapi/', admin_api.index, name='adapi')
+    path('adapi/', admin_api.index, name='adapi'),
+
+    path('evat/',views.evat_keys,name='evat_keys')
 
 ]
 

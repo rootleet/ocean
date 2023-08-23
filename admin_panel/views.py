@@ -2001,11 +2001,12 @@ def api(request, module, action):
 
     return JsonResponse({'status': status, 'message': message}, safe=False)
 
-
+@login_required()
 def loc_master(request):
     context = {
         'page_title': 'Location Master',
-        'locations': Locations.objects.all()
+        'locations': Locations.objects.all(),
+        'nav':True
     }
     return render(request, 'dashboard/company/loc_master.html', context=context)
 
@@ -2450,3 +2451,14 @@ def reminder(request):
     }
     return render(request, 'dashboard/profile/reminder.html', context=context)
 
+
+
+@login_required()
+def evat_keys(request):
+    context = {
+        'nav': True,
+        'page': {
+            'title': 'EVAT Keys'
+        }
+    }
+    return render(request, 'dashboard/evat/evat-keys.html', context=context)

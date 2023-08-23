@@ -319,10 +319,28 @@ class Locations(models.Model):
     code = models.CharField(max_length=3, unique=True)
     descr = models.TextField()
 
+    server_location = models.TextField(null=True)
+    ip_address = models.TextField(null=True)
+    db = models.TextField(null=True)
+    db_user = models.TextField(null=True)
+    db_password = models.TextField(null=True)
+
     created_by = models.IntegerField(default=0)
     created_on = models.DateTimeField(auto_now_add=True)
     edited_on = models.DateTimeField(auto_now=True)
-    status = models.IntegerField(default=0)
+    status = models.IntegerField(default=1)
+    evat_key = models.IntegerField(default=0)
+
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, blank=True, null=True)
+
+    def evat(self):
+        credentials = EvatCredentials.objects.filter(pk=self.evat_key)
+
+        if credentials.count() == 1:
+            key = credentials.last()
+            return key.server_location
+        else:
+            return "NOT SET"
 
 
 class TransferHD(models.Model):
@@ -400,7 +418,6 @@ class Files(models.Model):
 
     def file_name(self):
         return os.path.basename(self.media.name)
-    
 
 
 class AuthToken(models.Model):
@@ -647,8 +664,8 @@ class Reminder(models.Model):
 
 class Contacts(models.Model):
     full_name = models.TextField()
-    email = models.CharField(max_length=100,unique=False,null=False)
-    phone = models.TextField(max_length=100,unique=False,null=False)
+    email = models.CharField(max_length=100, unique=False, null=False)
+    phone = models.TextField(max_length=100, unique=False, null=False)
 
     created_date = models.DateField(auto_now_add=True)
     created_time = models.TimeField(auto_now_add=True)
@@ -660,3 +677,29 @@ class Contacts(models.Model):
 
     class Meta:
         unique_together = (('owner', 'phone'), ('owner', 'email'))
+
+
+class EvatCredentials(models.Model):
+    server_ip = models.TextField(null=True)
+    server_location = models.TextField(null=True)
+    company_tin = models.CharField(null=False, unique=False, max_length=20)
+    company_name = models.CharField(null=False, unique=True, max_length=100)
+    company_security_key = models.CharField(null=False, unique=False, max_length=255)
+    inv_req = models.CharField(null=False, unique=True, max_length=255)
+    z_rez = models.CharField(null=False, unique=True, max_length=255)
+
+    created_date = models.DateField(auto_now_add=True)
+    created_time = models.TimeField(auto_now_add=True)
+    updated_date = models.DateField(auto_now=True)
+    updated_time = models.TimeField(auto_now=True)
+
+    status = models.IntegerField(default=1)  # 1 active, 0 not, 99 done
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, blank=True, null=True)
+
+    def stat(self):
+        if self.status == 1:
+            return 'ACTIVE'
+        elif self.status == 0:
+            return 'INACTIVE'
+        else:
+            return 'UNKNOWN'
