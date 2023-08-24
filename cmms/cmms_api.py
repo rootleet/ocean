@@ -517,7 +517,7 @@ def api(request):
                             trans = header.trans()
 
                             if document == 'csv' and doc == 'STC':
-                                file_name = f"static/general/tmp/{header.frozen.loc_id} - {header.frozen.remarks}.csv"
+                                file_name = f"static/general/tmp/{header.frozen.loc_id} - {header.frozen.remarks} - {header.frozen.ref}.csv"
                                 # Header
                                 header = ["ITEM_REF",  "COUNTED"]
 
