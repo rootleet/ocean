@@ -156,7 +156,7 @@ def api(request):
                                         'status': frozen.status,
                                         'owner': frozen.owner.username,
                                         'created': f"{frozen.created_date} {frozen.created_time}",
-                                        'entry': frozen.ent(),
+                                        'entry': frozen.ref,
                                         'posted': frozen.posted()
 
                                     },
