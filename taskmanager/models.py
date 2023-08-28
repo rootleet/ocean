@@ -14,7 +14,7 @@ class Tasks(models.Model):
     created_time = models.TimeField(auto_now_add=True)
     updated_date = models.DateField(auto_now=True)
     updated_time = models.TimeField(auto_now=True)
-    status = models.IntegerField(default=1)  # 1 active, 2 done, 99 done
+    status = models.IntegerField(default=1)  # 1 open, 2 close, 99 deleted
     owner = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True)
 
     def transaction(self):
@@ -27,6 +27,7 @@ class Tasks(models.Model):
             return f"#{counts} updated on {last.created_date} by {last.owner.username}"
         else:
             return "no update"
+
 
 
 class TaskTransactions(models.Model):

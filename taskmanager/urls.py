@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from . import views
+from . import views, api
 
 urlpatterns = [
     path('', views.my_tasks, name='my_tasks'),
@@ -24,5 +24,6 @@ urlpatterns = [
     path('new/',views.new_task,name='task_new'),
     path('save_new_task/',views.save_new_task,name='save_new_task'),
     path('new_task_tran/',views.new_task_tran,name='save_new_task_tran'),
-    path('close_task/<uni>',views.close_task,name='close_task')
+    path('close_task/<uni>',views.close_task,name='close_task'),
+    path('api/',api.index,name='api')
 ]

@@ -396,6 +396,18 @@ def api_function(request):
 
                     response['message'] = frame
 
+                elif module == 'users':
+                    users = User.objects.all()
+                    arr = []
+                    for us in users:
+                        arr.append({
+                            'pk':us.pk,
+                            'username':us.username,
+                            'name':f"{us.first_name} {us.last_name}"
+                        })
+
+                    response['message'] = arr
+
                 elif module == 'appcenter':
                     task = data.get('task')
                     pk = data.get('pk')

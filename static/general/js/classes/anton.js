@@ -31,6 +31,16 @@ class Anton {
         },time * 1000)
     }
 
+
+    Users(){
+        let payload = {
+            'module':'users',
+            data : {}
+        }
+
+        return api.call('VIEW', payload, '/apiv2/')
+    }
+
 }
 
 class LineCalculate {
@@ -183,9 +193,6 @@ class Kasa {
           }
 
         } else {
-          // Put your code here for when the user cancels
-          // For example, you can show a message or handle the cancel action
-          // Your code goes here...
           Swal.fire('Cancelled', 'You cancelled the action', 'error');
         }
       });
