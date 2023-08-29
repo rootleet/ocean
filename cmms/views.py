@@ -183,24 +183,29 @@ def new_sales_customer(request):
 @login_required()
 def save_sales_customer(request):
     if request.method == 'POST':
-        form = NewSalesCustomer(request.POST)
-        mobile = request.POST['mobile']
-        email = request.POST['email']
-        if SalesCustomers.objects.filter(mobile=mobile).exists():
-            messages.error(request, f"Customer exist with number {mobile}")
-        elif SalesCustomers.objects.filter(email=email).exists():
-            messages.error(request, f"Customer exist with number {mobile}")
-        elif form.is_valid():
-            try:
-                form.save()
-                messages.success(request, "CUSTOMER ADDED")
-            except IntegrityError:
-                messages.error(request, "CUSTOMER ALREADY EXISTS")
-            except Exception as e:
-                messages.error(request, str(e))
-        else:
-            return HttpResponse(form)
-            messages.error(request, "FORM IS INVALID")
+        try:
+            form = NewSalesCustomer(request.POST)
+            mobile = request.POST['mobile']
+            email = request.POST['email']
+            company = request.POST['company']
+            if SalesCustomers.objects.filter(mobile=mobile).exists():
+                messages.error(request, f"Customer exist with number {mobile}")
+            elif SalesCustomers.objects.filter(email=email).exists():
+                messages.error(request, f"Customer exist with number {mobile}")
+            elif SalesCustomers.objects.filter(company=company).exists():
+                messages.error(request, f"Customer from company {company}")
+            elif form.is_valid():
+                try:
+                    form.save()
+                    messages.success(request, "CUSTOMER ADDED")
+                except IntegrityError:
+                    messages.error(request, "CUSTOMER ALREADY EXISTS")
+                except Exception as e:
+                    messages.error(request, str(e))
+            else:
+                messages.error(request, "FORM IS INVALID")
+        except Exception as e:
+            messages.error(request,e)
     else:
         messages.error(request, "WRONG REQUEST METHOD")
 
