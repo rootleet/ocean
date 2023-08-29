@@ -1273,6 +1273,7 @@ def api(request):
 
                 if doc == 'deal':
                     owner = data.get('closer')
+                    finale = data.get('finale')
                     closer = User.objects.get(pk=owner)
                     key = data.get('key')
                     deal = SalesDeals.objects.get(pk=key)
@@ -1282,6 +1283,7 @@ def api(request):
                     DealTransactions(title='CLOSED', details=message, deal=deal, owner=closer).save()
 
                     deal.status = 1
+                    deal.finale = finale
                     deal.save()
 
                     response['message'] = 'DEAL CLOSED'

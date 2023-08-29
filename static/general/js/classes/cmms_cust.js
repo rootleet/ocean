@@ -542,42 +542,48 @@ class CmmsSales{
 
     closeDeal(deal) {
         amodal.hide()
-        let payload = {
-            'module': 'cmms_sales_deal',
-            data: {
-                'deal': deal
-            }
-        };
 
         Swal.fire({
             title: 'CLOSING REMARK',
-            input: 'textarea',
-            inputPlaceholder: 'Type your message here...',
+            html:
+                '<select id="swal-select" class="form-control mb-2">' +
+                '<option selected value="0">FAILED</option>' +
+                '<option value="1">SUCCES</option>' +
+                '</select>' +
+                `<textarea id="swal-textarea" class="form-control" placeholder="Type your message here..."></textarea>`,
             showCancelButton: true,
             confirmButtonText: 'Submit',
             cancelButtonText: 'Cancel',
             allowEscapeKey: false,
-            allowOutsideClick: false
+            allowOutsideClick: false,
+            preConfirm: function() {
+                return [
+                    document.getElementById('swal-select').value,
+                    document.getElementById('swal-textarea').value
+                ];
+            }
         }).then((result) => {
             if (result.isConfirmed) {
-                console.log('Text area value: ', result.value);
+                console.log('Selected option: ', result.value[0]);
+                console.log('Text area value: ', result.value[1]);
                 let close_payload = {
                     module:'close',
                     data:{
                         'doc':'deal',
                         'key':deal,
-                        message:result.value,
-                        closer:$('#mypk').val()
+                        message: result.value[1],
+                        closer:$('#mypk').val(),
+                        finale: result.value[0]
                     }
                 };
 
-                let request = api.call('PATCH',close_payload,'/cmms/api/')
+                let request = api.call('PATCH', close_payload, '/cmms/api/')
                 kasa.confirm(request['message'],1,'here')
 
             } else if (result.dismiss === Swal.DismissReason.cancel) {
                 amodal.show()
             }
-        })
+        });
     }
 }
 

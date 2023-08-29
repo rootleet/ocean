@@ -223,7 +223,7 @@ class SalesCustomers(models.Model):
 
 
 class SalesCustomerTransactions(models.Model):
-    customer = models.ForeignKey(SalesCustomers,on_delete=models.SET_NULL, null=True, blank=True)
+    customer = models.ForeignKey(SalesCustomers, on_delete=models.SET_NULL, null=True, blank=True)
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     title = models.TextField()
     details = models.TextField()
@@ -256,7 +256,9 @@ class SalesDeals(models.Model):
     updated_date = models.DateField(auto_now=True)
     updated_time = models.TimeField(auto_now=True)
 
-    status = models.IntegerField(default=0) # 0 open, 1 closed, 3 invalid
+    status = models.IntegerField(default=0)  # 0 open, 1 closed, 3 invalid
+
+    finale = models.IntegerField(default=0)  # 0 failed, 1 success
 
     def transactions(self):
         return DealTransactions.objects.filter(deal=self.pk).order_by('-pk')
