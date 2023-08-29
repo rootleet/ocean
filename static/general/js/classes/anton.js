@@ -187,7 +187,12 @@ class Kasa {
         // Check if the user clicked "OK"
         if (result.isConfirmed) {
           if(reload === 1){
-              location.href = to
+              if(to==='here'){
+                  location.reload()
+              } else {
+                  location.href = to
+              }
+
           } else {
               kasa.info('Thanks')
           }

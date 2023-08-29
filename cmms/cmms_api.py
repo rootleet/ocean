@@ -20,6 +20,7 @@ from django.contrib import messages
 
 from cmms.extra import db
 
+
 @csrf_exempt
 def api(request):
     global header
@@ -519,7 +520,7 @@ def api(request):
                             if document == 'csv' and doc == 'STC':
                                 file_name = f"static/general/tmp/{header.frozen.loc_id} - {header.frozen.remarks} - {header.frozen.ref}.csv"
                                 # Header
-                                header = ["ITEM_REF",  "COUNTED"]
+                                header = ["ITEM_REF", "COUNTED"]
 
                                 with open(file_name, mode="w", newline='') as file:
                                     writer = csv.writer(file)
@@ -614,7 +615,8 @@ def api(request):
                         if cust_code == 'all':
                             cursor.execute("select cust_code,cust_name,cust_contact,email1 from customer_master")
                         else:
-                            cursor.execute(f"select cust_code,cust_name,cust_contact,email1 from customer_master  where cust_code = '{cust_code}'")
+                            cursor.execute(
+                                f"select cust_code,cust_name,cust_contact,email1 from customer_master  where cust_code = '{cust_code}'")
                         cust_arr = []
                         for customer in cursor.fetchall():
                             cust_arr.append({
@@ -712,7 +714,8 @@ def api(request):
                     assets = {}
                     trans = []
 
-                    inv_hd = db().execute(f"select Entry_no,Invoice_date,tot_amt,tax_amt,net_amt,labor_amount,material_amount,asset_code from invoice_hd where Entry_no= '{invoice}'").fetchone()
+                    inv_hd = db().execute(
+                        f"select Entry_no,Invoice_date,tot_amt,tax_amt,net_amt,labor_amount,material_amount,asset_code from invoice_hd where Entry_no= '{invoice}'").fetchone()
                     header['invoice_no'] = str(inv_hd[0]).strip()
                     header['date'] = str(inv_hd[1]).strip()
                     header['net'] = str(inv_hd[2]).strip()
@@ -723,7 +726,8 @@ def api(request):
 
                     # asset details
                     asset_code = inv_hd[7]
-                    asset = db().execute(f"select ASSET_CODE,asset_desc,asset_no,asset_ref_no,model_no,cust_code from asset_mast where ASSET_CODE = '{asset_code}'").fetchone()
+                    asset = db().execute(
+                        f"select ASSET_CODE,asset_desc,asset_no,asset_ref_no,model_no,cust_code from asset_mast where ASSET_CODE = '{asset_code}'").fetchone()
                     assets['code'] = str(asset[0]).strip()
                     assets['name'] = str(asset[1]).strip()
                     assets['number'] = str(asset[2]).strip()
@@ -731,8 +735,8 @@ def api(request):
                     assets['model'] = str(asset[4]).strip()
                     assets['owner'] = str(asset[5]).strip()
 
-
-                    db().execute(f"select invoice_type,descr,uom,unit_qty,unit_price,tot_amt,tax_amt,net_amt from invoice_tran where Entry_no = '{invoice}'")
+                    db().execute(
+                        f"select invoice_type,descr,uom,unit_qty,unit_price,tot_amt,tax_amt,net_amt from invoice_tran where Entry_no = '{invoice}'")
                     for tran in db().fetchall():
                         tobj = {
                             'type': str(tran[0]).strip(),
@@ -747,7 +751,7 @@ def api(request):
                         trans.append(tobj)
 
                     response['message'] = {
-                        'header':header,'asset':assets,'trans':trans
+                        'header': header, 'asset': assets, 'trans': trans
                     }
                     response['status_code'] = 200
 
@@ -784,32 +788,34 @@ def api(request):
 
                     if customers.count() > 0:
                         for customer in customers:
-                            x_region = getattr(customer.region, 'name', 'UNKNOWN') if customer and hasattr(customer, 'region') else 'unknown'
-                            suburb = getattr(customer.suburb, 'name', 'UNKNOWN') if customer and hasattr(customer, 'suburb') else 'unknown'
+                            x_region = getattr(customer.region, 'name', 'UNKNOWN') if customer and hasattr(customer,
+                                                                                                           'region') else 'unknown'
+                            suburb = getattr(customer.suburb, 'name', 'UNKNOWN') if customer and hasattr(customer,
+                                                                                                         'suburb') else 'unknown'
 
                             obj = {
-                                'pk':customer.pk,
-                                'url':customer.url,
-                                'company':customer.company,
-                                'name':customer.name,
-                                'mobile':customer.mobile,
-                                'email':customer.email,
-                                'address':customer.address,
-                                'type_of_client':customer.type_of_client,
-                                'timestamp':{
-                                    'created_date':customer.created_date,
-                                    'created_time':customer.created_time,
-                                    'updated_date':customer.updated_date,
-                                    'updated_time':customer.updated_time
+                                'pk': customer.pk,
+                                'url': customer.url,
+                                'company': customer.company,
+                                'name': customer.name,
+                                'mobile': customer.mobile,
+                                'email': customer.email,
+                                'address': customer.address,
+                                'type_of_client': customer.type_of_client,
+                                'timestamp': {
+                                    'created_date': customer.created_date,
+                                    'created_time': customer.created_time,
+                                    'updated_date': customer.updated_date,
+                                    'updated_time': customer.updated_time
                                 },
-                                'status':customer.status,
-                                'owner':{
-                                    'pk':customer.owner.pk,
-                                    'username':customer.owner.username
+                                'status': customer.status,
+                                'owner': {
+                                    'pk': customer.owner.pk,
+                                    'username': customer.owner.username
                                 },
-                                'geography':{
-                                    'region':x_region,
-                                    'suburb':suburb
+                                'geography': {
+                                    'region': x_region,
+                                    'suburb': suburb
                                 }
 
                             }
@@ -829,26 +835,26 @@ def api(request):
                         deal_arr = []
                         for deal in deals:
                             obj = {
-                                'sales_rep':{
-                                    'pk':deal.owner.pk,
-                                    'username':deal.owner.username
+                                'sales_rep': {
+                                    'pk': deal.owner.pk,
+                                    'username': deal.owner.username
                                 },
-                                'purch_rep':{
-                                    'name':deal.pur_rep_name,
-                                    'email':deal.pur_rep_email,
-                                    'phone':deal.pur_rep_phone,
-                                    'company':deal.customer.company
+                                'purch_rep': {
+                                    'name': deal.pur_rep_name,
+                                    'email': deal.pur_rep_email,
+                                    'phone': deal.pur_rep_phone,
+                                    'company': deal.customer.company
                                 },
-                                'asset':{
-                                    'name':deal.asset,
-                                    'model':deal.model,
-                                    'stock_type':deal.stock_type,
-                                    'requirement':deal.requirement
+                                'asset': {
+                                    'name': deal.asset,
+                                    'model': deal.model,
+                                    'stock_type': deal.stock_type,
+                                    'requirement': deal.requirement
                                 },
-                                'status':deal.status,
+                                'status': deal.status,
                                 'date': deal.created_date,
                                 'time': deal.created_time,
-                                'pk':deal.pk
+                                'pk': deal.pk
 
                             }
                             deal_arr.append(obj)
@@ -868,44 +874,45 @@ def api(request):
                         transactions = []
                         for tran in trans:
                             obj = {
-                                'title':tran.title,
-                                'details':tran.details,
-                                'owner':{
-                                    'pk':tran.owner.pk,
-                                    'username':tran.owner.username
+                                'title': tran.title,
+                                'details': tran.details,
+                                'owner': {
+                                    'pk': tran.owner.pk,
+                                    'username': tran.owner.username
                                 },
-                                'timestamp':{
-                                    'd_created':tran.created_date,
-                                    't_created':tran.created_time
+                                'timestamp': {
+                                    'd_created': tran.created_date,
+                                    't_created': tran.created_time
                                 }
                             }
                             transactions.append(obj)
 
                         header = {
-                            'sales_rep':{
-                                    'pk':deal.owner.pk,
-                                    'username':deal.owner.username
+                            'pk': deal.pk,
+                            'sales_rep': {
+                                'pk': deal.owner.pk,
+                                'username': deal.owner.username
                             },
-                            'purch_rep':{
-                                    'name':deal.pur_rep_name,
-                                    'email':deal.pur_rep_email,
-                                    'phone':deal.pur_rep_phone,
-                                    'company':deal.customer.company
+                            'purch_rep': {
+                                'name': deal.pur_rep_name,
+                                'email': deal.pur_rep_email,
+                                'phone': deal.pur_rep_phone,
+                                'company': deal.customer.company
                             },
-                            'asset':{
-                                    'name':deal.asset,
-                                    'model':deal.model,
-                                    'stock_type':deal.stock_type,
-                                    'requirement':deal.requirement
+                            'asset': {
+                                'name': deal.asset,
+                                'model': deal.model,
+                                'stock_type': deal.stock_type,
+                                'requirement': deal.requirement
                             },
-                            'status':deal.status,
+                            'status': deal.status,
                             'date': deal.created_date,
                             'time': deal.created_time
                         }
 
                         response['status_code'] = 200
                         response['message'] = {
-                            'deal':header,'trans':transactions
+                            'deal': header, 'trans': transactions
                         }
 
                     except Exception as e:
@@ -1135,13 +1142,14 @@ def api(request):
                     customer = SalesCustomers.objects.get(pk=sales_cust)
                     owner = User.objects.get(pk=sales_rep)
 
-                    SalesDeals(customer=customer,owner=owner,pur_rep_name=pur_rep_name,pur_rep_phone=pur_rep_phone,pur_rep_email=pur_rep_email,asset=asset,model=model,
-                                      stock_type=stock_type,requirement=requirement).save()
+                    SalesDeals(customer=customer, owner=owner, pur_rep_name=pur_rep_name, pur_rep_phone=pur_rep_phone,
+                               pur_rep_email=pur_rep_email, asset=asset, model=model,
+                               stock_type=stock_type, requirement=requirement).save()
                     response['status_code'] = 200
                     response['message'] = "DEAL CREATED"
                 except Exception as e:
                     response['status_code'] = 505
-                    response['message']  = str(e)
+                    response['message'] = str(e)
 
             elif module == 'deal_transaction':
                 dealkey = data.get('deal')
@@ -1149,12 +1157,10 @@ def api(request):
                 detail = data.get('detail')
                 ownerkey = data.get('owner')
 
-
-
                 try:
                     deal = SalesDeals.objects.get(pk=dealkey)
                     owner = User.objects.get(pk=ownerkey)
-                    DealTransactions(deal=deal,title=title,details=detail,owner=owner).save()
+                    DealTransactions(deal=deal, title=title, details=detail, owner=owner).save()
 
                     response['status_code'] = 200
                     response['message'] = "TRANSACTION ADDED"
@@ -1261,6 +1267,24 @@ def api(request):
                     response['status_code'] = 404
                     response['status'] = 'error'
                     response['message'] = f"Count not find matching document ({doc} - {key})"
+
+            elif module == 'close':
+                doc = data.get('doc')
+
+                if doc == 'deal':
+                    owner = data.get('closer')
+                    closer = User.objects.get(pk=owner)
+                    key = data.get('key')
+                    deal = SalesDeals.objects.get(pk=key)
+                    message = data.get('message')
+
+                    # update transactions
+                    DealTransactions(title='CLOSED', details=message, deal=deal, owner=closer).save()
+
+                    deal.status = 1
+                    deal.save()
+
+                    response['message'] = 'DEAL CLOSED'
 
 
         elif method == 'DELETE':

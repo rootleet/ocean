@@ -308,7 +308,17 @@ class CmmsSales{
             let message = response['message']
             in_deal = message['deal']
             trans = message['trans']
-            console.table(message)
+
+            let status = in_deal['status']
+            let close = `<button disabled class="btn btn-light">DEAL CLOSED</button>`,new_tran = close;
+
+
+            if(status === 0){
+                close = `<button onclick="cmms_sales.closeDeal(${in_deal['pk']})" class="btn btn-warning">CLOSE DEAL</button>`;
+                new_tran = `<button onclick="cmms_sales.newDealTransaction('${deal}')" class="btn btn-info">NEW TRANSACTION</button>`;
+            }
+
+
             // render page
             let html = `<div class="container-fluid p-2">
                         <div class="row d-flex flex-wrap">
@@ -326,7 +336,12 @@ class CmmsSales{
                             </div>
                             <div class="col-sm-8">
                                 <div class="card">
-                                    <div class="card-header"><strong class="card-title">REQUIREMENT</strong></div>
+                                    <div class="card-header">
+                                        <div class="w-100 d-flex flex-wrap">
+                                            <div class="w-50"><strong class="card-title">REQUIREMENT</strong></div>
+                                            <div class="w-50 d-flex flex-wrap justify-content-end">${close}</div>
+                                        </div>
+                                    </div>
                                     <div class="card-body p-2">
                                         <p class="card-text">${in_deal['asset']['requirement']}</p>
                                     </div>
@@ -336,7 +351,7 @@ class CmmsSales{
                         
                         <hr>
                         <div class="card">
-                            <div class="card-header clearfix"><button onclick="cmms_sales.newDealTransaction('${deal}')" class="btn btn-info">NEW TRANSACTION</button></div>
+                            <div class="card-header clearfix">${new_tran}</div>
                             <div class="card-body overflow-auto p-2" style="height: 30vh" id="saleTransactions">
                                 <div class="w-100 h-100 d-flex flex-wrap align-content-center justify-content-center"><div class="spinner-border text-primary" role="status"><span class="sr-only">Loading...</span></div></div>
                             </div>
@@ -525,6 +540,45 @@ class CmmsSales{
     }
 
 
+    closeDeal(deal) {
+        amodal.hide()
+        let payload = {
+            'module': 'cmms_sales_deal',
+            data: {
+                'deal': deal
+            }
+        };
+
+        Swal.fire({
+            title: 'CLOSING REMARK',
+            input: 'textarea',
+            inputPlaceholder: 'Type your message here...',
+            showCancelButton: true,
+            confirmButtonText: 'Submit',
+            cancelButtonText: 'Cancel',
+            allowEscapeKey: false,
+            allowOutsideClick: false
+        }).then((result) => {
+            if (result.isConfirmed) {
+                console.log('Text area value: ', result.value);
+                let close_payload = {
+                    module:'close',
+                    data:{
+                        'doc':'deal',
+                        'key':deal,
+                        message:result.value,
+                        closer:$('#mypk').val()
+                    }
+                };
+
+                let request = api.call('PATCH',close_payload,'/cmms/api/')
+                kasa.confirm(request['message'],1,'here')
+
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                amodal.show()
+            }
+        })
+    }
 }
 
 const cmms_cust = new CmmsCust()
