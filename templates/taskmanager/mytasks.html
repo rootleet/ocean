@@ -10,14 +10,17 @@
         </div>
     </div>
     <div class="card-body p-2">
-        <ul class="list-group">
-            {% for task in my_tasks %}
-              <li class="list-group-item">
-                  <input type="checkbox">
-                  </i> <strong><a href="{% url 'task' task.uni %}">{{ task.title }}</a></strong><br>
-                  <small class="text-muted">{{ task.task_inline }}</small>
-              </li>
-            {% endfor %}
-        </ul>
+        <div class="h-100 w-100 overflow-auto">
+            <ul class="list-group">
+                {% for task in my_tasks %}
+                  <li class="list-group-item">
+                      <input type="checkbox">
+                      </i> <strong><a href="{% url 'task' task.uni %}">{{ task.title }}</a></strong><br>
+                      <small class="text-muted">{{ task.task_inline }}</small>
+                  </li>
+                {% endfor %}
+            </ul>
+        </div>
+
     </div>
 {% endblock %}
