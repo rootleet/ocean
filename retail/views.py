@@ -31,8 +31,8 @@ def clerks(request):
         'nav': True,
         'locs': Locations.objects.all(),
         'clerks': Clerk.objects.all(),
-        'code':code,
-        'pwrod':pword
+        'code': code,
+        'pwrod': pword
     }
     return render(request, 'retail/clerks.html', context=context)
 
@@ -48,7 +48,7 @@ def save_clerk(request):
                 password = form.cleaned_data['pword']
                 sms_api = SmsApi.objects.get(is_default=1)
                 message = f"An Account has been created for you in Sneda Shopping Center POS. Below are your credentials \nCODE : {code}\nPassword : {password}"
-                Sms(api=sms_api,to=phone,message=message).save()
+                Sms(api=sms_api, to=phone, message=message).save()
                 messages.success(request, "CLERK ADDED")
             except Exception as e:
                 messages.error(request, f"EXCEPTION OCCURRED : {e}")
@@ -130,7 +130,6 @@ def sync_clerks(request, fr):
                 new_c = Clerk.objects.get(pk=pk)
                 new_c.flag_dwn = 0
                 new_c.save()
-
 
         return HttpResponse('SYNC COMPLETED')
     except Exception as e:
