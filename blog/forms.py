@@ -1,11 +1,16 @@
 from django import forms
 
+from blog.models import articles
+
 
 class SearchForm(forms.Form):
     query = forms.CharField(max_length=200)
 
 
-class NewArticle(forms.Form):
+class NewArticle(forms.ModelForm):
+    class Meta:
+        model = articles
+        exclude = ['date_created','time_created','updated_at']
     page_title = forms.CharField(max_length=200)
     article_desc = forms.CharField(max_length=5000)
     meta = forms.CharField(max_length=100)

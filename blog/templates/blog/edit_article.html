@@ -1,29 +1,15 @@
-
+{% extends 'blog/base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="{% static 'blog/css/bootstrap.min.css' %}">
-    <link rel="stylesheet" href="{% static 'blog/css/main.css' %}">
-    {% if page_title %}
-       <title> {{ page_title }} </title>
-    {% else %}
-        <title>Ocean | Power Of Sharing</title>
-    {% endif %}
 
-</head>
-<body class="bg-light">
+{% block body %}
 
-    <div class="container-fluid py-5" style="min-height: 100vh">
-        <!-- ARTICLE -->
-            <form action="{% url 'edit_save' %}" method="post" enctype="multipart/form-data">
+    <form class="h-100 card" action="{% url 'edit_save' %}" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
 {#                {% for f in form %}#}
 {#                    {{ f }}#}
 {#                {% endfor %}#}
 
-                <div class="w-100 d-flex flex-wrap justify-content-between">
+                <div class="w-100 card-header d-flex flex-wrap justify-content-between">
                     <div class="input-group w-45 mb-2">
                         <div class="input-group-prepend bg-light border-0">
                             <span class="input-group-text bg-light border-0 text-danger">Post Title</span>
@@ -50,15 +36,14 @@
 
                 </div>
 
-                 <textarea name="article_desc" style="height: 50vh" class="form-control" id="update_details">{{ article.article }}</textarea>
-                    <script src="{% static 'blog/js/htmeditor.min.js' %}"      htmeditor_textarea="update_details"      full_screen="no"      editor_height="500"     run_local="no">
-                    </script>
-                <div class="m-2 text-center">
+                 <div class="card-body">
+                     <textarea name="article_desc" class="tinymce-editor">{{ article.article }}</textarea>
+
+                 </div>
+                <div class="card-footer">
                     <button type="submit" class="btn btn-success rounded-0 h-fit">SAVE CHANGES</button>
                 </div>
 
             </form>
-    </div>
 
-</body>
-</html>
+{% endblock %}

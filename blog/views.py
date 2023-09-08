@@ -122,7 +122,9 @@ def new_article(request):
 def save_article(request):
     # validate for
     if request.method == 'POST':
+
         form = NewArticle(request.POST, request.FILES)
+
         if form.is_valid():
             # get form details
             page_title = form.cleaned_data['page_title']
@@ -245,6 +247,7 @@ def edit_article(request, uni):
         'page_title': 'Ocean | Article | Edit',
         'search_form': search_form, 'form': form,
         'article': this_article, 'meta_dat': meta_data,
+        'nav':True,
 
     }
     return render(request, 'blog/edit_article.html', context)

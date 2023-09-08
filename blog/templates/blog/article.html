@@ -1,12 +1,14 @@
 
-{% extends 'base.html' %}
+{% extends 'blog/base.html' %}
 {% load static %}
 
 {% block body %}
 
 
-    <div class="container bg-light" style="padding-top: 50px">
-        <h1 class="font-weight-bolder">{{ article.title }}</h1>
+    <div class="card-body h-100 overflow-auto py-2 bg-light" >
+        <h2 class="m-0 p-0">{{ article.title }}</h2>
+            <small class="text-muted">Created By {{ article.owner.username }} on {{ article.date_created }} {{ article.time_created }}</small>
+            <hr>
         <div class="article-header mb-5 text-light" style="background: url('{{ article.image.url }}')">
             <div class="w-100 h-100 bg_trans_30 d-flex flex-wrap align-content-center justify-content-center">
 
@@ -16,9 +18,7 @@
             <!-- ARTICLE -->
             <section class="col-sm-12 text-justify" style="font-size: large">
 
-                {{ article.article | safe }} {% if user.is_superuser %}
-                        <a class="" href="{% url 'edit_article' article.uni %}">Edit</a>
-                    {% endif %}
+                {{ article.article | safe }}
 
             </section>
 
@@ -50,6 +50,17 @@
 {#            </aside>#}
 
 
+        </div>
+    </div>
+
+    <div class="card-footer">
+        <div class="w-100 h-100 d-flex flex-wrap">
+            <div class="w-50"><a href="{% url 'finder' %}"><strong>Blog</strong></a> / <strong class="card-title">{{ article.title }}</strong></div>
+            <div class="w-50 d-flex flex-wrap justify-content-end">
+                {% if user.is_superuser %}
+                        <a class="btn btn-info" onclick="location.href='{% url 'edit_article' article.uni %}'" href="javascript:void(0)">Edit</a>
+                    {% endif %}
+            </div>
         </div>
     </div>
 

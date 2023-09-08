@@ -1,0 +1,97 @@
+{% extends 'retail/base.html' %}
+{% load static %}
+{% block body %}
+
+    <div class="modal" id="newCLerk">
+        <div class="modal-dialog">
+            <form method="post" enctype="multipart/form-data" action="{% url 'save_clerk' %}" class="modal-content">
+            {% csrf_token %}
+                <div class="modal-header">
+                    <strong class="modal-title">CREATE CLERK</strong>
+                    <button type="button" class="close fa fa-window-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm-12 mb-3">
+                                <label class="w-100" for="location">LOCATION</label>
+                                <select name="location" id="location" class="form-control form-control-sm rounded-0">
+                                    {% for loc in locs %}
+                                        <option value="{{ loc.pk }}">{{ loc.descr }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-sm-6 mb-3">
+                                <label class="w-100" for="first_name">First Name</label><input required type="text" name="first_name" id="first_name" class="form-control form-control-sm rounded-0">
+                            </div>
+
+                            <div class="col-sm-6 mb-3">
+                                <label class="w-100" for="last_name">First Name</label><input required type="text" name="last_name" id="last_name" class="form-control form-control-sm rounded-0">
+                            </div>
+
+                            <div class="col-sm-6 mb-3">
+                                <label class="w-100" for="phone">Phone Number</label><input maxlength="10" required type="text" name="phone" id="phone" class="form-control form-control-sm rounded-0">
+                            </div>
+
+                            <div class="col-sm-6 mb-3">
+                                <label class="w-100" for="img">Image</label><input type="file" required accept="image/jpeg" name="img" id="img" class="form-control form-control-sm rounded-0">
+                            </div>
+
+                            <div class="col-sm-6 mb-3">
+                                <label class="w-100" for="code">CODE</label><input type="text" required value="1244" id="code" name="code" readonly class="form-control form-control-sm rounded-0">
+                            </div>
+
+                            <div class="col-sm-6 mb-3">
+                                <label class="w-100" for="pword">PWORD</label><input value="1244" required type="password" id="pword" name="pword" readonly class="form-control form-control-sm rounded-0">
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-success">SAVE</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="card-header">
+        <div class="w-100 d-flex flex-wrap">
+            <div class="w-50"><strong class="card-title">CLERKS</strong></div>
+            <div class="w-50 d-flex flex-wrap justify-content-end">
+                <button data-bs-target="#newCLerk" data-bs-toggle="modal" class="btn btn-info ">NEW CLERK</button>
+                <button onclick="windowPopUp('{% url 'sync_clerks' 'ocean' %}','',200,200)" class="btn btn-primary">SEND CLERKS</button>
+                <button onclick="windowPopUp('{% url 'sync_clerks' 'locations' %}','',200,200)" class="btn btn-success">RECEIVE CLERKS</button>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <table class="table table-sm datatable">
+            <thead>
+                <tr>
+                    <th>IMG</th>
+                    <th>LOCATION</th>
+                    <th>CODE</th>
+                    <th>NAME</th>
+                    <th>PHONE</th>
+                    <th>ACTIONS</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                {% for clerk in clerks %}
+                    <tr class="{% if clerk.flag_dwn == 1 %}bg-info-light{% endif %}">
+                        <td><img src="{{ clerk.img.url }}" style="width: 20px" alt="" class="img-fluid"></td>
+                        <th>{{ clerk.location.descr }}</th>
+                        <td>{{ clerk.code }}</td>
+                        <td>{{ clerk.name }}</td>
+                        <td>{{ clerk.phone }}</td>
+                        <td>DELETE</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
+

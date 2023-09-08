@@ -1,9 +1,9 @@
-{% extends 'base.html' %}
+{% extends 'blog/base.html' %}
 {% load static %}
 
 {% block body %}
 
-    <form action="{% url 'save_article' %}" method="post" enctype="multipart/form-data" class="card w-100">
+    <form action="{% url 'save_article' %}" method="post" enctype="multipart/form-data" class="card h-100 w-100">
     {% csrf_token %}
         <div class="card-header">
             <div class="d-flex flex-wrap">
@@ -27,9 +27,9 @@
             </div>
         </div>
         <div class="card-body p-2">
-            <textarea name="article_desc" style="height: 50vh" class="form-control" id="update_details"></textarea>
-                    <script src="{% static 'blog/js/htmeditor.min.js' %}"      htmeditor_textarea="update_details"      full_screen="no"      editor_height="600"     run_local="no">
-                    </script>
+            <textarea name="article_desc" class="tinymce-editor">
+            </textarea>
+
         </div>
         <div class="card-footer">
             <button type="submit" class="btn btn-success rounded-0 h-fit">Publish</button>
