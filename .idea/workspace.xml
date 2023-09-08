@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="ffcbf13e-d396-4071-9a24-4014a690f966" name="Changes" comment="Updated tasks to have a scroll on full">
+      <change afterPath="$PROJECT_DIR$/appscenter/migrations/0092_alter_app_file.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/appscenter/migrations/0093_alter_app_file.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/retail/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/retail/admin.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/retail/apps.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/retail/forms.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/retail/migrations/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/retail/models.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/retail/tests.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/retail/urls.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/retail/views.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/retail/base.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/retail/clerks.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/retail/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blog/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/blog/forms.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blog/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/blog/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blog/templates/blog/article.html" beforeDir="false" afterPath="$PROJECT_DIR$/blog/templates/blog/article.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blog/templates/blog/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/blog/templates/blog/base.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blog/templates/blog/edit_article.html" beforeDir="false" afterPath="$PROJECT_DIR$/blog/templates/blog/edit_article.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blog/templates/blog/new-article.html" beforeDir="false" afterPath="$PROJECT_DIR$/blog/templates/blog/new-article.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blog/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/blog/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ocean/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/ocean/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ocean/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/ocean/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base.html" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="DjangoConsoleOptions" custom-start-script="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)">
+    <option name="myCustomStartScript" value="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;rootleet&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">
+    <option name="selectedUrlAndAccountId">
+      <UrlAndAccount>
+        <option name="accountId" value="db4189a1-ab93-4c29-91e8-751b521b3b54" />
+        <option name="url" value="https://github.com/rootleet/ocean.git" />
+      </UrlAndAccount>
+    </option>
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 2
+}</component>
+  <component name="ProjectId" id="2UNI1pEZU2NNamjIkYfdwS5b3lM" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "Notification.DisplayName-DoNotAsk-JavaScript: Code Vision Performance": "JavaScript: code vision performance watcher",
+    "Notification.DoNotAsk-JavaScript: Code Vision Performance": "true",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "C:/Users/reza/Documents/GitHub/ocean/retail",
+    "node.js.detected.package.eslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "ml.llm.LLMConfigurable",
+    "vue.rearranger.settings.migration": "true"
+  },
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "mysql"
+    ]
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\reza\Documents\GitHub\ocean\retail" />
+      <recent name="C:\Users\reza\Documents\GitHub\ocean\templates\retail" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="DJANGO" type="Python.DjangoServer" factoryName="Django server">
+      <module name="ocean_ori" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+        <env name="DJANGO_SETTINGS_MODULE" value="ocean.settings" />
+      </envs>
+      <option name="SDK_HOME" value="C:\Users\reza\Documents\GitHub\ocean\venv\Scripts\python.exe" />
+      <option name="SDK_NAME" value="Python 3.11 (ocean)" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="launchJavascriptDebuger" value="false" />
+      <option name="port" value="8000" />
+      <option name="host" value="0.0.0.0" />
+      <option name="additionalOptions" value="" />
+      <option name="browserUrl" value="http://127.0.0.1:8000/" />
+      <option name="runTestServer" value="false" />
+      <option name="runNoReload" value="false" />
+      <option name="useCustomRunCommand" value="false" />
+      <option name="customRunCommand" value="" />
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="ffcbf13e-d396-4071-9a24-4014a690f966" name="Changes" comment="" />
+      <created>1692773399576</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1692773399576</updated>
+      <workItem from="1692773400751" duration="12000" />
+      <workItem from="1692773455584" duration="33000" />
+      <workItem from="1692773537227" duration="64000" />
+      <workItem from="1692773752678" duration="43000" />
+      <workItem from="1692773854801" duration="10169000" />
+      <workItem from="1692858263004" duration="471000" />
+      <workItem from="1692873442167" duration="1139000" />
+      <workItem from="1692939454415" duration="62000" />
+      <workItem from="1693087377390" duration="26000" />
+      <workItem from="1693205091285" duration="5882000" />
+      <workItem from="1693304960866" duration="9825000" />
+      <workItem from="1693374826813" duration="3456000" />
+      <workItem from="1693423981408" duration="23000" />
+      <workItem from="1693424345924" duration="26000" />
+      <workItem from="1693424442989" duration="196000" />
+      <workItem from="1694080791385" duration="583000" />
+      <workItem from="1694146775762" duration="9840000" />
+    </task>
+    <task id="LOCAL-00001" summary="Add EVAT credentials, Location master, and related changes &#10;&#10;Added a new functionality to create, view and manage EVAT credentials from the dashboard.&#10;This includes a new HTML template (evat-keys.html) for displaying and managing EVAT keys in the dashboard, &#10;and another template update (loc_master.html) to handle changes in the Locations Master section. &#10;Additionally, updated 5 Python files (admin_api.py, views.py, models.py, urls.py, and admin_panel/urls.py) to handle new functionalities at the backend like - &#10;saving and viewing EVAT credentials, creating and storing new location, change evat_engine, delete location, etc.&#10;Also updated the navigation menu in base.html for easier access to the new functionalities. &#10;&#10;This is crucial for providing the users with a much easier and convenient way of managing their EVAT keys and Locations from the dashboard on the go, without having &#10;to deal with the back-end complexities. Each EVAT credential includes server information, company details and keys for various services.">
+      <option name="closed" value="true" />
+      <created>1692800370588</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1692800370588</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Update file upload paths in migrations&#10;&#10;Updated file upload path in 'appscenter' migrations from 0084 to 0091. This change is necessary to be up-to-date with the file upload time and also to ensure that files uploaded do not overwrite each other. Additionally, added initial migrations for the 'reports' app for proper version control and replicate the application state across different environments.">
+      <option name="closed" value="true" />
+      <created>1692800408833</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1692800408833</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Corrected 'entry' value in cmms_api data dict&#10;&#10;Fixed the 'entry' field in the data dictionary to correctly reference the 'ref' attribute of the 'frozen' object, not the non-existent 'ent()' method. This change is necessary for maintaining correct information when retrieving data from the 'frozen' object.">
+      <option name="closed" value="true" />
+      <created>1692873838178</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1692873838178</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Update filename in CSV export for STC document&#10;&#10;The filename of the exported CSV in the case of a STC document now includes the reference number (ref) of the associated header. Previously, the filename only contained the location ID and remarks of the header. With the addition of the reference number, it will be easier to identify the corresponding header for each exported CSV file.">
+      <option name="closed" value="true" />
+      <created>1692874028585</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1692874028585</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Add 'Others' option to position dropdown &#10;&#10;This commit adds a new option, 'Others', to the position dropdown in the sales-customer.html template. This allows users to select a different position that is not listed in the predefined options. This increases the flexibility of the form.">
+      <option name="closed" value="true" />
+      <created>1693318893472</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1693318893472</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Refactor 'save_sales_customer' to include company validation&#10;&#10;This commit refactors the 'save_sales_customer' view method to include validation for company. A check is added to see whether a customer from the respective company already exists. This change is necessary to prevent duplicate entries of the same company in the sales customer database.">
+      <option name="closed" value="true" />
+      <created>1693321384755</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1693321384755</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Add functionality to close sales deals via API&#10;&#10;This commit introduces the ability to close sales deals through the API. The update in the deal's status is indicated in the transaction record of the deal. The implemented changes influence multiple parts of the code, including the HTML representation of deals in 'sales-cust.html', the JS functions in 'anton.js' and 'cmms_cust.js' and most importantly, the backend logic in 'cmms_api.py' where the actual closing of deals is carried out. This feature helps sales reps to finalize their deals and record the closing remarks, improving the overall management of sales in the platform.">
+      <option name="closed" value="true" />
+      <created>1693342580656</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1693342580656</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Updated tasks to have a scroll on full">
+      <option name="closed" value="true" />
+      <created>1694081018587</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1694081018587</updated>
+    </task>
+    <task id="LOCAL-00009" summary="Updated tasks to have a scroll on full">
+      <option name="closed" value="true" />
+      <created>1694081359082</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1694081359082</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+    <MESSAGE value="Add EVAT credentials, Location master, and related changes &#10;&#10;Added a new functionality to create, view and manage EVAT credentials from the dashboard.&#10;This includes a new HTML template (evat-keys.html) for displaying and managing EVAT keys in the dashboard, &#10;and another template update (loc_master.html) to handle changes in the Locations Master section. &#10;Additionally, updated 5 Python files (admin_api.py, views.py, models.py, urls.py, and admin_panel/urls.py) to handle new functionalities at the backend like - &#10;saving and viewing EVAT credentials, creating and storing new location, change evat_engine, delete location, etc.&#10;Also updated the navigation menu in base.html for easier access to the new functionalities. &#10;&#10;This is crucial for providing the users with a much easier and convenient way of managing their EVAT keys and Locations from the dashboard on the go, without having &#10;to deal with the back-end complexities. Each EVAT credential includes server information, company details and keys for various services." />
+    <MESSAGE value="Update file upload paths in migrations&#10;&#10;Updated file upload path in 'appscenter' migrations from 0084 to 0091. This change is necessary to be up-to-date with the file upload time and also to ensure that files uploaded do not overwrite each other. Additionally, added initial migrations for the 'reports' app for proper version control and replicate the application state across different environments." />
+    <MESSAGE value="Corrected 'entry' value in cmms_api data dict&#10;&#10;Fixed the 'entry' field in the data dictionary to correctly reference the 'ref' attribute of the 'frozen' object, not the non-existent 'ent()' method. This change is necessary for maintaining correct information when retrieving data from the 'frozen' object." />
+    <MESSAGE value="Update filename in CSV export for STC document&#10;&#10;The filename of the exported CSV in the case of a STC document now includes the reference number (ref) of the associated header. Previously, the filename only contained the location ID and remarks of the header. With the addition of the reference number, it will be easier to identify the corresponding header for each exported CSV file." />
+    <MESSAGE value="Add 'Others' option to position dropdown &#10;&#10;This commit adds a new option, 'Others', to the position dropdown in the sales-customer.html template. This allows users to select a different position that is not listed in the predefined options. This increases the flexibility of the form." />
+    <MESSAGE value="Refactor 'save_sales_customer' to include company validation&#10;&#10;This commit refactors the 'save_sales_customer' view method to include validation for company. A check is added to see whether a customer from the respective company already exists. This change is necessary to prevent duplicate entries of the same company in the sales customer database." />
+    <MESSAGE value="Add functionality to close sales deals via API&#10;&#10;This commit introduces the ability to close sales deals through the API. The update in the deal's status is indicated in the transaction record of the deal. The implemented changes influence multiple parts of the code, including the HTML representation of deals in 'sales-cust.html', the JS functions in 'anton.js' and 'cmms_cust.js' and most importantly, the backend logic in 'cmms_api.py' where the actual closing of deals is carried out. This feature helps sales reps to finalize their deals and record the closing remarks, improving the overall management of sales in the platform." />
+    <MESSAGE value="Updated tasks to have a scroll on full" />
+    <option name="LAST_COMMIT_MESSAGE" value="Updated tasks to have a scroll on full" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/api/extras.py</url>
+          <line>41</line>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/taskmanager/views.py</url>
+          <line>28</line>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/OCEAN$views.coverage" NAME="views Coverage Results" MODIFIED="1684125120313" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/apiv2" />
+    <SUITE FILE_PATH="coverage/OCEAN$views__1_.coverage" NAME="views (1) Coverage Results" MODIFIED="1689850925090" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/cmms" />
+    <SUITE FILE_PATH="coverage/ocean$OCEAN.coverage" NAME="OCEAN Coverage Results" MODIFIED="1675376182886" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+  </component>
+</project>

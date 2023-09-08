@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataSource name="ocean@localhost">
+  <database-model serializer="dbm" dbms="MYSQL" family-id="MYSQL" format-version="4.49">
+    <root id="1">
+      <DefaultCasing>lower/lower</DefaultCasing>
+      <ServerVersion>8.0.32</ServerVersion>
+    </root>
+    <schema id="2" parent="1" name="bank"/>
+    <schema id="3" parent="1" name="dev"/>
+    <schema id="4" parent="1" name="ellamau"/>
+    <schema id="5" parent="1" name="era_db"/>
+    <schema id="6" parent="1" name="information_schema"/>
+    <schema id="7" parent="1" name="lisaavrb_lisadel"/>
+    <schema id="8" parent="1" name="loyalty"/>
+    <schema id="9" parent="1" name="mycom"/>
+    <schema id="10" parent="1" name="mysql"/>
+    <schema id="11" parent="1" name="ocean">
+      <Current>1</Current>
+    </schema>
+    <schema id="12" parent="1" name="performance_schema"/>
+    <schema id="13" parent="1" name="posdb"/>
+    <schema id="14" parent="1" name="sakila"/>
+    <schema id="15" parent="1" name="smhos"/>
+    <schema id="16" parent="1" name="sneda_mt"/>
+    <schema id="17" parent="1" name="stock"/>
+    <schema id="18" parent="1" name="sys"/>
+    <schema id="19" parent="1" name="test_ocean"/>
+    <schema id="20" parent="1" name="world"/>
+  </database-model>
+</dataSource>
