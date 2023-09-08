@@ -8,7 +8,7 @@ class Clerk(models.Model):
     last_name = models.TextField()
     phone = models.CharField(max_length=10, unique=True, null=False)
     code = models.CharField(max_length=4, unique=True, null=False)
-    pword = models.CharField(max_length=4, null=False, unique=False)
+    pword = models.CharField(max_length=10, null=False, unique=False)
     img = models.ImageField(upload_to='static/general/clerks/', default='static/general/img/users/default.png')
 
     flag_dwn = models.IntegerField(default=1)
