@@ -17,10 +17,22 @@ def base(request):
 
 
 def clerks(request):
+    import random
+
+    # Define the range for the random numbers (between 1000 and 9999)
+    min_num = 1000
+    max_num = 9999
+
+    # Generate four random integers in the thousands range
+    code = random.randint(min_num, max_num)
+    pword = random.randint(min_num, max_num)
+
     context = {
         'nav': True,
         'locs': Locations.objects.all(),
-        'clerks': Clerk.objects.all()
+        'clerks': Clerk.objects.all(),
+        'code':code,
+        'pwrod':pword
     }
     return render(request, 'retail/clerks.html', context=context)
 
