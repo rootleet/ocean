@@ -3,13 +3,13 @@ class Reports {
     cmms_sales_customer(){
         let table_header = ['TYPE OF','NAME','COMPANY','ADDRESS','PHONE','EMAIL','REGION','SUBURB','DATE','OWNER']
         // get customers
-        let response = cmms_sales.getCustomer()
+        let response = cmms_sales.getCustomer('all')
         let rows = ''
         if(response['status_code'] === 200){
             // if there are customers
             let customers = response['message'];
             console.table(customers)
-            for (let cust = 0; cust < customers.length; customers++) {
+            for (let cust = 0; cust < customers.length; cust++) {
                 let customer = customers[cust]
                 rows += `
                     <tr>
