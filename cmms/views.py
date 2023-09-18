@@ -271,3 +271,14 @@ def sales_deal(request,customer):
         messages.error(request,f"NO CUSTOMER WITH URL {customer}")
         return redirect('customer_sales')
 
+
+def service_customer(request,customer_code):
+    context = {
+        'nav': True,
+        'page': {
+
+            'title': "SERVICE CUSTOMER"
+        },
+        'customer':customer_code
+    }
+    return render(request, 'cmms/service/customer.html', context=context)

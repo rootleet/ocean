@@ -1,0 +1,58 @@
+{% extends 'cmms/base.html' %}
+
+{% block cmms %}
+    <div class="w-100 h-100 card">
+        <div class="card-header">
+            <button onclick="location.href='{% url 'service_customers' %}'" class="btn btn-info">ALL CUSTOMERS</button>
+        </div>
+        <div class="card-body overflow-hidden p-2">
+            <div style="height: 100% !important" class="overflow-auto">
+
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th>ASSET</th><th>ASSET NO</th><th>ASSET MODEL</th><th>CHASSIS</th><th>SERVICE COUNTS</th><th>FOLLOW UPS</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tBody">
+
+                    </tbody>
+                </table>
+
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        function dube() {
+            let payload = {
+            "module":"customer",
+            "data":{
+                "cust_type":"cmms_service"
+            }
+        }
+
+            let response = api.call('VIEW',payload,'/cmms/api/')
+            if(response['status_code'] === 200){
+                let message = response['message']
+                for (let i = 0; i < message.length; i++) {
+                    let customer = message[i]
+                    $('#tBody').append(`
+                        <tr>
+                            <td><a href="/cmms/servicing/customer/${customer['code']}/">${customer['code']}</a></td><td>${customer['name']}</td><td>${customer['phone']}</td><td>${customer['email']}</td>
+                            <td><i onclick="cmms_cust.viewCustomerAssets('${customer['code']}')" class="bi bi-car-front-fill pointer"></i></td>
+                        </tr>
+                    `);
+                }
+            } else {
+                kasa.error(response['message'])
+            }
+        }
+
+        cmms_cust.viewCustomerAssets(`{{ customer }}`)
+
+
+    </script>
+
+{% endblock %}

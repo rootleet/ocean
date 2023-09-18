@@ -135,7 +135,7 @@ class CmmsCust {
 
         status = response['status_code'];
         message = response['message'];
-        kasa.info("LOADING DATA......")
+        // kasa.info("LOADING DATA......")
         setTimeout(
             function () {
                 if (status === 200){
@@ -149,25 +149,26 @@ class CmmsCust {
                         for (let a = 0; a < count; a++) {
                             let asset = assets[a];
                             let code = asset['code'];
+                            let last_services = asset['service_times'];
 
-                            let service_payload = {
-                                "module":"service_history",
-                                "data":{
-                                    "asset":code
-                                }
-                            }
-
-                            let service_request = api.call('VIEW',service_payload,'/cmms/api/')
-                            let last_services = "NONE"
-                            if (service_request['status_code'] === 200){
-                                // get counts
-                                let serv_tr = ''
-                                let s_message = service_request['message'];
-                                if (s_message.length > 0){
-                                    let target = s_message[0]
-                                    last_services = target['date']
-                                }
-                            }
+                            // let service_payload = {
+                            //     "module":"service_history",
+                            //     "data":{
+                            //         "asset":code
+                            //     }
+                            // }
+                            //
+                            // let service_request = api.call('VIEW',service_payload,'/cmms/api/')
+                            // let last_services = "NONE"
+                            // if (service_request['status_code'] === 200){
+                            //     // get counts
+                            //     let serv_tr = ''
+                            //     let s_message = service_request['message'];
+                            //     if (s_message.length > 0){
+                            //         let target = s_message[0]
+                            //         last_services = target['date']
+                            //     }
+                            // }
 
                             tr += `
                                 <tr>
@@ -176,14 +177,12 @@ class CmmsCust {
                                     <td><i class="pointer text-info bi-chat-text" onclick="cmms.viewFollowups('${asset['number']}')"></i></td>
                                 </tr>
                             `
+
+
                         }
 
-                        let html = `
-                            <table class="table table-bordered table-sm datatable">
-                                <thead><tr><th>NAME</th><th>NUMBER</th><th>MODEL</th><th>CHASSIS</th><td>LAST SERVICED</td><td>FOLLOWS</td></tr></thead>
-                                <tbody id="custAsset">${tr}</tbody>
-                            </table>
-                        `
+
+                        $('#tBody').html(tr)
                         //cust_code
                         let customer_load = {
                             "module":"customer",
@@ -194,18 +193,14 @@ class CmmsCust {
                         }
 
                         let cus_resp = api.call('VIEW',customer_load,'/cmms/api/');
-                        console.table(cus_resp)
+
                         if(cus_resp['status_code'] === 200){
                             let cust = cus_resp['message'][0]['name']
-                            $('#g_modal_title').text(`${cust} SERVICE HISTORY`)
+                            $('.pagetitle h1').text(`${cust} SERVICE HISTORY`)
                         } else {
-                            $('#g_modal_title').text('CUSTOMER SERVICE HISTORY')
+                            $('.pagetitle h1').text('CUSTOMER SERVICE HISTORY')
                         }
 
-                        $('#g_modal_size').removeClass(' modal-dialog-centered')
-                        $('#g_modal_size').addClass('modal-xl')
-                        $('#g_modal_body').html(html)
-                        $('#g_modal').modal('show')
 
                     } else {
                         kasa.warning("There are no assets for customer")
@@ -263,7 +258,8 @@ class CmmsCust {
             `
             $('#g_modal_title').text("INVOICES")
             $('#g_modal_body').html(tab)
-
+            $('#g_modal_size').addClass('modal-lg')
+            $('#g_modal').modal('show')
 
         } else {
             kasa.error(`THERE IS AN ERROR GETTING SERVICE DETAILS : ${response['message']}`)

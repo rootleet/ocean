@@ -9,7 +9,7 @@
             <table class="table table-sm datatable">
                 <thead>
                     <tr>
-                        <th>NAME</th><th>ORGANIZATION</th><th>CONTACT</th><th>Email</th><th>ACTION</th>
+                        <th>CODE</th><th>ORGANIZATION</th><th>CONTACT</th><th>Email</th><th>ACTION</th>
                     </tr>
                 </thead>
                 <tbody id="tBody">
@@ -33,8 +33,8 @@
                 let customer = message[i]
                 $('#tBody').append(`
                     <tr>
-                        <td>${customer['code']}</td><td>${customer['name']}</td><td>${customer['phone']}</td><td>${customer['email']}</td>
-                        <td><i onclick="cmms_cust.viewCustomerAssets('${customer['code']}')" class="bi bi-car-front-fill pointer"></i></td>
+                        <td><a href="/cmms/servicing/customer/${customer['code']}/">${customer['code']}</a></td><td>${customer['name']}</td><td>${customer['phone']}</td><td>${customer['email']}</td>
+                        <td><i title='View Assets' onclick="location.href='/cmms/servicing/customer/${customer['code']}/'" class="bi bi-car-front-fill pointer"></i></td>
                     </tr>
                 `);
             }

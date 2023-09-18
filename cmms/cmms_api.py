@@ -648,15 +648,18 @@ def api(request):
                         asset_arr = []
                         asset_cursor = db()
                         asset_cursor.execute(assets_q)
-                        # db().execute(assets_q)
+
 
                         for asset in asset_cursor.fetchall():
+                            asset_cursor.execute(f"SELECT count(*) as service_times FROM invoice_hd where asset_code = '{str(asset[0]).strip()}'")
+
                             obj = {
                                 'code': str(asset[0]).strip(),
                                 'name': str(asset[1]).strip(),
                                 'number': str(asset[2]).strip(),
                                 'chassis': str(asset[3]).strip(),
                                 'model': str(asset[4]).strip(),
+                                'service_times':asset_cursor.fetchone()[0]
                             }
                             asset_arr.append(obj)
 
@@ -664,22 +667,24 @@ def api(request):
                         response['message'] = {
                             'customer': header, 'assets': asset_arr
                         }
+                        asset_cursor.close()
                     else:
                         response['status_code'] = 404
                         response['message'] = f"NO CUSTOMER WITH CODE {customer}"
 
                 elif module == 'service_history':
+                    conn = db()
                     asset = data.get('asset')
-                    db().execute(
+                    conn.execute(
                         f"select Entry_no,Invoice_date,wo_date,tot_amt,tax_amt,net_amt,labor_amount,material_amount from invoice_hd where asset_code = '{asset}' order by Invoice_date desc")
                     serv_arr = []
-                    for service in db().fetchall():
+                    for service in conn.fetchall():
 
                         # get materials
-                        db().execute(
+                        conn.execute(
                             f"select invoice_type,descr,uom,unit_qty,unit_price,tot_amt,tax_amt,net_amt from invoice_tran where Entry_no = '{service[0]}'")
                         tran_arr = []
-                        for tran in db().fetchall():
+                        for tran in conn.fetchall():
                             tobj = {
                                 'type': str(tran[0]).strip(),
                                 'name': str(tran[1]).strip(),
@@ -704,7 +709,7 @@ def api(request):
                         }
                         serv_arr.append(obj)
 
-                    # db().close()
+                    conn.close()
                     response['status_code'] = 200
                     response['message'] = serv_arr
 
@@ -714,7 +719,8 @@ def api(request):
                     assets = {}
                     trans = []
 
-                    inv_hd = db().execute(
+                    conn = db()
+                    inv_hd = conn.execute(
                         f"select Entry_no,Invoice_date,tot_amt,tax_amt,net_amt,labor_amount,material_amount,asset_code from invoice_hd where Entry_no= '{invoice}'").fetchone()
                     header['invoice_no'] = str(inv_hd[0]).strip()
                     header['date'] = str(inv_hd[1]).strip()
@@ -726,7 +732,7 @@ def api(request):
 
                     # asset details
                     asset_code = inv_hd[7]
-                    asset = db().execute(
+                    asset = conn.execute(
                         f"select ASSET_CODE,asset_desc,asset_no,asset_ref_no,model_no,cust_code from asset_mast where ASSET_CODE = '{asset_code}'").fetchone()
                     assets['code'] = str(asset[0]).strip()
                     assets['name'] = str(asset[1]).strip()
@@ -735,9 +741,9 @@ def api(request):
                     assets['model'] = str(asset[4]).strip()
                     assets['owner'] = str(asset[5]).strip()
 
-                    db().execute(
+                    conn.execute(
                         f"select invoice_type,descr,uom,unit_qty,unit_price,tot_amt,tax_amt,net_amt from invoice_tran where Entry_no = '{invoice}'")
-                    for tran in db().fetchall():
+                    for tran in conn.fetchall():
                         tobj = {
                             'type': str(tran[0]).strip(),
                             'name': str(tran[1]).strip(),
