@@ -275,6 +275,96 @@ class CmmsCust {
 }
 
 class CmmsSales{
+
+    saveCustomer(){
+        // validate inputs
+        let inputs = ['type_of_client','sector_of_company','company','region','city','address',
+        'phone','email','fax','position','first_name','last_name','note'];
+
+        if(anton.validateInputs(inputs)){
+            // get values
+            let type_of_client = $('#type_of_client');
+            let sector_of_company = $('#sector_of_company');
+            let company = $('#company');
+            let region = $('#region');
+            let address = $('#address');
+            let city = $('#city');
+            let phone = $('#phone');
+            let email = $('#email');
+            let fax = $('#fax');
+            let position = $('#position');
+            let first_name = $('#first_name');
+            let last_name = $('#last_name');
+            let note = $('#note');
+
+
+
+            // validate fields
+            let errors = 0,error_message = ''
+
+            //type of
+            if(type_of_client.val() === '0'){
+                errors += 1;
+                error_message += `<small class="text-danger">SELECT TYPE OF CLIENT</small><br>`;
+            }
+            //sector
+            if(sector_of_company.val() === '0'){
+                errors += 1;
+                error_message += `<small class="text-danger">SELECT SECTOR</small><br>`;
+            }
+            //REGION
+            if(region.val() === '0'){
+                errors += 1;
+                error_message += `<small class="text-danger">SELECT REGION</small><br>`;
+            }
+
+
+            if(errors < 1){
+                // prepare payload
+                let data = {
+                    type_of_client:type_of_client.val(),
+                    sector_of_company:sector_of_company.val(),
+                    company:company.val(),
+                    region:region.val(),
+                    address:address.val(),
+                    city:city.val(),
+                    phone:phone.val(),
+                    email:email.val(),
+                    fax:fax.val(),
+                    position:position.val(),
+                    first_name:first_name.val(),
+                    last_name:last_name.val(),
+                    note:note.val(),
+                    url:company.val().replace(/\s/g, '-').toLowerCase(),
+                    owner:$('#owner').val()
+                }
+
+                console.table(data)
+
+                let payload = {
+                    module:'sales_customer',
+                    data:data
+                }
+                let save = api.call('PUT',payload,'/cmms/api/')
+                console.table(save)
+                if(save['status'] === 200){
+                    kasa.confirm("Customer Saved",1,'/cmms/sales/customers/')
+                } else {
+                    kasa.error(save['message'])
+                }
+
+
+            } else {
+                kasa.html(`<strong>${errors} error(s)</strong><hr>${error_message}`)
+            }
+
+
+        } else {
+            kasa.error("All Input Fields Are Required")
+        }
+
+    }
+
     getCustomer(key='all'){
         let payload = {
             module:'cmms_sales_customer',

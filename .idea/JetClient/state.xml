@@ -1,6 +1,70 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="JetClientState">
+    <option name="draftsState">
+      <draftsState>
+        <option name="requests">
+          <list>
+            <requestState>
+              <option name="body">
+                <bodyState>
+                  <option name="raw" value="{&#10;  &quot;doc&quot;: &quot;send_dept_mail&quot;&#10;}" />
+                  <option name="type" value="JSON" />
+                </bodyState>
+              </option>
+              <option name="headers">
+                <list>
+                  <headerState>
+                    <option name="key" value="Content-Type" />
+                    <option name="value" value="application/json" />
+                  </headerState>
+                </list>
+              </option>
+              <option name="id" value="54706f75-1758-44fa-a347-e47ea7601ae4" />
+              <option name="method" value="POST" />
+              <option name="name" value="SEND DEPT REPORT" />
+              <option name="url" value="http://127.0.0.1:8000/reports/api/" />
+            </requestState>
+            <requestState>
+              <option name="body">
+                <bodyState>
+                  <option name="raw" value="{&#10;  &quot;doc&quot;: &quot;send_dept_mail&quot;&#10;}" />
+                  <option name="type" value="JSON" />
+                </bodyState>
+              </option>
+              <option name="headers">
+                <list>
+                  <headerState>
+                    <option name="key" value="Content-Type" />
+                    <option name="value" value="application/json" />
+                  </headerState>
+                </list>
+              </option>
+              <option name="id" value="ab3c62f7-fce8-4e72-ad68-6c95c2065e56" />
+              <option name="method" value="POST" />
+              <option name="name" value="MAKE REPORT" />
+              <option name="url" value="http://127.0.0.1:8000/reports/api/" />
+            </requestState>
+          </list>
+        </option>
+      </draftsState>
+    </option>
+    <option name="folders">
+      <list>
+        <folderState>
+          <option name="icon" value="TEST_ROOT" />
+          <option name="id" value="f63b7dc5-2ce3-4e70-864f-ad2551e296c1" />
+          <option name="name" value="REPORTS" />
+          <option name="sortWeight" value="1000000" />
+          <option name="syncProperties">
+            <synchronizationPropertiesState>
+              <option name="folderPath" value="C:\Users\reza\Documents\GitHub\ocean\.jetclient" />
+            </synchronizationPropertiesState>
+          </option>
+          <option name="testSuite" value="true" />
+        </folderState>
+      </list>
+    </option>
     <option name="id" value="94abc2fb-3c92-41cf-b43d-0682e9495445" />
   </component>
 </project>

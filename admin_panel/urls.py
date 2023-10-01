@@ -102,6 +102,8 @@ urlpatterns = [
     path('reminder/', views.reminder, name='reminder'),
 
     path('all-users/', views.all_users, name='all-users'),
+    path('users/save-department/',views.save_department,name='save-department'),
+    path('users/set_department/',views.set_department,name='set_department'),
     path('update_profile/', views.update_profile, name='update_profile'),
     path('save-ou/', views.save_ou, name='save_ou'),
     path('save_um/', views.save_um, name='save_um'),
@@ -112,7 +114,8 @@ urlpatterns = [
     path('sms/bulk_sms/', views.bulk_sms, name='bulk_sms'),
     path('adapi/', admin_api.index, name='adapi'),
 
-    path('evat/',views.evat_keys,name='evat_keys')
+    path('evat/',views.evat_keys,name='evat_keys'),
+
 
 ]
 

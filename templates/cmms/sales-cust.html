@@ -69,6 +69,9 @@
         <div class="card-header">
             <button onclick="location.href='{% url 'customer_sales' %}'" class="btn btn-info rounded-0 btn-sm"> <i class="bi bi-arrow-return-left"></i> CUSTOMERS</button>
             <button data-bs-target="#newDeal" data-bs-toggle="modal" class="btn btn-primary">NEW DEAL</button>
+            <button onclick="Swal.fire({
+            'icon':'info',text:'{{ customer.note }}'
+            })" class="btn btn-primary">NOTES</button>
         </div>
         <div class="card-body p-2">
             <table class="table table-sm datatable">

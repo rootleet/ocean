@@ -6,7 +6,11 @@ from django.contrib.auth.models import User, Permission
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
-from admin_panel.models import GeoCity, GeoCitySub, Reminder, SmsApi, UserAddOns, EvatCredentials, Locations
+from admin_panel.anton import remove_html_tags
+from admin_panel.models import GeoCity, GeoCitySub, Reminder, SmsApi, UserAddOns, EvatCredentials, Locations, \
+    Departments
+from reports.models import DepartmentReportMailQue
+from taskmanager.models import Tasks
 
 
 @csrf_exempt
@@ -255,6 +259,69 @@ def index(request):
                 success_response['message'] = arr
                 response = success_response
 
+            elif module == 'dept_report':
+                # get all department
+                import openpyxl
+                workbook = openpyxl.Workbook()
+
+                departments = Departments.objects.all()
+                for department in departments:
+                    members = department.members()
+                    head_email = department.email_of_head
+                    files = ''
+                    for member in members:
+                        sheet = workbook.active
+                        sheet['A1'] = "TITLE"
+                        sheet['B1'] = "DESCRIPTION"
+                        sheet['C1'] = "LAST TRANSACTION"
+                        sheet['D1'] = "Transaction Time"
+                        sheet['E1'] = "Status"
+                        user = member.user
+                        from datetime import datetime
+                        current_datetime = datetime.now()
+                        formatted_datetime = current_datetime.strftime("%Y_%m_%d_%H_%M_%S")
+                        file_name1 = f"{user.first_name}_{user.last_name}_report_as_of_{formatted_datetime}.xlsx"
+
+                        file_name = f"static/general/task-reports/{file_name1}"
+                        # get tasks
+                        user_tasks = Tasks.objects.filter(owner=user)
+                        sheet_count = 2
+                        for task in user_tasks:
+                            title = task.title
+                            descr = remove_html_tags(task.description)
+                            last_transaction_time = "NO TRANSACTION"
+                            last_transaction = "NO TRANSACTION"
+                            if task.transaction().count() > 0:
+                                transactions = task.transaction().last()
+                                last_transaction = remove_html_tags(transactions.description)
+                                last_transaction_time = transactions.created_date
+
+                            sheet[f"A{sheet_count}"] = title
+                            sheet[f'B{sheet_count}'] = descr
+                            sheet[f'C{sheet_count}'] = last_transaction
+                            sheet[f'D{sheet_count}'] = last_transaction_time
+                            sheet[f"E{sheet_count}"] = task.text_status()
+
+
+                            sheet_count += 1
+                            # for transaction in transactions:
+                            #     tran_title = transaction.title
+                            #     tran_descr = transaction.description
+                            #     date_time = f"{transaction.created_date} {transaction.created_time}"
+                            #
+                            #     sheet[f"A{sheet_count}"] = title
+                            #     sheet[f"B{sheet_count}"] = tran_title
+                            #     sheet[f"C{sheet_count}"] = tran_descr
+                            #     sheet[f"D{sheet_count}"] = date_time
+                            #     sheet[f"E{sheet_count}"] = "NOT KNOWN"
+                            #
+                            #     sheet_count += 1
+
+                        workbook.save(file_name)
+                        files += f"{file_name1},"
+                    response['message'] = files
+                    response['status_code'] = 200
+                    DepartmentReportMailQue(department=department, files=files).save()
             else:
                 response['status_code'] = 503
                 response['message'] = f"UNKNOWN MODULE ( METHOD : {method}, MODULE : {module} )"

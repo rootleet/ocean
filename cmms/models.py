@@ -184,18 +184,23 @@ class StockFreezeTrans(models.Model):
 
 
 class SalesCustomers(models.Model):
+    sector_of_company = models.TextField(blank=True)
+    type_of_client = models.TextField()
     company = models.CharField(max_length=225, unique=True)
-    url = models.CharField(max_length=225, unique=True)
-    name = models.TextField()
+    region = models.ForeignKey(GeoCity, on_delete=models.SET_NULL, null=True, blank=True)
+    city = models.ForeignKey(GeoCitySub, on_delete=models.SET_NULL, null=True, blank=True)
     mobile = models.CharField(max_length=225, unique=True)
     email = models.CharField(max_length=225, unique=True)
+    fax = models.TextField(blank=True)
     address = models.TextField()
-    type_of_client = models.TextField()
 
+    first_name = models.TextField(blank=True)
+    last_name = models.TextField(blank=True)
     position = models.TextField(default='none')
+    note = models.TextField(null=True, blank=True)
+    name = models.TextField()
 
-    region = models.ForeignKey(GeoCity, on_delete=models.SET_NULL, null=True, blank=True)
-    suburb = models.ForeignKey(GeoCitySub, on_delete=models.SET_NULL, null=True, blank=True)
+    url = models.CharField(max_length=225, unique=True)
 
     created_date = models.DateField(auto_now_add=True)
     created_time = models.TimeField(auto_now_add=True)

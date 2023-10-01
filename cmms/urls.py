@@ -38,6 +38,7 @@ urlpatterns = [
     path('sales/save-transaction/', views.save_sales_transaction, name='save_sales_transaction'),
     path('sales/deals/<customer>/', views.sales_deal, name='sales-deal'),
 
+
     path('servicing/', views.service_customers, name='service_customers'),
     path('servicing/customer/<customer_code>/',views.service_customer,name='service_customer')
 

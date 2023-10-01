@@ -4,31 +4,31 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ffcbf13e-d396-4071-9a24-4014a690f966" name="Changes" comment="Updated tasks to have a scroll on full">
-      <change afterPath="$PROJECT_DIR$/appscenter/migrations/0092_alter_app_file.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/appscenter/migrations/0093_alter_app_file.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/retail/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/retail/admin.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/retail/apps.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/retail/forms.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/retail/migrations/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/retail/models.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/retail/tests.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/retail/urls.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/retail/views.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/retail/base.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/retail/clerks.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/retail/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/blog/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/blog/forms.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/blog/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/blog/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/blog/templates/blog/article.html" beforeDir="false" afterPath="$PROJECT_DIR$/blog/templates/blog/article.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/blog/templates/blog/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/blog/templates/blog/base.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/blog/templates/blog/edit_article.html" beforeDir="false" afterPath="$PROJECT_DIR$/blog/templates/blog/edit_article.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/blog/templates/blog/new-article.html" beforeDir="false" afterPath="$PROJECT_DIR$/blog/templates/blog/new-article.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/blog/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/blog/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ocean/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/ocean/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ocean/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/ocean/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base.html" afterDir="false" />
+    <list default="true" id="ffcbf13e-d396-4071-9a24-4014a690f966" name="Changes" comment="OpenAI Token is not set.">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/JetClient/state.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/JetClient/state.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/3a6a5de2-5c16-4c61-8911-ff2a73819934.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/3a6a5de2-5c16-4c61-8911-ff2a73819934.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/admin_panel/admin_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/admin_panel/admin_api.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/admin_panel/anton.py" beforeDir="false" afterPath="$PROJECT_DIR$/admin_panel/anton.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/admin_panel/form.py" beforeDir="false" afterPath="$PROJECT_DIR$/admin_panel/form.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/admin_panel/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/admin_panel/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/admin_panel/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/admin_panel/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/admin_panel/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/admin_panel/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmms/cmms_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/cmms/cmms_api.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmms/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/cmms/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmms/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/cmms/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/reports/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/reports_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/reports/reports_api.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/assets/img/favicon.png" beforeDir="false" afterPath="$PROJECT_DIR$/static/assets/img/favicon.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/assets/img/logo.png" beforeDir="false" afterPath="$PROJECT_DIR$/static/assets/img/logo.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/general/js/classes/cmms_cust.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/general/js/classes/cmms_cust.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/taskmanager/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/taskmanager/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/cmms/new-sales-customer.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/cmms/new-sales-customer.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/cmms/sales-cust.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/cmms/sales-cust.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/cmms/sales-customer.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/cmms/sales-customer.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/dashboard/company/all-users.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/dashboard/company/all-users.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -62,6 +62,15 @@
       </UrlAndAccount>
     </option>
   </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="mock:///folder-pre-request-script-drafts.js" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock:///folder-test-script-drafts.js" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock:///folder-test-script-f63b7dc5.js" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock:///pre-request-script-54706f75.js" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock:///pre-request-script-ab3c62f7.js" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock:///test-script-54706f75.js" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock:///test-script-ab3c62f7.js" root0="FORCE_HIGHLIGHTING" />
+  </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
@@ -77,31 +86,32 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "Notification.DisplayName-DoNotAsk-JavaScript: Code Vision Performance": "JavaScript: code vision performance watcher",
-    "Notification.DoNotAsk-JavaScript: Code Vision Performance": "true",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "main",
-    "last_opened_file_path": "C:/Users/reza/Documents/GitHub/ocean/retail",
-    "node.js.detected.package.eslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "ml.llm.LLMConfigurable",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;Notification.DisplayName-DoNotAsk-JavaScript: Code Vision Performance&quot;: &quot;JavaScript: code vision performance watcher&quot;,
+    &quot;Notification.DoNotAsk-JavaScript: Code Vision Performance&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/reza/Documents/GitHub/ocean/templates/cmms/service&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "DatabaseDriversLRU": [
-      "mysql"
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;mysql&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\reza\Documents\GitHub\ocean\templates\cmms\service" />
       <recent name="C:\Users\reza\Documents\GitHub\ocean\retail" />
       <recent name="C:\Users\reza\Documents\GitHub\ocean\templates\retail" />
     </key>
@@ -158,6 +168,23 @@
       <workItem from="1693424442989" duration="196000" />
       <workItem from="1694080791385" duration="583000" />
       <workItem from="1694146775762" duration="9840000" />
+      <workItem from="1694175941237" duration="2510000" />
+      <workItem from="1694193183065" duration="318000" />
+      <workItem from="1694193527457" duration="1009000" />
+      <workItem from="1694489186198" duration="10000" />
+      <workItem from="1694706271905" duration="9777000" />
+      <workItem from="1694984649522" duration="920000" />
+      <workItem from="1695051667270" duration="5989000" />
+      <workItem from="1695210538097" duration="390000" />
+      <workItem from="1695842805702" duration="7686000" />
+      <workItem from="1695973803426" duration="2780000" />
+      <workItem from="1695977959283" duration="826000" />
+      <workItem from="1695980997266" duration="5431000" />
+      <workItem from="1696008894845" duration="830000" />
+      <workItem from="1696070291760" duration="1278000" />
+      <workItem from="1696139394288" duration="984000" />
+      <workItem from="1696140446679" duration="247000" />
+      <workItem from="1696140713743" duration="5191000" />
     </task>
     <task id="LOCAL-00001" summary="Add EVAT credentials, Location master, and related changes &#10;&#10;Added a new functionality to create, view and manage EVAT credentials from the dashboard.&#10;This includes a new HTML template (evat-keys.html) for displaying and managing EVAT keys in the dashboard, &#10;and another template update (loc_master.html) to handle changes in the Locations Master section. &#10;Additionally, updated 5 Python files (admin_api.py, views.py, models.py, urls.py, and admin_panel/urls.py) to handle new functionalities at the backend like - &#10;saving and viewing EVAT credentials, creating and storing new location, change evat_engine, delete location, etc.&#10;Also updated the navigation menu in base.html for easier access to the new functionalities. &#10;&#10;This is crucial for providing the users with a much easier and convenient way of managing their EVAT keys and Locations from the dashboard on the go, without having &#10;to deal with the back-end complexities. Each EVAT credential includes server information, company details and keys for various services.">
       <option name="closed" value="true" />
@@ -231,11 +258,87 @@
       <option name="project" value="LOCAL" />
       <updated>1694081359082</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Integrating retail">
+      <option name="closed" value="true" />
+      <created>1694176140891</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1694176140891</updated>
+    </task>
+    <task id="LOCAL-00011" summary="Integrating retail">
+      <option name="closed" value="true" />
+      <created>1694176470196</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1694176470196</updated>
+    </task>
+    <task id="LOCAL-00012" summary="Auto generate user id and password">
+      <option name="closed" value="true" />
+      <created>1694177772480</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1694177772480</updated>
+    </task>
+    <task id="LOCAL-00013" summary="Auto generate user id and password">
+      <option name="closed" value="true" />
+      <created>1694177820327</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1694177820327</updated>
+    </task>
+    <task id="LOCAL-00014" summary="increase pword size">
+      <option name="closed" value="true" />
+      <created>1694178091703</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1694178091703</updated>
+    </task>
+    <task id="LOCAL-00015" summary="pword changed to text field">
+      <option name="closed" value="true" />
+      <created>1694178271229</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1694178271229</updated>
+    </task>
+    <task id="LOCAL-00016" summary="Update report.js to make sure cmms sales customer reports are accurate">
+      <option name="closed" value="true" />
+      <created>1694707299942</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1694707299942</updated>
+    </task>
+    <task id="LOCAL-00017" summary="Update CMMS routing">
+      <option name="closed" value="true" />
+      <created>1695058108858</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1695058108858</updated>
+    </task>
+    <task id="LOCAL-00018" summary="Update CMMS routing">
+      <option name="closed" value="true" />
+      <created>1695210747837</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1695210747837</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="UnknownFeatures">
+    <option featureType="dependencySupport" implementationName="executable:docker" />
+    <option featureType="dependencySupport" implementationName="executable:kubectl" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
@@ -258,7 +361,13 @@
     <MESSAGE value="Refactor 'save_sales_customer' to include company validation&#10;&#10;This commit refactors the 'save_sales_customer' view method to include validation for company. A check is added to see whether a customer from the respective company already exists. This change is necessary to prevent duplicate entries of the same company in the sales customer database." />
     <MESSAGE value="Add functionality to close sales deals via API&#10;&#10;This commit introduces the ability to close sales deals through the API. The update in the deal's status is indicated in the transaction record of the deal. The implemented changes influence multiple parts of the code, including the HTML representation of deals in 'sales-cust.html', the JS functions in 'anton.js' and 'cmms_cust.js' and most importantly, the backend logic in 'cmms_api.py' where the actual closing of deals is carried out. This feature helps sales reps to finalize their deals and record the closing remarks, improving the overall management of sales in the platform." />
     <MESSAGE value="Updated tasks to have a scroll on full" />
-    <option name="LAST_COMMIT_MESSAGE" value="Updated tasks to have a scroll on full" />
+    <MESSAGE value="Integrating retail" />
+    <MESSAGE value="Auto generate user id and password" />
+    <MESSAGE value="increase pword size" />
+    <MESSAGE value="pword changed to text field" />
+    <MESSAGE value="Update report.js to make sure cmms sales customer reports are accurate" />
+    <MESSAGE value="Update CMMS routing" />
+    <option name="LAST_COMMIT_MESSAGE" value="Update CMMS routing" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -272,6 +381,16 @@
           <url>file://$PROJECT_DIR$/taskmanager/views.py</url>
           <line>28</line>
           <option name="timeStamp" value="4" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/cmms/cmms_api.py</url>
+          <line>1217</line>
+          <option name="timeStamp" value="5" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/taskmanager/api.py</url>
+          <line>3</line>
+          <option name="timeStamp" value="6" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

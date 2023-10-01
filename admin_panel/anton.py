@@ -64,3 +64,8 @@ def push_notification(user_pk, subject='', message=''):
         # response = requests.request("GET", url, headers=headers, data=payload)
         #
         # print(response.text)
+
+
+def remove_html_tags(text):
+    clean = re.compile('<.*?>')
+    return re.sub(clean, '', text)

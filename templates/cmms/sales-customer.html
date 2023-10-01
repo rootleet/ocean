@@ -42,7 +42,10 @@
                                             <label for="position">POSITION</label>
                                             <select name="position" id="position" class="form-control mb-2 form-control-sm rounded-0">
                                                 <option value="Director">Director</option>
+                                                <option value="Owner">Owner</option>
                                                 <option value="Procurement">Procurement</option>
+                                                <option value="Receptionist">Receptionist</option>
+                                                <option value="Transport Manager">Transport Manager</option>
                                                 <option value="Procurement">Others</option>
                                             </select>
 
@@ -54,6 +57,8 @@
                                             <label for="mobile">Contact Number</label><input type="tel" name="mobile" id="mobile" required autocomplete="off" class="form-control form-control-sm rounded-0 mb-2">
                                             <!-- EMAIL -->
                                             <label for="email">Email</label><input type="email" name="email" id="email" required autocomplete="off" class="form-control form-control-sm rounded-0 mb-2">
+                                            <!-- NOTE -->
+                                            <label for="note">Note</label><textarea required class="form-control mb-2 form-control-sm rounded-0" name="note" id="note" cols="30" rows="2"></textarea>
                                             <hr>
                                             <!-- ADDRESS -->
                                             <label for="region">REGION</label>
@@ -88,7 +93,7 @@
                 </form>
             </div>
         </div>
-        <i data-bs-target="#newCust" title="Add New Customer" data-bs-toggle="modal" class="pointer text-info bi bi-plus-square"></i>
+        <i onclick="location.href='{% url 'new_sales_customer' %}'" title="Add New Customer" class="pointer text-info bi bi-plus-square"></i>
 {#        <button onclick="location.href='{% url 'new_sales_customer' %}'" class="btn btn-info">REGISTER CUSTOMER</button>#}
     </div>
     <div class="card-body overflow-hidden">

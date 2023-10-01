@@ -28,6 +28,13 @@ class Tasks(models.Model):
         else:
             return "no update"
 
+    def text_status(self):
+        if self.status == 1:
+            return "OPEN"
+        elif self.status == 2:
+            return "CLOSE"
+        else:
+            return 'UNKNOWN'
 
 
 class TaskTransactions(models.Model):

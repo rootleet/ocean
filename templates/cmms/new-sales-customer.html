@@ -4,69 +4,248 @@
 
 {% block cmms %}
    <div class="w-100 h-100 card">
-    <div class="card-header">
-        <button type="submit" form="saveCust" class="btn btn-info">SAVE</button>
-    </div>
-    <form id="saveCust" method="post" action="{% url 'save_sales_customer' %}" class="card-body p-2">
-        <div class="container p-0">
-            <div class="row no-gutters">
+        <div class="card-header">
+            <button type="button" onclick="cmms_sales.saveCustomer()" class="btn btn-info">SAVE</button>
+        </div>
 
-                <!-- CONTACT -->
-                <div class="col-sm-6">
-                    <div class="card">
-                        <div class="card-header">
-                            <small class="card-title">Customer Details</small>
-                        </div>
-                        <div class="card-body p-2">
-                            <label for="company">Organization</label><input type="text" name="company" id="company" required autocomplete="off" class="form-control form-control-sm rounded-0 mb-2">
-                            <!-- NAME -->
-                            <label for="name">Name</label><input type="text" name="name" id="name" required autocomplete="off" class="form-control form-control-sm rounded-0 mb-2">
-                            <!-- TELEPHONE -->
-                            <label for="mobile">Contact Number</label><input type="tel" name="mobile" id="mobile" required autocomplete="off" class="form-control form-control-sm rounded-0 mb-2">
-                            <!-- EMAIL -->
-                            <label for="email">Email</label><input type="email" name="email" id="email" required autocomplete="off" class="form-control form-control-sm rounded-0 mb-2">
-                            <!-- ADDRESS -->
-                            <label for="address">Address</label><textarea required class="form-control form-control-sm rounded-0" name="address" id="address" cols="30" rows="6"></textarea>
-                        </div>
+        <div class="card-body overflow-auto p-2">
+
+
+            <div class="container">
+                <h3>Company Details</h3>
+                <div class="row">
+
+                    <input type="hidden" readonly name="url" id="url" required autocomplete="off" class="form-control form-control-sm rounded-0 mb-2">
+                    <input type="hidden" required name="owner" id="owner" value="{{ user.pk }}">
+
+                    <div class="col-sm-4">
+                        <!-- TYPE -->
+                        <label for="type_of_client">TYPE OF</label>
+                        <select class="form-control form-check-sm rounded-0" id="type_of_client" name="type_of_client">
+                            <option value="0">SELECT</option>
+                            <option value="Private Individual">Private Individual</option>
+                            <option value="Private Company">Private Company</option>
+                            <option value="Government">Government</option>
+                            <option value="Walk In">Walk In</option>
+                            <option value="Walk In">Phone Call</option>
+                            <option value="Tender">Tender</option>
+                            <option value="Bank Financed">Bank Financed</option>
+                        </select>
+                        <small class="text-info">Type Of Organization</small>
+
                     </div>
-                </div>
 
-                <div class="col-sm-6">
-
-                    <div class="form-group card mb-2">
-                        {% csrf_token %}
-                        <div class="card-header">
-                            <small class="card-title">Other Infor</small>
-                        </div>
-                        <div class="card-body p-2">
-                            <label for="type_of_client">Type Of Client</label><select class="form-control form-check-sm rounded-0 mb-2" id="type_of_client" name="type_of_client">
-                              <option value="Private Individual">Private Individual</option>
-                              <option value="Private Company">Private Company</option>
+                    <div class="col-sm-4  mb-3">
+                        <!-- SECTOR -->
+                        <label for="sector_of_company">SECTOR</label>
+                        <select class="form-control form-check-sm rounded-0" id="sector_of_company" name="sector_of_company">
+                            <option value="0">SELECT</option>
+                            <option value="Aerospace">Aerospace</option>
+                              <option value="Automotive">Automotive</option>
+                              <option value="Construction">Construction</option>
+                              <option value="Education">Education</option>
+                              <option value="Energy">Energy</option>
+                              <option value="Finance">Finance</option>
+                              <option value="Food and Beverage">Food and Beverage</option>
                               <option value="Government">Government</option>
-                              <option value="Walk In">Walk In</option>
-                              <option value="Tender">Tender</option>
-                              <option value="Bank Financed">Bank Financed</option>
-                            </select>
-                            <label for="requirement">Requirement</label><textarea required class="form-control form-control-sm rounded-0" name="requirement" id="requirement" cols="30" rows="2"></textarea>
-                            <label for="purc_reason">Reason Of Purchase</label><textarea required class="form-control form-control-sm rounded-0" name="purc_reason" id="purc_reason" cols="30" rows="2"></textarea>
-                            <hr>
-                            <small class="text-info">optional but vital information</small> <br>
-                            <label for="age_of_cur">Age Of Current Car</label><input min="0" value="0" type="number" name="age_of_cur" class="form-control mb-2 form-control-sm rounded-0" id="age_of_cur">
-                            <!-- CAR TYPE -->
-                            <label for="cur_car_det">Car Detail ( Brand/ Model )</label><input required value="unknown" type="text" name="cur_car_det" class="form-control mb-2 form-control-sm rounded-0" id="cur_car_det">
-
-                            <input type="hidden" required name="owner" value="{{ user.pk }}">
-
-                        </div>
-
-
+                              <option value="Healthcare">Healthcare</option>
+                              <option value="Hospitality">Hospitality</option>
+                              <option value="Manufacturing">Manufacturing</option>
+                              <option value="Media and Entertainment">Media and Entertainment</option>
+                              <option value="Nonprofit">Nonprofit</option>
+                              <option value="Pharmaceuticals">Pharmaceuticals</option>
+                              <option value="Real Estate">Real Estate</option>
+                              <option value="Retail">Retail</option>
+                              <option value="Technology">Technology</option>
+                              <option value="Telecommunications">Telecommunications</option>
+                              <option value="Transportation">Transportation</option>
+                              <option value="Utilities">Utilities</option>
+                        </select>
+                        <small class="text-info">Sector of organizational operations</small>
 
                     </div>
+
+                    <div class="col-sm-4">
+                        <label for="company">COMPANY NAME</label><input onchange="makeurl()" type="text" name="company" id="company" required autocomplete="off" class="form-control form-control rounded-0">
+                        <small class="text-info">descriptive and official company name</small>
+                    </div>
+
+                    <!-- REGION -->
+                    <div class="col-sm-4">
+                        <label for="region">REGION</label>
+                        <select onchange="getCities(this.value)" name="region" id="region" class="form-control rounded-0">
+                            <option value="0">SELECT CITY</option>
+                        </select>
+                        <small class="text-info">region</small>
+                    </div>
+
+                    <!-- CITY -->
+                    <div class="col-sm-4 mb-4">
+                        <label for="city">CITY</label>
+                        <select disabled name="city" id="city" class="form-control rounded-0">
+                            <option value="0">SELECT CITY</option>
+                        </select>
+                        <small class="text-info">city, town, or village of customer</small>
+                    </div>
+
+                    <!-- ADDRESS -->
+                    <div class="col-sm-4">
+                        <label for="address">ADDRESS</label><input type="text" name="address" id="address" required autocomplete="off" class="form-control form-control rounded-0">
+                        <small class="text-info">street,ghpost address,landmard</small>
+                    </div>
+
+                    <!-- PHONE -->
+                    <div class="col-sm-4">
+                        <label for="phone">PHONE</label><input type="tel" name="phone" id="phone" required autocomplete="off" class="form-control form-control rounded-0">
+                        <small class="text-info">company phone number</small>
+                    </div>
+                    <!-- EMAIL -->
+                    <div class="col-sm-4">
+                        <label for="email">EMAIL</label><input type="text" name="email" id="email" required autocomplete="off" class="form-control form-control rounded-0">
+                        <small class="text-info">company email address</small>
+                    </div>
+                    <!-- FAX -->
+                    <div class="col-sm-4">
+                        <label for="fax">FAX</label><input type="text" value="NONE" name="fax" id="fax" required autocomplete="off" class="form-control form-control rounded-0">
+                        <small class="text-info">fax detail</small>
+                    </div>
+
                 </div>
 
+    <hr>
+
+                <div class="row">
+                    <!-- FIRST NAME -->
+                    <div class="col-sm-4">
+                        <h3>PERSONAL DETAIL</h3>
+                        <label for="position">POSITION</label>
+                        <select name="position" id="position" class="form-control mb-2 rounded-0">
+                            <option value="0">SELECT POSITION</option>
+                            <option value="Director">Director</option>
+                            <option value="Owner">Owner</option>
+                            <option value="Procurement">Procurement</option>
+                            <option value="Receptionist">Receptionist</option>
+                            <option value="Transport Manager">Transport Manager</option>
+                            <option value="Procurement">Others</option>
+                        </select>
+                        <label for="first_name">FIRST NAME</label><input type="text" class="form-control rounded-0 mb-2" id="first_name">
+                        <label for="last_name">LAST NAME</label><input type="text" class="form-control rounded-0 mb-2" id="last_name">
+                    </div>
+
+                    <div class="col-sm-8">
+                        <div class="w-100 text-right"><h3>NOTE</h3></div>
+                        <textarea name="note" id="note" cols="30" rows="5" class="form-control rounded-0"></textarea>
+                    </div>
+
+                </div>
 
             </div>
+
         </div>
-    </form>
+
    </div>
+
+
+    <script>
+        let customers = cmms_sales.getCustomer('all')
+
+        if(customers['status_code'] === 200)
+        {
+            let tr = '';
+            for (let i = 0; i < customers['message'].length; i++) {
+                let customer = customers['message'][i]
+                let url = customer['url']
+                tr += `<tr>
+                            <td><small>${customer['name']}</small></td>
+                            <td><small>${customer['company']}</small></td>
+                            <td><small>${customer['mobile']}</small></td>
+                            <td><small>${customer['email']}</small></td>
+                            <td><small>${customer['geography']['region']}</small></td>
+                            <td><small>${customer['geography']['suburb']}</small></td>
+                            <td>
+                                <i onclick="location.href='/cmms/sales/deals/${url}/'" class="bi bi-translate mr-5 pointer"></i>
+                                {% if user.is_superuser %}
+                                <i onclick="if(confirm('ARE YOU SURE')){cmms_sales.delete_customer('${customer['pk']}')}" class="bi bi-trash-fill pointer text-danger"></i>
+                                {% endif %}
+                            </td>
+                        </tr>`
+
+            }
+            $('#tBody').html(tr)
+        } else if (customers['status_code'] === 404) {
+            $('#newCust').modal('show')
+
+        } else {
+            kasa.info(customers['message'])
+        }
+
+        function makeurl() {
+            let company = $('#company').val()
+            $('#url').val(company.replace(/\s/g, '-').toLowerCase())
+        }
+
+        // load cities for modal
+        function getCities(city) {
+            let payload_x = {
+                'module':'geo',
+                data:{
+                    'part':'region',
+                    'key':city
+                }
+            }
+
+            let response = api.call('VIEW',payload_x,'/adapi/')
+
+            if(response['status_code'] === 200){
+                let opt = ''
+                let message = response['message'][0];
+
+                let subs = message['subs']
+                if(subs.length > 0){
+                    for (let sb = 0; sb < subs.length ; sb++) {
+                        let sub = subs[sb]
+                        console.table(sub)
+                        if(sb === 0){
+                            opt += `<option selected value="${sub['pk']}">${sub['name']}</option>`
+                        } else {
+                            opt += `<option value="${sub['pk']}">${sub['name']}</option>`
+                        }
+
+                    }
+                    $('#city').prop('disabled',false)
+                    $('#city').html(opt)
+                } else {
+                    $('#city').prop('disabled',true)
+                    kasa.html(`No subs in region, use <a href="javascript:void()" onclick="windowPopUp('{% url 'geo' %}','LOCATIONS',900,600)" >his link</a> to create a sub in region`)
+                }
+
+
+            }
+        }
+
+        function loadRegions(){
+            let payload = {
+                'module':'geo',
+                data:{
+                    'part':'region',
+                    'key':'*'
+                }
+            }
+
+            let response = api.call('VIEW',payload,'/adapi/')
+
+            if(response['status_code'] === 200){
+                options = ''
+                let message = response['message'];
+                for (let r = 0; r < message.length; r++) {
+                    let region = message[r]
+                    options += `<option value="${region['pk']}">${region['name']}</option>`
+                }
+                $('#region').append(options)
+            }
+        }
+        loadRegions()
+    </script>
+
 {% endblock %}
+

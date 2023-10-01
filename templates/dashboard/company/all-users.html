@@ -2,10 +2,27 @@
 {% load static %}
 
 {% block body %}
+    <div class="modal" id="newDepartment">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="{% url 'save-department' %}" method="post" class="modal-body">
+                    {% csrf_token %}
+                    <label for="name">NAME OF DEPARTMENT</label><input required type="tel" class="form-control rounded-0 mb-2" autocomplete="off" name="name" id="name">
+                    <hr>
+                    <label for="name_of_head">NAME OF HEAD</label><input required type="text" class="form-control rounded-0 mb-2" autocomplete="off" name="name_of_head" id="name_of_head">
+                    <label for="email_of_head">EMAIL OF HEAD</label><input required type="email" class="form-control rounded-0 mb-2" autocomplete="off" name="email_of_head" id="email_of_head">
+                    <label for="phone_of_head">PHONE OF HEAD</label><input required type="tel" class="form-control rounded-0 mb-2" autocomplete="off" name="phone_of_head" id="phone_of_head">
+                    <hr>
+                    <label for="description">Description</label><textarea required name="description" id="description" cols="30" rows="5" class="form-control rounded-0"></textarea>
 
+                    <button class="btn mt-2 btn-success">SAVE</button>
+                </form>
+            </div>
+        </div>
+    </div>
     <div class="w-100 h-100">
 
-        <div class="container-fluid" style="height: 75vh; overflow: hidden">
+        <div class="container-fluid p-0" style="height: 75vh; overflow: hidden">
             <div class="row">
                 <div class="col-sm-8">
                     <div class="card">
@@ -97,9 +114,32 @@
                                                 {% if this_user.is_superuser == False %}
                                                     <i class="pointer bx bx-recycle text-danger mr-2" onclick="user.Delete('{{ this_user.pk }}')"></i>
                                                 {% endif %}
+                                                <i data-bs-target="#chgDept{{ this_user.pk }}" data-bs-toggle="modal" title="Change Department" class="bx bx-group"></i>
                                                 <i title="Permissions" class="pointer bx bx-key text-warning" onclick="location.href='{% url 'user_permissions' this_user.username %}'"></i>
                                             </td>
                                         </tr>
+
+                                        <div class="modal" id="chgDept{{ this_user.pk }}">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content p-2">
+                                                    <div class="modal-header"><strong class="modal-title">CHANGE DEPARTMENT FOR {{ this_user.first_name }} {{ this_user.last_name }}</strong></div>
+                                                    <form method="post" action="{% url 'set_department' %}" class="modal-body">
+                                                    {% csrf_token %}
+                                                        <input type="hidden" name="user" value="{{ this_user.pk }}">
+                                                        <label for="dept" class="">DEPARTMENT</label>
+                                                        <select name="dept" id="dept" class="form-control rounded-0">
+                                                            {% for dep in depts %}
+                                                                <option value="{{ dep.pk }}">{{ dep.name }}</option>
+                                                            {% endfor %}
+                                                        </select>
+                                                        <hr>
+                                                        <button class="btn btn-success m-2">COMMIT</button>
+                                                    </form>
+
+                                                </div>
+                                            </div>
+                                        </div>
+
                                     {% endfor %}
                                 </tbody>
                             </table>
@@ -108,6 +148,19 @@
                 </div>
 
                 <div class="col-sm-4">
+
+                    <div class="card">
+                        <div class="card-header">
+                            <strong class="card-title">DEPARTMENTS</strong> <button data-bs-toggle="modal" data-bs-target="#newDepartment" class="btn btn-sm btn-info">ADD</button>
+                        </div>
+                        <div class="card-body p-1">
+                            <ul>
+                                {% for dept in depts %}
+                                <li><i title="delete" class="fa fa-recycle text-danger pointer"></i> {{ dept.name }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
 
                     <div class="card">
                         <div class="card-header">

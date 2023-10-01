@@ -1,11 +1,12 @@
 import json
+import sys
 
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from fpdf import FPDF
 
 from meeting.models import MeetingHD
-from reports.models import ReportForms, ReportLegend, LegendSubs
+from reports.models import ReportForms, ReportLegend, LegendSubs, DepartmentReportMailQue
 from taskmanager.models import Tasks
 
 
@@ -90,14 +91,92 @@ def interface(request):
 
             lg = ReportLegend.objects.get(pk=legend)
 
-            LegendSubs(legend=lg, description=description,action=action,name=name).save()
+            LegendSubs(legend=lg, description=description, action=action, name=name).save()
 
             success_response['message'] = "Legend Saved"
             response = success_response
 
+        elif doc == 'send_dept_mail':
+
+            pending_mail_list = DepartmentReportMailQue.objects.filter(status=0)
+            resp = []
+            deptt = []
+            if pending_mail_list.count() > 0:
+                for mails in pending_mail_list:
+                    head_email = mails.department.email_of_head
+                    files = mails.files
+                    clean_files = files.rstrip(',')
+                    files_array = clean_files.split(',')
+
+                    import smtplib
+                    from email.mime.multipart import MIMEMultipart
+                    from email.mime.text import MIMEText
+                    from email.mime.application import MIMEApplication
+                    # Email configuration
+                    smtp_server = "smtp.gmail.com"
+                    smtp_port = 587
+                    sender_email = "donotreply@protonghana.com"
+                    sender_password = "arbogirmfctrnnpt"  # Use an app password for security
+                    subject = f"{mails.department.name} PRODUCTIVITY REPORT "
+                    html_content = "Productivity report base on task manager. This report will includes all tasks"
+
+                    # Create a MIME multipart message
+                    msg = MIMEMultipart()
+                    msg["From"] = sender_email
+                    msg["To"] = head_email
+                    msg["Subject"] = subject
+
+                    # Attach the HTML content to the message
+                    msg.attach(MIMEText(html_content, "html"))
+                    files_array = clean_files.split(',')
+                    ff = []
+                    for att_file in files_array:
+                        # Attach the file
+                        ff.append(att_file)
+                        attachment_filename = f"static/general/task-reports/{att_file}"
+                        attachment_path = attachment_filename
+                        try:
+                            with open(attachment_path, 'rb') as attachment:
+                                part = MIMEApplication(attachment.read())
+                                part.add_header('Content-Disposition', 'attachment', filename=att_file.strip())
+                                msg.attach(part)
+                                print(attachment_filename)
+                        except FileNotFoundError:
+                            print(f"File not found: {attachment_filename}")
+                        except Exception as e:
+                            print(f"Error attaching file {attachment_filename}: {str(e)}")
+
+                            # Connect to the Gmail SMTP server and send the email
+                    try:
+                        server = smtplib.SMTP(smtp_server, smtp_port)
+                        server.starttls()
+                        server.login(sender_email, sender_password)
+                        server.sendmail(sender_email, head_email, msg.as_string())
+                        deptt.append({'department':mails.department.name,'files':ff})
+                        mails.status = 1
+                        mails.save()
+
+                    except Exception as e:
+                        # response['status_code'] = 505
+                        # response['message'] = str(e)
+                        deptt.append({'department':mails.department.name,'files':e})
+                        message = f"COULD NOT SEND EMAIL {str(e)}"
+                        print("Error sending email:", e)
+                    finally:
+                        server.quit()
+
+                success_response['message'] = deptt
+                response = success_response
+            else:
+                success_response['message'] = "No Emails To Send For Department"
+                response = success_response
 
     except Exception as e:
+        error_type, error_instance, traceback = sys.exc_info()
+        tb_path = traceback.tb_frame.f_code.co_filename
+        line_number = traceback.tb_lineno
         response["status_code"] = 500
-        response["message"] = f"{str(e)}"
+        response[
+            "message"] = f"An error of type {error_type} occurred on line {line_number} in file {tb_path}. Details: {e}"
 
     return JsonResponse(response)

@@ -1,7 +1,7 @@
 from django import forms
 
 from admin_panel.models import ProductMaster, ProductPacking, Locations, TicketHd, Files, OrganizationalUnit, \
-    UnitMembers, SmsApi, BulkSms
+    UnitMembers, SmsApi, BulkSms, Departments
 from dolphine.models import Documents
 
 
@@ -9,6 +9,12 @@ class NewProduct(forms.ModelForm):
     class Meta:
         model = ProductMaster
         exclude = ['created_on', 'edited_on', 'status', 'created_by', 'price_center']
+
+
+class NewDepartments(forms.ModelForm):
+    class Meta:
+        model = Departments
+        exclude = []
 
 
 class NewProductPacking(forms.ModelForm):
@@ -82,7 +88,7 @@ class NewUM(forms.ModelForm):
 class NewSMSApi(forms.ModelForm):
     class Meta:
         model = SmsApi
-        exclude = ['created_date', 'created_time', 'status','is_default']
+        exclude = ['created_date', 'created_time', 'status', 'is_default']
 
 
 class NewBulkSms(forms.ModelForm):

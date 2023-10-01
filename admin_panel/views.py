@@ -21,7 +21,7 @@ from fpdf import FPDF
 
 from admin_panel.anton import push_notification, is_valid_password
 from admin_panel.form import NewProduct, NewLocation, LogIn, NewTicket, UploadFIle, SignUp, NewOu, NewUM, NewSMSApi, \
-    NewBulkSms
+    NewBulkSms, NewDepartments
 from admin_panel.models import *
 from blog.models import *
 from community.models import *
@@ -2141,7 +2141,8 @@ def all_users(request):
         'page': page,
         'users': User.objects.all(),
         'ous': OrganizationalUnit.objects.all(),
-        'unit_membs': UnitMembers.objects.all()
+        'unit_membs': UnitMembers.objects.all(),
+        'depts':Departments.objects.all()
     }
     return render(request, 'dashboard/company/all-users.html', context=context)
 
@@ -2462,3 +2463,27 @@ def evat_keys(request):
         }
     }
     return render(request, 'dashboard/evat/evat-keys.html', context=context)
+
+def save_department(request):
+    if request.method == 'POST':
+        form = NewDepartments(request.POST)
+        if form.is_valid():
+            form.save()
+        else:
+            messages.error(request,form.errors)
+    else:
+        messages.error(request,"INVALID METHOD")
+
+    return redirect('all-users')
+
+def set_department(request):
+    form = request.POST
+    user = form['user']
+    dept = form['dept']
+
+    sys_user = User.objects.get(pk=user)
+    add_on = UserAddOns.objects.get(user=sys_user)
+    deptmt = Departments.objects.get(pk=dept)
+    add_on.department = deptmt
+    add_on.save()
+    return  redirect('all-users')

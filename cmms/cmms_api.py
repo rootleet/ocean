@@ -649,9 +649,9 @@ def api(request):
                         asset_cursor = db()
                         asset_cursor.execute(assets_q)
 
-
                         for asset in asset_cursor.fetchall():
-                            asset_cursor.execute(f"SELECT count(*) as service_times FROM invoice_hd where asset_code = '{str(asset[0]).strip()}'")
+                            asset_cursor.execute(
+                                f"SELECT count(*) as service_times FROM invoice_hd where asset_code = '{str(asset[0]).strip()}'")
 
                             obj = {
                                 'code': str(asset[0]).strip(),
@@ -659,7 +659,7 @@ def api(request):
                                 'number': str(asset[2]).strip(),
                                 'chassis': str(asset[3]).strip(),
                                 'model': str(asset[4]).strip(),
-                                'service_times':asset_cursor.fetchone()[0]
+                                'service_times': asset_cursor.fetchone()[0]
                             }
                             asset_arr.append(obj)
 
@@ -1174,7 +1174,40 @@ def api(request):
                     response['status_code'] = 500
                     response['message'] = str(e)
 
+            elif module == 'sales_customer':
+                try:
+                    type_of_client = data.get('type_of_client')
+                    sector_of_company = data.get('sector_of_company')
+                    company = data.get('company')
+                    region = data.get('region')
+                    address = data.get('address')
+                    city = data.get('city')
+                    phone = data.get('phone')
+                    email = data.get('email')
+                    fax = data.get('fax')
 
+                    position = data.get('position')
+                    first_name = data.get('first_name')
+                    last_name = data.get('last_name')
+                    note = data.get('note')
+
+                    url = data.get('url')
+                    owner_pk = data.get('owner')
+                    # save
+                    owner = User.objects.get(pk=owner_pk)
+                    reg = GeoCity.objects.get(pk=region)
+                    cit = GeoCitySub.objects.get(pk=city)
+
+                    SalesCustomers(sector_of_company=sector_of_company, type_of_client=type_of_client, company=company,
+                                   region=reg, city=cit,
+                                   mobile=phone, email=email, fax=fax, address=address, first_name=first_name,
+                                   last_name=last_name, position=position,
+                                   note=note, name=f"{first_name} {last_name}", url=url, owner=owner).save()
+                    response['status'] = 200
+                    response['message'] = "CUSTOMER SAVED"
+                except Exception as e:
+                    response['status'] = 505
+                    response['message'] = str(e)
 
         elif method == 'PATCH':
             if module == 'stock':

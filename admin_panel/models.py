@@ -430,6 +430,17 @@ class AuthToken(models.Model):
 
 
 # hold extra user details
+class Departments(models.Model):
+    name = models.CharField(max_length=255,unique=True)
+    name_of_head = models.TextField()
+    email_of_head = models.TextField()
+    phone_of_head = models.TextField()
+    description = models.TextField(null=True)
+
+    def members(self):
+        return UserAddOns.objects.filter(department=self)
+
+
 class UserAddOns(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     about = models.TextField()
@@ -442,6 +453,8 @@ class UserAddOns(models.Model):
     app_version = models.ForeignKey('appconfig.VersionHistory', on_delete=models.CASCADE)
     profile_pic = models.FileField(upload_to=f'static/general/img/users/')
     pword_reset = models.IntegerField(default=1)
+
+    department = models.ForeignKey(Departments,on_delete=models.SET_NULL, null=True, blank=True)
 
     def settings(self):
         return UserSettings.objects.get(user=self.user)
