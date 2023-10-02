@@ -2,6 +2,7 @@ import json
 
 import requests
 from django.contrib import messages
+from django.contrib.auth import authenticate, login as auth_login, logout, get_user_model
 from django.contrib.auth.models import User, Permission
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -302,7 +303,6 @@ def index(request):
                             sheet[f'D{sheet_count}'] = last_transaction_time
                             sheet[f"E{sheet_count}"] = task.text_status()
 
-
                             sheet_count += 1
                             # for transaction in transactions:
                             #     tran_title = transaction.title
@@ -322,9 +322,44 @@ def index(request):
                     response['message'] = files
                     response['status_code'] = 200
                     DepartmentReportMailQue(department=department, files=files).save()
+
+            elif module == 'auth':
+                username = data.get('username')
+                password = data.get('key')
+
+                # check if user exist
+                user = authenticate(request, username=username, password=password)
+
+                try:
+                    # check if user is valid
+                    if hasattr(user, 'is_active'):
+                        auth_login(request, user)
+                        # Redirect to a success page.
+                        msg = {
+                            'auth': 'yes',
+                            'pk': 1,
+                            'username': username
+                        }
+
+                    else:
+                        msg = {
+                            'auth': 'no',
+                            'error': "Check Credentials"
+                        }
+
+                except Exception as e:
+                    msg = {
+                        'auth': 'no',
+                        'error': str(e)
+                    }
+                success_response['message'] = msg
+                response = success_response
+                print(response)
             else:
                 response['status_code'] = 503
                 response['message'] = f"UNKNOWN MODULE ( METHOD : {method}, MODULE : {module} )"
+
+
 
         elif method == 'PATCH':  # update
             if module == 'user_permission':

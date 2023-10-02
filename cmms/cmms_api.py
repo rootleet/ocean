@@ -11,6 +11,7 @@ from django.views.decorators.csrf import csrf_exempt
 from fpdf import FPDF
 
 from cmms.forms import NewSalesCustomer, NewSaleTransactions
+from crm.models import Logs
 from ocean.settings import DB_SERVER, DB_NAME, DB_USER, DB_PORT, DB_PASSWORD
 from django.contrib.auth import get_user_model
 import pyodbc
@@ -1151,6 +1152,14 @@ def api(request):
                     SalesDeals(customer=customer, owner=owner, pur_rep_name=pur_rep_name, pur_rep_phone=pur_rep_phone,
                                pur_rep_email=pur_rep_email, asset=asset, model=model,
                                stock_type=stock_type, requirement=requirement).save()
+
+                    # save in logs
+                    desc = (f"Initiated discussion with {pur_rep_name} from {customer.company} regarding car "
+                            f"purchase. Asset presented is"
+                            f"{asset} with model of {model}. He has a requirement which is {requirement}")
+                    Logs(owner=owner, description=desc, phone=pur_rep_phone, flag='success', subject="Car Purchase",
+                         customer=pur_rep_name).save()
+
                     response['status_code'] = 200
                     response['message'] = "DEAL CREATED"
                 except Exception as e:

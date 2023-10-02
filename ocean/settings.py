@@ -53,7 +53,8 @@ INSTALLED_APPS = [
     'appscenter.apps.AppscenterConfig',
     'reports.apps.ReportsConfig',
     'taskmanager.apps.TaskmanagerConfig',
-    'retail.apps.RetailConfig'
+    'retail.apps.RetailConfig',
+    'crm.apps.CrmConfig'
 ]
 
 MIDDLEWARE = [
