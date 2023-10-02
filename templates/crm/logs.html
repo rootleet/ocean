@@ -1,0 +1,34 @@
+{% extends 'crm/base.html' %}
+{% load static %}
+
+{% block crm %}
+    <div class="card-body">
+    <div class="card-header">
+        <button onclick="crm.newLog()" class="btn btn-info">NEW</button>
+    </div>
+        <table class="table datatable">
+            <thead>
+                <tr>
+                    <th>NAME</th><th>SUBJECT</th><th>PHONE</th><th>DATE</th><th>TIME</th><th>FLAG</th><th>action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for log in logs %}
+                    <tr>
+                        <td>{{ log.customer }}</td>
+                        <td>{{ log.subject }}</td>
+                        <td>{{ log.phone }}</td>
+                        <td>{{ log.created_date }}</td>
+                        <td>{{ log.created_time }}</td>
+                        <td><kbd class="bg-danger">UNREA</kbd></td>
+                        <td><i onclick="Swal.fire({
+                        text:`{{ log.description }}`
+                        })" class="fa fa-eye text-info"></i></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <script src="{% static 'general/js/classes/crm.js' %}"></script>
+{% endblock %}

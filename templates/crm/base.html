@@ -1,0 +1,640 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>OCEAN</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="{% static 'assets/img/favicon.png' %}" rel="icon">
+  <link href="{% static 'assets/img/apple-touch-icon.png' %}" rel="apple-touch-icon">
+
+  <!-- Google Fonts
+
+  <link href="https://fonts.gstatic.com" rel="preconnect">
+
+  <link
+    href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+    rel="stylesheet"> !-->
+
+  <!-- Vendor CSS Files -->
+  <link href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/boxicons/css/boxicons.min.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/quill/quill.snow.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/quill/quill.bubble.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/remixicon/remixicon.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/simple-datatables/style.css' %}" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link href="{% static 'assets/css/style.css' %}" rel="stylesheet">
+  <link href="{% static 'general/css/recorder.css' %}" rel="stylesheet">
+    <link href="{% static 'general/css/colors.css' %}" rel="stylesheet">
+
+
+
+
+  <script src="{% static 'blog/js/jquery.min.js' %}"></script>
+  <script src="{% static 'blog/js/popper.min.js' %}"></script>
+  <script src="{% static 'blog/js/bootstrap.min.js' %}"></script>
+  <script src="{% static 'general/js/cust.js' %}"></script>
+  <script src="{% static 'general/js/admin.js' %}"></script>
+  <script src="{% static 'general/js/error_handler.js' %}"></script>
+  <script src="{% static 'general/js/sweetalert2@11' %}"></script>
+  <script src="{% static 'general/js/all.js' %}"></script>
+  <script src="{% static 'general/js/prod_master.js' %}"></script>
+
+  <script src="{% static 'general/js/classes/products.js' %}"></script>
+  <script src="{% static 'general/js/classes/adjustment.js' %}"></script>
+  <script src="{% static 'general/js/classes/grn.js' %}"></script>
+  <script src="{% static 'general/js/classes/transfer.js' %}"></script>
+  <script src="{% static 'general/js/classes/issues.js' %}"></script>
+  <script src="{% static 'general/js/classes/recording.js' %}"></script>
+  <script src="{% static 'general/js/classes/meeting.js' %}"></script>
+  <script src="{% static 'general/js/record.js' %}"></script>
+  <script src="{% static 'general/js/classes/user.js' %}"></script>
+  <script src="{% static 'general/js/classes/po.js' %}"></script>
+    <script src="{% static 'general/js/classes/sales.js' %}"></script>
+    <script src="{% static 'general/js/classes/sms.js' %}"></script>
+    <script src="{% static 'general/js/classes/cmms.js' %}"></script>
+    <script src="{% static 'general/js/trigger.js' %}"></script>
+    <script src="{% static 'general/js/classes/api.js' %}"></script>
+    <script src="{% static 'general/js/classes/dev_mgmt.js' %}"></script>
+    <script src="{% static 'general/js/classes/ticket.js' %}"></script>
+    <script src="{% static 'general/js/classes/app.js' %}"></script>
+    <script src="{% static 'general/js/classes/docs.js' %}"></script>
+    <script src="{% static 'general/js/classes/anton.js' %}"></script>
+    <script src="{% static 'general/js/classes/cmms_cust.js' %}"></script>
+    <script src="{% static 'general/js/classes/modal.js' %}"></script>
+
+
+  <script>
+    var pClass = new Products()
+
+  </script>
+
+  <!-- =======================================================
+  * Template Name: NiceAdmin - v2.4.1
+  * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
+  * Author: BootstrapMade.com
+  * License: https://bootstrapmade.com/license/
+  ======================================================== -->
+</head>
+
+<body>
+    <!-- MODALS -->
+    <div id="g_modal" class="modal fade">
+        <div id="g_modal_size"  class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="g_modal_title"></h5>
+                </div>
+                <div class="modal-body overflow-auto" style='max-height : 75vh'>
+                    <div class="w-100" id="g_modal_body">
+                        
+                    </div>
+                </div>
+                <div class="footer" id="g_footer"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="followUps">
+                <div class="modal-dialog modal-lg modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <strong class="modal-title">Followup History</strong>
+{#                            <button id="newFolloupButton" class="close bx bx-plus btn btn-sm" data-bs-target="#newFolloup" data-bs-toggle="modal"></button>#}
+                        </div>
+                        <div class="modal-body" id="xfact" style="height: 60vh; overflow: auto">
+                            <table class="table table-bordered table-sm table-hover table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Person</th><th>Date</th><th>Title</th><th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="fTbody">
+                                    <tr>
+                                        <td>James</td>
+                                        <td>Date</td>
+                                        <td>Hello World</td>
+                                        <td><i class="fa fa-reply pointer" onclick="al('info','hello world')"></i></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="newFolloup">
+                <div class="modal-dialog modal-dialog-centered modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <strong class="modal-title">NEW FOLLOWUP</strong>
+                        </div>
+                        <div class="modal-body">
+                            <label for="car_no">CAR NUMBER</label><input type="text" readonly id="car_no" name="car_no" class="form-control mb-2 rounded-0">
+                            <label for="ftitle">TItle</label><input type="text" class="form-control mb-2 rounded-0" id="ftitle">
+                            <label for="freply">Response</label><textarea name="" id="freply" cols="30" rows="10"
+                                                                  class="form-control rounded-0"></textarea>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" onclick="cmms.SaveFollowup()" class="btn btn-success">SAVE</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+    <div class="modal" id="loader">
+        <div class="w-100 bg_trans_80 h-100 d-flex flex-wrap align-content-center justify-content-center">
+            <img src="{% static 'general/img/icons/2.gif' %}" alt="" class="img-fluid">
+            <div class="w-100 text-center">
+                <br>
+                <small class="text-info" id="error_msg"></small>
+            </div>
+        </div>
+    </div>
+    <script>
+        $('#loader').modal('show')
+    </script>
+
+  <input type="hidden" id="autos_url" value="{% url 'autos' 'ajax' %}">
+  <input type="hidden" id="search_url" value="{% url 'search' %}">
+  <input type="hidden" value="{{ request.user.pk }}" id="mypk">
+  <input type="hidden" value="{{ request.user.username }}" id="myName">
+  {% if nav == True %}
+  <!-- ======= Header ======= -->
+  <header id="header" class="header fixed-top d-flex align-items-center">
+
+    <div class="d-flex align-items-center justify-content-between">
+      <a href="{% url 'home' %}" class="logo d-flex align-items-center">
+        <img src="{% static 'assets/img/logo.png' %}" alt="">
+        <span class="d-none d-lg-block">OCEAN</span>
+      </a>
+      <i class="bi bi-list toggle-sidebar-btn"></i>
+    </div><!-- End Logo -->
+
+    <div class="search-bar">
+      <form class="search-form d-flex align-items-center" method="POST" action="#">
+        <input type="text" name="searchQuery" id="searchQuery" placeholder="Search" title="Enter search keyword">
+        <button type="button" id="{{ searchButton }}" title="Search"><i class="bi bi-search"></i></button>
+      </form>
+    </div><!-- End Search Bar -->
+
+    {{ legend1 }}
+
+    <nav class="header-nav ms-auto">
+      <ul class="d-flex align-items-center">
+
+        <li class="nav-item d-block d-lg-none">
+          <a class="nav-link nav-icon search-bar-toggle " href="#">
+            <i class="bi bi-search"></i>
+          </a>
+        </li><!-- End Search Icon-->
+
+        <li class="nav-item dropdown">
+
+          <a class="nav-link nav-icon">
+            <small class="text-danger">
+                {% for message in messages %}
+                  {{ message }}
+                {% endfor %}
+            </small>
+          </a><!-- End Messages Icon -->
+
+          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow messages">
+            <li class="dropdown-header">
+              You have 3 new messages
+              <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li class="message-item">
+              <a href="#">
+                <img src="{% static 'assets/img/messages-1.jpg' %}" alt="" class="rounded-circle">
+                <div>
+                  <h4>Maria Hudson</h4>
+                  <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
+                  <p>4 hrs. ago</p>
+                </div>
+              </a>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li class="message-item">
+              <a href="#">
+                <img src="{% static 'assets/img/messages-2.jpg' %}" alt="" class="rounded-circle">
+                <div>
+                  <h4>Anna Nelson</h4>
+                  <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
+                  <p>6 hrs. ago</p>
+                </div>
+              </a>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li class="message-item">
+              <a href="#">
+                <img src="{% static 'assets/img/messages-3.jpg' %}" alt="" class="rounded-circle">
+                <div>
+                  <h4>David Muldon</h4>
+                  <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
+                  <p>8 hrs. ago</p>
+                </div>
+              </a>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li class="dropdown-footer">
+              <a href="#">Show all messages</a>
+            </li>
+
+          </ul><!-- End Messages Dropdown Items -->
+
+        </li><!-- End Messages Nav -->
+
+
+        <li class="nav-item dropdown">
+
+
+
+          <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
+            <i class="bi bi-bell"></i>
+            <span class="badge bg-primary badge-number">{{ notifications.unread.count }}</span>
+          </a><!-- End Notification Icon -->
+
+          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
+
+
+
+            <li class="dropdown-header">
+              You have {{ notifications.unread.count }} new notifications
+              <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            {% for notification in notifications.unread %}
+            <li class="notification-item">
+              <i class="bi bi-exclamation-circle text-warning"></i>
+              <div>
+                <h4>{{ notification.title }}</h4>
+                <p>{{ notification.descr }}</p>
+                <p>{{ notification.created_date }} <span class="text-info">{{ notification.created_time }}</span></p>
+              </div>
+            </li>
+            {% endfor %}
+
+            <li class="notification-item">
+              <i class="bi bi-exclamation-circle text-warning"></i>
+              <div>
+                <h4>Lorem Ipsum</h4>
+                <p>Quae dolorem earum veritatis oditseno</p>
+                <p>30 min. ago</p>
+              </div>
+            </li>
+
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li class="notification-item">
+              <i class="bi bi-x-circle text-danger"></i>
+              <div>
+                <h4>Atque rerum nesciunt</h4>
+                <p>Quae dolorem earum veritatis oditseno</p>
+                <p>1 hr. ago</p>
+              </div>
+            </li>
+
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li class="notification-item">
+              <i class="bi bi-check-circle text-success"></i>
+              <div>
+                <h4>Sit rerum fuga</h4>
+                <p>Quae dolorem earum veritatis oditseno</p>
+                <p>2 hrs. ago</p>
+              </div>
+            </li>
+
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li class="notification-item">
+              <i class="bi bi-info-circle text-primary"></i>
+              <div>
+                <h4>Dicta reprehenderit</h4>
+                <p>Quae dolorem earum veritatis oditseno</p>
+                <p>4 hrs. ago</p>
+              </div>
+            </li>
+
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li class="dropdown-footer">
+              <a href="#">Show all notifications</a>
+            </li>
+
+          </ul><!-- End Notification Dropdown Items -->
+
+        </li><!-- End Notification Nav -->
+
+
+        <li class="nav-item dropdown">
+
+          <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
+            <i class="bi bi-chat-left-text"></i>
+            <span class="badge bg-success badge-number">3</span>
+          </a><!-- End Messages Icon -->
+
+          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow messages">
+            <li class="dropdown-header">
+              You have 3 new messages
+              <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li class="message-item">
+              <a href="#">
+                <img src="{% static 'assets/img/messages-1.jpg' %}" alt="" class="rounded-circle">
+                <div>
+                  <h4>Maria Hudson</h4>
+                  <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
+                  <p>4 hrs. ago</p>
+                </div>
+              </a>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li class="message-item">
+              <a href="#">
+                <img src="{% static 'assets/img/messages-2.jpg' %}" alt="" class="rounded-circle">
+                <div>
+                  <h4>Anna Nelson</h4>
+                  <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
+                  <p>6 hrs. ago</p>
+                </div>
+              </a>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li class="message-item">
+              <a href="#">
+                <img src="{% static 'assets/img/messages-3.jpg' %}" alt="" class="rounded-circle">
+                <div>
+                  <h4>David Muldon</h4>
+                  <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
+                  <p>8 hrs. ago</p>
+                </div>
+              </a>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li class="dropdown-footer">
+              <a href="#">Show all messages</a>
+            </li>
+
+          </ul><!-- End Messages Dropdown Items -->
+
+        </li><!-- End Messages Nav -->
+
+        <li class="nav-item dropdown pe-3">
+
+          <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
+            <img src="{% static 'assets/img/users/default.png' %}" alt="Profile" class="rounded-circle">
+            <span class="d-none d-md-block dropdown-toggle ps-2">{{ user.username }}</span>
+          </a><!-- End Profile Iamge Icon -->
+
+          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+            <li class="dropdown-header">
+              <h6>{{ user.firstname }} {{ user.lastname }}</h6>
+              <span>Web Designer</span>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li>
+              <a class="dropdown-item d-flex align-items-center" href="{% url 'profile' %}">
+                <i class="bi bi-person"></i>
+                <span>My Profile</span>
+              </a>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li>
+              <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
+                <i class="bi bi-gear"></i>
+                <span>Account Settings</span>
+              </a>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li>
+              <a class="dropdown-item d-flex align-items-center" href="pages-faq.html">
+                <i class="bi bi-question-circle"></i>
+                <span>Need Help?</span>
+              </a>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li>
+              <a class="dropdown-item d-flex align-items-center" href="{% url 'logout' %}">
+                <i class="bi bi-box-arrow-right"></i>
+                <span>Sign Out</span>
+              </a>
+            </li>
+
+          </ul><!-- End Profile Dropdown Items -->
+        </li><!-- End Profile Nav -->
+
+      </ul>
+    </nav><!-- End Icons Navigation -->
+
+  </header><!-- End Header -->
+
+  <!-- ======= Sidebar ======= -->
+
+  <aside id="sidebar" class="sidebar">
+
+    <ul class="sidebar-nav" id="sidebar-nav">
+
+
+
+{#      <li class="nav-item">#}
+{#        <a class="nav-link collapsed" href="{% url 'car-jobs' %}">#}
+{#          <i class="bi bi-list"></i><span>CAR JOB</span>#}
+{#        </a>#}
+{#      </li>#}
+
+    {% if user.is_superuser %}
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{% url 'cmms-tools' %}">
+          <i class="bi bi-tools"></i><span>TOOLS</span>
+        </a>
+      </li>
+
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#Community-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-boxes"></i><span>Stock</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="Community-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+{#          <li>#}
+{#            <a href="{% url 'stock' %}">#}
+{#              <i class="bi bi-boxes"></i><span>Stock</span>#}
+{#            </a>#}
+{#          </li>#}
+            <li>
+            <a href="{% url 'frozen-stock' %}">
+              <i class="bi bi-boxes"></i><span>Frozen</span>
+            </a>
+          </li>
+          <li>
+            <a href='{% url 'stock-count' %}'>
+              <i class='bi bi-record'></i> Count
+            </a>
+          </li>
+
+        </ul>
+      </li>
+    {% endif %}
+    <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#customer-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-people"></i><span>CUST MGMT</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="customer-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+
+            <li>
+            <a href="{% url 'customer_sales' %}">
+              <i class="bi bi-boxes"></i><span>SALES</span>
+            </a>
+          </li>
+
+          <li>
+            <a href='{% url 'service_customers' %}'>
+              <i class='bi bi-record'></i> Servicing
+            </a>
+          </li>
+
+        </ul>
+      </li>
+
+
+
+
+
+    {% if perms.cmms.view_followup %}
+
+    
+
+        <!-- END OF CMMD -->
+        {% endif %}
+
+     
+
+
+
+   
+
+
+
+    </ul>
+
+  </aside><!-- End Sidebar-->
+  {% endif %}
+
+  <main id="main" class="main">
+
+    <div class="pagetitle">
+      <h1>{{ page.title }}</h1>
+      <nav>
+        {# <ol class="breadcrumb">#}
+          {# <li class="breadcrumb-item"><a href="index.html">Home</a></li>#}
+          {# <li class="breadcrumb-item">Pages</li>#}
+          {# <li class="breadcrumb-item active">Blank</li>#}
+          {# </ol>#}
+      </nav>
+    </div><!-- End Page Title -->
+
+    <section class="section h-100 card" style="height: 85vh !important">
+      {% block crm %}
+
+      {% endblock %}
+    </section>
+
+  </main><!-- End #main -->
+
+
+
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
+      class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Vendor JS Files -->
+  <script src="{% static 'assets/vendor/apexcharts/apexcharts.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/chart.js/chart.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/echarts/echarts.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/quill/quill.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/simple-datatables/simple-datatables.js' %}"></script>
+  <script src="{% static 'assets/vendor/tinymce/tinymce.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/php-email-form/validate.js' %}"></script>
+
+  <!-- Template Main JS File -->
+  <script src="{% static 'assets/js/main.js' %}"></script>
+
+    <script>
+
+        $('#loader').delay(5000).modal('hide')
+
+    </script>
+
+
+{#{% if messages %}#}
+{#  <script>#}
+{#    {% for message in messages %}#}
+{#      kasa.info(`{{ message }}`)#}
+{#    {% endfor %}#}
+{#  </script>#}
+{#{% endif %}#}
+
+</body>
+
+</html>
+
+
