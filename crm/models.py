@@ -16,3 +16,7 @@ class Logs(models.Model):
     owner = models.ForeignKey(User, blank=True, null=True, on_delete=get_username_on_delete)
     created_date = models.DateField(auto_now_add=True)
     created_time = models.TimeField(auto_now_add=True)
+    company = models.TextField(blank=True)
+    position = models.TextField(blank=True)
+    email = models.TextField(blank=True)
+    sector = models.TextField(blank=True)

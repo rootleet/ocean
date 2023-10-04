@@ -2,25 +2,26 @@
 {% load static %}
 
 {% block crm %}
-    <div class="card-body">
     <div class="card-header">
         <button onclick="crm.newLog()" class="btn btn-info">NEW</button>
     </div>
+    <div class="card-body overflow-hidden">
+
         <table class="table datatable">
             <thead>
                 <tr>
-                    <th>NAME</th><th>SUBJECT</th><th>PHONE</th><th>DATE</th><th>TIME</th><th>FLAG</th><th>action</th>
+                    <th>COMPANY</th><th>CONTACT PERSON</th><th>SUBJECT</th><th>CONTACT</th><th>DATE</th><th>FLAG</th><th>action</th>
                 </tr>
             </thead>
             <tbody>
                 {% for log in logs %}
                     <tr>
-                        <td>{{ log.customer }}</td>
-                        <td>{{ log.subject }}</td>
-                        <td>{{ log.phone }}</td>
-                        <td>{{ log.created_date }}</td>
-                        <td>{{ log.created_time }}</td>
-                        <td><kbd class="bg-danger">UNREA</kbd></td>
+                        <td><small>{{ log.company }}</small></td>
+                        <td><small>{{ log.customer }}</small></td>
+                        <td><small>{{ log.subject }}</small></td>
+                        <td><i class="bx bx-phone"></i> <small>{{ log.phone }}</small> <br> <i class="bx bxs-inbox"></i> <small>{{ log.email }}</small></td>
+                        <td><small>{{ log.created_date }}</small> <br><small>{{ log.created_time }}</small></td>
+                        <td><i class="text-{{ log.flag }}">{{ log.flag }}</i></td>
                         <td><i onclick="Swal.fire({
                         text:`{{ log.description }}`
                         })" class="fa fa-eye text-info"></i></td>

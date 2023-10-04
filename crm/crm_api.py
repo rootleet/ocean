@@ -29,8 +29,6 @@ def api_interface(request):
         module = body.get('module')
         data = body.get('data')
 
-
-
         if method == 'PUT':
             if module == 'log':
                 description = data.get('description')
@@ -39,8 +37,15 @@ def api_interface(request):
                 phone = data.get('phone')
                 subject = data.get('subject')
                 mypk = data.get('mypk')
+                company = data.get('company')
+                position = data.get('position')
+                email = data.get('email')
+                sector = data.get('sector')
 
-                Logs(description=description,flag=flag,customer=name,phone=phone,subject=subject,owner=User.objects.get(pk=mypk)).save()
+                Logs(description=description, flag=flag, customer=name, phone=phone, subject=subject,
+                     owner=User.objects.get(pk=mypk),
+                     company=company, position=position, email=email, sector=sector).save()
+
                 success_response['message'] = "Logged"
                 response = success_response
         elif method == 'VIEW':
@@ -50,11 +55,15 @@ def api_interface(request):
                 lgo = []
                 for l in lg:
                     obj = {
-                        'customer':l.customer,
-                        'subject':l.subject,
-                        'detail':l.description,
-                        'date':l.created_date,
-                        'time':l.created_time
+                        'customer': l.customer,
+                        'subject': l.subject,
+                        'detail': l.description,
+                        'date': l.created_date,
+                        'time': l.created_time,
+                        'company': l.company,
+                        'position': l.position,
+                        'email': l.email,
+                        'sector': l.sector,
                     }
                     lgo.append(obj)
 
@@ -66,8 +75,8 @@ def api_interface(request):
         tb_path = traceback.tb_frame.f_code.co_filename
         line_number = traceback.tb_lineno
         response["status_code"] = 500
-        response["message"] = f"An error of type {error_type} occurred on line {line_number} in file {tb_path}. Details: {e}"
+        response[
+            "message"] = f"An error of type {error_type} occurred on line {line_number} in file {tb_path}. Details: {e}"
         # response["message"] = f"Details: {e}"
-
 
     return JsonResponse(response)
