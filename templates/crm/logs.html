@@ -10,19 +10,18 @@
         <table class="table datatable">
             <thead>
                 <tr>
-                    <th>COMPANY</th><th>CONTACT PERSON</th><th>SUBJECT</th><th>CONTACT</th><th>DATE</th><th>FLAG</th><th>action</th>
+                    <th>COMPANY</th><th>CONTACT PERSON</th><th>CONTACT</th><th>DATE</th><th>FLAG</th><th>action</th>
                 </tr>
             </thead>
             <tbody>
                 {% for log in logs %}
                     <tr>
                         <td><small>{{ log.company }}</small></td>
-                        <td><small>{{ log.customer }}</small></td>
-                        <td><small>{{ log.subject }}</small></td>
+                        <td><small>{{ log.customer }} <br>{{ log.position }}</small></td>
                         <td><i class="bx bx-phone"></i> <small>{{ log.phone }}</small> <br> <i class="bx bxs-inbox"></i> <small>{{ log.email }}</small></td>
                         <td><small>{{ log.created_date }}</small> <br><small>{{ log.created_time }}</small></td>
                         <td><i class="text-{{ log.flag }}">{{ log.flag }}</i></td>
-                        <td><i onclick="Swal.fire({
+                        <td><i onclick="Swal.fire({title:`{{ log.subject }}`,
                         text:`{{ log.description }}`
                         })" class="fa fa-eye text-info"></i></td>
                     </tr>
