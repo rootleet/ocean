@@ -164,8 +164,6 @@ def login_view(request):
 
             if hasattr(auth, 'is_active'):
 
-
-
                 auth_login(request, auth)
                 return redirect(next)
             else:
@@ -271,8 +269,11 @@ def sign_up(request):
 
             # check if email exist
             if User.objects.filter(email=email).count() > 0:
+                messages.error(request, f"User Exist With Email")
 
-                return HttpResponse(User.objects.filter(email=email).count())
+            # check phone number
+            if UserAddOns.objects.filter(phone=mobile):
+                messages.error(request, f"{mobile} Exists")
 
             else:
 
@@ -324,20 +325,49 @@ def sign_up(request):
                     email_from = settings.EMAIL_HOST_USER
                     Emails(sent_from=email_from, sent_to=email, subject=subject, body=message, email_type='system',
                            ref='system').save()
+                    # log sms
+                    sms_api = SmsApi.objects.get(is_default=1)
+                    sms_template = """
+                    Hello [User's Name],\n
+
+                    We are pleased to inform you that a profile has been created for you in our Ocean system. Here are your login credentials:\n\n
+
+                    Username: [Username]\n
+                    Password: [Password]\n
+
+                    You can now log in to your account using the provided credentials. Please make sure to change your password after your first login for security reasons.\n
+
+                    If you have any questions or need assistance, please don't hesitate to contact our support team at [Support Email] or [Support Phone Number].\n
+
+                    
+
+                    Best regards,
+                    SNEDA IT
+                    """
+
+                    sms_message = sms_template.replace("[User's Name]", f"{first_name} {last_name}")
+                    sms_message = sms_message.replace("[Username]", username)
+                    sms_message = sms_message.replace("[Password]", password)
+                    sms_message = sms_message.replace("[Support Email]", "solomon@snedaghana.com")
+                    sms_message = sms_message.replace("[Support Phone Number]", "054 631 0011 / 020 199 8184")
+
+                    Sms(api=sms_api, to=mobile, message=sms_message).save()
 
                     # send_mail(subject, message, email_from, recipient_list)
-                    # messages.error(request, "Please check your email to activate your account")
+                    messages.error(request, "Account Created")
 
-                    return redirect('all-users')
+
                 except Exception as e:
                     new_user_instance.delete()
                     messages.error(request, f"error%%Error Saving User {e}")
-                    return HttpResponse(e)
+                    # return HttpResponse(e)
 
         else:
-            return HttpResponse(f"Invalid Form {form}")
+            messages.error(request, f"INVALID FORM")
     else:
-        return HttpResponse("Unaccepted Form Method")
+        messages.error(request, f"INVALID REQUEST METHOD")
+
+    return redirect('all-users')
 
 
 @login_required(login_url='/login/')
@@ -2001,12 +2031,13 @@ def api(request, module, action):
 
     return JsonResponse({'status': status, 'message': message}, safe=False)
 
+
 @login_required()
 def loc_master(request):
     context = {
         'page_title': 'Location Master',
         'locations': Locations.objects.all(),
-        'nav':True
+        'nav': True
     }
     return render(request, 'dashboard/company/loc_master.html', context=context)
 
@@ -2142,7 +2173,7 @@ def all_users(request):
         'users': User.objects.all(),
         'ous': OrganizationalUnit.objects.all(),
         'unit_membs': UnitMembers.objects.all(),
-        'depts':Departments.objects.all()
+        'depts': Departments.objects.all()
     }
     return render(request, 'dashboard/company/all-users.html', context=context)
 
@@ -2339,7 +2370,7 @@ def resetpasswordview(request, token):
 
         # check if link is valid
         if tken.valid == 0:
-            messages.info(request,'RESET TOKEN IS EXPIRED')
+            messages.info(request, 'RESET TOKEN IS EXPIRED')
             return redirect('login')
 
         context = {
@@ -2430,6 +2461,7 @@ def upload_doc(request):
         form = ImageUploadForm()
         return HttpResponse(form)
 
+
 @login_required()
 def geo(request):
     context = {
@@ -2439,6 +2471,7 @@ def geo(request):
         }
     }
     return render(request, 'dashboard/accessories/geo.html', context=context)
+
 
 @login_required()
 def reminder(request):
@@ -2453,7 +2486,6 @@ def reminder(request):
     return render(request, 'dashboard/profile/reminder.html', context=context)
 
 
-
 @login_required()
 def evat_keys(request):
     context = {
@@ -2464,17 +2496,19 @@ def evat_keys(request):
     }
     return render(request, 'dashboard/evat/evat-keys.html', context=context)
 
+
 def save_department(request):
     if request.method == 'POST':
         form = NewDepartments(request.POST)
         if form.is_valid():
             form.save()
         else:
-            messages.error(request,form.errors)
+            messages.error(request, form.errors)
     else:
-        messages.error(request,"INVALID METHOD")
+        messages.error(request, "INVALID METHOD")
 
     return redirect('all-users')
+
 
 def set_department(request):
     form = request.POST
@@ -2486,4 +2520,4 @@ def set_department(request):
     deptmt = Departments.objects.get(pk=dept)
     add_on.department = deptmt
     add_on.save()
-    return  redirect('all-users')
+    return redirect('all-users')
