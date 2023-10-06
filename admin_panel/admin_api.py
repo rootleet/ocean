@@ -355,6 +355,21 @@ def index(request):
                 success_response['message'] = msg
                 response = success_response
                 print(response)
+
+            elif module == 'users':
+                all_users = User.objects.all()
+                us = []
+                for user in all_users:
+                    obj = {
+                        'pk':user.pk,
+                        'username':user.username,
+                        'fullname':f"{user.first_name} {user.last_name}"
+                    }
+                    us.append(obj)
+
+                success_response['message'] = us
+                response = success_response
+
             else:
                 response['status_code'] = 503
                 response['message'] = f"UNKNOWN MODULE ( METHOD : {method}, MODULE : {module} )"

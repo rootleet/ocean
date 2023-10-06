@@ -16,6 +16,14 @@ class User {
         }
 
     }
+
+    allUsers(){
+        let payload = {
+            module:'users'
+        };
+
+        return api.call('VIEW', payload, '/adapi/');
+    }
 }
 
 const user = new User()

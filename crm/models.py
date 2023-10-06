@@ -8,7 +8,7 @@ def get_username_on_delete(user):
 
 # Create your models here.
 class Logs(models.Model):
-    customer = models.TextField(null=False,blank=False)
+    customer = models.TextField(null=False, blank=False)
     flag = models.TextField()
     phone = models.TextField()
     subject = models.TextField()
@@ -20,3 +20,7 @@ class Logs(models.Model):
     position = models.TextField(blank=True)
     email = models.TextField(blank=True)
     sector = models.TextField(blank=True)
+
+
+class CrmUsers(models.Model):
+    user = models.ForeignKey(User, blank=True, null=True, on_delete=get_username_on_delete)

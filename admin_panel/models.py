@@ -120,6 +120,7 @@ class Emails(models.Model):
     status = models.IntegerField(default=0)
     status_message = models.TextField(default='Scheduled')
     sent_on = models.DateTimeField(auto_now=True)
+    attachments = models.TextField(blank=True)
 
 
 class Sales(models.Model):

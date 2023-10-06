@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import render
 
-from crm.models import Logs
+from crm.models import Logs, CrmUsers
 
 
 # Create your views here.
@@ -17,3 +17,15 @@ def base(request):
     }
 
     return render(request, 'crm/logs.html', context=context)
+
+
+def crm_users(request):
+    context = {
+        'nav': True,
+        'page': {
+            'title': "CRM USERS",
+        },
+        'users': CrmUsers.objects.all().order_by('-pk')
+    }
+
+    return render(request, 'crm/crm-users.html', context=context)

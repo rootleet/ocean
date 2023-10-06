@@ -114,6 +114,58 @@ class Crm {
         });
 
     }
+
+    newUser(){
+        // Create an array of options for the select input
+        let users = user.allUsers();
+        if (users['status_code'] === 200){
+            let msg = users['message'];
+            let opt = {}
+            for (let m = 0; m < msg.length; m++) {
+                let tm = msg[m]
+                opt[tm['pk']] = `${tm['fullname']} - ${tm['username']}`
+            }
+
+            console.table(opt)
+
+            // Use SweetAlert 2 to create a modal with a select input
+            Swal.fire({
+              title: 'SELECT USER',
+              input: 'select',
+              inputOptions: opt,
+              inputPlaceholder: 'Select an option',
+              showCancelButton: true,
+              cancelButtonText: 'Cancel',
+              confirmButtonText: 'OK',
+              inputValidator: (value) => {
+                // Validate the selected option (optional)
+                if (!value) {
+                  return 'You must select an option!';
+                }
+              },
+            }).then((result) => {
+              if (result.isConfirmed) {
+                const selectedOption = result.value;
+                // Do something with the selected option
+                // console.log(`You selected: ${selectedOption}`);
+                let crmpayload = {
+                    module:'add_user',
+                    data:{
+                        user:selectedOption
+                    }
+                };
+                let crmUsAdd = api.call('PUT',crmpayload,'/crm/api/');
+                // console.table(crmUsAdd)
+                kasa.confirm(`${crmUsAdd['message']}`,1,'/crm/users/')
+              }
+            });
+        }
+        const options = ['Option 1', 'Option 2', 'Option 3'];
+
+
+
+    }
+
 }
 
 const crm = new Crm()

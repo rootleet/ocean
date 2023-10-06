@@ -1,0 +1,27 @@
+{% extends 'crm/base.html' %}
+{% load static %}
+
+{% block crm %}
+    <div class="card-header">
+        <button onclick="crm.newUser()" class="btn btn-info">NEW</button>
+    </div>
+    <div class="card-body overflow-hidden">
+
+        <table class="table datatable">
+            <thead>
+                <tr>
+                    <th>USERNAME</th><th>FIRST NAME</th><th>LASTNAME</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for us in users %}
+                    <tr>
+
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <script src="{% static 'general/js/classes/crm.js' %}"></script>
+{% endblock %}

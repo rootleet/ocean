@@ -5,6 +5,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from fpdf import FPDF
 
+from admin_panel.models import Emails
 from meeting.models import MeetingHD
 from reports.models import ReportForms, ReportLegend, LegendSubs, DepartmentReportMailQue
 from taskmanager.models import Tasks
@@ -170,6 +171,82 @@ def interface(request):
             else:
                 success_response['message'] = "No Emails To Send For Department"
                 response = success_response
+
+        elif doc == 'mail_sync':
+            pending_mails = Emails.objects.filter(status=0)
+            c = 0
+            for email in pending_mails:
+                recipient = email.sent_to
+                subject = email.subject
+                sent_from = email.sent_from
+                body = email.body
+                this_email = Emails.objects.filter(pk=email.pk)
+                email_type = email.email_type
+                email_ref = email.ref
+                attacs = email.attachments
+
+                import smtplib
+                from email.mime.multipart import MIMEMultipart
+                from email.mime.text import MIMEText
+                from email.mime.application import MIMEApplication
+
+                # Email configuration
+                smtp_server = "smtp.gmail.com"
+                smtp_port = 587
+                sender_email = "donotreply@protonghana.com"
+                sender_password = "arbogirmfctrnnpt"  # Use an app password for security
+                html_content = body
+
+                # Create a MIME multipart message
+                msg = MIMEMultipart()
+                msg["From"] = sender_email
+                msg["To"] = recipient
+                msg["Subject"] = subject
+
+                # Attach the HTML content to the message
+                msg.attach(MIMEText(html_content, "html"))
+                files_array = attacs.split(',')
+                ff = []
+
+                for att_file in files_array:
+                    # Attach the file
+                    ff.append(att_file)
+                    attachment_filename = f"static/general/crm-logs-reports/{att_file}"
+                    attachment_path = attachment_filename
+                    try:
+                        with open(attachment_path, 'rb') as attachment:
+                            part = MIMEApplication(attachment.read())
+                            part.add_header('Content-Disposition', 'attachment', filename=att_file.strip())
+                            msg.attach(part)
+                            print(att_file)
+                    except FileNotFoundError:
+                        print(f"File not found: {attachment_filename}")
+                    except Exception as e:
+                        print(f"Error attaching file {attachment_filename}: {str(e)}")
+
+                        # Connect to the Gmail SMTP server and send the email
+                try:
+                    server = smtplib.SMTP(smtp_server, smtp_port)
+                    server.starttls()
+                    server.login(sender_email, sender_password)
+                    server.sendmail(sender_email, recipient, msg.as_string())
+
+                    email.status = 1
+                    email.save()
+
+                except Exception as e:
+                    # response['status_code'] = 505
+                    # response['message'] = str(e)
+
+                    message = f"COULD NOT SEND EMAIL {str(e)}"
+                    print("Error sending email:", e)
+                finally:
+                    server.quit()
+
+                c += 1
+            success_response['message'] = f"{c} EMAILS SENT"
+            response = success_response
+
 
     except Exception as e:
         error_type, error_instance, traceback = sys.exc_info()

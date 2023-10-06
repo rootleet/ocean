@@ -19,7 +19,8 @@ from . import views, crm_api
 
 urlpatterns = [
     path('', views.base, name='crm'),
-    path('api/',crm_api.api_interface,name='crm_api')
+    path('api/',crm_api.api_interface,name='crm_api'),
+    path('users/',views.crm_users,name='crm_users')
 
 ]
 
