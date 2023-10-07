@@ -1,4 +1,5 @@
 {% extends 'dolphine/base.html' %}
+{% load static %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -8,7 +9,23 @@
 </head>
 <body>
     {% block main %}
-
+        <div class="modal" id="rmbg">
+            <div class="modal-dialog">
+                <form id="imageUploadForm" action="{% url 'rmbg' %}" method="post" enctype="multipart/form-data" class="modal-content">
+                    <div class="modal-body">
+                        {% csrf_token %}
+                        <div class="w-50 mx-auto m-2">
+                            <img id="imagePreview" src="https://placehold.co/600x600?text=SELECT + IMAGE" alt="" class="img-fluid img-thumbnail ">
+                        </div>
+                        <input id="imageInput" name="image" type="file" accept="image/jpeg" class="form-control">
+                    </div>
+                    <div class="modal-footer">
+                        <a href="" id="resultMessage"></a>
+                        <button id="uploadButton" class="btn btn-info">UPLOAD</button>
+                    </div>
+                </form>
+            </div>
+        </div>
         <div class="row h-100 overflow-hidden">
 {#            <!-- LEFT PANE -->#}
 {#            <div class="col-sm-3 h-100"></div>#}
@@ -25,7 +42,10 @@
                                 <h5 class="card-title p-0 m-0">
                                     DOLPHIN
                                 </h5>
-                                <button onclick="location.href='{% url 'home' %}'" class="btn btn-sm btn-primary">HOME</button>
+                                <div class="w-50 d-flex flex-wrap justify-content-end">
+                                    <button data-bs-target="#rmbg" data-bs-toggle="modal" class="btn btn-sm btn-primary">RMIMGBG</button>
+                                    <button onclick="location.href='{% url 'home' %}'" class="btn btn-sm btn-primary">HOME</button>
+                                </div>
                             </div>
                         </div>
                         <div class="card-body overflow-auto p-2">
@@ -71,6 +91,72 @@
             </div>
 
         </div>
+
+        <script>
+    // Get references to the input and image elements
+    const imageInput = document.getElementById('imageInput');
+    const imagePreview = document.getElementById('imagePreview');
+
+    // Add an event listener to the input element to listen for changes
+    imageInput.addEventListener('change', function() {
+      // Check if a file has been selected
+      if (imageInput.files && imageInput.files[0]) {
+        // Create a FileReader object
+        const reader = new FileReader();
+
+        // Define the function to run when the file is loaded
+        reader.onload = function(e) {
+          // Set the source of the image element to the loaded file data
+          imagePreview.src = e.target.result;
+
+          // Display the image element
+          imagePreview.style.display = 'block';
+        };
+
+        // Read the selected file as a data URL
+        reader.readAsDataURL(imageInput.files[0]);
+      }
+    });
+  </script>
+
+         <script>
+    $(function() {
+        //general/img/icons/2.gif
+
+      $('#imageUploadForm').submit(function(event) {
+          $('#imagePreview').attr('src', `/static/general/img/icons/2.gif`);
+          event.preventDefault()
+        // Create a FormData object to store form data, including the selected image
+        var formData = new FormData($('#imageUploadForm')[0]);
+
+        $.ajax({
+          url: '/dolphine/rmbg/',  // Replace with the actual URL to your Django view
+          type: 'POST',
+          data: formData,
+          processData: false,  // Prevent jQuery from processing the data
+          contentType: false,  // Prevent jQuery from setting the content type
+          success: function(response) {
+            // Handle the response from the server
+            let status,message;
+            console.table(response)
+            status = response['success'];
+            message = response['message'];
+            if(status === true){
+                // replace image
+                $('#resultMessage').html(`<a href="/${message}">DOWNLOAD</a>`)
+                $('#imagePreview').attr('src', `/${message}`);
+            } else {
+                kasa.info(message)
+            }
+          },
+          error: function(xhr, status, error) {
+            console.error('Error:', error);
+            $('#resultMessage').text('An error occurred while uploading the file.');
+          }
+        });
+      });
+    });
+  </script>
 
     {% endblock %}
 </body>

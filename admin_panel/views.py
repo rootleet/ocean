@@ -289,8 +289,15 @@ def sign_up(request):
                 pass_w = '{}{}'.format(f"{last_name}", pass_num)
 
                 # save username
-                new_user_instance = User.objects.create_user(username=username, password=pass_w, email=email,
-                                                             first_name=first_name, last_name=last_name)
+                # new_user_instance = User.objects.create_user(username=username, password=pass_w, email=email,
+                #                                              first_name=first_name, last_name=last_name)
+
+                user = User.objects.create_user(username=username, password=pass_w)
+                user.first_name = first_name
+                user.last_name = last_name
+                user.email = email
+                user.is_active = True
+                user.save()
 
                 md_mix = f"{pass_w} {first_name} {last_name} {username} "
                 hash_object = hashlib.md5(md_mix.encode())
@@ -298,8 +305,8 @@ def sign_up(request):
 
                 try:
 
-                    new_user_instance.is_active = False
-                    new_user_instance.save()
+                    # new_user_instance.is_active = False
+                    # new_user_instance.save()
 
                     created_account = User.objects.get(username=username)
                     AuthToken(user=created_account, token=api_token).save()
@@ -347,7 +354,7 @@ def sign_up(request):
 
                     sms_message = sms_template.replace("[User's Name]", f"{first_name} {last_name}")
                     sms_message = sms_message.replace("[Username]", username)
-                    sms_message = sms_message.replace("[Password]", password)
+                    sms_message = sms_message.replace("[Password]", pass_w)
                     sms_message = sms_message.replace("[Support Email]", "solomon@snedaghana.com")
                     sms_message = sms_message.replace("[Support Phone Number]", "054 631 0011 / 020 199 8184")
 
@@ -935,7 +942,7 @@ def task_filter(request):
         }
         return render(request, 'dashboard/all_task.html', context=context)
 
-
+@login_required()
 def emails(request):
     from django.contrib.auth import get_user_model
     User = get_user_model()
@@ -2377,8 +2384,8 @@ def resetpasswordview(request, token):
             'user_pk': user.pk
         }
         return render(request, 'profile/resetpassword.html', context=context)
-
-    return HttpResponse(token)
+    else:
+        return HttpResponse("HTTP Version Not Supported", status=505)
 
 
 def resetpassword(request):

@@ -21,5 +21,6 @@ urlpatterns = [
     path('', views.dolphine, name='dolphine'),
     path('upload/',views.upload,name='upload'),
     path('delete/<enc>/',views.delete,name='delete_file'),
-    path('donwload/<enc>/',views.download,name='download_file')
+    path('donwload/<enc>/',views.download,name='download_file'),
+    path('rmbg/',views.rmbg,name='rmbg')
 ]

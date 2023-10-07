@@ -8,6 +8,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
 from admin_panel.anton import remove_html_tags
+from admin_panel.cron_exe import execute_script
 from admin_panel.models import GeoCity, GeoCitySub, Reminder, SmsApi, UserAddOns, EvatCredentials, Locations, \
     Departments
 from reports.models import DepartmentReportMailQue
@@ -361,15 +362,50 @@ def index(request):
                 us = []
                 for user in all_users:
                     obj = {
-                        'pk':user.pk,
-                        'username':user.username,
-                        'fullname':f"{user.first_name} {user.last_name}"
+                        'pk': user.pk,
+                        'username': user.username,
+                        'fullname': f"{user.first_name} {user.last_name}"
                     }
                     us.append(obj)
 
                 success_response['message'] = us
                 response = success_response
 
+            elif module == 'cronjob':
+                import datetime
+                # Get the current time
+                current_time = datetime.datetime.now().time()
+
+                # Convert the current time to a string if needed
+                current_time_str = current_time.strftime("%H:%M:%S")
+
+                scripts = '/path/to/scripts/'
+                # get jobs
+                jobs = [
+                    {
+                        'name': 'hello-always',
+                        'type': 'always',
+                        'time': '00:00',
+                        'exe': 'sync_html.sh'
+                    },
+                    {
+                        'name': 'hello-sometime',
+                        'type': 'timed',
+                        'time': '12:00',
+                        'exe': 'sync_emails.sh'
+                    }
+                ]
+
+                # loop through Jobs
+                for job in jobs:
+                    j_name = job['name']
+                    j_type = job['type']
+                    j_time = job['time']
+                    j_script = job['exe']
+                    exe_script = f"{scripts}{j_script}"
+
+                    if j_type == 'always' or (j_type == 'timed' and j_time >= current_time_str):
+                        execute_script(exe_script)
             else:
                 response['status_code'] = 503
                 response['message'] = f"UNKNOWN MODULE ( METHOD : {method}, MODULE : {module} )"

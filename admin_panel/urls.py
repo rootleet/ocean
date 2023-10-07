@@ -15,6 +15,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+
+from ocean import settings
+from django.conf.urls.static import static
+
 from . import views,  admin_api
 
 urlpatterns = [
@@ -119,4 +123,6 @@ urlpatterns = [
 
 ]
 
-# handler404 = 'blog.views.handler404'
+handler404 = 'blog.views.handler404'
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
