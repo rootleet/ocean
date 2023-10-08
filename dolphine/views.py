@@ -80,61 +80,62 @@ def download(request, enc):
         return response
 
 
+@login_required(login_url='/login/')
 def rmbg(request):
     if request.method == 'POST' and request.FILES:
-        uploaded_file = request.FILES['image']
-        name = request.POST['name']
-
-        # Process the uploaded file here
-
-        file_name = uploaded_file.name
-        file_size = uploaded_file.size
-        content_type = uploaded_file.content_type
-
-        # Create a FileSystemStorage instance for static files
-        fs = FileSystemStorage()
-
-        # Generate a unique filename for the uploaded image
-        file_name = fs.get_available_name(uploaded_file.name)
-
-        # Save the uploaded file to a static directory
-        file_path = os.path.join('static/rmbg/raw/', file_name)
-
-        fs.save(file_path, uploaded_file)
-
-        # remove bg
-        import glob
-        from rembg import remove
-        from PIL import Image
-        # Processing the image
         try:
-            input = Image.open(file_path)
-            file_name_with_extension = os.path.basename(file_path)
-            file_name_without_extension, file_extension = os.path.splitext(file_name_with_extension)
-            out_file = f"static/rmbg/nobg/{name}.png"
-            # Removing the background from the given Image
-            output = remove(input)
+            uploaded_file = request.FILES['image']
+            name = request.POST['name']
 
-            # Saving the image in the given path
-            output.save(out_file)
-            print(f"SAVED: {out_file}")
-            ImgRv(ori=file_path, nobg=out_file,owner=User.objects.get(pk=request.user.pk),name=name).save()
-            # move image to done
-            # source_file_path = input_file
-            # destination_folder_path = "static/rmbg/done/"
-            # shutil.move(source_file_path, destination_folder_path)
 
-            return JsonResponse({
-                'success': True,
-                'message': out_file
-            })
+            # Create a FileSystemStorage instance for static files
+            fs = FileSystemStorage()
 
+            # Generate a unique filename for the uploaded image
+            file_name = fs.get_available_name(uploaded_file.name)
+
+            # Save the uploaded file to a static directory
+            file_path = os.path.join('static/rmbg/raw/', file_name)
+
+            fs.save(file_path, uploaded_file)
+
+            # remove bg
+            import glob
+            from rembg import remove
+            from PIL import Image
+            # Processing the image
+            try:
+                input = Image.open(file_path)
+                file_name_with_extension = os.path.basename(file_path)
+                file_name_without_extension, file_extension = os.path.splitext(file_name_with_extension)
+                out_file = f"static/rmbg/nobg/{name}.png"
+                # Removing the background from the given Image
+                output = remove(input)
+
+                # Saving the image in the given path
+                output.save(out_file)
+                print(f"SAVED: {out_file}")
+                ImgRv(ori=file_path, nobg=out_file, owner=User.objects.get(pk=request.user.pk), name=name).save()
+                # move image to done
+                # source_file_path = input_file
+                # destination_folder_path = "static/rmbg/done/"
+                # shutil.move(source_file_path, destination_folder_path)
+
+                return JsonResponse({
+                    'success': True,
+                    'message': out_file
+                })
+
+            except Exception as e:
+                return JsonResponse({
+                    'success': False,
+                    'message': str(e),
+                })
         except Exception as e:
             return JsonResponse({
                 'success': False,
                 'message': str(e),
             })
-
 
 def back_remover(request):
     context = {
