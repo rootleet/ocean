@@ -34,55 +34,40 @@
             <!-- CENTER -->
             <div class="col-sm-12 text-muted h-100">
 
-
-
-                {% if files.count > 0 %}
-                    <div class="card recent_files">
+                <div class="card recent_files">
                         <div class="card-header">
                             <div class="w-100 d-flex flex-wrap align-content-center justify-content-between">
                                 <h5 class="card-title p-0 m-0">
                                     DOLPHIN
                                 </h5>
                                 <div class="w-50 d-flex flex-wrap justify-content-end">
-                                    <button onclick="location.href='{% url 'back_remover' %}'" class="btn btn-sm btn-primary">BG REMOVER</button>
-                                    <button onclick="location.href='{% url 'home' %}'" class="btn btn-sm btn-primary">HOME</button>
+                                    <button data-bs-target="#rmbg" data-bs-toggle="modal" class="btn btn-sm btn-primary">NEW</button>
                                 </div>
                             </div>
                         </div>
                         <div class="card-body overflow-auto p-2">
-                            <table class="table">
-                                <thead class="bg-dark text-light">
-                                    <tr>
-                                        <th>Name</th><th>Date</th><th>Size</th><th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for file in files %}
-                                    <tr>
-                                        <td>
-                                            <i onclick="location.href='{% url 'download_file' file.enc %}'" class="fa pointer text-success fa-download"></i> &spar;
-                                            {{ file.filename }}</td>
-                                        <td>{{ file.time }}</td>
-                                        <td>{{ file.size | filesizeformat }}</td>
-                                        <td>
-                                            <div class="w-100 d-flex flex-wrap justify-content-between">
-                                                <i class="fa pointer text-info fa-eye mr-2"></i>
-                                                <i onclick="location.href='{% url 'delete_file' file.enc %}'" class="fa text-danger pointer fa-trash"></i>
-                                            </div>
-                                        </td>
-                                    </tr>
+
+                            <div class="container">
+                                <div class="row">
+                                    {% for image in images %}
+                                    <div class="col-sm-3 overflow-hidden">
+
+                                        <div class="card w-100" >
+                                          <img style="width: 200px; height: 200px" class="card-img-top" src="/{{ image.nobg }}" alt="Card image">
+                                          <div class="card-body">
+                                            <p class="card-text p-2">{{ image.name }}</p>
+                                            <a href="#" class="btn btn-primary">DOWNLOAD</a>
+                                          </div>
+                                        </div>
+
+                                    </div>
                                     {% endfor %}
-                                </tbody>
-                            </table>
+
+                                </div>
+                            </div>
+
                         </div>
                     </div>
-                {% else %}
-                    <div class="w-100 h-100 d-flex flex-wrap align-content-center justify-content-center">
-                        <div class="alert alert-info">
-                            Drop files to start upload
-                        </div>
-                    </div>
-                {% endif %}
 
             </div>
 
@@ -148,6 +133,7 @@
                             $('#resultMessage').html(`<a href="/${message}">DOWNLOAD</a>`)
                             $('#imagePreview').attr('src', `/${message}`);
                             $('#name').val('')
+                            location.reload()
                         } else {
                             kasa.info(message)
                         }

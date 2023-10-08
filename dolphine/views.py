@@ -2,12 +2,13 @@ import hashlib
 import os
 
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.core.files.storage import FileSystemStorage
 from django.http import HttpResponse, JsonResponse, FileResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.decorators.csrf import csrf_exempt
 
-from dolphine.models import Files
+from dolphine.models import Files, ImgRv
 from django.utils import timezone
 from cryptography.fernet import Fernet
 
@@ -82,9 +83,10 @@ def download(request, enc):
 def rmbg(request):
     if request.method == 'POST' and request.FILES:
         uploaded_file = request.FILES['image']
+        name = request.POST['name']
+
         # Process the uploaded file here
 
-        # Example: Get file details
         file_name = uploaded_file.name
         file_size = uploaded_file.size
         content_type = uploaded_file.content_type
@@ -97,7 +99,7 @@ def rmbg(request):
 
         # Save the uploaded file to a static directory
         file_path = os.path.join('static/rmbg/raw/', file_name)
-        print(file_path)
+
         fs.save(file_path, uploaded_file)
 
         # remove bg
@@ -108,13 +110,15 @@ def rmbg(request):
         try:
             input = Image.open(file_path)
             file_name_with_extension = os.path.basename(file_path)
-            out_file = f"static/rmbg/nobg/{file_name_with_extension}.png"
+            file_name_without_extension, file_extension = os.path.splitext(file_name_with_extension)
+            out_file = f"static/rmbg/nobg/{name}.png"
             # Removing the background from the given Image
             output = remove(input)
 
             # Saving the image in the given path
             output.save(out_file)
             print(f"SAVED: {out_file}")
+            ImgRv(ori=file_path, nobg=out_file,owner=User.objects.get(pk=request.user.pk),name=name).save()
             # move image to done
             # source_file_path = input_file
             # destination_folder_path = "static/rmbg/done/"
@@ -131,3 +135,9 @@ def rmbg(request):
                 'message': str(e),
             })
 
+
+def back_remover(request):
+    context = {
+        'images': ImgRv.objects.filter(owner=request.user).order_by('-pk')
+    }
+    return render(request, 'dolphine/bg-remover.html', context=context)

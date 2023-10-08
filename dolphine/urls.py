@@ -22,5 +22,6 @@ urlpatterns = [
     path('upload/',views.upload,name='upload'),
     path('delete/<enc>/',views.delete,name='delete_file'),
     path('donwload/<enc>/',views.download,name='download_file'),
-    path('rmbg/',views.rmbg,name='rmbg')
+    path('rmbg/',views.rmbg,name='rmbg'),
+    path('background-remover/',views.back_remover,name='back_remover')
 ]

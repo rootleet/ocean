@@ -39,3 +39,15 @@ class Documents(models.Model):
     doc = models.CharField(max_length=3)
     entry_no = models.TextField()
     file = models.FileField(upload_to='static/uploads/%Y/%m/%d/')
+
+
+class ImgRv(models.Model):
+    ori = models.TextField()
+    nobg = models.TextField()
+    date_crated = models.DateField(auto_now_add=True)
+    time_created = models.TimeField(auto_now_add=True)
+    name = models.TextField(blank=True)
+
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+
+
