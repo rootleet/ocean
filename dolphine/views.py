@@ -131,6 +131,7 @@ def rmbg(request):
                     'success': False,
                     'message': str(e),
                 })
+
         except Exception as e:
             return JsonResponse({
                 'success': False,
