@@ -140,7 +140,7 @@
                       },
                       error: function(xhr, status, error) {
                         console.error('Error:', error);
-                        $('#resultMessage').text('An error occurred while uploading the file.');
+                        $('#resultMessage').text(error);
                       }
                     });
                 } else {
