@@ -24,3 +24,14 @@ class Logs(models.Model):
 
 class CrmUsers(models.Model):
     user = models.ForeignKey(User, blank=True, null=True, on_delete=get_username_on_delete)
+
+    def last_logged(self):
+        cts = self.logscount()
+        if cts > 0:
+            last_log = Logs.objects.filter(owner=self.user).last()
+            return last_log.created_date
+        else:
+            return "NO"
+
+    def logscount(self):
+        return Logs.objects.filter(owner=self.user).count()

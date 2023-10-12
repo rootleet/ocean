@@ -184,6 +184,7 @@ def interface(request):
                 email_type = email.email_type
                 email_ref = email.ref
                 attacs = email.attachments
+                cc = email.send_cc()
 
                 import smtplib
                 from email.mime.multipart import MIMEMultipart
@@ -202,6 +203,7 @@ def interface(request):
                 msg["From"] = sender_email
                 msg["To"] = recipient
                 msg["Subject"] = subject
+                msg['Cc'] = email.cc
 
                 # Attach the HTML content to the message
                 msg.attach(MIMEText(html_content, "html"))

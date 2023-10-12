@@ -1,5 +1,6 @@
 import hashlib
 import os
+import shutil
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -117,9 +118,9 @@ def rmbg(request):
                 print(f"SAVED: {out_file}")
                 ImgRv(ori=file_path, nobg=out_file, owner=User.objects.get(pk=request.user.pk), name=name).save()
                 # move image to done
-                # source_file_path = input_file
-                # destination_folder_path = "static/rmbg/done/"
-                # shutil.move(source_file_path, destination_folder_path)
+                source_file_path = file_path
+                destination_folder_path = "static/rmbg/done/"
+                shutil.move(source_file_path, destination_folder_path)
 
                 return JsonResponse({
                     'success': True,

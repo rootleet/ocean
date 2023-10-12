@@ -96,59 +96,68 @@ def api_interface(request):
                 tr = ''
                 result = CrmUsers.objects.all()
                 for own in result:
-                    workbook = openpyxl.Workbook()
-                    owner = own.user
-                    # start sheet
-                    sheet = workbook.active
-                    sheet['A1'] = "COMPANY"
-                    sheet['B1'] = "CONTACT PERSON"
-                    sheet['C1'] = "POSITION"
-                    sheet['D1'] = "PHONE"
-                    sheet['E1'] = "EMAIL"
-                    sheet['F1'] = "FLAG"
-                    sheet['G1'] = "DETAILS"
                     # get data
                     # user = User.objects.get(pk=owner)
+                    owner = own.user
                     us_logs = Logs.objects.filter(owner=owner, created_date=today)
                     l_count = us_logs.count()
                     tr += (f'<tr><td style="border: 1px solid black;">{owner.first_name} {owner.last_name}</td><td '
                            f'style="border: 1px solid black;">{l_count}</tr></tr>')
-                    x_row = 2
-                    for lg in us_logs:
-                        comp_name = lg.company
-                        contact_person = lg.customer
-                        position = lg.position
-                        phone = lg.phone
-                        email = lg.email
-                        flag = lg.flag
-                        detail = lg.description
+                    if l_count > 0:
+                        # make attachment
+                        workbook = openpyxl.Workbook()
 
-                        sheet[f'A{x_row}'] = comp_name
-                        sheet[f'B{x_row}'] = contact_person
-                        sheet[f'C{x_row}'] = position
-                        sheet[f'D{x_row}'] = phone
-                        sheet[f'E{x_row}'] = email
-                        sheet[f'F{x_row}'] = flag
-                        sheet[f'G{x_row}'] = detail
+                        # start sheet
+                        sheet = workbook.active
+                        sheet['A1'] = "COMPANY"
+                        sheet['B1'] = "CONTACT PERSON"
+                        sheet['C1'] = "POSITION"
+                        sheet['D1'] = "PHONE"
+                        sheet['E1'] = "EMAIL"
+                        sheet['F1'] = "FLAG"
+                        sheet['G1'] = "DETAILS"
 
-                        x_row += 1
+                        x_row = 2
+                        for lg in us_logs:
+                            comp_name = lg.company
+                            contact_person = lg.customer
+                            position = lg.position
+                            phone = lg.phone
+                            email = lg.email
+                            flag = lg.flag
+                            detail = lg.description
 
-                    from datetime import datetime
-                    current_datetime = datetime.now()
-                    formatted_datetime = current_datetime.strftime("%Y_%m_%d_%H_%M_%S")
-                    file_name1 = f"{owner.first_name}_{owner.last_name}_CRM_REPORT_{formatted_datetime}.xlsx"
+                            sheet[f'A{x_row}'] = comp_name
+                            sheet[f'B{x_row}'] = contact_person
+                            sheet[f'C{x_row}'] = position
+                            sheet[f'D{x_row}'] = phone
+                            sheet[f'E{x_row}'] = email
+                            sheet[f'F{x_row}'] = flag
+                            sheet[f'G{x_row}'] = detail
 
-                    file_name = f"static/general/crm-logs-reports/{file_name1}"
-                    attc += f"{file_name1},"
-                    workbook.save(file_name)
-                    print(file_name)
+                            x_row += 1
+
+                        from datetime import datetime
+                        current_datetime = datetime.now()
+                        formatted_datetime = current_datetime.strftime("%Y_%m_%d_%H_%M_%S")
+                        file_name1 = f"{owner.first_name}_{owner.last_name}_CRM_REPORT_{formatted_datetime}.xlsx"
+
+                        file_name = f"static/general/crm-logs-reports/{file_name1}"
+                        attc += f"{file_name1},"
+                        workbook.save(file_name)
+                        print(file_name)
 
                 # add to emails
                 body = f'<table><tr><th style="border: 1px solid black;">USER</th><th style="border: 1px solid ' \
                        f'black;">LOGS</th></td>{tr}</table>'
+                cc = "uyinsolomon2@gmail.com,solomon@snedaghana.com"
+                Emails(sent_from='crm@snedaghana.com', sent_to='bharat@snedaghana.com',
+                       subject=f"CRM REPORTS ON {today}",
+                       body=body, email_type='crm', attachments=attc, cc=cc).save()
+
                 Emails(sent_from='crm@snedaghana.com', sent_to='solomon@snedaghana.com',
                        subject=f"CRM REPORTS ON {today}",
-                       body=body, email_type='crm', attachments=attc).save()
+                       body=body, email_type='crm', attachments=attc, cc=cc).save()
 
                 success_response['message'] = "EMAILS LOG"
                 response = success_response

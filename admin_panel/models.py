@@ -116,11 +116,16 @@ class Emails(models.Model):
     body = models.TextField()
     email_type = models.TextField()
     ref = models.TextField()
+    cc = models.TextField(blank=True)
     scheduled_on = models.DateTimeField(auto_now_add=True)
     status = models.IntegerField(default=0)
     status_message = models.TextField(default='Scheduled')
     sent_on = models.DateTimeField(auto_now=True)
     attachments = models.TextField(blank=True)
+
+    def send_cc(self):
+        cc = self.cc.rstrip(',')
+        return cc.split(',')
 
 
 class Sales(models.Model):

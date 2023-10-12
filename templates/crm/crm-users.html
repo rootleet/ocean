@@ -10,13 +10,15 @@
         <table class="table datatable">
             <thead>
                 <tr>
-                    <th>USERNAME</th><th>FIRST NAME</th><th>LASTNAME</th>
+                    <th>NAME</th><th>LAST LOGGED</th><th>LOGS</th>
                 </tr>
             </thead>
             <tbody>
                 {% for us in users %}
                     <tr>
-
+                        <td>{{ us.user.username }} {{ us.user.last_name }}</td>
+                        <td>{{ us.last_logged }}</td>
+                        <td><kbd class="bg-info">today: {{ us.logscount }}</kbd></td>
                     </tr>
                 {% endfor %}
             </tbody>
