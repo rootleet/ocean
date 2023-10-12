@@ -159,6 +159,7 @@ def api_interface(request):
                        subject=f"CRM REPORTS ON {today}",
                        body=body, email_type='crm', attachments=attc, cc=cc).save()
 
+
                 success_response['message'] = "EMAILS LOG"
                 response = success_response
 
