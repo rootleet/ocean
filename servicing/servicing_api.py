@@ -183,7 +183,7 @@ def interface(request):
                 if ServiceCard.objects.filter(cardno=cardno).exists():
                     card = ServiceCard.objects.get(cardno=cardno)
                     print(card.technician_id)
-                    technician = User.objects.get(pk=card.technician_id)
+                    technician = User.objects.get(pk=int(card.technician_id))
                     cardpk = card.pk
                     print(cardpk)
                     materials = []
