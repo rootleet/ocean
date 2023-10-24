@@ -105,10 +105,12 @@ def interface(request):
                                      total_price=total_price, service_card=just_service_card).save()
 
                 # queue SMS
-                Sms(api=SmsApi.objects.get(is_default=1), message=f"A ticket has been opened for your query \nTICKET : "
-                                                                  f"{cardno} \nSERVICE "
-                                                                  f"TYPE : {service.name} \nQUERY : "
-                                                                  f"{remarks}",
+                Sms(api=SmsApi.objects.get(is_default=1), message=f"A ticket has been opened for your query \n\nTICKET : "
+                                                                  f"{cardno} \n\nSERVICE "
+                                                                  f"TYPE : {service.name} \n\nQUERY : "
+                                                                  f"{remarks} \n\nYou can track service using the "
+                                                                  f"link below "
+                                                                  f"http://snedaghana.loc/servicing/jobcard/tracking/{just_service_card.cardno}/",
                     to=phone).save()
 
 
