@@ -71,7 +71,7 @@ def interface(request):
                 remarks = head.get('remarks')
                 service = Services.objects.get(pk=head.get('service'))
                 service_sub = SubServices.objects.get(pk=head.get('service_sub'))
-                technician = User.objects.get(pk=head.get('technician'))
+                technician = head.get('technician')
                 importance = head.get('importance')
                 tick = head.get('ticket')
                 if tick == '0':
@@ -86,7 +86,7 @@ def interface(request):
 
                 # save service card
                 ServiceCard(client=client, owner=owner, remarks=remarks, service=service, service_sub=service_sub,
-                            technician=technician, ticket=ticket, importance=importance, cardno=cardno).save()
+                            technician_id=technician, ticket=ticket, importance=importance, cardno=cardno).save()
 
                 just_service_card = ServiceCard.objects.all().last()
 
