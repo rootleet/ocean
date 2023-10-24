@@ -107,7 +107,7 @@ def interface(request):
                 # queue SMS
                 Sms(api=SmsApi.objects.get(is_default=1), message=f"A ticket has been opened for your query \nTICKET : "
                                                                   f"{cardno} \nSERVICE "
-                                                                  f"TYPE : {service.description} \nREMARKS / QUERY : "
+                                                                  f"TYPE : {service.name} \nQUERY : "
                                                                   f"{remarks}",
                     to=phone).save()
 
