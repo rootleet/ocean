@@ -71,13 +71,13 @@ def interface(request):
                 remarks = head.get('remarks')
                 service = Services.objects.get(pk=head.get('service'))
                 service_sub = SubServices.objects.get(pk=head.get('service_sub'))
-                technician = head.get('technician')
+                technician = User.objects.get(pk=head.get('technician'))
                 importance = head.get('importance')
                 tick = head.get('ticket')
 
                 if tick == '0':
                     # generate
-                    TicketHd(owner=client, title=f"{service.name}", descr=f"{service.description}", status=1).save()
+                    TicketHd(owner=client, title=f"{service.name}", descr=f"{service.description}",status=1).save()
                     ticket = TicketHd.objects.all().last()
                 else:
                     ticket = TicketHd.objects.get(pk=tick)
@@ -87,7 +87,7 @@ def interface(request):
 
                 # save service card
                 ServiceCard(client=client, owner=owner, remarks=remarks, service=service, service_sub=service_sub,
-                            technician_id=technician, ticket=ticket, importance=importance, cardno=cardno).save()
+                            technician=technician, ticket=ticket, importance=importance, cardno=cardno).save()
 
                 just_service_card = ServiceCard.objects.all().last()
 
@@ -105,14 +105,14 @@ def interface(request):
                                      total_price=total_price, service_card=just_service_card).save()
 
                 # queue SMS
-                Sms(api=SmsApi.objects.get(is_default=1),
-                    message=f"A ticket has been opened for your query \n\nTICKET : "
-                            f"{cardno} \n\nSERVICE "
-                            f"TYPE : {service.name} \n\nQUERY : "
-                            f"{remarks} \n\nYou can track service using the "
-                            f"link below "
-                            f"http://snedaghana.loc/servicing/jobcard/tracking/{just_service_card.cardno}/",
+                Sms(api=SmsApi.objects.get(is_default=1), message=f"A ticket has been opened for your query \n\nTICKET : "
+                                                                  f"{cardno} \n\nSERVICE "
+                                                                  f"TYPE : {service.name} \n\nQUERY : "
+                                                                  f"{remarks} \n\nYou can track service using the "
+                                                                  f"link below "
+                                                                  f"http://snedaghana.loc/servicing/jobcard/tracking/{just_service_card.cardno}/",
                     to=phone).save()
+
 
                 success_response['message'] = "Job Opened"
 
@@ -135,8 +135,7 @@ def interface(request):
                     Sms(api_id=SMS_KEY, message=sms, to=client_details.phone).save()
                     service.client_approval = 1
                     service.save()
-                    TicketTrans(ticket_id=service.ticket_id,
-                                tran=f"Sent To {client.get_full_name()} for approval withm message {message}",
+                    TicketTrans(ticket_id=service.ticket_id, tran=f"Sent To {client.get_full_name()} for approval withm message {message}",
                                 title="CLIENT APPROVAL", user_id=request.user.pk).save()
                     success_response['message'] = f"Sent To {client.get_full_name()} for approval and closing"
                 else:
@@ -182,8 +181,7 @@ def interface(request):
 
                 if ServiceCard.objects.filter(cardno=cardno).exists():
                     card = ServiceCard.objects.get(cardno=cardno)
-                    print(card.technician_id)
-                    technician = User.objects.get(pk=int(card.technician_id))
+                    technician = User.objects.get(pk=card.technician_id)
                     cardpk = card.pk
                     print(cardpk)
                     materials = []
@@ -308,8 +306,8 @@ def interface(request):
 
                 service.status = status
                 service.save()
-                Sms(to=owner_details.phone, message=f"Ticket has been closed\nTICKET NO: {cardno}",
-                    api=SmsApi.objects.get(is_default=1)).save()
+                Sms(to=owner_details.phone,message=f"Ticket has been closed\nTICKET NO: {cardno}",
+                api=SmsApi.objects.get(is_default=1)).save()
                 mesg = "DOCUMENT UPDATED"
                 if status == 0:
                     mesg = "DOCUMENT DELETED"

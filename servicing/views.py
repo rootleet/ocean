@@ -39,6 +39,7 @@ def newjob(request):
         return redirect('services')
 
     context['users'] = UserAddOns.objects.all()
+    context['technicians'] = User.objects.filter(is_superuser=1)
     context['tickets'] = TicketHd.objects.filter(status=0)
     context['services'] = sers
     context['page']['title'] = "New Job Card"
