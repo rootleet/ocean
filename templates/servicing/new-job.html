@@ -123,7 +123,7 @@
                                 <select name="" id="technician" class="form-control form-control-sm rounded-0">
                                     <option value="">SELECT TECHNICIAN</option>
                                     {% for tech in technicians %}
-                                        <option value="{{ tech.pk }}">{{ tech.user.first_name }} {{ tech.user.last_name }}</option>
+                                        <option value="{{ tech.pk }}">{{ tech.first_name }} {{ tech.last_name }}</option>
                                     {% endfor %}
                                 </select>
                             </div>
