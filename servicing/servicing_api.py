@@ -61,6 +61,7 @@ def interface(request):
                 head = data.get('head')
                 materials = data.get('materials')
 
+                print(head)
                 # get header data
                 cardno = f"JC{ServiceCard.objects.all().count() + 1}"
                 client_pk = head.get('client')
