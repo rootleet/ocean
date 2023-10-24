@@ -179,6 +179,7 @@ def interface(request):
 
                 if ServiceCard.objects.filter(cardno=cardno).exists():
                     card = ServiceCard.objects.get(cardno=cardno)
+                    technician = User.objects.get(pk=card.technician_id)
                     cardpk = card.pk
                     print(cardpk)
                     materials = []
@@ -238,11 +239,11 @@ def interface(request):
                             },
                         },
                         'technician': {
-                            'pk': card.technician.pk,
-                            'username': card.technician.username,
-                            'email': card.technician.email,
-                            'fullname': f"{card.technician.first_name} {card.technician.last_name}",
-                            'phone': UserAddOns.objects.get(user=card.technician).phone
+                            'pk': technician.pk,
+                            'username': technician.username,
+                            'email': technician.email,
+                            'fullname': f"{technician.first_name} {technician.last_name}",
+                            'phone': UserAddOns.objects.get(user=technician).phone
                         },
                         'ticket': {
                             'hd': {
