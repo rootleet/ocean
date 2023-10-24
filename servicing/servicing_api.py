@@ -110,7 +110,7 @@ def interface(request):
                                                                   f"TYPE : {service.name} \n\nQUERY : "
                                                                   f"{remarks} \n\nYou can track service using the "
                                                                   f"link below "
-                                                                  f"http://snedaghana.loc/servicing/jobcard/tracking/{just_service_card.cardno}/",
+                                                                  f"http://ocean.snedaghana.loc/servicing/jobcard/tracking/{just_service_card.cardno}/",
                     to=phone).save()
 
 
@@ -128,7 +128,7 @@ def interface(request):
                 sms = (
                     f"TICKET CLOSING\nTICKET No: {cardno}\nService Type: {service.service.name}\nMessage: {message}\n"
                     f"Final: use the link below to close or give further response to the ticket "
-                    f"\nhttp://snedaghana.loc/servicing/jobcard/tracking/{cardno}/")
+                    f"\nhttp://ocean.snedaghana.loc/servicing/jobcard/tracking/{cardno}/")
 
                 print(DEFAULT_SMS_API)
                 if SMS:
