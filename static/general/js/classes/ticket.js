@@ -65,6 +65,104 @@ class Ticket {
 
     }
 
+    updateTranScreen(ticket){
+        let form = `
+            <label for="title">TITLE</label><input type="text" id="title" class="form-control rounded-0 mb-2" placeholder="" />
+            <label for="description">DESCRIPTION</label><textarea name="" id="description" cols="30" rows="5" class="form-control rounded-0 mb-2" placeholder=""></textarea>
+            <label for="datetime">DATE TIME</label><input type="datetime-local" name="" class="form-control rounded-0 mb-2" id="datetime">
+            <input type="hidden" id="ticket" value="${ticket}" >
+            <label for="notify">NOTIFY</label><select name="notify" class="form-control rounded-0 mb-2" id="notify">
+                <option value="NO">NO</option>
+                <option value="YES">YES</option>
+            </select>
+            <button onclick="ticket.saveTicketTran()" class="btn btn-sm btn-success w-100">SUBMIT</button>
+            
+        `;
+        amodal.setBodyHtml(form);
+        amodal.setTitleText("UPDATE TICKET");
+        amodal.show()
+    }
+
+    saveTicketTran(){
+        let inputs = ['title','description','datetime','ticket','mypk'];
+
+        if(anton.validateInputs(inputs)){
+
+            let payload = {
+                module:'ticketupdate',
+                data:anton.Inputs(inputs)
+            }
+
+            amodal.hide();
+
+            let request = api.call('PUT',payload,'/adapi/');
+
+            kasa.info(request['message']);
+
+        } else {
+            kasa.error("INVALID FORM")
+        }
+
+        amodal.hide();
+    }
+
+    sendToClient(cardno){
+        Swal.fire({
+          title: 'MESSAGE',
+          html:
+            '<textarea id="message" class="form-control rounded-0" rows="5" placeholder="Text"></textarea>',
+          showCancelButton: true,
+          confirmButtonText: 'Confirm',
+          cancelButtonText: 'Cancel',
+          showLoaderOnConfirm: true,
+          preConfirm: () => {
+            const message = document.getElementById('message').value;
+
+            // You can use textInputValue and textareaInputValue as needed
+            let payload = {
+                module:'send_ticket_to_client',
+                data: {
+                    cardno:cardno,
+                    message:message
+                }
+            }
+
+            kasa.info(api.call('PUT',payload,'/servicing/api/')['message'])
+
+          }
+        });
+
+    }
+
+    approveTicket(cardno,status){
+        Swal.fire({
+          title: 'ENTER FEED BACK',
+          html:
+            '<textarea id="message" class="form-control rounded-0" rows="5" placeholder="Text"></textarea>',
+          showCancelButton: true,
+          confirmButtonText: 'Confirm',
+          cancelButtonText: 'Cancel',
+          showLoaderOnConfirm: true,
+          preConfirm: () => {
+            const message = document.getElementById('message').value;
+
+            // You can use textInputValue and textareaInputValue as needed
+            let payload = {
+                module:'client_ticket_approval',
+                data: {
+                    cardno:cardno,
+                    message:message,
+                    status:status
+                }
+            }
+
+            kasa.confirm(api.call('PATCH',payload,'/servicing/api/')['message'],1,'here')
+
+          }
+        });
+    }
+
+
 }
 
 const ticket = new Ticket();

@@ -1,0 +1,96 @@
+{% extends "servicing/base.html" %}
+{% load static %}
+
+{% block body %}
+    <div class='card-header'>
+        <button onclick='newService()' class='btn btn-info rounded-0'>NEW SERVICE TYPE</button>
+    </div>
+    <div class='card-body p-2 overflow-auto'>
+        <table class='table table-sm datatable table-bordered table-striped table-hover table-bordered'>
+            <thead><tr>
+                <th>CODE</th>
+                <th>NAME</th>
+                <th>DESCRIPTION</th>
+                <th>Action</th>
+            </tr></thead>
+            <tbody>
+                {% for service in services %}
+                    <tr>
+                        <td>{{ service.code }}</td><td>{{ service.name }}</td><td>{{ service.description }}</td>
+                        <td>
+                            <button onclick="deleteService({{ service.pk }})" style="padding: .2em !important;width: 30px !important; height: 30px !important" class="btn btn-danger pointer mr-2"><i class="fa fa-recycle"></i></button>
+                            <button style="padding: .2em !important;width: 30px !important; height: 30px !important" class="btn btn-info pointer mr-2"><i class="fa fa-pen"></i></button>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        let api_interface = '/servicing/api/';
+        let new_form = `
+            <div class="w-100">
+                <label for="service_code">CODE</label>
+                <input type="text" value="{{ newcode }}" readonly id="service_code" class="form-control rounded-0 mb-2 w-100" autocomplete="off">
+                <label for="service_name">NAME</label>
+                <input type="text" id="service_name" class="form-control rounded-0 mb-2 w-100" autocomplete="off">
+                <label for="service_description">DETAILS</label>
+                <textarea class="form-control rounded-0 mb-2 w-100" id="service_description" cols="30" rows="5"></textarea><hr>
+                <input type="hidden" id="service_owner" value="{{ request.user.pk }}" />
+                <button onclick="saveNewService()" class="btn btn-success rounded-0 ml-2">SAVE</button>
+            </div>
+        `;
+
+        function newService(){
+
+            amodal.setBodyHtml(new_form);
+            amodal.setTitleText("CREATE SERVICE");
+            amodal.show();
+        }
+
+        function saveNewService(){
+            let target_inuts = ['service_code','service_name','service_description','service_owner']
+            if(anton.validateInputs(target_inuts)){
+                kasa.success("LETS GO")
+                let form_info = anton.Inputs(target_inuts);
+
+                let payload = {
+                    'module':'services',
+                    data: form_info
+                };
+
+                let request = api.call('PUT',payload,'/servicing/api/')
+                if(request['status_code'] === 200){
+                    kasa.confirm(request['message'],1,'here')
+                } else {
+                    kasa.error(request['message'])
+                }
+
+            } else {
+                kasa.error("INVALID FORM")
+            }
+        }
+
+        function deleteService(key){
+            if(confirm("Are you sure you want to perform action?")){
+                let payload = {
+                    module:'services',
+                    data:{
+                        'service':key
+                    }
+                };
+
+                kasa.confirm(
+                    api.call('DELETE',payload,api_interface)['message'],
+                    1,
+                    'here'
+                );
+            } else {
+                kasa.info("Operation Cancelled")
+            }
+
+        }
+
+    </script>
+{% endblock %}

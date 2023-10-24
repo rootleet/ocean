@@ -1,5 +1,5 @@
 import hashlib
-from datetime import datetime,date
+from datetime import datetime, date
 
 from django.contrib.auth.models import User
 from django.contrib.messages.context_processors import messages
@@ -14,7 +14,8 @@ import os
 
 from django.views.decorators.csrf import csrf_exempt
 
-from admin_panel.models import TicketHd, SmsApi, Sms, TaskHD, TaskTrans, ProductMaster, ProductPacking, ProductTrans
+from admin_panel.models import TicketHd, SmsApi, Sms, TaskHD, TaskTrans, ProductMaster, ProductPacking, ProductTrans, \
+    UserAddOns
 from api.extras import get_stock, suppler_details, cardex
 from appscenter.models import AppsGroup, App, AppAssign, VersionControl
 from community.models import tags
@@ -243,7 +244,7 @@ def api_function(request):
                         if taskHd.count() == 1:
                             task = taskHd.last()
                             update = TaskTrans(entry_uni=task.entry_uni, tran_title=title, tran_descr=details,
-                                               entry_date=update_date, support_by=support_by,owner=owner)
+                                               entry_date=update_date, support_by=support_by, owner=owner)
                             update.save()
 
                             response['message'] = "Task Updated!!"
@@ -266,7 +267,6 @@ def api_function(request):
                         mac = data.get('mac')
                         app = data.get('app')
                         message = data.get('message') or "Current Version Does Not Support Logging"
-
 
                         try:
                             pc = Computer.objects.get(mac_address=mac)
@@ -382,11 +382,11 @@ def api_function(request):
                                 "sku": device.sku,
                             },
                             'printers': printer_list,
-                            'timestamp':{
-                                'created_date':device.created_date,
-                                'created_time':device.created_time,
-                                'updated_date':device.updated_date,
-                                'updated_time':device.updated_time
+                            'timestamp': {
+                                'created_date': device.created_date,
+                                'created_time': device.created_time,
+                                'updated_date': device.updated_date,
+                                'updated_time': device.updated_time
                             }
                         }
 
@@ -397,13 +397,28 @@ def api_function(request):
                     response['message'] = frame
 
                 elif module == 'users':
-                    users = User.objects.all()
+                    pk = data.get('pk') or '*'
+                    if pk == '*':
+                        users = User.objects.all()
+                    else:
+                        users = User.objects.filter(pk=pk)
                     arr = []
                     for us in users:
+                        addon = {
+                            'phone': 'null',
+                            'department': 'null'
+                        }
+                        if UserAddOns.objects.filter(user=us).exists():
+                            addonx = UserAddOns.objects.get(user=us)
+                            addon['phone'] = addonx.phone
+                            # addon['department'] = addonx.dept()
+
                         arr.append({
-                            'pk':us.pk,
-                            'username':us.username,
-                            'name':f"{us.first_name} {us.last_name}"
+                            'pk': us.pk,
+                            'username': us.username,
+                            'name': f"{us.first_name} {us.last_name}",
+                            'addon': addon,
+                            'email': us.email
                         })
 
                     response['message'] = arr
@@ -846,6 +861,30 @@ def api_function(request):
                     response['message'] = {
                         'header': head, 'trans': arr
                     }
+
+                elif module == 'ticket':
+                    tick = data.get('tick') or '*'
+                    owner = data.get('owner' or '*')
+                    status = data.get('status')
+                    ti = []
+                    if owner == '*':
+                        ticks = TicketHd.objects.all()
+                    else:
+                        ticks = TicketHd.objects.filter(owner_id=owner, status=status)
+
+                    for ticket in ticks:
+                        ti.append({
+                            'pk':ticket.pk,
+                            'owner': {
+                                'pk': ticket.owner.pk,
+                                'username': ticket.owner.username,
+                                'fullname': f"{ticket.owner.first_name} {ticket.owner.last_name}"
+                            },
+                            'title': ticket.title,
+                            'description': ticket.descr
+                        })
+
+                    response['message'] = ti
 
             except KeyError as e:
                 response["status_code"] = 400

@@ -25,6 +25,15 @@ class Anton {
         return true;
     }
 
+    Inputs(ids){
+        let xd = {};
+        for (let i = 0; i < ids.length; i++) {
+            xd[ids[i]] = $(`#${ids[i]}`).val()
+        }
+
+        return xd;
+    }
+
     wait(time = 1){
         setTimeout(function () {
             console.log(waiting)

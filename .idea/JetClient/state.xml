@@ -45,6 +45,26 @@
               <option name="name" value="MAKE REPORT" />
               <option name="url" value="http://127.0.0.1:8000/reports/api/" />
             </requestState>
+            <requestState>
+              <option name="body">
+                <bodyState>
+                  <option name="raw" value="{&#10;  &quot;module&quot;: &quot;send_log&quot;&#10;}" />
+                  <option name="type" value="JSON" />
+                </bodyState>
+              </option>
+              <option name="headers">
+                <list>
+                  <headerState>
+                    <option name="key" value="Content-Type" />
+                    <option name="value" value="application/json" />
+                  </headerState>
+                </list>
+              </option>
+              <option name="id" value="f9aca2c2-c857-4025-a3a7-3c0c8939ee6c" />
+              <option name="method" value="POST" />
+              <option name="name" value="SEND LOGS" />
+              <option name="url" value="http://127.0.0.1:8000/crm/api/" />
+            </requestState>
           </list>
         </option>
       </draftsState>

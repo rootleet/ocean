@@ -403,9 +403,13 @@ class TicketHd(models.Model):
     edited_on = models.DateTimeField(auto_now=True)
     status = models.IntegerField(default=0)
 
+    def transactions(self):
+        return TicketTrans.objects.filter(ticket=self).order_by('-pk')
+
 
 class TicketTrans(models.Model):
     ticket = models.ForeignKey('TicketHd', on_delete=models.CASCADE)
+    title = models.TextField(null=True, blank=True)
     tran = models.TextField()
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
@@ -437,7 +441,7 @@ class AuthToken(models.Model):
 
 # hold extra user details
 class Departments(models.Model):
-    name = models.CharField(max_length=255,unique=True)
+    name = models.CharField(max_length=255, unique=True)
     name_of_head = models.TextField()
     email_of_head = models.TextField()
     phone_of_head = models.TextField()
@@ -460,10 +464,13 @@ class UserAddOns(models.Model):
     profile_pic = models.FileField(upload_to=f'static/general/img/users/')
     pword_reset = models.IntegerField(default=1)
 
-    department = models.ForeignKey(Departments,on_delete=models.SET_NULL, null=True, blank=True)
+    department = models.ForeignKey(Departments, on_delete=models.SET_NULL, null=True, blank=True)
 
     def settings(self):
         return UserSettings.objects.get(user=self.user)
+
+    def dept(self):
+        return self.department.name if Departments.objects.exists() == 1 else "NOT ASSIGNED"
 
 
 class PasswordResetToken(models.Model):

@@ -4,29 +4,51 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ffcbf13e-d396-4071-9a24-4014a690f966" name="Changes" comment="Send Department Emails">
+    <list default="true" id="ffcbf13e-d396-4071-9a24-4014a690f966" name="Changes" comment="add more catch error">
+      <change afterPath="$PROJECT_DIR$/admin_panel/sms_hold.py" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/appscenter/migrations/0104_alter_app_file.py" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/appscenter/migrations/0105_alter_app_file.py" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/crm/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/crm/admin.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/crm/apps.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/crm/crm_api.py" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/crm/migrations/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/crm/models.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/crm/tests.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/crm/urls.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/crm/views.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ocean.zip" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/reports/migrations/0003_alter_departmentreportmailque_status.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/general/js/classes/crm.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/servicing/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/servicing/admin.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/servicing/apps.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/servicing/models.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/servicing/servicing_api.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/servicing/tests.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/servicing/urls.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/servicing/views.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/general/img/users/jackline.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/general/js/classes/servicing.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/uploads/2023/10/07/planes.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/servicing/base.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/servicing/jobcard.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/servicing/landing.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/servicing/new-job.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/servicing/services.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/servicing/transactions.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/JetClient/state.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/JetClient/state.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dataSources/3a6a5de2-5c16-4c61-8911-ff2a73819934.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/3a6a5de2-5c16-4c61-8911-ff2a73819934.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/admin_panel/admin_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/admin_panel/admin_api.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/admin_panel/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/admin_panel/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/admin_panel/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/admin_panel/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apiv2/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/apiv2/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmms/cmms_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/cmms/cmms_api.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crm/crm_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/crm/crm_api.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ocean/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/ocean/settings.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ocean/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/ocean/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/general/js/classes/anton.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/general/js/classes/anton.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/general/js/classes/cmms.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/general/js/classes/cmms.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/general/js/classes/modal.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/general/js/classes/modal.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/general/js/classes/ticket.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/general/js/classes/ticket.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/cmms/tools.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/cmms/tools.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/dashboard/company/all-users.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/dashboard/company/all-users.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,8 +61,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="HTML File" />
         <option value="JavaScript File" />
+        <option value="HTML File" />
         <option value="Python Script" />
       </list>
     </option>
@@ -63,13 +85,8 @@
     </option>
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="mock:///folder-pre-request-script-drafts.js" root0="FORCE_HIGHLIGHTING" />
-    <setting file="mock:///folder-test-script-drafts.js" root0="FORCE_HIGHLIGHTING" />
-    <setting file="mock:///folder-test-script-f63b7dc5.js" root0="FORCE_HIGHLIGHTING" />
-    <setting file="mock:///pre-request-script-54706f75.js" root0="FORCE_HIGHLIGHTING" />
-    <setting file="mock:///pre-request-script-ab3c62f7.js" root0="FORCE_HIGHLIGHTING" />
-    <setting file="mock:///test-script-54706f75.js" root0="FORCE_HIGHLIGHTING" />
-    <setting file="mock:///test-script-ab3c62f7.js" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock:///pre-request-script-f9aca2c2.js" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock:///test-script-f9aca2c2.js" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -96,7 +113,7 @@
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/reza/Documents/GitHub/ocean/templates/crn&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/reza/Documents/GitHub/ocean/templates/servicing&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
@@ -112,11 +129,11 @@
 }</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\reza\Documents\GitHub\ocean\templates\servicing" />
+      <recent name="C:\Users\reza\Documents\GitHub\ocean\cronjobs" />
       <recent name="C:\Users\reza\Documents\GitHub\ocean\templates\crn" />
       <recent name="C:\Users\reza\Documents\GitHub\ocean\crm" />
       <recent name="C:\Users\reza\Documents\GitHub\ocean\templates\cmms\service" />
-      <recent name="C:\Users\reza\Documents\GitHub\ocean\retail" />
-      <recent name="C:\Users\reza\Documents\GitHub\ocean\templates\retail" />
     </key>
   </component>
   <component name="RunManager">
@@ -189,7 +206,23 @@
       <workItem from="1696140446679" duration="247000" />
       <workItem from="1696140713743" duration="9513000" />
       <workItem from="1696155865718" duration="10813000" />
-      <workItem from="1696208993639" duration="3218000" />
+      <workItem from="1696208993639" duration="5240000" />
+      <workItem from="1696239588932" duration="433000" />
+      <workItem from="1696421011612" duration="9409000" />
+      <workItem from="1696515695080" duration="686000" />
+      <workItem from="1696519623526" duration="17942000" />
+      <workItem from="1696603359295" duration="172000" />
+      <workItem from="1696659825181" duration="7217000" />
+      <workItem from="1696767477986" duration="10086000" />
+      <workItem from="1696842463774" duration="590000" />
+      <workItem from="1697091409136" duration="6346000" />
+      <workItem from="1697120274213" duration="4639000" />
+      <workItem from="1697198881813" duration="10887000" />
+      <workItem from="1697457284543" duration="596000" />
+      <workItem from="1697740904979" duration="608000" />
+      <workItem from="1697955501866" duration="33503000" />
+      <workItem from="1698056462335" duration="6010000" />
+      <workItem from="1698121262996" duration="15416000" />
     </task>
     <task id="LOCAL-00001" summary="Add EVAT credentials, Location master, and related changes &#10;&#10;Added a new functionality to create, view and manage EVAT credentials from the dashboard.&#10;This includes a new HTML template (evat-keys.html) for displaying and managing EVAT keys in the dashboard, &#10;and another template update (loc_master.html) to handle changes in the Locations Master section. &#10;Additionally, updated 5 Python files (admin_api.py, views.py, models.py, urls.py, and admin_panel/urls.py) to handle new functionalities at the backend like - &#10;saving and viewing EVAT credentials, creating and storing new location, change evat_engine, delete location, etc.&#10;Also updated the navigation menu in base.html for easier access to the new functionalities. &#10;&#10;This is crucial for providing the users with a much easier and convenient way of managing their EVAT keys and Locations from the dashboard on the go, without having &#10;to deal with the back-end complexities. Each EVAT credential includes server information, company details and keys for various services.">
       <option name="closed" value="true" />
@@ -367,7 +400,135 @@
       <option name="project" value="LOCAL" />
       <updated>1696147329350</updated>
     </task>
-    <option name="localTasksCounter" value="23" />
+    <task id="LOCAL-00023" summary="crm">
+      <option name="closed" value="true" />
+      <created>1696213837093</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1696213837093</updated>
+    </task>
+    <task id="LOCAL-00024" summary="crm">
+      <option name="closed" value="true" />
+      <created>1696239736641</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1696239736641</updated>
+    </task>
+    <task id="LOCAL-00025" summary="crm">
+      <option name="closed" value="true" />
+      <created>1696426174038</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1696426174038</updated>
+    </task>
+    <task id="LOCAL-00026" summary="crm">
+      <option name="closed" value="true" />
+      <created>1696426704866</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1696426704866</updated>
+    </task>
+    <task id="LOCAL-00027" summary="GENERATING AND SENDING CRM REPORTS">
+      <option name="closed" value="true" />
+      <created>1696568705147</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1696568705147</updated>
+    </task>
+    <task id="LOCAL-00028" summary="Modify creating user account to make it more informative. Two communication options enhanced. When a user is created, an email and sms is sent detailing the account details credentials.&#10;&#10;Two bash scripts added also to automate daily generating of emails of CRM logs and sending them.">
+      <option name="closed" value="true" />
+      <created>1696570160128</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1696570160128</updated>
+    </task>
+    <task id="LOCAL-00029" summary="grnerate crm file renamed">
+      <option name="closed" value="true" />
+      <created>1696572070142</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1696572070142</updated>
+    </task>
+    <task id="LOCAL-00030" summary="image backgroup remover added to dolphine">
+      <option name="closed" value="true" />
+      <created>1696679192038</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1696679192038</updated>
+    </task>
+    <task id="LOCAL-00031" summary="image backgroup remover added to dolphine">
+      <option name="closed" value="true" />
+      <created>1696771284621</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1696771284621</updated>
+    </task>
+    <task id="LOCAL-00032" summary="image backgroup remover added to dolphine">
+      <option name="closed" value="true" />
+      <created>1696772489737</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1696772489737</updated>
+    </task>
+    <task id="LOCAL-00033" summary="add more catch error">
+      <option name="closed" value="true" />
+      <created>1696773876617</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1696773876617</updated>
+    </task>
+    <task id="LOCAL-00034" summary="add more catch error">
+      <option name="closed" value="true" />
+      <created>1696774145036</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1696774145036</updated>
+    </task>
+    <task id="LOCAL-00035" summary="add more catch error">
+      <option name="closed" value="true" />
+      <created>1697127370885</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1697127370885</updated>
+    </task>
+    <task id="LOCAL-00036" summary="add more catch error">
+      <option name="closed" value="true" />
+      <created>1697127560524</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1697127560524</updated>
+    </task>
+    <task id="LOCAL-00037" summary="add more catch error">
+      <option name="closed" value="true" />
+      <created>1697127779356</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1697127779356</updated>
+    </task>
+    <task id="LOCAL-00038" summary="add more catch error">
+      <option name="closed" value="true" />
+      <created>1697128773895</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1697128773895</updated>
+    </task>
+    <option name="localTasksCounter" value="39" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -407,7 +568,13 @@
     <MESSAGE value="Creating and Sending task report" />
     <MESSAGE value="cromjob for generation reports" />
     <MESSAGE value="Send Department Emails" />
-    <option name="LAST_COMMIT_MESSAGE" value="Send Department Emails" />
+    <MESSAGE value="crm" />
+    <MESSAGE value="GENERATING AND SENDING CRM REPORTS" />
+    <MESSAGE value="Modify creating user account to make it more informative. Two communication options enhanced. When a user is created, an email and sms is sent detailing the account details credentials.&#10;&#10;Two bash scripts added also to automate daily generating of emails of CRM logs and sending them." />
+    <MESSAGE value="grnerate crm file renamed" />
+    <MESSAGE value="image backgroup remover added to dolphine" />
+    <MESSAGE value="add more catch error" />
+    <option name="LAST_COMMIT_MESSAGE" value="add more catch error" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -424,7 +591,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/cmms/cmms_api.py</url>
-          <line>1226</line>
+          <line>1272</line>
           <option name="timeStamp" value="5" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">

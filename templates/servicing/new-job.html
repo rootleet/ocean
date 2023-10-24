@@ -1,0 +1,387 @@
+{% extends "servicing/base.html" %}
+{% load static %}
+
+{% block body %}
+
+    <!-- HEADER -->
+    <div class="card-header">
+        <div class="w-100 h-100 d-flex flex-wrap">
+            <button title="save" data-bs-toggle="tooltip" onclick="saveJobCard()" style="margin-right: .2em" class="btn btn-outline-primary"><i class="fa fa-save"></i></button>
+            <button onclick="location.href='{% url 'jobcard' %}'" style="margin-right: .2em" class="btn btn-outline-info"><i class="fa fa-history"></i></button>
+        </div>
+    </div>
+
+    <!-- BODY -->
+    <div class="card-body p-2 overflow-auto">
+        <div class="container h-100">
+            <div class="row h-100 no-gutters">
+                <!-- CLIENT DETAILS -->
+                <div class="col-sm-4">
+                    <div class="card">
+                        <div class="card-header"><strong class="card-title">Client</strong></div>
+                        <div class="card-body p-2">
+                            <!-- NAME -->
+                            <div class="input-group imput-group-sm mb-2">
+                                <div class="input-group-prepend rounded-0">
+                                    <small class="input-group-text rounded-0">NAME</small>
+                                </div>
+                                <select name="" onchange="loadClient()"  class="form-control rounded-0 form-control-sm" id="client">
+                                    <option value="">SELECT USER</option>
+                                    {% for us in users %}
+                                        <option value="{{ us.user.pk }}">{{ us.user.first_name }} {{ us.user.last_name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <!-- EMAIL -->
+                            <div class="input-group imput-group-sm mb-2">
+                                <div class="input-group-prepend rounded-0">
+                                    <small class="input-group-text rounded-0">EMAIL</small>
+                                </div>
+                                <input required readonly value="" placeholder="select client" type="email" class="form-control rounded-0 form-control-sm" id="email">
+                            </div>
+
+                            <!-- CONTACT -->
+                            <div class="input-group imput-group-sm mb-2">
+                                <div class="input-group-prepend rounded-0">
+                                    <small class="input-group-text rounded-0">PHON</small>
+                                </div>
+                                <input type="tel" required readonly value="" placeholder="select client" class="form-control rounded-0 form-control-sm" id="phone">
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SERVICE DETAILS -->
+                <div class="col-sm-4">
+                    <div class="card">
+                        <div class="card-header"><strong class="card-title">Service Details</strong></div>
+                        <div class="card-body p-2">
+                            <!-- NAME -->
+                            <div class="input-group imput-group-sm mb-2">
+                                <div class="input-group-prepend rounded-0">
+                                    <small class="input-group-text rounded-0">SERVICE MAST</small>
+                                </div>
+                                <select onchange="selectService()" class="form-control rounded-0 form-control-sm" id="service">
+                                    <option value="">SELECT SERVICE</option>
+                                    {% for service in services %}
+                                        <option value="{{ service.pk }}">{{ service.name }}</option>{% endfor %}
+                                </select>
+                            </div>
+
+                            <!-- EMAIL -->
+                            <div class="input-group imput-group-sm mb-2">
+                                <div class="input-group-prepend rounded-0">
+                                    <small class="input-group-text rounded-0">SERVICE SUB</small>
+                                </div>
+                                <select disabled name="" id="service_sub"
+                                        class="form-control form-control-sm rounded-0">
+                                    <option value="">SELECT SERVICE</option>
+                                </select>
+                            </div>
+
+                            <!-- CONTACT -->
+                            <div class="input-group imput-group-sm mb-2">
+                                <div class="input-group-prepend rounded-0">
+                                    <small class="input-group-text rounded-0">STATUS</small>
+                                </div>
+                                <select name="" id="importance" class="form-control form-control-sm rounded-0">
+                                    <option value="0"> PRIMARY</option>
+                                    <option value="1">SECONDARY</option>
+                                    <option value="2">TERTIARY</option>
+                                </select>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TECHNICIAN -->
+                <div class="col-sm-4">
+                    <div class="card">
+                        <div class="card-header"><strong class="card-title">TECHNICAL</strong></div>
+                        <div class="card-body p-2">
+
+                            <!-- TICKET -->
+                            <div class="input-group input-group-sm mb-2">
+                                <div class="input-group-prepend rounded-0">
+                                    <small class="input-group-text rounded-0">TICKET.</small>
+                                </div>
+                                <select onchange="$('#remarks').val(remarks[this.value])" disabled name="" id="ticket" class="form-control form-control-sm rounded-0">
+                                    <option value="generate">GENERATE</option>
+                                </select>
+                            </div>
+
+                            <!-- NAME -->
+                            <div class="input-group input-group-sm mb-2">
+                                <div class="input-group-prepend rounded-0">
+                                    <small class="input-group-text rounded-0">ASSIGNED TO.</small>
+                                </div>
+                                <select name="" id="technician" class="form-control form-control-sm rounded-0">
+                                    <option value="">SELECT TECHNICIAN</option>
+                                    {% for tech in users %}
+                                        {% if tech.user.is_superuser %}
+                                            <option value="{{ tech.pk }}">{{ tech.user.first_name }} {{ tech.user.last_name }}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <!-- REMARKS -->
+                            <div class="input-group input-group-sm">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text rounded-0">AD. REMARKS</span>
+                                </div>
+                                <textarea id="remarks" cols="30" class="form-control form-control-sm rounded-0" rows="1">NONE</textarea>
+                            </div>
+
+                            <input type="hidden" value="{{ user.pk }}" id="owner">
+
+
+
+
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TRANSACTIONS -->
+                <div style="height: 60%" class="col-sm-12">
+                    <div class="card h-100">
+                        <div class="card-header">
+                            <strong class="card-title">Add Materials</strong> <button onclick="newLine()" class="btn btn-info">ADD ITEM</button>
+                        </div>
+                        <div class="card-body p-2">
+
+                            <table class="table table-sm table-bordered table-striped table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>SN</th>
+                                        <th>ITEM</th>
+                                        <th>DESCRIPTION</th>
+                                        <th>UNIT PRICE</th>
+                                        <th>QUANTITY</th>
+                                        <th>TOTAL</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody id="tBody">
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let remarks = {};
+        // add new line to table rows
+        function newLine() {
+            // get rows in table and add 1 to it for the next line
+            let nex_row_num = $('#tBody tr').length + 1;
+
+            // make new row html with next_row_num
+            let new_row = `
+                <tr id="row${nex_row_num}">
+                    <td><kbd ondblclick="$('#row${nex_row_num}').remove()" class="pointer">${nex_row_num}</kbd></td>
+                    <td><input type="text" class="form-control form-control-sm rounded-0" id="row${nex_row_num}item"></td>
+                    <td><input type="text" class="form-control form-control-sm rounded-0" id="row${nex_row_num}desc"></td>
+                    <td><input type="number" style="width: 100px" class="form-control form-control-sm rounded-0" id="row${nex_row_num}unitprice"></td>
+                    <td><input type="number" style="width: 100px" class="form-control form-control-sm rounded-0" id="row${nex_row_num}qty"></td>
+                    <td><input type="number" style="width: 100px" class="form-control form-control-sm rounded-0" id="row${nex_row_num}totalprice"></td>
+                </tr>
+            `;
+
+            // append new row ro able
+            $('#tBody').append(new_row);
+
+        }
+
+        // get tickets
+        function tickets(){
+            remarks = {};
+            if(anton.validateInputs(['client'])){
+                // set payload and request
+                let ticket_payload = {
+                    'module':'ticket',
+                    data:{
+                        owner:$('#client').val(),
+                        'status':0
+                    }
+                };
+
+                let request = api.call('VIEW',ticket_payload,'/apiv2/');
+                if(request['status_code'] === 200){
+                    let tickets = request['message'];
+                    let req_option = `<option value="0"> GENERATE TICKET </option>`;
+                    remarks[0] = "NONE"
+
+                    for (let t = 0; t < tickets.length; t++) {
+                        let ticket = tickets[t];
+                        req_option += `<option value="${ticket['pk']}" >${ticket['title']}</option>`
+                        remarks[ticket['pk']] = ticket['description']
+                    }
+
+                    $('#ticket').html(req_option);
+                    $('#ticket').prop('disabled',false);
+
+                } else {
+                    alert(request['message'])
+                }
+
+                //console.table(remarks);
+
+            } else {
+                kasa.error("SELECT USER FIRST");
+            }
+        }
+
+
+        // load client in screen
+        function loadClient(){
+            // get client id
+
+
+            // validate there is input
+            if(anton.validateInputs(['client'])){
+                // get data
+                let client_pk = $('#client').val();
+
+                let payload = {
+                    module:'users',
+                    data: {
+                        pk:client_pk
+                    }
+
+                };
+
+                let request = api.call('VIEW',payload,'/apiv2/');
+                if(request['status_code'] === 200){
+                    let user = request['message'][0];
+                    $('#phone').val(user['addon']['phone']);
+                    $('#email').val(user['email']);
+
+                    // load user tickets
+                    tickets();
+
+                } else {
+                    alert(request['message']);
+                    $('#phone').val('');
+                    $('#email').val('');
+                }
+
+            } else {
+                kasa.error("SELECT CLIENT");
+            }
+        }
+
+        // select service
+        function selectService(){
+            // validate service form
+            if(anton.validateInputs(['service'])){
+                // get service key
+                let service = $('#service').val();
+
+                // set payload
+                let payload = {
+                    'module':'services',
+                    data:{
+                        'service':service
+                    }
+                };
+
+                // send payload to API
+                let request = api.call("VIEW",payload,'/servicing/api/');
+
+                if(request['status_code'] === 200){
+                    // response is positive
+                    let services = request['message'][0];
+                    let subs = services['subs'];
+                    let options = '';
+
+                    if(subs.length > 0){
+                        // make options for subs with a loop
+                        for (let s = 0; s < subs.length; s++) {
+                            let sub = subs[s];
+                            options += `<option value="${sub['pk']}" >${sub['name']}</option>`;
+                        }
+                        // render options in html
+                        $('#service_sub').html(options);
+                        $('#service_sub').prop('disabled',false);
+                    } else {
+                        // create sub message
+                        alert(`NO SUBS`)
+                    }
+
+
+
+
+                } else {
+                    kasa.error(request['message']);
+                }
+
+            } else {
+                kasa.error("PLEASE SELECT A SERVICE")
+            }
+        }
+
+        // save new job card
+        function saveJobCard(){
+            // get inputs
+            let header = ['client','email','phone','service','service_sub','importance','ticket','technician','remarks','owner'];
+            if(anton.validateInputs(header)){
+                let head = anton.Inputs(header);
+
+                // get tbody fields
+                let rows = $('#tBody tr').length;
+                let materials = [];
+                for (let tr = 1; tr <= rows ; tr++) {
+                    let line,item,description,price,quantity,total_price;
+
+                    line = tr;
+                    item = `row${tr}item`;
+                    description = `row${tr}desc`;
+                    price = `row${tr}unitprice`;
+                    quantity = `row${tr}qty`;
+                    total_price = `row${tr}totalprice`;
+                    materials.push({
+                        line:line,
+                        item:$(`#${item}`).val(),
+                        description:$(`#${description}`).val(),
+                        price: $(`#${price}`).val(),
+                        quantity:$(`#${quantity}`).val(),
+                        total_price:$(`#${total_price}`).val()
+                    })
+                }
+
+                let payload = {
+                    module: 'jobcard',
+                    data: {
+                        head:head,
+                        materials:materials
+                    }
+                }
+
+                let request = api.call('PUT',payload,'/servicing/api/')
+
+                if(request['status_code'] === 200){
+                    kasa.confirm(request['message'],1,'/servicing/jobcard/');
+                } else {
+                    alert(request['message'])
+                }
+
+            } else {
+                kasa.error("FILL ALL FIELDS")
+            }
+        }
+
+    </script>
+
+{% endblock %}

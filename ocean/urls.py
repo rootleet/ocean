@@ -32,6 +32,7 @@ urlpatterns = [
     path('reports/',include('reports.urls')),
     path('taskmanager/',include('taskmanager.urls')),
     path('retail/',include('retail.urls')),
-    path('crm/',include('crm.urls'))
+    path('crm/',include('crm.urls')),
+    path('servicing/',include('servicing.urls'))
 
 ]

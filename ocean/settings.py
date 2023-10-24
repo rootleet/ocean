@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 from pathlib import Path
 import os
 
+
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -54,7 +56,8 @@ INSTALLED_APPS = [
     'reports.apps.ReportsConfig',
     'taskmanager.apps.TaskmanagerConfig',
     'retail.apps.RetailConfig',
-    'crm.apps.CrmConfig'
+    'crm.apps.CrmConfig',
+    'servicing.apps.ServicingConfig'
 ]
 
 MIDDLEWARE = [
@@ -204,3 +207,4 @@ OLD_DB_NAME = 'PROC_CMMS_V1'
 # #DB_PORT = '1237'
 # DB_PORT = '1433'
 # DB_NAME = 'PROC_CMMS_V1'
+

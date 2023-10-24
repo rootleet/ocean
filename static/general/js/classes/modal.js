@@ -42,7 +42,12 @@ class Modal {
     show(){
         $('#g_modal').modal('show')
     }
-    hide(){
+    hide(clear=true){
+        if(clear === true){
+            this.setTitleText('');
+            this.setFooterHtml('');
+            this.setBodyHtml('');
+        }
         $('#g_modal').modal('hide')
     }
 

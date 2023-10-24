@@ -10,7 +10,7 @@ from django.views.decorators.csrf import csrf_exempt
 from admin_panel.anton import remove_html_tags
 from admin_panel.cron_exe import execute_script
 from admin_panel.models import GeoCity, GeoCitySub, Reminder, SmsApi, UserAddOns, EvatCredentials, Locations, \
-    Departments
+    Departments, TicketTrans, Sms, TicketHd
 from reports.models import DepartmentReportMailQue
 from taskmanager.models import Tasks
 
@@ -167,6 +167,26 @@ def index(request):
                           db_user=db_user, db=db, db_password=db_password, owner=creating_user).save()
 
                 success_response = "LOCATION SAVED"
+                response = success_response
+
+            elif module == 'ticketupdate':
+                date_time = data.get('datetime')
+                ticket = data.get('ticket')
+                title = data.get('title')
+                description = data.get('description')
+                owner = data.get('mypk')
+                notify = data.get('notify')
+
+                TicketTrans(ticket_id=ticket, title=title, tran=description, user_id=owner, created_on=date_time).save()
+
+                if notify == 'YES':
+                    tickethd = TicketHd.objects.get(pk=ticket)
+                    tick_owner = tickethd.owner
+                    user_details = UserAddOns.objects.get(user=tick_owner)
+                    Sms(to=user_details.phone, message=f"TICKET UPDATE\nTitle: {title}\Description: {description}",
+                        api=SmsApi.objects.get(is_default=1)).save()
+
+                success_response['message'] = "TIcket Updated"
                 response = success_response
 
             else:

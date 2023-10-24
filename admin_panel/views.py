@@ -267,6 +267,8 @@ def sign_up(request):
             position = request.POST['position']
             company = request.POST['company']
 
+            notify = request.POST['notify']
+
             # check if email exist
             if User.objects.filter(email=email).count() > 0:
                 messages.error(request, f"User Exist With Email")
@@ -330,8 +332,8 @@ def sign_up(request):
                               f"Reset your password and login with the link below <br>" \
                               f"<a target='_blank' href='http://ocean.snedaghana.loc/profile/restpwrod/{resettoken}/'>http://ocean.snedaghana.loc/profile/restpwrod/{resettoken}/</a> "
                     email_from = settings.EMAIL_HOST_USER
-                    Emails(sent_from=email_from, sent_to=email, subject=subject, body=message, email_type='system',
-                           ref='system').save()
+
+
                     # log sms
                     sms_api = SmsApi.objects.get(is_default=1)
                     sms_template = """
@@ -358,7 +360,10 @@ def sign_up(request):
                     sms_message = sms_message.replace("[Support Email]", "solomon@snedaghana.com")
                     sms_message = sms_message.replace("[Support Phone Number]", "054 631 0011 / 020 199 8184")
 
-                    Sms(api=sms_api, to=mobile, message=sms_message).save()
+                    if notify == "YES":
+                        Sms(api=sms_api, to=mobile, message=sms_message).save()
+                        Emails(sent_from=email_from, sent_to=email, subject=subject, body=message, email_type='system',
+                               ref='system').save()
 
                     # send_mail(subject, message, email_from, recipient_list)
                     messages.error(request, "Account Created")

@@ -9,7 +9,7 @@ static/general/img/products/tuto1.pdf
 tuto1.pdf
 /api/migrations/
 /meeting/migrations/
-/inventory/migrations/
+
 *.pdf
 /venv/
 /admin_panel/migrations/
@@ -21,3 +21,4 @@ tuto1.pdf
 /static/files/
 /dolphine/migrations/
 /cmms/migrations/
+*/migrations

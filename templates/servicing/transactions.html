@@ -1,0 +1,47 @@
+{% extends "servicing/base.html" %}
+{% load static %}
+
+{% block body %}
+
+    {% if pagevalid %}
+        <div class="card-header">
+            <strong class="card-title">{{ pagemessage.service.name }} | {{ pagemessage.service_sub.name }}</strong>
+        </div>
+        <div class="card-body p-2">
+            <div class="alert alert-info">
+                {{ pagemessage.remarks }}
+            </div>
+            {% if pagemessage.client_approval == 1 %}
+                <div class="w-100 d-flex flex-wrap justify-content-between">
+                    <button onclick="if(confirm('Are you sure you accept solution?')){ticket.approveTicket(`{{ pagemessage.cardno }}`,2)}" class="btn btn-success">APPROVE</button>
+                    <button onclick="if(confirm('Are you sure you want to reject solution?')){ticket.approveTicket(`{{ pagemessage.cardno }}`,0)}" class="btn btn-danger">REJECT</button>
+                </div>
+            {% endif %}
+
+            <hr>
+            {% for tran in pagemessage.ticket.transactions %}
+
+                <div class="card rounded-0">
+                    <div class="card-header">
+                        <strong class="card-title">{{ tran.title }}</strong><br>
+                        <small>by {{ tran.user.username }} </small>on {{ tran.created_on }}
+                    </div>
+                <div class="card-body p-2">
+                    {{ tran.tran }}
+                </div>
+                </div>
+
+            {% endfor %}
+
+        </div>
+    {% else %}
+        <div class="w-100 h-100 d-flex flex-wrap align-content-center justify-content-center">
+            <div class="alert alert-danger">
+                <p>{{ pagemessage }}</p>
+            </div>
+        </div>
+    {% endif %}
+
+
+
+{% endblock %}

@@ -926,6 +926,52 @@ def api(request):
                         response['status_code'] = 505
                         response['message'] = str(e)
 
+                elif module == 'reqtran':
+                    request_number = data.get('reqnum')
+                    cursor = db()
+
+                    cursor.execute(f"SELECT * FROM mr_request_hd where entry_no = '{request_number}'")
+                    req = cursor.fetchone()
+
+                    if req is not None:
+                        arr = []
+                        cursor.execute(
+                            f"select item_code,barcode,item_des,total_units,entry_date from mr_request_tran where entry_no = '{request_number}'")
+                        for tran in cursor.fetchall():
+                            item_code, barcode, item_des, total_units, entry_date = tran
+
+                            # get previous record
+
+                            cursor.execute(
+                                f"SELECT top(1) entry_no,doc_date,doc_ref_no1,total_units FROM stock_chk where doc_type in ('TR','GR','AD') and item_code = '{item_code}' and doc_date <= '{entry_date}' and doc_ref_no1 != '{request_number}' order by doc_date desc")
+                            last_transfer = cursor.fetchone()
+                            if last_transfer is not None:
+                                entry_no, doc_date, doc_ref_no1, total_tran_units = last_transfer
+
+                                cursor.execute(
+                                    f"select sum(total_units) from stock_chk where doc_type = 'IS' and item_code = '{item_code}' and doc_date <= '{entry_date}'")
+                                iss_t = cursor.fetchone()[0]
+
+                                arr.append({
+                                    'itemcode': item_code.strip(),
+                                    'barcode': barcode.strip(),
+                                    'name': item_des.strip(),
+                                    'unit': total_units,
+                                    'transfer': {
+                                        'entry_no': entry_no,
+                                        'qty': total_tran_units,
+                                        'tranfer_date': doc_date
+                                    },
+                                    'usage': iss_t
+                                })
+
+                        response['status_code'] = 202
+                        response['message'] = arr
+                    else:
+                        response['status_code'] = 404
+                        response['message'] = f"NO RECORD FOR {request_number}"
+
+
             except Exception as e:
                 response['status'] = 'error'
                 response['status_code'] = 505

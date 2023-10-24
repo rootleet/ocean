@@ -1309,8 +1309,70 @@ class Cmms {
         }
 
 
+    reqTransfer() {
+        Swal.fire({
+          title: 'ENTER REQUEST NUMBER',
+          input: 'text',
+          inputAttributes: {
+            required: 'true'
+          },
+          showCancelButton: true,
+          confirmButtonText: 'Submit',
+          cancelButtonText: 'Cancel',
+          showLoaderOnConfirm: true,
+          preConfirm: (value) => {
+            if (!value) {
+              Swal.showValidationMessage('Please enter a valid number');
+            } else {
+              return value;
+            }
+          },
+        }).then((result) => {
+          if (result.isConfirmed) {
+            const value = result.value;
+            let payload = {
+                module:'reqtran',
+                data : {
+                    reqnum:value
+                }
+            };
 
+            let request = api.call('VIEW',payload,'/cmms/api/');
+            if(request['status_code'] === 202){
+                let rows = ''
+                // load modal
+                var message = request['message'];
+                for (let xx = 0; xx < message.length; xx++) {
+                    let msg = message[xx];
+                    let barcode,itemcode,transfer,name,unit,usage;
+                    barcode = msg['barcode'];
+                    itemcode = msg['itemcode'];
+                    transfer = msg['transfer'];
+                    name = msg['name'];
+                    unit = msg['unit'];
+                    usage = msg['usage'];
 
+                    rows += `<tr><td>${barcode}</td><td>${itemcode}</td><td>${name}</td><td>${transfer['tranfer_date']} <kbd>${transfer['qty']}</kbd></td><td>${usage}</td></tr>`;
+
+                }
+
+                amodal.setBodyHtml(`
+                    <table class="table table-sm table-bordered">
+                        <thead><tr><th>BARCODE</th><th>ITEMCODE</th><th>NAME</th><th>LAST TRANSFER / GRN</th><th>USAGE AFTER</th></tr></thead>
+                        <tbody>${rows}</tbody>
+                    </table>
+                `);
+                amodal.setSize('L');
+                amodal.setTitleText("USAGE SINCE LAST TRANSFER");
+                amodal.show()
+
+            } else {
+                kasa.error(request['message']);
+            }
+
+          }
+        });
+    }
 }
 
 const cmms = new Cmms()
