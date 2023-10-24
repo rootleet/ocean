@@ -74,6 +74,7 @@ def interface(request):
                 technician = head.get('technician')
                 importance = head.get('importance')
                 tick = head.get('ticket')
+
                 if tick == '0':
                     # generate
                     TicketHd(owner=client, title=f"{service.name}", descr=f"{service.description}",status=1).save()
