@@ -333,24 +333,31 @@ def interface(request):
                 ticket = service.ticket
                 message = data.get('message')
                 status = data.get('status')
-                service.status = status
+
+
                 if status == 2:
                     # approved
                     msg = f"TICKET: {cardno}\nSTATUS: Closed by Client\nMessage: {message}"
                     ticket.status = 2
                     ticket.save()
+                    service.status = 2
+                    service.client_approval = 2
+
 
                 else:
                     # not approved
                     service.status = 1
                     msg = f"TICKET: {cardno}\nSTATUS: Rejected by Client\nMessage: {message}"
+                    service.status = 1
+                    service.client_approval = 0
+
                 try:
                     Sms(api_id=SMS_KEY, message=msg, to='0546310011').save()
                     TicketTrans(title="Client Feedback", tran=msg, ticket_id=service.ticket_id,
                                 user_id=request.user.pk).save()
                     success_response['message'] = "Feedback Sent"
-                    service.client_approval = status
                     service.save()
+
                 except Exception as e:
                     success_response['message'] = f"Feedback Not Sent {e}"
 

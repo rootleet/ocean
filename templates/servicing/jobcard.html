@@ -256,6 +256,9 @@
                     $('#close').prop('disabled',false);
                     $('#send_to_client').prop('disabled',false);
                 }
+                // check status
+                statusCheck(service['status'])
+
                 $('#delete').val(cardno)
 
                 $('#client_name').val(client['fullname']);
@@ -335,6 +338,43 @@
             } else {
                 alert(request['message'])
             }
+        }
+
+        function statusCheck(status){
+            let del,close,update,send;
+
+            del = $('#delete');
+            close = $('#close');
+            update = $('#update');
+            send = $('#send_to_client');
+
+            switch (status) {
+                case 0:
+                    // deleted => disable('delete',close,update,send)
+                    del.prop('disabled',true);
+                    close.prop('disabled',true);
+                    update.prop('disabled',true);
+                    send.prop('disabled',true);
+
+                    break;
+                case 1:
+                    //open
+                    del.prop('disabled',false);
+                    close.prop('disabled',false);
+                    update.prop('disabled',false);
+                    send.prop('disabled',false);
+                    break;
+                case 2:
+                    // closed
+                    del.prop('disabled',true);
+                    close.prop('disabled',true);
+                    update.prop('disabled',true);
+                    send.prop('disabled',true);
+                    break;
+                default:
+
+            }
+
         }
 
         // delete job card

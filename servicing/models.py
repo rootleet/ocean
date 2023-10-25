@@ -47,13 +47,13 @@ class ServiceCard(models.Model):
     ticket = models.ForeignKey(TicketHd, on_delete=models.CASCADE)
     importance = models.IntegerField(default=0)
 
-    status = models.IntegerField(default=1)
+    status = models.IntegerField(default=1)  # 1 open, 2 closed, 0 deleted
     created_date = models.DateField(auto_now_add=True)
     created_time = models.TimeField(auto_now_add=True)
     updated_date = models.DateField(auto_now=True)
     updated_time = models.TimeField(auto_now=True)
 
-    client_approval = models.IntegerField(default=0)
+    client_approval = models.IntegerField(default=0)  # 0 not sent, 1 sent, 2 approved
 
     def materials(self):
         return ServiceMaterials.objects.filter(service_card=self)
