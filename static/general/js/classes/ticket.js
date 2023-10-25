@@ -65,12 +65,12 @@ class Ticket {
 
     }
 
-    updateTranScreen(ticket){
+    updateTranScreen(){
         let form = `
             <label for="title">TITLE</label><input type="text" id="title" class="form-control rounded-0 mb-2" placeholder="" />
             <label for="description">DESCRIPTION</label><textarea name="" id="description" cols="30" rows="5" class="form-control rounded-0 mb-2" placeholder=""></textarea>
             <label for="datetime">DATE TIME</label><input type="datetime-local" name="" class="form-control rounded-0 mb-2" id="datetime">
-            <input type="hidden" id="ticket" value="${ticket}" >
+           
             <label for="notify">NOTIFY</label><select name="notify" class="form-control rounded-0 mb-2" id="notify">
                 <option value="NO">NO</option>
                 <option value="YES">YES</option>
@@ -84,20 +84,29 @@ class Ticket {
     }
 
     saveTicketTran(){
-        let inputs = ['title','description','datetime','ticket','mypk'];
+        let inputs = ['title','description','datetime','cardno','mypk'];
 
         if(anton.validateInputs(inputs)){
+            let jobcard = api.call('VIEW',{module:'servicecard',data:{cardno:$('#cardno').val()}},'/servicing/api/');
+            if(jobcard['status_code'] === 200){
+                let payload = {
+                    module:'ticketupdate',
+                    data:anton.Inputs(inputs)
+                }
+                console.table(jobcard)
+                payload['data']['ticket'] = jobcard['message']['ticket']['hd']['pk']
 
-            let payload = {
-                module:'ticketupdate',
-                data:anton.Inputs(inputs)
+
+                amodal.hide();
+
+                let request = api.call('PUT',payload,'/adapi/');
+
+                kasa.info(request['message']);
+                loadJobCard(payload['data']['cardno'])
+            } else {
+                kasa.error(jobcard['message']);
             }
 
-            amodal.hide();
-
-            let request = api.call('PUT',payload,'/adapi/');
-
-            kasa.info(request['message']);
 
         } else {
             kasa.error("INVALID FORM")
@@ -127,7 +136,8 @@ class Ticket {
                 }
             }
 
-            kasa.info(api.call('PUT',payload,'/servicing/api/')['message'])
+            kasa.info(api.call('PUT',payload,'/servicing/api/')['message']);
+            loadJobCard(cardno)
 
           }
         });

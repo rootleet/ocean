@@ -10,8 +10,8 @@
             <div class="w-75 h-100 d-flex flex-wrap">
                 <button onclick="location.href='{% url 'newjob' %}'" style="margin-right: .2em" class="btn btn-outline-primary"><i class="fa fa-plus"></i> new service</button>
                 <button onclick="if(confirm('ARE YOU SURE?')){deleteJobCard(this.value)}" id="delete" style="margin-right: .2em" class="btn btn-outline-danger"><i class="fa fa-trash"></i> delete</button>
-                <button onclick="if(confirm('ARE YOU SURE YOU WANT TO CLOSE SERVICE?')){updateDocument(this.value,2)}" id="close" style="margin-right: .2em" class="btn btn-outline-warning"><i class="fa fa-door-closed"></i> close</button>
-                <button id="update" onclick="ticket.updateTranScreen(this.value)" style="margin-right: .2em" class="btn btn-outline-info"><i class="fa fa-assistive-listening-systems"></i> update ticket</button>
+                <button onclick="if(confirm('ARE YOU SURE YOU WANT TO CLOSE SERVICE?')){updateDocument(2)}" id="close" style="margin-right: .2em" class="btn btn-outline-warning"><i class="fa fa-door-closed"></i> close</button>
+                <button id="update" onclick="ticket.updateTranScreen()" style="margin-right: .2em" class="btn btn-outline-info"><i class="fa fa-assistive-listening-systems"></i> update ticket</button>
                 <button id="send_to_client" onclick="ticket.sendToClient($('#delete').val())" style="margin-right: .2em" class="btn btn-outline-info"><i class="fa fa-mail-bulk"></i> send client</button>
                 <button onclick="windowPopUp(`/servicing/jobcard/tracking/${$('#delete').val()}/`,'none',500,1024)" class="btn btn-info"><i class="fa fa-list"></i></button>
             </div>
@@ -100,6 +100,13 @@
                     <div class="card">
                         <div class="card-header"><strong class="card-title">TECHNICAL</strong></div>
                         <div class="card-body p-2">
+                            <!-- EMAIL -->
+                            <div class="input-group imput-group-sm mb-2">
+                                <div class="input-group-prepend rounded-0">
+                                    <small class="input-group-text rounded-0">CARDNO</small>
+                                </div>
+                                <input required readonly type="text" class="form-control rounded-0 form-control-sm" id="cardno">
+                            </div>
                             <!-- NAME -->
                             <div class="input-group imput-group-sm mb-2">
                                 <div class="input-group-prepend rounded-0">
@@ -116,13 +123,7 @@
                                 <input type="tel" required readonly  class="form-control rounded-0 form-control-sm" id="techphone">
                             </div>
 
-                            <!-- EMAIL -->
-                            <div class="input-group imput-group-sm mb-2">
-                                <div class="input-group-prepend rounded-0">
-                                    <small class="input-group-text rounded-0">LEVEL</small>
-                                </div>
-                                <input required readonly type="email" class="form-control rounded-0 form-control-sm" id="level">
-                            </div>
+
 
 
 
@@ -131,8 +132,21 @@
                     </div>
                 </div>
 
+                <!-- TICKET DETAILS -->
+                <div style="height: 60%" class="col-sm-6">
+                    <div class="card h-100">
+                        <div class="card-header">
+                            <strong class="card-title">Ticket Details</strong>
+                        </div>
+                        <div class="card-body overflow-auto p-2">
+                            <h2 id="task_title"></h2>
+                            <div id="taskdesc"></div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- TRANSACTIONS -->
-                <div style="height: 60%" class="col-sm-12">
+                <div style="height: 60%" class="col-sm-6">
                     <div class="card h-100">
                         <div class="card-header p-2">
                             <!-- Nav pills -->
@@ -145,7 +159,7 @@
                               </li>
                             </ul>
                         </div>
-                        <div class="card-body p-2">
+                        <div class="card-body overflow-auto p-2">
 
 
                             <!-- Tab panes -->
@@ -190,7 +204,7 @@
     </div>
 
     <script>
-        console.log(`CARD: NO {{ cardno }}`)
+
         function loadJobCard(cardno){
             let payload = {
                 module:'servicecard',
@@ -282,7 +296,7 @@
                 //technician
                 $('#technician').val(technician['fullname']);
                 $('#techphone').val(technician['phone']);
-                $('#level').val(service['importance'])
+                $('#cardno').val(cardno)
 
                 // materials
                 let mats = ''
@@ -303,12 +317,16 @@
 
                 $('#update').val(ticket['hd']['pk']);
 
+                $('#task_title').html(ticket['hd']['title']);
+                $('#taskdesc').html(ticket['hd']['description']);
+
                 // tickets
                 let ticket_trans = ticket['trans'];
                 let t_rows = '';
+                $('#ticketTrans').html(t_rows);
                 for (let tt = 0; tt < ticket_trans.length; tt++) {
                     let tran = ticket_trans[tt];
-                    t_rows += `<tr><td>${tran['title']}</td><td>${tran['descr']}</td><td>${tran['owner']['fullname']}</td><td>${tran['date']}</td></tr>`
+                    t_rows += `<tr><td><small>${tran['title']}</small></td><td><small>${tran['descr']}</small></td><td><small>${tran['owner']['fullname']}</small></td><td><small>${tran['date']}</small></td></tr>`
                 }
                 $('#ticketTrans').html(t_rows);
 
@@ -320,19 +338,19 @@
         }
 
         // delete job card
-        function deleteJobCard(cardno) {
-            updateDocument(cardno,0)
+        function deleteJobCard() {
+            updateDocument(0)
 
         }
 
-        function updateDocument(cardno,status){
+        function updateDocument(status){
             if(status < 0 || status > 2){
                 kasa.error("INVALID SETTINGS")
             } else {
                 let payload = {
                 module:'jobcardstatus',
                 data: {
-                    'cardno':cardno,
+                    'cardno':$('#cardno').val(),
                     'status':status
                     }
                 };

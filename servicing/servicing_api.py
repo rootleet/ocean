@@ -74,19 +74,24 @@ def interface(request):
                 technician = User.objects.get(pk=head.get('technician'))
                 importance = head.get('importance')
                 tick = head.get('ticket')
+                ticket_title = head.get('ticket_title')
+                ticked_description = head.get('description')
 
                 if tick == '0':
                     # generate
-                    TicketHd(owner=client, title=f"{service.name}", descr=f"{service.description}",status=1).save()
-                    ticket = TicketHd.objects.all().last()
+                    TicketHd(owner=client, title=f"{ticket_title}", descr=f"{ticked_description}", status=1).save()
+                    ticket = TicketHd.objects.filter(owner=client, title=f"{ticket_title}", descr=f"{ticked_description}", status=1).last()
                 else:
-                    ticket = TicketHd.objects.get(pk=tick)
                     ticket2 = TicketHd.objects.get(pk=tick)
                     ticket2.status = 1
+                    ticket2.title = ticket_title
+                    ticket2.descr = ticket_title
                     ticket2.save()
+                    ticket = TicketHd.objects.get(pk=tick)
+
 
                 # save service card
-                ServiceCard(client=client, owner=owner, remarks=remarks, service=service, service_sub=service_sub,
+                ServiceCard(client=client, owner=owner, remarks=f"{service.name}/{service_sub.name}/{ticket_title}", service=service, service_sub=service_sub,
                             technician=technician, ticket=ticket, importance=importance, cardno=cardno).save()
 
                 just_service_card = ServiceCard.objects.all().last()
@@ -105,14 +110,14 @@ def interface(request):
                                      total_price=total_price, service_card=just_service_card).save()
 
                 # queue SMS
-                Sms(api=SmsApi.objects.get(is_default=1), message=f"A ticket has been opened for your query \n\nTICKET : "
-                                                                  f"{cardno} \n\nSERVICE "
-                                                                  f"TYPE : {service.name} \n\nQUERY : "
-                                                                  f"{remarks} \n\nYou can track service using the "
-                                                                  f"link below "
-                                                                  f"http://ocean.snedaghana.loc/servicing/jobcard/tracking/{just_service_card.cardno}/",
+                Sms(api=SmsApi.objects.get(is_default=1),
+                    message=f"A ticket has been opened for your query \n\nTICKET : "
+                            f"{cardno} \n\nSERVICE "
+                            f"TYPE : {service.name} \n\nTITLE : "
+                            f"{ticket_title} \n\nYou can track service using the "
+                            f"link below "
+                            f"\n\nhttp://ocean.snedaghana.loc/servicing/jobcard/tracking/{just_service_card.cardno}/",
                     to=phone).save()
-
 
                 success_response['message'] = "Job Opened"
 
@@ -126,16 +131,17 @@ def interface(request):
                 client_details = UserAddOns.objects.get(user=client)
 
                 sms = (
-                    f"TICKET CLOSING\nTICKET No: {cardno}\nService Type: {service.service.name}\nMessage: {message}\n"
+                    f"TICKET CLOSING\n\nTICKET No: {cardno}\n\nService Type: {service.service.name}\n\nMessage: {message}\n"
                     f"Final: use the link below to close or give further response to the ticket "
-                    f"\nhttp://ocean.snedaghana.loc/servicing/jobcard/tracking/{cardno}/")
+                    f"\n\nhttp://ocean.snedaghana.loc/servicing/jobcard/tracking/{cardno}/")
 
                 print(DEFAULT_SMS_API)
                 if SMS:
                     Sms(api_id=SMS_KEY, message=sms, to=client_details.phone).save()
                     service.client_approval = 1
                     service.save()
-                    TicketTrans(ticket_id=service.ticket_id, tran=f"Sent To {client.get_full_name()} for approval withm message {message}",
+                    TicketTrans(ticket_id=service.ticket_id,
+                                tran=f"Sent To {client.get_full_name()} for approval withm message {message}",
                                 title="CLIENT APPROVAL", user_id=request.user.pk).save()
                     success_response['message'] = f"Sent To {client.get_full_name()} for approval and closing"
                 else:
@@ -306,17 +312,17 @@ def interface(request):
 
                 service.status = status
                 service.save()
-                Sms(to=owner_details.phone,message=f"Ticket has been closed\nTICKET NO: {cardno}",
-                api=SmsApi.objects.get(is_default=1)).save()
+                Sms(to=owner_details.phone, message=f"Ticket has been closed\nTICKET NO: {cardno}",
+                    api=SmsApi.objects.get(is_default=1)).save()
                 mesg = "DOCUMENT UPDATED"
                 if status == 0:
                     mesg = "DOCUMENT DELETED"
-                    ticket.status = 2
+                    ticket.status = status
                     ticket.save()
                 elif status == 2:
                     mesg = "DOCUMENT CLOSED"
                     # close ticket
-                    ticket.status = 2
+                    ticket.status = status
                     ticket.save()
 
                 success_response['message'] = mesg

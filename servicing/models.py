@@ -59,8 +59,6 @@ class ServiceCard(models.Model):
         return ServiceMaterials.objects.filter(service_card=self)
 
 
-
-
 class ServiceMaterials(models.Model):
     service_card = models.ForeignKey(ServiceCard, on_delete=models.CASCADE)
     line = models.IntegerField()

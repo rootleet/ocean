@@ -120,7 +120,7 @@ def index(request):
     my_issues = {
         'open': TicketHd.objects.filter(owner=request.user.pk, status=0).count(),
         'scheduled': TicketHd.objects.filter(owner=request.user.pk, status=1).count(),
-        'close': TicketHd.objects.filter(owner=request.user.pk, status=3).count(),
+        'close': TicketHd.objects.filter(owner=request.user.pk, status=2).count(),
     }
     context = {
         'notifications': notifications,
@@ -2132,7 +2132,7 @@ def ticket(request):
     context = {
         'nav': True,
         'ticket_count': TicketHd.objects.filter(owner=request.user).count(),
-        'my_tickets': TicketHd.objects.filter(owner=request.user),
+        'my_tickets': TicketHd.objects.filter(owner=request.user).order_by('status'),
         'page': {
             'title': 'My Tickets'
         }

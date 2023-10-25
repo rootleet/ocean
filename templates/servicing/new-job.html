@@ -110,7 +110,7 @@
                                 <div class="input-group-prepend rounded-0">
                                     <small class="input-group-text rounded-0">TICKET.</small>
                                 </div>
-                                <select onchange="$('#remarks').val(remarks[this.value])" disabled name="" id="ticket" class="form-control form-control-sm rounded-0">
+                                <select onchange="$('#ticket_title').val(tits[this.value]);$('#description').val(remarks[this.value])" disabled name="" id="ticket" class="form-control form-control-sm rounded-0">
                                     <option value="generate">GENERATE</option>
                                 </select>
                             </div>
@@ -131,9 +131,9 @@
                             <!-- REMARKS -->
                             <div class="input-group input-group-sm">
                                 <div class="input-group-prepend">
-                                    <span class="input-group-text rounded-0">AD. REMARKS</span>
+                                    <span class="input-group-text rounded-0">TITLE</span>
                                 </div>
-                                <textarea id="remarks" cols="30" class="form-control form-control-sm rounded-0" rows="1">NONE</textarea>
+                                <textarea id="ticket_title" cols="30" class="form-control form-control-sm rounded-0" rows="1"></textarea>
                             </div>
 
                             <input type="hidden" value="{{ user.pk }}" id="owner">
@@ -146,15 +146,28 @@
                     </div>
                 </div>
 
+                <!-- TASK DETAILS -->
+                <div style="height: 60%" class="col-sm-6">
+                    <div class="card h-100">
+                        <div class="card-header">
+                            <strong class="card-title">TICKET DESCRIPTION</strong>
+                        </div>
+                        <div class="card-body p-2">
+                            <textarea name="description" id="description" class="h-100 form-control form-control-sm" cols="30" ></textarea>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- TRANSACTIONS -->
-                <div style="height: 60%" class="col-sm-12">
+                <div style="height: 60%" class="col-sm-6">
                     <div class="card h-100">
                         <div class="card-header">
                             <strong class="card-title">Add Materials</strong> <button onclick="newLine()" class="btn btn-info">ADD ITEM</button>
                         </div>
                         <div class="card-body p-2">
 
-                            <table class="table table-sm table-bordered table-striped table-hover">
+                            <div class="table-responsive">
+                                <table class="table table-sm table-bordered table-striped table-hover">
                                 <thead>
                                     <tr>
                                         <th>SN</th>
@@ -170,6 +183,9 @@
 
                                 </tbody>
                             </table>
+
+                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -180,6 +196,8 @@
 
     <script>
         let remarks = {};
+        let tits = {};
+        amodal.setBodyHtml(`<textarea id="ticket_description" class="form-control" ></textarea>`);
         // add new line to table rows
         function newLine() {
             // get rows in table and add 1 to it for the next line
@@ -219,12 +237,13 @@
                 if(request['status_code'] === 200){
                     let tickets = request['message'];
                     let req_option = `<option value="0"> GENERATE TICKET </option>`;
-                    remarks[0] = "NONE"
+
 
                     for (let t = 0; t < tickets.length; t++) {
                         let ticket = tickets[t];
                         req_option += `<option value="${ticket['pk']}" >${ticket['title']}</option>`
                         remarks[ticket['pk']] = ticket['description']
+                        tits[ticket['pk']] = ticket['title']
                     }
 
                     $('#ticket').html(req_option);
@@ -330,13 +349,23 @@
             }
         }
 
+        // ticket save0
+        function fsaveJobCard0() {
+
+          amodal.setSize('L');
+          amodal.setFooterHtml(`<button onclick="saveJobCard()" class="btn btn-success">SAVE</button>`)
+          amodal.setTitleText("Ticket Description");
+          amodal.show()
+        }
+
         // save new job card
         function saveJobCard(){
             // get inputs
-            let header = ['client','email','phone','service','service_sub','importance','ticket','technician','remarks','owner'];
-            if(anton.validateInputs(header)){
-                let head = anton.Inputs(header);
 
+            let header = ['client','email','phone','service','service_sub','importance','ticket','technician','ticket_title','owner','description'];
+            if(anton.validateInputs(header) ){
+                let head = anton.Inputs(header);
+                console.table(head);
                 // get tbody fields
                 let rows = $('#tBody tr').length;
                 let materials = [];
