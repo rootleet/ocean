@@ -1,3 +1,7 @@
+var currentDate = new Date();
+currentDate.setDate(1);
+var formattedDate = currentDate.toISOString().slice(0,10);
+const first_of_month = formattedDate;
 
 function log_issue(uni) {
     let log_title = `#log_title_${uni}`

@@ -1,5 +1,5 @@
 class Reports {
-
+    menu;
     cmms_sales_customer(){
         let table_header = ['TYPE OF','NAME','COMPANY','ADDRESS','PHONE','EMAIL','REGION','SUBURB','DATE','OWNER']
         // get customers
@@ -147,12 +147,17 @@ class Reports {
             }
 
             let table = `<table class="table table-sm table-bordered"><thead><tr>${th}</tr></thead><tbody>${rows}</tbody></table>`
-            let menu = card.getBody()
+            this.menu = card.getBody()
             card.setTitle(report_title)
             card.setBody(table)
-            card.setFooter(`<button class="btn btn-success" onclick="">HOME</button>`)
+            card.setFooter(`<button class="btn btn-success" onclick="reports.loadMenu()">HOME</button>`)
 
         }
+    }
+
+    loadMenu(){
+        card.setTitleHtml(`<button class="btn btn-info" onclick="phorm.newReportLegend()">NEW LEGEND</button>`)
+        card.setBody(this.menu)
     }
 
     /*
@@ -189,9 +194,11 @@ class Reports {
             </div>
         </div>
         `;
-            amodal.setTitleText("JOB CARDS: FILTER OPTIONS");
+            amodal.setTitleText(`JOB CARDS: FILTER OPTIONS`);
             amodal.setBodyHtml(form);
             amodal.setFooterHtml(`<button class="btn btn-info" onclick="reports.loadServiceReports()">GENERATE</button>`)
+            $('#from').val(first_of_month);
+            $('#to').val(today);
             amodal.show();
 
         } else {
@@ -213,20 +220,22 @@ class Reports {
             let request = api.call('VIEW',payload,'/servicing/api/');
             if(request['status_code'] === 200){
                 let cards = request['message'];
-                let header = ['CARD No','TITLE','SERVICE','TECHNICIAN','PREVIEW'];
+                let header = ['DATE','TITLE','SERVICE','TECHNICIAN','PREVIEW'];
                 let rows = '';
                 for (let c = 0; c < cards.length; c++){
                     let card = cards[c];
                     rows += `<tr>
-                                <td><small onclick="windowPopUp('/servicing/jobcard/tracking/${card['cardno']}/')" class="pointer text-info">${card['cardno']}</small></td>
+                                <td><small>${card['date']}</small></td>
                                 <td><small>${card['title']}</small></td>
                                 <td><small>${card['service']}</small></td>
                                 <td><small>${card['technician']}</small></td>
-                                <td><small onclick="alert('${card['description']}')" class="bi bi-eye-fill text-info pointer"></small></td>
+                                <td>
+                                    <small onclick="windowPopUp('/servicing/jobcard/tracking/${card['cardno']}/')" class="bi bi-eye-fill text-info mr-5 pointer"></small>
+                                </td>
                             </tr>`
                 }
 
-                reports.render(header,rows,'SERVICE REPORTS');
+                reports.render(header,rows,`${$('#status').find(':selected').text()} service report for  ${$('#user').find(':selected').text()} between ${$('#from').val()} and ${$('#to').val()}`);
 
                 amodal.hide(true)
             } else {

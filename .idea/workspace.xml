@@ -4,51 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ffcbf13e-d396-4071-9a24-4014a690f966" name="Changes" comment="add more catch error">
-      <change afterPath="$PROJECT_DIR$/admin_panel/sms_hold.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/appscenter/migrations/0104_alter_app_file.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/appscenter/migrations/0105_alter_app_file.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/crm/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/crm/migrations/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ocean.zip" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/reports/migrations/0003_alter_departmentreportmailque_status.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/servicing/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/servicing/admin.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/servicing/apps.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/servicing/models.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/servicing/servicing_api.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/servicing/tests.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/servicing/urls.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/servicing/views.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/general/img/users/jackline.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/general/js/classes/servicing.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/uploads/2023/10/07/planes.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/servicing/base.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/servicing/jobcard.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/servicing/landing.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/servicing/new-job.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/servicing/services.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/servicing/transactions.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/JetClient/state.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/JetClient/state.xml" afterDir="false" />
+    <list default="true" id="ffcbf13e-d396-4071-9a24-4014a690f966" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/3a6a5de2-5c16-4c61-8911-ff2a73819934.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/3a6a5de2-5c16-4c61-8911-ff2a73819934.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/admin_panel/admin_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/admin_panel/admin_api.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/admin_panel/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/admin_panel/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/admin_panel/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/admin_panel/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apiv2/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/apiv2/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmms/cmms_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/cmms/cmms_api.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/crm/crm_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/crm/crm_api.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ocean/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/ocean/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ocean/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/ocean/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/servicing/servicing_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/servicing/servicing_api.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/general/js/admin.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/general/js/admin.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/static/general/js/classes/anton.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/general/js/classes/anton.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/general/js/classes/cmms.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/general/js/classes/cmms.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/general/js/classes/modal.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/general/js/classes/modal.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/general/js/classes/ticket.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/general/js/classes/ticket.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/cmms/tools.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/cmms/tools.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/dashboard/company/all-users.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/dashboard/company/all-users.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/general/js/classes/reports.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/general/js/classes/reports.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -223,46 +186,10 @@
       <workItem from="1697955501866" duration="33503000" />
       <workItem from="1698056462335" duration="6010000" />
       <workItem from="1698121262996" duration="15416000" />
-    </task>
-    <task id="LOCAL-00001" summary="Add EVAT credentials, Location master, and related changes &#10;&#10;Added a new functionality to create, view and manage EVAT credentials from the dashboard.&#10;This includes a new HTML template (evat-keys.html) for displaying and managing EVAT keys in the dashboard, &#10;and another template update (loc_master.html) to handle changes in the Locations Master section. &#10;Additionally, updated 5 Python files (admin_api.py, views.py, models.py, urls.py, and admin_panel/urls.py) to handle new functionalities at the backend like - &#10;saving and viewing EVAT credentials, creating and storing new location, change evat_engine, delete location, etc.&#10;Also updated the navigation menu in base.html for easier access to the new functionalities. &#10;&#10;This is crucial for providing the users with a much easier and convenient way of managing their EVAT keys and Locations from the dashboard on the go, without having &#10;to deal with the back-end complexities. Each EVAT credential includes server information, company details and keys for various services.">
-      <option name="closed" value="true" />
-      <created>1692800370588</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1692800370588</updated>
-    </task>
-    <task id="LOCAL-00002" summary="Update file upload paths in migrations&#10;&#10;Updated file upload path in 'appscenter' migrations from 0084 to 0091. This change is necessary to be up-to-date with the file upload time and also to ensure that files uploaded do not overwrite each other. Additionally, added initial migrations for the 'reports' app for proper version control and replicate the application state across different environments.">
-      <option name="closed" value="true" />
-      <created>1692800408833</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1692800408833</updated>
-    </task>
-    <task id="LOCAL-00003" summary="Corrected 'entry' value in cmms_api data dict&#10;&#10;Fixed the 'entry' field in the data dictionary to correctly reference the 'ref' attribute of the 'frozen' object, not the non-existent 'ent()' method. This change is necessary for maintaining correct information when retrieving data from the 'frozen' object.">
-      <option name="closed" value="true" />
-      <created>1692873838178</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1692873838178</updated>
-    </task>
-    <task id="LOCAL-00004" summary="Update filename in CSV export for STC document&#10;&#10;The filename of the exported CSV in the case of a STC document now includes the reference number (ref) of the associated header. Previously, the filename only contained the location ID and remarks of the header. With the addition of the reference number, it will be easier to identify the corresponding header for each exported CSV file.">
-      <option name="closed" value="true" />
-      <created>1692874028585</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1692874028585</updated>
-    </task>
-    <task id="LOCAL-00005" summary="Add 'Others' option to position dropdown &#10;&#10;This commit adds a new option, 'Others', to the position dropdown in the sales-customer.html template. This allows users to select a different position that is not listed in the predefined options. This increases the flexibility of the form.">
-      <option name="closed" value="true" />
-      <created>1693318893472</created>
-      <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1693318893472</updated>
+      <workItem from="1698147568376" duration="2943000" />
+      <workItem from="1698174798740" duration="166000" />
+      <workItem from="1698175195651" duration="8361000" />
+      <workItem from="1698252370578" duration="14318000" />
     </task>
     <task id="LOCAL-00006" summary="Refactor 'save_sales_customer' to include company validation&#10;&#10;This commit refactors the 'save_sales_customer' view method to include validation for company. A check is added to see whether a customer from the respective company already exists. This change is necessary to prevent duplicate entries of the same company in the sales customer database.">
       <option name="closed" value="true" />
@@ -528,7 +455,135 @@
       <option name="project" value="LOCAL" />
       <updated>1697128773895</updated>
     </task>
-    <option name="localTasksCounter" value="39" />
+    <task id="LOCAL-00039" summary="technician pk instead of obj">
+      <option name="closed" value="true" />
+      <created>1698147941501</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1698147941501</updated>
+    </task>
+    <task id="LOCAL-00040" summary="technician pk instead of obj">
+      <option name="closed" value="true" />
+      <created>1698148029994</created>
+      <option name="number" value="00040" />
+      <option name="presentableId" value="LOCAL-00040" />
+      <option name="project" value="LOCAL" />
+      <updated>1698148029994</updated>
+    </task>
+    <task id="LOCAL-00041" summary="technician pk instead of obj">
+      <option name="closed" value="true" />
+      <created>1698148191152</created>
+      <option name="number" value="00041" />
+      <option name="presentableId" value="LOCAL-00041" />
+      <option name="project" value="LOCAL" />
+      <updated>1698148191152</updated>
+    </task>
+    <task id="LOCAL-00042" summary="technician pk instead of obj">
+      <option name="closed" value="true" />
+      <created>1698148274079</created>
+      <option name="number" value="00042" />
+      <option name="presentableId" value="LOCAL-00042" />
+      <option name="project" value="LOCAL" />
+      <updated>1698148274079</updated>
+    </task>
+    <task id="LOCAL-00043" summary="technician pk instead of obj">
+      <option name="closed" value="true" />
+      <created>1698148454884</created>
+      <option name="number" value="00043" />
+      <option name="presentableId" value="LOCAL-00043" />
+      <option name="project" value="LOCAL" />
+      <updated>1698148454884</updated>
+    </task>
+    <task id="LOCAL-00044" summary="technician pk instead of obj">
+      <option name="closed" value="true" />
+      <created>1698148634744</created>
+      <option name="number" value="00044" />
+      <option name="presentableId" value="LOCAL-00044" />
+      <option name="project" value="LOCAL" />
+      <updated>1698148634744</updated>
+    </task>
+    <task id="LOCAL-00045" summary="technician pk instead of obj">
+      <option name="closed" value="true" />
+      <created>1698148831423</created>
+      <option name="number" value="00045" />
+      <option name="presentableId" value="LOCAL-00045" />
+      <option name="project" value="LOCAL" />
+      <updated>1698148831423</updated>
+    </task>
+    <task id="LOCAL-00046" summary="technician pk instead of obj">
+      <option name="closed" value="true" />
+      <created>1698148924545</created>
+      <option name="number" value="00046" />
+      <option name="presentableId" value="LOCAL-00046" />
+      <option name="project" value="LOCAL" />
+      <updated>1698148924545</updated>
+    </task>
+    <task id="LOCAL-00047" summary="make technicians query only">
+      <option name="closed" value="true" />
+      <created>1698149411385</created>
+      <option name="number" value="00047" />
+      <option name="presentableId" value="LOCAL-00047" />
+      <option name="project" value="LOCAL" />
+      <updated>1698149411385</updated>
+    </task>
+    <task id="LOCAL-00048" summary="make technicians query only">
+      <option name="closed" value="true" />
+      <created>1698149446778</created>
+      <option name="number" value="00048" />
+      <option name="presentableId" value="LOCAL-00048" />
+      <option name="project" value="LOCAL" />
+      <updated>1698149446778</updated>
+    </task>
+    <task id="LOCAL-00049" summary="make technicians query only">
+      <option name="closed" value="true" />
+      <created>1698149618582</created>
+      <option name="number" value="00049" />
+      <option name="presentableId" value="LOCAL-00049" />
+      <option name="project" value="LOCAL" />
+      <updated>1698149618582</updated>
+    </task>
+    <task id="LOCAL-00050" summary="make technicians query only">
+      <option name="closed" value="true" />
+      <created>1698149881703</created>
+      <option name="number" value="00050" />
+      <option name="presentableId" value="LOCAL-00050" />
+      <option name="project" value="LOCAL" />
+      <updated>1698149881704</updated>
+    </task>
+    <task id="LOCAL-00051" summary="FINALE">
+      <option name="closed" value="true" />
+      <created>1698150211800</created>
+      <option name="number" value="00051" />
+      <option name="presentableId" value="LOCAL-00051" />
+      <option name="project" value="LOCAL" />
+      <updated>1698150211800</updated>
+    </task>
+    <task id="LOCAL-00052" summary="UI/UX - The user interface of addning and viewing jobcard has been enhanced to add more and relevant data in regard to a specific job card.&#10;&#10;JS Functioning - Ticked update and has been modified to make sure the corrected ticket is updated by referring to the related job-card. Loading of updates is made automatically after updating a ticket transactions. This is to reduce user flow layer by making it not a requirement to navigate back and forth to load latest updates.&#10;&#10;Dashboard - Dashboard issue graphy ( Pie chart ) has been modified to make sure accurate data is presented base on schedules,pending, and done tickets.&#10;&#10;Tickets - Tickets screen has been modified for clients, datatable is introduced to enable easy filtering and also tickets are sorted in accordance to status. Pending will show first, followed by scheduled and then done.">
+      <option name="closed" value="true" />
+      <created>1698216267315</created>
+      <option name="number" value="00052" />
+      <option name="presentableId" value="LOCAL-00052" />
+      <option name="project" value="LOCAL" />
+      <updated>1698216267315</updated>
+    </task>
+    <task id="LOCAL-00053" summary="New status checker has been added to validate job card status">
+      <option name="closed" value="true" />
+      <created>1698253822817</created>
+      <option name="number" value="00053" />
+      <option name="presentableId" value="LOCAL-00053" />
+      <option name="project" value="LOCAL" />
+      <updated>1698253822817</updated>
+    </task>
+    <task id="LOCAL-00054" summary="Reports - A new report has been added. This will generate a report base on job cards.&#10;&#10;Task Linking - When a new service order ( jobcard ) is opened, it will automatically generate a task for the assigned person. This will make sure that the assigned person will have it as part of weekly department report when it is being generated and sent to the departmental head.">
+      <option name="closed" value="true" />
+      <created>1698301635530</created>
+      <option name="number" value="00054" />
+      <option name="presentableId" value="LOCAL-00054" />
+      <option name="project" value="LOCAL" />
+      <updated>1698301635531</updated>
+    </task>
+    <option name="localTasksCounter" value="55" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -551,10 +606,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="Add EVAT credentials, Location master, and related changes &#10;&#10;Added a new functionality to create, view and manage EVAT credentials from the dashboard.&#10;This includes a new HTML template (evat-keys.html) for displaying and managing EVAT keys in the dashboard, &#10;and another template update (loc_master.html) to handle changes in the Locations Master section. &#10;Additionally, updated 5 Python files (admin_api.py, views.py, models.py, urls.py, and admin_panel/urls.py) to handle new functionalities at the backend like - &#10;saving and viewing EVAT credentials, creating and storing new location, change evat_engine, delete location, etc.&#10;Also updated the navigation menu in base.html for easier access to the new functionalities. &#10;&#10;This is crucial for providing the users with a much easier and convenient way of managing their EVAT keys and Locations from the dashboard on the go, without having &#10;to deal with the back-end complexities. Each EVAT credential includes server information, company details and keys for various services." />
-    <MESSAGE value="Update file upload paths in migrations&#10;&#10;Updated file upload path in 'appscenter' migrations from 0084 to 0091. This change is necessary to be up-to-date with the file upload time and also to ensure that files uploaded do not overwrite each other. Additionally, added initial migrations for the 'reports' app for proper version control and replicate the application state across different environments." />
-    <MESSAGE value="Corrected 'entry' value in cmms_api data dict&#10;&#10;Fixed the 'entry' field in the data dictionary to correctly reference the 'ref' attribute of the 'frozen' object, not the non-existent 'ent()' method. This change is necessary for maintaining correct information when retrieving data from the 'frozen' object." />
-    <MESSAGE value="Update filename in CSV export for STC document&#10;&#10;The filename of the exported CSV in the case of a STC document now includes the reference number (ref) of the associated header. Previously, the filename only contained the location ID and remarks of the header. With the addition of the reference number, it will be easier to identify the corresponding header for each exported CSV file." />
     <MESSAGE value="Add 'Others' option to position dropdown &#10;&#10;This commit adds a new option, 'Others', to the position dropdown in the sales-customer.html template. This allows users to select a different position that is not listed in the predefined options. This increases the flexibility of the form." />
     <MESSAGE value="Refactor 'save_sales_customer' to include company validation&#10;&#10;This commit refactors the 'save_sales_customer' view method to include validation for company. A check is added to see whether a customer from the respective company already exists. This change is necessary to prevent duplicate entries of the same company in the sales customer database." />
     <MESSAGE value="Add functionality to close sales deals via API&#10;&#10;This commit introduces the ability to close sales deals through the API. The update in the deal's status is indicated in the transaction record of the deal. The implemented changes influence multiple parts of the code, including the HTML representation of deals in 'sales-cust.html', the JS functions in 'anton.js' and 'cmms_cust.js' and most importantly, the backend logic in 'cmms_api.py' where the actual closing of deals is carried out. This feature helps sales reps to finalize their deals and record the closing remarks, improving the overall management of sales in the platform." />
@@ -574,7 +625,13 @@
     <MESSAGE value="grnerate crm file renamed" />
     <MESSAGE value="image backgroup remover added to dolphine" />
     <MESSAGE value="add more catch error" />
-    <option name="LAST_COMMIT_MESSAGE" value="add more catch error" />
+    <MESSAGE value="technician pk instead of obj" />
+    <MESSAGE value="make technicians query only" />
+    <MESSAGE value="FINALE" />
+    <MESSAGE value="UI/UX - The user interface of addning and viewing jobcard has been enhanced to add more and relevant data in regard to a specific job card.&#10;&#10;JS Functioning - Ticked update and has been modified to make sure the corrected ticket is updated by referring to the related job-card. Loading of updates is made automatically after updating a ticket transactions. This is to reduce user flow layer by making it not a requirement to navigate back and forth to load latest updates.&#10;&#10;Dashboard - Dashboard issue graphy ( Pie chart ) has been modified to make sure accurate data is presented base on schedules,pending, and done tickets.&#10;&#10;Tickets - Tickets screen has been modified for clients, datatable is introduced to enable easy filtering and also tickets are sorted in accordance to status. Pending will show first, followed by scheduled and then done." />
+    <MESSAGE value="New status checker has been added to validate job card status" />
+    <MESSAGE value="Reports - A new report has been added. This will generate a report base on job cards.&#10;&#10;Task Linking - When a new service order ( jobcard ) is opened, it will automatically generate a task for the assigned person. This will make sure that the assigned person will have it as part of weekly department report when it is being generated and sent to the departmental head." />
+    <option name="LAST_COMMIT_MESSAGE" value="Reports - A new report has been added. This will generate a report base on job cards.&#10;&#10;Task Linking - When a new service order ( jobcard ) is opened, it will automatically generate a task for the assigned person. This will make sure that the assigned person will have it as part of weekly department report when it is being generated and sent to the departmental head." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

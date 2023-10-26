@@ -355,7 +355,8 @@ def interface(request):
                         'title': service.ticket.title,
                         'description': service.ticket.descr,
                         'service': f"{service.service.name}/{service.service_sub.name}",
-                        'technician':service.technician.get_full_name()
+                        'technician':service.technician.get_full_name(),
+                        'date':service.created_date
                     })
 
 
