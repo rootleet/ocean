@@ -9,10 +9,11 @@
 
             <div class="w-75 h-100 d-flex flex-wrap">
                 <button onclick="location.href='{% url 'newjob' %}'" style="margin-right: .2em" class="btn btn-outline-primary"><i class="fa fa-plus"></i> new service</button>
+                <button id="find_job" onclick="findJobScreen()" style="margin-right: .2em" class="btn btn-outline-info"><i class="fa fa-search"></i> find</button>
                 <button onclick="if(confirm('ARE YOU SURE?')){deleteJobCard(this.value)}" id="delete" style="margin-right: .2em" class="btn btn-outline-danger"><i class="fa fa-trash"></i> delete</button>
                 <button onclick="if(confirm('ARE YOU SURE YOU WANT TO CLOSE SERVICE?')){updateDocument(2)}" id="close" style="margin-right: .2em" class="btn btn-outline-warning"><i class="fa fa-door-closed"></i> close</button>
                 <button id="update" onclick="ticket.updateTranScreen()" style="margin-right: .2em" class="btn btn-outline-info"><i class="fa fa-assistive-listening-systems"></i> update ticket</button>
-                <button id="send_to_client" onclick="ticket.sendToClient($('#delete').val())" style="margin-right: .2em" class="btn btn-outline-info"><i class="fa fa-mail-bulk"></i> send client</button>
+                <button id="send_to_client" onclick="ticket.sendToClient($('#delete').val())" style="margin-right: .2em" class="btn btn-outline-success"><i class="fa fa-mail-bulk"></i> send client</button>
                 <button onclick="windowPopUp(`/servicing/jobcard/tracking/${$('#delete').val()}/`,'none',500,1024)" class="btn btn-info"><i class="fa fa-list"></i></button>
             </div>
             <div class="w-25 h-100 d-flex flex-wrap justify-content-end">
@@ -242,20 +243,6 @@
                     $('#prev').prop('disabled',true);
                 }
 
-                if(service['status'] === 0 || service['status'] === 2){
-                    // disabled delete
-                    $('#delete').prop('disabled',true);
-                    $('#update').prop('disabled',true);
-                    $('#close').prop('disabled',true);
-                    $('#send_to_client').prop('disabled',true);
-
-
-                } else if (service['status'] === 1 ){
-                    $('#delete').prop('disabled',false);
-                    $('#update').prop('disabled',false);
-                    $('#close').prop('disabled',false);
-                    $('#send_to_client').prop('disabled',false);
-                }
                 // check status
                 statusCheck(service['status'])
 
@@ -403,6 +390,44 @@
 
         // load first card
         loadJobCard(`{{ cardno }}`)
+
+        // find job card screen
+        function findJobScreen() {
+            amodal.setTitleText(`<input id="jobstring" onkeyup="findJob()" class="form-control rounded-0 w-100" placeholder="enter string" >`)
+            amodal.setBodyHtml(`<div class="table-responsive"><table class="table table-sm"><thead><tr><th>JOB CARD</th><th>TITLE</th><th>OWNER</th><th>DATE</th></tr></thead><tbody id="queryresults"></tbody></table></div>`)
+
+            amodal.show()
+        }
+
+        // find job
+        function findJob() {
+            let jobstring = $('#jobstring').val();
+            let payload = {
+                module:'findjob',
+                data:{
+                    jobstring:jobstring
+                }
+            };
+
+            let jobquery = api.call('VIEW',payload,'/servicing/api/');
+            console.table(jobquery);
+            let queryresults = ''
+            if(jobquery['status_code'] === 200){
+
+                let results = jobquery['message'];
+
+                for (let r = 0; r < results.length; r++) {
+                    let result = results[r];
+                    queryresults += `<tr><td><small class="pointer text-info" onclick="loadJobCard('${result['cardno']}');amodal.hide(false)" >${result['cardno']}</small></td><td title="${result['description']}"><small>${result['title']}</small></td><td><small>${result['owner']}</small></td><td><small>${result['date']}</small></td></tr>`;
+                }
+
+            } else {
+                queryresults = `<tr><td><small class="text-danger">${jobquery['message']}</small></td></tr>`;
+                console.log(jobquery['message']);
+            }
+            $('#queryresults').html(queryresults);
+        }
+
     </script>
 
 {% endblock %}

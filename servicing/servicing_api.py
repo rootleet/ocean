@@ -2,6 +2,7 @@ import json
 import sys
 
 from django.contrib.auth.models import User
+from django.db.models import Q
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from fpdf import FPDF
@@ -12,7 +13,7 @@ from meeting.models import MeetingHD
 
 from reports.models import ReportForms, ReportLegend, LegendSubs, DepartmentReportMailQue
 from servicing.models import Services, SubServices, ServiceCard, ServiceMaterials
-from taskmanager.models import Tasks
+from taskmanager.models import Tasks, TaskTransactions
 
 
 @csrf_exempt
@@ -80,7 +81,8 @@ def interface(request):
                 if tick == '0':
                     # generate
                     TicketHd(owner=client, title=f"{ticket_title}", descr=f"{ticked_description}", status=1).save()
-                    ticket = TicketHd.objects.filter(owner=client, title=f"{ticket_title}", descr=f"{ticked_description}", status=1).last()
+                    ticket = TicketHd.objects.filter(owner=client, title=f"{ticket_title}",
+                                                     descr=f"{ticked_description}", status=1).last()
                 else:
                     ticket2 = TicketHd.objects.get(pk=tick)
                     ticket2.status = 1
@@ -89,9 +91,14 @@ def interface(request):
                     ticket2.save()
                     ticket = TicketHd.objects.get(pk=tick)
 
-
+                    # add to task managers
+                Tasks(title=ticket_title, uni=ticket_title.replace(' ', ''), description=ticked_description,
+                      owner=technician).save()
+                task = Tasks.objects.get(uni=ticket_title.replace(' ', ''))
                 # save service card
-                ServiceCard(client=client, owner=owner, remarks=f"{service.name}/{service_sub.name}/{ticket_title}", service=service, service_sub=service_sub,
+                ServiceCard(client=client, task=task, owner=owner,
+                            remarks=f"{service.name}/{service_sub.name}/{ticket_title}",
+                            service=service, service_sub=service_sub,
                             technician=technician, ticket=ticket, importance=importance, cardno=cardno).save()
 
                 just_service_card = ServiceCard.objects.all().last()
@@ -139,7 +146,14 @@ def interface(request):
                 if SMS:
                     Sms(api_id=SMS_KEY, message=sms, to=client_details.phone).save()
                     service.client_approval = 1
+                    ticket = service.ticket
                     service.save()
+                    if ServiceCard.objects.filter(ticket_id=ticket).count() == 1:
+                        service = ServiceCard.objects.get(ticket_id=ticket)
+                        task = service.task
+                        TaskTransactions(task=task, title=f"SENT TO CLOSING",
+                                         description=f"Sent To {client.get_full_name()} for approval and closing",
+                                         owner_id=request.user.pk).save()
                     TicketTrans(ticket_id=service.ticket_id,
                                 tran=f"Sent To {client.get_full_name()} for approval withm message {message}",
                                 title="CLIENT APPROVAL", user_id=request.user.pk).save()
@@ -298,7 +312,54 @@ def interface(request):
                     success_response['status_code'] = 404
                     success_response['message'] = "NO JOB CARD FOUND"
 
+            elif module == 'findjob':
+                jobstring = data.get('jobstring')
+                cards = ServiceCard.objects.filter(Q(remarks__icontains=jobstring) | Q(cardno__icontains=jobstring) |
+                                                   Q(ticket__title__icontains=jobstring) |
+                                                   Q(technician__username__icontains=jobstring))
 
+                if cards.count() > 0:
+                    cardx = []
+                    for card in cards:
+                        cardx.append({
+                            'cardno': card.cardno,
+                            'title': card.ticket.title,
+                            'description': card.ticket.descr,
+                            'owner': card.client.get_full_name(),
+                            'status': card.status,
+                            'date': card.created_date
+                        })
+                    success_response['message'] = cardx
+                else:
+                    success_response['status_code'] = 404
+                    success_response['message'] = f"{jobstring} does not match any record"
+
+            elif module == 'service_report':
+                target_user = data.get('user')
+                target_status = data.get('status')
+                target_from = data.get('from')
+                target_to = data.get('to')
+                cards = []
+
+                if target_user == '*':
+                    query = ServiceCard.objects.filter(status=target_status,
+                                                       created_date__range=(target_from, target_to))
+                else:
+                    query = ServiceCard.objects.filter(status=target_status,
+                                                       created_date__range=(target_from, target_to),
+                                                       client_id=target_user)
+
+                for service in query:
+                    cards.append({
+                        'cardno': service.cardno,
+                        'title': service.ticket.title,
+                        'description': service.ticket.descr,
+                        'service': f"{service.service.name}/{service.service_sub.name}",
+                        'technician':service.technician.get_full_name()
+                    })
+
+
+                success_response['message'] = cards
 
         # update data
         elif method == 'PATCH':
@@ -333,10 +394,11 @@ def interface(request):
                 ticket = service.ticket
                 message = data.get('message')
                 status = data.get('status')
-
+                client = service.client
 
                 if status == 2:
                     # approved
+
                     msg = f"TICKET: {cardno}\nSTATUS: Closed by Client\nMessage: {message}"
                     ticket.status = 2
                     ticket.save()
@@ -357,6 +419,16 @@ def interface(request):
                                 user_id=request.user.pk).save()
                     success_response['message'] = "Feedback Sent"
                     service.save()
+
+                    if ServiceCard.objects.filter(ticket_id=ticket.pk).count() == 1:
+                        service = ServiceCard.objects.get(ticket_id=ticket.pk)
+                        task = service.task
+                        TaskTransactions(task=task, title=f"Client Feedback",
+                                         description=msg,
+                                         owner_id=request.user.pk).save()
+                        if status == 2:
+                            task.status = 2
+                            task.save()
 
                 except Exception as e:
                     success_response['message'] = f"Feedback Not Sent {e}"

@@ -4,6 +4,7 @@ from django.db import models
 from ocean import settings
 
 
+
 # Create your models here.
 class Tasks(models.Model):
     title = models.TextField()
@@ -36,6 +37,13 @@ class Tasks(models.Model):
         else:
             return 'UNKNOWN'
 
+    def is_service(self):
+        from servicing.models import ServiceCard
+        if ServiceCard.objects.filter(task=self).exists():
+            return True
+        else:
+            return False
+
 
 class TaskTransactions(models.Model):
     task = models.ForeignKey(Tasks, on_delete=models.SET_NULL, blank=True, null=True)
@@ -46,5 +54,5 @@ class TaskTransactions(models.Model):
     created_time = models.TimeField(auto_now_add=True)
     updated_date = models.DateField(auto_now=True)
     updated_time = models.TimeField(auto_now=True)
-    status = models.IntegerField(default=1)  # 1 active, 0 not, 99 done
+    status = models.IntegerField(default=1)  # 1 active, 0 deleted, 2 done
     owner = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True)

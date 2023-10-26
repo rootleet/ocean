@@ -12,7 +12,8 @@ from admin_panel.cron_exe import execute_script
 from admin_panel.models import GeoCity, GeoCitySub, Reminder, SmsApi, UserAddOns, EvatCredentials, Locations, \
     Departments, TicketTrans, Sms, TicketHd
 from reports.models import DepartmentReportMailQue
-from taskmanager.models import Tasks
+from servicing.models import ServiceCard
+from taskmanager.models import Tasks, TaskTransactions
 
 
 @csrf_exempt
@@ -176,6 +177,11 @@ def index(request):
                 description = data.get('description')
                 owner = data.get('mypk')
                 notify = data.get('notify')
+
+                if ServiceCard.objects.filter(ticket_id=ticket).count() == 1:
+                    service = ServiceCard.objects.get(ticket_id=ticket)
+                    task = service.task
+                    TaskTransactions(task=task, title=title, description=description, owner_id=owner).save()
 
                 TicketTrans(ticket_id=ticket, title=title, tran=description, user_id=owner, created_on=date_time).save()
 

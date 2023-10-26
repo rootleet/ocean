@@ -154,6 +154,93 @@ class Reports {
 
         }
     }
+
+    /*
+    * START SERVICING
+    * */
+
+    // job card reports screen
+    JobCardsScreen(){
+
+        let users = user.allUsers();
+        if (users['status_code'] === 200){
+            let uss = users['message'];
+            let uop = `<option value="*">All Users</option>`;
+            for (let u = 0; u < uss.length; u++) {
+                let user = uss[u];
+                uop += `<option value="${user['pk']}">${user['fullname']}</option>`
+            }
+
+            let form = `
+        <div class="container">
+            <div class="row mb-2">
+                <div class="col-sm-6"><select class="form-control rounded-0" id="user">${uop}</select></div>
+                <div class="col-sm-6">
+                    <select class="form-control rounded-0" id="status">
+                        <option value="1">OPEN</option>
+                        <option value="2">CLOSE</option>
+                        <option value="0">DELETE</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-sm-6"><label for="from">FROM</label><input type="date" name="from" id="from" class="form-control rounded-0"></div>
+                <div class="col-sm-6"><label for="to">TO</label><input type="date" name="to" id="to" class="form-control rounded-0"></div>
+            </div>
+        </div>
+        `;
+            amodal.setTitleText("JOB CARDS: FILTER OPTIONS");
+            amodal.setBodyHtml(form);
+            amodal.setFooterHtml(`<button class="btn btn-info" onclick="reports.loadServiceReports()">GENERATE</button>`)
+            amodal.show();
+
+        } else {
+
+            kasa.error(users['message'])
+        }
+
+
+    }
+
+    loadServiceReports(){
+        let ids = ['user','status','from','to']
+        if(anton.validateInputs(ids)){
+            let data = anton.Inputs(ids)
+            let payload = {
+                module:'service_report',
+                data:data
+            };
+            let request = api.call('VIEW',payload,'/servicing/api/');
+            if(request['status_code'] === 200){
+                let cards = request['message'];
+                let header = ['CARD No','TITLE','SERVICE','TECHNICIAN','PREVIEW'];
+                let rows = '';
+                for (let c = 0; c < cards.length; c++){
+                    let card = cards[c];
+                    rows += `<tr>
+                                <td><small onclick="windowPopUp('/servicing/jobcard/tracking/${card['cardno']}/')" class="pointer text-info">${card['cardno']}</small></td>
+                                <td><small>${card['title']}</small></td>
+                                <td><small>${card['service']}</small></td>
+                                <td><small>${card['technician']}</small></td>
+                                <td><small onclick="alert('${card['description']}')" class="bi bi-eye-fill text-info pointer"></small></td>
+                            </tr>`
+                }
+
+                reports.render(header,rows,'SERVICE REPORTS');
+
+                amodal.hide(true)
+            } else {
+                kasa.error(request['message']);
+            }
+        } else {
+            kasa.error("FILL ALL FIELDS")
+        }
+    }
+
+    /*
+    * END OF SERVICING
+    * */
+
 }
 
 const reports = new Reports()

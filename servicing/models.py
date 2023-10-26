@@ -2,6 +2,7 @@ from django.contrib.auth.models import User
 from django.db import models
 
 from admin_panel.models import TicketHd
+from taskmanager.models import Tasks
 
 
 # services
@@ -45,6 +46,7 @@ class ServiceCard(models.Model):
     service_sub = models.ForeignKey(SubServices, on_delete=models.CASCADE)
     technician = models.ForeignKey(User, on_delete=models.CASCADE, related_name='technical')
     ticket = models.ForeignKey(TicketHd, on_delete=models.CASCADE)
+    task = models.ForeignKey(Tasks, on_delete=models.SET_NULL, null=True, blank=False)
     importance = models.IntegerField(default=0)
 
     status = models.IntegerField(default=1)  # 1 open, 2 closed, 0 deleted

@@ -49,7 +49,7 @@ def my_tasks(request):
     me = User.objects.get(pk=request.user.pk)
     context = {
         'nav': True,
-        'my_tasks': Tasks.objects.filter(owner=me).order_by('-pk')
+        'my_tasks': Tasks.objects.filter(owner=me,status=1).order_by('-pk')
     }
     return render(request, 'taskmanager/mytasks.html', context=context)
 

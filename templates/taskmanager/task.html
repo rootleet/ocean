@@ -20,8 +20,8 @@
         <div class="w-100 d-flex flex-wrap">
 
             <button onclick="rops.download('TSK','{{ task.uni }}','PDF')" style="border-radius: 0 !important" class="btn btn-info btn-warning"> <i class="fa fa-file-pdf"></i> PRINT</button>
-            {% if task.status == 1 %}
-                <button onclick="location.href='{% url 'task_update' task.uni %}'" style="border-radius: 0 !important" class="btn btn-info">UPDATE</button>
+            {% if task.status == 1 and task.is_service == False %}
+                <button onclick="location.href='{% url 'task_update' task.uni %}'" style="border-radius: 0 !important" class="btn btn-info">UPDATE {{ task.is_service }}</button>
                 <button onclick="location.href='{% url 'close_task' task.uni %}'" style="border-radius: 0 !important" class="btn btn-info btn-danger">CLOSE</button>
             {% endif %}
         </div>
