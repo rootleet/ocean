@@ -1,14 +1,15 @@
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
 from admin_panel.models import Locations, SmsApi, Sms
 from cmms.extra import db
 from retail.forms import NewClerk
-from retail.models import Clerk
+from retail.models import Clerk, BoltItems
 
 
-# Create your views here.
+@login_required()
 def base(request):
     context = {
         'nav': True
@@ -16,6 +17,7 @@ def base(request):
     return render(request, 'retail/index.html', context=context)
 
 
+@login_required()
 def clerks(request):
     import random
 
@@ -37,6 +39,7 @@ def clerks(request):
     return render(request, 'retail/clerks.html', context=context)
 
 
+@login_required()
 def save_clerk(request):
     if request.method == 'POST':
         form = NewClerk(request.POST, request.FILES)
@@ -62,6 +65,7 @@ def save_clerk(request):
     return redirect('clerks')
 
 
+@login_required()
 def sync_clerks(request, fr):
     try:
         if fr == 'locations':
@@ -134,3 +138,14 @@ def sync_clerks(request, fr):
         return HttpResponse('SYNC COMPLETED')
     except Exception as e:
         return HttpResponse(e)
+
+@login_required()
+def bolt_products(request):
+    context = {
+        'nav': True,
+        'page': {
+            'title': "Bolt Products"
+        },
+        'items':BoltItems.objects.all()
+    }
+    return render(request, 'retail/bolt-products.html', context=context)

@@ -13,8 +13,6 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 from pathlib import Path
 import os
 
-
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -208,3 +206,8 @@ OLD_DB_NAME = 'PROC_CMMS_V1'
 # DB_PORT = '1433'
 # DB_NAME = 'PROC_CMMS_V1'
 
+RET_DB_HOST = 'localhost'
+RET_DB_NAME = 'SMSEXPV17'
+RET_DB_USER = 'sa'
+RET_DB_PASS = 'sa@123456'
+RET_DB_PORT = ''

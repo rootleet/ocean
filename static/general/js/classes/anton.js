@@ -50,6 +50,12 @@ class Anton {
         return api.call('VIEW', payload, '/apiv2/')
     }
 
+    IsRequest(request) {
+        if(request['status_code'] === 200){
+            return true
+        }
+        return false;
+    }
 }
 
 class LineCalculate {

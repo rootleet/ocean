@@ -15,13 +15,15 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from . import views
+from . import views, retail_api
 
 urlpatterns = [
     path('', views.base, name='retail'),
+    path('api/', retail_api.interface, name='retail_api'),
     path('clerks/', views.clerks, name='clerks'),
-    path('save_clerk/',views.save_clerk,name='save_clerk'),
-    path('sync_clerks/<fr>/',views.sync_clerks,name='sync_clerks')
+    path('save_clerk/', views.save_clerk, name='save_clerk'),
+    path('sync_clerks/<fr>/', views.sync_clerks, name='sync_clerks'),
+    path('bolt/products/',views.bolt_products,name='bolt_products')
 
 ]
 

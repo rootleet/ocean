@@ -72,6 +72,7 @@
     <script src="{% static 'general/js/classes/anton.js' %}"></script>
     <script src="{% static 'general/js/classes/cmms_cust.js' %}"></script>
     <script src="{% static 'general/js/classes/modal.js' %}"></script>
+    <script src="{% static 'general/js/classes/retail.js' %}"></script>
 
 
   <script>
@@ -479,16 +480,22 @@
 
 
 
-      <li class="nav-item">
+
+
+    {% if user.is_superuser %}
+        <li class="nav-item">
         <a class="nav-link collapsed" href="{% url 'clerks' %}">
           <i class="bi bi-list"></i><span>CLERKS</span>
         </a>
       </li>
-
-    {% if user.is_superuser %}
       <li class="nav-item">
         <a class="nav-link collapsed" href="{% url 'cmms-tools' %}">
           <i class="bi bi-tools"></i><span>TOOLS</span>
+        </a>
+      </li>
+        <li class="nav-item">
+        <a class="nav-link collapsed" href="{% url 'bolt_products' %}">
+          <i class="bi bi-list"></i><span>Bolt Products</span>
         </a>
       </li>
 

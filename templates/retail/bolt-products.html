@@ -1,0 +1,42 @@
+{% extends 'retail/base.html' %}
+{% load static %}
+{% block body %}
+    <div class="card-header">
+        <div class="w-100 h-100 d-flex flex-wrap">
+            <div class="w-50 h-100"><strong class="card-title">BOLT ITEMS</strong></div>
+            <div class="w-50 h-100 d-flex flex-wrap justify-content-end align-content-center">
+                <button onclick="retail.boldUploadScreen()" class="btn btn-info"><i class="bx bx-upload"></i> UPLOAD BATCH</button>
+                <button onclick="retail.markProducts()" class="btn btn-dark"><i class="bx bx-checkbox-checked"></i> MARK UPDATE</button>
+                <button onclick="retail.checkPrices()" class="btn btn-primary">PRICE CHANGE</button>
+            </div>
+        </div>
+    </div>
+    <div class="card-body overflow-auto">
+        <table class="table datatable">
+            <thead>
+                <tr>
+                    <th>BARCODE</th>
+                    <th>NAME</th>
+                    <th>BOLT PRICE</th>
+                    <th>INVENTORY PRICE</th>
+                    <th>SPINTEX</th>
+                    <th>NIA</th>
+                    <th>OSU</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in items %}
+                    <tr class="{% if item.price != item.inv_price %}bg-warning{% endif %}">
+                        <td>{{ item.barcode }}</td>
+                        <td>{{ item.item_des }}</td>
+                        <td>{{ item.price }}</td>
+                        <td>{{ item.inv_price }}</td>
+                        <td class="{% if item.stock_spintex == 1 %}text-success{% else %}text-danger{% endif %}">{{ item.stock_spintex }}</td>
+                        <td class="{% if item.stock_nia == 1 %}text-success{% else %}text-danger{% endif %}">{{ item.stock_nia }}</td>
+                        <td class="{% if item.stock_osu == 1 %}text-success{% else %}text-danger{% endif %}">{{ item.stock_osu }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
