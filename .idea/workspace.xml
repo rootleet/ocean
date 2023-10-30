@@ -4,35 +4,21 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ffcbf13e-d396-4071-9a24-4014a690f966" name="Changes" comment="Reports - A new report has been added. This will generate a report base on job cards.&#10;&#10;Task Linking - When a new service order ( jobcard ) is opened, it will automatically generate a task for the assigned person. This will make sure that the assigned person will have it as part of weekly department report when it is being generated and sent to the departmental head.">
-      <change afterPath="$PROJECT_DIR$/cronjobs/bolt_price_stock_check.sh" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/retail/db.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/retail/retail_api.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/general/bolt_price_changes/nia_stock_change_as_of_2023_10_29_07_55_21.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/general/bolt_price_changes/nia_stock_change_as_of_2023_10_29_08_07_55.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/general/bolt_price_changes/nia_stock_change_as_of_2023_10_29_08_11_31.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/general/bolt_price_changes/nia_stock_change_as_of_2023_10_29_10_30_53.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/general/bolt_price_changes/osu_stock_change_as_of_2023_10_29_07_55_21.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/general/bolt_price_changes/osu_stock_change_as_of_2023_10_29_08_07_55.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/general/bolt_price_changes/osu_stock_change_as_of_2023_10_29_08_11_31.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/general/bolt_price_changes/osu_stock_change_as_of_2023_10_29_10_30_53.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/general/bolt_price_changes/price_changes_as_of_2023_10_29_07_55_21.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/general/bolt_price_changes/price_changes_as_of_2023_10_29_08_07_55.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/general/bolt_price_changes/price_changes_as_of_2023_10_29_08_11_31.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/general/bolt_price_changes/price_changes_as_of_2023_10_29_10_30_53.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/general/bolt_price_changes/spintex_stock_change_as_of_2023_10_29_07_55_21.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/general/bolt_price_changes/spintex_stock_change_as_of_2023_10_29_08_07_55.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/general/bolt_price_changes/spintex_stock_change_as_of_2023_10_29_08_11_31.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/general/bolt_price_changes/spintex_stock_change_as_of_2023_10_29_10_30_53.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/general/js/classes/retail.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/retail/bolt-products.html" afterDir="false" />
+    <list default="true" id="ffcbf13e-d396-4071-9a24-4014a690f966" name="Changes" comment="Bolt - An api has been created for retail which core for now is to handle bolt products and groups habdlinf">
+      <change afterPath="$PROJECT_DIR$/templates/retail/bolt-groups.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ocean/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/ocean/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/admin_panel/templatetags/permission_tags.py" beforeDir="false" afterPath="$PROJECT_DIR$/admin_panel/templatetags/permission_tags.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/admin_panel/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/admin_panel/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/retail/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/retail/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/retail/retail_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/retail/retail_api.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/retail/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/retail/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/retail/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/retail/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/static/general/js/classes/anton.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/general/js/classes/anton.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/general/js/classes/retail.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/general/js/classes/retail.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/dashboard/profile/profile.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/dashboard/profile/profile.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/retail/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/retail/base.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/retail/bolt-products.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/retail/bolt-products.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -239,15 +225,8 @@
       <workItem from="1698175195651" duration="8361000" />
       <workItem from="1698252370578" duration="14318000" />
       <workItem from="1698318153039" duration="242000" />
-      <workItem from="1698424803730" duration="30024000" />
-    </task>
-    <task id="LOCAL-00007" summary="Add functionality to close sales deals via API&#10;&#10;This commit introduces the ability to close sales deals through the API. The update in the deal's status is indicated in the transaction record of the deal. The implemented changes influence multiple parts of the code, including the HTML representation of deals in 'sales-cust.html', the JS functions in 'anton.js' and 'cmms_cust.js' and most importantly, the backend logic in 'cmms_api.py' where the actual closing of deals is carried out. This feature helps sales reps to finalize their deals and record the closing remarks, improving the overall management of sales in the platform.">
-      <option name="closed" value="true" />
-      <created>1693342580656</created>
-      <option name="number" value="00007" />
-      <option name="presentableId" value="LOCAL-00007" />
-      <option name="project" value="LOCAL" />
-      <updated>1693342580656</updated>
+      <workItem from="1698424803730" duration="38094000" />
+      <workItem from="1698643276790" duration="214000" />
     </task>
     <task id="LOCAL-00008" summary="Updated tasks to have a scroll on full">
       <option name="closed" value="true" />
@@ -633,7 +612,15 @@
       <option name="project" value="LOCAL" />
       <updated>1698318342357</updated>
     </task>
-    <option name="localTasksCounter" value="56" />
+    <task id="LOCAL-00056" summary="Bolt - An api has been created for retail which core for now is to handle bolt products and groups habdlinf">
+      <option name="closed" value="true" />
+      <created>1698601823890</created>
+      <option name="number" value="00056" />
+      <option name="presentableId" value="LOCAL-00056" />
+      <option name="project" value="LOCAL" />
+      <updated>1698601823891</updated>
+    </task>
+    <option name="localTasksCounter" value="57" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -656,7 +643,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="Add 'Others' option to position dropdown &#10;&#10;This commit adds a new option, 'Others', to the position dropdown in the sales-customer.html template. This allows users to select a different position that is not listed in the predefined options. This increases the flexibility of the form." />
     <MESSAGE value="Refactor 'save_sales_customer' to include company validation&#10;&#10;This commit refactors the 'save_sales_customer' view method to include validation for company. A check is added to see whether a customer from the respective company already exists. This change is necessary to prevent duplicate entries of the same company in the sales customer database." />
     <MESSAGE value="Add functionality to close sales deals via API&#10;&#10;This commit introduces the ability to close sales deals through the API. The update in the deal's status is indicated in the transaction record of the deal. The implemented changes influence multiple parts of the code, including the HTML representation of deals in 'sales-cust.html', the JS functions in 'anton.js' and 'cmms_cust.js' and most importantly, the backend logic in 'cmms_api.py' where the actual closing of deals is carried out. This feature helps sales reps to finalize their deals and record the closing remarks, improving the overall management of sales in the platform." />
     <MESSAGE value="Updated tasks to have a scroll on full" />
@@ -681,7 +667,8 @@
     <MESSAGE value="UI/UX - The user interface of addning and viewing jobcard has been enhanced to add more and relevant data in regard to a specific job card.&#10;&#10;JS Functioning - Ticked update and has been modified to make sure the corrected ticket is updated by referring to the related job-card. Loading of updates is made automatically after updating a ticket transactions. This is to reduce user flow layer by making it not a requirement to navigate back and forth to load latest updates.&#10;&#10;Dashboard - Dashboard issue graphy ( Pie chart ) has been modified to make sure accurate data is presented base on schedules,pending, and done tickets.&#10;&#10;Tickets - Tickets screen has been modified for clients, datatable is introduced to enable easy filtering and also tickets are sorted in accordance to status. Pending will show first, followed by scheduled and then done." />
     <MESSAGE value="New status checker has been added to validate job card status" />
     <MESSAGE value="Reports - A new report has been added. This will generate a report base on job cards.&#10;&#10;Task Linking - When a new service order ( jobcard ) is opened, it will automatically generate a task for the assigned person. This will make sure that the assigned person will have it as part of weekly department report when it is being generated and sent to the departmental head." />
-    <option name="LAST_COMMIT_MESSAGE" value="Reports - A new report has been added. This will generate a report base on job cards.&#10;&#10;Task Linking - When a new service order ( jobcard ) is opened, it will automatically generate a task for the assigned person. This will make sure that the assigned person will have it as part of weekly department report when it is being generated and sent to the departmental head." />
+    <MESSAGE value="Bolt - An api has been created for retail which core for now is to handle bolt products and groups habdlinf" />
+    <option name="LAST_COMMIT_MESSAGE" value="Bolt - An api has been created for retail which core for now is to handle bolt products and groups habdlinf" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

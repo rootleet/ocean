@@ -28,7 +28,7 @@ def my_dp(user):
             if os.path.isfile(file):
                 rel_path = os.path.relpath(file, settings.STATIC_ROOT)
                 return rel_path
-        return '/static/assets/img/users/default.png'
+        return '/static/assets/img/users/user.png'
 
     else:
-        return '/static/assets/img/users/default.png'
+        return '/static/assets/img/users/user.png'

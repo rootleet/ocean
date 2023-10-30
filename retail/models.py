@@ -27,6 +27,9 @@ class BoltGroups(models.Model):
     created_on = models.DateTimeField(auto_now_add=True)
     edited_on = models.DateTimeField(auto_now=True)
 
+    def items(self):
+        return BoltItems.objects.filter(group=self)
+
 
 class BoltItems(models.Model):
     group = models.ForeignKey(BoltGroups,on_delete=models.CASCADE)

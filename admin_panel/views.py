@@ -2118,6 +2118,7 @@ def profile(request):
     context = {
         'user': user,
         'ad_on': UserAddOns.objects.get(user=user.pk),
+        'nav':True
     }
     return render(request, 'dashboard/profile/profile.html', context=context)
 

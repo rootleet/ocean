@@ -56,6 +56,8 @@ class Anton {
         }
         return false;
     }
+
+
 }
 
 class LineCalculate {
@@ -260,9 +262,20 @@ class ReportCard {
 
 }
 
-const rops = new ReportCard()
-const card = new reportCard()
-const linecomment = new LineComment()
-const kasa = new Kasa()
+class Loader {
+    show(){
+        $('#loader').show()
+    }
+
+    hide(){
+        $('#loader').hide()
+    }
+}
+
+const loader = new Loader();
+const rops = new ReportCard();
+const card = new reportCard();
+const linecomment = new LineComment();
+const kasa = new Kasa();
 const anton = new Anton();
 const lincal = new LineCalculate()

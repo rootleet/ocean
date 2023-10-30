@@ -204,13 +204,22 @@ def interface(request):
 
                             nia_stock_row += 1
 
-                html = (f""
-                        f"<table>"
-                        f"<tr><td><strong>PRICE CHANGE</strong></td><td>{sheet_row - 2}</td></tr>"
-                        f"<tr><td><strong>SPINTEX STOCK</strong></td><td>{spintex_stock_row - 2}</td></tr>"
-                        f"<tr><td><strong>OSU STOCK</strong></td><td>{osu_stock_row - 2}</td></tr>"
-                        f"<tr><td><strong>NIA</strong></td><td>{nia_stock_row - 2}</td></tr>"
-                        f"</table>")
+                price_count = sheet_row - 2
+                nia_count = nia_stock_row - 2
+                spintex_count = spintex_stock_row - 2
+                osu_count = osu_stock_row - 2
+
+                tr = ""
+                if price_count > 0:
+                    tr += f"<tr><td><strong>PRICE CHANGE</strong></td><td>{price_count}</td></tr>"
+                if spintex_count > 0:
+                    tr += f"<tr><td><strong>SPINTEX STOCK</strong></td><td>{spintex_count}</td></tr>"
+                if nia_count > 0:
+                    tr += f"<tr><td><strong>NIA</strong></td><td>{nia_count}</td></tr>"
+                if osu_count > 0:
+                    tr += f"<tr><td><strong>OSU STOCK</strong></td><td>{osu_count}</td></tr>"
+
+                html = f"<table>{tr}</table>"
 
                 print(html)
 
@@ -229,9 +238,10 @@ def interface(request):
                 nia_stock_book.save(nia_stock_change_file)
 
                 if send == 'yes':
-                    Emails(sent_to="solomon@snedaghana.com", subject='BOLT UPDATE', body=html,
-                           attachments=f"{price_change_file},{spintex_stock_change_file},"
-                                       f"{osu_stock_change_file},{nia_stock_change_file}").save()
+                    if price_count > 0 or spintex_count > 0 or nia_count > 0 or osu_count > 0:
+                        Emails(sent_to="solomon@snedaghana.com", subject='BOLT UPDATE', body=html,
+                               attachments=f"{price_change_file},{spintex_stock_change_file},"
+                                           f"{osu_stock_change_file},{nia_stock_change_file}").save()
 
                 success_response['message'] = {
                     'price_change': {
@@ -252,6 +262,43 @@ def interface(request):
                     }
                 }
 
+            elif module == 'export_items':
+                key = data.get('key')
+                format = data.get('format')
+                if key == '*':
+                    items = BoltItems.objects.all()
+                    file_name = f"static/general/bolt/bolt-items.xlsx"
+                else:
+                    items = BoltItems.objects.filter(group_id=key)
+                    group = BoltGroups.objects.get(pk=key)
+                    file_name = f"static/general/bolt/{group.name}.xlsx"
+
+                import openpyxl
+                workbook = openpyxl.Workbook()
+                sheet = workbook.active
+
+                if format == 'excel':
+
+                    sheet['A1'] = "BARCODE"
+                    sheet['B1'] = "NAME"
+                    sheet['C1'] = "PRICE"
+                    sheet['D1'] = "SPINTEX"
+                    sheet['E1'] = "NIA"
+                    sheet['F1'] = "OSU"
+                    row = 2
+
+                    for item in items:
+                        sheet[f'A{row}'] = item.barcode
+                        sheet[f'B{row}'] = item.item_des
+                        sheet[f'C{row}'] = item.price
+                        sheet[f'D{row}'] = item.stock_spintex
+                        sheet[f'E{row}'] = item.stock_nia
+                        sheet[f'F{row}'] = item.stock_osu
+                        row += 1
+
+                    workbook.save(file_name)
+                    success_response['message'] = file_name
+
         elif method == 'PATCH':
             if module == 'price_update':
                 items = BoltItems.objects.all()
@@ -259,8 +306,6 @@ def interface(request):
                 for item in items:
                     item.price = item.inv_price
                     item.save()
-
-
 
         response = success_response
 

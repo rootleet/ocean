@@ -1,0 +1,38 @@
+{% extends 'retail/base.html' %}
+{% load static %}
+{% block body %}
+
+    <div class="card-header">
+        <div class="w-100 h-100 d-flex flex-wrap">
+            <div class="w-25 h-100">
+                <strong class="card-title">Groups</strong>
+            </div>
+            <div class="w-75 h-100 d-flex flex-wrap align-content-center justify-content-end">
+                <button class="btn btn-info">NEW GROUP</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-body overflow-auto">
+        <table class="table datatable">
+            <thead>
+                <tr>
+                    <th>NAME</th><th>ITEMS</th><th>ACTION</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for group in groups %}
+                    <tr>
+                        <td>{{ group.name }}</td>
+                        <td>{{ group.items.count }}</td>
+                        <td>
+                            <a onclick="retail.exportItems({{ group.pk }})" title="Export Items In Excel" href="javascript:void(0)" class="text-success"><i class="fa fa-file-excel"></i></a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+
+{% endblock %}

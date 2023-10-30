@@ -107,6 +107,7 @@ class Retail {
     }
 
     checkPrices(){
+       loader.show();
         let payload = {
             module:'price_change',
             data: {
@@ -134,6 +135,7 @@ class Retail {
 
             amodal.setBodyHtml(table);
             amodal.setTitleText("PRICE AND STOCK UPDATE");
+            loader.hide();
             amodal.show();
         } else {
             kasa.error(request['message'])
@@ -157,6 +159,27 @@ class Retail {
     }
 
 
+    exportItems(pk) {
+        $('#loader').show()
+
+        let payload = {
+            module:'export_items',
+            data: {
+                'format':'excel',
+                key:pk
+            }
+        };
+        let request = api.call('VIEW',payload,'/retail/api/');
+        if(anton.IsRequest(request)){
+
+            kasa.html(`<a href="/${request['message']}">Download File</a>`)
+
+        } else {
+            kasa.error(request['message'])
+        }
+
+        $('#loader').hide()
+    }
 }
 
 const retail = new Retail();
