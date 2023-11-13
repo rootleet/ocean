@@ -15,9 +15,9 @@ RUN apt-get update \
 WORKDIR /app
 
 # Copy the requirements.txt file and install Python dependencies
-COPY requirements.txt /app/
+COPY req.txt /app/
 RUN pip install --upgrade pip
-RUN pip install -r requirements.txt
+RUN pip install -r req.txt
 
 # Copy the Django project files to the container
 COPY .. /app/

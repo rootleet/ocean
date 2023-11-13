@@ -5,8 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ffcbf13e-d396-4071-9a24-4014a690f966" name="Changes" comment="added docker file">
+      <change afterPath="$PROJECT_DIR$/req.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dockerignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirement.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirement2.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt.bk" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -226,23 +231,7 @@
       <workItem from="1699452640319" duration="37000" />
       <workItem from="1699454784007" duration="469000" />
       <workItem from="1699865604029" duration="3224000" />
-      <workItem from="1699879257487" duration="1760000" />
-    </task>
-    <task id="LOCAL-00013" summary="Auto generate user id and password">
-      <option name="closed" value="true" />
-      <created>1694177820327</created>
-      <option name="number" value="00013" />
-      <option name="presentableId" value="LOCAL-00013" />
-      <option name="project" value="LOCAL" />
-      <updated>1694177820327</updated>
-    </task>
-    <task id="LOCAL-00014" summary="increase pword size">
-      <option name="closed" value="true" />
-      <created>1694178091703</created>
-      <option name="number" value="00014" />
-      <option name="presentableId" value="LOCAL-00014" />
-      <option name="project" value="LOCAL" />
-      <updated>1694178091703</updated>
+      <workItem from="1699879257487" duration="2562000" />
     </task>
     <task id="LOCAL-00015" summary="pword changed to text field">
       <option name="closed" value="true" />
@@ -620,7 +609,23 @@
       <option name="project" value="LOCAL" />
       <updated>1699887638063</updated>
     </task>
-    <option name="localTasksCounter" value="62" />
+    <task id="LOCAL-00062" summary="added docker file">
+      <option name="closed" value="true" />
+      <created>1699889545178</created>
+      <option name="number" value="00062" />
+      <option name="presentableId" value="LOCAL-00062" />
+      <option name="project" value="LOCAL" />
+      <updated>1699889545178</updated>
+    </task>
+    <task id="LOCAL-00063" summary="added docker file">
+      <option name="closed" value="true" />
+      <created>1699889564412</created>
+      <option name="number" value="00063" />
+      <option name="presentableId" value="LOCAL-00063" />
+      <option name="project" value="LOCAL" />
+      <updated>1699889564412</updated>
+    </task>
+    <option name="localTasksCounter" value="64" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
