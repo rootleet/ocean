@@ -4,11 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ffcbf13e-d396-4071-9a24-4014a690f966" name="Changes" comment="bolt api changed">
-      <change afterPath="$PROJECT_DIR$/dockerignore" afterDir="false" />
+    <list default="true" id="ffcbf13e-d396-4071-9a24-4014a690f966" name="Changes" comment="added docker file">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ocean/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/ocean/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirement.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirement.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dockerignore" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -228,15 +226,7 @@
       <workItem from="1699452640319" duration="37000" />
       <workItem from="1699454784007" duration="469000" />
       <workItem from="1699865604029" duration="3224000" />
-      <workItem from="1699879257487" duration="919000" />
-    </task>
-    <task id="LOCAL-00012" summary="Auto generate user id and password">
-      <option name="closed" value="true" />
-      <created>1694177772480</created>
-      <option name="number" value="00012" />
-      <option name="presentableId" value="LOCAL-00012" />
-      <option name="project" value="LOCAL" />
-      <updated>1694177772480</updated>
+      <workItem from="1699879257487" duration="1760000" />
     </task>
     <task id="LOCAL-00013" summary="Auto generate user id and password">
       <option name="closed" value="true" />
@@ -622,7 +612,15 @@
       <option name="project" value="LOCAL" />
       <updated>1699879687613</updated>
     </task>
-    <option name="localTasksCounter" value="61" />
+    <task id="LOCAL-00061" summary="added docker file">
+      <option name="closed" value="true" />
+      <created>1699887638062</created>
+      <option name="number" value="00061" />
+      <option name="presentableId" value="LOCAL-00061" />
+      <option name="project" value="LOCAL" />
+      <updated>1699887638063</updated>
+    </task>
+    <option name="localTasksCounter" value="62" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -645,7 +643,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="Updated tasks to have a scroll on full" />
     <MESSAGE value="Integrating retail" />
     <MESSAGE value="Auto generate user id and password" />
     <MESSAGE value="increase pword size" />
@@ -670,7 +667,8 @@
     <MESSAGE value="Bolt - An api has been created for retail which core for now is to handle bolt products and groups habdlinf" />
     <MESSAGE value="db interface updated" />
     <MESSAGE value="bolt api changed" />
-    <option name="LAST_COMMIT_MESSAGE" value="bolt api changed" />
+    <MESSAGE value="added docker file" />
+    <option name="LAST_COMMIT_MESSAGE" value="added docker file" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
