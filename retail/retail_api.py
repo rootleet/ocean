@@ -74,7 +74,7 @@ def interface(request):
 
                     items = BoltItems.objects.all()
                 else:
-                    items = BoltItems.objects.filter(pk=pk)
+                    items = BoltItems.objects.filter(Q(pk=pk) | Q(barcode=pk))
 
                 item_list = []
                 for item in items:
