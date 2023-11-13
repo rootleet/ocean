@@ -4,21 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ffcbf13e-d396-4071-9a24-4014a690f966" name="Changes" comment="Bolt - An api has been created for retail which core for now is to handle bolt products and groups habdlinf">
-      <change afterPath="$PROJECT_DIR$/templates/retail/bolt-groups.html" afterDir="false" />
+    <list default="true" id="ffcbf13e-d396-4071-9a24-4014a690f966" name="Changes" comment="bolt api changed">
+      <change afterPath="$PROJECT_DIR$/dockerignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/admin_panel/templatetags/permission_tags.py" beforeDir="false" afterPath="$PROJECT_DIR$/admin_panel/templatetags/permission_tags.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/admin_panel/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/admin_panel/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/retail/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/retail/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/retail/retail_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/retail/retail_api.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/retail/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/retail/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/retail/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/retail/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/general/js/classes/anton.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/general/js/classes/anton.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/general/js/classes/retail.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/general/js/classes/retail.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/dashboard/profile/profile.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/dashboard/profile/profile.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/retail/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/retail/base.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/retail/bolt-products.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/retail/bolt-products.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ocean/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/ocean/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirement.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirement.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -227,38 +217,18 @@
       <workItem from="1698318153039" duration="242000" />
       <workItem from="1698424803730" duration="38094000" />
       <workItem from="1698643276790" duration="214000" />
-    </task>
-    <task id="LOCAL-00008" summary="Updated tasks to have a scroll on full">
-      <option name="closed" value="true" />
-      <created>1694081018587</created>
-      <option name="number" value="00008" />
-      <option name="presentableId" value="LOCAL-00008" />
-      <option name="project" value="LOCAL" />
-      <updated>1694081018587</updated>
-    </task>
-    <task id="LOCAL-00009" summary="Updated tasks to have a scroll on full">
-      <option name="closed" value="true" />
-      <created>1694081359082</created>
-      <option name="number" value="00009" />
-      <option name="presentableId" value="LOCAL-00009" />
-      <option name="project" value="LOCAL" />
-      <updated>1694081359082</updated>
-    </task>
-    <task id="LOCAL-00010" summary="Integrating retail">
-      <option name="closed" value="true" />
-      <created>1694176140891</created>
-      <option name="number" value="00010" />
-      <option name="presentableId" value="LOCAL-00010" />
-      <option name="project" value="LOCAL" />
-      <updated>1694176140891</updated>
-    </task>
-    <task id="LOCAL-00011" summary="Integrating retail">
-      <option name="closed" value="true" />
-      <created>1694176470196</created>
-      <option name="number" value="00011" />
-      <option name="presentableId" value="LOCAL-00011" />
-      <option name="project" value="LOCAL" />
-      <updated>1694176470196</updated>
+      <workItem from="1698673859515" duration="644000" />
+      <workItem from="1698675423575" duration="30000" />
+      <workItem from="1698676114510" duration="820000" />
+      <workItem from="1698729655508" duration="2451000" />
+      <workItem from="1698737165815" duration="2701000" />
+      <workItem from="1698776560617" duration="1333000" />
+      <workItem from="1698906460494" duration="16000" />
+      <workItem from="1699439485180" duration="836000" />
+      <workItem from="1699452640319" duration="37000" />
+      <workItem from="1699454784007" duration="469000" />
+      <workItem from="1699865604029" duration="3224000" />
+      <workItem from="1699879257487" duration="919000" />
     </task>
     <task id="LOCAL-00012" summary="Auto generate user id and password">
       <option name="closed" value="true" />
@@ -620,7 +590,39 @@
       <option name="project" value="LOCAL" />
       <updated>1698601823891</updated>
     </task>
-    <option name="localTasksCounter" value="57" />
+    <task id="LOCAL-00057" summary="Bolt - An api has been created for retail which core for now is to handle bolt products and groups habdlinf">
+      <option name="closed" value="true" />
+      <created>1698673970193</created>
+      <option name="number" value="00057" />
+      <option name="presentableId" value="LOCAL-00057" />
+      <option name="project" value="LOCAL" />
+      <updated>1698673970194</updated>
+    </task>
+    <task id="LOCAL-00058" summary="db interface updated">
+      <option name="closed" value="true" />
+      <created>1698674352192</created>
+      <option name="number" value="00058" />
+      <option name="presentableId" value="LOCAL-00058" />
+      <option name="project" value="LOCAL" />
+      <updated>1698674352193</updated>
+    </task>
+    <task id="LOCAL-00059" summary="db interface updated">
+      <option name="closed" value="true" />
+      <created>1698676385539</created>
+      <option name="number" value="00059" />
+      <option name="presentableId" value="LOCAL-00059" />
+      <option name="project" value="LOCAL" />
+      <updated>1698676385540</updated>
+    </task>
+    <task id="LOCAL-00060" summary="bolt api changed">
+      <option name="closed" value="true" />
+      <created>1699879687613</created>
+      <option name="number" value="00060" />
+      <option name="presentableId" value="LOCAL-00060" />
+      <option name="project" value="LOCAL" />
+      <updated>1699879687613</updated>
+    </task>
+    <option name="localTasksCounter" value="61" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -643,8 +645,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="Refactor 'save_sales_customer' to include company validation&#10;&#10;This commit refactors the 'save_sales_customer' view method to include validation for company. A check is added to see whether a customer from the respective company already exists. This change is necessary to prevent duplicate entries of the same company in the sales customer database." />
-    <MESSAGE value="Add functionality to close sales deals via API&#10;&#10;This commit introduces the ability to close sales deals through the API. The update in the deal's status is indicated in the transaction record of the deal. The implemented changes influence multiple parts of the code, including the HTML representation of deals in 'sales-cust.html', the JS functions in 'anton.js' and 'cmms_cust.js' and most importantly, the backend logic in 'cmms_api.py' where the actual closing of deals is carried out. This feature helps sales reps to finalize their deals and record the closing remarks, improving the overall management of sales in the platform." />
     <MESSAGE value="Updated tasks to have a scroll on full" />
     <MESSAGE value="Integrating retail" />
     <MESSAGE value="Auto generate user id and password" />
@@ -668,7 +668,9 @@
     <MESSAGE value="New status checker has been added to validate job card status" />
     <MESSAGE value="Reports - A new report has been added. This will generate a report base on job cards.&#10;&#10;Task Linking - When a new service order ( jobcard ) is opened, it will automatically generate a task for the assigned person. This will make sure that the assigned person will have it as part of weekly department report when it is being generated and sent to the departmental head." />
     <MESSAGE value="Bolt - An api has been created for retail which core for now is to handle bolt products and groups habdlinf" />
-    <option name="LAST_COMMIT_MESSAGE" value="Bolt - An api has been created for retail which core for now is to handle bolt products and groups habdlinf" />
+    <MESSAGE value="db interface updated" />
+    <MESSAGE value="bolt api changed" />
+    <option name="LAST_COMMIT_MESSAGE" value="bolt api changed" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

@@ -98,10 +98,10 @@ DATABASES = {
     },
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'ocean',
-        'USER': 'root',
+        'NAME': 'u560949065_ocean',
+        'USER': 'u560949065_ocean',
         'PASSWORD': 'Sunderland@411',
-        'HOST': 'localhost',
+        'HOST': 'snedasmartmeter.com',
         'PORT': '3306',
         'OPTIONS': {
             "init_command": "SET foreign_key_checks = 0;",
