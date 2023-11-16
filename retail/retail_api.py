@@ -369,7 +369,7 @@ def interface(request):
                 for item in items:
                     cursor = ret_cursor()
                     barcode = item.barcode
-                    query = f"SELECT retail1 FROM prod_mast where barcode = {barcode}"
+                    query = f"SELECT retail1 FROM prod_mast where barcode = '{barcode}'"
                     cursor.execute(query)
                     row = cursor.fetchone()
                     retail1 = item.inv_price
