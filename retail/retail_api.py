@@ -1,6 +1,7 @@
 import json
 import sys
 
+import pyodbc
 from django.contrib.auth.models import User
 from django.db.models import Q
 from django.http import JsonResponse
@@ -8,6 +9,7 @@ from django.views.decorators.csrf import csrf_exempt
 from fpdf import FPDF
 
 from admin_panel.models import Emails
+from ocean.settings import RET_DB_HOST, RET_DB_USER, RET_DB_PASS, RET_DB_NAME
 from retail.db import ret_cursor, get_stock
 from retail.models import BoltItems, BoltGroups
 
@@ -299,12 +301,83 @@ def interface(request):
                     workbook.save(file_name)
                     success_response['message'] = file_name
 
+            elif module == 'slow_moving_items':
+                loc = data.get('loc') or ''
+                days = data.get('days')
+                export = data.get('export')
+                if export == 'excel':
+                    import openpyxl
+                    book = openpyxl.Workbook()
+                    sheet = book.active
+                    sheet['A1'] = "SLOW MOVING ITEMS"
+                    sheet['A2'] = "BARCODE"
+                    sheet["B3"] = "NAME"
+                    sheet['C3'] = "AVAILABLE QUANTITY"
+                    sheet['D2'] = "SOLD QUANTITY"
+                    sh_row = 3
+
+                query = f"exec dbo.Sp_slow_moving_rept N'%',N'%',N'%',N'',N'Zade',N'AA001',N'SOO216',N'',N'YWS195','2023-11-13 00:00:00',N'{days}',N'%',N'%',N'%','2023-08-15 00:00:00','2023-11-13 00:00:00',N'ALL'"
+                print(query)
+                server = f"{RET_DB_HOST}"
+                database = RET_DB_NAME
+                username = RET_DB_USER
+                password = RET_DB_PASS
+                driver = '{ODBC Driver 17 for SQL Server}'  # Change this to the driver you're using
+                connection_string = f"DRIVER={driver};SERVER={server};DATABASE={database};UID={username};PWD={password}"
+                connection = pyodbc.connect(connection_string)
+
+                cursor = connection.cursor()
+
+                cursor.execute(query)
+                arr = []
+                for row in cursor.fetchall():
+                    print(row)
+                    barcode = row[2]
+                    item_code = row[0]
+                    item_ref = row[1]
+                    name = row[3]
+                    av_stock = row[17]
+                    sol_stock = row[21]
+                    if export == 'json':
+                        obj = {
+                            'barcode': barcode,
+                            'item_code': item_code,
+                            'item_ref': item_ref,
+                            'name': name,
+                            'available': av_stock,
+                            'sold': sol_stock
+                        }
+                    elif export == 'excel':
+                        sheet[f"A{sh_row}"] = barcode
+                        sheet[f"B{sh_row}"] = name
+                        sheet[f"C{sh_row}"] = av_stock
+                        sheet[f"D{sh_row}"] = sol_stock
+
+                if export == 'json':
+                    success_response['message'] = arr
+                elif export == 'excel':
+                    file_name = f"static/general/tmp/SLOW_MOVING_ITEMS.xlsx"
+                    book.save(file_name)
+                    success_response['message'] = file_name
+
+                response = success_response
+
         elif method == 'PATCH':
             if module == 'price_update':
                 items = BoltItems.objects.all()
 
                 for item in items:
-                    item.price = item.inv_price
+                    cursor = ret_cursor
+                    barcode = item.barcode
+                    query = f"SELECT retail1 FROM prod_mast where barcode = {barcode}"
+                    cursor.execute(query)
+                    row = cursor.fetchone()
+                    retail1 = item.inv_price
+                    if row is not None:
+                        retail1 = row[0]
+
+
+                    item.price = retail1
                     item.save()
 
         response = success_response
