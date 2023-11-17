@@ -303,11 +303,10 @@ class Sms {
                     if(status === 1)
                     {
                         status_htm = `<small class="text-success">sent</small>`
+
                     } else {
                         status_htm = `<small class="text-info">pending</small>`
-                    }
-
-                    tr += `
+                        tr += `
                         <tr data-bs-target="#msag${mi}" data-bs-toggle="modal">
                                             <td>${from}</td>
                                             <td>${to}</td>
@@ -317,47 +316,50 @@ class Sms {
                                         
                     `
 
-                    modals += `<div class="modal fade" id="msag${mi}" backdrop="false">
-                                            <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title">
-                                                            From ${from} to ${to}
-                                                        </h5>
-                                                    </div>
-
-                                                    <div class="modal-body">
-
-                                                        <div class="w-100 mb-2 container">
-                                                            <div class="row w-100">
-                                                                <div class="col-sm-4">
-                                                                    <button class="btn btn-success">STATUS</button>
+                        modals += `<div class="modal fade" id="msag${mi}" backdrop="false">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title">
+                                                                From ${from} to ${to}
+                                                            </h5>
+                                                        </div>
+    
+                                                        <div class="modal-body">
+    
+                                                            <div class="w-100 mb-2 container">
+                                                                <div class="row w-100">
+                                                                    <div class="col-sm-4">
+                                                                        <button class="btn btn-success">STATUS</button>
+                                                                    </div>
+                                                                    <div class="col-sm-8">
+                                                                        <div class="w-100"><small class="w-100"><span>Queued On : </span><i class="text-info">${timestamp}</i></small></div>
+                                                                        <div class="w-100"><small class="w-100"><span>Last Tried :</span><i class="text-info">${last_tried}</i></small></div>
+                                                                    </div>
+    
                                                                 </div>
-                                                                <div class="col-sm-8">
-                                                                    <div class="w-100"><small class="w-100"><span>Queued On : </span><i class="text-info">${timestamp}</i></small></div>
-                                                                    <div class="w-100"><small class="w-100"><span>Last Tried :</span><i class="text-info">${last_tried}</i></small></div>
+                                                            </div>
+    
+                                                            <hr>
+    
+                                                            <div class="card">
+    
+                                                                <div class="card-body">
+                                                                    <h5 class="card-title">Message</h5>
+                                                                    <p>
+                                                                    ${mess}
+                                                                    </p>
+    
                                                                 </div>
-
                                                             </div>
                                                         </div>
-
-                                                        <hr>
-
-                                                        <div class="card">
-
-                                                            <div class="card-body">
-                                                                <h5 class="card-title">Message</h5>
-                                                                <p>
-                                                                ${mess}
-                                                                </p>
-
-                                                            </div>
-                                                        </div>
+    
                                                     </div>
-
                                                 </div>
-                                            </div>
-                                        </div>`
+                                            </div>`
+
+                    }
+
 
                 }
 
