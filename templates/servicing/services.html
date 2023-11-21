@@ -19,7 +19,7 @@
                         <td>{{ service.code }}</td><td>{{ service.name }}</td><td>{{ service.description }}</td>
                         <td>
                             <button onclick="deleteService({{ service.pk }})" style="padding: .2em !important;width: 30px !important; height: 30px !important" class="btn btn-danger pointer mr-2"><i class="fa fa-recycle"></i></button>
-                            <button style="padding: .2em !important;width: 30px !important; height: 30px !important" class="btn btn-info pointer mr-2"><i class="fa fa-pen"></i></button>
+                            <button onclick="location.href='{% url 'service' service.pk %}'" style="padding: .2em !important;width: 30px !important; height: 30px !important" class="btn btn-info pointer mr-2"><i class="fa fa-eye"></i></button>
                         </td>
                     </tr>
                 {% endfor %}

@@ -1,3 +1,5 @@
+import hashlib
+
 from django.contrib.auth.models import User
 
 from admin_panel.models import UserAddOns, UserSettings, Emails, Sms, SmsApi
@@ -69,3 +71,11 @@ def push_notification(user_pk, subject='', message=''):
 def remove_html_tags(text):
     clean = re.compile('<.*?>')
     return re.sub(clean, '', text)
+
+
+def make_md5_hash(text):
+    from datetime import datetime
+    current_datetime = datetime.now()
+    formatted_datetime = current_datetime.strftime("%Y_%m_%d_%H_%M_%S")
+    new_text = f"{text}{formatted_datetime}"
+    return hashlib.md5(new_text.encode('utf-8')).hexdigest()

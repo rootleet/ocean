@@ -310,9 +310,10 @@
                 let payload = {
                     'module':'services',
                     data:{
-                        'service':service
+                        'pk':service
                     }
                 };
+
 
                 // send payload to API
                 let request = api.call("VIEW",payload,'/servicing/api/');
@@ -320,8 +321,11 @@
                 if(request['status_code'] === 200){
                     // response is positive
                     let services = request['message'][0];
+                    console.table(services)
                     let subs = services['subs'];
+                    let technicians = services['technicians'];
                     let options = '';
+                    let tech_options = '';
 
                     if(subs.length > 0){
                         // make options for subs with a loop
@@ -336,6 +340,13 @@
                         // create sub message
                         alert(`NO SUBS`)
                     }
+
+                    for(let t = 0; t < technicians.length; t++) {
+                      let technician = technicians[t];
+                      tech_options += `<option value="${technician['pk']}">${technician['name']}</option>`
+                    }
+
+                    $('#technician').html(tech_options);
 
 
 

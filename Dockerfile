@@ -5,9 +5,16 @@ FROM python:3.9
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
+# Set MySQL database credentials as environment variables
+ENV DB_HOST 192.168.2.60
+ENV DB_PORT 3306
+ENV DB_NAME ocean
+ENV DB_USER root
+ENV DB_PASSWORD Sunderland@411
+
 # Install system dependencies
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends gcc libpq-dev \
+    && apt-get install -y --no-install-recommends gcc libpq-dev unixodbc unixodbc-dev \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -22,13 +29,10 @@ RUN pip install -r req.txt
 # Copy the Django project files to the container
 COPY .. /app/
 
-# Set MySQL database credentials as environment variables
-
-
 # Expose the port that Django runs on (default is 8000)
 EXPOSE 8000
 
 # Run the Django development server
-CMD ["python", "manage.py","makemigrations"]
-CMD ["python", "manage.py","migrate"]
+CMD ["python", "manage.py", "makemigrations"]
+CMD ["python", "manage.py", "migrate"]
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]

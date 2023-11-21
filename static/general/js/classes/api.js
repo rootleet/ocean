@@ -4,7 +4,10 @@ class Api {
         // console.log(JSON.stringify(data))
         // let link = interface
         // console.table(link)
-        var result = 0;
+        var result = {
+            'status_code':0,
+            'message':'Not Sent To Backend'
+        };
         $.ajax({
             url:link,
             type: method,

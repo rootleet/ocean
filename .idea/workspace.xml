@@ -4,14 +4,25 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ffcbf13e-d396-4071-9a24-4014a690f966" name="Changes" comment="added docker file">
-      <change afterPath="$PROJECT_DIR$/req.txt" afterDir="false" />
+    <list default="true" id="ffcbf13e-d396-4071-9a24-4014a690f966" name="Changes" comment="show only pending sms">
+      <change afterPath="$PROJECT_DIR$/templates/servicing/service.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/3a6a5de2-5c16-4c61-8911-ff2a73819934.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/3a6a5de2-5c16-4c61-8911-ff2a73819934.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirement.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirement2.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt.bk" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/admin_panel/anton.py" beforeDir="false" afterPath="$PROJECT_DIR$/admin_panel/anton.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ocean/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/ocean/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/servicing/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/servicing/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/servicing/servicing_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/servicing/servicing_api.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/servicing/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/servicing/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/servicing/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/servicing/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/general/js/classes/anton.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/general/js/classes/anton.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/general/js/classes/api.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/general/js/classes/api.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/general/js/classes/servicing.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/general/js/classes/servicing.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/servicing/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/servicing/base.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/servicing/new-job.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/servicing/new-job.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/servicing/services.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/servicing/services.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -72,6 +83,7 @@
     &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
     &quot;Notification.DisplayName-DoNotAsk-JavaScript: Code Vision Performance&quot;: &quot;JavaScript: code vision performance watcher&quot;,
     &quot;Notification.DoNotAsk-JavaScript: Code Vision Performance&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenDjangoStructureViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
@@ -99,9 +111,10 @@
       <recent name="C:\Users\reza\Documents\GitHub\ocean\templates\cmms\service" />
     </key>
   </component>
-  <component name="RunManager" selected="Django Server.DJANGO">
+  <component name="RunManager" selected="Docker.Docker Image">
     <configuration name="retail_api" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="ocean_ori" />
+      <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
@@ -124,6 +137,7 @@
     </configuration>
     <configuration name="DJANGO" type="Python.DjangoServer" factoryName="Django server">
       <module name="ocean_ori" />
+      <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
@@ -147,11 +161,42 @@
       <option name="customRunCommand" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="Docker Image" type="docker-deploy" factoryName="docker-image" temporary="true" server-name="Docker">
+      <deployment type="docker-image">
+        <settings>
+          <option name="imageTag" value="rootleet411/ocean:latest" />
+          <option name="containerName" value="" />
+          <option name="envVars">
+            <list>
+              <DockerEnvVarImpl>
+                <option name="name" value="DB_HOST" />
+                <option name="value" value="localhost" />
+              </DockerEnvVarImpl>
+            </list>
+          </option>
+        </settings>
+      </deployment>
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="docker-deploy" factoryName="docker-image" temporary="true">
+      <deployment type="docker-image">
+        <settings />
+      </deployment>
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Docker.Docker Image" />
         <item itemvalue="Python.retail_api" />
       </list>
     </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-python-sdk-fa315bd92469-d8c811c5f287-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-233.11799.20" />
+      </set>
+    </attachedChunks>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -231,23 +276,13 @@
       <workItem from="1699452640319" duration="37000" />
       <workItem from="1699454784007" duration="469000" />
       <workItem from="1699865604029" duration="3224000" />
-      <workItem from="1699879257487" duration="2562000" />
-    </task>
-    <task id="LOCAL-00015" summary="pword changed to text field">
-      <option name="closed" value="true" />
-      <created>1694178271229</created>
-      <option name="number" value="00015" />
-      <option name="presentableId" value="LOCAL-00015" />
-      <option name="project" value="LOCAL" />
-      <updated>1694178271229</updated>
-    </task>
-    <task id="LOCAL-00016" summary="Update report.js to make sure cmms sales customer reports are accurate">
-      <option name="closed" value="true" />
-      <created>1694707299942</created>
-      <option name="number" value="00016" />
-      <option name="presentableId" value="LOCAL-00016" />
-      <option name="project" value="LOCAL" />
-      <updated>1694707299942</updated>
+      <workItem from="1699879257487" duration="6258000" />
+      <workItem from="1699960305967" duration="1231000" />
+      <workItem from="1700063016312" duration="4073000" />
+      <workItem from="1700146894859" duration="314000" />
+      <workItem from="1700153099840" duration="968000" />
+      <workItem from="1700239939444" duration="2167000" />
+      <workItem from="1700510932982" duration="13887000" />
     </task>
     <task id="LOCAL-00017" summary="Update CMMS routing">
       <option name="closed" value="true" />
@@ -625,7 +660,23 @@
       <option name="project" value="LOCAL" />
       <updated>1699889564412</updated>
     </task>
-    <option name="localTasksCounter" value="64" />
+    <task id="LOCAL-00064" summary="add req for pip">
+      <option name="closed" value="true" />
+      <created>1699890740195</created>
+      <option name="number" value="00064" />
+      <option name="presentableId" value="LOCAL-00064" />
+      <option name="project" value="LOCAL" />
+      <updated>1699890740195</updated>
+    </task>
+    <task id="LOCAL-00065" summary="show only pending sms">
+      <option name="closed" value="true" />
+      <created>1700241357648</created>
+      <option name="number" value="00065" />
+      <option name="presentableId" value="LOCAL-00065" />
+      <option name="project" value="LOCAL" />
+      <updated>1700241357649</updated>
+    </task>
+    <option name="localTasksCounter" value="66" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -648,8 +699,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="Integrating retail" />
-    <MESSAGE value="Auto generate user id and password" />
     <MESSAGE value="increase pword size" />
     <MESSAGE value="pword changed to text field" />
     <MESSAGE value="Update report.js to make sure cmms sales customer reports are accurate" />
@@ -673,7 +722,9 @@
     <MESSAGE value="db interface updated" />
     <MESSAGE value="bolt api changed" />
     <MESSAGE value="added docker file" />
-    <option name="LAST_COMMIT_MESSAGE" value="added docker file" />
+    <MESSAGE value="add req for pip" />
+    <MESSAGE value="show only pending sms" />
+    <option name="LAST_COMMIT_MESSAGE" value="show only pending sms" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

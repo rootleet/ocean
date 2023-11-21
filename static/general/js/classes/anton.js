@@ -12,7 +12,7 @@ class Anton {
     validateInputs(ids) {
         for (let i = 0; i < ids.length; i++) {
             const value = $(`#${ids[i]}`).val();
-            if (value === '') {
+            if (value === '' || value === undefined) {
                 // alert('False');
                 return false;
                 $(`#${ids[i]}`).addClass('border-danger')

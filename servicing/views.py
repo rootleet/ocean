@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
@@ -58,15 +59,15 @@ def jobcard(request):
 
 
 @login_required()
-def tracking(request,cardno):
+def tracking(request, cardno):
     context['nav'] = True
     context['pagevalid'] = False
     context['pagemessage'] = "none"
 
     # check if user own this
 
-    if ServiceCard.objects.filter(cardno=cardno).exists():
-        service = ServiceCard.objects.get(cardno=cardno)
+    if ServiceCard.objects.filter(Q(cardno=cardno) | Q(task__uni=cardno)).exists():
+        service = ServiceCard.objects.get(Q(cardno=cardno) | Q(task__uni=cardno))
 
         # validate owner
         if service.owner.pk == request.user.pk or request.user.is_superuser:
@@ -79,3 +80,21 @@ def tracking(request,cardno):
         context['pagemessage'] = f"SERVICE with number {cardno} DOES NOT EXIST"
 
     return render(request, 'servicing/transactions.html', context=context)
+
+@login_required()
+def service(request, service_id):
+    if Services.objects.filter(pk=service_id).exists():
+        serv = Services.objects.get(pk=service_id)
+        context['nav'] = True
+        context['page']['title'] = f"{serv.name} Detail"
+        context['service'] = serv
+        context['jobs'] = ServiceCard.objects.filter(service=serv).order_by('-pk')[:10]
+        context['job_counts'] = {
+            'total': ServiceCard.objects.all().count(),
+            'complete': ServiceCard.objects.filter(service=serv, status=2),
+            'open': ServiceCard.objects.filter(service=serv,status=1)
+        }
+
+        return render(request, 'servicing/service.html', context=context)
+    else:
+        return HttpResponse(status=404)

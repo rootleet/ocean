@@ -1,0 +1,164 @@
+{% extends "servicing/base.html" %}
+{% load static %}
+
+
+{% block body %}
+    <input type="hidden" value="{{ service.code }}" id="service_code">
+    <div class="container-fluid p-2 h-25">
+        <section class="section h-100 dashboard">
+            <div class="row h-100">
+                <!-- ALL JOBS -->
+                <div class="col-sm-4 h-100">
+
+                    <div class="card h-100">
+                        <div class="card-header">
+                            <strong class="card-title">ALL JOBS</strong>
+                        </div>
+                        <div class="card-body">
+                            <div class="w-100 h-100 d-flex flex-wrap align-content-center justify-content-center">
+                                {{ service.jobs.all.count }}
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="col-sm-4 h-100">
+
+                    <div class="card h-100">
+                        <div class="card-header">
+                            <strong class="card-title">PENDING APPROVAL</strong>
+                        </div>
+                        <div class="card-body">
+                            <div class="w-100 h-100 d-flex flex-wrap align-content-center justify-content-center">
+                                {{ service.jobs.opened.count }}
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- CLOSED -->
+                <div class="col-sm-4 h-100">
+
+                    <div class="card h-100">
+                        <div class="card-header">
+                            <strong class="card-title">CLOSED JOBS</strong>
+                        </div>
+                        <div class="card-body">
+                            <div class="w-100 h-100 d-flex flex-wrap align-content-center justify-content-center">
+                                {{ service.jobs.closed.count }}
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+    </div>
+
+    <div class="container-fluid p-2 h-75">
+        <div class="row h-100">
+            <!-- SUBS -->
+            <div class="col-sm-4">
+                <div class="w-100 h-100 card">
+                    <div class="card-header">
+                        <div class="w-100 d-flex flex-wrap align-content-center justify-content-between">
+                            <div class="w-50"><strong class="card-title">SUBS</strong></div>
+                            <div class="w-50 d-flex flex-wrap justify-content-end">
+                                <button onclick="servicing.newSub()" class="btn btn-info"><i class="fa fa-plus"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body p-1">
+                    <div class="table-responsive">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>NAME</th><th>ACTION</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for sub in service.subs %}
+                                    <tr>
+                                        <td>{{ sub.name }}</td>
+                                        <td>Delete</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                </div>
+
+            </div>
+
+            <!-- JOBS -->
+            <div class="col-sm-4">
+                <div class="w-100 h-100 card">
+                    <div class="card-header"><strong class="card-title">JOBS</strong></div>
+                    <div class="card-body p-1 overflow-auto">
+                        <div class="table-responsive">
+                        <table class="table table-sm">
+
+                            <tbody>
+                                {% for job in jobs %}
+                                    <tr>
+                                        <td>
+                                            {% if job.status == 1 %}
+                                            <span class="badge bg-info mr-2">OPEN</span>
+                                            {% elif job.status == 2 %}
+                                            <span class="badge bg-success mr-2">DONE</span>
+                                            {% elif job.status == 0 %}
+                                            <span class="badge bg-danger mr-2">DELE</span>
+                                            {% else %}
+                                            <span class="badge bg-warning mr-2">UNKNOWN</span>
+                                            {% endif %}
+                                            -
+                                            <a href="javaScript:void(0)">{{ job.ticket.title }}</a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- TECHNICIANS -->
+            <div class="col-sm-4">
+                <div class="w-100 h-100 card">
+                    <div class="card-header">
+                        <div class="w-100 d-flex flex-wrap align-content-center justify-content-between">
+                            <div class="w-50"><strong class="card-title">TECHNICIANS</strong></div>
+                            <div class="w-50 d-flex flex-wrap justify-content-end">
+                                <button onclick="servicing.newTechnician()" class="btn btn-info"><i class="fa fa-plus"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-body p-1">
+                        <div class="table-responsive">
+                            <table class="table table-sm">
+                                <tbody>
+
+                                    {% for technician in service.technicians %}
+                                        <tr>
+                                            <td>{{ technician.full_name }}</td>
+                                            <td>remove</td>
+                                        </tr>
+
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

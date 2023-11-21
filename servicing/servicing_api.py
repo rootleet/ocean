@@ -7,12 +7,13 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from fpdf import FPDF
 
+from admin_panel.anton import make_md5_hash
 from admin_panel.models import Emails, TicketHd, Sms, SmsApi, UserAddOns, TicketTrans
 from admin_panel.sms_hold import *
 from meeting.models import MeetingHD
 
 from reports.models import ReportForms, ReportLegend, LegendSubs, DepartmentReportMailQue
-from servicing.models import Services, SubServices, ServiceCard, ServiceMaterials
+from servicing.models import Services, SubServices, ServiceCard, ServiceMaterials, ServiceTechnicians
 from taskmanager.models import Tasks, TaskTransactions
 
 
@@ -57,6 +58,17 @@ def interface(request):
 
                 success_response['message'] = "Serviced Added"
 
+
+            elif module == 'service_sub':
+                service_code = data.get('service_code')
+                sub_name = data.get('sub_name')
+                description = data.get('description')
+                owner_id = data.get('owner_id')
+
+                service = Services.objects.get(code=service_code)
+                owner = User.objects.get(id=owner_id)
+                SubServices(service=service, name=sub_name, description=description).save()
+
             # save job card
             elif module == 'jobcard':
                 head = data.get('head')
@@ -72,7 +84,11 @@ def interface(request):
                 remarks = head.get('remarks')
                 service = Services.objects.get(pk=head.get('service'))
                 service_sub = SubServices.objects.get(pk=head.get('service_sub'))
-                technician = User.objects.get(pk=head.get('technician'))
+                technician = ServiceTechnicians.objects.get(
+                    technician=User.objects.get(pk=head.get('technician')),
+                    service=service
+                )
+                tech_adon = UserAddOns.objects.get(user=technician.technician)
                 importance = head.get('importance')
                 tick = head.get('ticket')
                 ticket_title = head.get('ticket_title')
@@ -92,9 +108,11 @@ def interface(request):
                     ticket = TicketHd.objects.get(pk=tick)
 
                     # add to task managers
-                Tasks(title=ticket_title, uni=ticket_title.replace(' ', ''), description=ticked_description,
-                      owner=technician).save()
-                task = Tasks.objects.get(uni=ticket_title.replace(' ', ''))
+                uni = make_md5_hash(ticket_title)
+                Tasks(title=ticket_title, uni=uni, description=ticked_description,
+                      owner=technician.technician).save()
+
+                task = Tasks.objects.get(uni=uni)
                 # save service card
                 ServiceCard(client=client, task=task, owner=owner,
                             remarks=f"{service.name}/{service_sub.name}/{ticket_title}",
@@ -116,16 +134,32 @@ def interface(request):
                     ServiceMaterials(line=line, item=item, description=description, price=price, quantity=quantity,
                                      total_price=total_price, service_card=just_service_card).save()
 
+                tech_number = tech_adon.phone.replace('+233','0')
                 # queue SMS
+                sms_api = SmsApi.objects.get(is_default=1)
                 Sms(api=SmsApi.objects.get(is_default=1),
                     message=f"A ticket has been opened for your query \n\nTICKET : "
                             f"{cardno} \n\nSERVICE "
                             f"TYPE : {service.name} \n\nTITLE : "
-                            f"{ticket_title} \n\nYou can track service using the "
+                            f"{ticket_title} \n\n"
+                            f"ASSIGNED TO : {tech_adon.user.get_full_name()} - {tech_number}\n\n"
+                            f"You can track service using the "
                             f"link below "
-                            f"\n\nhttp://ocean.snedaghana.loc/servicing/jobcard/tracking/{just_service_card.cardno}/",
+                            f"\n\nhttp://ocean.snedaghana.loc/servicing/jobcard/tracking/{uni}/",
                     to=phone).save()
 
+                # technician notification
+
+                tech_message = (f"NEW TICKET!!\n\n"
+                                f"You have been assigned a ticket and below are the details. \n\n"
+                                f"TITLE : {ticket_title} \n\n"
+                                f"DESCRIPTION : Sent via email \n\n"
+                                f"REQUEST BY : {client.get_full_name()} - {phone} \n\n"
+                                f"Please attend to the issue and call the owner if need be")
+
+                Sms(api=sms_api, message=tech_message, to=tech_number).save()
+                Emails(sent_from='issues@snedaghana.loc', sent_to=technician.technician.email,
+                       subject=f"NEW TICKET!! {ticket_title}", body=ticked_description).save()
                 success_response['message'] = "Job Opened"
 
             elif module == 'send_ticket_to_client':
@@ -161,6 +195,12 @@ def interface(request):
                 else:
                     success_response['message'] = "Could Not Send SMS"
 
+            elif module == "service_technician":
+                service_code = data.get('service_code')
+                technician = data.get('technician')
+                service = Services.objects.get(code=service_code)
+
+                ServiceTechnicians(service=service, technician=User.objects.get(pk=technician)).save()
 
 
 
@@ -171,26 +211,36 @@ def interface(request):
                 if pk == '*':
                     services = Services.objects.filter(status__gt=0)
                 else:
-                    servicing = Services.objects.filter(pk=pk, status__gt=0)
+                    services = Services.objects.filter(pk=pk, status__gt=0)
 
                 if services.count() > 0:
                     arr = []
-                    for servce in services:
-                        subs = servce.subs()
+                    for service in services:
+                        subs = SubServices.objects.filter(service=service)
+                        technicians = ServiceTechnicians.objects.filter(service=service)
+
                         ss = []
+                        tt = []
                         for sub in subs:
                             ss.append({
                                 'pk': sub.pk,
                                 'name': sub.name,
                                 'desc': sub.description
                             })
+                        for technician in technicians:
+                            tt.append({
+                                'pk': technician.technician.pk,
+                                'name': technician.technician.get_full_name()
+                            })
                         arr.append({
-                            'pk': servce.pk,
-                            'code': servce.code,
-                            'description': servce.description,
-                            'subs': ss
+                            'pk': service.pk,
+                            'code': service.code,
+                            'description': service.description,
+                            'subs': ss,
+                            'technicians': tt
 
                         })
+                        print(arr)
                     success_response['message'] = arr
                 else:
                     success_response['status_code'] = 404
@@ -201,7 +251,7 @@ def interface(request):
 
                 if ServiceCard.objects.filter(cardno=cardno).exists():
                     card = ServiceCard.objects.get(cardno=cardno)
-                    technician = User.objects.get(pk=card.technician_id)
+                    technician = card.technician
                     cardpk = card.pk
                     print(cardpk)
                     materials = []
@@ -262,10 +312,10 @@ def interface(request):
                         },
                         'technician': {
                             'pk': technician.pk,
-                            'username': technician.username,
-                            'email': technician.email,
-                            'fullname': f"{technician.first_name} {technician.last_name}",
-                            'phone': UserAddOns.objects.get(user=technician).phone
+                            'username': technician.technician.username,
+                            'email': technician.technician.email,
+                            'fullname': f"{technician.technician.get_full_name()}",
+                            'phone': UserAddOns.objects.get(user=technician.technician).phone
                         },
                         'ticket': {
                             'hd': {
@@ -355,10 +405,9 @@ def interface(request):
                         'title': service.ticket.title,
                         'description': service.ticket.descr,
                         'service': f"{service.service.name}/{service.service_sub.name}",
-                        'technician':service.technician.get_full_name(),
-                        'date':service.created_date
+                        'technician': service.technician.get_full_name(),
+                        'date': service.created_date
                     })
-
 
                 success_response['message'] = cards
 
@@ -433,6 +482,8 @@ def interface(request):
 
                 except Exception as e:
                     success_response['message'] = f"Feedback Not Sent {e}"
+
+
 
         # delete data
         elif method == 'DELETE':
