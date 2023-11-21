@@ -67,12 +67,12 @@ def tracking(request, cardno):
     # check if user own this
 
     if ServiceCard.objects.filter(Q(cardno=cardno) | Q(task__uni=cardno)).exists():
-        service = ServiceCard.objects.get(Q(cardno=cardno) | Q(task__uni=cardno))
+        this_service = ServiceCard.objects.get(Q(cardno=cardno) | Q(task__uni=cardno))
 
         # validate owner
-        if service.owner.pk == request.user.pk or request.user.is_superuser:
+        if this_service.owner.pk == request.user.pk or request.user.is_superuser:
             context['pagevalid'] = True
-            context['pagemessage'] = service
+            context['pagemessage'] = this_service
         else:
             context['pagemessage'] = "You are not the owner of this ticket"
 
