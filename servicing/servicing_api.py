@@ -157,9 +157,17 @@ def interface(request):
                                 f"REQUEST BY : {client.get_full_name()} - {phone} \n\n"
                                 f"Please attend to the issue and call the owner if need be")
 
+                email_body = (f"<strong>REPORTED BY</strong> : {client.get_full_name()}<br>"
+                              f"<strong>TITLE</strong> : {ticket_title}<hr>"
+                              f"{ticked_description}"
+                              f"<hr>"
+                              f"<i>NOTE: Please contact client with the details below for further discussion of issue </><br>"
+                              f"<strong>Mobile </strong> : <a href='tel:{phone}'>{phone}</a> <br>"
+                              f"<strong>Email : </strong> <a href='mailto:{client.email}'>{client.email}</a>")
+
                 Sms(api=sms_api, message=tech_message, to=tech_number).save()
                 Emails(sent_from='issues@snedaghana.loc', sent_to=technician.technician.email,
-                       subject=f"NEW TICKET!! {ticket_title}", body=ticked_description).save()
+                       subject=f"NEW TICKET!! {ticket_title}", body=email_body).save()
                 success_response['message'] = "Job Opened"
 
             elif module == 'send_ticket_to_client':
