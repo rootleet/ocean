@@ -280,22 +280,23 @@ def interface(request):
                 sheet = workbook.active
 
                 if format == 'excel':
-
-                    sheet['A1'] = "BARCODE"
-                    sheet['B1'] = "NAME"
-                    sheet['C1'] = "PRICE"
-                    sheet['D1'] = "SPINTEX"
-                    sheet['E1'] = "NIA"
-                    sheet['F1'] = "OSU"
+                    sheet['A1'] = "CATEGORY"
+                    sheet['B1'] = "BARCODE"
+                    sheet['C1'] = "NAME"
+                    sheet['D1'] = "PRICE"
+                    sheet['E1'] = "SPINTEX"
+                    sheet['F1'] = "NIA"
+                    sheet['G1'] = "OSU"
                     row = 2
 
                     for item in items:
-                        sheet[f'A{row}'] = item.barcode
-                        sheet[f'B{row}'] = item.item_des
-                        sheet[f'C{row}'] = item.price
-                        sheet[f'D{row}'] = item.stock_spintex
-                        sheet[f'E{row}'] = item.stock_nia
-                        sheet[f'F{row}'] = item.stock_osu
+                        sheet[f'A{row}'] = item.group.name
+                        sheet[f'B{row}'] = item.barcode
+                        sheet[f'C{row}'] = item.item_des
+                        sheet[f'D{row}'] = item.price
+                        sheet[f'E{row}'] = item.stock_spintex
+                        sheet[f'F{row}'] = item.stock_nia
+                        sheet[f'G{row}'] = item.stock_osu
                         row += 1
 
                     workbook.save(file_name)
