@@ -67,10 +67,12 @@ class Mailer {
                             <div style="width: 100%; text-align: left !important">
                             <strong>TO</strong> : ${data['recipient']} <br><br>
                             <strong>CC</strong> : ${data['cc']} <br><br>
+                            <strong>Subject</strong> : ${data['subject']} <br><br>
                             <strong>Message</strong> : ${data['body']} <br><br>
                             </div>
                         `
                     })
+                    return que
                 } else {
                     kasa.error("ALL FIELDS REQUIRED")
                 }

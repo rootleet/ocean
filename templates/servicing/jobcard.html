@@ -13,9 +13,11 @@
                 <button onclick="if(confirm('ARE YOU SURE?')){deleteJobCard(this.value)}" id="delete" style="margin-right: .2em" class="btn btn-outline-danger"><i class="fa fa-trash"></i></button>
                 <button onclick="if(confirm('ARE YOU SURE YOU WANT TO CLOSE SERVICE?')){updateDocument(2)}" id="close" style="margin-right: .2em" class="btn btn-outline-warning"><i class="fa fa-door-closed"></i> close</button>
                 <button id="update" onclick="ticket.updateTranScreen()" style="margin-right: .2em" class="btn btn-outline-info"><i class="fa fa-assistive-listening-systems"></i> update ticket</button>
-                <button id="send_to_client" onclick="ticket.sendToClient($('#delete').val())" style="margin-right: .2em" class="btn btn-outline-success"><i class="fa fa-mail-bulk"></i> send client</button>
-                <button id="send_to_provider" onclick="mail_provider()" style="margin-right: .2em" class="btn btn-outline-success"><i class="fa fa-mail-bulk"></i> send client</button>
+                <button id="send_to_client" onclick="ticket.sendToClient($('#delete').val())" style="margin-right: .2em" class="btn btn-outline-success"><i class="fa fa-mail-bulk"></i> client</button>
+                <button id="send_to_provider" onclick="mail_provider()" style="margin-right: .2em" class="btn btn-outline-dark"><i class="fa fa-mail-bulk"></i> provider</button>
                 <button onclick="windowPopUp(`/servicing/jobcard/tracking/${$('#delete').val()}/`,'none',500,1024)" class="btn btn-info"><i class="fa fa-list"></i></button>
+                <input type="hidden" id="cardno">
+                <input type="hidden" id="task">
             </div>
             <div class="w-25 h-100 d-flex flex-wrap justify-content-end">
                  <button id="prev" onclick="loadJobCard(this.value)" style="margin-right: .2em" class="btn btn-outline-info"><i class="bi bi-skip-backward-btn"></i></button>
@@ -230,6 +232,9 @@
                 let technician = service['technician'];
                 let ticket = service['ticket'];
                 let timedata = service['timedata'];
+                let task = service['task'];
+
+                $('#task').val(task['uni']);
 
                 // html modifications
                 if(next['count'] > 0){
@@ -440,7 +445,8 @@
             let cc = `${client_address};${it_manager}`
             let title = $('#task_title').text()
             let taskdesc = $('#taskdesc').text()
-            taskdesc += `<br><br><i>Issue Transactions for detailed troubleshooting can be found at <a href="#">link</a></i>`
+            let task = $('#task').val()
+            taskdesc += `<br><br><i>With ocean at beta release that might be unavailable online sometimes, issue transactions for detailed troubleshooting can be found at <a href="http://41.222.234.59/servicing/jobcard/tracking/${task}/">link</a></i>`
 
 
             $('#recipient').val(provider_email);

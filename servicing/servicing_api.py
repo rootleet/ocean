@@ -333,7 +333,8 @@ def interface(request):
                                 'pk': card.ticket.pk,
                                 'title': card.ticket.title,
                                 'description': card.ticket.descr,
-                                'status': card.ticket.status
+                                'status': card.ticket.status,
+
                             },
                             'trans': ticket_trans
                         },
@@ -353,6 +354,9 @@ def interface(request):
                         'prev': {
                             'count': 0,
                             'code': 0
+                        },
+                        'task':{
+                            'uni': card.task.uni
                         }
                     }
 
