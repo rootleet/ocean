@@ -256,6 +256,7 @@ def interface(request):
             from email.mime.application import MIMEApplication
 
             mails = MailQueues.objects.filter(is_sent=False)
+
             for mail in mails:
                 sender = mail.sender
                 recipient = mail.recipient
@@ -313,7 +314,8 @@ def interface(request):
 
                     message = f"COULD NOT SEND EMAIL {str(e)}"
                     response['message'] = message
-
+                success_response['message'] = f"{mails.count()} Sent"
+                response = success_response
 
 
     except Exception as e:
