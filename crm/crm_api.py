@@ -6,7 +6,7 @@ from django.db.models import Q
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
-from admin_panel.models import Emails
+from admin_panel.models import Emails, MailQueues, MailSenders, MailAttachments
 from crm.models import Logs, CrmUsers
 
 
@@ -142,8 +142,8 @@ def api_interface(request):
                         formatted_datetime = current_datetime.strftime("%Y_%m_%d_%H_%M_%S")
                         file_name1 = f"{owner.first_name}_{owner.last_name}_CRM_REPORT_{formatted_datetime}.xlsx"
 
-                        file_name = f"static/general/crm-logs-reports/{file_name1}"
-                        attc += f"{file_name1},"
+                        file_name = f"static/attachments/{file_name1}"
+                        attc += f"{file_name},"
                         workbook.save(file_name)
                         print(file_name)
 
@@ -151,14 +151,31 @@ def api_interface(request):
                 body = f'<table><tr><th style="border: 1px solid black;">USER</th><th style="border: 1px solid ' \
                        f'black;">LOGS</th></td>{tr}</table>'
                 cc = "uyinsolomon2@gmail.com,solomon@snedaghana.com"
-                Emails(sent_from='crm@snedaghana.com', sent_to='bharat@snedaghana.com',
-                       subject=f"CRM REPORTS ON {today}",
-                       body=body, email_type='crm', attachments=attc, cc=cc).save()
+                # Emails(sent_from='crm@snedaghana.com', sent_to='bharat@snedaghana.com',
+                #        subject=f"CRM REPORTS ON {today}",
+                #        body=body, email_type='crm', attachments=attc, cc=cc).save()
+                #
+                # Emails(sent_from='crm@snedaghana.com', sent_to='solomon@snedaghana.com',
+                #        subject=f"CRM REPORTS ON {today}",
+                #        body=body, email_type='crm', attachments=attc, cc=cc).save()
 
-                Emails(sent_from='crm@snedaghana.com', sent_to='solomon@snedaghana.com',
-                       subject=f"CRM REPORTS ON {today}",
-                       body=body, email_type='crm', attachments=attc, cc=cc).save()
-
+                MailQueues(
+                    sender=MailSenders.objects.get(is_default=1),
+                    recipient='solomon@snedaghana.com',
+                    body=body,
+                    subject=f"CRM REPORTS ON {today}",
+                    cc=cc
+                ).save()
+                mail = MailQueues.objects.get(
+                    sender=MailSenders.objects.get(is_default=1),
+                    recipient='solomon@snedaghana.com',
+                    body=body,
+                    subject=f"CRM REPORTS ON {today}",
+                    cc=cc
+                )
+                for attchment in attc.split(','):
+                    if len(attchment) > 0:
+                        MailAttachments(mail=mail, attachment=attchment).save()
 
                 success_response['message'] = "EMAILS LOG"
                 response = success_response

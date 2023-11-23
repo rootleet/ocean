@@ -5,7 +5,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from fpdf import FPDF
 
-from admin_panel.models import Emails
+from admin_panel.models import Emails, MailQueues, MailAttachments
 from meeting.models import MeetingHD
 from reports.models import ReportForms, ReportLegend, LegendSubs, DepartmentReportMailQue
 from taskmanager.models import Tasks
@@ -248,6 +248,72 @@ def interface(request):
                 c += 1
             success_response['message'] = f"{c} EMAILS SENT"
             response = success_response
+
+        elif doc == 'mail_sync_v2':
+            import smtplib
+            from email.mime.multipart import MIMEMultipart
+            from email.mime.text import MIMEText
+            from email.mime.application import MIMEApplication
+
+            mails = MailQueues.objects.filter(is_sent=False)
+            for mail in mails:
+                sender = mail.sender
+                recipient = mail.recipient
+                subject = mail.subject
+                body = mail.body
+                cc = mail.cc
+
+                smtp_server = sender.host
+                smtp_port = sender.port
+                sender_email = sender.address
+                sender_password = sender.password
+                html_content = body
+
+                msg = MIMEMultipart()
+                msg['From'] = sender_email
+                msg['To'] = recipient
+                msg['Subject'] = subject
+                msg['CC'] = cc
+
+                # attachments
+                msg.attach(MIMEText(html_content, 'html'))
+                attachments = MailAttachments.objects.filter(mail=mail)
+                print(attachments.count)
+                for attachment in attachments:
+                    attachment_filename = attachment.attachment.path
+                    file_name = attachment_filename.split('/')[-1]
+                    try:
+                        with open(attachment_filename, 'rb') as attached:
+                            part = MIMEApplication(attached)
+                            part.add_header('Content-Disposition', 'attachment',filename=file_name)
+                            msg.attach(part)
+                    except FileNotFoundError:
+                        print(f"File not found: {attachment_filename}")
+                    except Exception as e:
+                        print(f"Error attaching file {attachment_filename}: {str(e)}")
+
+                # send email
+
+                try:
+                    server = smtplib.SMTP(smtp_server, smtp_port)
+                    server.starttls()
+                    server.login(sender_email, sender_password)
+                    server.sendmail(sender_email, recipient, msg.as_string())
+
+                    mail.is_sent = 1
+                    mail.sent_response = "Email Sent"
+                    mail.save()
+                    server.quit()
+                    response['message'] = "Email Sent"
+                except Exception as e:
+                    # response['status_code'] = 505
+                    # response['message'] = str(e)
+                    mail.sent_response = f"Could Not Send {e}"
+                    mail.save()
+
+                    message = f"COULD NOT SEND EMAIL {str(e)}"
+                    response['message'] = message
+
 
 
     except Exception as e:

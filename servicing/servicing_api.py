@@ -10,6 +10,7 @@ from fpdf import FPDF
 from admin_panel.anton import make_md5_hash
 from admin_panel.models import Emails, TicketHd, Sms, SmsApi, UserAddOns, TicketTrans
 from admin_panel.sms_hold import *
+from appscenter.models import App
 from meeting.models import MeetingHD
 
 from reports.models import ReportForms, ReportLegend, LegendSubs, DepartmentReportMailQue
@@ -93,6 +94,7 @@ def interface(request):
                 tick = head.get('ticket')
                 ticket_title = head.get('ticket_title')
                 ticked_description = head.get('description')
+                app = App.objects.get(pk=head.get('app'))
 
                 if tick == '0':
                     # generate
@@ -117,7 +119,7 @@ def interface(request):
                 ServiceCard(client=client, task=task, owner=owner,
                             remarks=f"{service.name}/{service_sub.name}/{ticket_title}",
                             service=service, service_sub=service_sub,
-                            technician=technician, ticket=ticket, importance=importance, cardno=cardno).save()
+                            technician=technician, ticket=ticket, importance=importance, cardno=cardno,app=app).save()
 
                 just_service_card = ServiceCard.objects.all().last()
 
@@ -299,6 +301,7 @@ def interface(request):
                             'fullname': f"{card.client.first_name} {card.client.last_name}",
                             'phone': UserAddOns.objects.get(user=card.client).phone
                         },
+                        'app':card.app_details(),
                         'owner': {
                             'pk': card.owner.pk,
                             'username': card.owner.username,

@@ -3,99 +3,130 @@
 
 
 {% block body  %}
-    <div id="appGroups" class="modal fade">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <strong class="modal-title">APP GROUPS</strong>
-                </div>
+    <div class="card-header">
+        <div class="w-100 d-flex">
+            <div class="w-50"></div>
+            <div class="w-50 d-flex flex-wrap justify-content-end">
+                <button onclick="app.new_app_screen(`{{ html.providers_options }}`,`{{ md }}`)" class="btn btn-info"><i class="fa fa-plus"></i> APP</button>
             </div>
         </div>
     </div>
+    <div class="card-body p-2">
 
-    <div id="newApp" class="modal fade">
-        <form class="modal-dialog" action="{% url 'save-new-app' %}" method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-            <div class="modal-content">
-                <div class="modal-header">
-                    <strong class="modal-title">APP GROUPS</strong>
-                </div>
-                <div class="modal-body">
-                    <label for="group">App Group</label><select name="group" id="group" class="form-control mb-2 rounded-0">
-                        {% for group in appgroups %}
-                            <option value="{{ group.pk }}">{{ group.name }}</option>
-                        {% endfor %}
-                    </select>
+        <div class="container p-1 h-100">
 
-                    <input type="hidden" name="uni" value="{{ md }}">
-
-                    <label class="w-100">App NAme
-                        <input type="text" name="name" autocomplete="off" class="form-control rounded-0 mb-2" required>
-                    </label>
-
-                    <label for="description">Description</label><textarea name="description" id="description" cols="30" rows="5" class="form-control mb-2 rounded-0"></textarea>
-
-                    <input type="file" accept="application/epub+zip" name="file" id="file" class="form-control mb-2">
-
-                    <label class="w-100">App Path
-                        <input type="text" name="root" autocomplete="off" class="form-control rounded-0 mb-2" required>
-                    </label>
-
-                </div>
-
-                <div class="modal-footer">
-                    <button type="submit" class="w-100 btn btn-success">REGISTER</button>
-                </div>
-
-            </div>
-        </form>
-    </div>
-
-    <div class="w-100 container overflow-hidden" style="height: 85vh">
-        <!-- TOOLS -->
-        <div class="w-100 h-50 p-2 overflow-hidden">
-            <div class="card h-100">
-                <div class="card-body p-2 h-100">
-                    <div class="w-100 row">
-                        <div class="col-sm-2">
-                            <button data-bs-target="#appGroups" data-bs-toggle="modal" class="btn h-100 btn-info p-5 w-100">
-                                APP GROUP
-                            </button>
+            <div class="row no-gutter pb-2 h-50">
+                <div class="col-sm-6 h-100">
+                    <div class="card h-100">
+                        <div class="card-header">
+                            <div class="w-100 d-flex flex-wrap">
+                                <div class="w-50 h-100"><strong class="card-title">Providers</strong></div>
+                                <div class="w-50 h-100 d-flex flex-wrap justify-content-end align-content-center">
+                                    <button onclick="apps.new_provider_screen()" class="btn btn-info"><i class="fa fa-plus"></i></button>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-sm-2">
-                            <button data-bs-target="#newApp" data-bs-toggle="modal" class="btn h-100 btn-info p-5 w-100">
-                                REGISTER APP
-                            </button>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>NAME</th>
+                                            <th>LOCATION</th>
+                                            <th>CONTACT</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for provider in providers %}
+                                            <tr>
+                                                <td>{{ provider.name }}</td>
+                                                <td>{{ provider.country }} <br> {{ provider.city }}</td>
+                                                <td>
+                                                    <a href="tel:{{ provider.phone }}"><i class="fa fa-phone"></i> {{ provider.phone }}</a><br>
+                                                    <a href="mailto:{{ provider.email }}"><i class="fa fa-envelope"></i> {{ provider.email }}</a>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- APPS -->
-        <div class="h-50 w-100 p-2 overflow-hidden">
-            <div class="card h-100">
-                <div class="card-header">
-                    <span class="card-title">APPS</span>
-                </div>
-                <div class="card-body overflow-auto">
-                    <table class="table table-sm">
-                        <thead>
-                            <tr><td>GROUP</td><td>NAME</td><td>VERSION</td><td>ACTION</td></tr>
-                        </thead>
-                        <tbody>
-                            {% for app in apps %}
-                                <tr>
-                                    <td>{{ app.group.name }}</td>
-                                    <td>{{ app.name }}</td>
-                                    <td>{{ app.version }}</td>
-                                    <td><button onclick="location.href='{% url 'app' app.pk %}'" class="btn btn-info btn-sm">VIEW</button></td>
-                                </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
+            <div class="row no-gutter h-50">
+                {% for app in apps %}
+                    <div class="col-sm-4">
+                        <div class="card">
+                            <div class="card-body p-2 d-flex flex-wrap align-content-center">
+                                <div class="w-25">
+                                    <img style="height: 50px; width: 50px"
+                                         src="{{ app.logo.url }}" alt="" class="img-fluid">
+                                </div>
+                                <div class="w-75 pl-2">
+                                    <strong>{{ app.name }}</strong><br>
+                                    <p class="ellipsis">{{ app.description }}</p>
+                                </div>
+                            </div>
+                            <div class="card-footer d-flex flex-wrap justify-content-between">
+                                <a onclick="location.href='{% url 'app' app.pk %}'" href="javascript:void(0)" class="btn btn-primary text-center">PREVIEW</a>
+                                <a href="javascript:void(0)" onclick="location.href='{{ app.file.url }}'" class="btn btn-info text-center">DOWNLOAD</a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
             </div>
         </div>
+
     </div>
+
+    <script>
+        class Apps{
+            new_provider_screen(){
+                let form = `
+                    <label for="name">NAME</label>
+                    <input type="text" class="form-control mb-2 rounded-0" id="name" />
+
+                     <label for="description">DESCRIPTION</label>
+                    <textarea name="" id="description" cols="30" rows="3" class="form-control rounded-0 mb-2"></textarea>
+
+                     <label for="email">EMAIL</label>
+                    <input type="email" class="form-control mb-2 rounded-0" id="email" />
+
+                     <label for="phone">PHONE</label>
+                    <input type="text" class="form-control mb-2 rounded-0" id="phone" />
+
+                     <label for="country">COUNTRY</label>
+                    <input type="text" class="form-control mb-2 rounded-0" id="country" />
+
+                    <label for="city">COUNTRY</label>
+                    <input type="text" class="form-control mb-2 rounded-0" id="city" /> <hr>
+                    <button onclick="apps.saveProvider()" class="btn btn-success w-100">REGISTER</button>
+                `;
+
+                amodal.setTitleText("REGISTER PROVIDER");
+                amodal.setBodyHtml(form);
+                amodal.show()
+            }
+
+            saveProvider() {
+                let ids = ['name','description','email','phone','country','city','mypk'];
+                if(anton.validateInputs(ids)){
+                    let data = anton.Inputs(ids);
+                    let payload = {
+                        'module':'provider',
+                        data:data
+                    };
+                    let response = api.call('PUT',payload,'/appscenter/api/');
+                    kasa.confirm(response['message'],1,'here')
+                } else {
+                    kasa.error("Please fill form")
+                }
+            }
+        }
+
+        const apps = new Apps();
+    </script>
+
 {% endblock %}

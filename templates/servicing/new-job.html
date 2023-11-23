@@ -127,14 +127,19 @@
                                     {% endfor %}
                                 </select>
                             </div>
+                            <div class="input-group input-group-sm">
+                                <div class="input-group-prepend rounded-0">
+                                    <small class="input-group-text rounded-0">APP</small>
+                                </div>
+                                <select name="" id="app" class="form-control form-control-sm rounded-0">
+                                    <option value="">SELECT APP</option>
+                                    {% for app in apps %}
+                                        <option value="{{ app.pk }}">{{ app.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
 
                             <!-- REMARKS -->
-                            <div class="input-group input-group-sm">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text rounded-0">TITLE</span>
-                                </div>
-                                <textarea id="ticket_title" cols="30" class="form-control form-control-sm rounded-0" rows="1"></textarea>
-                            </div>
 
                             <input type="hidden" value="{{ user.pk }}" id="owner">
 
@@ -150,10 +155,17 @@
                 <div style="height: 60%" class="col-sm-6">
                     <div class="card h-100">
                         <div class="card-header">
-                            <strong class="card-title">TICKET DESCRIPTION</strong>
+                            <strong class="card-title">TICKET DETAILS</strong>
                         </div>
                         <div class="card-body p-2">
-                            <textarea name="description" id="description" class="h-100 form-control form-control-sm" cols="30" ></textarea>
+
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text rounded-0">TITLE</span>
+                                </div>
+                                <textarea id="ticket_title" cols="30" class="form-control rounded-0" rows="1"></textarea>
+                            </div>
+                            <textarea name="description" id="description" class="form-control form-control-sm" rows="10" cols="30" ></textarea>
                         </div>
                     </div>
                 </div>
@@ -373,7 +385,7 @@
         function saveJobCard(){
             // get inputs
 
-            let header = ['client','email','phone','service','service_sub','importance','ticket','technician','ticket_title','owner','description'];
+            let header = ['client','email','phone','service','service_sub','importance','ticket','technician','ticket_title','owner','description','app'];
             if(anton.validateInputs(header) ){
                 let head = anton.Inputs(header);
                 console.table(head);

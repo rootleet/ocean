@@ -3,7 +3,13 @@
 
 {% block crm %}
     <div class="card-header">
-        <button onclick="crm.newLog()" class="btn btn-info">NEW</button>
+        <div class="w-100 d-flex">
+            <div class="w-50"></div>
+            <div class="w-50 d-flex flex-wrap justify-content-end">
+                <button onclick="crm.newLog()" style="margin-right: .2rem" class="btn btn-info">NEW</button>
+                <button onclick="crm.generateReports()" class="btn btn-warning">GENERATE REPORT</button>
+            </div>
+        </div>
     </div>
     <div class="card-body overflow-hidden">
 

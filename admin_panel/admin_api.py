@@ -10,7 +10,7 @@ from django.views.decorators.csrf import csrf_exempt
 from admin_panel.anton import remove_html_tags
 from admin_panel.cron_exe import execute_script
 from admin_panel.models import GeoCity, GeoCitySub, Reminder, SmsApi, UserAddOns, EvatCredentials, Locations, \
-    Departments, TicketTrans, Sms, TicketHd
+    Departments, TicketTrans, Sms, TicketHd, MailSenders, MailQueues
 from reports.models import DepartmentReportMailQue
 from servicing.models import ServiceCard
 from taskmanager.models import Tasks, TaskTransactions
@@ -193,6 +193,30 @@ def index(request):
                         api=SmsApi.objects.get(is_default=1)).save()
 
                 success_response['message'] = "TIcket Updated"
+                response = success_response
+
+            elif module == 'mail_senders':
+                host = data.get('host')
+                port = data.get('port')
+                address = data.get('address')
+                password = data.get('password')
+                is_default = data.get('is_default')
+                is_tls = data.get('is_tls')
+                owner = User.objects.get(pk=data['mypk'])
+
+                MailSenders(host=host, port=port, address=address,password=password, is_default=is_default, is_tls=is_tls,owner=owner).save()
+                success_response['message'] = "Sender Added"
+                response = success_response
+
+            elif module == 'que_mail':
+                print(data)
+                sender = MailSenders.objects.get(pk=data.get('sender'))
+                recipient = data.get('recipient')
+                subject = data.get('subject')
+                body = data.get('body')
+                cc = data.get('cc')
+                MailQueues(sender=sender, recipient=recipient, subject=subject, body=body, cc=cc).save()
+                success_response['message'] = "Mail Added To Que"
                 response = success_response
 
             else:
@@ -432,6 +456,22 @@ def index(request):
 
                     if j_type == 'always' or (j_type == 'timed' and j_time >= current_time_str):
                         execute_script(exe_script)
+
+            elif module == 'mail_senders':
+                arr = []
+                senders = MailSenders.objects.all()
+
+                for sender in senders:
+                    arr.append({
+                        'host':sender.host,
+                        'port':sender.port,
+                        'address':sender.address,
+                        'pk':sender.pk
+                    })
+
+                success_response['message'] = arr
+                response = success_response
+
             else:
                 response['status_code'] = 503
                 response['message'] = f"UNKNOWN MODULE ( METHOD : {method}, MODULE : {module} )"

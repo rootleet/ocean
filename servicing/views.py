@@ -6,6 +6,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
 from admin_panel.models import UserAddOns, TicketHd
+from appscenter.models import App
 from servicing.models import Services, ServiceCard
 
 context = {
@@ -44,6 +45,7 @@ def newjob(request):
     context['tickets'] = TicketHd.objects.filter(status=0)
     context['services'] = sers
     context['page']['title'] = "New Job Card"
+    context['apps'] = App.objects.all()
     return render(request, 'servicing/new-job.html', context=context)
 
 

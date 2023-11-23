@@ -15,13 +15,14 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from . import views
+from . import views, apps_api
 
 urlpatterns = [
 
     path('', views.index, name='apps-center'),
     path('app/<pk>/', views.app, name='app'),
     path('save_app_update/', views.save_app_update, name='save_app_update'),
-    path('save_new_app/', views.save_new_app, name='save-new-app')
+    path('save_new_app/', views.save_new_app, name='save-new-app'),
+    path('api/', apps_api.interface, name='apps-api')
 
 ]

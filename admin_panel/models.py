@@ -128,6 +128,53 @@ class Emails(models.Model):
         return cc.split(',')
 
 
+class MailSenders(models.Model):
+    host = models.TextField()
+    port = models.TextField()
+    address = models.CharField(max_length=200,unique=True)
+    password = models.TextField()
+    is_default = models.BooleanField(default=False)
+    is_tls = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=True)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    added_on = models.DateTimeField(auto_now_add=True)
+
+    def mail_counts(self):
+        return {
+            'sent': MailQueues.objects.filter(sender=self, is_sent=True).count(),
+            'not_sent': MailQueues.objects.filter(sender=self, is_sent=False).count()
+        }
+
+    def mails(self):
+        MailQueues.objects.filter(sender=self)
+
+
+class MailQueues(models.Model):
+    sender = models.ForeignKey(MailSenders, on_delete=models.CASCADE)
+    recipient = models.EmailField()
+    subject = models.TextField()
+    body = models.TextField()
+    cc = models.TextField(blank=True)
+    scheduled_on = models.DateTimeField(auto_now_add=True)
+    is_sent = models.BooleanField(default=False)
+    sent_on = models.DateTimeField(auto_now=True)
+    sent_response = models.TextField(blank=True, default="NOT SENT")
+
+    def has_attachments(self):
+        return MailAttachments.objects.filter(mail=self).count()
+
+    def attachments(self):
+        return MailAttachments.objects.filter(mail=self)
+
+    def copied(self):
+        return len(self.cc.split(';'))
+
+
+class MailAttachments(models.Model):
+    mail = models.ForeignKey(MailQueues, on_delete=models.CASCADE)
+    attachment = models.FileField(upload_to='static/attachments/')
+
+
 class Sales(models.Model):
     loc = models.CharField(max_length=3)
     mech_no = models.TextField()

@@ -3,252 +3,251 @@
 
 {% block body %}
 
-    <div class="w-100 h-100">
+    <div class="card-header">
+        <strong class="card-title">EMAILS</strong>
+    </div>
 
-        <div class="card-header">
-            <strong class="card-title">MAILS</strong>
-        </div>
+    <div class="card-body p-2">
+        <div class="container p-0 h-100">
 
-        <div class="card-body">
-            <div class="container-fluid h-100">
-
-            <div class="row h-100">
-
-                <!-- EMAIL GROUPS -->
-                <div style="display: none !important" class="col-sm-6">
-                    <div class="panel panel-danger" style="height: 40vh; overflow: hidden !important">
-                    <div class="card-header">
-                        <h4>Mailing Groups</h4>
-                        <ul class="links">
-                            <li>
-                                <a href="#">
-                                    <i class="fa fa-navicon"></i>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div style="text-align: left" class="panel-sub-heading">
-                        <div style="width: 100%;" class="d-flex flex-wrap">
-                            <button data-toggle="modal" href="#addMailingGroup" class="btn btn-sm btn-info">New Email Group</button>
-                            <form method="post" action="{% url 'save_email_group' %}" class="modal fade" id="addMailingGroup" data-backdrop="false">
-                            {% csrf_token %}
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <strong class="modal-title">Adding Emailing Group</strong>
-                                        </div>
-                                        <div class="modal-body">
-                                            <label style="width: 100%">Grou Name
-                                                <input type="text" required autocomplete="off" name="name" class="form-control rounded-o">
-                                            </label>
-                                            <small class="text-info">Descriptive name of group i.e CMMS Accounts</small>
-                                            <hr>
-                                            <label for="">Associated Tag</label><select required name="tag" id="" class="form-control rounded-0">
-                                                <option disabled selected>Select Tag</option>
-                                                {% for mg_tags in comm_tags %}
-                                                    <option value="{{ mg_tags.pk }}">{{ mg_tags.tag_dec }}</option>
-                                                {% endfor %}
-                                            </select>
-                                            <small class="text-info">Tag to tie this group to auto emailing</small>
-                                            <hr>
-                                            <label for="">Group Description</label>
-                                            <textarea name="description" id="" required cols="30" rows="5"
-                                                      class="form-control rounded-0"></textarea>
-                                            <small class="text-info">Brief description of group</small>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button class="btn btn-warning btn-sm rounded-0" type="button" data-dismiss="modal">CANCEL</button>
-                                            <button class="btn btn-sm btn-success rounded-0" type="submit">SAVE</button>
-                                        </div>
-                                    </div>
+            <div class="row h-100 d-flex flex-wrap align-content-between">
+                <!-- EMAIL SENDERS -->
+                <div class="col-sm-6" style="height: 45% !important">
+                    <div class="card h-100">
+                        <div class="card-header">
+                            <div class="w-100 h-100 d-flex">
+                                <div class="w-50">
+                                    <strong class="card-title">SENDERS</strong>
                                 </div>
-                            </form>
-
+                                <div class="w-50 d-flex flex-wrap justify-content-end align-content-center">
+                                    <button onclick="NewSenderScreen()" class="btn btn-info"><i class="fa fa-plus"></i></button>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="card-body" style="height: 75%!important ;overflow: auto!important">
-                        <div class="table-responsive" style=" ; overflow: hidden">
-                            <table class="table table-bordered no-margin">
-                                <input type="hidden" id="close_url" value="{% url 'close_task' %}">
-                                <thead>
-                                    <tr>
-                                        <th>CL</th>
-                                        <th>Group Name</th>
-                                        <th>Default Domain</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for emg in email_groups %}
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-sm">
+                                    <thead>
                                         <tr>
-                                            <td>{{ emg.clients }}</td>
-                                            <td>{{ emg.group_name }}</td>
-                                            <td>{{ emg.def_domain.tag_dec }}</td>
-                                            <td>
-                                                <div style="width: 100%" class="d-flex flex-wrap align-content-center justify-content-between">
-                                                    <button class="badge btn-sm btn-warning">suspend</button>
-                                                    <button class="badge btn-sm btn-danger">delete</button>
-                                                </div>
-                                            </td>
+                                            <th>HOST</th>
+                                            <th>ADDRESS</th>
+                                            <th>OWNER</th>
+                                            <th>EMAILS</th>
                                         </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                        {% for sender in senders %}
+                                            <tr>
+                                                <td>{{ sender.host }}</td>
+                                                <td>{{ sender.address }}</td>
+                                                <td>{{ sender.owner.get_full_name }}</td>
+                                                <td>{{ sender.mails.count }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
-
-
-                </div>
                 </div>
 
-                <!-- EMAIL ADDRESSES -->
-                <div style="display: none !important" class="col-sm-6">
-                    <div class="panel panel-warning" style="height: 40vh; overflow: hidden !important">
-                    <div class="card-header">
-                        <h4>Mailing Addresses</h4>
-                        <ul class="links">
-                            <li>
-                                <a href="#">
-                                    <i class="fa fa-navicon"></i>
-                                </a>
-                            </li>
-                        </ul>
+                <!-- STATISTICS -->
+                <div class="col-sm-6" style="height: 45% !important">
+                    <div class="card h-100">
+                        <div class="card-header">
+                            <strong class="card-title">STATISTICS</strong>
+                        </div>
                     </div>
-                    <div style="text-align: left" class="panel-sub-heading">
-                        <div style="width: 100%;" class="d-flex flex-wrap">
-                            <button data-toggle="modal" href="#newEmailAddress" class="btn btn-sm btn-warning">New Address</button>
-                            <form method="post" action="{% url 'add_notification_mem' %}" class="modal fade" id="newEmailAddress" data-backdrop="false">
-                            {% csrf_token %}
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header bg-warning">
-                                            <strong class="modal-title">Adding Email Address</strong>
-                                        </div>
-                                        <div class="modal-body">
-                                            <!-- FULL NAME -->
-                                            <label style="width: 100%">Full Name
-                                                <input type="text" required autocomplete="off" name="full_name" class="form-control border-warning rounded-o">
-                                            </label>
-                                            <small class="text-warning">Full name of recipient</small>
-                                            <hr>
+                </div>
 
-                                            <!-- Email Address -->
-                                            <label style="width: 100%">Email address
-                                                <input type="email" required autocomplete="off" name="email" class="form-control border-warning rounded-o">
-                                            </label>
-                                            <small class="text-warning">Primary email address of recipient</small>
-                                            <hr>
-
-                                            <!-- MOBILE -->
-                                            <label style="width: 100%">Mobile Number
-                                                <input type="tel" required autocomplete="off" name="phone" class="form-control border-warning rounded-o">
-                                            </label>
-                                            <small class="text-warning">In future, there is a plan to send sms as well, this data is for that</small>
-                                            <hr>
-
-                                            <!-- GROUP -->
-                                            <label for="">Email Group</label>
-                                            <select name="email_group" id="" class="form-control">
-                                                <option disabled selected>Select Group</option>
-                                                {% for emg in email_groups %}
-                                                    <option value="{{ emg.pk }}">{{ emg.group_name }}</option>
-                                                {% endfor %}
-                                            </select>
-
-
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button class="btn btn-warning btn-sm rounded-0" type="button" data-dismiss="modal">CANCEL</button>
-                                            <button class="btn btn-sm btn-success rounded-0" type="submit">SAVE</button>
-                                        </div>
-                                    </div>
+                <div class="col-sm-12 h-50">
+                    <div class="card h-100">
+                        <div class="card-header">
+                            <div class="w-100 d-flex flex-wrap">
+                                <div class="w-50"><strong class="card-title">MAIL LOGS</strong></div>
+                                <div class="w-50 d-flex flex-wrap align-content-center justify-content-end">
+                                    <button onclick="email.new_email_screen()" title="NEW EMAIL" class="btn btn-info rounded-0" style="margin-right:5px "><i class="fa fa-envelope"></i></button>
+                                    <button onclick="email.sync_mails()" class="btn btn-warning rounded-0"><i class="fa fa-sync"></i></button>
                                 </div>
-                            </form>
-
+                            </div>
                         </div>
-                    </div>
-                    <div class="card-body" style="height: 75%!important ;overflow: auto!important;">
-                        <div class="table-responsive" style=" ; overflow: hidden">
-                            <table class="table table-bordered table-warning no-margin">
-                                <input type="hidden" id="close_url" value="{% url 'close_task' %}">
-                                <thead>
-                                    <tr>
-                                        <th style="width: 20%">Group</th>
-                                        <th style="width: 50%">Name</th>
-                                        <th style="width: 20%">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for emg in email_address %}
-                                        <tr title="Email Address : {{ emg.email_addr }} Phone : {{ emg.mobile_number }}">
-                                            <td>{{ emg.group.group_name  | slice:":10" }}</td>
-                                            <td>{{ emg.full_name  }}</td>
-                                            <td>
-                                                <div style="width: 100%" class="d-flex flex-wrap align-content-center justify-content-between">
-                                                    <button class="badge btn-sm btn-warning"><i class="fa fa-pause"></i></button>
-                                                    <button class="badge btn-sm btn-danger"><i class="fa fa-recycle"></i></button>
-                                                </div>
-                                            </td>
+
+                        <div class="card-body">
+                            {% if emails.count > 0 %}
+                                <table class="table-sm table table-bordered table-hover table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>SENDER</th>
+                                            <th>RECIPIENT</th>
+                                            <th>COPIED</th>
+                                            <th>ATTACHMENTS</th>
+                                            <th>DATE</th>
+                                            <th>STATUS</th>
                                         </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                        {% for email in emails %}
+                                            <tr>
+                                                <td>{{ email.sender.address }}</td>
+                                                <td>{{ email.recipient }}</td>
+                                                <td>{{ email.copied }}</td>
+                                                <td>{{ email.attachments.count }}</td>
+                                                <td>{{ email.scheduled_on }}</td>
+                                                <td>
+                                                    <span onclick="alert(`{{ email.sent_response }}`)" class="badge pointer {% if email.is_sent == False %}bg-danger{% else %}bg-success{% endif %}">{{ email.is_sent }}</span>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            {% else %}
+                                <div class="w-100 h-100 d-flex flex-wrap align-content-center justify-content-center">
+                                    <span class="display-2 text-muted">NO EMAIL</span>
+                                </div>
+                            {% endif %}
                         </div>
+
                     </div>
-
-
                 </div>
-                </div>
-
-                <!-- EMAIL LIST -->
-                <table class="table table-sm datatable ">
-                                                        <thead>
-                                                            <tr>
-                                                                <th style="width: 10%">From</th>
-                                                                <th style="width: 10%">TO</th>
-                                                                <th style="width: 30%">Subject</th>
-                                                                <th style="width: 10%">Type</th>
-                                                                <th style="width: 5%">Reference</th>
-                                                                <th style="width: 5%">Status</th>
-                                                                <th style="width: 25%">Date</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            {% for email in emails %}
-                                                                <tr onclick="kasa.html(`{{ email.body }}`)" >
-                                                                    <td title="{{ email.sent_from }}">{{ email.sent_from | slice:":10" }}</td>
-                                                                    <td title="{{ email.sent_to }}">{{ email.sent_to | slice:":20" }}</td>
-                                                                    <td title="{{ email.subject }}">{{ email.subject | slice:":40" }}</td>
-                                                                    <td>{{ email.email_type }}</td>
-                                                                    <td>{{ email.ref }}</td>
-                                                                    <td>{{ email.status }}</td>
-                                                                    <td>{{ email.scheduled_on }}</td>
-                                                                </tr>
-
-                                                                <div class="modal fade" id="mail{{ email.pk }}">
-                                                                    <div class="modal-dialog">
-                                                                        <div class="modal-content">
-                                                                            <div class="modal-body p-2">
-                                                                                {{ email.body }}
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-
-                                                            {% endfor %}
-
-                                                        </tbody>
-                                                    </table>
 
             </div>
 
         </div>
-        </div>
-
-
-
-
-
     </div>
+
+    <script>
+        // new sender screen
+        function NewSenderScreen() {
+            amodal.setTitleText("Add New Email Sender");
+            let form = `
+                <label for="host">HOST</label>
+                <input class="form-control rounded-0 mb-2" id="host" />
+                <label for="address">ADDRESS</label>
+                <input class="form-control rounded-0 mb-2" id="address" type="email" />
+                <label for="password">PASSWORD</label>
+                <input class="form-control rounded-0 mb-2" type="password" id="password" />
+                <label for="port">PORT</label>
+                <input class="form-control rounded-0 mb-2" type="number" id="port" />
+                <label for="is_default">DEFAULT</label>
+                <select name="" id="is_default" class="mb-2 form-control">
+                    <option value="False">False</option>
+                    <option value="True">True</option>
+                </select>
+                <label for="is_tls">TLS</label>
+                <select name="" id="is_tls" class="mb-2 form-control">
+                    <option value="False">False</option>
+                    <option value="True">True</option>
+                </select>
+                <hr>
+                <button class="w-100 btn btn-success" onclick="saveNewSender()">ADD</button>
+            `;
+            amodal.setBodyHtml(form);
+            amodal.setFooterHtml(`<button class="w-100 btn btn-success" onclick="saveNewSender()">ADD</button>`);
+            amodal.show()
+        }
+
+        // save new sender
+        function saveNewSender() {
+            let ids = ['host','port','address','password','is_default','is_tls','mypk'];
+            if(anton.validateInputs(ids)){
+                let data = anton.Inputs(ids);
+
+                let payload = {
+                    module:'mail_senders',
+                    data:data
+                };
+                let response = api.call('PUT',payload,'/adapi/');
+                kasa.confirm(response['message'],1,'here');
+            } else {
+                kasa.error("All Field Required")
+            }
+        }
+
+        // new email screen
+        class Email {
+            new_email_screen(){
+                amodal.setTitleText("CREATE AN EMAIL");
+                // get email senders
+                let senders_payload = {
+                    'module':'mail_senders',
+                    data:{}
+                };
+                let senders_response = api.call('VIEW',senders_payload,'/adapi/')
+                if(senders_response['status_code'] === 200){
+                    let senders = senders_response['message'];
+                    let senders_option = '';
+                    for (let s = 0; s < senders.length; s++) {
+                        let sender = senders[s];
+                        senders_option += `<option value="${sender['pk']}">${sender['address']}</option>`
+                    }
+
+
+                    let form = `
+                    <label for="sender">SENDER</label>
+                    <select id="sender" class="form-control rounded-0 mb-2"></select>
+                    <label for="recipient">RECIPIENT</label>
+                    <input type="email" id="recipient" class="form-control rounded-0 mb-2">
+                    <label for="cc">CC</label>
+                    <input type="email" id="cc" class="form-control rounded-0 mb-2">
+                    <label for="subject">SUBJECT</label>
+                    <input type="text" class="form-control rounded-0 mb-2" id="subject">
+
+                    <label for="body">MESSAGE</label>
+                    <textarea name="" id="body" cols="30" rows="10" class="form-control rounded-0"></textarea>
+
+                 <input type="file" id="attachment" class="form-control">
+                    <hr>
+                    <button onclick="email.que()" class="btn btn-success w-100">QUE</button>
+
+                `;
+                amodal.setBodyHtml(form);
+                $('#sender').html(senders_option)
+                amodal.setSize('L')
+                amodal.show()
+
+                } else {
+                    kasa.error(senders_response['message'])
+                }
+
+
+            }
+
+            que() {
+                let ids = ['sender','subject','recipient','cc','body'];
+                if(anton.validateInputs(ids)){
+                    let data = anton.Inputs(ids);
+                    var fileInput = document.getElementById('attachment');
+                    var file = fileInput.files[0];
+                    if(file){
+                        data['attachment'] = file
+                    }
+                    let payload = {
+                        module:'que_mail',
+                        data:data
+                    };
+                    console.table(payload)
+                    let que = api.call('PUT',payload,'/adapi/');
+                    kasa.confirm(que['message'],1,'here')
+                } else {
+                    kasa.error("ALL FIELDS REQUIRED")
+                }
+            }
+
+            sync_mails(){
+                loader.show();
+                let payload = {
+                    data:{
+                        doc:'mail_sync_v2'
+                    }
+                };
+
+                let sync = api.call('VIEW',payload,'/reports/api/');
+                loader.hide()
+                kasa.confirm(sync['message'],1,'here');
+            }
+        }
+        const email = new Email();
+
+    </script>
 
 {% endblock %}

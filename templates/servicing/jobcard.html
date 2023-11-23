@@ -8,12 +8,13 @@
         <div class="w-100 h-100 d-flex flex-wrap">
 
             <div class="w-75 h-100 d-flex flex-wrap">
-                <button onclick="location.href='{% url 'newjob' %}'" style="margin-right: .2em" class="btn btn-outline-primary"><i class="fa fa-plus"></i> new service</button>
-                <button id="find_job" onclick="findJobScreen()" style="margin-right: .2em" class="btn btn-outline-info"><i class="fa fa-search"></i> find</button>
-                <button onclick="if(confirm('ARE YOU SURE?')){deleteJobCard(this.value)}" id="delete" style="margin-right: .2em" class="btn btn-outline-danger"><i class="fa fa-trash"></i> delete</button>
+                <button onclick="location.href='{% url 'newjob' %}'" style="margin-right: .2em" class="btn btn-outline-primary"><i class="fa fa-plus"></i></button>
+                <button id="find_job" onclick="findJobScreen()" style="margin-right: .2em" class="btn btn-outline-info"><i class="fa fa-search"></i></button>
+                <button onclick="if(confirm('ARE YOU SURE?')){deleteJobCard(this.value)}" id="delete" style="margin-right: .2em" class="btn btn-outline-danger"><i class="fa fa-trash"></i></button>
                 <button onclick="if(confirm('ARE YOU SURE YOU WANT TO CLOSE SERVICE?')){updateDocument(2)}" id="close" style="margin-right: .2em" class="btn btn-outline-warning"><i class="fa fa-door-closed"></i> close</button>
                 <button id="update" onclick="ticket.updateTranScreen()" style="margin-right: .2em" class="btn btn-outline-info"><i class="fa fa-assistive-listening-systems"></i> update ticket</button>
                 <button id="send_to_client" onclick="ticket.sendToClient($('#delete').val())" style="margin-right: .2em" class="btn btn-outline-success"><i class="fa fa-mail-bulk"></i> send client</button>
+                <button id="send_to_provider" onclick="mail_provider()" style="margin-right: .2em" class="btn btn-outline-success"><i class="fa fa-mail-bulk"></i> send client</button>
                 <button onclick="windowPopUp(`/servicing/jobcard/tracking/${$('#delete').val()}/`,'none',500,1024)" class="btn btn-info"><i class="fa fa-list"></i></button>
             </div>
             <div class="w-25 h-100 d-flex flex-wrap justify-content-end">
@@ -104,9 +105,9 @@
                             <!-- EMAIL -->
                             <div class="input-group imput-group-sm mb-2">
                                 <div class="input-group-prepend rounded-0">
-                                    <small class="input-group-text rounded-0">CARDNO</small>
+                                    <small class="input-group-text rounded-0">APP</small>
                                 </div>
-                                <input required readonly type="text" class="form-control rounded-0 form-control-sm" id="cardno">
+                                <input required readonly type="text" class="form-control rounded-0 form-control-sm" id="app">
                             </div>
                             <!-- NAME -->
                             <div class="input-group imput-group-sm mb-2">
@@ -215,6 +216,7 @@
             };
 
             let request = api.call('VIEW',payload,'/servicing/api/');
+            console.table(request)
             if(request['status_code'] === 200){
                 $('#close').val(cardno)
                 let service = request['message'];
@@ -282,6 +284,7 @@
 
                 }
 
+                $('#app').val(service['app']['name'])
 
                 //technician
                 $('#technician').val(technician['fullname']);
@@ -320,7 +323,7 @@
                 }
                 $('#ticketTrans').html(t_rows);
 
-                console.table(service);
+
 
             } else {
                 alert(request['message'])
@@ -426,6 +429,26 @@
                 console.log(jobquery['message']);
             }
             $('#queryresults').html(queryresults);
+        }
+
+
+        function mail_provider() {
+            mailer.new_email_screen()
+            let client_address = $('#client_email').val();
+            let provider_email = 'solomon@sedaghana.com';
+            let it_manager = 'solomon@snedaghana.com;bharat@snedaghana.com;ajay@snedaghana.com';
+            let cc = `${client_address};${it_manager}`
+            let title = $('#task_title').text()
+            let taskdesc = $('#taskdesc').text()
+            taskdesc += `<br><br><i>Issue Transactions for detailed troubleshooting can be found at <a href="#">link</a></i>`
+
+
+            $('#recipient').val(provider_email);
+            $('#cc').val(cc);
+            $('#subject').val(`Sneda Ghana Issues : ${title}`)
+            $('#body').val(taskdesc)
+
+
         }
 
     </script>

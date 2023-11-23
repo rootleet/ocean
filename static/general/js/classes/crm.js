@@ -166,6 +166,24 @@ class Crm {
 
     }
 
+    generateReports() {
+        loader.show();
+        let payload = {
+            module:'generate_log_report',
+            data:{}
+        };
+
+        kasa.confirm(
+            api.call(
+                'VIEW',
+                payload,
+                '/crm/api/')['message'],
+            1,
+            'here'
+        )
+
+        loader.hide()
+    }
 }
 
 const crm = new Crm()

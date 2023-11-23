@@ -4,11 +4,37 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ffcbf13e-d396-4071-9a24-4014a690f966" name="Changes" comment="Re-module servicing procedures.">
+    <list default="true" id="ffcbf13e-d396-4071-9a24-4014a690f966" name="Changes" comment="make technician email message more descriptive">
+      <change afterPath="$PROJECT_DIR$/appscenter/apps_api.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cronjobs/mail_sync_v2.sh" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/apps/logos/default.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/apps/logos/icons8-parrot-100.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/general/js/classes/form.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/general/js/classes/mailer.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/admin_panel/admin_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/admin_panel/admin_api.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/admin_panel/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/admin_panel/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/admin_panel/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/admin_panel/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apiv2/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/apiv2/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/appconfig/form.py" beforeDir="false" afterPath="$PROJECT_DIR$/appconfig/form.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/appscenter/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/appscenter/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/appscenter/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crm/crm_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/crm/crm_api.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ocean/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/ocean/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/retail/retail_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/retail/retail_api.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/reports_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/reports/reports_api.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/servicing/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/servicing/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/servicing/servicing_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/servicing/servicing_api.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/servicing/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/servicing/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/general/js/classes/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/general/js/classes/app.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/general/js/classes/crm.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/general/js/classes/crm.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/appcenter/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/appcenter/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/crm/logs.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/crm/logs.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/dashboard/emails.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/dashboard/emails.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/servicing/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/servicing/base.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/servicing/jobcard.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/servicing/jobcard.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/servicing/new-job.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/servicing/new-job.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -63,38 +89,41 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
-    &quot;Notification.DisplayName-DoNotAsk-JavaScript: Code Vision Performance&quot;: &quot;JavaScript: code vision performance watcher&quot;,
-    &quot;Notification.DoNotAsk-JavaScript: Code Vision Performance&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.OpenDjangoStructureViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/reza/Documents/GitHub/ocean/templates/servicing&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "DefaultHtmlFileTemplate": "HTML File",
+    "Notification.DisplayName-DoNotAsk-JavaScript: Code Vision Performance": "JavaScript: code vision performance watcher",
+    "Notification.DoNotAsk-JavaScript: Code Vision Performance": "true",
+    "RunOnceActivity.OpenDjangoStructureViewOnStart": "true",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "C:/Users/reza/Documents/GitHub/ocean/cronjobs",
+    "node.js.detected.package.eslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "vue.rearranger.settings.migration": "true"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;DatabaseDriversLRU&quot;: [
-      &quot;mysql&quot;
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "mysql"
     ]
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\reza\Documents\GitHub\ocean\templates\servicing" />
       <recent name="C:\Users\reza\Documents\GitHub\ocean\cronjobs" />
+      <recent name="C:\Users\reza\Documents\GitHub\ocean\static\apps\logos" />
+      <recent name="C:\Users\reza\Documents\GitHub\ocean\templates\servicing" />
       <recent name="C:\Users\reza\Documents\GitHub\ocean\templates\crn" />
       <recent name="C:\Users\reza\Documents\GitHub\ocean\crm" />
-      <recent name="C:\Users\reza\Documents\GitHub\ocean\templates\cmms\service" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\reza\Documents\GitHub\ocean\static\general\js\classes" />
     </key>
   </component>
   <component name="RunManager" selected="Docker.Docker Image">
@@ -269,23 +298,10 @@
       <workItem from="1700153099840" duration="968000" />
       <workItem from="1700239939444" duration="2167000" />
       <workItem from="1700510932982" duration="14122000" />
-      <workItem from="1700571425700" duration="387000" />
-    </task>
-    <task id="LOCAL-00018" summary="Update CMMS routing">
-      <option name="closed" value="true" />
-      <created>1695210747837</created>
-      <option name="number" value="00018" />
-      <option name="presentableId" value="LOCAL-00018" />
-      <option name="project" value="LOCAL" />
-      <updated>1695210747837</updated>
-    </task>
-    <task id="LOCAL-00019" summary="Creating and Sending task report">
-      <option name="closed" value="true" />
-      <created>1696146831412</created>
-      <option name="number" value="00019" />
-      <option name="presentableId" value="LOCAL-00019" />
-      <option name="project" value="LOCAL" />
-      <updated>1696146831413</updated>
+      <workItem from="1700571425700" duration="2692000" />
+      <workItem from="1700651669115" duration="17426000" />
+      <workItem from="1700681445725" duration="144000" />
+      <workItem from="1700681646693" duration="13787000" />
     </task>
     <task id="LOCAL-00020" summary="cromjob for generation reports">
       <option name="closed" value="true" />
@@ -663,7 +679,23 @@
       <option name="project" value="LOCAL" />
       <updated>1700553314158</updated>
     </task>
-    <option name="localTasksCounter" value="67" />
+    <task id="LOCAL-00067" summary="Add products category to bolt products export, and also add fix service reports generating">
+      <option name="closed" value="true" />
+      <created>1700571848017</created>
+      <option name="number" value="00067" />
+      <option name="presentableId" value="LOCAL-00067" />
+      <option name="project" value="LOCAL" />
+      <updated>1700571848017</updated>
+    </task>
+    <task id="LOCAL-00068" summary="make technician email message more descriptive">
+      <option name="closed" value="true" />
+      <created>1700575846603</created>
+      <option name="number" value="00068" />
+      <option name="presentableId" value="LOCAL-00068" />
+      <option name="project" value="LOCAL" />
+      <updated>1700575846603</updated>
+    </task>
+    <option name="localTasksCounter" value="69" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -686,8 +718,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="pword changed to text field" />
-    <MESSAGE value="Update report.js to make sure cmms sales customer reports are accurate" />
     <MESSAGE value="Update CMMS routing" />
     <MESSAGE value="Creating and Sending task report" />
     <MESSAGE value="cromjob for generation reports" />
@@ -711,7 +741,9 @@
     <MESSAGE value="add req for pip" />
     <MESSAGE value="show only pending sms" />
     <MESSAGE value="Re-module servicing procedures." />
-    <option name="LAST_COMMIT_MESSAGE" value="Re-module servicing procedures." />
+    <MESSAGE value="Add products category to bolt products export, and also add fix service reports generating" />
+    <MESSAGE value="make technician email message more descriptive" />
+    <option name="LAST_COMMIT_MESSAGE" value="make technician email message more descriptive" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

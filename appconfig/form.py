@@ -6,7 +6,7 @@ from appscenter.models import App, VersionControl
 class NewApp(forms.ModelForm):
     class Meta:
         model = App
-        exclude = ['created_time', 'created_date', 'status', 'version','containers']
+        exclude = ['created_time', 'created_date', 'status', 'version']
 
 
 class NewVersion(forms.ModelForm):

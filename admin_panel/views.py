@@ -958,8 +958,8 @@ def emails(request):
         'pahe': page,
         'comm_tags': tags.objects.all(),
         'email_groups': EmailGroup.objects.all(),
-        'emails': Emails.objects.all().order_by('-id'),
-        'email_address': NotificationGroups.objects.all()
+        'emails': MailQueues.objects.filter(is_sent=False).order_by('-id'),
+        'senders': MailSenders.objects.all()
     }
     return render(request, 'dashboard/emails.html', context=context)
 

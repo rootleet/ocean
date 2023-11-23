@@ -3,48 +3,41 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, HttpResponse
 
 from django.shortcuts import render, redirect
+from django.views.decorators.csrf import csrf_exempt
 
 from appconfig.form import NewApp, NewVersion
-from appscenter.models import AppsGroup, App, AppAssign
+from appscenter.models import AppsGroup, App, AppAssign, AppProviders
+from blog.anton import make_md5
 
 
 @login_required()
 def index(request):
-    import hashlib
     import time
 
-    # Assuming you have access to the `request` object with the user information
     username = request.user.username
-
-    # Get the current time as a string
     current_time = str(time.time())
-
-    # Concatenate the username and current time
     data = username + current_time
+    provider_options = ''
+    providers = AppProviders.objects.filter(is_active=True)
+    for provider in providers:
+        provider_options += f"<option value='{provider.pk}'>{provider.name}</option>"
 
-    # Create an MD5 hash object
-    md5_hash = hashlib.md5()
-
-    # Convert the data string to bytes
-    data_bytes = data.encode('utf-8')
-
-    # Update the MD5 hash object with the data bytes
-    md5_hash.update(data_bytes)
-
-    # Get the hexadecimal representation of the MD5 hash
-    md5_hex = md5_hash.hexdigest()
 
     context = {
         'nav': True,
-        'appgroups': AppsGroup.objects.filter(status=1),
+        'providers': AppProviders.objects.filter(is_active=True),
         'apps': App.objects.all(),
-        'md':md5_hex
+        'md': make_md5(data),
+        'html':{
+            'providers_options': provider_options
+        }
     }
 
     return render(request, 'appcenter/index.html', context=context)
 
 
 @login_required()
+@csrf_exempt
 def save_new_app(request):
     if request.method == 'POST':
         form = NewApp(request.POST, request.FILES)
@@ -63,6 +56,7 @@ def save_new_app(request):
 def app(request, pk):
     this_app = App.objects.get(pk=pk)
     assign = AppAssign.objects.filter(app=this_app)
+
     context = {
         'nav': True,
         'app': this_app,
@@ -70,6 +64,7 @@ def app(request, pk):
         'assigns': assign
     }
     return render(request, 'appcenter/app.html', context=context)
+
 
 @login_required()
 def save_app_update(request):

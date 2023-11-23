@@ -22,5 +22,6 @@ from meeting import contacts
 urlpatterns = [
     path('', views.api_function, name='api_function'),
     path('contact/', contacts.index, name='api_contacts'),
-    path('meeting/', meeting_api.index, name='api_meeting')
+    path('meeting/', meeting_api.index, name='api_meeting'),
+
 ]

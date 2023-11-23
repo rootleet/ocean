@@ -1,9 +1,24 @@
 from datetime import datetime
 
+from django.contrib.auth.models import User
 from django.db import models
 
 from inventory.models import Computer, ComputerGroup
 from ocean import settings
+
+
+# app providers
+class AppProviders(models.Model):
+    name = models.CharField(max_length=255, unique=True)
+    description = models.TextField()
+    email = models.EmailField()
+    phone = models.TextField()
+    country = models.CharField(max_length=255)
+    city = models.CharField(max_length=255)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    is_active = models.BooleanField(default=True)
 
 
 # APPS GROUPS
@@ -17,8 +32,9 @@ class AppsGroup(models.Model):
 
 
 class App(models.Model):
-    group = models.ForeignKey('AppsGroup', on_delete=models.CASCADE)
-    containers = models.ManyToManyField('AppContainer')
+    provider = models.ForeignKey(AppProviders, on_delete=models.CASCADE, default=None, blank=True, null=True)
+    logo = models.ImageField(upload_to='static/apps/logos/', blank=True, null=True,default='static/apps/logos/default'
+                                                                                           '.png')
     name = models.TextField()
     uni = models.CharField(max_length=60, unique=True)
     description = models.TextField()
@@ -32,12 +48,14 @@ class App(models.Model):
 
     def latest_version(self):
         return VersionControl.objects.filter(app=self).order_by('-pk')[:1]
+
     def lastest_url(self):
         if VersionControl.objects.filter(app=self).exists():
             file = VersionControl.objects.filter(app=self).last()
             return file.files.url
         else:
             return '#'
+
 
 class VersionControl(models.Model):
     app = models.ForeignKey('App', on_delete=models.CASCADE)
