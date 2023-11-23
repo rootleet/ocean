@@ -274,7 +274,9 @@ def interface(request):
                 msg['From'] = sender_email
                 msg['To'] = recipient
                 msg['Subject'] = subject
-                msg['CC'] = cc
+                msg['Cc'] = cc
+
+                to_address = [recipient] + cc.split(',') if cc else [recipient]
 
                 # attachments
                 msg.attach(MIMEText(html_content, 'html'))
@@ -299,7 +301,7 @@ def interface(request):
                     server = smtplib.SMTP(smtp_server, smtp_port)
                     server.starttls()
                     server.login(sender_email, sender_password)
-                    server.sendmail(sender_email, recipient, msg.as_string())
+                    server.sendmail(sender_email, to_address, msg.as_string())
 
                     mail.is_sent = 1
                     mail.sent_response = "Email Sent"
