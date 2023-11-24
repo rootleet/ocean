@@ -218,7 +218,7 @@ def interface(request):
                         stock201.save()
                     else:
                         Stock.objects.create(product=product, quantity=kitchen, location='201')
-
+                success_response['message'] = "Stock Updated"
         elif method == 'VIEW':
             if module == 'bolt_products':
                 pk = data.get('key') or '*'
