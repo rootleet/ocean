@@ -147,6 +147,7 @@ def interface(request):
                 cursor.execute(query)
                 saved = 0
                 not_synced = 0
+                error = []
                 for product in cursor.fetchall():
                     code = product[0]
                     barcode = str(product[1]).strip()
@@ -165,6 +166,7 @@ def interface(request):
                         saved = saved + 1
                     else:
                         not_synced = not_synced + 1
+                        error.append(f"{barcode} - {item_des} # sub group {sub_group} / does not exist")
 
                 success_response['message'] = f"{saved} / {saved + not_synced} products synced"
                 response = success_response
