@@ -22,7 +22,7 @@ class Clerk(models.Model):
 
 
 class BoltGroups(models.Model):
-    name = models.CharField(unique=True,max_length=266)
+    name = models.CharField(unique=True, max_length=266)
 
     created_on = models.DateTimeField(auto_now_add=True)
     edited_on = models.DateTimeField(auto_now=True)
@@ -32,7 +32,7 @@ class BoltGroups(models.Model):
 
 
 class BoltItems(models.Model):
-    group = models.ForeignKey(BoltGroups,on_delete=models.CASCADE)
+    group = models.ForeignKey(BoltGroups, on_delete=models.CASCADE)
     barcode = models.CharField(unique=True, max_length=100, null=False, blank=False)
     item_des = models.TextField()
     price = models.DecimalField(decimal_places=2, max_digits=60, default=0.00)
@@ -45,3 +45,61 @@ class BoltItems(models.Model):
 
     created_on = models.DateTimeField(auto_now_add=True)
     edited_on = models.DateTimeField(auto_now=True)
+
+
+class ProductSupplier(models.Model):
+    code = models.CharField(unique=True, max_length=60)
+    name = models.CharField(unique=True, max_length=60)
+    person = models.TextField()
+    phone = models.TextField()
+    email = models.TextField()
+    city = models.TextField()
+    country = models.TextField()
+    created_on = models.DateTimeField(auto_now_add=True)
+
+
+class ProductGroup(models.Model):
+    code = models.CharField(unique=True, max_length=10, null=False, blank=False)
+    name = models.CharField(unique=True, max_length=60)
+    created_on = models.DateTimeField(auto_now_add=True)
+    edited_on = models.DateTimeField(auto_now=True)
+
+    def subgroups(self):
+        return ProductSubGroup.objects.filter(group=self)
+
+
+class ProductSubGroup(models.Model):
+    group = models.ForeignKey(ProductGroup, on_delete=models.CASCADE)
+    code = models.CharField(unique=False, max_length=10)
+    name = models.CharField(unique=False, max_length=60)
+    created_on = models.DateTimeField(auto_now_add=True)
+
+    def products(self):
+        return Products.objects.filter(subgroup=self)
+
+    class Meta:
+        unique_together = (('group', 'code'),)
+
+
+class Products(models.Model):
+    subgroup = models.ForeignKey(ProductSubGroup, on_delete=models.CASCADE)
+    code = models.CharField(unique=True, max_length=60)
+    barcode = models.CharField(unique=True, max_length=100, null=False, blank=False)
+    name = models.TextField(null=False)
+    price = models.DecimalField(decimal_places=2, max_digits=60)
+
+    def is_on_bolt(self):
+        barcode = self.barcode.strip()
+        if BoltItems.objects.filter(barcode=barcode).exists():
+            return True
+        else:
+            return False
+
+
+class Stock(models.Model):
+    product = models.ForeignKey(Products, on_delete=models.CASCADE)
+    location = models.CharField(max_length=100, null=False, blank=False)
+    quantity = models.DecimalField(decimal_places=2, max_digits=10, default=0.00)
+
+    class Meta:
+        unique_together = (('product', 'location'),)

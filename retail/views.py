@@ -6,7 +6,7 @@ from django.shortcuts import render, redirect
 from admin_panel.models import Locations, SmsApi, Sms
 from cmms.extra import db
 from retail.forms import NewClerk
-from retail.models import Clerk, BoltItems, BoltGroups
+from retail.models import Clerk, BoltItems, BoltGroups, Products
 
 
 @login_required()
@@ -162,3 +162,14 @@ def bolt_groups(request):
         'groups': BoltGroups.objects.all()
     }
     return render(request, 'retail/bolt-groups.html', context=context)
+
+@login_required()
+def products(request):
+    context = {
+        'nav': True,
+        'page': {
+            'title': "Product Master"
+        },
+        'items': Products.objects.all()
+    }
+    return render(request, 'retail/products.html', context=context)

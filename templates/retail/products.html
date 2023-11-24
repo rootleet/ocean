@@ -1,0 +1,44 @@
+{% extends 'retail/base.html' %}
+{% load static %}
+{% block body %}
+    <div class="card-header">
+        <div class="w-100 h-100 d-flex flex-wrap">
+            <div class="w-25 h-100"><strong class="card-title">PRODUCTS LIST</strong></div>
+            <div class="w-75 h-100 d-flex flex-wrap justify-content-end align-content-center">
+
+                <a href="javascript:void(0)" style="border-radius: 0 !important" onclick="retail.export_retail_products('*')" class="btn btn-outline-warning"><i class="fa fa-file-excel"></i> Export</a>
+            </div>
+        </div>
+    </div>
+    <div class="card-body overflow-auto">
+
+        <table class="table datatable">
+            <thead>
+                <tr>
+                    <th>GROUP</th>
+                    <th>SUB GROUP</th>
+                    <th>BARCODE</th>
+                    <th>NAME</th>
+                    <th>PRICE</th>
+                    <th>IS_ON_BOLT</th>
+                </tr>
+            </thead>
+            <tbody id="tbody">
+                {% for item in items %}
+                    <tr class="">
+                        <td><small>{{ item.subgroup.group.name | slice:':10' }}</small></td>
+                        <td><small>{{ item.subgroup.name | slice:'20' }}</small></td>
+                        <td><small>{{ item.barcode }}</small></td>
+                        <td><small>{{ item.name | slice:'28' }}</small></td>
+                        <td><small>{{ item.price }}</small></td>
+                        <td><small>{{ item.is_on_bolt }}</small></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        //retail.loadProducts()
+    </script>
+{% endblock %}

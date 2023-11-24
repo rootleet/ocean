@@ -180,6 +180,74 @@ class Retail {
 
         $('#loader').hide()
     }
+
+    loadProducts() {
+        let payload = {
+            "module":"retail_products",
+            "data":{
+                "doc":"json"
+            }
+        }
+
+        let response = api.call('VIEW',payload,'/retail/api/');
+        if(anton.IsRequest(response)){
+            let products = response['message'];
+            let tr = "";
+            for (let p = 0; p < products.length; p++) {
+                let product = products[p];
+                let group,subgroup,barcode,name,price,is_on_bolt;
+                group = product['group'];
+                subgroup = product['sub_group'];
+                barcode = product['barcode'];
+                name = product['name'];
+                price = product['price'];
+                is_on_bolt = product['is_on_bolt']
+                tr += `
+                    <tr><td>${group}</td><td>${subgroup}</td><td>${barcode}</td><td>${name}</td><td>${price}</td><td>${is_on_bolt}</td></tr>
+                `;
+            };
+            let table = `
+                <table class="table table-hover table-sm"><thead>
+                <tr>
+                    <th>GROUP</th>
+                    <th>SUB GROUP</th>
+                    <th>BARCODE</th>
+                    <th>NAME</th>
+                    <th>INVENTORY PRICE</th>
+                    <th>IS_ON_BOLT</th>
+                </tr>
+            </thead>
+            <tbody id="tbody">
+            </tbody>${tr}</table>
+            `;
+
+            $('.card-body').html(table)
+        } else {
+            $('#pagebody').html(response['message'])
+        }
+    }
+
+    export_retail_products(pk='*') {
+        $('#loader').show()
+
+        let payload = {
+            module:'retail_products',
+            data: {
+                'doc':'excel',
+                product:pk
+            }
+        };
+        let request = api.call('VIEW',payload,'/retail/api/');
+        if(anton.IsRequest(request)){
+
+            kasa.html(`<a href="/${request['message']}">Download File</a>`)
+
+        } else {
+            kasa.error(request['message'])
+        }
+
+        $('#loader').hide()
+    }
 }
 
 const retail = new Retail();

@@ -119,7 +119,7 @@ def interface(request):
                 ServiceCard(client=client, task=task, owner=owner,
                             remarks=f"{service.name}/{service_sub.name}/{ticket_title}",
                             service=service, service_sub=service_sub,
-                            technician=technician, ticket=ticket, importance=importance, cardno=cardno,app=app).save()
+                            technician=technician, ticket=ticket, importance=importance, cardno=cardno, app=app).save()
 
                 just_service_card = ServiceCard.objects.all().last()
 
@@ -136,7 +136,7 @@ def interface(request):
                     ServiceMaterials(line=line, item=item, description=description, price=price, quantity=quantity,
                                      total_price=total_price, service_card=just_service_card).save()
 
-                tech_number = tech_adon.phone.replace('+233','0')
+                tech_number = tech_adon.phone.replace('+233', '0')
                 # queue SMS
                 sms_api = SmsApi.objects.get(is_default=1)
                 Sms(api=SmsApi.objects.get(is_default=1),
@@ -301,7 +301,7 @@ def interface(request):
                             'fullname': f"{card.client.first_name} {card.client.last_name}",
                             'phone': UserAddOns.objects.get(user=card.client).phone
                         },
-                        'app':card.app_details(),
+                        'app': card.app_details(),
                         'owner': {
                             'pk': card.owner.pk,
                             'username': card.owner.username,
@@ -355,7 +355,7 @@ def interface(request):
                             'count': 0,
                             'code': 0
                         },
-                        'task':{
+                        'task': {
                             'uni': card.task.uni
                         }
                     }

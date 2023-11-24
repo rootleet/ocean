@@ -7,11 +7,12 @@ from django.db.models import Q
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from fpdf import FPDF
+from sympy import Product
 
 from admin_panel.models import Emails
 from ocean.settings import RET_DB_HOST, RET_DB_USER, RET_DB_PASS, RET_DB_NAME
 from retail.db import ret_cursor, get_stock
-from retail.models import BoltItems, BoltGroups
+from retail.models import BoltItems, BoltGroups, ProductSupplier, ProductGroup, ProductSubGroup, Products, Stock
 
 
 @csrf_exempt
@@ -67,6 +68,154 @@ def interface(request):
                 except Exception as e:
                     pass
                 success_response['message'] = BoltGroups.objects.get(name=name).pk
+
+            elif module == 'sync_retail_suppliers':
+                query = "select supp_code as 'code',supp_name as 'name',contact as 'person',phone1 as 'phone',address1 as 'email',address2 as 'city',country_id as 'country' from supplier"
+                cursor = ret_cursor()
+                cursor.execute(query)
+                counts = 0
+                not_counted = 0
+                for supplier in cursor.fetchall():
+                    code = supplier[0].strip()
+                    name = supplier[1].strip()
+                    person = supplier[2].strip()
+                    phone = '' if supplier[3] is None else supplier[3].strip()
+                    email = '' if supplier[4] is None else supplier[4].strip()
+                    city = '' if supplier[5] is None else supplier[5].strip()
+                    country = '' if supplier[6] is None else supplier[6].strip()
+
+                    try:
+                        supp, create = ProductSupplier.objects.get_or_create(code=code, name=name, phone=phone,
+                                                                             person=person,
+                                                                             email=email, city=city, country=country)
+                        counts = counts + 1
+                    except Exception as e:
+                        not_counted = not_counted + 1
+
+                success_response['message'] = f"{counts} / {counts + not_counted} suppliers synced"
+                response = success_response
+
+            elif module == 'sync_retail_groups':
+                query = f"select group_code,group_des from group_mast"
+                cursor = ret_cursor()
+                cursor.execute(query)
+                count = 0
+                not_counted = 0
+
+                for group in cursor.fetchall():
+                    code, name = group[0].strip(), group[1].strip()
+                    try:
+                        get, add = ProductGroup.objects.get_or_create(code=code, name=name)
+                        count = count + 1
+                    except Exception as e:
+                        not_counted = not_counted + 1
+
+                success_response['message'] = f"{count} / {count + not_counted} groups synced"
+                response = success_response
+
+            elif module == 'sync_retail_sub_groups':
+                cursor = ret_cursor()
+                query = f"SELECT group_code,(select group_des from group_mast where group_code = sub_group.group_code) as 'group', sub_group,sub_group_des from sub_group"
+                cursor.execute(query)
+                count = 0
+                not_counted = 0
+                errors = []
+
+                for sub_group in cursor.fetchall():
+
+                    group_code, group_des, sub_group_code, sub_group_des = sub_group[0], sub_group[1].strip(), \
+                        sub_group[2].strip(), sub_group[3].strip()
+                    group, add = ProductGroup.objects.get_or_create(code=group_code, name=group_des)
+
+                    if add:
+                        group = ProductGroup.objects.get(code=group_code, name=group_des)
+
+                    try:
+                        sub, create = ProductSubGroup.objects.get_or_create(group=group, code=sub_group_code,
+                                                                            name=sub_group_des)
+                        count = count + 1
+                    except Exception as e:
+                        errors.append(e)
+                        not_counted = not_counted + 1
+
+                success_response['message'] = f"{count} / {count + not_counted} sub groups synced with errors {errors}"
+                response = success_response
+
+            elif module == 'sync_retail_products':
+                cursor = ret_cursor()
+                query = "SELECT item_code, barcode, item_des, (SELECT group_des FROM group_mast WHERE group_mast.group_code = prod_mast.group_code) AS 'group', (SELECT sub_group_des FROM sub_group WHERE sub_group.group_code = prod_mast.group_code AND sub_group.sub_group = prod_mast.sub_group) AS 'sub_group', (SELECT supp_name FROM supplier WHERE supplier.supp_code = prod_mast.supp_code) AS 'supplier', retail1 FROM prod_mast WHERE item_type != 0"
+                cursor.execute(query)
+                saved = 0
+                not_synced = 0
+                for product in cursor.fetchall():
+                    code = product[0]
+                    barcode = str(product[1]).strip()
+                    item_des = product[2].strip()
+                    group = product[3]
+                    sub_group = product[4].strip()
+                    supplier = product[5]
+                    retail1 = product[6]
+
+                    # add to products
+
+                    if ProductSubGroup.objects.filter(name=sub_group).count() == 1:
+                        subgroup = ProductSubGroup.objects.get(name=sub_group)
+                        save, create = Products.objects.get_or_create(subgroup=subgroup, name=item_des, barcode=barcode,
+                                                                      code=code, price=retail1)
+                        saved = saved + 1
+                    else:
+                        not_synced = not_synced + 1
+
+                success_response['message'] = f"{saved} / {saved + not_synced} products synced"
+                response = success_response
+
+            elif module == 'update_stock':
+                products = Products.objects.all()
+                for product in products:
+                    barcode = product.barcode.strip()
+                    item_code = product.code
+
+                    stock = get_stock(item_code)
+                    print(product.name, stock)
+                    spintex = stock.get('spintex')
+                    nia = stock.get('nia')
+                    osu = stock.get('osu')
+                    warehouse = stock.get('warehouse')
+                    kitchen = stock.get('kitchen')
+                    if Stock.objects.filter(product=product, location='001').exists():
+                        stock = Stock.objects.get(product=product, location='001')
+                        stock.quantity = spintex
+                        stock.save()
+                    else:
+                        Stock.objects.create(product=product, quantity=spintex, location='001')
+
+                    if Stock.objects.filter(product=product, location='202').exists():
+                        stock = Stock.objects.get(product=product, location='202')
+                        stock.quantity = spintex
+                        stock.save()
+                    else:
+                        Stock.objects.create(product=product, quantity=nia, location='202')
+
+                    if Stock.objects.filter(product=product, location='205').exists():
+                        stock = Stock.objects.get(product=product, location='205')
+                        stock.quantity = spintex
+                        stock.save()
+                    else:
+                        Stock.objects.create(product=product, quantity=osu, location='205')
+
+                    if Stock.objects.filter(product=product, location='999').exists():
+                        stock = Stock.objects.get(product=product, location='999')
+                        stock.quantity = spintex
+                        stock.save()
+                    else:
+                        Stock.objects.create(product=product, quantity=warehouse, location='999')
+
+                    if Stock.objects.filter(product=product, location='201').exists():
+                        stock = Stock.objects.get(product=product, location='201')
+                        stock.quantity = spintex
+                        stock.save()
+                    else:
+                        Stock.objects.create(product=product, quantity=kitchen, location='201')
 
         elif method == 'VIEW':
             if module == 'bolt_products':
@@ -363,6 +512,155 @@ def interface(request):
 
                 response = success_response
 
+            elif module == 'retail_categories':
+                import openpyxl
+                document = data.get('doc')
+                group_id = data.get('group_id') or '*'
+
+                if group_id == '*':
+                    groups = ProductGroup.objects.all()
+                else:
+                    groups = ProductGroup.objects.filter(pk=group_id)
+
+                arr = []
+
+                book = openpyxl.Workbook()
+                sheet = book.active
+                sheet.title = 'CATEGORIES'
+                sheet['A1'] = 'CODE'
+                sheet['B1'] = 'NAME'
+                sheet['C1'] = 'SUBS'
+                sheet_count = 2
+
+                for group in groups:
+                    if document == 'json':
+                        arr.append({
+                            'code': group.code,
+                            'name': group.name,
+                            'subs': group.subgroups().count()
+                        })
+                    elif document == 'excel':
+                        sheet[f"A{sheet_count}"] = group.code
+                        sheet[f"B{sheet_count}"] = group.name
+                        sheet[f"C{sheet_count}"] = group.subgroups().count()
+                        sheet_count += 1
+
+                if document == 'json':
+                    success_response['message'] = arr
+                elif document == 'excel':
+                    file_name = 'static/general/tmp/categories.xlsx'
+                    book.save(file_name)
+                    success_response['message'] = file_name
+
+            elif module == 'retail_sub_categories':
+                import openpyxl
+                document = data.get('doc')
+                sub_group_id = data.get('sub_group_id') or '*'
+                if sub_group_id == '*':
+                    sub_groups = ProductSubGroup.objects.all()
+                else:
+                    sub_groups = ProductSubGroup.objects.filter(pk=sub_group_id)
+
+                arr = []
+                book = openpyxl.Workbook()
+                sheet = book.active
+                sheet.title = "SUB CATEGORIES"
+                sheet['A1'] = "GROUP"
+                sheet['B1'] = "CODE"
+                sheet['C1'] = "NAME"
+                sheet['D1'] = "PRODUCTS"
+
+                sheet_count = 2
+
+                for sub_group in sub_groups:
+                    group = sub_group.group
+                    code = sub_group.code
+                    name = sub_group.name
+                    products = sub_group.products().count()
+
+                    if document == 'json':
+                        arr.append(
+                            {'pk': sub_group.pk, 'group': group.name, 'code': code, 'name': name, 'products': products})
+                    elif document == 'excel':
+                        sheet[f"A{sheet_count}"] = group.name
+                        sheet[f"B{sheet_count}"] = code
+                        sheet[f"C{sheet_count}"] = name
+                        sheet[f"D{sheet_count}"] = products
+
+                if document == 'json':
+                    success_response['message'] = arr
+                elif document == 'excel':
+                    file_name = 'static/general/tmp/sub_categories.xlsx'
+                    book.save(file_name)
+                    success_response['message'] = file_name
+
+            elif module == 'retail_products':
+                import openpyxl
+                product = data.get('product') or '*'
+                document = data.get('doc') or 'json'
+
+                if product == '*':
+                    products = Products.objects.all()
+                else:
+                    products = Products.objects.filter(pk=product)
+
+                book = openpyxl.Workbook()
+                sheet = book.active
+                sheet.title = 'Products'
+
+                sheet['A1'] = 'Group'
+                sheet['B1'] = 'Sub Group'
+                sheet['C1'] = 'Code'
+                sheet['D1'] = 'Barcode'
+                sheet['E1'] = 'Name'
+                sheet['F1'] = 'Price'
+                sheet['G1'] = 'IS_ON_BOLT'
+                sheet_count = 2
+                arr = []
+
+                for product in products:
+                    sub_group = product.subgroup
+                    group = sub_group.group.name
+                    sub_name = sub_group.name
+                    code = product.code
+                    barcode = product.barcode.strip()
+                    name = product.name
+                    price = product.price
+                    pk = product.pk
+                    bolt = product.is_on_bolt()
+
+                    # check if on bolt
+
+                    if document == 'json':
+                        arr.append({
+                            'pk': pk,
+                            'group': group,
+                            'sub_group': sub_name,
+                            'code': code,
+                            'barcode': barcode,
+                            'name': name,
+                            'price': price,
+                            'is_on_bolt': bolt
+                        })
+                    elif document == 'excel':
+                        sheet['A' + str(sheet_count)] = group
+                        sheet['B' + str(sheet_count)] = sub_name
+                        sheet['C' + str(sheet_count)] = code
+                        sheet['D' + str(sheet_count)] = barcode
+                        sheet['E' + str(sheet_count)] = name
+                        sheet['F' + str(sheet_count)] = price
+                        sheet['G' + str(sheet_count)] = bolt
+                        sheet_count += 1
+
+                if document == 'json':
+                    success_response['message'] = arr
+                elif document == 'excel':
+                    file_name = 'static/general/tmp/products.xlsx'
+                    book.save(file_name)
+                    success_response['message'] = file_name
+
+
+
         elif method == 'PATCH':
             if module == 'price_update':
                 items = BoltItems.objects.all()
@@ -377,7 +675,6 @@ def interface(request):
                     if row is not None:
                         retail1 = row[0]
 
-
                     item.price = retail1
                     item.save()
 
@@ -391,4 +688,4 @@ def interface(request):
         response[
             "message"] = f"An error of type {error_type} occurred on line {line_number} in file {tb_path}. Details: {e}"
 
-    return JsonResponse(response)
+    return JsonResponse(response, safe=False)

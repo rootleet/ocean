@@ -5,9 +5,24 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ffcbf13e-d396-4071-9a24-4014a690f966" name="Changes" comment="mail send v2">
+      <change afterPath="$PROJECT_DIR$/cronjobs/retail/sync_retail_groups.sh" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cronjobs/retail/sync_retail_products.sh" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cronjobs/retail/sync_retail_sub_groups.sh" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cronjobs/retail/sync_retail_suppliers.sh" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/general/tmp/categories.xlsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/general/tmp/products.xlsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/general/tmp/sub_categories.xlsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/retail/products.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ocean/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/ocean/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/reports/reports_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/reports/reports_api.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/retail/db.py" beforeDir="false" afterPath="$PROJECT_DIR$/retail/db.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/retail/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/retail/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/retail/retail_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/retail/retail_api.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/retail/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/retail/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/retail/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/retail/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/servicing/servicing_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/servicing/servicing_api.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/general/js/classes/retail.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/general/js/classes/retail.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/retail/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/retail/base.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -62,38 +77,38 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
-    &quot;Notification.DisplayName-DoNotAsk-JavaScript: Code Vision Performance&quot;: &quot;JavaScript: code vision performance watcher&quot;,
-    &quot;Notification.DoNotAsk-JavaScript: Code Vision Performance&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.OpenDjangoStructureViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/reza/Documents/GitHub/ocean/cronjobs&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "DefaultHtmlFileTemplate": "HTML File",
+    "Notification.DisplayName-DoNotAsk-JavaScript: Code Vision Performance": "JavaScript: code vision performance watcher",
+    "Notification.DoNotAsk-JavaScript: Code Vision Performance": "true",
+    "RunOnceActivity.OpenDjangoStructureViewOnStart": "true",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "C:/Users/reza/Documents/GitHub/ocean/cronjobs/retail",
+    "node.js.detected.package.eslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "vue.rearranger.settings.migration": "true"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;DatabaseDriversLRU&quot;: [
-      &quot;mysql&quot;
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "mysql"
     ]
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\reza\Documents\GitHub\ocean\cronjobs\retail" />
+      <recent name="C:\Users\reza\Documents\GitHub\ocean\templates\retail" />
       <recent name="C:\Users\reza\Documents\GitHub\ocean\cronjobs" />
       <recent name="C:\Users\reza\Documents\GitHub\ocean\static\apps\logos" />
       <recent name="C:\Users\reza\Documents\GitHub\ocean\templates\servicing" />
-      <recent name="C:\Users\reza\Documents\GitHub\ocean\templates\crn" />
-      <recent name="C:\Users\reza\Documents\GitHub\ocean\crm" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\reza\Documents\GitHub\ocean\static\general\js\classes" />
@@ -275,23 +290,9 @@
       <workItem from="1700651669115" duration="17426000" />
       <workItem from="1700681445725" duration="144000" />
       <workItem from="1700681646693" duration="17438000" />
-      <workItem from="1700739782953" duration="457000" />
-    </task>
-    <task id="LOCAL-00023" summary="crm">
-      <option name="closed" value="true" />
-      <created>1696213837093</created>
-      <option name="number" value="00023" />
-      <option name="presentableId" value="LOCAL-00023" />
-      <option name="project" value="LOCAL" />
-      <updated>1696213837093</updated>
-    </task>
-    <task id="LOCAL-00024" summary="crm">
-      <option name="closed" value="true" />
-      <created>1696239736641</created>
-      <option name="number" value="00024" />
-      <option name="presentableId" value="LOCAL-00024" />
-      <option name="project" value="LOCAL" />
-      <updated>1696239736641</updated>
+      <workItem from="1700739782953" duration="782000" />
+      <workItem from="1700740974189" duration="1731000" />
+      <workItem from="1700758441005" duration="14149000" />
     </task>
     <task id="LOCAL-00025" summary="crm">
       <option name="closed" value="true" />
@@ -669,7 +670,23 @@
       <option name="project" value="LOCAL" />
       <updated>1700735839404</updated>
     </task>
-    <option name="localTasksCounter" value="72" />
+    <task id="LOCAL-00072" summary="mail send v2">
+      <option name="closed" value="true" />
+      <created>1700740465480</created>
+      <option name="number" value="00072" />
+      <option name="presentableId" value="LOCAL-00072" />
+      <option name="project" value="LOCAL" />
+      <updated>1700740465481</updated>
+    </task>
+    <task id="LOCAL-00073" summary="mail send v2">
+      <option name="closed" value="true" />
+      <created>1700740472942</created>
+      <option name="number" value="00073" />
+      <option name="presentableId" value="LOCAL-00073" />
+      <option name="project" value="LOCAL" />
+      <updated>1700740472942</updated>
+    </task>
+    <option name="localTasksCounter" value="74" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

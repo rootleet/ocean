@@ -489,6 +489,24 @@
         </a>
       </li>
 
+        <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#prod-nav" data-bs-toggle="collapse" href="#">
+          <i class="bx bx-food-menu"></i><span>Products</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="prod-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <a href="{% url 'products' %}">
+              <i class="bi bi-circle"></i><span>Products List</span>
+            </a>
+          </li>
+            <li>
+            <a href="{% url 'bolt_groups' %}">
+              <i class="bi bi-alarm-fill"></i><span>Categories</span>
+            </a>
+          </li>
+
+        </ul>
+      </li>
 
 
         <li class="nav-item">
