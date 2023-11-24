@@ -15,7 +15,7 @@ class MeetingHD(models.Model):
     end_date = models.DateField()
     end_time = models.TimeField()
 
-    # document = models.TextField(default='NULL')
+    document = models.TextField(default='NULL')
 
     created_date = models.DateField(auto_now_add=True)
     created_time = models.TimeField(auto_now=True)
