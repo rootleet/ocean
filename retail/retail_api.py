@@ -185,37 +185,37 @@ def interface(request):
                     warehouse = stock.get('warehouse')
                     kitchen = stock.get('kitchen')
                     if Stock.objects.filter(product=product, location='001').exists():
-                        stock = Stock.objects.get(product=product, location='001')
-                        stock.quantity = spintex
-                        stock.save()
+                        sp_stock = Stock.objects.get(product=product, location='001')
+                        sp_stock.quantity = spintex
+                        sp_stock.save()
                     else:
                         Stock.objects.create(product=product, quantity=spintex, location='001')
 
                     if Stock.objects.filter(product=product, location='202').exists():
-                        stock = Stock.objects.get(product=product, location='202')
-                        stock.quantity = spintex
-                        stock.save()
+                        stock202 = Stock.objects.get(product=product, location='202')
+                        stock202.quantity = spintex
+                        stock202.save()
                     else:
                         Stock.objects.create(product=product, quantity=nia, location='202')
 
                     if Stock.objects.filter(product=product, location='205').exists():
-                        stock = Stock.objects.get(product=product, location='205')
-                        stock.quantity = spintex
-                        stock.save()
+                        stock205 = Stock.objects.get(product=product, location='205')
+                        stock205.quantity = spintex
+                        stock205.save()
                     else:
                         Stock.objects.create(product=product, quantity=osu, location='205')
 
                     if Stock.objects.filter(product=product, location='999').exists():
-                        stock = Stock.objects.get(product=product, location='999')
-                        stock.quantity = spintex
-                        stock.save()
+                        stock999 = Stock.objects.get(product=product, location='999')
+                        stock999.quantity = spintex
+                        stock999.save()
                     else:
                         Stock.objects.create(product=product, quantity=warehouse, location='999')
 
                     if Stock.objects.filter(product=product, location='201').exists():
-                        stock = Stock.objects.get(product=product, location='201')
-                        stock.quantity = spintex
-                        stock.save()
+                        stock201 = Stock.objects.get(product=product, location='201')
+                        stock201.quantity = spintex
+                        stock201.save()
                     else:
                         Stock.objects.create(product=product, quantity=kitchen, location='201')
 
