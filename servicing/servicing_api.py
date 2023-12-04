@@ -356,7 +356,7 @@ def interface(request):
                             'code': 0
                         },
                         'task': {
-                            'uni': card.task.uni
+                            'uni': card.task.uni or 'none'
                         }
                     }
 
