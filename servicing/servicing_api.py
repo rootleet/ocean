@@ -266,7 +266,10 @@ def interface(request):
                     print(cardpk)
                     materials = []
                     ticket_trans = []
-
+                    if card.task is None:
+                        uni = cardno
+                    else:
+                        uni = card.task.uni
                     for material in card.materials():
                         materials.append({
                             'line': material.line,
@@ -356,7 +359,7 @@ def interface(request):
                             'code': 0
                         },
                         'task': {
-                            'uni': card.task.uni or 'none'
+                            'uni': uni
                         }
                     }
 
