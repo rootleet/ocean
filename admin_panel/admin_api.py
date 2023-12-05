@@ -614,7 +614,7 @@ def index(request):
                     f"<strong>Email</strong> : {user.email}<br>"
                     f"<strong>Password</strong> : {new_password}<br>")
                 sms_message = (f"Your password for ocean has been reset, please logon using the crecentials below \n"
-                               f"USERNAME: {user.user.username}\n"
+                               f"USERNAME: {user.username}\n"
                                f"Password:{new_password}")
                 mail_api = MailSenders.objects.get(is_default=True)
                 user.save()
