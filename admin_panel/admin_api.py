@@ -620,7 +620,7 @@ def index(request):
                 user.save()
                 MailQueues(sender=mail_api, recipient=user.email, cc='solomon@snedaghana.com',
                            subject="PASSWORD RESET FOR OCEAN", body=email_template).save()
-                Sms(api_key=SmsApi.objects.get(is_default=1),to=addon.phone,message=sms_message).save()
+                Sms(api=SmsApi.objects.get(is_default=1),to=addon.phone,message=sms_message).save()
 
 
         elif method == 'DELETE':  # delete
