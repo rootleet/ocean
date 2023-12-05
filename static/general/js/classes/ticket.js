@@ -22,18 +22,9 @@ class Ticket {
             }
         }
 
-        let call = api.put(data)
+        let call = api.put(data);
+         kasa.confirm(call['message'],1,'here')
 
-        if(isJson(JSON.stringify(call))){
-
-            let resp = call
-
-            alert(resp['message'])
-            kasa.confirm(resp['message'],1,'here')
-
-        } else {
-            al('error',"Unexpected Response")
-        }
       }
 
 
