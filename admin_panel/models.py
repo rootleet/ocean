@@ -449,7 +449,7 @@ class TicketHd(models.Model):
     created_on = models.DateTimeField(auto_now_add=True)
     edited_on = models.DateTimeField(auto_now=True)
     status = models.IntegerField(default=0)
-    app = models.TextField(default='Unknown')
+    # app = models.TextField(default='Unknown')
 
     def transactions(self):
         return TicketTrans.objects.filter(ticket=self).order_by('-pk')
