@@ -2135,7 +2135,7 @@ def ticket(request):
     context = {
         'nav': True,
         'ticket_count': TicketHd.objects.filter(owner=request.user).count(),
-        'my_tickets': TicketHd.objects.filter(owner=request.user).order_by('status'),
+        'my_tickets': TicketHd.objects.filter(owner=request.user).order_by('-created_on'),
         'apps': App.objects.all().order_by('name'),
         'page': {
             'title': 'My Tickets'
