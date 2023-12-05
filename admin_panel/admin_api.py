@@ -622,6 +622,33 @@ def index(request):
                            subject="PASSWORD RESET FOR OCEAN", body=email_template).save()
                 Sms(api=SmsApi.objects.get(is_default=1),to=addon.phone,message=sms_message).save()
 
+            elif module == 'all_password_reset':
+                users = UserAddOns.objects.all()
+                for user in users:
+                    us = user.user
+                    # generate new password
+                    new_password = generate_random_password()
+                    us.set_password(new_password)
+
+                    email_template = (
+                        f"Dear {us.get_full_name()}, your password has been reset to <strong>{new_password}</strong>."
+                        f" Logon to <a href='http://ocean.snedaghana.loc'>OCEAN</a> with credentials below<br>"
+                        f"<strong>Username</strong> : {us.username}<br>"
+                        f"<strong>Email</strong> : {us.email}<br>"
+                        f"<strong>Password</strong> : {new_password}<br>")
+                    sms_message = (
+                        f"Your password for ocean has been reset, please logon using the crecentials below \n"
+                        f"USERNAME: {us.username}\n"
+                        f"Password:{new_password}")
+                    mail_api = MailSenders.objects.get(is_default=True)
+                    us.save()
+                    MailQueues(sender=mail_api, recipient=us.email, cc='solomon@snedaghana.com',
+                               subject="PASSWORD RESET FOR OCEAN", body=email_template).save()
+                    Sms(api=SmsApi.objects.get(is_default=1), to=user.phone, message=sms_message).save()
+
+                success_response['message'] = "All Passwords Reset"
+                response = success_response
+
 
         elif method == 'DELETE':  # delete
 
