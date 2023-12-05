@@ -601,7 +601,7 @@ def index(request):
             elif module == 'rest_password':
                 pk = data.get('user')
                 user = User.objects.get(pk=pk)
-
+                addon = UserAddOns.objects.get(user=user)
                 # generate new password
                 new_password = generate_random_password()
                 user.set_password(new_password)
@@ -612,10 +612,14 @@ def index(request):
                     f"<strong>Username</strong> : {user.username}<br>"
                     f"<strong>Email</strong> : {user.email}<br>"
                     f"<strong>Password</strong> : {new_password}<br>")
+                sms_message = (f"Your password for ocean has been reset, please logon using the crecentials below \n"
+                               f"USERNAME: {user.user.username}\n"
+                               f"Password:{new_password}")
                 mail_api = MailSenders.objects.get(is_default=True)
                 user.save()
                 MailQueues(sender=mail_api, recipient=user.email, cc='solomon@snedaghana.com',
                            subject="PASSWORD RESET FOR OCEAN", body=email_template).save()
+                Sms(api_key=SmsApi.objects.get(is_default=1),to=addon.phone,message=sms_message).save()
 
 
         elif method == 'DELETE':  # delete
