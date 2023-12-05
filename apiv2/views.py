@@ -106,10 +106,11 @@ def api_function(request):
                     owner = data.get('owner')
                     title = data.get('title')
                     descr = data.get('descr')
+                    app = data.get('app')
 
                     try:
                         own = User.objects.get(pk=owner)
-                        TicketHd(title=title, descr=descr, owner=own).save()
+                        TicketHd(title=title, descr=descr, owner=own,app=app).save()
                         # sms
                         smsapi = SmsApi.objects.get(is_default=1)
                         Sms(api=smsapi, to='0201998184',

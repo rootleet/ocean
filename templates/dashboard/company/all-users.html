@@ -123,11 +123,15 @@
                                             <td><span class="text-success">ac</span></td>
                                             <td>{{ this_user.last_login }}</td>
                                             <td>
-                                                {% if this_user.is_superuser == False %}
-                                                    <i class="pointer bx bx-recycle text-danger mr-2" onclick="user.Delete('{{ this_user.pk }}')"></i>
-                                                {% endif %}
-                                                <i data-bs-target="#chgDept{{ this_user.pk }}" data-bs-toggle="modal" title="Change Department" class="bx bx-group"></i>
-                                                <i title="Permissions" class="pointer bx bx-key text-warning" onclick="location.href='{% url 'user_permissions' this_user.username %}'"></i>
+                                                <div class="dropdown">
+                                                    <span data-toggle="dropdown" class="bx bx-collapse-horizontal"></span>
+                                                    <div class="dropdown-menu">
+                                                        <a class="dropdown-item text-danger" onclick="user.Delete('{{ this_user.pk }}')" href="javascript:void(0)">Disable</a>
+                                                        <a class="dropdown-item text-warning" onclick="user.resetPassword('{{ this_user.pk }}')" href="javascript:void(0)">Reset Password</a>
+                                                        <a class="dropdown-item text-secondary" data-bs-target="#chgDept{{ this_user.pk }}" data-bs-toggle="modal" href="javascript:void(0)">Department Set</a>
+                                                        <a class="dropdown-item text-primary" onclick="location.href='{% url 'user_permissions' this_user.username %}'"  href="javascript:void(0)">UAL</a>
+                                                    </div>
+                                                </div>
                                             </td>
                                         </tr>
 

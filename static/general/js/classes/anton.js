@@ -187,8 +187,12 @@ class Kasa {
 
   html(message){
       Swal.fire({
-          html:message
-      })
+            html: message,
+            customClass: {
+                content: 'text-left'
+            }
+        });
+
   }
 
   confirm(message,reload=0,to='/'){

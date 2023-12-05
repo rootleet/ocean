@@ -24,6 +24,20 @@ class User {
 
         return api.call('VIEW', payload, '/adapi/');
     }
+
+    resetPassword(key) {
+        let payload = {
+            'module':'rest_password',
+            data:{
+                user:key
+            }
+        }
+
+        console.table(payload)
+
+        let response = api.call('PATCH',payload,'/adapi/');
+        kasa.confirm(response['message'],1,'here');
+    }
 }
 
 const user = new User()

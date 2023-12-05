@@ -7,6 +7,7 @@ import babel.numbers
 import datetime
 import hashlib
 
+from django.apps.registry import Apps
 from django.contrib.auth import authenticate, login as auth_login, logout, get_user_model
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.models import Permission
@@ -23,6 +24,7 @@ from admin_panel.anton import push_notification, is_valid_password
 from admin_panel.form import NewProduct, NewLocation, LogIn, NewTicket, UploadFIle, SignUp, NewOu, NewUM, NewSMSApi, \
     NewBulkSms, NewDepartments
 from admin_panel.models import *
+from appscenter.models import App
 from blog.models import *
 from community.models import *
 from django.views.decorators.csrf import csrf_exempt
@@ -332,7 +334,6 @@ def sign_up(request):
                               f"Reset your password and login with the link below <br>" \
                               f"<a target='_blank' href='http://ocean.snedaghana.loc/profile/restpwrod/{resettoken}/'>http://ocean.snedaghana.loc/profile/restpwrod/{resettoken}/</a> "
                     email_from = settings.EMAIL_HOST_USER
-
 
                     # log sms
                     sms_api = SmsApi.objects.get(is_default=1)
@@ -946,6 +947,7 @@ def task_filter(request):
             'domain': tags.objects.all()
         }
         return render(request, 'dashboard/all_task.html', context=context)
+
 
 @login_required()
 def emails(request):
@@ -2118,7 +2120,7 @@ def profile(request):
     context = {
         'user': user,
         'ad_on': UserAddOns.objects.get(user=user.pk),
-        'nav':True
+        'nav': True
     }
     return render(request, 'dashboard/profile/profile.html', context=context)
 
@@ -2134,6 +2136,7 @@ def ticket(request):
         'nav': True,
         'ticket_count': TicketHd.objects.filter(owner=request.user).count(),
         'my_tickets': TicketHd.objects.filter(owner=request.user).order_by('status'),
+        'apps': App.objects.all().order_by('name'),
         'page': {
             'title': 'My Tickets'
         }
@@ -2178,6 +2181,7 @@ def make_ticket(request):
             return HttpResponse(form)
 
 
+@login_required()
 def all_users(request):
     page['title'] = 'Users'
     context = {

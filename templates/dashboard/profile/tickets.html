@@ -4,7 +4,7 @@
 {% block body %}
     <div class="container">
         <div class="modal fade" id="openTicket">
-            <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-dialog modal-dialog-centered">
                 <div  class="modal-content">
                     <input type="hidden" name="owner" id="owner" value="{{ user.pk }}">
                     {% csrf_token %}
@@ -13,10 +13,16 @@
                     </div>
                     <div class="modal-body p-2">
                         <div class="w-100 p-2">
-                            <label class="w-100 mb-2">Title
-                                <input type="text" name="title" id="title" required class="form-control rounded-0">
-                            </label>
-                        <label for="description">Description</label><textarea  name="descr" id="description" cols="30" rows="10" class="form-control mb-2 rounded-0"></textarea>
+                            <div class="w-100 d-flex flex-wrap justify-content-between">
+                                <label class="w-45 mb-2">TITLE
+                                    <input type="text" name="title" id="title" required class="form-control rounded-0">
+                                </label>
+                                <div class="w-45">
+                                    <label for="app" class="w-100">APPLICATION</label>
+                                    <input type="text" name="app" class="form-control rounded-0" id="app">
+                                </div>
+                            </div>
+                        <label for="description">DESCRIPTION</label><textarea  name="descr" id="description" cols="30" rows="10" class="form-control mb-2 rounded-0"></textarea>
 
 {#                            <input type="file" name="media" multiple class="form-control">#}
 {#                            <input type="hidden" name="doc" value="TIK">#}
@@ -52,6 +58,7 @@
                             <table class="table table-hover datatable table-sm table-bordered border-info">
                                 <thead class="thead-dark border">
                                     <tr>
+                                        <th>App</th>
                                         <th>Title</th>
                                         <th>Description</th>
                                         <th>Status</th>
@@ -62,6 +69,7 @@
                                 <tbody>
                                     {% for ticket in my_tickets %}
                                         <tr>
+                                            <td>{{ ticket.app }}</td>
                                             <td>{{ ticket.title }}</td>
                                             <td>{{ ticket.descr | slice:':30' }}</td>
                                             <td>

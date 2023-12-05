@@ -7,8 +7,9 @@ class Ticket {
         var owner = $('#owner').val().trim();
           var title = $('#title').val().trim();
           var description = $('#description').val().trim();
+          let app = $('#app').val()
 
-      if (owner === '' || title === '' || description === '') {
+      if (owner === '' || title === '' || description === '' || app === '') {
         alert('Please fill in all the fields');
       } else {
         let data = {
@@ -16,7 +17,8 @@ class Ticket {
             "data":{
                 "owner":owner,
                 "title":title,
-                "descr":description
+                "descr":description,
+                'app':app
             }
         }
 
@@ -27,8 +29,7 @@ class Ticket {
             let resp = call
 
             alert(resp['message'])
-
-            location.reload()
+            kasa.confirm(resp['message'],1,'here')
 
         } else {
             al('error',"Unexpected Response")

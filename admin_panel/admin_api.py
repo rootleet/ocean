@@ -7,7 +7,7 @@ from django.contrib.auth.models import User, Permission
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
-from admin_panel.anton import remove_html_tags
+from admin_panel.anton import remove_html_tags, generate_random_password
 from admin_panel.cron_exe import execute_script
 from admin_panel.models import GeoCity, GeoCitySub, Reminder, SmsApi, UserAddOns, EvatCredentials, Locations, \
     Departments, TicketTrans, Sms, TicketHd, MailSenders, MailQueues
@@ -204,12 +204,13 @@ def index(request):
                 is_tls = data.get('is_tls')
                 owner = User.objects.get(pk=data['mypk'])
 
-                MailSenders(host=host, port=port, address=address,password=password, is_default=is_default, is_tls=is_tls,owner=owner).save()
+                MailSenders(host=host, port=port, address=address, password=password, is_default=is_default,
+                            is_tls=is_tls, owner=owner).save()
                 success_response['message'] = "Sender Added"
                 response = success_response
 
             elif module == 'que_mail':
-                print(data)
+
                 sender = MailSenders.objects.get(pk=data.get('sender'))
                 recipient = data.get('recipient')
                 subject = data.get('subject')
@@ -218,6 +219,21 @@ def index(request):
                 MailQueues(sender=sender, recipient=recipient, subject=subject, body=body, cc=cc).save()
                 success_response['message'] = "Mail Added To Que"
                 response = success_response
+
+            elif module == 'broadcast_mail':
+                sender = MailSenders.objects.get(is_default=True)
+                users = UserAddOns.objects.all()
+                message = data.get('body')
+                subject = data.get('subject')
+                for user in users:
+                    us = user.user
+                    email = us.email
+                    body = message.replace('%name%', f"{us.get_full_name()}")
+                    MailQueues(sender=sender, recipient=email,subject=subject, body=body,cc='').save()
+
+                success_response['message'] = "Mail Added To Broadcast"
+                response = success_response
+
 
             else:
                 response['status_code'] = 503
@@ -463,10 +479,10 @@ def index(request):
 
                 for sender in senders:
                     arr.append({
-                        'host':sender.host,
-                        'port':sender.port,
-                        'address':sender.address,
-                        'pk':sender.pk
+                        'host': sender.host,
+                        'port': sender.port,
+                        'address': sender.address,
+                        'pk': sender.pk
                     })
 
                 success_response['message'] = arr
@@ -581,6 +597,25 @@ def index(request):
                 location.save()
 
                 response = success_response
+
+            elif module == 'rest_password':
+                pk = data.get('user')
+                user = User.objects.get(pk=pk)
+
+                # generate new password
+                new_password = generate_random_password()
+                user.set_password(new_password)
+
+                email_template = (
+                    f"Dear {user.get_full_name()}, your password has been reset to <strong>{new_password}</strong>."
+                    f" Logon to <a href='http://ocean.snedaghana.loc'>OCEAN</a> with credentials below<br>"
+                    f"<strong>Username</strong> : {user.username}<br>"
+                    f"<strong>Email</strong> : {user.email}<br>"
+                    f"<strong>Password</strong> : {new_password}<br>")
+                mail_api = MailSenders.objects.get(is_default=True)
+                user.save()
+                MailQueues(sender=mail_api, recipient=user.email, cc='solomon@snedaghana.com',
+                           subject="PASSWORD RESET FOR OCEAN", body=email_template).save()
 
 
         elif method == 'DELETE':  # delete

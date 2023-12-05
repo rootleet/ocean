@@ -79,3 +79,11 @@ def make_md5_hash(text):
     formatted_datetime = current_datetime.strftime("%Y_%m_%d_%H_%M_%S")
     new_text = f"{text}{formatted_datetime}"
     return hashlib.md5(new_text.encode('utf-8')).hexdigest()
+
+
+def generate_random_password():
+    import secrets
+    import string
+    characters = string.ascii_letters + string.digits  # Use letters and digits
+    random_password = ''.join(secrets.choice(characters) for i in range(8))
+    return random_password

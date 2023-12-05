@@ -3,6 +3,24 @@
 
 {% block body %}
 
+    <div class="modal" id="broadcast">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <strong class="modal-title">EMAIL BROADCASTING</strong>
+                </div>
+                <div class="modal-body">
+                    <label for="subject">SUBJECT</label><input type="text" class="form-control rounded-0 mb-2" id="subject">
+
+                    <label for="body"></label><textarea id="body" name="article_desc" class="tinymce-editor"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-success" onclick="email.do_broadcast()">SEND</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="card-header">
         <strong class="card-title">EMAILS</strong>
     </div>
@@ -66,13 +84,14 @@
                             <div class="w-100 d-flex flex-wrap">
                                 <div class="w-50"><strong class="card-title">MAIL LOGS</strong></div>
                                 <div class="w-50 d-flex flex-wrap align-content-center justify-content-end">
+                                    <button data-bs-toggle="modal" style="margin-right:5px " data-bs-target="#broadcast" class="btn btn-info"><i class="fa fa-broadcast-tower"></i></button>
                                     <button onclick="email.new_email_screen()" title="NEW EMAIL" class="btn btn-info rounded-0" style="margin-right:5px "><i class="fa fa-envelope"></i></button>
                                     <button onclick="email.sync_mails()" class="btn btn-warning rounded-0"><i class="fa fa-sync"></i></button>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="card-body">
+                        <div class="card-body overflow-auto">
                             {% if emails.count > 0 %}
                                 <table class="table-sm table table-bordered table-hover table-striped">
                                     <thead>
@@ -88,7 +107,7 @@
                                     <tbody>
                                         {% for email in emails %}
                                             <tr>
-                                                <td>{{ email.sender.address }}</td>
+                                                <td><span><i onclick="kasa.html(`{{ email.body }}`)" class="fa fa-envelope-open text-info pointer"></i></span> {{ email.sender.address }}</td>
                                                 <td>{{ email.recipient }}</td>
                                                 <td>{{ email.copied }}</td>
                                                 <td>{{ email.attachments.count }}</td>
@@ -245,6 +264,23 @@
                 loader.hide()
                 kasa.confirm(sync['message'],1,'here');
             }
+
+            do_broadcast(){
+                let body = tinymce.get('body').getContent();
+                let subject = $('#subject').val()
+
+                let payload = {
+                    module:'broadcast_mail',
+                    data:{
+                        body:body,
+                        subject:subject
+                    }
+                }
+
+                let request = api.call('PUT',payload,'/adapi/');
+                kasa.confirm(request['message'],1,'here')
+            }
+
         }
         const email = new Email();
 
