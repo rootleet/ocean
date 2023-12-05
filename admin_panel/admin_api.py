@@ -1,4 +1,5 @@
 import json
+import sys
 
 import requests
 from django.contrib import messages
@@ -636,8 +637,13 @@ def index(request):
             response['message'] = f"UKNOWN REQUEST METHOD ({method})"
 
     except Exception as e:
+        error_type, error_instance, traceback = sys.exc_info()
+        tb_path = traceback.tb_frame.f_code.co_filename
+        line_number = traceback.tb_lineno
+
         response["status_code"] = 500
-        response["message"] = f"{str(e)}"
+        response[
+            "message"] = f"An error of type {error_type} occurred on line {line_number} in file {tb_path}. Details: {e}"
         print(str(e))
 
     return JsonResponse(response)
