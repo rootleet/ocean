@@ -85,13 +85,16 @@ class ServiceCard(models.Model):
 
     def app_details(self):
         obj = {
-            'name':'none'
+            'name': 'none',
+            'provider_email': 'none'
         }
 
         if App.objects.filter(pk=self.app.pk).exists():
             obj['name'] = self.app.name
+            obj['provider_email'] = self.app.provider.email
 
         return obj
+
 
 class ServiceMaterials(models.Model):
     service_card = models.ForeignKey(ServiceCard, on_delete=models.CASCADE)

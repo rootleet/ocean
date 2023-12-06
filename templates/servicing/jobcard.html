@@ -112,6 +112,7 @@
                                     <small class="input-group-text rounded-0">APP</small>
                                 </div>
                                 <input required readonly type="text" class="form-control rounded-0 form-control-sm" id="app">
+                                <input type="text" id="provider_email">
                             </div>
                             <!-- NAME -->
                             <div class="input-group imput-group-sm mb-2">
@@ -236,6 +237,7 @@
                 let timedata = service['timedata'];
                 let task = service['task'];
 
+
                 $('#task').val(task['uni']);
 
                 // html modifications
@@ -270,19 +272,22 @@
                     $('#status').removeClass('text-danger')
                     $('#status').removeClass('text-warning')
                     $('#status').addClass('text-info')
-                } else if (service['status'] === 0){
+                }
+                else if (service['status'] === 0){
                     $('#status').val("DELETED")
                     $('#status').removeClass('text-warning')
                     $('#status').removeClass('text-success')
                     $('#status').removeClass('text-info')
                     $('#status').addClass('text-danger')
-                } else if (service['status'] === 2){
+                }
+                else if (service['status'] === 2){
                     $('#status').val("CLOSED")
                     $('#status').removeClass('text-warning')
                     $('#status').removeClass('text-danger')
                     $('#status').removeClass('text-info')
                     $('#status').addClass('text-success')
-                } else {
+                }
+                else {
                     $('#status').val("UNKNOWN")
                     $('#status').removeClass('text-success')
                     $('#status').removeClass('text-danger')
@@ -292,6 +297,7 @@
                 }
 
                 $('#app').val(service['app']['name'])
+                $('#provider_email').val(service['app']['provider_email'])
 
                 //technician
                 $('#technician').val(technician['fullname']);
@@ -444,9 +450,9 @@
         function mail_provider() {
             mailer.new_email_screen()
             let client_address = $('#client_email').val();
-            let provider_email = 'solomon@sedaghana.com';
-            let it_manager = 'solomon@snedaghana.com;bharat@snedaghana.com;ajay@snedaghana.com';
-            let cc = `${client_address};${it_manager}`
+            let provider_email = $('#provider_email').val();
+            let it_manager = 'solomon@snedaghana.com,bharat@snedaghana.com,ajay@snedaghana.com';
+            let cc = `${client_address},${it_manager}`
             let title = $('#task_title').text()
             let taskdesc = $('#taskdesc').text()
             let task = $('#task').val()
