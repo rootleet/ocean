@@ -20,6 +20,8 @@
                 <input type="hidden" id="task">
             </div>
             <div class="w-25 h-100 d-flex flex-wrap justify-content-end">
+
+                <button id="prev" onclick="svc.pendingCards()" style="margin-right: .2em" class="btn btn-outline-primary">PENDING</button>
                  <button id="prev" onclick="loadJobCard(this.value)" style="margin-right: .2em" class="btn btn-outline-info"><i class="bi bi-skip-backward-btn"></i></button>
                 <button id="next" onclick="loadJobCard(this.value)" style="margin-right: .2em" class="btn btn-outline-info"><i class="bi bi-skip-forward-btn"></i></button>
             </div>
@@ -333,6 +335,8 @@
             } else {
                 alert(request['message'])
             }
+
+            amodal.hide()
         }
 
         function statusCheck(status){
@@ -456,6 +460,61 @@
 
 
         }
+
+        class Service {
+            pendingCards(){
+                let payload = {
+                    module:'service_report',
+                    data:{
+                        user:'*',
+                        status:1,
+                        from:'2023-01-01',
+                        to:'2099-12-31'
+                    }
+                }
+
+                let request = api.call('VIEW',payload,'/servicing/api/');
+
+                if(anton.IsRequest(request)){
+                    let message = request['message'];
+                    console.table(message)
+                    let tr = ''
+                    for (let jb = 0; jb < message.length; jb++) {
+                        let job = message[jb];
+                        let cardno,date,description,service,technician,title;
+                        cardno = job['cardno'];
+                        date = job['date'];
+                        description = job['description'].substring(0, 30);
+                        technician = job['technician'];
+                        title = job['title'];
+                        let owner = job['owner'];
+                        tr += `
+                            <tr>
+                                <td>${date}</td>
+                                <td>${owner}</td>
+                                <td><a onclick="loadJobCard('${cardno}')" href="javascript:void()">${title}</a></td>
+                                <td>${description}</td>
+                                <td>${technician}</td>
+                            </tr>
+                        `
+                    }
+
+                    let tab = `
+                        <table class='table table-sm table-bordered'>
+                            <thead><tr><th>DATE</th><th>OWNER</th><th>TITLE</th><th>DESCRIPTION</th><th>TECHNICIAN</th></tr></thead>
+                            <tbody>${tr}</tbody>
+                        </table>
+                    `;
+                    amodal.setTitleText("PENDING JOBS");
+                    amodal.setBodyHtml(tab);
+                    amodal.setSize('L');
+                    amodal.show();
+                } else {
+                    kasa.error("Invalid Response")
+                }
+            }
+        }
+        const svc = new Service()
 
     </script>
 

@@ -424,7 +424,8 @@ def interface(request):
                         'description': service.ticket.descr,
                         'service': f"{service.service.name}/{service.service_sub.name}",
                         'technician': service.technician.technician.get_full_name(),
-                        'date': service.created_date
+                        'date': service.created_date,
+                        'owner':service.owner.get_full_name()
                     })
 
                 success_response['message'] = cards
