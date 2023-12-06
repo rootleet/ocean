@@ -112,7 +112,7 @@
                                     <small class="input-group-text rounded-0">APP</small>
                                 </div>
                                 <input required readonly type="text" class="form-control rounded-0 form-control-sm" id="app">
-                                <input type="text" id="provider_email">
+                                <input type="hidden" id="provider_email">
                             </div>
                             <!-- NAME -->
                             <div class="input-group imput-group-sm mb-2">
@@ -451,7 +451,7 @@
             mailer.new_email_screen()
             let client_address = $('#client_email').val();
             let provider_email = $('#provider_email').val();
-            let it_manager = 'solomon@snedaghana.com,bharat@snedaghana.com,ajay@snedaghana.com';
+            let it_manager = 'bharat@snedaghana.com,ajay@snedaghana.com';
             let cc = `${client_address},${it_manager}`
             let title = $('#task_title').text()
             let taskdesc = $('#taskdesc').text()
