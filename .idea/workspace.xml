@@ -4,13 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ffcbf13e-d396-4071-9a24-4014a690f966" name="Changes" comment="add supplier accurate email address when sending to supplier">
+    <list default="true" id="ffcbf13e-d396-4071-9a24-4014a690f966" name="Changes" comment="update accurate tax description when opening a job">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/appscenter/apps_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/appscenter/apps_api.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/appscenter/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/appscenter/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ocean/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/ocean/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/servicing/servicing_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/servicing/servicing_api.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/servicing/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/servicing/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/servicing/jobcard.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/servicing/jobcard.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/servicing/transactions.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/servicing/transactions.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -286,47 +284,7 @@
       <workItem from="1701769246767" duration="9854000" />
       <workItem from="1701781848816" duration="3617000" />
       <workItem from="1701871126559" duration="6237000" />
-      <workItem from="1701933062886" duration="2327000" />
-    </task>
-    <task id="LOCAL-00051" summary="FINALE">
-      <option name="closed" value="true" />
-      <created>1698150211800</created>
-      <option name="number" value="00051" />
-      <option name="presentableId" value="LOCAL-00051" />
-      <option name="project" value="LOCAL" />
-      <updated>1698150211800</updated>
-    </task>
-    <task id="LOCAL-00052" summary="UI/UX - The user interface of addning and viewing jobcard has been enhanced to add more and relevant data in regard to a specific job card.&#10;&#10;JS Functioning - Ticked update and has been modified to make sure the corrected ticket is updated by referring to the related job-card. Loading of updates is made automatically after updating a ticket transactions. This is to reduce user flow layer by making it not a requirement to navigate back and forth to load latest updates.&#10;&#10;Dashboard - Dashboard issue graphy ( Pie chart ) has been modified to make sure accurate data is presented base on schedules,pending, and done tickets.&#10;&#10;Tickets - Tickets screen has been modified for clients, datatable is introduced to enable easy filtering and also tickets are sorted in accordance to status. Pending will show first, followed by scheduled and then done.">
-      <option name="closed" value="true" />
-      <created>1698216267315</created>
-      <option name="number" value="00052" />
-      <option name="presentableId" value="LOCAL-00052" />
-      <option name="project" value="LOCAL" />
-      <updated>1698216267315</updated>
-    </task>
-    <task id="LOCAL-00053" summary="New status checker has been added to validate job card status">
-      <option name="closed" value="true" />
-      <created>1698253822817</created>
-      <option name="number" value="00053" />
-      <option name="presentableId" value="LOCAL-00053" />
-      <option name="project" value="LOCAL" />
-      <updated>1698253822817</updated>
-    </task>
-    <task id="LOCAL-00054" summary="Reports - A new report has been added. This will generate a report base on job cards.&#10;&#10;Task Linking - When a new service order ( jobcard ) is opened, it will automatically generate a task for the assigned person. This will make sure that the assigned person will have it as part of weekly department report when it is being generated and sent to the departmental head.">
-      <option name="closed" value="true" />
-      <created>1698301635530</created>
-      <option name="number" value="00054" />
-      <option name="presentableId" value="LOCAL-00054" />
-      <option name="project" value="LOCAL" />
-      <updated>1698301635531</updated>
-    </task>
-    <task id="LOCAL-00055" summary="Reports - A new report has been added. This will generate a report base on job cards.&#10;&#10;Task Linking - When a new service order ( jobcard ) is opened, it will automatically generate a task for the assigned person. This will make sure that the assigned person will have it as part of weekly department report when it is being generated and sent to the departmental head.">
-      <option name="closed" value="true" />
-      <created>1698318342357</created>
-      <option name="number" value="00055" />
-      <option name="presentableId" value="LOCAL-00055" />
-      <option name="project" value="LOCAL" />
-      <updated>1698318342357</updated>
+      <workItem from="1701933062886" duration="7268000" />
     </task>
     <task id="LOCAL-00056" summary="Bolt - An api has been created for retail which core for now is to handle bolt products and groups habdlinf">
       <option name="closed" value="true" />
@@ -680,7 +638,47 @@
       <option name="project" value="LOCAL" />
       <updated>1701880468999</updated>
     </task>
-    <option name="localTasksCounter" value="100" />
+    <task id="LOCAL-00100" summary="This update enables the system admin to change job card app to fitting">
+      <option name="closed" value="true" />
+      <created>1701939260099</created>
+      <option name="number" value="00100" />
+      <option name="presentableId" value="LOCAL-00100" />
+      <option name="project" value="LOCAL" />
+      <updated>1701939260100</updated>
+    </task>
+    <task id="LOCAL-00101" summary="This update enables the system admin to change job card app to fitting">
+      <option name="closed" value="true" />
+      <created>1701940770075</created>
+      <option name="number" value="00101" />
+      <option name="presentableId" value="LOCAL-00101" />
+      <option name="project" value="LOCAL" />
+      <updated>1701940770075</updated>
+    </task>
+    <task id="LOCAL-00102" summary="This update enables the system admin to change job card app to fitting">
+      <option name="closed" value="true" />
+      <created>1701940945767</created>
+      <option name="number" value="00102" />
+      <option name="presentableId" value="LOCAL-00102" />
+      <option name="project" value="LOCAL" />
+      <updated>1701940945767</updated>
+    </task>
+    <task id="LOCAL-00103" summary="setting py reset">
+      <option name="closed" value="true" />
+      <created>1701941046091</created>
+      <option name="number" value="00103" />
+      <option name="presentableId" value="LOCAL-00103" />
+      <option name="project" value="LOCAL" />
+      <updated>1701941046091</updated>
+    </task>
+    <task id="LOCAL-00104" summary="update accurate tax description when opening a job">
+      <option name="closed" value="true" />
+      <created>1701947035657</created>
+      <option name="number" value="00104" />
+      <option name="presentableId" value="LOCAL-00104" />
+      <option name="project" value="LOCAL" />
+      <updated>1701947035657</updated>
+    </task>
+    <option name="localTasksCounter" value="105" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -703,9 +701,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="added docker file" />
-    <MESSAGE value="add req for pip" />
-    <MESSAGE value="show only pending sms" />
     <MESSAGE value="Re-module servicing procedures." />
     <MESSAGE value="Add products category to bolt products export, and also add fix service reports generating" />
     <MESSAGE value="make technician email message more descriptive" />
@@ -728,7 +723,10 @@
     <MESSAGE value="remove apps module" />
     <MESSAGE value="add a button in job card to load existing screens" />
     <MESSAGE value="add supplier accurate email address when sending to supplier" />
-    <option name="LAST_COMMIT_MESSAGE" value="add supplier accurate email address when sending to supplier" />
+    <MESSAGE value="This update enables the system admin to change job card app to fitting" />
+    <MESSAGE value="setting py reset" />
+    <MESSAGE value="update accurate tax description when opening a job" />
+    <option name="LAST_COMMIT_MESSAGE" value="update accurate tax description when opening a job" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

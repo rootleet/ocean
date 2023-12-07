@@ -9,14 +9,19 @@
         </div>
         <div class="card-body p-2">
             <div class="alert alert-info">
-                {{ pagemessage.remarks }}
+                <h1>{{ pagemessage.ticket.title }}</h1>
+                <hr>
+                {{ pagemessage.ticket.descr }}
             </div>
-            {% if pagemessage.client_approval == 1 %}
-                <div class="w-100 d-flex flex-wrap justify-content-between">
-                    <button onclick="if(confirm('Are you sure you accept solution?')){ticket.approveTicket(`{{ pagemessage.cardno }}`,2)}" class="btn btn-success">APPROVE</button>
-                    <button onclick="if(confirm('Are you sure you want to reject solution?')){ticket.approveTicket(`{{ pagemessage.cardno }}`,0)}" class="btn btn-danger">REJECT</button>
+
+                <div class="w-100 d-flex flex-wrap justify-content-center">
+                    <button onclick="location.href='tel:{{ pagemessage.technician.phone }}'" class="btn btn-info" style="margin: 2px"><i class="fa fa-phone"></i> SUPPORT</button>
+                    {% if pagemessage.client_approval == 1 %}
+                        <button style="margin: 2px" onclick="if(confirm('Are you sure you accept solution?')){ticket.approveTicket(`{{ pagemessage.cardno }}`,2)}" class="btn btn-success">APPROVE</button>
+                        <button style="margin: 2px" onclick="if(confirm('Are you sure you want to reject solution?')){ticket.approveTicket(`{{ pagemessage.cardno }}`,0)}" class="btn btn-danger">REJECT</button>
+                    {% endif %}
                 </div>
-            {% endif %}
+
 
             <hr>
             {% for tran in pagemessage.ticket.transactions %}

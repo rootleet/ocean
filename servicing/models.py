@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from django.db import models
 
-from admin_panel.models import TicketHd
+from admin_panel.models import TicketHd, UserAddOns
 from appscenter.models import App
 from taskmanager.models import Tasks
 
@@ -57,6 +57,14 @@ class ServiceTechnicians(models.Model):
 
     class Meta:
         unique_together = (('service', 'technician'),)
+
+    def phone(self):
+
+        if UserAddOns.objects.filter(user=self.technician).exists():
+            details = UserAddOns.objects.get(user=self.technician)
+            return details.phone
+        else:
+            return 000
 
 
 class ServiceCard(models.Model):

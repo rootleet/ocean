@@ -22,7 +22,7 @@
             </div>
             <div class="w-25 h-100 d-flex flex-wrap justify-content-end">
 
-                <button id="prev" onclick="svc.pendingCards()" style="margin-right: .2em" class="btn btn-outline-primary">PENDING</button>
+                <button onclick="svc.pendingCards()" style="margin-right: .2em" class="btn btn-outline-primary">PENDING</button>
                  <button id="prev" onclick="loadJobCard(this.value)" style="margin-right: .2em" class="btn btn-outline-info"><i class="bi bi-skip-backward-btn"></i></button>
                 <button id="next" onclick="loadJobCard(this.value)" style="margin-right: .2em" class="btn btn-outline-info"><i class="bi bi-skip-forward-btn"></i></button>
             </div>
@@ -257,6 +257,8 @@
                 } else {
                     $('#prev').prop('disabled',true);
                 }
+
+                console.table(prev)
 
                 // check status
                 statusCheck(service['status'])
