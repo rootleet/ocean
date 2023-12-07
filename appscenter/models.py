@@ -32,7 +32,7 @@ class AppsGroup(models.Model):
 
 
 class App(models.Model):
-    provider = models.ForeignKey(AppProviders, on_delete=models.CASCADE, default=None, blank=True, null=True)
+    provider = models.ForeignKey(AppProviders, on_delete=models.CASCADE, default=1, blank=False, null=False)
     logo = models.ImageField(upload_to='static/apps/logos/', blank=True, null=True,default='static/apps/logos/default'
                                                                                            '.png')
     name = models.TextField()
@@ -55,6 +55,12 @@ class App(models.Model):
             return file.files.url
         else:
             return '#'
+
+    def prov(self):
+        if self.provider == 'null':
+            return False
+        else:
+            return True
 
 
 class VersionControl(models.Model):

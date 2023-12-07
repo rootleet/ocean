@@ -9,6 +9,7 @@
 
             <div class="w-75 h-100 d-flex flex-wrap">
                 <button onclick="location.href='{% url 'newjob' %}'" style="margin-right: .2em" class="btn btn-outline-primary"><i class="fa fa-plus"></i></button>
+                <button id="change_app" onclick="svc.changeApp(this.value)" style="margin-right: .2em" class="btn btn-outline-primary">CHGAP</button>
                 <button id="find_job" onclick="findJobScreen()" style="margin-right: .2em" class="btn btn-outline-info"><i class="fa fa-search"></i></button>
                 <button onclick="if(confirm('ARE YOU SURE?')){deleteJobCard(this.value)}" id="delete" style="margin-right: .2em" class="btn btn-outline-danger"><i class="fa fa-trash"></i></button>
                 <button onclick="if(confirm('ARE YOU SURE YOU WANT TO CLOSE SERVICE?')){updateDocument(2)}" id="close" style="margin-right: .2em" class="btn btn-outline-warning"><i class="fa fa-door-closed"></i> close</button>
@@ -221,11 +222,13 @@
             };
 
             let request = api.call('VIEW',payload,'/servicing/api/');
-            console.table(request)
+            ////console.table(request)
             if(request['status_code'] === 200){
                 $('#close').val(cardno)
                 let service = request['message'];
                 let client = service['client'];
+                let service_pk = service['pk'];
+                $('#change_app').val(service_pk);
                 let materials = service['materials'];
                 let next = service['next'];
                 let owner = service['owner'];
@@ -428,7 +431,7 @@
             };
 
             let jobquery = api.call('VIEW',payload,'/servicing/api/');
-            console.table(jobquery);
+            ////console.table(jobquery);
             let queryresults = ''
             if(jobquery['status_code'] === 200){
 
@@ -441,7 +444,7 @@
 
             } else {
                 queryresults = `<tr><td><small class="text-danger">${jobquery['message']}</small></td></tr>`;
-                console.log(jobquery['message']);
+                //console.log(jobquery['message']);
             }
             $('#queryresults').html(queryresults);
         }
@@ -483,7 +486,7 @@
 
                 if(anton.IsRequest(request)){
                     let message = request['message'];
-                    console.table(message)
+                    //console.table(message)
                     let tr = ''
                     for (let jb = 0; jb < message.length; jb++) {
                         let job = message[jb];
@@ -517,6 +520,54 @@
                     amodal.show();
                 } else {
                     kasa.error("Invalid Response")
+                }
+            }
+            changeApp(pk){
+                // get apps
+                let apps_payload = {
+                    module:'apps',
+                    data:{
+                        pk:'*'
+                    }
+                };
+                let apps_option = ""
+                //console.table(apps_payload)
+                let request = api.call("VIEW",apps_payload,'/appscenter/api/');
+
+                if(anton.IsRequest(request)){
+                    let apps = request['message'];
+                    for (let ap = 0; ap < apps.length; ap++) {
+                        let app = apps[ap];
+                        apps_option += `<option value="${app['pk']}">${app['name']}</option>`
+                    }
+                    let form = `<select id='app_pk' class='form-control rounded_c mb-2'>${apps_option}</select>`;
+                    amodal.setTitleText("CHANGING JOB APP");
+                    amodal.setBodyHtml(form);
+                    amodal.show()
+                    amodal.setFooterHtml(`<button onclick="svc.changeAppFinal('${pk}')" class="w-100 btn btn-success">CHANGE</button>`)
+
+                } else {
+                    kasa.error("INVALID RESPONSE")
+                }
+            }
+
+            changeAppFinal(service_pk) {
+                let app_pk = $('#app_pk').val()
+                let payload = {
+                    module:'change_service_app',
+                    data: {
+                        card_pk:service_pk,
+                        app_id:app_pk
+                    }
+                };
+
+                let request = api.call('PATCH',payload,'/servicing/api/');
+                if(anton.IsRequest(request)){
+                    amodal.hide()
+                    kasa.success("App Changed")
+                    loadJobCard(request['message'])
+                } else {
+                    kasa.error("INVALID RESPONSE")
                 }
             }
         }

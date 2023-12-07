@@ -4,8 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ffcbf13e-d396-4071-9a24-4014a690f966" name="Changes" comment="remove apps module">
+    <list default="true" id="ffcbf13e-d396-4071-9a24-4014a690f966" name="Changes" comment="add supplier accurate email address when sending to supplier">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/apps_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/appscenter/apps_api.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/appscenter/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ocean/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/ocean/settings.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/servicing/servicing_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/servicing/servicing_api.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/servicing/jobcard.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/servicing/jobcard.html" afterDir="false" />
@@ -283,31 +285,8 @@
       <workItem from="1701684174980" duration="1668000" />
       <workItem from="1701769246767" duration="9854000" />
       <workItem from="1701781848816" duration="3617000" />
-      <workItem from="1701871126559" duration="1985000" />
-    </task>
-    <task id="LOCAL-00048" summary="make technicians query only">
-      <option name="closed" value="true" />
-      <created>1698149446778</created>
-      <option name="number" value="00048" />
-      <option name="presentableId" value="LOCAL-00048" />
-      <option name="project" value="LOCAL" />
-      <updated>1698149446778</updated>
-    </task>
-    <task id="LOCAL-00049" summary="make technicians query only">
-      <option name="closed" value="true" />
-      <created>1698149618582</created>
-      <option name="number" value="00049" />
-      <option name="presentableId" value="LOCAL-00049" />
-      <option name="project" value="LOCAL" />
-      <updated>1698149618582</updated>
-    </task>
-    <task id="LOCAL-00050" summary="make technicians query only">
-      <option name="closed" value="true" />
-      <created>1698149881703</created>
-      <option name="number" value="00050" />
-      <option name="presentableId" value="LOCAL-00050" />
-      <option name="project" value="LOCAL" />
-      <updated>1698149881704</updated>
+      <workItem from="1701871126559" duration="6237000" />
+      <workItem from="1701933062886" duration="2327000" />
     </task>
     <task id="LOCAL-00051" summary="FINALE">
       <option name="closed" value="true" />
@@ -677,7 +656,31 @@
       <option name="project" value="LOCAL" />
       <updated>1701784294472</updated>
     </task>
-    <option name="localTasksCounter" value="97" />
+    <task id="LOCAL-00097" summary="add a button in job card to load existing screens">
+      <option name="closed" value="true" />
+      <created>1701873221715</created>
+      <option name="number" value="00097" />
+      <option name="presentableId" value="LOCAL-00097" />
+      <option name="project" value="LOCAL" />
+      <updated>1701873221716</updated>
+    </task>
+    <task id="LOCAL-00098" summary="add supplier accurate email address when sending to supplier">
+      <option name="closed" value="true" />
+      <created>1701880309758</created>
+      <option name="number" value="00098" />
+      <option name="presentableId" value="LOCAL-00098" />
+      <option name="project" value="LOCAL" />
+      <updated>1701880309759</updated>
+    </task>
+    <task id="LOCAL-00099" summary="add supplier accurate email address when sending to supplier">
+      <option name="closed" value="true" />
+      <created>1701880468999</created>
+      <option name="number" value="00099" />
+      <option name="presentableId" value="LOCAL-00099" />
+      <option name="project" value="LOCAL" />
+      <updated>1701880468999</updated>
+    </task>
+    <option name="localTasksCounter" value="100" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -700,8 +703,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="db interface updated" />
-    <MESSAGE value="bolt api changed" />
     <MESSAGE value="added docker file" />
     <MESSAGE value="add req for pip" />
     <MESSAGE value="show only pending sms" />
@@ -725,7 +726,9 @@
     <MESSAGE value="ui" />
     <MESSAGE value="Reset All Passwords" />
     <MESSAGE value="remove apps module" />
-    <option name="LAST_COMMIT_MESSAGE" value="remove apps module" />
+    <MESSAGE value="add a button in job card to load existing screens" />
+    <MESSAGE value="add supplier accurate email address when sending to supplier" />
+    <option name="LAST_COMMIT_MESSAGE" value="add supplier accurate email address when sending to supplier" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

@@ -502,6 +502,17 @@ def interface(request):
                 except Exception as e:
                     success_response['message'] = f"Feedback Not Sent {e}"
 
+            elif module == 'change_service_app':
+                card_pk = data.get('card_pk', None)
+                app = data.get('app_id', None)
+
+                card = ServiceCard.objects.get(pk=card_pk)
+                jobcard = card.cardno
+                app = App.objects.get(pk=app)
+                card.app = app
+                card.save()
+                success_response['message'] = jobcard
+                response = success_response
 
 
         # delete data
