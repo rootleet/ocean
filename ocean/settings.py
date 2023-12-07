@@ -88,7 +88,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'ocean.wsgi.application'
 
-# Database
+# Databasex
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 DATABASES = {
