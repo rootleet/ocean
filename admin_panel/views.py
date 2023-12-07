@@ -20,7 +20,7 @@ from django.contrib import messages
 from django.http import JsonResponse
 from fpdf import FPDF
 
-from admin_panel.anton import push_notification, is_valid_password
+from admin_panel.anton import push_notification, is_valid_password, generate_random_password
 from admin_panel.form import NewProduct, NewLocation, LogIn, NewTicket, UploadFIle, SignUp, NewOu, NewUM, NewSMSApi, \
     NewBulkSms, NewDepartments
 from admin_panel.models import *
@@ -289,8 +289,9 @@ def sign_up(request):
                 else:
                     username = last_name.replace(' ', '').lower()
 
-                pass_num = '{:03d}'.format(random.randrange(1, 999999))
-                pass_w = '{}{}'.format(f"{last_name}", pass_num)
+                # pass_num = '{:03d}'.format(random.randrange(1, 999999))
+                # pass_w = '{}{}'.format(f"{last_name}", pass_num)
+                pass_w = generate_random_password()
 
                 # save username
                 # new_user_instance = User.objects.create_user(username=username, password=pass_w, email=email,

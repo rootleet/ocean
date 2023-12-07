@@ -98,6 +98,17 @@ DATABASES = {
     },
     'default': {
         'ENGINE': 'django.db.backends.mysql',
+        'NAME': os.environ.get('DB_NAME') or 'ocean',
+        'USER': os.environ.get('DB_USER') or 'root',
+        'PASSWORD': os.environ.get('DB_PASSWORD') or 'Sunderland@411',
+        'HOST': os.environ.get('DB_HOST') or 'localhost',
+        'PORT': os.environ.get('DB_PORT') or '3306',
+        'OPTIONS': {
+            "init_command": "SET foreign_key_checks = 0;",
+        },
+    },
+    'online': {
+        'ENGINE': 'django.db.backends.mysql',
         'NAME': 'u560949065_ocean',
         'USER': 'u560949065_ocean',
         'PASSWORD': 'Sunderland@411',
@@ -206,7 +217,7 @@ OLD_DB_NAME = 'PROC_CMMS_V1'
 # DB_PORT = '1433'
 # DB_NAME = 'PROC_CMMS_V1'
 
-RET_DB_HOST = '192.168.2.4'
+RET_DB_HOST = 'localhost'
 RET_DB_NAME = 'SMSEXPV17'
 RET_DB_USER = 'sa'
 RET_DB_PASS = 'sa@123456'
