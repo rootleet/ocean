@@ -75,7 +75,6 @@ def interface(request):
                 head = data.get('head')
                 materials = data.get('materials')
 
-                print(head)
                 # get header data
                 cardno = f"JC{ServiceCard.objects.all().count() + 1}"
                 client_pk = head.get('client')
@@ -105,7 +104,7 @@ def interface(request):
                     ticket2 = TicketHd.objects.get(pk=tick)
                     ticket2.status = 1
                     ticket2.title = ticket_title
-                    ticket2.descr = ticket_title
+                    ticket2.descr = ticked_description
                     ticket2.save()
                     ticket = TicketHd.objects.get(pk=tick)
 

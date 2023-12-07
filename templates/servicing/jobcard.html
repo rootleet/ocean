@@ -226,6 +226,7 @@
             if(request['status_code'] === 200){
                 $('#close').val(cardno)
                 let service = request['message'];
+                console.table(service)
                 let client = service['client'];
                 let service_pk = service['pk'];
                 $('#change_app').val(service_pk);
