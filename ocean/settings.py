@@ -88,7 +88,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'ocean.wsgi.application'
 
-# Databasex
+# Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 DATABASES = {
@@ -98,11 +98,11 @@ DATABASES = {
     },
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.environ.get('DB_NAME') or 'ocean',
-        'USER': os.environ.get('DB_USER') or 'root',
-        'PASSWORD': os.environ.get('DB_PASSWORD') or 'Sunderland@411',
-        'HOST': os.environ.get('DB_HOST') or 'localhost',
-        'PORT': os.environ.get('DB_PORT') or '3306',
+        'NAME': 'ocean',
+        'USER': 'root',
+        'PASSWORD': 'Sunderland@411',
+        'HOST': 'localhost',
+        'PORT': '3306',
         'OPTIONS': {
             "init_command": "SET foreign_key_checks = 0;",
         },
