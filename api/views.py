@@ -1056,7 +1056,7 @@ def api_call(request, module, crud):
         # send all pending sms
         elif crud == 'sendSms':
             import requests
-            pending_messages = Sms.objects.filter(status=0)[:1]
+            pending_messages = Sms.objects.filter(status=0)
             for pending in pending_messages:
                 try:
                     pk = pending.pk

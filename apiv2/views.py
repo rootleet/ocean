@@ -110,7 +110,7 @@ def api_function(request):
 
                     try:
                         own = User.objects.get(pk=owner)
-                        TicketHd(title=title, descr=descr, owner=own,app=app).save()
+                        TicketHd(title=title, descr=descr, owner=own, app=app).save()
                         # sms
                         smsapi = SmsApi.objects.get(is_default=1)
                         Sms(api=smsapi, to='0546310011',
@@ -875,7 +875,7 @@ def api_function(request):
 
                     for ticket in ticks:
                         ti.append({
-                            'pk':ticket.pk,
+                            'pk': ticket.pk,
                             'owner': {
                                 'pk': ticket.owner.pk,
                                 'username': ticket.owner.username,
