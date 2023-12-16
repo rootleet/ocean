@@ -235,7 +235,7 @@ class reportCard {
     }
 
     setTitle(title){
-        $('#reportCardTitle').text(title)
+        $('#reportCardTitle').html(title)
     }
 
     setTitleHtml(html){

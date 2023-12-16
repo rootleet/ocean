@@ -103,6 +103,20 @@ class ServiceCard(models.Model):
 
         return obj
 
+    def text_status(self):
+
+        if self.client_approval == 0:
+            return 'attending_to'
+
+        if self.client_approval == 1:
+            return  'sent_to_client'
+
+        if self.status == 2:
+            return 'closed'
+
+        if self.ticket.status == 0:
+            return 'unattended'
+
 
 class ServiceMaterials(models.Model):
     service_card = models.ForeignKey(ServiceCard, on_delete=models.CASCADE)

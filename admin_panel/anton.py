@@ -87,3 +87,9 @@ def generate_random_password():
     characters = string.ascii_letters + string.digits  # Use letters and digits
     random_password = ''.join(secrets.choice(characters) for i in range(8))
     return random_password
+
+
+def current_date():
+    from datetime import datetime
+    current_datetime = datetime.now()
+    return current_datetime.strftime("%Y_%m_%d_%H_%M_%S")

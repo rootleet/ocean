@@ -211,8 +211,11 @@ def index(request):
                 response = success_response
 
             elif module == 'que_mail':
-
-                sender = MailSenders.objects.get(pk=data.get('sender'))
+                sender_pk = data.get('sender') or 'default'
+                if sender_pk != 'default':
+                    sender = MailSenders.objects.get(pk=data.get('sender'))
+                else:
+                    sender = MailSenders.objects.get(is_default=True)
                 recipient = data.get('recipient')
                 subject = data.get('subject')
                 body = data.get('body')

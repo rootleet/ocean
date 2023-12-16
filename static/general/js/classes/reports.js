@@ -182,6 +182,7 @@ class Reports {
                 <div class="col-sm-6"><select class="form-control rounded-0" id="user">${uop}</select></div>
                 <div class="col-sm-6">
                     <select class="form-control rounded-0" id="status">
+                        <option value="*">ALL</option>
                         <option value="1">OPEN</option>
                         <option value="2">CLOSE</option>
                         <option value="0">DELETE</option>
@@ -235,7 +236,19 @@ class Reports {
                             </tr>`
                 }
 
-                reports.render(header,rows,`${$('#status').find(':selected').text()} service report for  ${$('#user').find(':selected').text()} between ${$('#from').val()} and ${$('#to').val()}`);
+                let rep_title = `${$('#status').find(':selected').text()} service report for  ${$('#user').find(':selected').text()} between ${$('#from').val()} and ${$('#to').val()}`;
+                let user,from,to,status;
+                user = data['user'];
+                status = data['status']
+                from = data['from']
+                to = data['to']
+                let rep_head = `
+                    <div class="w-100 d-flex flex-wrap justify-content-between">
+                        <div class="w-75">${rep_title}</div>
+                        <div class="w-25 d-flex flex-wrap justify-content-end"><button onclick="reports.exportServiceReport('${user}','${from}','${to}','${status}')" class="btn btn-info">DOWNLOAD</button></div>
+                    </div>
+                `
+                reports.render(header,rows,`${rep_head}`);
 
                 amodal.hide(true)
             } else {
@@ -246,6 +259,24 @@ class Reports {
         }
     }
 
+    exportServiceReport(user,from,to,status){
+        let payload  = {
+            module:'service_report',
+            data:{
+                user:user,
+                from:from,
+                to:to,
+                status:status,
+                doc:"excel"
+            }
+        }
+        let request = api.call('VIEW',payload,'/servicing/api/');
+        if(anton.IsRequest(request)){
+            kasa.html(`<a href="/${request['message']}">Download</a>`)
+        } else {
+            kasa.error(request['message'])
+        }
+    }
     /*
     * END OF SERVICING
     * */

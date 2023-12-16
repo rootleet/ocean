@@ -21,6 +21,25 @@
         </div>
     </div>
 
+    <div class="modal" id="bulk_email">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <strong class="modal-title">GROUP EMAILS</strong>
+                </div>
+                <div class="modal-body">
+                    <label for="bulk_file">FILE</label><input type="file" accept="text/csv" class="form-control mb-2" name="file" id="bulk_file">
+                    <label for="bulk_sub">SUBJECT</label><input type="text" id="bulk_sub" class="form-control rounded-0 mb-2" name="sub">
+
+                    <label for="bulk_message"></label><textarea name="message" id="bulk_message" class="tinymce-editor"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button onclick="email.loadBulk()" class="btn btn-success">SEND</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="card-header">
         <strong class="card-title">EMAILS</strong>
     </div>
@@ -30,7 +49,7 @@
 
             <div class="row h-100 d-flex flex-wrap align-content-between">
                 <!-- EMAIL SENDERS -->
-                <div class="col-sm-6" style="height: 45% !important">
+                <div class="col-sm-6" style="height: 25% !important">
                     <div class="card h-100">
                         <div class="card-header">
                             <div class="w-100 h-100 d-flex">
@@ -70,7 +89,7 @@
                 </div>
 
                 <!-- STATISTICS -->
-                <div class="col-sm-6" style="height: 45% !important">
+                <div class="col-sm-6" style="height: 25% !important">
                     <div class="card h-100">
                         <div class="card-header">
                             <strong class="card-title">STATISTICS</strong>
@@ -78,12 +97,13 @@
                     </div>
                 </div>
 
-                <div class="col-sm-12 h-50">
+                <div class="col-sm-12" style="height: 70%">
                     <div class="card h-100">
                         <div class="card-header">
                             <div class="w-100 d-flex flex-wrap">
                                 <div class="w-50"><strong class="card-title">MAIL LOGS</strong></div>
                                 <div class="w-50 d-flex flex-wrap align-content-center justify-content-end">
+                                    <button data-bs-toggle="modal" style="margin-right:5px " data-bs-target="#bulk_email" class="btn btn-info"><i class="fa fa-people-arrows"></i></button>
                                     <button data-bs-toggle="modal" style="margin-right:5px " data-bs-target="#broadcast" class="btn btn-info"><i class="fa fa-broadcast-tower"></i></button>
                                     <button onclick="email.new_email_screen()" title="NEW EMAIL" class="btn btn-info rounded-0" style="margin-right:5px "><i class="fa fa-envelope"></i></button>
                                     <button onclick="email.sync_mails()" class="btn btn-warning rounded-0"><i class="fa fa-sync"></i></button>
@@ -281,6 +301,52 @@
                 kasa.confirm(request['message'],1,'here')
             }
 
+            loadBulk() {
+                const file = document.getElementById('bulk_file').files[0];
+                let em_message = tinymce.get('bulk_message').getContent();
+                let bulk_sub = $('#bulk_sub').val()
+
+
+
+                if(!file || em_message.length < 1 || bulk_sub.length < 1) {
+                    alert('Invalid Form');
+                    return;
+                }
+
+                console.table(file);
+                const reader = new FileReader();
+                reader.onload = e => {
+                    let sent = 0;
+                    let not_sent = 0;
+                    for (const line of e.target.result.split('\r')) {
+                        if(line.split('@').length === 2){
+                            let payload = {
+                                module:'que_mail',
+                                data:{
+                                    sender:'default',
+                                    subject:bulk_sub,
+                                    recipient:line,
+                                    cc:'',
+                                    body:em_message
+                                }
+                            }
+                            let que = api.call('PUT',payload,'/adapi/');
+                            if(anton.IsRequest(que)){
+                                sent ++
+                            } else {
+                                not_sent ++
+                            }
+                            console.table(que)
+                        }
+
+                    }
+                    kasa.confirm(`SENT : ${sent}, NOT SENT ${not_sent}`);
+                }
+
+                reader.readAsText(file);
+
+
+            }
         }
         const email = new Email();
 

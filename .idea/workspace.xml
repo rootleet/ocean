@@ -4,10 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ffcbf13e-d396-4071-9a24-4014a690f966" name="Changes" comment="change new ticket sms number">
+    <list default="true" id="ffcbf13e-d396-4071-9a24-4014a690f966" name="Changes" comment="send all sms in ocean">
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apiv2/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/apiv2/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/admin_panel/admin_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/admin_panel/admin_api.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/admin_panel/anton.py" beforeDir="false" afterPath="$PROJECT_DIR$/admin_panel/anton.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/admin_panel/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/admin_panel/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/servicing/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/servicing/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/servicing/servicing_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/servicing/servicing_api.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/general/js/classes/anton.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/general/js/classes/anton.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/general/js/classes/reports.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/general/js/classes/reports.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/dashboard/emails.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/dashboard/emails.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -66,6 +73,7 @@
   &quot;keyToString&quot;: {
     &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
     &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;Django Server.DJANGO.executor&quot;: &quot;Run&quot;,
     &quot;Notification.DisplayName-DoNotAsk-JavaScript: Code Vision Performance&quot;: &quot;JavaScript: code vision performance watcher&quot;,
     &quot;Notification.DoNotAsk-JavaScript: Code Vision Performance&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.OpenDjangoStructureViewOnStart&quot;: &quot;true&quot;,
@@ -99,7 +107,7 @@
       <recent name="C:\Users\reza\Documents\GitHub\ocean\static\general\js\classes" />
     </key>
   </component>
-  <component name="RunManager" selected="Docker.Docker Image">
+  <component name="RunManager" selected="Django Server.DJANGO">
     <configuration name="retail_api" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="ocean_ori" />
       <option name="ENV_FILES" value="" />
@@ -182,7 +190,7 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-python-sdk-fa315bd92469-d8c811c5f287-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-233.11799.20" />
+        <option value="bundled-python-sdk-7a29c1521ef0-c986f194a52a-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-233.11799.298" />
       </set>
     </attachedChunks>
   </component>
@@ -287,15 +295,10 @@
       <workItem from="1701983775600" duration="3678000" />
       <workItem from="1702032986869" duration="616000" />
       <workItem from="1702281772977" duration="1305000" />
-      <workItem from="1702309565538" duration="125000" />
-    </task>
-    <task id="LOCAL-00058" summary="db interface updated">
-      <option name="closed" value="true" />
-      <created>1698674352192</created>
-      <option name="number" value="00058" />
-      <option name="presentableId" value="LOCAL-00058" />
-      <option name="project" value="LOCAL" />
-      <updated>1698674352193</updated>
+      <workItem from="1702309565538" duration="816000" />
+      <workItem from="1702570272555" duration="1600000" />
+      <workItem from="1702573082217" duration="5160000" />
+      <workItem from="1702707126631" duration="7144000" />
     </task>
     <task id="LOCAL-00059" summary="db interface updated">
       <option name="closed" value="true" />
@@ -681,7 +684,15 @@
       <option name="project" value="LOCAL" />
       <updated>1702282142682</updated>
     </task>
-    <option name="localTasksCounter" value="107" />
+    <task id="LOCAL-00107" summary="send all sms in ocean">
+      <option name="closed" value="true" />
+      <created>1702309725707</created>
+      <option name="number" value="00107" />
+      <option name="presentableId" value="LOCAL-00107" />
+      <option name="project" value="LOCAL" />
+      <updated>1702309725709</updated>
+    </task>
+    <option name="localTasksCounter" value="108" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -704,7 +715,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="make technician email message more descriptive" />
     <MESSAGE value="Re-made servicing to container much detaili and simplify processed.&#10;&#10;1. Email sending has been enhanced to include much more details with a version 2 of mail sync.&#10;&#10;2. Every app will have much more details that includes provider, logo and a new layout design for apps.&#10;&#10;3. Every jobcard will belong to an app, and there is a send provider button that will auto generate email template to be sent to provider&#10;&#10;4. JS has been enhanced to add a form class that helps make forms in js than typing them" />
     <MESSAGE value="mail send v2" />
     <MESSAGE value="Enhance Retail to include product from database with relative cronjob" />
@@ -729,7 +739,8 @@
     <MESSAGE value="update accurate tax description when opening a job" />
     <MESSAGE value="more detailed issues showing and also service navigation" />
     <MESSAGE value="change new ticket sms number" />
-    <option name="LAST_COMMIT_MESSAGE" value="change new ticket sms number" />
+    <MESSAGE value="send all sms in ocean" />
+    <option name="LAST_COMMIT_MESSAGE" value="send all sms in ocean" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

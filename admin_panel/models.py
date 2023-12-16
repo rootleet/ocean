@@ -131,7 +131,7 @@ class Emails(models.Model):
 class MailSenders(models.Model):
     host = models.TextField()
     port = models.TextField()
-    address = models.CharField(max_length=200,unique=True)
+    address = models.CharField(max_length=200, unique=True)
     password = models.TextField()
     is_default = models.BooleanField(default=False)
     is_tls = models.BooleanField(default=True)
@@ -149,7 +149,12 @@ class MailSenders(models.Model):
         MailQueues.objects.filter(sender=self)
 
 
+class MailGroup(models.Model):
+    name = models.CharField(max_length=66, unique=True, null=False, blank=False)
+
+
 class MailQueues(models.Model):
+    group = models.ForeignKey(MailGroup, on_delete=models.SET_NULL, default=None, null=True)
     sender = models.ForeignKey(MailSenders, on_delete=models.CASCADE)
     recipient = models.EmailField()
     subject = models.TextField()

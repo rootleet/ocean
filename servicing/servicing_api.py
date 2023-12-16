@@ -6,8 +6,10 @@ from django.db.models import Q
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from fpdf import FPDF
+from openpyxl.chart import PieChart, Reference
+from openpyxl.styles import Font, PatternFill, Alignment
 
-from admin_panel.anton import make_md5_hash
+from admin_panel.anton import make_md5_hash, current_date
 from admin_panel.models import Emails, TicketHd, Sms, SmsApi, UserAddOns, TicketTrans
 from admin_panel.sms_hold import *
 from appscenter.models import App
@@ -406,26 +408,108 @@ def interface(request):
                 target_status = data.get('status')
                 target_from = data.get('from')
                 target_to = data.get('to')
+                doc = data.get('doc') or 'preview'
                 cards = []
 
-                if target_user == '*':
+                if target_user == '*' and target_status != '*':
                     query = ServiceCard.objects.filter(status=target_status,
                                                        created_date__range=(target_from, target_to))
+                elif target_user == '*' and target_status == '*':
+                    query = ServiceCard.objects.filter(created_date__range=(target_from, target_to))
+
+                elif target_user != '*' and target_status == '*':
+                    query = ServiceCard.objects.filter(created_date__range=(target_from, target_to),
+                                                       client_id=target_user)
                 else:
                     query = ServiceCard.objects.filter(status=target_status,
                                                        created_date__range=(target_from, target_to),
                                                        client_id=target_user)
 
+                if doc == 'excel':
+                    import openpyxl
+                    book = openpyxl.Workbook()
+                    sheet = book.active
+
+                    UNATTENDED = 0
+                    OPEN = 0
+                    CLIENT_APPROVAL = 0
+                    CLOSED = 0
+
+                    sheet.title = f"{target_from} To {target_to}"
+                    sheet.merge_cells("A1:G1")
+                    font_style = Font(size=20, bold=True, color='FFFFFF', )
+                    fill_color = PatternFill(start_color='000000', end_color='000000', fill_type='solid')
+                    align = Alignment(horizontal='center', vertical='center', wrap_text=True)
+                    header = sheet['A1']
+                    header.value = f"IT SUPPORT REPORT FROM {target_from} TO {target_to}"
+                    header.font = font_style
+                    header.fill = fill_color
+                    header.alignment = align
+                    sheet.row_dimensions[1].height = 34
+
+                    sheet['A2'] = "DATE".upper()
+                    sheet['B2'] = "TITLE".upper()
+                    sheet['C2'] = "Service".upper()
+                    sheet['D2'] = "Description".upper()
+                    sheet['E2'] = 'Status'.upper()
+                    sheet['F2'] = "Technician".upper()
+                    sheet['G2'] = "Owner".upper()
+
+                    sheet_count = 3
+
                 for service in query:
-                    cards.append({
-                        'cardno': service.cardno,
-                        'title': service.ticket.title,
-                        'description': service.ticket.descr,
-                        'service': f"{service.service.name}/{service.service_sub.name}",
-                        'technician': service.technician.technician.get_full_name(),
-                        'date': service.created_date,
-                        'owner':service.owner.get_full_name()
-                    })
+                    if doc == 'preview':
+                        cards.append({
+                            'cardno': service.cardno,
+                            'title': service.ticket.title,
+                            'description': service.ticket.descr,
+                            'service': f"{service.service.name}/{service.service_sub.name}",
+                            'technician': service.technician.technician.get_full_name(),
+                            'date': service.created_date,
+                            'owner': service.owner.get_full_name()
+                        })
+                    elif doc == 'excel':
+                        sheet[f"A{sheet_count}"] = service.created_date
+                        sheet[f"B{sheet_count}"] = service.ticket.title
+                        sheet[f"C{sheet_count}"] = f"{service.service.name}/{service.service_sub.name}"
+                        sheet[f"D{sheet_count}"] = service.ticket.descr
+                        sheet[f"E{sheet_count}"] = service.text_status()
+                        sheet[f"F{sheet_count}"] = service.technician.technician.get_full_name()
+                        sheet[f"G{sheet_count}"] = service.service.owner.get_full_name()
+                        if service.client_approval == 0:
+                            OPEN += 1
+
+                        if service.client_approval == 1:
+                            CLIENT_APPROVAL += 1
+
+                        if service.status == 2 :
+                            CLOSED += 1
+
+                        if service.ticket.status == 0:
+                            UNATTENDED += 1
+                        sheet_count += 1
+
+                if doc == 'excel':
+                    chat_sheet = book.create_sheet("CHART")
+                    data = [
+                        ["Category", "Value"],
+                        ["OPEN", OPEN], ["CLIENT APPROVAL", CLIENT_APPROVAL], ["CLOSED", CLOSED], ["UNATTENDED",UNATTENDED]
+                    ]
+
+                    for row in data:
+                        chat_sheet.append(row)
+
+                    chat = PieChart()
+                    chat.title = "EXECUTION"
+                    data2 = Reference(chat_sheet, min_col=2, min_row=1, max_col=2, max_row=len(data))
+                    lebels = Reference(chat_sheet, min_col=1, min_row=2, max_row=len(data))
+                    chat.add_data(data2, titles_from_data=True)
+                    chat.set_categories(labels=lebels)
+                    chat_sheet.add_chart(chat, 'D1')
+                    file_name = f"static/general/tmp/SERVICING_REPORT_AS_OF{current_date()}.xlsx"
+                    book.save(file_name)
+
+                    cards = file_name
 
                 success_response['message'] = cards
 
