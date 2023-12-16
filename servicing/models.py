@@ -118,7 +118,7 @@ class ServiceCard(models.Model):
         if self.client_approval == 1:
             return  'sent_to_client'
 
-        if self.status == 2:
+        if self.client_approval == 2:
             return 'closed'
 
         if self.ticket.status == 0:

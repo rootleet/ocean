@@ -412,29 +412,36 @@ def interface(request):
                 doc = data.get('doc') or 'preview'
                 cards = []
 
-                if target_user == '*' and target_status != '*':
-                    query = ServiceCard.objects.filter(status=target_status,
-                                                       created_date__range=(target_from, target_to))
-                elif target_user == '*' and target_status == '*':
-                    query = ServiceCard.objects.filter(created_date__range=(target_from, target_to))
+                # if target_user == '*' and target_status != '*':
+                #     query = ServiceCard.objects.filter(status=target_status,
+                #                                        created_date__range=(target_from, target_to))
+                # elif target_user == '*' and target_status == '*':
+                #     query = ServiceCard.objects.filter(created_date__range=(target_from, target_to))
+                #
+                # elif target_user != '*' and target_status == '*':
+                #     query = ServiceCard.objects.filter(created_date__range=(target_from, target_to),
+                #                                        client_id=target_user)
+                # else:
+                #     query = ServiceCard.objects.filter(status=target_status,
+                #                                        created_date__range=(target_from, target_to),
+                #                                        client_id=target_user)
 
-                elif target_user != '*' and target_status == '*':
-                    query = ServiceCard.objects.filter(created_date__range=(target_from, target_to),
-                                                       client_id=target_user)
-                else:
-                    query = ServiceCard.objects.filter(status=target_status,
-                                                       created_date__range=(target_from, target_to),
-                                                       client_id=target_user)
+                query = ServiceCard.objects.filter(
+                    Q(client_id=target_user) if target_user != '*' else Q(),
+                    Q(status=target_status) if target_status != '*' else Q(),
+                    Q(created_date__range=(target_from, target_to))
+                )
+                UNATTENDED = 0
+                OPEN = 0
+                CLIENT_APPROVAL = 0
+                CLOSED = 0
 
                 if doc == 'excel':
                     import openpyxl
                     book = openpyxl.Workbook()
                     sheet = book.active
 
-                    UNATTENDED = 0
-                    OPEN = 0
-                    CLIENT_APPROVAL = 0
-                    CLOSED = 0
+
 
                     sheet.title = f"{target_from} To {target_to}"
                     sheet.merge_cells("A1:G1")
@@ -474,23 +481,24 @@ def interface(request):
                         sheet[f"A{sheet_count}"] = service.created_date
                         sheet[f"B{sheet_count}"] = service.ticket.title
                         sheet[f"C{sheet_count}"] = f"{service.service.name}/{service.service_sub.name}"
-                        sheet[f"D{sheet_count}"] = service.ticket.descr
+                        sheet[f"D{sheet_count}"] = service.ticket.descr[:100]
                         sheet[f"E{sheet_count}"] = service.text_status()
                         sheet[f"F{sheet_count}"] = service.technician.technician.get_full_name()
-                        sheet[f"G{sheet_count}"] = service.service.owner.get_full_name()
-                        sheet[f"H{sheet_count}"] = service.last_transaction()
-                        if service.client_approval == 0:
+                        sheet[f"G{sheet_count}"] = service.ticket.owner.get_full_name()
+                        sheet[f"H{sheet_count}"] = service.last_transaction()[:100]
+                        if service.text_status() == 'attending_to':
                             OPEN += 1
-
-                        if service.client_approval == 1:
+                        elif service.text_status() == 'sent_to_client':
                             CLIENT_APPROVAL += 1
 
-                        if service.status == 2 :
+                        elif service.text_status() == 'closed':
                             CLOSED += 1
 
-                        if service.ticket.status == 0:
+                        elif service.text_status() == 'unattended':
                             UNATTENDED += 1
+
                         sheet_count += 1
+
 
                 if doc == 'excel':
                     chat_sheet = book.create_sheet("CHART")
@@ -509,7 +517,7 @@ def interface(request):
                     chat.add_data(data2, titles_from_data=True)
                     chat.set_categories(labels=lebels)
                     chat_sheet.add_chart(chat, 'D1')
-                    file_name = f"static/general/tmp/SERVICING_REPORT_AS_OF{current_date()}.xlsx"
+                    file_name = f"static/general/tmp/SERVICING_REPORT.xlsx"
                     book.save(file_name)
 
                     cards = file_name
