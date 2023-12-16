@@ -4,6 +4,8 @@ import pathlib
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import models
+from django.utils import timezone
+
 from community.models import questions, QuestionTags
 from blog.models import Providers
 from django.db.models import Sum
@@ -451,7 +453,7 @@ class TicketHd(models.Model):
     title = models.TextField()
     descr = models.TextField()
 
-    created_on = models.DateTimeField(auto_now_add=True)
+    created_on = models.DateTimeField(default=timezone.now)
     edited_on = models.DateTimeField(auto_now=True)
     status = models.IntegerField(default=0)
     app = models.TextField(default='Unknown')

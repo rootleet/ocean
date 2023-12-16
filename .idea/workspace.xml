@@ -4,17 +4,29 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ffcbf13e-d396-4071-9a24-4014a690f966" name="Changes" comment="send all sms in ocean">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+    <list default="true" id="ffcbf13e-d396-4071-9a24-4014a690f966" name="Changes" comment="issues reporting">
+      <change afterPath="$PROJECT_DIR$/static/general/tmp/SERVICING_REPORT_AS_OF2023_12_16_07_02_20.xlsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/general/tmp/SERVICING_REPORT_AS_OF2023_12_16_07_09_59.xlsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/general/tmp/SERVICING_REPORT_AS_OF2023_12_16_07_12_13.xlsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/general/tmp/SERVICING_REPORT_AS_OF2023_12_16_07_18_34.xlsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/general/tmp/SERVICING_REPORT_AS_OF2023_12_16_07_21_56.xlsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/general/tmp/SERVICING_REPORT_AS_OF2023_12_16_07_27_32.xlsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/general/tmp/SERVICING_REPORT_AS_OF2023_12_16_07_29_42.xlsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/general/tmp/SERVICING_REPORT_AS_OF2023_12_16_07_32_42.xlsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/general/tmp/SERVICING_REPORT_AS_OF2023_12_16_07_36_20.xlsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/general/tmp/SERVICING_REPORT_AS_OF2023_12_16_07_39_13.xlsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/general/tmp/SERVICING_REPORT_AS_OF2023_12_16_07_41_44.xlsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/general/tmp/SERVICING_REPORT_AS_OF2023_12_16_07_51_18.xlsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/general/tmp/SERVICING_REPORT_AS_OF2023_12_16_07_52_27.xlsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/general/tmp/SERVICING_REPORT_AS_OF2023_12_16_07_56_49.xlsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/general/tmp/SERVICING_REPORT_AS_OF2023_12_16_08_06_01.xlsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/general/tmp/SERVICING_REPORT_AS_OF2023_12_16_08_08_05.xlsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/general/tmp/SERVICING_REPORT_AS_OF2023_12_16_08_08_58.xlsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/general/tmp/SERVICING_REPORT_AS_OF2023_12_16_08_13_30.xlsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/admin_panel/admin_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/admin_panel/admin_api.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/admin_panel/anton.py" beforeDir="false" afterPath="$PROJECT_DIR$/admin_panel/anton.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/admin_panel/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/admin_panel/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/servicing/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/servicing/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/servicing/servicing_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/servicing/servicing_api.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/general/js/classes/anton.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/general/js/classes/anton.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/general/js/classes/reports.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/general/js/classes/reports.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/dashboard/emails.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/dashboard/emails.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/servicing/new-job.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/servicing/new-job.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -298,15 +310,7 @@
       <workItem from="1702309565538" duration="816000" />
       <workItem from="1702570272555" duration="1600000" />
       <workItem from="1702573082217" duration="5160000" />
-      <workItem from="1702707126631" duration="7144000" />
-    </task>
-    <task id="LOCAL-00059" summary="db interface updated">
-      <option name="closed" value="true" />
-      <created>1698676385539</created>
-      <option name="number" value="00059" />
-      <option name="presentableId" value="LOCAL-00059" />
-      <option name="project" value="LOCAL" />
-      <updated>1698676385540</updated>
+      <workItem from="1702707126631" duration="9142000" />
     </task>
     <task id="LOCAL-00060" summary="bolt api changed">
       <option name="closed" value="true" />
@@ -692,7 +696,15 @@
       <option name="project" value="LOCAL" />
       <updated>1702309725709</updated>
     </task>
-    <option name="localTasksCounter" value="108" />
+    <task id="LOCAL-00108" summary="issues reporting">
+      <option name="closed" value="true" />
+      <created>1702714606372</created>
+      <option name="number" value="00108" />
+      <option name="presentableId" value="LOCAL-00108" />
+      <option name="project" value="LOCAL" />
+      <updated>1702714606373</updated>
+    </task>
+    <option name="localTasksCounter" value="109" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -715,7 +727,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="Re-made servicing to container much detaili and simplify processed.&#10;&#10;1. Email sending has been enhanced to include much more details with a version 2 of mail sync.&#10;&#10;2. Every app will have much more details that includes provider, logo and a new layout design for apps.&#10;&#10;3. Every jobcard will belong to an app, and there is a send provider button that will auto generate email template to be sent to provider&#10;&#10;4. JS has been enhanced to add a form class that helps make forms in js than typing them" />
     <MESSAGE value="mail send v2" />
     <MESSAGE value="Enhance Retail to include product from database with relative cronjob" />
     <MESSAGE value="added generar retail bash script" />
@@ -740,7 +751,8 @@
     <MESSAGE value="more detailed issues showing and also service navigation" />
     <MESSAGE value="change new ticket sms number" />
     <MESSAGE value="send all sms in ocean" />
-    <option name="LAST_COMMIT_MESSAGE" value="send all sms in ocean" />
+    <MESSAGE value="issues reporting" />
+    <option name="LAST_COMMIT_MESSAGE" value="issues reporting" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

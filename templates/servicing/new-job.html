@@ -158,12 +158,18 @@
                             <strong class="card-title">TICKET DETAILS</strong>
                         </div>
                         <div class="card-body p-2">
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text rounded-0">DATE</span>
+                                </div>
+                                <input type="date" id="ticket_date" class="form-control rounded-0" >
 
+                            </div>
                             <div class="input-group mb-2">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text rounded-0">TITLE</span>
                                 </div>
-                                <textarea id="ticket_title" cols="30" class="form-control rounded-0" rows="1"></textarea>
+                                <input type="text" id="ticket_title" class="form-control rounded-0" >
                             </div>
                             <textarea name="description" id="description" class="form-control form-control-sm" rows="10" cols="30" ></textarea>
                         </div>
@@ -207,6 +213,7 @@
     </div>
 
     <script>
+        $('#ticket_date').val(today)
         let remarks = {};
         let tits = {};
         amodal.setBodyHtml(`<textarea id="ticket_description" class="form-control" ></textarea>`);
@@ -385,7 +392,7 @@
         function saveJobCard(){
             // get inputs
 
-            let header = ['client','email','phone','service','service_sub','importance','ticket','technician','ticket_title','owner','description','app'];
+            let header = ['client','email','phone','service','service_sub','importance','ticket','technician','ticket_title','owner','description','app','ticket_date'];
             if(anton.validateInputs(header) ){
                 let head = anton.Inputs(header);
                 console.table(head);

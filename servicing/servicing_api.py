@@ -80,6 +80,7 @@ def interface(request):
                 # get header data
                 cardno = f"JC{ServiceCard.objects.all().count() + 1}"
                 client_pk = head.get('client')
+                entry_date = head.get('ticket_date')
                 client = User.objects.get(pk=client_pk)
                 phone = head.get('phone').replace('+233', '0')
                 owner = User.objects.get(pk=head.get('owner'))
@@ -99,7 +100,7 @@ def interface(request):
 
                 if tick == '0':
                     # generate
-                    TicketHd(owner=client, title=f"{ticket_title}", descr=f"{ticked_description}", status=1).save()
+                    TicketHd(owner=client, title=f"{ticket_title}", descr=f"{ticked_description}", status=1,created_on=entry_date).save()
                     ticket = TicketHd.objects.filter(owner=client, title=f"{ticket_title}",
                                                      descr=f"{ticked_description}", status=1).last()
                 else:
