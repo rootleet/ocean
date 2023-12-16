@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from django.db import models
 
-from admin_panel.models import TicketHd, UserAddOns
+from admin_panel.models import TicketHd, UserAddOns, TicketTrans
 from appscenter.models import App
 from taskmanager.models import Tasks
 
@@ -90,6 +90,13 @@ class ServiceCard(models.Model):
 
     def materials(self):
         return ServiceMaterials.objects.filter(service_card=self)
+
+    def last_transaction(self):
+        if TicketTrans.objects.filter(ticket_id=self.ticket_id).exists():
+            tran = TicketTrans.objects.filter(ticket_id=self.ticket_id).last()
+            return tran.tran
+        else:
+            return "No Transaction"
 
     def app_details(self):
         obj = {

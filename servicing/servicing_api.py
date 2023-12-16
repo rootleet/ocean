@@ -455,6 +455,7 @@ def interface(request):
                     sheet['E2'] = 'Status'.upper()
                     sheet['F2'] = "Technician".upper()
                     sheet['G2'] = "Owner".upper()
+                    sheet['H2'] = "Last Transaction"
 
                     sheet_count = 3
 
@@ -477,6 +478,7 @@ def interface(request):
                         sheet[f"E{sheet_count}"] = service.text_status()
                         sheet[f"F{sheet_count}"] = service.technician.technician.get_full_name()
                         sheet[f"G{sheet_count}"] = service.service.owner.get_full_name()
+                        sheet[f"H{sheet_count}"] = service.last_transaction()
                         if service.client_approval == 0:
                             OPEN += 1
 

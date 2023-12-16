@@ -5,28 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ffcbf13e-d396-4071-9a24-4014a690f966" name="Changes" comment="issues reporting">
-      <change afterPath="$PROJECT_DIR$/static/general/tmp/SERVICING_REPORT_AS_OF2023_12_16_07_02_20.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/general/tmp/SERVICING_REPORT_AS_OF2023_12_16_07_09_59.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/general/tmp/SERVICING_REPORT_AS_OF2023_12_16_07_12_13.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/general/tmp/SERVICING_REPORT_AS_OF2023_12_16_07_18_34.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/general/tmp/SERVICING_REPORT_AS_OF2023_12_16_07_21_56.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/general/tmp/SERVICING_REPORT_AS_OF2023_12_16_07_27_32.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/general/tmp/SERVICING_REPORT_AS_OF2023_12_16_07_29_42.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/general/tmp/SERVICING_REPORT_AS_OF2023_12_16_07_32_42.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/general/tmp/SERVICING_REPORT_AS_OF2023_12_16_07_36_20.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/general/tmp/SERVICING_REPORT_AS_OF2023_12_16_07_39_13.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/general/tmp/SERVICING_REPORT_AS_OF2023_12_16_07_41_44.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/general/tmp/SERVICING_REPORT_AS_OF2023_12_16_07_51_18.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/general/tmp/SERVICING_REPORT_AS_OF2023_12_16_07_52_27.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/general/tmp/SERVICING_REPORT_AS_OF2023_12_16_07_56_49.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/general/tmp/SERVICING_REPORT_AS_OF2023_12_16_08_06_01.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/general/tmp/SERVICING_REPORT_AS_OF2023_12_16_08_08_05.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/general/tmp/SERVICING_REPORT_AS_OF2023_12_16_08_08_58.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/general/tmp/SERVICING_REPORT_AS_OF2023_12_16_08_13_30.xlsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/admin_panel/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/admin_panel/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/servicing/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/servicing/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/servicing/servicing_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/servicing/servicing_api.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/servicing/new-job.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/servicing/new-job.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -310,15 +291,7 @@
       <workItem from="1702309565538" duration="816000" />
       <workItem from="1702570272555" duration="1600000" />
       <workItem from="1702573082217" duration="5160000" />
-      <workItem from="1702707126631" duration="9142000" />
-    </task>
-    <task id="LOCAL-00060" summary="bolt api changed">
-      <option name="closed" value="true" />
-      <created>1699879687613</created>
-      <option name="number" value="00060" />
-      <option name="presentableId" value="LOCAL-00060" />
-      <option name="project" value="LOCAL" />
-      <updated>1699879687613</updated>
+      <workItem from="1702707126631" duration="10217000" />
     </task>
     <task id="LOCAL-00061" summary="added docker file">
       <option name="closed" value="true" />
@@ -704,7 +677,15 @@
       <option name="project" value="LOCAL" />
       <updated>1702714606373</updated>
     </task>
-    <option name="localTasksCounter" value="109" />
+    <task id="LOCAL-00109" summary="issues reporting">
+      <option name="closed" value="true" />
+      <created>1702720250963</created>
+      <option name="number" value="00109" />
+      <option name="presentableId" value="LOCAL-00109" />
+      <option name="project" value="LOCAL" />
+      <updated>1702720250963</updated>
+    </task>
+    <option name="localTasksCounter" value="110" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
