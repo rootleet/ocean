@@ -6,6 +6,7 @@ from pathlib import Path
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import authenticate, login as auth_login, logout
+from django.contrib.auth.decorators import login_required
 from django.contrib.sites import requests
 from django.core.mail import send_mail
 from stream.models import *
@@ -15,6 +16,7 @@ from django.http import HttpResponse
 from django.shortcuts import render
 
 
+@login_required()
 def index(request):
     videos = Videos.objects.all()
     context = {
@@ -25,6 +27,7 @@ def index(request):
     return render(request, 'streams/index.html', context=context)
 
 
+@login_required()
 def upload_video(request):
     import subprocess
     current_user = request.user
@@ -59,10 +62,12 @@ def upload_video(request):
             return HttpResponse(f"Could Not Add {e} {video_file}")
 
 
+@login_required()
 def watch(request, key):
     if Videos.objects.filter(key=key).exists():
         video = Videos.objects.get(key=key)
         context = {
-            'video': video
+            'video': video,
+            'nav':True
         }
         return render(request, 'streams/watch.html', context=context)
