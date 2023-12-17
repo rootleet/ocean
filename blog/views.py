@@ -26,6 +26,8 @@ all_meta = article_meta.objects.all()
 def index(request):
     artcs = articles.objects.all().order_by('-id')[:200]
     groups = article_meta.objects.all()
+    all_articles = articles.objects.all()[:50]
+    cats = tags.objects.all()
 
     context = {
         'nav': True,
@@ -34,19 +36,20 @@ def index(request):
         'artcs': artcs,
         'groups': groups,
         'meta': article_meta.objects.all(),
+        'articles': all_articles,
     }
     return render(request, 'blog/index.html', context)
 
-
+@login_required()
 def article(request, title):
-    if articles.objects.filter(title=title).count() < 1:
+    if articles.objects.filter(uni=title).count() < 1:
         return redirect('finder')
     if request.user.is_authenticated:
         user_id = request.user.id
     else:
         user_id = 0
 
-    this_article = articles.objects.get(title=title)
+    this_article = articles.objects.get(uni=title)
 
     context = {
         'page_title': 'Ocean | Article | ' + str(title),
@@ -106,7 +109,7 @@ def search_result(request, query):
     }
     return render(request, 'blog/search-result.html', context=context)
 
-
+@login_required()
 def new_article(request):
     form = NewArticle()
     meta_data = tags.objects.all().order_by('tag_dec')
@@ -118,7 +121,7 @@ def new_article(request):
     }
     return render(request, 'blog/new-article.html', context=context)
 
-
+@login_required()
 def save_article(request):
     # validate for
     if request.method == 'POST':
@@ -164,7 +167,7 @@ def save_article(request):
     else:
         return HttpResponse("Not Posted Form")
 
-
+@login_required()
 def load_meta(request, meta):
     all_articles = articles.objects.filter(meta=meta)
     cats = tags.objects.all()
@@ -175,7 +178,7 @@ def load_meta(request, meta):
     }
     return render(request, 'blog/meta-load.html', context=context)
 
-
+@login_required()
 def login(request):
     if request.user.is_authenticated:
         return redirect('blog-home')
@@ -191,7 +194,7 @@ def login(request):
     }
     return render(request, 'blog/login.html', context=context)
 
-
+@login_required()
 def login_process(request):
     if request.method == 'POST':
         form = LogIn(request.POST)
@@ -223,12 +226,12 @@ def login_process(request):
     else:
         pass
 
-
+@login_required()
 def logout_view(request):
     logout(request)
     return redirect('blog-home')
 
-
+@login_required()
 def edit_article(request, uni):
     form = EdArticle()
     if 'login' not in request.session:

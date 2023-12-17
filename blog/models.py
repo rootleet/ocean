@@ -6,8 +6,8 @@ from django.db import models
 
 # Create your models here.
 class articles(models.Model):
-    uni = models.CharField(max_length=200)
-    owner = models.ForeignKey(User,null=True,blank=True,on_delete=models.SET_NULL)
+    uni = models.CharField(max_length=200, unique=True)
+    author = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL)
 
     status = models.IntegerField(default=0)
     article = models.TextField()
@@ -15,8 +15,10 @@ class articles(models.Model):
     tag = models.CharField(max_length=200)
     intro = models.TextField(default='none')
     meta = models.CharField(max_length=200, default='none')
-    image = models.ImageField(upload_to=f'static/blog/asssets/article/{datetime.now().strftime("%Y-%m-%d")}/',
-                              default='1.jpg')
+    image = models.ImageField(upload_to=f'static/general/img/articles',
+                              default='static/general/img/articles/def_img.png')
+    thumbnail = models.ImageField(upload_to=f'static/general/img/articles',
+                                  default='static/general/img/articles/def_thumb.png')
 
     date_created = models.DateField(auto_now_add=True)
     time_created = models.TimeField(auto_now_add=True)

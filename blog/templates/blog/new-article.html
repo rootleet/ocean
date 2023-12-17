@@ -3,23 +3,19 @@
 
 {% block body %}
 
-    <form action="{% url 'save_article' %}" method="post" enctype="multipart/form-data" class="card h-100 w-100">
-    {% csrf_token %}
+    <div class="card h-100 w-100">
+
         <div class="card-header">
             <div class="d-flex flex-wrap">
                 <div class="w-50">
-                    <input type="text" placeholder="Title" autocomplete="off" required name="page_title" class="form-control rounded-0 border-danger">
+                    <input type="text" placeholder="Title" autocomplete="off" required id="title" name="page_title" class="form-control rounded-0 border-danger">
                 </div>
                 <div class="w-25">
                     <div class="input-group">
                         <div class="input-group-prepend bg-light border-0">
                             <span class="input-group-text bg-light border-0 text-danger">Meta</span>
                         </div>
-                        <select name="meta" class="form-control rounded-0 border-danger" id="">
-                            {% for meta in meta_dat %}
-                                <option value="{{ meta.tag_code }}">{{ meta.tag_dec }}</option>
-                            {% endfor %}
-                        <option value="0" selected>Others</option>
+                        <input type="text" placeholder="Tags" autocomplete="off" required id="tags" name="tags" class="form-control rounded-0 border-danger">
                         </select>
                     </div>
                 </div>
@@ -27,14 +23,14 @@
             </div>
         </div>
         <div class="card-body p-2">
-            <textarea name="article_desc" class="tinymce-editor">
+            <textarea name="article_desc" id="article_desc" class="tinymce-editor">
             </textarea>
 
         </div>
         <div class="card-footer">
-            <button type="submit" class="btn btn-success rounded-0 h-fit">Publish</button>
+            <button type="button" onclick="blog.saveArticle()" class="btn btn-success rounded-0 h-fit">Publish</button>
         </div>
-    </form>
+    </div>
 
 {#    <div class="container-fluid py-5" style="min-height: 100vh">#}
 {#        <!-- ARTICLE -->#}

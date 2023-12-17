@@ -4,34 +4,55 @@
 
 {% block body %}
 
-    <div class="container h-100">
-        <div class="row h-100 d-flex flex-wrap align-content-center justify-content-center">
+    <div class="card-body h-100">
 
-            <div class="col-sm-3 p-2">
-                <button onclick="location.href='{% url 'new-article' %}'" type="button" class="btn w-100 btn-outline-primary text-center tool_button">
-                    <i class="fa fa-3x fa-book-reader"></i> <br><br> New Article
-                </button>
-            </div>
+        <div class="container h-100 py-3 overflow-auto">
 
-            <div class="col-sm-3 p-2">
-                <button onclick="location.href='{% url 'finder' %}'" type="button" class="btn w-100 btn-outline-primary text-center tool_button">
-                    <i class="fa fa-3x fa-search"></i> <br><br> Finder
-                </button>
-            </div>
+            <div class="row no-gutters">
+                <div style="height: 300px" class="col-sm-12 bg-dark text-light p-5 rounded_c d-flex flex-wrap align-content-center">
+                    <div>
+                        <h1>OceanFlow Guides</h1>
+                        <div class="w-50">
+                            <p>
+Welcome to OceanFlow Guides, your go-to resource for tutorials, how-to guides, and in-depth instructions within the Ocean app ecosystem. Dive into a sea of knowledge where we navigate the currents of technology, exploration, and innovation.
+                            </p>
+                        </div>
+                        <a href="#">Read More ></a>
+                    </div>
+                </div>
 
-            <div class="col-sm-3 p-2">
-                <button onclick="location.href='{% url 'community' %}'" class="btn w-100 btn-outline-warning text-center tool_button">
-                    <i class="fa fa-3x fa-question-circle"></i> <br><br> Support Center
-                </button>
-            </div>
+                {% for article in articles %}
 
-            <div class="col-sm-3 p-2">
-                <button onclick="location.href='{% url 'stream' %}'" class="btn w-100 btn-outline-danger text-center tool_button">
-                    <i class="fa fa-3x fa-question-circle"></i> <br><br> Videos Streams
-                </button>
+                    <div class="col-sm-6  p-2" style="height: 200px">
+                        <div  class="rounded_c d-flex flex-wrap border overflow-hidden h-100">
+
+                            <div style="background: #eaeaea" class="w-75 p-3 h-100">
+                                <h3 class="ellipsis">{{ article.title }}</h3>
+                                <p class="ellipsis_2">
+                                    {{ article.article | striptags | slice:":100"  }}
+                                </p>
+                                <a href="javascript:void(0)" onclick="location.href='{% url 'article' article.uni %}'">Continue Reading</a>
+                                <div class="w-100">
+                                    <span class="badge bg-info">tag</span> <span class="badge bg-info">tag</span>
+                                </div>
+
+                            </div>
+
+                            <div class="w-25 h-100 d-flex flex-wrap align-content-center">
+                                <img src="{{ article.image.url }}" alt="" class="imf-fluid h-100">
+                            </div>
+
+                        </div>
+                    </div>
+
+                {% endfor %}
+
+
+
             </div>
 
         </div>
+
     </div>
 
 {% endblock %}

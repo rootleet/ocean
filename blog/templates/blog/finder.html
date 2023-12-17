@@ -1,63 +1,56 @@
 {% extends 'blog/base.html' %}
 {% load static %}
 
-<style>
-    body{
-        background: black;
-        color: #f3f3f3;
-    }
-</style>
+
 
 {% block body %}
 
-    <div class="container pt-2 h-100">
+    <div class="card-body h-100">
 
-        <div class="w-100 mx-auto">
-            <div class="list-group list-group-horizontal mb-2">
-                {% for tag in tags %}
-                    <a href="{% url 'load-meta' tag.tag_dec %}" class="list-group-item">{{ tag.tag_dec }}</a>
-                {% endfor %}
-            </div>
-        </div>
+        <div class="container py-3 overflow-auto">
 
-        <div class="row h-100">
+            <div class="row no-gutters">
+                <div style="height: 300px" class="col-sm-12 bg-dark-light p-5 rounded_c d-flex flex-wrap align-content-center">
+                    <div>
+                        <h1>TITLE</h1>
+                        <div class="w-50">
+                            <p>
+                                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aperiam, atque autem corporis dolor doloribus eaque earum est, eum exercitationem ipsa ipsam laborum molestiae neque nisi possimus soluta voluptatibus. Magnam, vel?
+                            </p>
+                        </div>
+                        <a href="#">Read More ></a>
+                    </div>
+                </div>
 
+                {% for article in articles %}
 
+                    <div class="col-sm-6  p-2" style="height: 200px">c
+                        <div  class="rounded_c d-flex flex-wrap border overflow-hidden h-100">
 
-            {% for article in articles %}
-                <div  class="col-sm-3 col-md-6 col-lg-4 p-2 mb-2">
-
-                            <!-- Card -->
-                            <div class="card p-2 mb-5 shadow">
-
-                              <!-- Card image -->
-                              <div class="view overlay">
-                                <img class="card-img-top custom_shadow" src="{{ article.image.url }}"
-                                  alt="Card image cap">
-                                <a href="#!">
-                                  <div class="mask rgba-white-slight"></div>
-                                </a>
-                              </div>
-
-                              <!-- Card content -->
-                              <div class="card-body">
-
-                                <!-- Title -->
-                                <h4 class="card-title ellipsis">{{ article.title }}</h4>
-                                <!-- Text -->
-                                <p class="card-text font-weight-lighter">{{ article.article | safe | slice:':50' }}</p>
-                                <!-- Button -->
-                                <a href="{% url 'article' article.title  %}" class="btn btn-primary rounded-0">READ</a>
-
-                              </div>
+                            <div class="w-75 p-3 bg-dark-light h-100">
+                                <h3 class="ellipsis">{{ article.title }}</h3>
+                                <p class="ellipsis_2">
+                                    {{ article.article | striptags | slice:":100"  }}
+                                </p>
+                                <a href="javascript:void(0)">Continue Reading</a>
+                                <div class="w-100">
+                                    <span class="badge bg-info">tag</span> <span class="badge bg-info">tag</span>
+                                </div>
 
                             </div>
-                            <!-- Card -->
+
+                            <div style="background: url('{{ article.image.url }}')" class="w-25 h-100 img_bg">
+
+                            </div>
 
                         </div>
-            {% endfor %}
+                    </div>
+
+                {% endfor %}
 
 
+
+            </div>
 
         </div>
 

@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from . import views
+from . import views, blog_api
 
 urlpatterns = [
     path('', views.index, name='blog-home'),
@@ -34,6 +34,7 @@ urlpatterns = [
     path('login-process', views.login_process, name='login_process-blog'),
     path('finder/', views.finder, name='finder'),
     path('article_convo',views.article_convo, name='article_convo'),
-    path('load_convo',views.load_convo,name='load_convo')
+    path('load_convo',views.load_convo,name='load_convo'),
+    path('api/',blog_api.interface,name='blog_api')
 
 ]

@@ -1,4 +1,7 @@
 {% load static %}
+{% load permission_tags %}
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -14,9 +17,13 @@
   <link href="{% static 'assets/img/favicon.png' %}" rel="icon">
   <link href="{% static 'assets/img/apple-touch-icon.png' %}" rel="apple-touch-icon">
 
-  <!-- Google Fonts -->
+  <!-- Google Fonts
+
   <link href="https://fonts.gstatic.com" rel="preconnect">
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+  <link
+    href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+    rel="stylesheet"> !-->
 
   <!-- Vendor CSS Files -->
   <link href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
@@ -29,47 +36,115 @@
 
   <!-- Template Main CSS File -->
   <link href="{% static 'assets/css/style.css' %}" rel="stylesheet">
+  <link href="{% static 'general/css/recorder.css' %}" rel="stylesheet">
+    <link rel="manifest" href="{% static 'general/manifest.json' %}">
+     <link href="{% static 'general/css/colors.css' %}" rel="stylesheet">
 
 
 
-     <script src="{% static 'blog/js/jquery.min.js' %}"></script>
-    <script src="{% static 'blog/js/popper.min.js' %}"></script>
-    <script src="{% static 'blog/js/bootstrap.min.js' %}"></script>
- <script src="{% static 'general/js/cust.js' %}"></script>
-    <script src="{% static 'general/js/admin.js' %}"></script>
-<script src="{% static 'general/js/error_handler.js' %}"></script>
-<script src="{% static 'general/js/sweetalert2@11' %}"></script>
-<script src="{% static 'general/js/all.js' %}"></script>
-    <script src="{% static 'general/js/prod_master.js' %}"></script>
 
-    <script src="{% static 'general/js/classes/products.js' %}"></script>
-    <script src="{% static 'general/js/classes/adjustment.js' %}"></script>
-    <script src="{% static 'general/js/classes/grn.js' %}"></script>
-    <script src="{% static 'general/js/classes/transfer.js' %}"></script>
 
-<script>
+  <script src="{% static 'blog/js/jquery.min.js' %}"></script>
+  <script src="{% static 'blog/js/popper.min.js' %}"></script>
+  <script src="{% static 'blog/js/bootstrap.min.js' %}"></script>
+  <script src="{% static 'general/js/cust.js' %}"></script>
+  <script src="{% static 'general/js/admin.js' %}"></script>
+  <script src="{% static 'general/js/error_handler.js' %}"></script>
+  <script src="{% static 'general/js/sweetalert2@11' %}"></script>
+  <script src="{% static 'general/js/all.js' %}"></script>
+  <script src="{% static 'general/js/prod_master.js' %}"></script>
+
+  <script src="{% static 'general/js/classes/products.js' %}"></script>
+  <script src="{% static 'general/js/classes/adjustment.js' %}"></script>
+  <script src="{% static 'general/js/classes/grn.js' %}"></script>
+  <script src="{% static 'general/js/classes/transfer.js' %}"></script>
+  <script src="{% static 'general/js/classes/issues.js' %}"></script>
+  <script src="{% static 'general/js/classes/recording.js' %}"></script>
+  <script src="{% static 'general/js/classes/meeting.js' %}"></script>
+  <script src="{% static 'general/js/record.js' %}"></script>
+  <script src="{% static 'general/js/classes/user.js' %}"></script>
+  <script src="{% static 'general/js/classes/po.js' %}"></script>
+    <script src="{% static 'general/js/classes/sales.js' %}"></script>
+    <script src="{% static 'general/js/classes/sms.js' %}"></script>
+    <script src="{% static 'general/js/classes/cmms.js' %}"></script>
+    <script src="{% static 'general/js/trigger.js' %}"></script>
+    <script src="{% static 'general/js/classes/api.js' %}"></script>
+    <script src="{% static 'general/js/classes/dev_mgmt.js' %}"></script>
+    <script src="{% static 'general/js/classes/ticket.js' %}"></script>
+    <script src="{% static 'general/js/classes/app.js' %}"></script>
+    <script src="{% static 'general/js/classes/docs.js' %}"></script>
+    <script src="{% static 'general/js/classes/anton.js' %}"></script>
+    <script src="{% static 'general/js/classes/reminder.js' %}"></script>
+    <script src="{% static 'general/js/classes/contact.js' %}"></script>
+    <script src="{% static 'general/js/classes/modal.js' %}"></script>
+    <script src="{% static 'general/js/classes/form.js' %}"></script>
+    <script src="{% static 'general/js/classes/blog.js' %}"></script>
+
+
+
+  <script>
     var pClass = new Products()
 
-</script>
+  </script>
 
-  <!-- =======================================================
-  * Template Name: NiceAdmin - v2.4.1
-  * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
-  * Author: BootstrapMade.com
-  * License: https://bootstrapmade.com/license/
-  ======================================================== -->
+    <style>
+        .install-button {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+        .tox-promotion{
+            display: none !important;
+        }
+    </style>
 </head>
 
 <body>
-<input type="hidden" id="autos_url" value="{% url 'autos' 'ajax' %}">
-<input type="hidden" id="search_url" value="{% url 'search' %}">
-{% if nav == True %}
+    <!-- MODALS -->
+    <div id="g_modal" class="modal fade">
+        <div id="g_modal_size" class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="g_modal_title"></h5>
+                    <button class="close btn btn-outline-danger" data-bs-dismiss="modal">X</button>
+                </div>
+                <div class="modal-body">
+                    <div class="w-100" id="g_modal_body">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal" id="loader">
+        <div class="w-100 bg_trans_80 h-100 d-flex flex-wrap align-content-center justify-content-center">
+            <img src="{% static 'general/img/icons/2.gif' %}" alt="" class="img-fluid">
+            <div class="w-100 text-center">
+                <br>
+                <small class="text-info" id="error_msg"></small>
+            </div>
+        </div>
+    </div>
+    <script>
+        $('#loader').modal('show')
+    </script>
+
+  <input type="hidden" id="autos_url" value="{% url 'autos' 'ajax' %}">
+  <input type="hidden" id="search_url" value="{% url 'search' %}">
+  <input type="hidden" value="{{ request.user.pk }}" id="mypk">
+  {% if nav == True %}
   <!-- ======= Header ======= -->
   <header id="header" class="header fixed-top d-flex align-items-center">
 
     <div class="d-flex align-items-center justify-content-between">
-      <a href="index.html" class="logo d-flex align-items-center">
-        <img src="{% static 'assets/img/favicon.png' %}" alt="">
+      <a href="{% url 'home' %}" class="logo d-flex align-items-center">
+        <img src="{% static 'assets/img/logo.png' %}" alt="">
         <span class="d-none d-lg-block">OCEAN</span>
       </a>
       <i class="bi bi-list toggle-sidebar-btn"></i>
@@ -77,10 +152,12 @@
 
     <div class="search-bar">
       <form class="search-form d-flex align-items-center" method="POST" action="#">
-        <input type="text" name="query" placeholder="Search" title="Enter search keyword">
-        <button type="submit" title="Search"><i class="bi bi-search"></i></button>
+        <input type="text" name="searchQuery" id="searchQuery" placeholder="Search" title="Enter search keyword">
+        <button type="button" id="{{ searchButton }}" title="Search"><i class="bi bi-search"></i></button>
       </form>
     </div><!-- End Search Bar -->
+
+    {{ legend1 }}
 
     <nav class="header-nav ms-auto">
       <ul class="d-flex align-items-center">
@@ -95,17 +172,29 @@
 
           <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
             <i class="bi bi-bell"></i>
-            <span class="badge bg-primary badge-number">4</span>
+            <span class="badge bg-primary badge-number">{{ notifications.unread.count }}</span>
           </a><!-- End Notification Icon -->
 
           <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
+
             <li class="dropdown-header">
-              You have 4 new notifications
+              You have {{ notifications.unread.count }} new notifications
               <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
             </li>
             <li>
               <hr class="dropdown-divider">
             </li>
+
+            {% for notification in notifications.unread %}
+            <li class="notification-item">
+              <i class="bi bi-exclamation-circle text-warning"></i>
+              <div>
+                <h4>{{ notification.title }}</h4>
+                <p>{{ notification.descr }}</p>
+                <p>{{ notification.created_date }} <span class="text-info">{{ notification.created_time }}</span></p>
+              </div>
+            </li>
+            {% endfor %}
 
             <li class="notification-item">
               <i class="bi bi-exclamation-circle text-warning"></i>
@@ -184,7 +273,7 @@
 
             <li class="message-item">
               <a href="#">
-                <img src="assets/img/messages-1.jpg" alt="" class="rounded-circle">
+                <img src="{% static 'assets/img/messages-1.jpg' %}" alt="" class="rounded-circle">
                 <div>
                   <h4>Maria Hudson</h4>
                   <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
@@ -198,7 +287,7 @@
 
             <li class="message-item">
               <a href="#">
-                <img src="assets/img/messages-2.jpg" alt="" class="rounded-circle">
+                <img src="{% static 'assets/img/messages-2.jpg' %}" alt="" class="rounded-circle">
                 <div>
                   <h4>Anna Nelson</h4>
                   <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
@@ -212,7 +301,7 @@
 
             <li class="message-item">
               <a href="#">
-                <img src="assets/img/messages-3.jpg" alt="" class="rounded-circle">
+                <img src="{% static 'assets/img/messages-3.jpg' %}" alt="" class="rounded-circle">
                 <div>
                   <h4>David Muldon</h4>
                   <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
@@ -235,7 +324,7 @@
         <li class="nav-item dropdown pe-3">
 
           <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-            <img src="{% static 'assets/img/users/default.png' %}" alt="Profile" class="rounded-circle">
+            <img src="{{ request.user|my_profile_picture }}" alt="Profile" class="rounded-circle">
             <span class="d-none d-md-block dropdown-toggle ps-2">{{ user.username }}</span>
           </a><!-- End Profile Iamge Icon -->
 
@@ -304,46 +393,67 @@
           <i class="bi bi-grid"></i>
           <span>Dashboard</span>
         </a>
+      </li><!-- End Dashboard Nav -->
+
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="javascript:void(0)" onclick="location.href='{% url 'new-article' %}'">
+          <i class="bi bi-file-earmark-plus-fill text-primary"></i>
+          <span>NEW ARTICLE</span>
+        </a>
       </li>
 
-        {% if user.is_superuser %}
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="{% url 'new-article' %}">
-                  <i class="bi bi-envelope-paper"></i>
-                  <span>NEW ARTICLE</span>
-                </a>
-              </li>
-        {% endif %}
+
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="javascript:void(0)" onclick="location.href='{% url 'blog-home' %}'">
+          <i class="bi bi-newspaper text-info"></i>
+          <span>Articles</span>
+        </a>
+      </li>
+
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="javascript:void(0)" onclick="location.href='{% url 'stream' %}'">
+          <i class="bi bi-youtube text-danger"></i>
+          <span>Video Tutorials</span>
+        </a>
+      </li>
+
+
+
 
     </ul>
 
   </aside><!-- End Sidebar-->
-{% endif %}
+  {% endif %}
 
   <main id="main" class="main">
 
     <div class="pagetitle">
       <h1>{{ page.title }}</h1>
       <nav>
-{#        <ol class="breadcrumb">#}
-{#          <li class="breadcrumb-item"><a href="index.html">Home</a></li>#}
-{#          <li class="breadcrumb-item">Pages</li>#}
-{#          <li class="breadcrumb-item active">Blank</li>#}
-{#        </ol>#}
+        {# <ol class="breadcrumb">#}
+          {# <li class="breadcrumb-item"><a href="index.html">Home</a></li>#}
+          {# <li class="breadcrumb-item">Pages</li>#}
+          {# <li class="breadcrumb-item active">Blank</li>#}
+          {# </ol>#}
       </nav>
     </div><!-- End Page Title -->
 
-    <section class="section h-100">
-      {% block body %}
+    <section class="section h-100" style="height: 85vh !important">
+      <div class="w-100 h-100 card overflow-hidden">
+          <button id="install-button" class="install-button">Install App</button>
 
-      {% endblock %}
+          {% block body %}
+
+          {% endblock %}
+      </div>
     </section>
 
   </main><!-- End #main -->
 
 
 
-  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
+      class="bi bi-arrow-up-short"></i></a>
 
   <!-- Vendor JS Files -->
   <script src="{% static 'assets/vendor/apexcharts/apexcharts.min.js' %}"></script>
@@ -358,6 +468,79 @@
   <!-- Template Main JS File -->
   <script src="{% static 'assets/js/main.js' %}"></script>
 
+    <script>
+
+        $('#loader').delay(5000).modal('hide')
+
+    </script>
+
+
+{% if messages %}
+  <script>
+    {% for message in messages %}
+      kasa.info(`{{ message }}`)
+    {% endfor %}
+  </script>
+{% endif %}
+
+    <script>
+        let deferredPrompt;
+
+window.addEventListener('beforeinstallprompt', (event) => {
+    // Prevent the default prompt
+    console.log('beforeinstallprompt event fired');
+    event.preventDefault();
+
+    // Stash the event so it can be triggered later
+    deferredPrompt = event;
+
+    // Automatically trigger the install prompt
+    deferredPrompt.prompt();
+
+    // Wait for the user to respond to the prompt
+    deferredPrompt.userChoice.then((choiceResult) => {
+        if (choiceResult.outcome === 'accepted') {
+            console.log('User accepted the install prompt');
+        } else {
+            console.log('User dismissed the install prompt');
+        }
+
+        // Reset the deferredPrompt for future prompts
+        deferredPrompt = null;
+    });
+});
+
+window.addEventListener('load', () => {
+    const installButton = document.getElementById('install-button');
+    if (deferredPrompt) {
+        installButton.style.display = 'block';
+
+        installButton.addEventListener('click', () => {
+            // Show the browser's install prompt
+            deferredPrompt.prompt();
+
+            // Wait for the user to respond to the prompt
+            deferredPrompt.userChoice.then((choiceResult) => {
+                if (choiceResult.outcome === 'accepted') {
+                    console.log('User accepted the install prompt');
+                } else {
+                    console.log('User dismissed the install prompt');
+                }
+
+                // Reset the deferredPrompt for future prompts
+                deferredPrompt = null;
+
+                // Hide the custom install button
+                installButton.style.display = 'none';
+            });
+        });
+    }
+});
+
+    </script>
+
 </body>
 
 </html>
+
+

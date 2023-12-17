@@ -7,7 +7,10 @@
 
     <div class="card-body h-100 overflow-auto py-2 bg-light" >
         <h2 class="m-0 p-0">{{ article.title }}</h2>
-            <small class="text-muted">Created By {{ article.owner.username }} on {{ article.date_created }} {{ article.time_created }}</small>
+            <small class="text-muted">Created By {{ article.author.get_full_name }} on {{ article.date_created }} {{ article.time_created }}</small>
+            {% if user.is_superuser %}
+                <span onclick="location.href='{% url 'edit_article' article.uni %}'" class="badge bg-info pointer">edit</span>
+            {% endif %}
             <hr>
         <div class="article-header mb-5 text-light" style="background: url('{{ article.image.url }}')">
             <div class="w-100 h-100 bg_trans_30 d-flex flex-wrap align-content-center justify-content-center">
@@ -22,47 +25,13 @@
 
             </section>
 
-            <!-- ASIDE -->
-{#            <aside class="col-sm-3">#}
-{#                <div class="card custom_shadow">#}
-{#                    <div class="card-header">#}
-{#                        <strong class="card-title">Conversation Box</strong>#}
-{#                        <i onclick="var d = $('#messages');d.scrollTop(d.prop('scrollHeight'))" class="float-right text-danger post" id="new" style="display: none">new!!</i>#}
-{#                    </div>#}
-{#                    <div id="messages" class="card-body overflow-auto" style="height: 250px">#}
-{##}
-{##}
-{##}
-{#                    </div>#}
-{#                    <input type="hidden" value="{% url 'load_convo' %}" id="load_convo_url">#}
-{#                    <div class="card-footer">#}
-{#                        {% if user.is_active %}#}
-{#                            <form action="{% url 'article_convo' %}" method="post" id="general_form">#}
-{#                            {% csrf_token %}#}
-{#                                <input type="hidden" value="{{ article.pk }}" id="article_pk" name="article">#}
-{#                                <input type="text" class="form-control rounded-0" placeholder="Type...." autocomplete="off" required id="convo_message" name="convo_message">#}
-{#                            </form>#}
-{#                        {% else %}#}
-{#                            <a href="{% url 'login' %}?next={{ request.get_full_path }}" class="btn w-100 btn-info">JOIN CONVERSATION</a>#}
-{#                        {% endif %}#}
-{#                    </div>#}
-{#                </div>#}
-{#            </aside>#}
+
 
 
         </div>
     </div>
 
-    <div class="card-footer">
-        <div class="w-100 h-100 d-flex flex-wrap">
-            <div class="w-50"><a href="{% url 'finder' %}"><strong>Blog</strong></a> / <strong class="card-title">{{ article.title }}</strong></div>
-            <div class="w-50 d-flex flex-wrap justify-content-end">
-                {% if user.is_superuser %}
-                        <a class="btn btn-info" onclick="location.href='{% url 'edit_article' article.uni %}'" href="javascript:void(0)">Edit</a>
-                    {% endif %}
-            </div>
-        </div>
-    </div>
+
 
     <script>
         load_convo_message()

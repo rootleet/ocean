@@ -227,6 +227,13 @@ class Kasa {
       });
   }
 
+    response(response) {
+        if(response['status_code'] === 200){
+            kasa.success("PASS")
+        } else {
+            kasa.error(response['message'])
+        }
+    }
 }
 
 class reportCard {
