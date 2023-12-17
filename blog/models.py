@@ -7,7 +7,7 @@ from django.db import models
 # Create your models here.
 class articles(models.Model):
     uni = models.CharField(max_length=200, unique=True)
-    # author = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL)
+    author = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL)
 
     status = models.IntegerField(default=0)
     article = models.TextField()
