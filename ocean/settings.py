@@ -55,7 +55,8 @@ INSTALLED_APPS = [
     'taskmanager.apps.TaskmanagerConfig',
     'retail.apps.RetailConfig',
     'crm.apps.CrmConfig',
-    'servicing.apps.ServicingConfig'
+    'servicing.apps.ServicingConfig',
+    'maintenance.apps.MaintenanceConfig'
 ]
 
 MIDDLEWARE = [
@@ -217,7 +218,7 @@ OLD_DB_NAME = 'PROC_CMMS_V1'
 # DB_PORT = '1433'
 # DB_NAME = 'PROC_CMMS_V1'
 
-RET_DB_HOST = 'localhost'
+RET_DB_HOST = '192.168.2.4'
 RET_DB_NAME = 'SMSEXPV17'
 RET_DB_USER = 'sa'
 RET_DB_PASS = 'sa@123456'
