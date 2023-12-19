@@ -678,6 +678,7 @@ def interface(request):
                         retail1 = row[0]
 
                     item.price = retail1
+                    item.inv_price = retail1
                     item.save()
 
         response = success_response
