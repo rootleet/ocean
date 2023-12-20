@@ -55,7 +55,8 @@ INSTALLED_APPS = [
     'taskmanager.apps.TaskmanagerConfig',
     'retail.apps.RetailConfig',
     'crm.apps.CrmConfig',
-    'servicing.apps.ServicingConfig'
+    'servicing.apps.ServicingConfig',
+    'maintenance.apps.MaintenanceConfig'
 ]
 
 MIDDLEWARE = [

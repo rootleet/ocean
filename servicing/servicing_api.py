@@ -17,7 +17,7 @@ from appscenter.models import App
 from meeting.models import MeetingHD
 
 from reports.models import ReportForms, ReportLegend, LegendSubs, DepartmentReportMailQue
-from servicing.models import Services, SubServices, ServiceCard, ServiceMaterials, ServiceTechnicians
+from servicing.models import Services, SubServices, ServiceCard, ServiceMaterials, ServiceTechnicians, CheckList
 from taskmanager.models import Tasks, TaskTransactions
 
 
@@ -87,6 +87,7 @@ def interface(request):
                 owner = User.objects.get(pk=head.get('owner'))
                 remarks = head.get('remarks')
                 annal = head.get('annal')
+                checklist = data.get('checklist').split(',')
                 service = Services.objects.get(pk=head.get('service'))
                 service_sub = SubServices.objects.get(pk=head.get('service_sub'))
                 technician = ServiceTechnicians.objects.get(
@@ -121,12 +122,15 @@ def interface(request):
 
                 task = Tasks.objects.get(uni=uni)
                 # save service card
-                ServiceCard(client=client, task=task, owner=owner,
+                just_service_card = ServiceCard(client=client, task=task, owner=owner,
                             remarks=f"{service.name}/{service_sub.name}/{ticket_title}",
                             service=service, service_sub=service_sub,
                             technician=technician, ticket=ticket, importance=importance, cardno=cardno, app=app,analysis=annal).save()
 
-                just_service_card = ServiceCard.objects.all().last()
+                # just_service_card = ServiceCard.objects.all().last()
+
+                for check in checklist:
+                    CheckList(cardno=just_service_card,name=check).save()
 
                 # deal with materials
                 for material in list(materials):

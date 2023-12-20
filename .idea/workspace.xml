@@ -4,12 +4,27 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ffcbf13e-d396-4071-9a24-4014a690f966" name="Changes" comment="take away author">
-      <change afterPath="$PROJECT_DIR$/static/general/tmp/SERVICING_REPORT.xlsx" afterDir="false" />
+    <list default="true" id="ffcbf13e-d396-4071-9a24-4014a690f966" name="Changes" comment="add service analysis">
+      <change afterPath="$PROJECT_DIR$/maintenance/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/maintenance/admin.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/maintenance/api.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/maintenance/apps.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/maintenance/models.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/maintenance/tests.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/maintenance/urls.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/maintenance/views.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/general/js/classes/maintenance.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/maintenance/landing.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/maintenance/maintenance.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/stream/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/stream/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/stream/templates/streams/watch.html" beforeDir="false" afterPath="$PROJECT_DIR$/stream/templates/streams/watch.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/stream/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/stream/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ocean/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/ocean/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ocean/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/ocean/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/servicing/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/servicing/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/servicing/servicing_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/servicing/servicing_api.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stream/templates/streams/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/stream/templates/streams/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/servicing/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/servicing/base.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/servicing/new-job.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/servicing/new-job.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -76,7 +91,7 @@
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/reza/Documents/GitHub/ocean/cronjobs/retail&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/reza/Documents/GitHub/ocean/maintainance&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
@@ -92,11 +107,11 @@
 }</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\reza\Documents\GitHub\ocean\maintainance" />
       <recent name="C:\Users\reza\Documents\GitHub\ocean\cronjobs\retail" />
       <recent name="C:\Users\reza\Documents\GitHub\ocean\templates\retail" />
       <recent name="C:\Users\reza\Documents\GitHub\ocean\cronjobs" />
       <recent name="C:\Users\reza\Documents\GitHub\ocean\static\apps\logos" />
-      <recent name="C:\Users\reza\Documents\GitHub\ocean\templates\servicing" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\reza\Documents\GitHub\ocean\static\general\js\classes" />
@@ -295,63 +310,11 @@
       <workItem from="1702573082217" duration="5160000" />
       <workItem from="1702707126631" duration="14516000" />
       <workItem from="1702749070631" duration="8208000" />
-      <workItem from="1702797668011" duration="11033000" />
-    </task>
-    <task id="LOCAL-00065" summary="show only pending sms">
-      <option name="closed" value="true" />
-      <created>1700241357648</created>
-      <option name="number" value="00065" />
-      <option name="presentableId" value="LOCAL-00065" />
-      <option name="project" value="LOCAL" />
-      <updated>1700241357649</updated>
-    </task>
-    <task id="LOCAL-00066" summary="Re-module servicing procedures.">
-      <option name="closed" value="true" />
-      <created>1700553314158</created>
-      <option name="number" value="00066" />
-      <option name="presentableId" value="LOCAL-00066" />
-      <option name="project" value="LOCAL" />
-      <updated>1700553314158</updated>
-    </task>
-    <task id="LOCAL-00067" summary="Add products category to bolt products export, and also add fix service reports generating">
-      <option name="closed" value="true" />
-      <created>1700571848017</created>
-      <option name="number" value="00067" />
-      <option name="presentableId" value="LOCAL-00067" />
-      <option name="project" value="LOCAL" />
-      <updated>1700571848017</updated>
-    </task>
-    <task id="LOCAL-00068" summary="make technician email message more descriptive">
-      <option name="closed" value="true" />
-      <created>1700575846603</created>
-      <option name="number" value="00068" />
-      <option name="presentableId" value="LOCAL-00068" />
-      <option name="project" value="LOCAL" />
-      <updated>1700575846603</updated>
-    </task>
-    <task id="LOCAL-00069" summary="Re-made servicing to container much detaili and simplify processed.&#10;&#10;1. Email sending has been enhanced to include much more details with a version 2 of mail sync.&#10;&#10;2. Every app will have much more details that includes provider, logo and a new layout design for apps.&#10;&#10;3. Every jobcard will belong to an app, and there is a send provider button that will auto generate email template to be sent to provider&#10;&#10;4. JS has been enhanced to add a form class that helps make forms in js than typing them">
-      <option name="closed" value="true" />
-      <created>1700720659183</created>
-      <option name="number" value="00069" />
-      <option name="presentableId" value="LOCAL-00069" />
-      <option name="project" value="LOCAL" />
-      <updated>1700720659183</updated>
-    </task>
-    <task id="LOCAL-00070" summary="Re-made servicing to container much detaili and simplify processed.&#10;&#10;1. Email sending has been enhanced to include much more details with a version 2 of mail sync.&#10;&#10;2. Every app will have much more details that includes provider, logo and a new layout design for apps.&#10;&#10;3. Every jobcard will belong to an app, and there is a send provider button that will auto generate email template to be sent to provider&#10;&#10;4. JS has been enhanced to add a form class that helps make forms in js than typing them">
-      <option name="closed" value="true" />
-      <created>1700734955485</created>
-      <option name="number" value="00070" />
-      <option name="presentableId" value="LOCAL-00070" />
-      <option name="project" value="LOCAL" />
-      <updated>1700734955485</updated>
-    </task>
-    <task id="LOCAL-00071" summary="mail send v2">
-      <option name="closed" value="true" />
-      <created>1700735839403</created>
-      <option name="number" value="00071" />
-      <option name="presentableId" value="LOCAL-00071" />
-      <option name="project" value="LOCAL" />
-      <updated>1700735839404</updated>
+      <workItem from="1702797668011" duration="16346000" />
+      <workItem from="1702908018816" duration="409000" />
+      <workItem from="1702979650412" duration="7354000" />
+      <workItem from="1703053477546" duration="19439000" />
+      <workItem from="1703102133002" duration="1702000" />
     </task>
     <task id="LOCAL-00072" summary="mail send v2">
       <option name="closed" value="true" />
@@ -689,7 +652,63 @@
       <option name="project" value="LOCAL" />
       <updated>1702825172669</updated>
     </task>
-    <option name="localTasksCounter" value="114" />
+    <task id="LOCAL-00114" summary="Set video static thumbnail">
+      <option name="closed" value="true" />
+      <created>1702847418286</created>
+      <option name="number" value="00114" />
+      <option name="presentableId" value="LOCAL-00114" />
+      <option name="project" value="LOCAL" />
+      <updated>1702847418286</updated>
+    </task>
+    <task id="LOCAL-00115" summary="db interface changed for bolt">
+      <option name="closed" value="true" />
+      <created>1702908130392</created>
+      <option name="number" value="00115" />
+      <option name="presentableId" value="LOCAL-00115" />
+      <option name="project" value="LOCAL" />
+      <updated>1702908130393</updated>
+    </task>
+    <task id="LOCAL-00116" summary="maintenance model removed">
+      <option name="closed" value="true" />
+      <created>1702908383994</created>
+      <option name="number" value="00116" />
+      <option name="presentableId" value="LOCAL-00116" />
+      <option name="project" value="LOCAL" />
+      <updated>1702908383994</updated>
+    </task>
+    <task id="LOCAL-00117" summary="Update retail API">
+      <option name="closed" value="true" />
+      <created>1702981041272</created>
+      <option name="number" value="00117" />
+      <option name="presentableId" value="LOCAL-00117" />
+      <option name="project" value="LOCAL" />
+      <updated>1702981041273</updated>
+    </task>
+    <task id="LOCAL-00118" summary="Update retail API">
+      <option name="closed" value="true" />
+      <created>1703078905170</created>
+      <option name="number" value="00118" />
+      <option name="presentableId" value="LOCAL-00118" />
+      <option name="project" value="LOCAL" />
+      <updated>1703078905172</updated>
+    </task>
+    <task id="LOCAL-00119" summary="Sending servicing to provider">
+      <option name="closed" value="true" />
+      <created>1703082618200</created>
+      <option name="number" value="00119" />
+      <option name="presentableId" value="LOCAL-00119" />
+      <option name="project" value="LOCAL" />
+      <updated>1703082618201</updated>
+    </task>
+    <task id="LOCAL-00120" summary="add service analysis">
+      <option name="closed" value="true" />
+      <created>1703083880284</created>
+      <option name="number" value="00120" />
+      <option name="presentableId" value="LOCAL-00120" />
+      <option name="project" value="LOCAL" />
+      <updated>1703083880284</updated>
+    </task>
+    <option name="localTasksCounter" value="121" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -712,12 +731,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="added generar retail bash script" />
-    <MESSAGE value="added update stock" />
-    <MESSAGE value="detailed retail message" />
-    <MESSAGE value="dynacmis stock variables" />
-    <MESSAGE value="no meeting doucment" />
-    <MESSAGE value="fix task uni or none" />
     <MESSAGE value="preparing ocean for live consumption" />
     <MESSAGE value="add sms message when resetiing password" />
     <MESSAGE value="detailed error message" />
@@ -737,7 +750,13 @@
     <MESSAGE value="issues reporting" />
     <MESSAGE value="last transaction added" />
     <MESSAGE value="take away author" />
-    <option name="LAST_COMMIT_MESSAGE" value="take away author" />
+    <MESSAGE value="Set video static thumbnail" />
+    <MESSAGE value="db interface changed for bolt" />
+    <MESSAGE value="maintenance model removed" />
+    <MESSAGE value="Update retail API" />
+    <MESSAGE value="Sending servicing to provider" />
+    <MESSAGE value="add service analysis" />
+    <option name="LAST_COMMIT_MESSAGE" value="add service analysis" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

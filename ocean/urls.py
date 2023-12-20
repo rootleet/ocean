@@ -27,12 +27,13 @@ urlpatterns = [
     path('dolphine/', include('dolphine.urls')),
     path('cmms/', include('cmms.urls')),
     path('apiv2/', include('apiv2.urls')),
-    path('blog/',include('blog.urls')),
-    path('appscenter/',include('appscenter.urls')),
-    path('reports/',include('reports.urls')),
-    path('taskmanager/',include('taskmanager.urls')),
-    path('retail/',include('retail.urls')),
-    path('crm/',include('crm.urls')),
-    path('servicing/',include('servicing.urls'))
+    path('blog/', include('blog.urls')),
+    path('appscenter/', include('appscenter.urls')),
+    path('reports/', include('reports.urls')),
+    path('taskmanager/', include('taskmanager.urls')),
+    path('retail/', include('retail.urls')),
+    path('crm/', include('crm.urls')),
+    path('servicing/', include('servicing.urls')),
+    path('maintainance/', include('maintenance.urls'))
 
 ]

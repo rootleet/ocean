@@ -203,7 +203,11 @@
                                 <div class="tab-pane container fade" id="ANALYSIS">
                                     <div class="row">
                                         <div class="col-sm-6">
-                                            <textarea class="form-control" id="annal" cols="30" rows="10"></textarea>
+                                            <label for="annal">ANALYSIS</label><textarea class="form-control" id="annal" cols="30" rows="10"></textarea>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <label for="checklist">CHECKLIST ( comma separated )</label><input onkeyup="doChecklict()" type="text" class="form-control" id="checklist">
+                                            <div class="w-100 d-flex flex-wrap p-2" id="checkcheck"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -430,7 +434,7 @@
         function saveJobCard(){
             // get inputs
 
-            let header = ['client','email','phone','annal','service','service_sub','importance','ticket','technician','ticket_title','owner','description','app','ticket_date'];
+            let header = ['client','email','phone','annal','service','service_sub','importance','ticket','technician','ticket_title','owner','description','app','ticket_date','checklist'];
             if(anton.validateInputs(header) ){
                 let head = anton.Inputs(header);
                 console.table(head);
@@ -475,6 +479,22 @@
             } else {
                 kasa.error("FILL ALL FIELDS")
             }
+        }
+
+        // doChecklict
+        function doChecklict(){
+
+            let values = $('#checklist').val().split(',');
+            console.table(values)
+            let ht = '';
+            for(let v =0; v < values.length; v++){
+                ht += `<span style="margin:.2em" class='badge bg-info'>${values[v]}</span>`
+            }
+
+            console.log(ht)
+            $('#checkcheck').html(ht);
+
+
         }
 
     </script>
