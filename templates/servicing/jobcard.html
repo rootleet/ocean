@@ -149,6 +149,9 @@
                                   <li class="nav-item">
                                     <a class="nav-link active" data-toggle="pill" href="#TICKET">TICKET</a>
                                   </li>
+                                    <li class="nav-item">
+                                    <a class="nav-link" data-toggle="pill" href="#ANALYSIS">ANALYSIS</a>
+                                  </li>
                                   <li class="nav-item">
                                     <a class="nav-link" data-toggle="pill" href="#TRANSACTIONS">TRANSACTIONS</a>
                                   </li>
@@ -176,6 +179,10 @@
 
                                         </tbody>
                                     </table>
+                                </div>
+
+                                <div class="tab-pane container fade" id="ANALYSIS">
+                                    <div class="p-2" id="annal"></div>
                                 </div>
 
                                 <div class="tab-pane container fade" id="MATERIALS">
@@ -249,6 +256,7 @@
                 let ticket = service['ticket'];
                 let timedata = service['timedata'];
                 let task = service['task'];
+                $('#annal').html(service['annal'])
 
 
                 $('#task').val(task['uni']);

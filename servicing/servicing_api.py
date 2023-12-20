@@ -86,6 +86,7 @@ def interface(request):
                 phone = head.get('phone').replace('+233', '0')
                 owner = User.objects.get(pk=head.get('owner'))
                 remarks = head.get('remarks')
+                annal = head.get('annal')
                 service = Services.objects.get(pk=head.get('service'))
                 service_sub = SubServices.objects.get(pk=head.get('service_sub'))
                 technician = ServiceTechnicians.objects.get(
@@ -123,7 +124,7 @@ def interface(request):
                 ServiceCard(client=client, task=task, owner=owner,
                             remarks=f"{service.name}/{service_sub.name}/{ticket_title}",
                             service=service, service_sub=service_sub,
-                            technician=technician, ticket=ticket, importance=importance, cardno=cardno, app=app).save()
+                            technician=technician, ticket=ticket, importance=importance, cardno=cardno, app=app,analysis=annal).save()
 
                 just_service_card = ServiceCard.objects.all().last()
 
@@ -308,6 +309,7 @@ def interface(request):
                             'fullname': f"{card.client.first_name} {card.client.last_name}",
                             'phone': UserAddOns.objects.get(user=card.client).phone
                         },
+                        'annal':card.analysis,
                         'app': card.app_details(),
                         'owner': {
                             'pk': card.owner.pk,
