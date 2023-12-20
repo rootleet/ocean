@@ -174,7 +174,7 @@ class MailQueues(models.Model):
         return MailAttachments.objects.filter(mail=self)
 
     def copied(self):
-        return len(self.cc.split(';'))
+        return len(self.cc.split(','))
 
 
 class MailAttachments(models.Model):

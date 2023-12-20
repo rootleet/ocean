@@ -140,72 +140,81 @@
                     </div>
                 </div>
 
-                <!-- TICKET DETAILS -->
-                <div style="height: 60%" class="col-sm-6">
-                    <div class="card h-100">
-                        <div class="card-header">
-                            <strong class="card-title">Ticket Details</strong>
-                        </div>
-                        <div class="card-body overflow-auto p-2">
-                            <h2 id="task_title"></h2>
-                            <div id="taskdesc"></div>
-                        </div>
-                    </div>
-                </div>
+                <div class="col-sm-12" style="height: 60% !important">
 
-                <!-- TRANSACTIONS -->
-                <div style="height: 60%" class="col-sm-6">
                     <div class="card h-100">
                         <div class="card-header p-2">
-                            <!-- Nav pills -->
-                            <ul class="nav nav-pills">
-                              <li class="nav-item">
-                                <a class="nav-link active" data-toggle="pill" href="#home">TRANSACTIONS</a>
-                              </li>
-                              <li class="nav-item">
-                                <a class="nav-link" data-toggle="pill" href="#menu1">MATERIALS</a>
-                              </li>
-                            </ul>
+                                <!-- Nav pills -->
+                                <ul class="nav nav-pills">
+                                  <li class="nav-item">
+                                    <a class="nav-link active" data-toggle="pill" href="#TICKET">TICKET</a>
+                                  </li>
+                                  <li class="nav-item">
+                                    <a class="nav-link" data-toggle="pill" href="#TRANSACTIONS">TRANSACTIONS</a>
+                                  </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" data-toggle="pill" href="#MATERIALS">MATERIALS</a>
+                                    </li>
+                                </ul>
                         </div>
+
                         <div class="card-body overflow-auto p-2">
-
-
-                            <!-- Tab panes -->
                             <div class="tab-content">
-                              <div class="tab-pane container active" id="home">
-                                  <table class="table table-sm table-bordered table-striped table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>TITLE</th><th>DESCRIPTION</th><th>BY</th><th>DATE CREATED</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="ticketTrans">
+                                <div class="tab-pane container active" id="TICKET">
+                                    <h2 id="task_title"></h2>
+                                    <div id="taskdesc"></div>
+                                </div>
 
-                                </tbody>
-                            </table>
-                              </div>
-                              <div class="tab-pane container fade" id="menu1">
-                                  <table class="table table-sm table-bordered table-striped table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>LINE</th>
-                                        <th>NAME</th>
-                                        <th>DESCRIPTION</th>
-                                        <th>PRICE</th>
-                                        <th>QTY</th>
-                                        <th>COST</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="materialRows">
+                                <div class="tab-pane container fade" id="TRANSACTIONS">
+                                    <table class="table table-sm table-bordered table-striped table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>TITLE</th><th>DESCRIPTION</th><th>BY</th><th>DATE CREATED</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="ticketTrans">
 
-                                </tbody>
-                            </table>
-                              </div>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div class="tab-pane container fade" id="MATERIALS">
+                                    <table class="table table-sm table-bordered table-striped table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>LINE</th>
+                                                <th>NAME</th>
+                                                <th>DESCRIPTION</th>
+                                                <th>PRICE</th>
+                                                <th>QTY</th>
+                                                <th>COST</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="materialRows">
+
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
+                        </div>
 
+                        <div class="card-footer">
+                            <div class="dropdown">
+                                <button class="btn btn-info" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fa fa-share"></i> EXPORT
+                                </button>
+                                <!-- Dropdown Menu -->
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <a class="dropdown-item" href="javascript:void()" onclick="svc.materialRequest(`${$('#delete').val()}`)">Material Request</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="#">Separated link</a>
+                                </div>
+                            </div>
                         </div>
                     </div>
+
                 </div>
+
 
             </div>
         </div>
@@ -454,21 +463,22 @@
 
 
         function mail_provider() {
+            windowPopUp(`/servicing/main-to-provider/${$('#delete').val()}/`,"EMAIL PROVIDER",1024,760)
             mailer.new_email_screen()
-            let client_address = $('#client_email').val();
-            let provider_email = $('#provider_email').val();
-            let it_manager = 'bharat@snedaghana.com,ajay@snedaghana.com';
-            let cc = `${client_address},${it_manager}`
-            let title = $('#task_title').text()
-            let taskdesc = $('#taskdesc').text()
-            let task = $('#task').val()
-            taskdesc += `<br><br><i>With ocean at beta release that might be unavailable online sometimes, issue transactions for detailed troubleshooting can be found at <a href="http://41.222.234.59/servicing/jobcard/tracking/${task}/">link</a></i>`
-
-
-            $('#recipient').val(provider_email);
-            $('#cc').val(cc);
-            $('#subject').val(`Sneda Ghana Issues : ${title}`)
-            $('#body').val(taskdesc)
+            {#let client_address = $('#client_email').val();#}
+            {#let provider_email = $('#provider_email').val();#}
+            {#let it_manager = 'bharat@snedaghana.com,ajay@snedaghana.com';#}
+            {#let cc = `${client_address},${it_manager}`#}
+            {#let title = $('#task_title').text()#}
+            {#let taskdesc = $('#taskdesc').text()#}
+            {#let task = $('#task').val()#}
+            {#taskdesc += `<br><br><i>With ocean at beta release that might be unavailable online sometimes, issue transactions for detailed troubleshooting can be found at <a href="http://41.222.234.59/servicing/jobcard/tracking/${task}/">link</a></i>`#}
+            {##}
+            {##}
+            {#$('#recipient').val(provider_email);#}
+            {#$('#cc').val(cc);#}
+            {#$('#subject').val(`Sneda Ghana Issues : ${title}`)#}
+            {#$('#body').val(taskdesc)#}
 
 
         }
@@ -572,6 +582,53 @@
                 } else {
                     kasa.error("INVALID RESPONSE")
                 }
+            }
+
+            materialRequest(){
+                Swal.fire({
+                    text: 'Send Mail?',
+                    showCancelButton: true,
+                    confirmButtonText: 'CONTINUE',
+                    cancelButtonText: 'CANCEL',
+                    input: 'select',
+                    inputOptions: {
+                        'NO': 'NO',
+                        'YES': 'YES'
+                    },
+                    inputPlaceholder: 'Select an option',
+                    inputValidator: (value) => {
+                        return new Promise((resolve) => {
+                            if (value !== '') {
+                                resolve();
+                            } else {
+                                resolve('Please select an option');
+                            }
+                        });
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        const selectedValue = result.value;
+
+                        let cardno = $('#delete').val()
+                        api.payload['module'] = 'material_request';
+                        api.payload['data'] = {
+                            'cardno':cardno,
+                            'send':selectedValue
+                        };
+
+                        let response = api.call('VIEW',api.payload,'/servicing/api/')
+                        if(anton.IsRequest(response)){
+                            kasa.html(`<a href="/${response['message']}">DOWNLOAD</a>`)
+                        } else {
+                            kasa.error(response['message'])
+                        }
+
+                    }
+
+
+
+                });
+
             }
         }
         const svc = new Service()

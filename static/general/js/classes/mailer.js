@@ -18,7 +18,7 @@ class Mailer {
 
                     let form = `
                     <label for="sender">SENDER</label>
-                    <select id="sender" class="form-control rounded-0 mb-2"></select>
+                    <select id="sender" class="form-control rounded-0 mb-2">${senders_option}</select>
                     <label for="recipient">RECIPIENT</label>
                     <input type="email" id="recipient" class="form-control rounded-0 mb-2">
                     <label for="cc">CC</label>
@@ -26,19 +26,15 @@ class Mailer {
                     <label for="subject">SUBJECT</label>
                     <input type="text" class="form-control rounded-0 mb-2" id="subject">
 
-                    <label for="body">MESSAGE</label>
-                    <textarea name="" id="body" cols="30" rows="10" class="form-control rounded-0"></textarea>
-
-                 <input type="file" id="attachment" class="form-control">
-                    <hr>
-                    <button onclick="mailer.que()" class="btn btn-success w-100">QUE</button>
+                    
+                    
 
                 `;
                 amodal.setBodyHtml(form);
-                $('#sender').html(senders_option)
-                amodal.setSize('L')
-                amodal.show()
-
+                $('#sender').html(senders_option);
+                $('#mailer_mailer').prepend(form);
+                $('#mailer').modal('show');
+                $('#mailer_footer').html(`<button onclick="mailer.que()" class="btn btn-success w-100">QUE</button>`)
                 } else {
                     kasa.error(senders_response['message'])
                 }

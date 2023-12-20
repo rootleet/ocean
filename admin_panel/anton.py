@@ -93,3 +93,8 @@ def current_date():
     from datetime import datetime
     current_datetime = datetime.now()
     return current_datetime.strftime("%Y_%m_%d_%H_%M_%S")
+
+
+def new_sms(to, message):
+    api = SmsApi.objects.get(is_default=1)
+    Sms(api=api, to=to, message=message).save()

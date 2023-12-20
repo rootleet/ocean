@@ -79,6 +79,7 @@ class ServiceCard(models.Model):
     task = models.ForeignKey(Tasks, on_delete=models.SET_NULL, null=True, blank=False)
     app = models.ForeignKey(App, on_delete=models.SET_NULL, null=True, blank=False)
     importance = models.IntegerField(default=0)
+    analysis = models.TextField(default='')
 
     status = models.IntegerField(default=1)  # 1 open, 2 closed, 0 deleted
     created_date = models.DateField(auto_now_add=True)
@@ -90,6 +91,11 @@ class ServiceCard(models.Model):
 
     def materials(self):
         return ServiceMaterials.objects.filter(service_card=self)
+
+    def materials_cost(self):
+        filtered_sum = ServiceMaterials.objects.filter(service_card=self).aggregate(
+            total_price_sum=models.Sum('total_price'))['total_price_sum'] or 0.00
+        return 100
 
     def last_transaction(self):
         if TicketTrans.objects.filter(ticket_id=self.ticket_id).exists():
@@ -116,7 +122,7 @@ class ServiceCard(models.Model):
             return 'attending_to'
 
         if self.client_approval == 1:
-            return  'sent_to_client'
+            return 'sent_to_client'
 
         if self.client_approval == 2:
             return 'closed'

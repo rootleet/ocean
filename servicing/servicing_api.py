@@ -10,7 +10,8 @@ from openpyxl.chart import PieChart, Reference
 from openpyxl.styles import Font, PatternFill, Alignment
 
 from admin_panel.anton import make_md5_hash, current_date
-from admin_panel.models import Emails, TicketHd, Sms, SmsApi, UserAddOns, TicketTrans
+from admin_panel.models import Emails, TicketHd, Sms, SmsApi, UserAddOns, TicketTrans, MailSenders, MailQueues, \
+    MailAttachments
 from admin_panel.sms_hold import *
 from appscenter.models import App
 from meeting.models import MeetingHD
@@ -100,7 +101,8 @@ def interface(request):
 
                 if tick == '0':
                     # generate
-                    TicketHd(owner=client, title=f"{ticket_title}", descr=f"{ticked_description}", status=1,created_on=entry_date).save()
+                    TicketHd(owner=client, title=f"{ticket_title}", descr=f"{ticked_description}", status=1,
+                             created_on=entry_date).save()
                     ticket = TicketHd.objects.filter(owner=client, title=f"{ticket_title}",
                                                      descr=f"{ticked_description}", status=1).last()
                 else:
@@ -441,8 +443,6 @@ def interface(request):
                     book = openpyxl.Workbook()
                     sheet = book.active
 
-
-
                     sheet.title = f"{target_from} To {target_to}"
                     sheet.merge_cells("A1:G1")
                     font_style = Font(size=20, bold=True, color='FFFFFF', )
@@ -499,12 +499,12 @@ def interface(request):
 
                         sheet_count += 1
 
-
                 if doc == 'excel':
                     chat_sheet = book.create_sheet("CHART")
                     data = [
                         ["Category", "Value"],
-                        ["OPEN", OPEN], ["CLIENT APPROVAL", CLIENT_APPROVAL], ["CLOSED", CLOSED], ["UNATTENDED",UNATTENDED]
+                        ["OPEN", OPEN], ["CLIENT APPROVAL", CLIENT_APPROVAL], ["CLOSED", CLOSED],
+                        ["UNATTENDED", UNATTENDED]
                     ]
 
                     for row in data:
@@ -523,6 +523,92 @@ def interface(request):
                     cards = file_name
 
                 success_response['message'] = cards
+
+            elif module == 'material_request':
+                cardno = data.get('cardno')
+                send = data.get('send') or 'NO'
+                card = ServiceCard.objects.get(cardno=cardno)
+                materials = card.materials()
+                cost = 0
+
+                if materials.count() > 0:
+                    cost = card.materials_cost()
+
+                from fpdf import FPDF
+                pdf = FPDF()
+                pdf.add_page('P')
+
+                pdf.set_font('Arial', 'B', 10)
+                pdf.cell(190, 10, 'MATERIAL REQUEST', 0, 1, 'C')
+                # job card
+                pdf.set_font('Arial', 'B', 8)
+                pdf.cell(20, 5, "Total Cost :  ", 0, 0)
+                pdf.set_font('Arial', '', 8)
+                pdf.cell(100, 5, f"{cost}", 0, 1)
+
+                pdf.set_font('Arial', 'B', 8)
+                pdf.cell(20, 5, "JOB CARD ", 0, 0)
+                pdf.set_font('Arial', '', 8)
+                pdf.cell(100, 5, card.cardno, 0, 1)
+
+                # Type
+                pdf.set_font('Arial', 'B', 8)
+                pdf.cell(20, 5, "Type ", 0, 0)
+                pdf.set_font('Arial', '', 8)
+                pdf.cell(100, 5, f"{card.service.name}", 0, 1)
+
+                # Title
+                pdf.set_font('Arial', 'B', 8)
+                pdf.cell(20, 5, "Title ", 0, 0)
+                pdf.set_font('Arial', '', 8)
+                pdf.cell(100, 5, card.ticket.title, 0, 1)
+                # owner
+                pdf.set_font('Arial', 'B', 8)
+                pdf.cell(20, 5, "Reported By ", 0, 0)
+                pdf.set_font('Arial', '', 8)
+                pdf.cell(100, 5, f"{card.owner.get_full_name()}", 0, 1)
+
+                # table header
+                pdf.set_font('Arial', 'B', 8)
+                pdf.cell(38, 5, "ITEM", 1, 0)
+                pdf.cell(38, 5, "DESCRIPTION", 1, 0)
+                pdf.cell(38, 5, "PRICE", 1, 0)
+                pdf.cell(38, 5, "QTY", 1, 0)
+                pdf.cell(38, 5, "TOTAL", 1, 1)
+
+                pdf.set_font('Arial', '', 8)
+                for material in card.materials():
+                    pdf.cell(38, 5, material.item, 1, 0)
+                    pdf.cell(38, 5, material.description, 1, 0)
+                    pdf.cell(38, 5, f"{material.price}", 1, 0)
+                    pdf.cell(38, 5, f"{material.quantity}", 1, 0)
+                    pdf.cell(38, 5, f"{material.total_price}", 1, 1)
+
+                file_name = f"static/general/servicing/{card.cardno}.pdf"
+                pdf.output(file_name)
+                if send == 'YES' and materials.count() > 0:
+                    mail_subject = "Material Request for Technical Issue Resolution"
+                    mail_message = f"""
+                        Dear Jawara,
+                        Attached is a material request document outlining the items needed to address a pressing technical issue we are currently facing.
+                        The timely approval and procurement of these items are crucial for resolving the technical matter efficiently. Your prompt attention to this request is highly appreciated.
+                        Please feel free to reach out if you require any further details or clarification.
+                        <h3>Issue</h3>
+                        <p><strong>Title</strong>{card.ticket.title}</p>
+                        <p><strong>Description</strong>{card.ticket.descr}</p>
+                        
+                    """
+                    if MailSenders.objects.filter(address='solomon@snedaghana.com').exists():
+                        sender = MailSenders.objects.get(address='solomon@snedaghana.com')
+                    else:
+                        sender = MailSenders.objects.get(is_default=True)
+                    mail = MailQueues(sender=sender, subject=mail_subject, body=mail_message,
+                                      recipient='jawaratu@snedaghana.com',
+                                      cc='ajay@snedaghana.com,bharat@snedaghana.com')
+                    mail.save()
+                    MailAttachments(mail=mail, attachment=file_name).save()
+                success_response['message'] = file_name
+
 
         # update data
         elif method == 'PATCH':
