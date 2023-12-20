@@ -24,7 +24,8 @@ urlpatterns = [
     path('service/<service_id>/', views.service, name='service'),
     path('newjob/', views.newjob, name='newjob'),
     path('jobcard/', views.jobcard, name='jobcard'),
-    path('jobcard/tracking/<cardno>/', views.tracking, name='tracking')
+    path('jobcard/tracking/<cardno>/', views.tracking, name='tracking'),
+    path('main-to-provider/<job>/', views.mail_to_provider, name='mail_provider')
 
 ]
 

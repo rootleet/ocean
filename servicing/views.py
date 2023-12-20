@@ -5,7 +5,7 @@ from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
-from admin_panel.models import UserAddOns, TicketHd
+from admin_panel.models import UserAddOns, TicketHd, MailSenders
 from appscenter.models import App
 from servicing.models import Services, ServiceCard
 
@@ -100,3 +100,16 @@ def service(request, service_id):
         return render(request, 'servicing/service.html', context=context)
     else:
         return HttpResponse(status=404)
+
+@login_required()
+def mail_to_provider(request,job):
+    if ServiceCard.objects.filter(cardno=job).count() == 1:
+        context = {
+            'nav':True,
+            'card':ServiceCard.objects.get(cardno=job),
+            'senders':MailSenders.objects.all()
+        }
+        return render(request,'servicing/send-to-provider.html',context=context)
+
+
+    return redirect('jobcard')

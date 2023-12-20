@@ -1,0 +1,73 @@
+{% extends 'servicing/base.html' %}
+{% load static %}
+
+{% block body %}
+    <div class="card-header">
+        <div class="w-100 d-flex flex-wrap justify-content-between">
+            <button class="btn btn-warning">CANCEL</button>
+            <button onclick="sendEmail()" class="btn btn-success">SEND MAIL</button>
+        </div>
+    </div>
+    <div class="card-body overflow-auto">
+        <div class="container-fluid p-2">
+            <div class="row">
+                <div class="col-sm-2">
+                    <label for="sender">SENDER</label>
+                    <select name="" id="sender" class="form-control rounded-0">
+                        {% for sender in senders %}
+                            <option value="{{ sender.pk }}">{{ sender.address }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-sm-6">
+                    <label for="subject">SUBJECT</label><input type="text" value="SNEDA GHANA | {{ card.app.name }} | {{ card.ticket.title }}" class="form-control rounded-0" id="subject">
+                </div>
+                <div class="col-sm-4">
+                    <label for="recipient">RECIPIENT</label><input value="{{ card.app.provider.email }}" readonly class="form-control rounded-0" type="text" id="recipient">
+                </div>
+                <div class="col-sm-12">
+                    <label for="cc">COPY</label><input type="text" id="cc" value="{{ card.owner.email }},bharat@snedaghana.com,ajay@snedaghana.com" class="form-control rounded-0">
+                </div>
+                <div class="col-sm-12">
+                    <label for="body"></label><textarea id="email_message" class="tinymce-editor">
+                    <h3>As Reported</h3>
+                    {{ card.ticket.descr }}
+                    <h3>Analysis</h3>
+                    {{ card.analysis }}
+                    <h3>Technical Support Request</h3>
+
+                    <hr>
+                    <small><a href='#'>Track</a> issue on <a href='#'>ocean</a></small>
+                </textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function sendEmail(){
+            let ids = ['sender','subject','recipient','cc'];
+            let body = tinymce.get('email_message').getContent();
+            console.log(body)
+
+            if(anton.validateInputs(ids) && body.length > 0){
+                let payload = api.payload;
+                payload['module'] = 'que_mail';
+                payload['data'] = anton.Inputs(ids);
+                payload['data']['body'] = body
+
+                // send
+                let que = api.call('PUT',payload,'/adapi/');
+                if(anton.IsRequest(que)){
+                    kasa.confirm(que['message'],1,'/servicing/jobcard/')
+                } else {
+                    kasa.response(que)
+                }
+
+            } else {
+                kasa.error("FILL ALL REQUIRED FIELDS")
+            }
+        }
+    </script>
+
+{% endblock %}
