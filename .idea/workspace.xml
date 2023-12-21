@@ -4,17 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ffcbf13e-d396-4071-9a24-4014a690f966" name="Changes" comment="Maintaiance done">
-      <change afterPath="$PROJECT_DIR$/inventory/invento.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/general/img/products/7.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/inventory/product/new.html" afterDir="false" />
+    <list default="true" id="ffcbf13e-d396-4071-9a24-4014a690f966" name="Changes" comment="auto close jobs">
+      <change afterPath="$PROJECT_DIR$/cronjobs/auto_close_service.sh" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/admin_panel/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/admin_panel/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/inventory/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/inventory/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/inventory/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/inventory/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/servicing/servicing_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/servicing/servicing_api.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/dashboard/products/prod_base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/dashboard/products/prod_base.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/dashboard/products/prodctMaster.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/dashboard/products/prodctMaster.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -69,39 +61,39 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
-    &quot;Django Server.DJANGO.executor&quot;: &quot;Run&quot;,
-    &quot;Notification.DisplayName-DoNotAsk-JavaScript: Code Vision Performance&quot;: &quot;JavaScript: code vision performance watcher&quot;,
-    &quot;Notification.DoNotAsk-JavaScript: Code Vision Performance&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.OpenDjangoStructureViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;django.template.preview.state&quot;: &quot;SHOW_EDITOR_AND_PREVIEW&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/reza/Documents/GitHub/ocean/maintainance&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "DefaultHtmlFileTemplate": "HTML File",
+    "Django Server.DJANGO.executor": "Run",
+    "Notification.DisplayName-DoNotAsk-JavaScript: Code Vision Performance": "JavaScript: code vision performance watcher",
+    "Notification.DoNotAsk-JavaScript: Code Vision Performance": "true",
+    "RunOnceActivity.OpenDjangoStructureViewOnStart": "true",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "django.template.preview.state": "SHOW_EDITOR_AND_PREVIEW",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "C:/Users/reza/Documents/GitHub/ocean/cronjobs",
+    "node.js.detected.package.eslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "vue.rearranger.settings.migration": "true"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;DatabaseDriversLRU&quot;: [
-      &quot;mysql&quot;
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "mysql"
     ]
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\reza\Documents\GitHub\ocean\cronjobs" />
       <recent name="C:\Users\reza\Documents\GitHub\ocean\maintainance" />
       <recent name="C:\Users\reza\Documents\GitHub\ocean\cronjobs\retail" />
       <recent name="C:\Users\reza\Documents\GitHub\ocean\templates\retail" />
-      <recent name="C:\Users\reza\Documents\GitHub\ocean\cronjobs" />
       <recent name="C:\Users\reza\Documents\GitHub\ocean\static\apps\logos" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
@@ -306,23 +298,7 @@
       <workItem from="1702979650412" duration="7354000" />
       <workItem from="1703053477546" duration="19439000" />
       <workItem from="1703102133002" duration="7063000" />
-      <workItem from="1703158889736" duration="1432000" />
-    </task>
-    <task id="LOCAL-00073" summary="mail send v2">
-      <option name="closed" value="true" />
-      <created>1700740472942</created>
-      <option name="number" value="00073" />
-      <option name="presentableId" value="LOCAL-00073" />
-      <option name="project" value="LOCAL" />
-      <updated>1700740472942</updated>
-    </task>
-    <task id="LOCAL-00074" summary="Enhance Retail to include product from database with relative cronjob">
-      <option name="closed" value="true" />
-      <created>1700814356408</created>
-      <option name="number" value="00074" />
-      <option name="presentableId" value="LOCAL-00074" />
-      <option name="project" value="LOCAL" />
-      <updated>1700814356409</updated>
+      <workItem from="1703158889736" duration="1647000" />
     </task>
     <task id="LOCAL-00075" summary="added generar retail bash script">
       <option name="closed" value="true" />
@@ -700,7 +676,23 @@
       <option name="project" value="LOCAL" />
       <updated>1703104185228</updated>
     </task>
-    <option name="localTasksCounter" value="122" />
+    <task id="LOCAL-00122" summary="auto close jobs">
+      <option name="closed" value="true" />
+      <created>1703160400629</created>
+      <option name="number" value="00122" />
+      <option name="presentableId" value="LOCAL-00122" />
+      <option name="project" value="LOCAL" />
+      <updated>1703160400629</updated>
+    </task>
+    <task id="LOCAL-00123" summary="auto close jobs">
+      <option name="closed" value="true" />
+      <created>1703160429212</created>
+      <option name="number" value="00123" />
+      <option name="presentableId" value="LOCAL-00123" />
+      <option name="project" value="LOCAL" />
+      <updated>1703160429212</updated>
+    </task>
+    <option name="localTasksCounter" value="124" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -723,7 +715,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="add sms message when resetiing password" />
     <MESSAGE value="detailed error message" />
     <MESSAGE value="fixed user does not exist error" />
     <MESSAGE value="fix api selection when sending am email" />
@@ -748,7 +739,8 @@
     <MESSAGE value="Sending servicing to provider" />
     <MESSAGE value="add service analysis" />
     <MESSAGE value="Maintaiance done" />
-    <option name="LAST_COMMIT_MESSAGE" value="Maintaiance done" />
+    <MESSAGE value="auto close jobs" />
+    <option name="LAST_COMMIT_MESSAGE" value="auto close jobs" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
