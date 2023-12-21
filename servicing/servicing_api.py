@@ -88,7 +88,8 @@ def interface(request):
                 owner = User.objects.get(pk=head.get('owner'))
                 remarks = head.get('remarks')
                 annal = head.get('annal')
-                checklist = data.get('checklist').split(',')
+                ckl = head.get('checklist') or 'none'
+                checklist = ckl.split(',')
                 service = Services.objects.get(pk=head.get('service'))
                 service_sub = SubServices.objects.get(pk=head.get('service_sub'))
                 technician = ServiceTechnicians.objects.get(
