@@ -724,7 +724,7 @@ def interface(request):
                             message = f"""
                             AUTO-CONFIRM\n\nTITLE:{title}\n\nIssue has been closed because it is past 24hours since 
                             it was completed and sent for your approval\nhttp://ocean.snedaghana.loc/servicing/jobcard/tracking/{sent.cardno}\n\n"""
-                            new_sms(phone,message)
+                            # #new_sms(phone,message)
                             obj.append({
                                 'title':title,
                                 'sent_to':phone
