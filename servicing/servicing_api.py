@@ -729,6 +729,9 @@ def interface(request):
                                 'title':title,
                                 'sent_to':phone
                             })
+                            sent.status = 2
+                            sent.client_approval = 2
+                            sent.save()
                 success_response['message'] = obj
 
 

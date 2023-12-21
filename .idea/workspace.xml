@@ -4,9 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ffcbf13e-d396-4071-9a24-4014a690f966" name="Changes" comment="auto close jobs">
-      <change afterPath="$PROJECT_DIR$/cronjobs/auto_close_service.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="ffcbf13e-d396-4071-9a24-4014a690f966" name="Changes" comment="auto close cronjobe">
+      <change beforePath="$PROJECT_DIR$/servicing/servicing_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/servicing/servicing_api.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -298,15 +297,7 @@
       <workItem from="1702979650412" duration="7354000" />
       <workItem from="1703053477546" duration="19439000" />
       <workItem from="1703102133002" duration="7063000" />
-      <workItem from="1703158889736" duration="1647000" />
-    </task>
-    <task id="LOCAL-00075" summary="added generar retail bash script">
-      <option name="closed" value="true" />
-      <created>1700814803041</created>
-      <option name="number" value="00075" />
-      <option name="presentableId" value="LOCAL-00075" />
-      <option name="project" value="LOCAL" />
-      <updated>1700814803041</updated>
+      <workItem from="1703158889736" duration="1964000" />
     </task>
     <task id="LOCAL-00076" summary="added update stock">
       <option name="closed" value="true" />
@@ -692,7 +683,15 @@
       <option name="project" value="LOCAL" />
       <updated>1703160429212</updated>
     </task>
-    <option name="localTasksCounter" value="124" />
+    <task id="LOCAL-00124" summary="auto close cronjobe">
+      <option name="closed" value="true" />
+      <created>1703160585571</created>
+      <option name="number" value="00124" />
+      <option name="presentableId" value="LOCAL-00124" />
+      <option name="project" value="LOCAL" />
+      <updated>1703160585571</updated>
+    </task>
+    <option name="localTasksCounter" value="125" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -715,7 +714,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="detailed error message" />
     <MESSAGE value="fixed user does not exist error" />
     <MESSAGE value="fix api selection when sending am email" />
     <MESSAGE value="ui" />
@@ -740,7 +738,8 @@
     <MESSAGE value="add service analysis" />
     <MESSAGE value="Maintaiance done" />
     <MESSAGE value="auto close jobs" />
-    <option name="LAST_COMMIT_MESSAGE" value="auto close jobs" />
+    <MESSAGE value="auto close cronjobe" />
+    <option name="LAST_COMMIT_MESSAGE" value="auto close cronjobe" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
