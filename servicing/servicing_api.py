@@ -4,12 +4,13 @@ import sys
 from django.contrib.auth.models import User
 from django.db.models import Q
 from django.http import JsonResponse
+from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 from fpdf import FPDF
 from openpyxl.chart import PieChart, Reference
 from openpyxl.styles import Font, PatternFill, Alignment
 
-from admin_panel.anton import make_md5_hash, current_date
+from admin_panel.anton import make_md5_hash, current_date, new_sms
 from admin_panel.models import Emails, TicketHd, Sms, SmsApi, UserAddOns, TicketTrans, MailSenders, MailQueues, \
     MailAttachments
 from admin_panel.sms_hold import *
@@ -699,6 +700,37 @@ def interface(request):
                 card.save()
                 success_response['message'] = jobcard
                 response = success_response
+
+            elif module == 'close_sent':
+                sent_to_client = ServiceCard.objects.filter(client_approval=1)
+                obj = []
+                for sent in sent_to_client:
+                    client = sent.client
+                    client_ad_on = UserAddOns.objects.get(user=client)
+                    phone = client_ad_on.phone
+                    title = sent.ticket.title
+                    # get sent record
+                    sent_tran = TicketTrans.objects.filter(ticket=sent.ticket,title='CLIENT APPROVAL')
+                    # Get the current date and time in UTC
+                    current_datetime = timezone.now()
+
+                    # Calculate the time difference
+
+                    if sent_tran.exists():
+                        tran = sent_tran.last()
+                        date_sent = tran.created_on
+                        time_difference = current_datetime - date_sent
+                        if time_difference.total_seconds() > 24 * 3600:
+                            message = f"""
+                            AUTO-CONFIRM\n\nTITLE:{title}\n\nIssue has been closed because it is past 24hours since 
+                            it was completed and sent for your approval\nhttp://ocean.snedaghana.loc/servicing/jobcard/tracking/{sent.cardno}\n\n"""
+                            new_sms(phone,message)
+                            obj.append({
+                                'title':title,
+                                'sent_to':phone
+                            })
+                success_response['message'] = obj
+
 
 
         # delete data
