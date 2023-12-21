@@ -4,7 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ffcbf13e-d396-4071-9a24-4014a690f966" name="Changes" comment="update the sents">
+    <list default="true" id="ffcbf13e-d396-4071-9a24-4014a690f966" name="Changes" comment="take away sms">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/servicing/servicing_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/servicing/servicing_api.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -297,15 +298,7 @@
       <workItem from="1702979650412" duration="7354000" />
       <workItem from="1703053477546" duration="19439000" />
       <workItem from="1703102133002" duration="7063000" />
-      <workItem from="1703158889736" duration="2029000" />
-    </task>
-    <task id="LOCAL-00077" summary="detailed retail message">
-      <option name="closed" value="true" />
-      <created>1700815154813</created>
-      <option name="number" value="00077" />
-      <option name="presentableId" value="LOCAL-00077" />
-      <option name="project" value="LOCAL" />
-      <updated>1700815154813</updated>
+      <workItem from="1703158889736" duration="2153000" />
     </task>
     <task id="LOCAL-00078" summary="dynacmis stock variables">
       <option name="closed" value="true" />
@@ -691,7 +684,15 @@
       <option name="project" value="LOCAL" />
       <updated>1703160897637</updated>
     </task>
-    <option name="localTasksCounter" value="126" />
+    <task id="LOCAL-00126" summary="take away sms">
+      <option name="closed" value="true" />
+      <created>1703160961099</created>
+      <option name="number" value="00126" />
+      <option name="presentableId" value="LOCAL-00126" />
+      <option name="project" value="LOCAL" />
+      <updated>1703160961099</updated>
+    </task>
+    <option name="localTasksCounter" value="127" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -714,7 +715,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="fix api selection when sending am email" />
     <MESSAGE value="ui" />
     <MESSAGE value="Reset All Passwords" />
     <MESSAGE value="remove apps module" />
@@ -739,7 +739,8 @@
     <MESSAGE value="auto close jobs" />
     <MESSAGE value="auto close cronjobe" />
     <MESSAGE value="update the sents" />
-    <option name="LAST_COMMIT_MESSAGE" value="update the sents" />
+    <MESSAGE value="take away sms" />
+    <option name="LAST_COMMIT_MESSAGE" value="take away sms" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
