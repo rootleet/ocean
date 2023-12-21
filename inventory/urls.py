@@ -28,7 +28,9 @@ urlpatterns = [
     path('grn/new/', views.new_grn, name='new-grn'),
     path('workstation/', views.workstation, name='workstation'),
     path('workstation/save_workstation/', views.save_workstation, name='save_workstation'),
-    path('workstation/view/<mac_addr>/', views.view_workstation, name='view_workstation')
+    path('workstation/view/<mac_addr>/', views.view_workstation, name='view_workstation'),
+
+    path('products/new/', views.new_products, name='new-product'),
 
 ]
 

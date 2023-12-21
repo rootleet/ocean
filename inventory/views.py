@@ -158,3 +158,10 @@ def view_workstation(request, mac_addr):
 
     }
     return render(request, 'inventory/workstation/view.html', context=context)
+
+
+def new_products(request):
+    context = {
+        'nav':True
+    }
+    return render(request,'inventory/product/new.html',context=context)

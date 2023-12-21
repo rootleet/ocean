@@ -65,7 +65,7 @@ urlpatterns = [
 
     # products master
     path('inventory/products/', views.products, name='products'),
-    path('inventory/products/new/', views.new_products, name='new-product'),
+    # path('inventory/products/new/', views.new_products, name='new-product'),
     path('inventory/products/save-new/', views.save_new_product, name='save-new-product'),
     path('inventory/products/adjustment/<p>', views.adjust_product_qty, name='adjust_product_qty'),
     path('inventory/adjustment/', views.adjustment, name='adjustment'),

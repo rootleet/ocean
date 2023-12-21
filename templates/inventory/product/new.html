@@ -1,0 +1,56 @@
+{% extends 'dashboard/products/prod_base.html' %}
+{% load static %}
+
+{% block body %}
+
+    <div class="card-header">
+        <div class="w-100 d-flex flex-wrap">
+            <div class="w-50"><strong class="card-title">CREATING PRODUCT</strong></div>
+            <div class="w-50 d-flex flex-wrap justify-content-end">
+                <button class="btn btn-warning" style="margin: .2em">CANCEL</button>
+                <button class="btn btn-success" style="margin: .2em">SAVE</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-body">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-4">
+                    <label class="text-info" for="group">GROUP</label>
+                    <select name="" class="form-control mb-2 rounded-0" id="group">
+                        <option value="0">SELECT GROUP</option>
+                    </select>
+
+                    <label class="text-info" for="sub_group">SUB-GROUP</label>
+                    <select name="" disabled class="form-control mb-2 rounded-0" id="sub_group">
+                        <option value="0">SELECT SUB</option>
+                    </select>
+
+                    <label for="barcode" class="text-info">BARCODE</label>
+                    <input autocomplete="off" type="text" id="barcode" class="form-control mb-2 rounded-0">
+
+                    <label for="name" class="text-info">NAME</label>
+                    <input type="text" autocomplete="off" id="name" class="form-control mb-2 rounded-0">
+                </div>
+
+                <div class="col-sm-4">
+                    <label class="text-info" for="purchasing_unit">PURCHASING UNIT</label>
+                    <select name="" id="purchasing_unit" class="form-control mb-2 rounded-0"></select>
+
+                    <label class="text-info" for="purchasing_qty">PURCHASING QUANTITY</label>
+                    <input type="number" class="form-control mb-2 rounded-0" id="purchasing_qty">
+
+                    <label class="text-info" for="issue_unit">ISSUING UNIT</label>
+                    <select name="" id="issue_unit" class="form-control mb-2 rounded-0"></select>
+
+                    <label class="text-info" for="issue_qty">ISSUING QUANTITY</label>
+                    <input type="number" class="form-control mb-2 rounded-0" id="issue_qty">
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
