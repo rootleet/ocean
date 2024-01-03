@@ -18,7 +18,7 @@ from appscenter.models import App
 from meeting.models import MeetingHD
 
 from reports.models import ReportForms, ReportLegend, LegendSubs, DepartmentReportMailQue
-from servicing.models import Services, SubServices, ServiceCard, ServiceMaterials, ServiceTechnicians
+from servicing.models import Services, SubServices, ServiceCard, ServiceMaterials, ServiceTechnicians, CheckList
 from taskmanager.models import Tasks, TaskTransactions
 
 
