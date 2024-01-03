@@ -307,6 +307,13 @@ def interface(request):
                             'date': ticktran.created_on
                         })
 
+                    checks = []
+                    for check in card.checklist():
+                        checks.append({
+                            'name':check.name,
+                            'checked':check.checked
+                        })
+
                     header = {
                         'pk': card.pk,
                         'client': {
@@ -363,6 +370,7 @@ def interface(request):
                             'timeupdated': card.updated_time
                         },
                         'materials': materials,
+                        'checklist':checks,
                         'next': {
                             'count': 0,
                             'code': 0
