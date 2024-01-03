@@ -130,8 +130,8 @@ class ServiceCard(models.Model):
         if self.ticket.status == 0:
             return 'unattended'
 
-    def checklist(self):
-        return CheckList.objects.filter(card=self)
+    # def checklist(self):
+    #     return CheckList.objects.filter(card=self)
 
 
 class ServiceMaterials(models.Model):
