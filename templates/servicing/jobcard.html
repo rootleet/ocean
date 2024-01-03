@@ -183,6 +183,9 @@
 
                                 <div class="tab-pane container fade" id="ANALYSIS">
                                     <div class="p-2" id="annal"></div>
+                                    <div id="checklist" class="w-100">
+
+                                    </div>
                                 </div>
 
                                 <div class="tab-pane container fade" id="MATERIALS">
@@ -326,6 +329,33 @@
                 $('#technician').val(technician['fullname']);
                 $('#techphone').val(technician['phone']);
                 $('#cardno').val(cardno)
+
+                // cheklist
+                let checklist = service['checklist'];
+                let list = '';
+                for(let c = 0; c < checklist.length; c++){
+                    let lx = checklist[c];
+                    if(lx.checked){
+                        list += `
+                        <div class="form-check">
+                          <label class="form-check-label">
+                            <input type="checkbox" checked class="form-check-input" value="">${lx.name}
+                          </label>
+                        </div>
+                    `
+                    } else {
+                        list += `
+                        <div class="form-check">
+                          <label class="form-check-label">
+                            <input type="checkbox" class="form-check-input" value="">${lx.name}
+                          </label>
+                        </div>
+                    `
+                    }
+
+                }
+
+                $('#checklist').html(list)
 
                 // materials
                 let mats = ''
