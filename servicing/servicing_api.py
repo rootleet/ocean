@@ -596,7 +596,7 @@ def interface(request):
                 pdf.set_font('Arial', '', 8)
                 for material in card.materials():
                     pdf.cell(50, 5, material.item[:10], 1, 0)
-                    pdf.cell(100, 5, material.description[:20], 1, 0)
+                    pdf.cell(100, 5, material.description[:60], 1, 0)
                     pdf.cell(15, 5, f"{material.price}", 1, 0)
                     pdf.cell(15, 5, f"{material.quantity}", 1, 0)
                     pdf.cell(15, 5, f"{material.total_price}", 1, 1)
