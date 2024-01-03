@@ -95,7 +95,7 @@ class ServiceCard(models.Model):
     def materials_cost(self):
         filtered_sum = ServiceMaterials.objects.filter(service_card=self).aggregate(
             total_price_sum=models.Sum('total_price'))['total_price_sum'] or 0.00
-        return 100
+        return filtered_sum
 
     def last_transaction(self):
         if TicketTrans.objects.filter(ticket_id=self.ticket_id).exists():

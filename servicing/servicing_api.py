@@ -587,19 +587,19 @@ def interface(request):
 
                 # table header
                 pdf.set_font('Arial', 'B', 8)
-                pdf.cell(40, 5, "ITEM", 1, 0)
-                pdf.cell(80, 5, "DESCRIPTION", 1, 0)
-                pdf.cell(25, 5, "PRICE", 1, 0)
-                pdf.cell(25, 5, "QTY", 1, 0)
-                pdf.cell(25, 5, "TOTAL", 1, 1)
+                pdf.cell(50, 5, "ITEM", 1, 0)
+                pdf.cell(100, 5, "DESCRIPTION", 1, 0)
+                pdf.cell(15, 5, "PRICE", 1, 0)
+                pdf.cell(15, 5, "QTY", 1, 0)
+                pdf.cell(15, 5, "TOTAL", 1, 1)
 
                 pdf.set_font('Arial', '', 8)
                 for material in card.materials():
-                    pdf.cell(40, 5, material.item, 1, 0)
-                    pdf.cell(80, 5, material.description, 1, 0)
-                    pdf.cell(25, 5, f"{material.price}", 1, 0)
-                    pdf.cell(25, 5, f"{material.quantity}", 1, 0)
-                    pdf.cell(25, 5, f"{material.total_price}", 1, 1)
+                    pdf.cell(50, 5, material.item[:10], 1, 0)
+                    pdf.cell(100, 5, material.description[:20], 1, 0)
+                    pdf.cell(15, 5, f"{material.price}", 1, 0)
+                    pdf.cell(15, 5, f"{material.quantity}", 1, 0)
+                    pdf.cell(15, 5, f"{material.total_price}", 1, 1)
 
                 file_name = f"static/general/servicing/{card.cardno}.pdf"
                 pdf.output(file_name)
