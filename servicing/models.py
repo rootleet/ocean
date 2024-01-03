@@ -144,10 +144,10 @@ class ServiceMaterials(models.Model):
     total_price = models.DecimalField(max_digits=60, decimal_places=2)
 
 
-class CheckList(models.Model):
-    card = models.ForeignKey(ServiceCard,on_delete=models.CASCADE)
-    name = models.TextField()
-    checked = models.BooleanField(default=False)
-
-    created_date = models.DateField(auto_now_add=True)
-    created_time = models.TimeField(auto_now_add=True)
+# class CheckList(models.Model):
+#     card = models.ForeignKey(ServiceCard,on_delete=models.CASCADE)
+#     name = models.TextField()
+#     checked = models.BooleanField(default=False)
+#
+#     created_date = models.DateField(auto_now_add=True)
+#     created_time = models.TimeField(auto_now_add=True)
