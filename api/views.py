@@ -937,7 +937,18 @@ def api_call(request, module, crud):
 
             else:
                 response['status'] = 404
-                response['message'] = f"NO SALES {Sales.objects.filter(day=day).count()}"
+                response['message'] = f"{Sales.objects.filter(day=day).count()}"
+
+        elif crud == 'today':
+            import locale
+
+            # Set the locale to the appropriate one for Ghana (LC_MONETARY might not be supported on all systems)
+            locale.setlocale(locale.LC_MONETARY, 'en_GH.UTF-8')
+            day = f"{today('year')}-{today('month')}-{today('day')}"
+            total_gross_sale = Sales.objects.filter(day=day).aggregate(Sum('gross_sales'))['gross_sales__sum'] or 0
+            response['status'] = 200
+            response['message'] = f"₵ {locale.currency(total_gross_sale, symbol=False, grouping=True)}"
+
 
     # sms
     elif module == 'sms':

@@ -95,6 +95,12 @@ class Sales {
         $('#g_modal_size').addClass('modal-lg')
         $('#g_modal').modal('show')
     }
+
+    total(day=today){
+        let sales_summary = JSON.parse(apiv2('sales','today',{'day':day}));
+        console.table(sales_summary)
+        $("#total").text(sales_summary.message)
+    }
 }
 
 const sales = new Sales()

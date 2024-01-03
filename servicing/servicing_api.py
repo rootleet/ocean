@@ -132,7 +132,7 @@ def interface(request):
                 # just_service_card = ServiceCard.objects.all().last()
 
                 for check in checklist:
-                    CheckList(cardno=just_service_card,name=check).save()
+                    CheckList(card=just_service_card,name=check).save()
 
                 # deal with materials
                 for material in list(materials):

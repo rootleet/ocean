@@ -88,7 +88,7 @@
                     <div class="card-body">
                         <div class="w-100 h-100 d-flex flex-wrap align-content-center justify-content-center">
 
-                            <strong class="display-1">{{ sales.total }}</strong>
+                            <strong id="total" class="display-1">loading..</strong>
                         </div>
                     </div>
                 </div>
@@ -616,5 +616,9 @@
 
         </script>
     {% endif %}
+
+    <script>
+    sales.total()
+    </script>
 
 {% endblock %}
