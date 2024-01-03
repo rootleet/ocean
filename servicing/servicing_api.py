@@ -125,14 +125,15 @@ def interface(request):
                 task = Tasks.objects.get(uni=uni)
                 # save service card
                 just_service_card = ServiceCard(client=client, task=task, owner=owner,
-                            remarks=f"{service.name}/{service_sub.name}/{ticket_title}",
-                            service=service, service_sub=service_sub,
-                            technician=technician, ticket=ticket, importance=importance, cardno=cardno, app=app,analysis=annal).save()
+                                                remarks=f"{service.name}/{service_sub.name}/{ticket_title}",
+                                                service=service, service_sub=service_sub,
+                                                technician=technician, ticket=ticket, importance=importance,
+                                                cardno=cardno, app=app, analysis=annal).save()
 
-                # just_service_card = ServiceCard.objects.all().last()
+                just_service_card = ServiceCard.objects.all().last()
 
                 for check in checklist:
-                    CheckList(card=just_service_card,name=check).save()
+                    CheckList(card=just_service_card, name=check).save()
 
                 # deal with materials
                 for material in list(materials):
@@ -315,7 +316,7 @@ def interface(request):
                             'fullname': f"{card.client.first_name} {card.client.last_name}",
                             'phone': UserAddOns.objects.get(user=card.client).phone
                         },
-                        'annal':card.analysis,
+                        'annal': card.analysis,
                         'app': card.app_details(),
                         'owner': {
                             'pk': card.owner.pk,
@@ -711,7 +712,7 @@ def interface(request):
                     phone = client_ad_on.phone
                     title = sent.ticket.title
                     # get sent record
-                    sent_tran = TicketTrans.objects.filter(ticket=sent.ticket,title='CLIENT APPROVAL')
+                    sent_tran = TicketTrans.objects.filter(ticket=sent.ticket, title='CLIENT APPROVAL')
                     # Get the current date and time in UTC
                     current_datetime = timezone.now()
 
@@ -725,10 +726,10 @@ def interface(request):
                             message = f"""
                             AUTO-CONFIRM\n\nTITLE:{title}\n\nIssue has been closed because it is past 24hours since 
                             it was completed and sent for your approval\nhttp://ocean.snedaghana.loc/servicing/jobcard/tracking/{sent.cardno}\n\n"""
-                            new_sms(phone,message)
+                            new_sms(phone, message)
                             obj.append({
-                                'title':title,
-                                'sent_to':phone
+                                'title': title,
+                                'sent_to': phone
                             })
                             sent.status = 2
                             sent.client_approval = 2
