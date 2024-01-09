@@ -1,4 +1,6 @@
+from django.contrib.auth.models import User
 from django.db import models
+from django.db.models import ForeignKey
 
 
 # CLERKS
@@ -103,3 +105,52 @@ class Stock(models.Model):
 
     class Meta:
         unique_together = (('product', 'location'),)
+
+
+class RecipeGroup(models.Model):
+    name = models.CharField(null=False, blank=False, max_length=60)
+    is_open = models.BooleanField(default=True)
+
+    created_on = models.DateTimeField(auto_now_add=True)
+    edited_on = models.DateTimeField(auto_now=True)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def products(self):
+        return RecipeProduct.objects.filter(group=self)
+
+    class Meta:
+        unique_together = (('name', 'owner'),)
+
+
+class RecipeProduct(models.Model):
+    group = ForeignKey(RecipeGroup, on_delete=models.CASCADE)
+    name = models.CharField(null=False, blank=False, max_length=60)
+    barcode = models.TextField(null=False, blank=False)
+    si_unit = models.TextField(null=False, blank=False)
+
+    created_on = models.DateTimeField(auto_now_add=True)
+    edited_on = models.DateTimeField(auto_now=True)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = (('name', 'owner', 'group'),)
+
+    def recipe_items(self):
+        return Recipe.objects.filter(product=self).count()
+
+    def recipe(self):
+        return Recipe.objects.filter(product=self)
+
+
+class Recipe(models.Model):
+    product = models.ForeignKey(RecipeProduct, on_delete=models.CASCADE)
+    name = models.TextField(null=False, blank=False)
+    quantity = models.DecimalField(decimal_places=2, max_digits=60, default=0.00)
+    si_unit = models.TextField(null=False, blank=False)
+
+    created_on = models.DateTimeField(auto_now_add=True)
+    edited_on = models.DateTimeField(auto_now=True)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = (('name', 'owner', 'product'),)

@@ -167,6 +167,7 @@ def login_view(request):
             if hasattr(auth, 'is_active'):
 
                 auth_login(request, auth)
+                # create user api token
                 return redirect(next)
             else:
                 messages.error(request,

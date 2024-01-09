@@ -12,7 +12,8 @@ from sympy import Product
 from admin_panel.models import Emails
 from ocean.settings import RET_DB_HOST, RET_DB_USER, RET_DB_PASS, RET_DB_NAME
 from retail.db import ret_cursor, get_stock
-from retail.models import BoltItems, BoltGroups, ProductSupplier, ProductGroup, ProductSubGroup, Products, Stock
+from retail.models import BoltItems, BoltGroups, ProductSupplier, ProductGroup, ProductSubGroup, Products, Stock, \
+    RecipeGroup, RecipeProduct, Recipe
 
 
 @csrf_exempt
@@ -219,7 +220,53 @@ def interface(request):
                     else:
                         Stock.objects.create(product=product, quantity=kitchen, location='201')
                 success_response['message'] = "Stock Updated"
+
+            elif module == 'recipe_group':
+                name = data.get('name')
+                us = data.get('mypk')
+                owner = User.objects.get(pk=us)
+                RecipeGroup(name=name, owner=owner).save()
+
+                success_response['message'] = "Group Added!!"
+            elif module == 'recipe_product':
+                gk = data.get('gk')
+                group = RecipeGroup.objects.get(pk=gk)
+                us = data.get('mypk')
+                owner = User.objects.get(pk=us)
+                name = data.get('name')
+                barcode = data.get('barcode')
+                si_unit = data.get('si_unit')
+
+                RecipeProduct(group=group, name=name, barcode=barcode, si_unit=si_unit, owner=owner).save()
+                success_response['message'] = "Recipe Product Added"
+
+            elif module == 'recipe_items':
+                pro_key = data.get('product')
+                product = RecipeProduct.objects.get(pk=pro_key)
+
+                us = data.get('mypk')
+                owner = User.objects.get(pk=us)
+                items = data.get('items')
+
+                # delete all recipes
+                Recipe.objects.filter(product=product).delete()
+
+                for item in items:
+                    print(item)
+                    name = item['name']
+                    qty = item['qty']
+                    si_unit = item['si_unit']
+
+                    Recipe(product=product, name=name, owner=owner, quantity=qty, si_unit=si_unit).save()
+
+                success_response['message'] = "Recipe Saved Successfully"
+
+            else:
+                success_response['status_code'] = 404
+                success_response['message'] = f"no {method} method with module called {module}"
+
         elif method == 'VIEW':
+            arr = []
             if module == 'bolt_products':
                 pk = data.get('key') or '*'
 
@@ -661,6 +708,93 @@ def interface(request):
                     book.save(file_name)
                     success_response['message'] = file_name
 
+            elif module == 'recipe_group':
+                key = data.get('key', '*')
+
+                if key == '*':
+                    groups = RecipeGroup.objects.all()
+                else:
+                    groups = RecipeGroup.objects.filter(pk=key)
+
+                for group in groups:
+                    prod = []
+                    products = group.products()
+                    p_count = products.count()
+                    for product in products:
+                        prod.append({
+                            'pk': product.pk,
+                            'name': product.name,
+                            'barcode': product.barcode,
+                            'si_unit': product.si_unit,
+                            'recipe_items': product.recipe_items()
+                        })
+
+                    arr.append({
+                        'name': group.name,
+                        'pk': group.pk,
+                        'is_open': group.is_open,
+                        'products': {
+                            'counts': p_count,
+                            'list': prod
+                        }
+                    })
+
+                success_response['message'] = arr
+
+            elif module == 'recipe_product':
+                key = data.get('key', '*')
+                print(key)
+                if key == '*':
+                    products = RecipeProduct.objects.all()
+                else:
+                    products = RecipeProduct.objects.filter(pk=key)
+
+                print(products)
+
+                for product in products:
+                    print(product)
+                    rec_list = []
+                    for r in product.recipe():
+                        rec_list.append({
+                            'pk': r.pk,
+                            'name': r.name,
+                            'quantity': r.quantity,
+                            'si_unit': r.si_unit
+                        })
+
+                    arr.append({
+                        'pk': product.pk,
+                        'name': product.name,
+                        'barcode': product.barcode,
+                        'si_unit': product.si_unit,
+                        'recipe_items': {
+                            'count': product.recipe_items(),
+                            'list': rec_list
+                        }
+                    })
+
+                    success_response['message'] = arr
+
+            elif module == 'recipe_item':
+                key = data.get('key', '*')
+
+                if key == '*':
+                    recipe_item = Recipe.objects.all()
+                else:
+                    recipe_item = Recipe.objects.filter(product_id=key)
+
+                for item in recipe_item:
+                    arr.append({
+                        'name': item.name,
+                        'quantity': item.quantity,
+                        'si_unit': item.si_unit
+                    })
+
+                success_response['message'] = arr
+
+            else:
+                success_response['status_code'] = 404
+                success_response['message'] = f"no {method} method with module called {module}"
 
 
         elif method == 'PATCH':

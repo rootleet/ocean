@@ -163,6 +163,7 @@ def bolt_groups(request):
     }
     return render(request, 'retail/bolt-groups.html', context=context)
 
+
 @login_required()
 def products(request):
     context = {
@@ -173,3 +174,19 @@ def products(request):
         'items': Products.objects.all()
     }
     return render(request, 'retail/products.html', context=context)
+
+@login_required()
+def recipe(request):
+    context = {
+        'nav': True,
+
+    }
+    return render(request, 'retail/recipe/landing.html', context=context)
+
+@login_required()
+def recipe_group(request, group_id):
+    context = {
+        'nav': True,
+        'group_id': group_id
+    }
+    return render(request, 'retail/recipe/recipe_group.html', context=context)

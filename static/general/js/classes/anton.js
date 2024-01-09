@@ -14,9 +14,11 @@ class Anton {
             const value = $(`#${ids[i]}`).val();
             if (value === '' || value === undefined) {
                 // alert('False');
-                return false;
+
                 $(`#${ids[i]}`).addClass('border-danger')
                 $(`#${ids[i]}`).removeClass('border-success')
+                kasa.error("Fill Fields")
+                return false;
             } else {
                 $(`#${ids[i]}`).addClass('border-success')
                 $(`#${ids[i]}`).removeClass('border-danger')
@@ -229,7 +231,7 @@ class Kasa {
 
     response(response) {
         if(response['status_code'] === 200){
-            kasa.success("PASS")
+            kasa.success(response['message'])
         } else {
             kasa.error(response['message'])
         }

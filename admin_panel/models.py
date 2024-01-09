@@ -518,6 +518,7 @@ class UserAddOns(models.Model):
     app_version = models.ForeignKey('appconfig.VersionHistory', on_delete=models.CASCADE)
     profile_pic = models.FileField(upload_to=f'static/general/img/users/')
     pword_reset = models.IntegerField(default=1)
+    api_token = models.TextField(null=True)
 
     department = models.ForeignKey(Departments, on_delete=models.SET_NULL, null=True, blank=True)
 

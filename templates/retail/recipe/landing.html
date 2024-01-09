@@ -1,0 +1,52 @@
+{% extends 'retail/base.html' %}
+{% load static %}
+
+{% block body %}
+
+    <div class="card-header">
+        <div class="w-100 d-flex flex-wrap">
+            <div class="w-50">
+                <strong class="card-title">MY RECIPES</strong>
+            </div>
+            <div class="w-50 d-flex flex-wrap justify-content-end">
+                <button onclick="recipe.newRecipeGroupScreen()" class="btn btn-sm btn-info">NEW RECIPE GROUP</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-body p-2">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="table-responsive">
+                        <table class="table table-sm table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th>NAME</th><th>PRODUCTS</th><th>STATUS</th>
+                                </tr>
+                            </thead>
+                            <tbody id="recipes">
+                                <tr>
+                                    <td>
+                                        <span onclick="kasa.info('Preview Group')" class="text-primary pointer">NAME</span>
+                                    </td>
+                                    <td>1</td>
+                                    <td><span class="badge bg-info">OPEN</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+
+        recipe.loadRecipe()
+
+    </script>
+
+
+{% endblock %}

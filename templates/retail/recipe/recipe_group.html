@@ -1,0 +1,135 @@
+{% extends 'retail/base.html' %}
+{% load static %}
+
+{% block body %}
+
+    <div class="card-header">
+        <div class="w-100 d-flex flex-wrap">
+            <div class="w-50">
+                <strong id="group_name" class="card-title">MY RECIPES</strong>
+            </div>
+            <div class="w-50 d-flex flex-wrap justify-content-end">
+            </div>
+        </div>
+    </div>
+
+    <div class="card-body overflow-hidden img_bg p-5" style="background: url('{% static 'general/img/recipe.jpg' %}')">
+        <div class="container-fluid overflow-hidden h-100">
+            <div class="row overflow-hidden h-100">
+                <div class="col-sm-6 overflow-hidden h-100">
+                    <div class="card h-100">
+                        <div class="card-header">
+                            <div class="w-100 d-flex flex-wrap">
+                                <div class="w-50"><strong class="card-title">PRODUCT</strong></div>
+                                <div class="w-50 d-flex flex-wrap justify-content-end">
+                                    <button onclick="recipe.newProductScreen()" class="btn btn-outline-info btn-sm">NEW</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-sm table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>BARCODE</th>
+                                            <th>NAME</th>
+                                            <th>UNIT</th>
+                                            <th>ITEMS</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="products">
+                                        <tr><td>12344</td><td>Test Item</td><td><span class="badge bg-info">12</span></td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="col-sm-6 overflow-hidden h-100">
+                    <div class="card overflow-hidden h-100">
+                        <div class="card-header">
+                            <div class="w-100 d-flex flex-wrap">
+                                <div class="w-50"><strong class="card-title"><span id="prd_name">SELECT PRODUCT</span></strong></div>
+                                <input type="hidden" id="active_product">
+                                <div class="w-50 d-flex flex-wrap justify-content-end">
+
+                                    <button onclick="recipe.newRecipeLine()" class="btn btn-info btn-sm">NEW LINE</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card-body overflow-auto">
+                            <div class="table-responsive">
+                                <table class="table table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>SN</th>
+                                            <th>NAME</th>
+                                            <th>PACK</th>
+                                            <th>QTY</th>
+                                            <th>-</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="recipe_items">
+
+{#                                        <tr>#}
+{#                                            <td>name</td>#}
+{#                                            <td>packing</td>#}
+{#                                            <td>qty</td>#}
+{#                                        </tr>#}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="card-footer">
+                            <button onclick="recipe.saveRecipe()" class="btn btn-success btn-sm w-100">SAVE</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+
+        let group_id = `{{ group_id }}`;
+
+        // get group items
+        function loadRecipeProducts() {
+            let group = recipe.getRecipeGroup(group_id);
+            let tr = "";
+            if(anton.IsRequest(group)){
+                let grp = group.message[0];
+                console.table(grp)
+                let name,is_open,products;
+                name = grp.name;
+                is_open = grp.is_open
+                products = grp.products.list
+
+                for (let p = 0; p < products.length ; p++) {
+                    let product = products[p];
+                    let recipe_items = product.recipe_items
+                    tr += `<tr><td><a onclick="recipe.loadRecipeItems('${product.pk}')" href="javascript:void(0)">${product.barcode}</a></td><td>${product.name}</td><td>${product.si_unit}</td><td><span class="badge bg-info">${recipe_items}</span></td></tr>`;
+                }
+
+
+                $('#group_name').text(name)
+            } else {
+                tr = `<t><td colspan="3" class="text-danger" >${group.message}</td></t>`
+            }
+
+            $('#products').html(tr)
+        }
+        loadRecipeProducts();
+
+
+
+    </script>
+
+
+{% endblock %}

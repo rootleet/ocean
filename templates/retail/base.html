@@ -73,6 +73,8 @@
     <script src="{% static 'general/js/classes/cmms_cust.js' %}"></script>
     <script src="{% static 'general/js/classes/modal.js' %}"></script>
     <script src="{% static 'general/js/classes/retail.js' %}"></script>
+    <script src="{% static 'general/js/classes/recipe.js' %}"></script>
+    <script src="{% static 'general/js/classes/form.js' %}"></script>
 
 
   <script>
@@ -526,6 +528,12 @@
           </li>
 
         </ul>
+      </li>
+
+        <li class="nav-item">
+        <a class="nav-link collapsed" href="{% url 'recipe' %}">
+          <i class="bi bi-list"></i><span>RECIPES</span>
+        </a>
       </li>
 
 
