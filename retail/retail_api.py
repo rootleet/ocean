@@ -14,6 +14,7 @@ from ocean.settings import RET_DB_HOST, RET_DB_USER, RET_DB_PASS, RET_DB_NAME
 from retail.db import ret_cursor, get_stock
 from retail.models import BoltItems, BoltGroups, ProductSupplier, ProductGroup, ProductSubGroup, Products, Stock, \
     RecipeGroup, RecipeProduct, Recipe
+from retail.retail_tools import create_recipe_card
 
 
 @csrf_exempt
@@ -770,7 +771,8 @@ def interface(request):
                         'recipe_items': {
                             'count': product.recipe_items(),
                             'list': rec_list
-                        }
+                        },
+                        'is_open':product.is_open
                     })
 
                     success_response['message'] = arr
@@ -814,6 +816,27 @@ def interface(request):
                     item.price = retail1
                     item.inv_price = retail1
                     item.save()
+
+            elif module == 'close_recipe':
+                prod_key = data.get('prod_key')
+                product = RecipeProduct.objects.get(pk=prod_key)
+                items = product.recipe()
+
+                if items.count() > 0:
+                    # make recipe card
+                    item_arr = []
+                    for item in items:
+                        item_arr.append([item.name, item.si_unit, item.quantity])
+
+                    create_recipe_card(product.name, item_arr)
+
+                    success_response['message'] = "Recipe Closed"
+                    product.is_open = False
+                    product.save()
+
+                else:
+                    success_response['status_code'] = 404
+                    success_response['message'] = "No Recipe Items"
 
         response = success_response
 

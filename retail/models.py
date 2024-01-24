@@ -108,7 +108,7 @@ class Stock(models.Model):
 
 
 class RecipeGroup(models.Model):
-    name = models.CharField(null=False, blank=False, max_length=60)
+    name = models.CharField(null=False, blank=False, unique=True, max_length=100)
     is_open = models.BooleanField(default=True)
 
     created_on = models.DateTimeField(auto_now_add=True)
@@ -127,6 +127,8 @@ class RecipeProduct(models.Model):
     name = models.CharField(null=False, blank=False, max_length=60)
     barcode = models.TextField(null=False, blank=False)
     si_unit = models.TextField(null=False, blank=False)
+
+    is_open = models.BooleanField(default=True)
 
     created_on = models.DateTimeField(auto_now_add=True)
     edited_on = models.DateTimeField(auto_now=True)

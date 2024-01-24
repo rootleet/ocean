@@ -6,7 +6,7 @@ from django.shortcuts import render, redirect
 from admin_panel.models import Locations, SmsApi, Sms
 from cmms.extra import db
 from retail.forms import NewClerk
-from retail.models import Clerk, BoltItems, BoltGroups, Products
+from retail.models import Clerk, BoltItems, BoltGroups, Products, RecipeProduct
 
 
 @login_required()
@@ -179,6 +179,7 @@ def products(request):
 def recipe(request):
     context = {
         'nav': True,
+        'closed':RecipeProduct.objects.filter(is_open=False)
 
     }
     return render(request, 'retail/recipe/landing.html', context=context)

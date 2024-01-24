@@ -21,3 +21,10 @@ def maintenance(request,uni):
         'maintenance': Maintenance.objects.get(pk=uni)
     }
     return render(request, 'maintenance/maintenance.html', context=context)
+
+@login_required()
+def asset_groups(request):
+    context = {
+        'nav':True
+    }
+    return render(request,'maintenance/asset-groups.html',context=context)

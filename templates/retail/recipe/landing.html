@@ -14,15 +14,15 @@
         </div>
     </div>
 
-    <div class="card-body p-2">
-        <div class="container">
-            <div class="row">
-                <div class="col-sm-6">
+    <div class="card-body p-2 overflow-hidden">
+        <div class="container h-100 overflow-hidden">
+            <div class="row h-100 overflow-hidden">
+                <div class="col-sm-6 h-100 overflow-auto">
                     <div class="table-responsive">
                         <table class="table table-sm table-bordered table-hover">
                             <thead>
                                 <tr>
-                                    <th>NAME</th><th>PRODUCTS</th><th>STATUS</th>
+                                    <th>GROUP</th><th>PRODUCTS</th><th>STATUS</th>
                                 </tr>
                             </thead>
                             <tbody id="recipes">
@@ -37,6 +37,41 @@
                         </table>
                     </div>
                 </div>
+
+                <div class="col-sm-6 h-100 overflow-auto">
+                    <div class="w-100 row d-flex flex-wrap">
+
+                        {% for close in closed %}
+                            <div class="col-sm-6">
+                                <div data-bs-target="#prod{{ close.pk }}" data-bs-toggle="modal" class="card pointer">
+                                    <div class="card-body">
+                                        <img src="/static/recipe_card/{{ close.name }}.png" alt="" class="img-fluid">
+                                    </div>
+                                    <div class="card-footer">
+                                        <small class="tex-info">{{ close.name }}</small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="modal fade" id="prod{{ close.pk }}">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <strong class="modal-title">{{ close.name }}</strong>
+                                        </div>
+                                        <div class="modal-body">
+                                            <img src="/static/recipe_card/{{ close.name }}.png" alt="" class="img-fluid">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        {% endfor %}
+
+
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>

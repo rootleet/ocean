@@ -1,4 +1,6 @@
 {% load static %}
+{% load permission_tags %}
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -35,7 +37,8 @@
   <!-- Template Main CSS File -->
   <link href="{% static 'assets/css/style.css' %}" rel="stylesheet">
   <link href="{% static 'general/css/recorder.css' %}" rel="stylesheet">
-    <link href="{% static 'general/css/colors.css' %}" rel="stylesheet">
+    <link rel="manifest" href="{% static 'general/manifest.json' %}">
+
 
 
 
@@ -70,11 +73,12 @@
     <script src="{% static 'general/js/classes/app.js' %}"></script>
     <script src="{% static 'general/js/classes/docs.js' %}"></script>
     <script src="{% static 'general/js/classes/anton.js' %}"></script>
-    <script src="{% static 'general/js/classes/cmms_cust.js' %}"></script>
+    <script src="{% static 'general/js/classes/reminder.js' %}"></script>
+    <script src="{% static 'general/js/classes/contact.js' %}"></script>
     <script src="{% static 'general/js/classes/modal.js' %}"></script>
-    <script src="{% static 'general/js/classes/retail.js' %}"></script>
-    <script src="{% static 'general/js/classes/recipe.js' %}"></script>
     <script src="{% static 'general/js/classes/form.js' %}"></script>
+    <script src="{% static 'general/js/classes/maintenance.js' %}"></script>
+
 
 
   <script>
@@ -82,62 +86,42 @@
 
   </script>
 
-  <!-- =======================================================
-  * Template Name: NiceAdmin - v2.4.1
-  * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
-  * Author: BootstrapMade.com
-  * License: https://bootstrapmade.com/license/
-  ======================================================== -->
+    <style>
+        .install-button {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+        .tox-promotion{
+            display: none !important;
+        }
+    </style>
 </head>
 
 <body>
     <!-- MODALS -->
     <div id="g_modal" class="modal fade">
-        <div id="g_modal_size"  class="modal-dialog">
+        <div id="g_modal_size" class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="g_modal_title"></h5>
+                    <button class="close btn btn-outline-danger" data-bs-dismiss="modal">X</button>
                 </div>
-                <div class="modal-body overflow-auto" style='max-height : 75vh'>
+                <div class="modal-body">
                     <div class="w-100" id="g_modal_body">
-                        
+
                     </div>
                 </div>
-                <div class="footer" id="g_footer"></div>
+                <div class="modal-footer" id="g_footer"></div>
             </div>
         </div>
     </div>
-
-    <div class="modal fade" id="followUps">
-                <div class="modal-dialog modal-lg modal-dialog-centered">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <strong class="modal-title">Followup History</strong>
-{#                            <button id="newFolloupButton" class="close bx bx-plus btn btn-sm" data-bs-target="#newFolloup" data-bs-toggle="modal"></button>#}
-                        </div>
-                        <div class="modal-body" id="xfact" style="height: 60vh; overflow: auto">
-                            <table class="table table-bordered table-sm table-hover table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>Person</th><th>Date</th><th>Title</th><th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="fTbody">
-                                    <tr>
-                                        <td>James</td>
-                                        <td>Date</td>
-                                        <td>Hello World</td>
-                                        <td><i class="fa fa-reply pointer" onclick="al('info','hello world')"></i></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
-
     <div class="modal" id="loader">
         <div class="w-100 bg_trans_80 h-100 d-flex flex-wrap align-content-center justify-content-center">
             <img src="{% static 'general/img/icons/2.gif' %}" alt="" class="img-fluid">
@@ -154,7 +138,6 @@
   <input type="hidden" id="autos_url" value="{% url 'autos' 'ajax' %}">
   <input type="hidden" id="search_url" value="{% url 'search' %}">
   <input type="hidden" value="{{ request.user.pk }}" id="mypk">
-  <input type="hidden" value="{{ request.user.username }}" id="myName">
   {% if nav == True %}
   <!-- ======= Header ======= -->
   <header id="header" class="header fixed-top d-flex align-items-center">
@@ -187,86 +170,12 @@
 
         <li class="nav-item dropdown">
 
-          <a class="nav-link nav-icon">
-            <small class="text-danger">
-                {% for message in messages %}
-                  {{ message }}
-                {% endfor %}
-            </small>
-          </a><!-- End Messages Icon -->
-
-          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow messages">
-            <li class="dropdown-header">
-              You have 3 new messages
-              <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
-            </li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-            <li class="message-item">
-              <a href="#">
-                <img src="{% static 'assets/img/messages-1.jpg' %}" alt="" class="rounded-circle">
-                <div>
-                  <h4>Maria Hudson</h4>
-                  <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
-                  <p>4 hrs. ago</p>
-                </div>
-              </a>
-            </li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-            <li class="message-item">
-              <a href="#">
-                <img src="{% static 'assets/img/messages-2.jpg' %}" alt="" class="rounded-circle">
-                <div>
-                  <h4>Anna Nelson</h4>
-                  <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
-                  <p>6 hrs. ago</p>
-                </div>
-              </a>
-            </li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-            <li class="message-item">
-              <a href="#">
-                <img src="{% static 'assets/img/messages-3.jpg' %}" alt="" class="rounded-circle">
-                <div>
-                  <h4>David Muldon</h4>
-                  <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
-                  <p>8 hrs. ago</p>
-                </div>
-              </a>
-            </li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-            <li class="dropdown-footer">
-              <a href="#">Show all messages</a>
-            </li>
-
-          </ul><!-- End Messages Dropdown Items -->
-
-        </li><!-- End Messages Nav -->
-
-
-        <li class="nav-item dropdown">
-
-
-
           <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
             <i class="bi bi-bell"></i>
             <span class="badge bg-primary badge-number">{{ notifications.unread.count }}</span>
           </a><!-- End Notification Icon -->
 
           <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
-
-
 
             <li class="dropdown-header">
               You have {{ notifications.unread.count }} new notifications
@@ -346,7 +255,6 @@
 
         </li><!-- End Notification Nav -->
 
-
         <li class="nav-item dropdown">
 
           <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
@@ -416,7 +324,7 @@
         <li class="nav-item dropdown pe-3">
 
           <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-            <img src="{% static 'assets/img/users/default.png' %}" alt="Profile" class="rounded-circle">
+            <img src="{{ request.user|my_profile_picture }}" alt="Profile" class="rounded-circle">
             <span class="d-none d-md-block dropdown-toggle ps-2">{{ user.username }}</span>
           </a><!-- End Profile Iamge Icon -->
 
@@ -480,87 +388,21 @@
 
     <ul class="sidebar-nav" id="sidebar-nav">
 
-
-
-
-
-    {% if user.is_superuser %}
-        <li class="nav-item">
-        <a class="nav-link collapsed" href="{% url 'clerks' %}">
-          <i class="bi bi-list"></i><span>CLERKS</span>
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{% url 'admin_panel' %}">
+          <i class="bi bi-grid"></i>
+          <span>Dashboard</span>
         </a>
-      </li>
+      </li><!-- End Dashboard Nav -->
 
         <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#prod-nav" data-bs-toggle="collapse" href="#">
-          <i class="bx bx-food-menu"></i><span>Products</span><i class="bi bi-chevron-down ms-auto"></i>
+        <a class="nav-link collapsed" href="{% url 'maint_asset_groups' %}">
+          <i class="bi bi-grid"></i>
+          <span>Asset Groups</span>
         </a>
-        <ul id="prod-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-          <li>
-            <a href="{% url 'products' %}">
-              <i class="bi bi-circle"></i><span>Products List</span>
-            </a>
-          </li>
-            <li>
-            <a href="{% url 'bolt_groups' %}">
-              <i class="bi bi-alarm-fill"></i><span>Categories</span>
-            </a>
-          </li>
-
-        </ul>
-      </li>
+      </li><!-- End Dashboard Nav -->
 
 
-
-
-
-
-
-    {% endif %}
-    {% if perms.retail.view_boltitems %}
-    <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#bolt-nav" data-bs-toggle="collapse" href="#">
-          <i class="bx bx-food-menu"></i><span>Bolt</span><i class="bi bi-chevron-down ms-auto"></i>
-        </a>
-        <ul id="bolt-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-          <li>
-            <a href="{% url 'bolt_products' %}">
-              <i class="bi bi-circle"></i><span>Products</span>
-            </a>
-          </li>
-            <li>
-            <a href="{% url 'bolt_groups' %}">
-              <i class="bi bi-alarm-fill"></i><span>Categories</span>
-            </a>
-          </li>
-
-        </ul>
-      </li>
-        {% endif %}
-    {% if perms.retail.add_recipegroup %}
-        <li class="nav-item">
-        <a class="nav-link collapsed" href="{% url 'recipe' %}">
-          <i class="bi bi-list"></i><span>RECIPES</span>
-        </a>
-      </li>
-            {% endif %}
-
-
-
-
-
-    {% if perms.cmms.view_followup %}
-
-    
-
-        <!-- END OF CMMD -->
-        {% endif %}
-
-     
-
-
-
-   
 
 
 
@@ -582,10 +424,14 @@
       </nav>
     </div><!-- End Page Title -->
 
-    <section class="section card h-100" style="height: 85vh !important">
-      {% block body %}
+    <section class="section h-100" style="height: 85vh !important">
+      <div class="w-100 h-100 card overflow-hidden">
+          <button id="install-button" class="install-button">Install App</button>
 
-      {% endblock %}
+          {% block body %}
+
+          {% endblock %}
+      </div>
     </section>
 
   </main><!-- End #main -->
@@ -615,13 +461,69 @@
     </script>
 
 
-{#{% if messages %}#}
-{#  <script>#}
-{#    {% for message in messages %}#}
-{#      kasa.info(`{{ message }}`)#}
-{#    {% endfor %}#}
-{#  </script>#}
-{#{% endif %}#}
+{% if messages %}
+  <script>
+    {% for message in messages %}
+      kasa.info(`{{ message }}`)
+    {% endfor %}
+  </script>
+{% endif %}
+
+    <script>
+        let deferredPrompt;
+
+window.addEventListener('beforeinstallprompt', (event) => {
+    // Prevent the default prompt
+    console.log('beforeinstallprompt event fired');
+    event.preventDefault();
+
+    // Stash the event so it can be triggered later
+    deferredPrompt = event;
+
+    // Automatically trigger the install prompt
+    deferredPrompt.prompt();
+
+    // Wait for the user to respond to the prompt
+    deferredPrompt.userChoice.then((choiceResult) => {
+        if (choiceResult.outcome === 'accepted') {
+            console.log('User accepted the install prompt');
+        } else {
+            console.log('User dismissed the install prompt');
+        }
+
+        // Reset the deferredPrompt for future prompts
+        deferredPrompt = null;
+    });
+});
+
+window.addEventListener('load', () => {
+    const installButton = document.getElementById('install-button');
+    if (deferredPrompt) {
+        installButton.style.display = 'block';
+
+        installButton.addEventListener('click', () => {
+            // Show the browser's install prompt
+            deferredPrompt.prompt();
+
+            // Wait for the user to respond to the prompt
+            deferredPrompt.userChoice.then((choiceResult) => {
+                if (choiceResult.outcome === 'accepted') {
+                    console.log('User accepted the install prompt');
+                } else {
+                    console.log('User dismissed the install prompt');
+                }
+
+                // Reset the deferredPrompt for future prompts
+                deferredPrompt = null;
+
+                // Hide the custom install button
+                installButton.style.display = 'none';
+            });
+        });
+    }
+});
+
+    </script>
 
 </body>
 

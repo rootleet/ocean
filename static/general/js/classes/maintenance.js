@@ -1,4 +1,7 @@
 class Maintenance {
+    constructor() {
+        this.api_interface = '/maintainance/api/'
+    }
     newScreen(){
         let form = "";
         form += fom.text('title','',true);
@@ -89,6 +92,43 @@ class Maintenance {
 
         } else {
             kasa.error("Fill Required Fields")
+        }
+    }
+
+    getGroup(key='*'){
+        let payload = {
+            module:'maintenance_asset_group',
+            data:{
+                key:key
+            }
+        }
+        return api.call('VIEW',payload,this.api_interface);
+
+
+    }
+
+    new_asset_group_screen() {
+        let form = '';
+        form += fom.text('name','Group Name',true);
+        amodal.setTitleText("New Maintainance Asset");
+        amodal.setBodyHtml(form);
+        amodal.setFooterHtml(`<button onclick="maintenance.save_asset_group()" class="btn btn-success">SAVE</button>`);
+        amodal.show();
+
+    }
+
+    save_asset_group() {
+        let ids = ['mypk','name'];
+        if(anton.validateInputs(ids)){
+            let payload = {
+                module:'maintenance_asset_group',
+                data:anton.Inputs(ids)
+            }
+            kasa.confirm(
+                api.call('PUT',payload,this.api_interface)['message'],1,'here'
+            )
+        } else {
+            kasa.error("Fill All Fields")
         }
     }
 }

@@ -76,7 +76,7 @@ class Recipe {
 
     newProductScreen() {
         let screen = "";
-        screen += fom.text('barcode',"Barcode");
+
         screen += fom.text('name','Product Name');
         screen += fom.select('si_unit',`<option value="PCS">PCS</option><option value="KG">KG</option><option value="LT">Litres</option>`,'UNIT')
 
@@ -88,12 +88,13 @@ class Recipe {
     }
 
     saveProduct() {
-        let ids = ['barcode','name','si_unit','mypk'];
+        let ids = ['name','si_unit','mypk'];
         if(anton.validateInputs(ids)){
             let payload = {
                 module:'recipe_product',
                 data:anton.Inputs(ids)
             };
+            payload['data']['barcode'] = $('#name').val()
             payload['data']['gk'] = group_id;
 
             kasa.response(api.call('PUT',payload,this.api_interface));
@@ -114,11 +115,12 @@ class Recipe {
 
             let message = products.message[0];
 
-            let name,recipe,pk
+            let name,recipe,pk,is_open
+            is_open = message.is_open
             name = message.name
             pk = message.pk
             recipe = message.recipe_items.list
-            console.table(recipe)
+
             $('#prd_name').text(name)
             $('#active_product').val(pk)
             for (let it = 0; it < recipe.length ; it++) {
@@ -145,6 +147,18 @@ class Recipe {
                 </tr>
                 `
             }
+
+            if(is_open === false){
+                // disable buttons
+                $('#save').prop('disabled',true);
+                $('#close').prop('disabled',true);
+                $('#newline').prop('disabled',true);
+            } else {
+                $('#save').prop('disabled',false);
+                $('#close').prop('disabled',false);
+                $('#newline').prop('disabled',false);
+            }
+
         }
 
         $('#recipe_items').html(tr)
@@ -210,7 +224,7 @@ class Recipe {
 
             if(pass){
                 let prod = $('#active_product').val();
-                kasa.success("Lets Go")
+
                 let payload = {
                     module:'recipe_items',
                     data:{
@@ -219,7 +233,7 @@ class Recipe {
                         items:items
                     }
                 };
-                kasa.response(api.call('PUT',payload,this.api_interface))
+                api.call('PUT',payload,this.api_interface)
                 this.loadRecipeItems(prod)
                 console.table(payload)
             } else {
@@ -229,6 +243,25 @@ class Recipe {
             kasa.error("Cannot Save Empty Recipe")
         }
         // console.log(rows);
+    }
+
+    close() {
+        if(confirm("Are you sure?")){
+            let id = ['active_product'];
+            let payload = {
+                module:'close_recipe',
+                data:{
+                    prod_key:$('#active_product').val()
+                }
+            };
+            if(anton.validateInputs(id)){
+                kasa.response(api.call('PATCH',payload,this.api_interface))
+            } else {
+                kasa.error("No Active Product")
+            }
+        } else {
+            kasa.info('Operation Cancelled')
+        }
     }
 }
 

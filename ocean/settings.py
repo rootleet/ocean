@@ -91,6 +91,13 @@ WSGI_APPLICATION = 'ocean.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
+# Read environment variables or use defaults
+DATABASE_ENGINE = os.environ.get('DB_ENGINE', 'django.db.backends.mysql')
+DATABASE_NAME = os.environ.get('DB_NAME', 'ocean')
+DATABASE_USER = os.environ.get('DB_USER', 'root')
+DATABASE_PASSWORD = os.environ.get('DB_PASSWORD', 'Sunderland@411')
+DATABASE_HOST = os.environ.get('DB_HOST', 'localhost')
+DATABASE_PORT = os.environ.get('DB_PORT', '3306')
 
 DATABASES = {
     'ex': {
@@ -98,16 +105,17 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     },
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'ocean',
-        'USER': 'root',
-        'PASSWORD': 'Sunderland@411',
-        'HOST': 'localhost',
-        'PORT': '3306',
+        'ENGINE': DATABASE_ENGINE,
+        'NAME': DATABASE_NAME,
+        'USER': DATABASE_USER,
+        'PASSWORD': DATABASE_PASSWORD,
+        'HOST': DATABASE_HOST,
+        'PORT': DATABASE_PORT,
         'OPTIONS': {
             "init_command": "SET foreign_key_checks = 0;",
         },
     },
+
     'online': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'u560949065_ocean',
@@ -202,10 +210,10 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 # CMMS DATA PARAMETERS
-DB_SERVER = '192.168.2.4'
-DB_PORT = '1237'
+DB_SERVER = '192.168.2.16'
+DB_PORT = '101'
 DB_USER = 'sa'
-DB_PASSWORD = 'sa@123456'
+DB_PASSWORD = 'Szczesny@411'
 DB_NAME = 'CMMS'
 
 OLD_DB_SERVER = '192.168.2.4'

@@ -32,7 +32,6 @@
                                 <table class="table table-sm table-bordered">
                                     <thead>
                                         <tr>
-                                            <th>BARCODE</th>
                                             <th>NAME</th>
                                             <th>UNIT</th>
                                             <th>ITEMS</th>
@@ -56,7 +55,7 @@
                                 <input type="hidden" id="active_product">
                                 <div class="w-50 d-flex flex-wrap justify-content-end">
 
-                                    <button onclick="recipe.newRecipeLine()" class="btn btn-info btn-sm">NEW LINE</button>
+                                    <button id="newline" onclick="recipe.newRecipeLine()" class="btn btn-info btn-sm">NEW LINE</button>
                                 </div>
                             </div>
                         </div>
@@ -86,7 +85,8 @@
                         </div>
 
                         <div class="card-footer">
-                            <button onclick="recipe.saveRecipe()" class="btn btn-success btn-sm w-100">SAVE</button>
+                            <button id="save" onclick="recipe.saveRecipe()" class="btn btn-success btn-sm">SAVE</button>
+                            <button id="close" onclick="recipe.close()" class="btn btn-warning btn-sm">CLOSE</button>
                         </div>
                     </div>
                 </div>
@@ -114,7 +114,7 @@
                 for (let p = 0; p < products.length ; p++) {
                     let product = products[p];
                     let recipe_items = product.recipe_items
-                    tr += `<tr><td><a onclick="recipe.loadRecipeItems('${product.pk}')" href="javascript:void(0)">${product.barcode}</a></td><td>${product.name}</td><td>${product.si_unit}</td><td><span class="badge bg-info">${recipe_items}</span></td></tr>`;
+                    tr += `<tr><td><a onclick="recipe.loadRecipeItems('${product.pk}')" href="javascript:void(0)">${product.name}</a></td><td>${product.si_unit}</td><td><span class="badge bg-info">${recipe_items}</span></td></tr>`;
                 }
 
 

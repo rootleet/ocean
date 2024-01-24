@@ -1,0 +1,68 @@
+{% extends 'maintenance/base.html' %}
+{% load static %}
+
+{% block body %}
+    <div class="card-header">
+        <strong class="card-title">
+            Assets Group
+        </strong>
+    </div>
+
+    <div class="card-body bg-info p-0 overflow-hidden">
+        <div class="container-fluid p-5 h-100 overflow-hidden">
+            <div class="row h-100 overflow-hidden">
+
+                <div class="col-sm-6 h-100 overflow-hidden">
+                    <div class="card h-100">
+                        <div class="card-header">
+                            <div class="w-100 d-flex flex-wrap">
+                                <div class="w-50"><strong class="card-title">Asset Group</strong></div>
+                                <div class="w-50 d-flex flex-wrap justify-content-end">
+                                    <button onclick="maintenance.new_asset_group_screen()" class="btn btn-sm btn-info"><i class="fa fa-plus-square"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th><th>Action</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 h-100 overflow-hidden">
+                    <div class="card h-100">
+                        <div class="card-header"><strong class="card-title">Asset Sub Group</strong></div>
+                        <div class="card-body" id="asset_sub_group">
+                            <div class="w-100 h-100 d-flex flex-wrap justify-content-center align-content-center">
+                                <h3 class="text-muted">Select Group</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function loadGroups(){
+            let groups = maintenance.getGroup();
+            if(anton.IsRequest(groups)){
+                let group_data = groups['message'];
+                console.table(groups.message)
+            } else {
+                kasa.response(groups)
+            }
+        }
+
+        loadGroups()
+    </script>
+
+{% endblock %}

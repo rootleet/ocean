@@ -22,6 +22,7 @@ urlpatterns = [
 
     path('api/', api.interface, name='interface'),
     path('',views.landing_page, name='maintenance'),
-    path('preview/<uni>/',views.maintenance,name='maintenance_preview')
+    path('preview/<uni>/',views.maintenance,name='maintenance_preview'),
+    path('asset-groups/',views.asset_groups,name='maint_asset_groups')
 
 ]
