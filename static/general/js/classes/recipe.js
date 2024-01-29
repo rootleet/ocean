@@ -134,12 +134,7 @@ class Recipe {
                     <tr id="row_${id}">
                     <td>${id}</td>
                     <td><input id="name_${id}" value="${name}" class="form-control rounded-0 form-control-sm" type="text"></td>
-                    <td>
-                         <select id="si_${id}" name="" class="form-control rounded-0 form-control-sm" id="">
-                            
-                            <option value="g">g</option>
-                         </select>
-                    </td>
+         
                     <td><input value="${qty}" id="qty_${id}" style="width: 100px" class="form-control rounded-0 form-control-sm" type="number"></td>
                     <td><span onclick="$('#row_${id}').remove()" class="badge bg-danger pointer">-</span> </td>
                 </tr>
@@ -169,12 +164,7 @@ class Recipe {
             <tr  id="row_${id}">
                 <td>${id}</td>
                 <td><input id="name_${id}" class="form-control rounded-0 form-control-sm" type="text"></td>
-                <td>
-                     <select id="si_${id}" name="" class="form-control rounded-0 form-control-sm" id="">
-                       
-                        <option value="g">g</option>
-                     </select>
-                </td>
+                
                 <td>
                     <input id="qty_${id}" style="width: 100px" class="form-control rounded-0 form-control-sm" type="number">
                 </td>
@@ -205,14 +195,14 @@ class Recipe {
                 si_id = `si_${id}`
                 qty_id = `qty_${id}`
 
-                let error = anton.validateInputs([name_id,si_id,qty_id]);
+                let error = anton.validateInputs([name_id,qty_id]);
                 if(error === false){
                     pass = false
                     break;
                 } else {
                     items.push({
                         'name':$(`#${name_id}`).val(),
-                        si_unit:$(`#${si_id}`).val(),
+                        si_unit:'g',
                         qty:$(`#${qty_id}`).val()
                     })
                 }
