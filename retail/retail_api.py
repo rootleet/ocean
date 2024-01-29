@@ -1,5 +1,6 @@
 import json
 import sys
+from decimal import Decimal
 
 import pyodbc
 from django.contrib.auth.models import User
@@ -823,7 +824,7 @@ def interface(request):
                         sheet[f"B{sheet_row}"] = si_unit
                         sheet[f"C{sheet_row}"] = quantity
                         sheet_row += 1
-                        l_qty += quantity
+                        l_qty += Decimal(quantity)
                         print(r_name)
 
                     sheet[f"A{sheet_row}"] = 'TOTAL'
