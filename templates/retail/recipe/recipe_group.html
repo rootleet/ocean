@@ -22,13 +22,14 @@
                             <div class="w-100 d-flex flex-wrap">
                                 <div class="w-50"><strong class="card-title">PRODUCT</strong></div>
                                 <div class="w-50 d-flex flex-wrap justify-content-end">
-                                    <button onclick="recipe.newProductScreen()" class="btn btn-outline-info btn-sm">NEW</button>
+                                    <button onclick="recipe.newProductScreen()" class="btn btn-outline-primary btn-sm">NEW</button>
+                                    <button onclick="recipe.exportGroup(`{{ group_id }}`)" style="margin-left: 2px" class="btn btn-outline-info btn-sm">EXPORT</button>
                                 </div>
                             </div>
                         </div>
 
                         <div class="card-body">
-                            <div class="table-responsive">
+                            <div class="table-responsive h-75 overflow-auto">
                                 <table class="table table-sm table-bordered">
                                     <thead>
                                         <tr>
