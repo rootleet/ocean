@@ -136,10 +136,8 @@ class Recipe {
                     <td><input id="name_${id}" value="${name}" class="form-control rounded-0 form-control-sm" type="text"></td>
                     <td>
                          <select id="si_${id}" name="" class="form-control rounded-0 form-control-sm" id="">
-                            <option value="${si}">${si}</option>
-                            <option value="PCS">PCS</option>
-                            <option value="KG">KG</option>
-                            <option value="LT">LT</option>
+                            
+                            <option value="g">g</option>
                          </select>
                     </td>
                     <td><input value="${qty}" id="qty_${id}" style="width: 100px" class="form-control rounded-0 form-control-sm" type="number"></td>
