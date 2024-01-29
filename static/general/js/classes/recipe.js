@@ -78,7 +78,7 @@ class Recipe {
         let screen = "";
 
         screen += fom.text('name','Product Name');
-        screen += fom.select('si_unit',`<option value="PCS">PCS</option><option value="KG">KG</option><option value="LT">Litres</option>`,'UNIT')
+        screen += fom.select('si_unit',`<option value="g">g</option>`,'UNIT')
 
 
         amodal.setBodyHtml(screen);
@@ -173,9 +173,8 @@ class Recipe {
                 <td><input id="name_${id}" class="form-control rounded-0 form-control-sm" type="text"></td>
                 <td>
                      <select id="si_${id}" name="" class="form-control rounded-0 form-control-sm" id="">
-                        <option value="PCS">PCS</option>
-                        <option value="KG">KG</option>
-                        <option value="LT">Liters</option>
+                       
+                        <option value="g">g</option>
                      </select>
                 </td>
                 <td>
@@ -262,6 +261,17 @@ class Recipe {
         } else {
             kasa.info('Operation Cancelled')
         }
+    }
+
+    exportGroup(pk=null) {
+        let payload = {
+            'module':'export_recipe_group',
+            data:{
+                'group':pk
+            }
+        }
+
+        let expt = api.call('VIEW',payload,this.api_interface)
     }
 }
 
