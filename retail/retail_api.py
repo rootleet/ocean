@@ -772,7 +772,7 @@ def interface(request):
                             'count': product.recipe_items(),
                             'list': rec_list
                         },
-                        'is_open':product.is_open
+                        'is_open': product.is_open
                     })
 
                     success_response['message'] = arr
@@ -793,6 +793,47 @@ def interface(request):
                     })
 
                 success_response['message'] = arr
+
+            elif module == 'export_recipe_group':
+                group_pk = data.get('group')
+                group = RecipeGroup.objects.get(pk=group_pk)
+                file_name = f"static/general/tmp/{group.name}.xlsx"
+                products = group.products()
+                import openpyxl
+
+                book = openpyxl.Workbook()
+
+                for product in products:
+
+                    name = product.name
+                    sheet = book.create_sheet(title=name.replace('/', ''))
+                    sheet['A1'] = 'NAME'
+                    sheet['B1'] = "UNIT"
+                    sheet['C1'] = "QUANTITY"
+
+                    sheet_row = 2
+                    l_qty = 0
+                    recipes = product.recipe()
+                    print(name)
+                    for recipe in recipes:
+                        r_name = recipe.name
+                        si_unit = recipe.si_unit
+                        quantity = recipe.quantity
+                        sheet[f"A{sheet_row}"] = r_name
+                        sheet[f"B{sheet_row}"] = si_unit
+                        sheet[f"C{sheet_row}"] = quantity
+                        sheet_row += 1
+                        l_qty += quantity
+                        print(r_name)
+
+                    sheet[f"A{sheet_row}"] = 'TOTAL'
+                    sheet[f"C{sheet_row}"] = l_qty
+
+                    print()
+
+                book.save(file_name)
+                success_response['message'] = f'/{file_name}'
+
 
             else:
                 success_response['status_code'] = 404

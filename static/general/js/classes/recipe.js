@@ -259,7 +259,12 @@ class Recipe {
             }
         }
 
-        let expt = api.call('VIEW',payload,this.api_interface)
+        let expt = api.call('VIEW',payload,this.api_interface);
+        if(anton.IsRequest(expt)){
+            kasa.html(`<a href="${expt.message}">DOWNLOAD</a>`)
+        } else {
+            kasa.response(expt)
+        }
     }
 }
 
