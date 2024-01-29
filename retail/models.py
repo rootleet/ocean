@@ -147,7 +147,7 @@ class RecipeProduct(models.Model):
 class Recipe(models.Model):
     product = models.ForeignKey(RecipeProduct, on_delete=models.CASCADE)
     name = models.TextField(null=False, blank=False)
-    quantity = models.DecimalField(decimal_places=5, max_digits=60, default=0.00)
+    quantity = models.TextField(default=0.00)
     si_unit = models.TextField(null=False, blank=False)
 
     created_on = models.DateTimeField(auto_now_add=True)
