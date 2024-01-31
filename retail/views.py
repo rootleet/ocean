@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-
+from django.views.decorators.csrf import csrf_exempt
 from admin_panel.models import Locations, SmsApi, Sms
 from cmms.extra import db
 from retail.forms import NewClerk
@@ -191,3 +191,20 @@ def recipe_group(request, group_id):
         'group_id': group_id
     }
     return render(request, 'retail/recipe/recipe_group.html', context=context)
+
+@login_required()
+@csrf_exempt
+def upload_item_image(request):
+    if request.method == 'POST':
+
+        product_key = request.POST['prod_pk']
+        image = request.FILES['prod_image']
+        
+        product = RecipeProduct.objects.get(pk=product_key)
+        grp_pk = product.group.pk
+        product.image = image
+        product.save()
+        messages.success(request,"Image Uploaded")
+    
+
+    return redirect('recipe_group',grp_pk)

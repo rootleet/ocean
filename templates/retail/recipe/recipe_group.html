@@ -33,13 +33,12 @@
                                 <table class="table table-sm table-bordered">
                                     <thead>
                                         <tr>
+                                            <th>IMG</th>
                                             <th>NAME</th>
-                                            <th>UNIT</th>
                                             <th>ITEMS</th>
                                         </tr>
                                     </thead>
                                     <tbody id="products">
-                                        <tr><td>12344</td><td>Test Item</td><td><span class="badge bg-info">12</span></td></tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -114,7 +113,14 @@
                 for (let p = 0; p < products.length ; p++) {
                     let product = products[p];
                     let recipe_items = product.recipe_items
-                    tr += `<tr><td><a onclick="recipe.loadRecipeItems('${product.pk}')" href="javascript:void(0)">${product.name}</a></td><td>${product.si_unit}</td><td><span class="badge bg-info">${recipe_items}</span></td></tr>`;
+                    tr += `
+                    <tr>
+                        <td>
+                            <a href='javascript:void(0)' onclick='recipe.changeProductImage("${product.pk}")'><img src='${product.image}' style='width:30px; height:30px' /></a>
+                        </td>
+                        <td><a onclick="recipe.loadRecipeItems('${product.pk}')" href="javascript:void(0)">${product.name}</a></td>
+                        <td><span class="badge bg-info">${recipe_items}</span></td>
+                    </tr>`;
                 }
 
 

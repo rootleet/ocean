@@ -240,7 +240,8 @@ def interface(request):
                 si_unit = data.get('si_unit')
 
                 RecipeProduct(group=group, name=name, barcode=barcode, si_unit=si_unit, owner=owner).save()
-                success_response['message'] = "Recipe Product Added"
+                recipe = RecipeProduct.objects.get(group=group, name=name, barcode=barcode, si_unit=si_unit, owner=owner)
+                success_response['message'] = recipe.pk
 
             elif module == 'recipe_items':
                 pro_key = data.get('product')
@@ -728,7 +729,8 @@ def interface(request):
                             'name': product.name,
                             'barcode': product.barcode,
                             'si_unit': product.si_unit,
-                            'recipe_items': product.recipe_items()
+                            'recipe_items': product.recipe_items(),
+                            'image':product.image.url or 'none'
                         })
 
                     arr.append({

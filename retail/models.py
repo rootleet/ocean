@@ -134,6 +134,8 @@ class RecipeProduct(models.Model):
     edited_on = models.DateTimeField(auto_now=True)
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
 
+    image = models.ImageField(upload_to='static/retail/products/',default='static/retail/products/default.png')
+
     class Meta:
         unique_together = (('name', 'owner', 'group'),)
 

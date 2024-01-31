@@ -1,41 +1,73 @@
 {% extends 'maintenance/base.html' %}
 {% load static %}
 
-{% block body %}
 
-    <div class="card-header">
-        <div class="w-100 d-flex flex-wrap justify-content-center">
-            <button onclick="maintenance.newScreen()" style="margin: .2em" class="btn btn-info btn-sm">NEW SERVICE REQUEST</button>
-        </div>
+
+<div class="card-header">
+    <div class="w-100 d-flex flex-wrap justify-content-center">
+        <button onclick="maintenance.newScreen()" style="margin: .2em" class="btn btn-info btn-sm">NEW SERVICE
+            REQUEST</button>
     </div>
+</div>
 
-    <div class="card-body">
-        <div class="container">
+<div class="card-body">
+    <div class="container">
 
-            <div class="row d-flex flex-wrap justify-content-center">
-                {% for main in maintenance %}
-                <div class="col-sm-8 my-1">
-                    <div class="w-100 card border rounded_c">
-                        <div class="card-body p-4">
-                            <div class="w-100 d-flex flex-wrap">
-                                <div class="w-100">
-                                    <a onclick="location.href='{% url 'maintenance_preview' main.pk %}'" href="javascript:void(0)">
-                                        <h2>{{ main.title }}</h2>
-                                    </a>
-                                    <p class="ellipsis_2">
-                                        {{ main.description }}
-                                    </p>
-                                    <span class="badge {{ main.status_html.color }}">{{ main.status_html.text }}</span>
-                                </div>
+        <div class="row d-flex flex-wrap justify-content-center">
+            {% for main in maintenance %}
+            <div class="col-sm-8 my-1">
+                <div class="w-100 card border rounded_c">
+                    <div class="card-body p-4">
+                        <div class="w-100 d-flex flex-wrap">
+                            <div class="w-100">
+                                <a onclick="location.href='{% url 'maintenance_preview' main.pk %}'"
+                                    href="javascript:void(0)">
+                                    <h2>{{ main.title }}</h2>
+                                </a>
+                                <p class="ellipsis_2">
+                                    {{ main.description }}
+                                </p>
+                                <span class="badge {{ main.status_html.color }}">{{ main.status_html.text }}</span>
                             </div>
                         </div>
                     </div>
                 </div>
-
-                {% endfor %}
-
             </div>
+
+            {% endfor %}
+
+        </div>
+    </div>
+</div>
+
+{% block body %}
+    <div class="card-header">
+        <div class="w-50 d-flex flex-wrap">
+            <button onclick="location.href='{% url 'new_maintain' %}'" class="btn btn-primary btn-sm" style="margin: 2px;"><i class="fa fa-plus"></i></button>
+            <button id="previous" class="btn btn-info btn-sm" style="margin: 2px;"><i class="fa fa-backward"></i></button>
+            <button id="next" class="btn btn-info btn-sm" style="margin: 2px;"><i class="fa fa-forward"></i></button>
         </div>
     </div>
 
+    <script>
+        $(document).ready(function () {
+            $('#next').click(function () {
+                alert("NEXT")
+            })
+        })
+
+        $(document).ready(function () {
+            $('#previous').click(function () {
+                alert("PREVIOUS")
+            })
+        })
+
+        function loadMaintenance(pk) {
+            let doc = maintenance.getMentanance(pk);
+            console.table(doc)
+        }
+
+        loadMaintenance(`{{ maintenance.pk }}`)
+
+    </script>
 {% endblock %}

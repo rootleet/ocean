@@ -27,7 +27,8 @@ urlpatterns = [
     path('bolt/categories/', views.bolt_groups, name='bolt_groups'),
     path('products/', views.products, name='products'),
     path('recipe/', views.recipe, name='recipe'),
-    path('recipe/group/<int:group_id>/', views.recipe_group, name='recipe_group')
+    path('recipe/group/<int:group_id>/', views.recipe_group, name='recipe_group'),
+    path('recipe/upload_item_image/',views.upload_item_image,name='upload_item_image')
 
 ]
 

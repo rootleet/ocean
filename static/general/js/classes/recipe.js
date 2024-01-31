@@ -78,17 +78,18 @@ class Recipe {
         let screen = "";
 
         screen += fom.text('name','Product Name');
-        screen += fom.select('si_unit',`<option value="g">g</option>`,'UNIT')
+        
+        
 
 
         amodal.setBodyHtml(screen);
-        amodal.setTitleText("NEW GROUP ITEM");
+        amodal.setTitleText("NEW ITEM");
         amodal.setFooterHtml(`<button onclick="recipe.saveProduct()" class="btn btn-success mx-2">SAVE</button>`)
         amodal.show()
     }
 
     saveProduct() {
-        let ids = ['name','si_unit','mypk'];
+        let ids = ['name','mypk'];
         if(anton.validateInputs(ids)){
             let payload = {
                 module:'recipe_product',
@@ -96,9 +97,20 @@ class Recipe {
             };
             payload['data']['barcode'] = $('#name').val()
             payload['data']['gk'] = group_id;
+            payload['data']['si_unit'] = 'g'
+            
+            let save = api.call('PUT',payload,this.api_interface);
+            if(anton.IsRequest(save)){
+                let product_pk = save.message
+                $('#new_product_pk').val(product_pk);
+                kasa.info('UPLOADING IMAGE....')
+                this.changeProductImage(product_pk);
+            } else {
+                kasa.response(save);
+            }
 
-            kasa.response(api.call('PUT',payload,this.api_interface));
-            amodal.hide()
+            // kasa.response(api.call('PUT',payload,this.api_interface));
+            // amodal.hide()
             loadRecipeProducts()
         }
     }
@@ -265,6 +277,22 @@ class Recipe {
         } else {
             kasa.response(expt)
         }
+    }
+
+    changeProductImage(pk){
+        let form = `
+            <form action='/retail/recipe/upload_item_image/' method="post" enctype="multipart/form-data" id='change_product_image'>
+                <input type='hidden' name='prod_pk' require id='prod_pk' value = '${pk}'>
+                <input name='prod_image' type='file' accept='images/*' require id='prod_image' class='form-control rounded-0' />
+                <hr>
+                <button type='submit' class='btn btn-sm rounded-0 btn-success'>SAVE</button>
+            </form>
+        `;
+
+        amodal.setTitleText("Change Product Image")
+        amodal.setBodyHtml(form);
+        amodal.setFooterHtml('')
+        amodal.show()
     }
 }
 
