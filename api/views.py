@@ -1158,7 +1158,7 @@ def api_call(request, module, crud):
             limit = data['records']
 
             # check if car exit with car number
-            server = f"{DB_SERVER},{DB_PORT}"
+            server = f"{DB_SERVER}\MOTOR,{DB_PORT}"
             database = DB_NAME
             username = DB_USER
             password = DB_PASSWORD

@@ -4,9 +4,77 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ffcbf13e-d396-4071-9a24-4014a690f966" name="Changes" comment="take away sms">
+    <list default="true" id="ffcbf13e-d396-4071-9a24-4014a690f966" name="Changes" comment="add image uploader">
+      <change afterPath="$PROJECT_DIR$/static/general/tmp/SMALL PLATES.xlsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/retail/products/3.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/retail/products/3_aOHuvTJ.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/retail/products/71zX1SlrvnL._AC_SX355_.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/retail/products/default.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/uploads/71zX1SlrvnL._AC_SX355_.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/uploads/a_4341.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/maintenance/asset.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/maintenance/new-asset.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/maintenance/new-maintain.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/servicing/servicing_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/servicing/servicing_api.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/maintenance/api.py" beforeDir="false" afterPath="$PROJECT_DIR$/maintenance/api.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/maintenance/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/maintenance/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/maintenance/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/maintenance/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/maintenance/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/maintenance/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/apps/logos/default.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/apps/logos/icons8-parrot-100.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/general/bolt_price_changes/nia_stock_change_as_of_2023_10_29_20_25_51.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/general/bolt_price_changes/nia_stock_change_as_of_2023_10_29_20_27_57.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/general/bolt_price_changes/nia_stock_change_as_of_2023_10_29_20_28_30.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/general/bolt_price_changes/nia_stock_change_as_of_2023_10_29_20_29_50.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/general/bolt_price_changes/nia_stock_change_as_of_2023_10_30_04_41_57.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/general/bolt_price_changes/osu_stock_change_as_of_2023_10_29_20_25_51.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/general/bolt_price_changes/osu_stock_change_as_of_2023_10_29_20_27_57.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/general/bolt_price_changes/osu_stock_change_as_of_2023_10_29_20_28_30.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/general/bolt_price_changes/osu_stock_change_as_of_2023_10_29_20_29_50.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/general/bolt_price_changes/osu_stock_change_as_of_2023_10_30_04_41_57.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/general/bolt_price_changes/price_changes_as_of_2023_10_29_20_25_51.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/general/bolt_price_changes/price_changes_as_of_2023_10_29_20_27_57.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/general/bolt_price_changes/price_changes_as_of_2023_10_29_20_28_30.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/general/bolt_price_changes/price_changes_as_of_2023_10_29_20_29_50.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/general/bolt_price_changes/price_changes_as_of_2023_10_30_04_41_57.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/general/bolt_price_changes/spintex_stock_change_as_of_2023_10_29_20_25_51.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/general/bolt_price_changes/spintex_stock_change_as_of_2023_10_29_20_27_57.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/general/bolt_price_changes/spintex_stock_change_as_of_2023_10_29_20_28_30.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/general/bolt_price_changes/spintex_stock_change_as_of_2023_10_29_20_29_50.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/general/bolt_price_changes/spintex_stock_change_as_of_2023_10_30_04_41_57.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/general/clerks/WhatsApp_Image_2023-02-28_at_11.11.18.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/general/clerks/WhatsApp_Image_2023-02-28_at_11.14.42.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/general/js/classes/maintenance.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/general/js/classes/maintenance.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/general/tmp/SERVICING_REPORT.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/general/tmp/categories.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/general/tmp/products.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/general/tmp/sub_categories.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/general/uploads/20221115/2022-09-04.db" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/rmbg/done/image.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/rmbg/nobg/1111.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/rmbg/nobg/12312.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/rmbg/nobg/3254567.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/rmbg/nobg/6033000083159.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/rmbg/nobg/boss.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/rmbg/nobg/boss1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/rmbg/nobg/cbc.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/rmbg/nobg/dfgfde4ter.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/rmbg/nobg/er34.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/rmbg/nobg/hdtf.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/rmbg/nobg/karma.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/rmbg/nobg/origin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/rmbg/nobg/sfsd.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/rmbg/nobg/sfsdfs.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/rmbg/nobg/vbrete.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/uploads/2023/06/13/1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/uploads/2023/06/13/1_G3ZrV1Q.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/maintenance/asset-groups.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/maintenance/asset-groups.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/maintenance/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/maintenance/base.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templatetags/custom_tags.py" beforeDir="false" afterPath="$PROJECT_DIR$/templatetags/custom_tags.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/2023/04/20/L111022_E1222.Log" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -19,8 +87,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="HTML File" />
         <option value="JavaScript File" />
+        <option value="HTML File" />
         <option value="Python Script" />
       </list>
     </option>
@@ -61,46 +129,48 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "DefaultHtmlFileTemplate": "HTML File",
-    "Django Server.DJANGO.executor": "Run",
-    "Notification.DisplayName-DoNotAsk-JavaScript: Code Vision Performance": "JavaScript: code vision performance watcher",
-    "Notification.DoNotAsk-JavaScript: Code Vision Performance": "true",
-    "RunOnceActivity.OpenDjangoStructureViewOnStart": "true",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "django.template.preview.state": "SHOW_EDITOR_AND_PREVIEW",
-    "git-widget-placeholder": "main",
-    "last_opened_file_path": "C:/Users/reza/Documents/GitHub/ocean/cronjobs",
-    "node.js.detected.package.eslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;Django Server.DJANGO.executor&quot;: &quot;Run&quot;,
+    &quot;Docker.Dockerfile.executor&quot;: &quot;Run&quot;,
+    &quot;Notification.DisplayName-DoNotAsk-JavaScript: Code Vision Performance&quot;: &quot;JavaScript: code vision performance watcher&quot;,
+    &quot;Notification.DoNotAsk-JavaScript: Code Vision Performance&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenDjangoStructureViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;django.template.preview.state&quot;: &quot;SHOW_EDITOR_AND_PREVIEW&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/reza/Documents/GitHub/ocean/static/general/img&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "DatabaseDriversLRU": [
-      "mysql"
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;mysql&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\reza\Documents\GitHub\ocean\static\general\img" />
       <recent name="C:\Users\reza\Documents\GitHub\ocean\cronjobs" />
       <recent name="C:\Users\reza\Documents\GitHub\ocean\maintainance" />
       <recent name="C:\Users\reza\Documents\GitHub\ocean\cronjobs\retail" />
       <recent name="C:\Users\reza\Documents\GitHub\ocean\templates\retail" />
-      <recent name="C:\Users\reza\Documents\GitHub\ocean\static\apps\logos" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\reza\Documents\GitHub\ocean\templates\retail" />
       <recent name="C:\Users\reza\Documents\GitHub\ocean\static\general\js\classes" />
     </key>
   </component>
-  <component name="RunManager" selected="Django Server.DJANGO">
+  <component name="RunManager" selected="Docker.Dockerfile">
     <configuration name="retail_api" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="ocean_ori" />
       <option name="ENV_FILES" value="" />
@@ -167,6 +237,14 @@
       </deployment>
       <method v="2" />
     </configuration>
+    <configuration name="Dockerfile" type="docker-deploy" factoryName="dockerfile" temporary="true" server-name="Docker">
+      <deployment type="dockerfile">
+        <settings>
+          <option name="sourceFilePath" value="Dockerfile" />
+        </settings>
+      </deployment>
+      <method v="2" />
+    </configuration>
     <configuration default="true" type="docker-deploy" factoryName="docker-image" temporary="true">
       <deployment type="docker-image">
         <settings />
@@ -175,6 +253,7 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Docker.Dockerfile" />
         <item itemvalue="Docker.Docker Image" />
         <item itemvalue="Python.retail_api" />
       </list>
@@ -183,7 +262,7 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-python-sdk-7a29c1521ef0-c986f194a52a-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-233.11799.298" />
+        <option value="bundled-python-sdk-50da183f06c8-2887949eec09-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-233.13135.95" />
       </set>
     </attachedChunks>
   </component>
@@ -298,199 +377,27 @@
       <workItem from="1702979650412" duration="7354000" />
       <workItem from="1703053477546" duration="19439000" />
       <workItem from="1703102133002" duration="7063000" />
-      <workItem from="1703158889736" duration="2153000" />
-    </task>
-    <task id="LOCAL-00078" summary="dynacmis stock variables">
-      <option name="closed" value="true" />
-      <created>1700815326135</created>
-      <option name="number" value="00078" />
-      <option name="presentableId" value="LOCAL-00078" />
-      <option name="project" value="LOCAL" />
-      <updated>1700815326135</updated>
-    </task>
-    <task id="LOCAL-00079" summary="dynacmis stock variables">
-      <option name="closed" value="true" />
-      <created>1700815676622</created>
-      <option name="number" value="00079" />
-      <option name="presentableId" value="LOCAL-00079" />
-      <option name="project" value="LOCAL" />
-      <updated>1700815676622</updated>
-    </task>
-    <task id="LOCAL-00080" summary="dynacmis stock variables">
-      <option name="closed" value="true" />
-      <created>1700815707507</created>
-      <option name="number" value="00080" />
-      <option name="presentableId" value="LOCAL-00080" />
-      <option name="project" value="LOCAL" />
-      <updated>1700815707507</updated>
-    </task>
-    <task id="LOCAL-00081" summary="no meeting doucment">
-      <option name="closed" value="true" />
-      <created>1700819440800</created>
-      <option name="number" value="00081" />
-      <option name="presentableId" value="LOCAL-00081" />
-      <option name="project" value="LOCAL" />
-      <updated>1700819440800</updated>
-    </task>
-    <task id="LOCAL-00082" summary="no meeting doucment">
-      <option name="closed" value="true" />
-      <created>1700819544265</created>
-      <option name="number" value="00082" />
-      <option name="presentableId" value="LOCAL-00082" />
-      <option name="project" value="LOCAL" />
-      <updated>1700819544265</updated>
-    </task>
-    <task id="LOCAL-00083" summary="fix task uni or none">
-      <option name="closed" value="true" />
-      <created>1701685010538</created>
-      <option name="number" value="00083" />
-      <option name="presentableId" value="LOCAL-00083" />
-      <option name="project" value="LOCAL" />
-      <updated>1701685010539</updated>
-    </task>
-    <task id="LOCAL-00084" summary="fix task uni or none">
-      <option name="closed" value="true" />
-      <created>1701685306653</created>
-      <option name="number" value="00084" />
-      <option name="presentableId" value="LOCAL-00084" />
-      <option name="project" value="LOCAL" />
-      <updated>1701685306653</updated>
-    </task>
-    <task id="LOCAL-00085" summary="preparing ocean for live consumption">
-      <option name="closed" value="true" />
-      <created>1701777255423</created>
-      <option name="number" value="00085" />
-      <option name="presentableId" value="LOCAL-00085" />
-      <option name="project" value="LOCAL" />
-      <updated>1701777255423</updated>
-    </task>
-    <task id="LOCAL-00086" summary="add sms message when resetiing password">
-      <option name="closed" value="true" />
-      <created>1701777643630</created>
-      <option name="number" value="00086" />
-      <option name="presentableId" value="LOCAL-00086" />
-      <option name="project" value="LOCAL" />
-      <updated>1701777643630</updated>
-    </task>
-    <task id="LOCAL-00087" summary="detailed error message">
-      <option name="closed" value="true" />
-      <created>1701777793582</created>
-      <option name="number" value="00087" />
-      <option name="presentableId" value="LOCAL-00087" />
-      <option name="project" value="LOCAL" />
-      <updated>1701777793582</updated>
-    </task>
-    <task id="LOCAL-00088" summary="fixed user does not exist error">
-      <option name="closed" value="true" />
-      <created>1701777887725</created>
-      <option name="number" value="00088" />
-      <option name="presentableId" value="LOCAL-00088" />
-      <option name="project" value="LOCAL" />
-      <updated>1701777887725</updated>
-    </task>
-    <task id="LOCAL-00089" summary="fix api selection when sending am email">
-      <option name="closed" value="true" />
-      <created>1701778039756</created>
-      <option name="number" value="00089" />
-      <option name="presentableId" value="LOCAL-00089" />
-      <option name="project" value="LOCAL" />
-      <updated>1701778039756</updated>
-    </task>
-    <task id="LOCAL-00090" summary="ui">
-      <option name="closed" value="true" />
-      <created>1701779474986</created>
-      <option name="number" value="00090" />
-      <option name="presentableId" value="LOCAL-00090" />
-      <option name="project" value="LOCAL" />
-      <updated>1701779474986</updated>
-    </task>
-    <task id="LOCAL-00091" summary="ui">
-      <option name="closed" value="true" />
-      <created>1701779744771</created>
-      <option name="number" value="00091" />
-      <option name="presentableId" value="LOCAL-00091" />
-      <option name="project" value="LOCAL" />
-      <updated>1701779744771</updated>
-    </task>
-    <task id="LOCAL-00092" summary="Reset All Passwords">
-      <option name="closed" value="true" />
-      <created>1701780614022</created>
-      <option name="number" value="00092" />
-      <option name="presentableId" value="LOCAL-00092" />
-      <option name="project" value="LOCAL" />
-      <updated>1701780614022</updated>
-    </task>
-    <task id="LOCAL-00093" summary="remove apps module">
-      <option name="closed" value="true" />
-      <created>1701782315659</created>
-      <option name="number" value="00093" />
-      <option name="presentableId" value="LOCAL-00093" />
-      <option name="project" value="LOCAL" />
-      <updated>1701782315660</updated>
-    </task>
-    <task id="LOCAL-00094" summary="remove apps module">
-      <option name="closed" value="true" />
-      <created>1701782428103</created>
-      <option name="number" value="00094" />
-      <option name="presentableId" value="LOCAL-00094" />
-      <option name="project" value="LOCAL" />
-      <updated>1701782428104</updated>
-    </task>
-    <task id="LOCAL-00095" summary="remove apps module">
-      <option name="closed" value="true" />
-      <created>1701782716196</created>
-      <option name="number" value="00095" />
-      <option name="presentableId" value="LOCAL-00095" />
-      <option name="project" value="LOCAL" />
-      <updated>1701782716196</updated>
-    </task>
-    <task id="LOCAL-00096" summary="remove apps module">
-      <option name="closed" value="true" />
-      <created>1701784294472</created>
-      <option name="number" value="00096" />
-      <option name="presentableId" value="LOCAL-00096" />
-      <option name="project" value="LOCAL" />
-      <updated>1701784294472</updated>
-    </task>
-    <task id="LOCAL-00097" summary="add a button in job card to load existing screens">
-      <option name="closed" value="true" />
-      <created>1701873221715</created>
-      <option name="number" value="00097" />
-      <option name="presentableId" value="LOCAL-00097" />
-      <option name="project" value="LOCAL" />
-      <updated>1701873221716</updated>
-    </task>
-    <task id="LOCAL-00098" summary="add supplier accurate email address when sending to supplier">
-      <option name="closed" value="true" />
-      <created>1701880309758</created>
-      <option name="number" value="00098" />
-      <option name="presentableId" value="LOCAL-00098" />
-      <option name="project" value="LOCAL" />
-      <updated>1701880309759</updated>
-    </task>
-    <task id="LOCAL-00099" summary="add supplier accurate email address when sending to supplier">
-      <option name="closed" value="true" />
-      <created>1701880468999</created>
-      <option name="number" value="00099" />
-      <option name="presentableId" value="LOCAL-00099" />
-      <option name="project" value="LOCAL" />
-      <updated>1701880468999</updated>
-    </task>
-    <task id="LOCAL-00100" summary="This update enables the system admin to change job card app to fitting">
-      <option name="closed" value="true" />
-      <created>1701939260099</created>
-      <option name="number" value="00100" />
-      <option name="presentableId" value="LOCAL-00100" />
-      <option name="project" value="LOCAL" />
-      <updated>1701939260100</updated>
-    </task>
-    <task id="LOCAL-00101" summary="This update enables the system admin to change job card app to fitting">
-      <option name="closed" value="true" />
-      <created>1701940770075</created>
-      <option name="number" value="00101" />
-      <option name="presentableId" value="LOCAL-00101" />
-      <option name="project" value="LOCAL" />
-      <updated>1701940770075</updated>
+      <workItem from="1703158889736" duration="2701000" />
+      <workItem from="1703163539723" duration="5217000" />
+      <workItem from="1703236997129" duration="968000" />
+      <workItem from="1703264076103" duration="26000" />
+      <workItem from="1703615181920" duration="955000" />
+      <workItem from="1703623746143" duration="1463000" />
+      <workItem from="1703633224064" duration="92000" />
+      <workItem from="1704288309726" duration="6746000" />
+      <workItem from="1704322921442" duration="593000" />
+      <workItem from="1704727303729" duration="16671000" />
+      <workItem from="1705963471544" duration="16901000" />
+      <workItem from="1706073282908" duration="3808000" />
+      <workItem from="1706095431028" duration="2830000" />
+      <workItem from="1706137595827" duration="13530000" />
+      <workItem from="1706195717050" duration="17687000" />
+      <workItem from="1706264821598" duration="1025000" />
+      <workItem from="1706283716691" duration="97000" />
+      <workItem from="1706523284184" duration="8766000" />
+      <workItem from="1706541596848" duration="4152000" />
+      <workItem from="1706630463028" duration="961000" />
+      <workItem from="1706705511464" duration="1239000" />
     </task>
     <task id="LOCAL-00102" summary="This update enables the system admin to change job card app to fitting">
       <option name="closed" value="true" />
@@ -692,7 +599,199 @@
       <option name="project" value="LOCAL" />
       <updated>1703160961099</updated>
     </task>
-    <option name="localTasksCounter" value="127" />
+    <task id="LOCAL-00127" summary="sms re-enstated">
+      <option name="closed" value="true" />
+      <created>1703161093831</created>
+      <option name="number" value="00127" />
+      <option name="presentableId" value="LOCAL-00127" />
+      <option name="project" value="LOCAL" />
+      <updated>1703161093831</updated>
+    </task>
+    <task id="LOCAL-00128" summary="sms re-enstated">
+      <option name="closed" value="true" />
+      <created>1703171180066</created>
+      <option name="number" value="00128" />
+      <option name="presentableId" value="LOCAL-00128" />
+      <option name="project" value="LOCAL" />
+      <updated>1703171180067</updated>
+    </task>
+    <task id="LOCAL-00129" summary="sms re-enstated">
+      <option name="closed" value="true" />
+      <created>1704291290049</created>
+      <option name="number" value="00129" />
+      <option name="presentableId" value="LOCAL-00129" />
+      <option name="project" value="LOCAL" />
+      <updated>1704291290050</updated>
+    </task>
+    <task id="LOCAL-00130" summary="servicing model">
+      <option name="closed" value="true" />
+      <created>1704291384607</created>
+      <option name="number" value="00130" />
+      <option name="presentableId" value="LOCAL-00130" />
+      <option name="project" value="LOCAL" />
+      <updated>1704291384607</updated>
+    </task>
+    <task id="LOCAL-00131" summary="servicing model">
+      <option name="closed" value="true" />
+      <created>1704291447084</created>
+      <option name="number" value="00131" />
+      <option name="presentableId" value="LOCAL-00131" />
+      <option name="project" value="LOCAL" />
+      <updated>1704291447084</updated>
+    </task>
+    <task id="LOCAL-00132" summary="servicing model">
+      <option name="closed" value="true" />
+      <created>1704291616922</created>
+      <option name="number" value="00132" />
+      <option name="presentableId" value="LOCAL-00132" />
+      <option name="project" value="LOCAL" />
+      <updated>1704291616922</updated>
+    </task>
+    <task id="LOCAL-00133" summary="servicing model">
+      <option name="closed" value="true" />
+      <created>1704291762777</created>
+      <option name="number" value="00133" />
+      <option name="presentableId" value="LOCAL-00133" />
+      <option name="project" value="LOCAL" />
+      <updated>1704291762777</updated>
+    </task>
+    <task id="LOCAL-00134" summary="servicing model">
+      <option name="closed" value="true" />
+      <created>1704292106734</created>
+      <option name="number" value="00134" />
+      <option name="presentableId" value="LOCAL-00134" />
+      <option name="project" value="LOCAL" />
+      <updated>1704292106734</updated>
+    </task>
+    <task id="LOCAL-00135" summary="servicing model">
+      <option name="closed" value="true" />
+      <created>1704294768965</created>
+      <option name="number" value="00135" />
+      <option name="presentableId" value="LOCAL-00135" />
+      <option name="project" value="LOCAL" />
+      <updated>1704294768965</updated>
+    </task>
+    <task id="LOCAL-00136" summary="servicing model">
+      <option name="closed" value="true" />
+      <created>1704299120882</created>
+      <option name="number" value="00136" />
+      <option name="presentableId" value="LOCAL-00136" />
+      <option name="project" value="LOCAL" />
+      <updated>1704299120882</updated>
+    </task>
+    <task id="LOCAL-00137" summary="servicing model">
+      <option name="closed" value="true" />
+      <created>1704299641544</created>
+      <option name="number" value="00137" />
+      <option name="presentableId" value="LOCAL-00137" />
+      <option name="project" value="LOCAL" />
+      <updated>1704299641545</updated>
+    </task>
+    <task id="LOCAL-00138" summary="added recipe model">
+      <option name="closed" value="true" />
+      <created>1704770164719</created>
+      <option name="number" value="00138" />
+      <option name="presentableId" value="LOCAL-00138" />
+      <option name="project" value="LOCAL" />
+      <updated>1704770164719</updated>
+    </task>
+    <task id="LOCAL-00139" summary="added recipe model">
+      <option name="closed" value="true" />
+      <created>1706109840076</created>
+      <option name="number" value="00139" />
+      <option name="presentableId" value="LOCAL-00139" />
+      <option name="project" value="LOCAL" />
+      <updated>1706109840078</updated>
+    </task>
+    <task id="LOCAL-00140" summary="added recipe model">
+      <option name="closed" value="true" />
+      <created>1706109852547</created>
+      <option name="number" value="00140" />
+      <option name="presentableId" value="LOCAL-00140" />
+      <option name="project" value="LOCAL" />
+      <updated>1706109852547</updated>
+    </task>
+    <task id="LOCAL-00141" summary="retail module updated to have max length of 6 in recipe quantity">
+      <option name="closed" value="true" />
+      <created>1706265287608</created>
+      <option name="number" value="00141" />
+      <option name="presentableId" value="LOCAL-00141" />
+      <option name="project" value="LOCAL" />
+      <updated>1706265287608</updated>
+    </task>
+    <task id="LOCAL-00142" summary="modification made to point db to accurate port">
+      <option name="closed" value="true" />
+      <created>1706524181688</created>
+      <option name="number" value="00142" />
+      <option name="presentableId" value="LOCAL-00142" />
+      <option name="project" value="LOCAL" />
+      <updated>1706524181688</updated>
+    </task>
+    <task id="LOCAL-00143" summary="change unite data type">
+      <option name="closed" value="true" />
+      <created>1706526300544</created>
+      <option name="number" value="00143" />
+      <option name="presentableId" value="LOCAL-00143" />
+      <option name="project" value="LOCAL" />
+      <updated>1706526300544</updated>
+    </task>
+    <task id="LOCAL-00144" summary="change unite data type">
+      <option name="closed" value="true" />
+      <created>1706531052992</created>
+      <option name="number" value="00144" />
+      <option name="presentableId" value="LOCAL-00144" />
+      <option name="project" value="LOCAL" />
+      <updated>1706531052992</updated>
+    </task>
+    <task id="LOCAL-00145" summary="change unite data type">
+      <option name="closed" value="true" />
+      <created>1706531896598</created>
+      <option name="number" value="00145" />
+      <option name="presentableId" value="LOCAL-00145" />
+      <option name="project" value="LOCAL" />
+      <updated>1706531896598</updated>
+    </task>
+    <task id="LOCAL-00146" summary="change unite data type">
+      <option name="closed" value="true" />
+      <created>1706532468663</created>
+      <option name="number" value="00146" />
+      <option name="presentableId" value="LOCAL-00146" />
+      <option name="project" value="LOCAL" />
+      <updated>1706532468663</updated>
+    </task>
+    <task id="LOCAL-00147" summary="change unite data type">
+      <option name="closed" value="true" />
+      <created>1706533038327</created>
+      <option name="number" value="00147" />
+      <option name="presentableId" value="LOCAL-00147" />
+      <option name="project" value="LOCAL" />
+      <updated>1706533038328</updated>
+    </task>
+    <task id="LOCAL-00148" summary="change unite data type">
+      <option name="closed" value="true" />
+      <created>1706534588906</created>
+      <option name="number" value="00148" />
+      <option name="presentableId" value="LOCAL-00148" />
+      <option name="project" value="LOCAL" />
+      <updated>1706534588906</updated>
+    </task>
+    <task id="LOCAL-00149" summary="change unite data type">
+      <option name="closed" value="true" />
+      <created>1706535023965</created>
+      <option name="number" value="00149" />
+      <option name="presentableId" value="LOCAL-00149" />
+      <option name="project" value="LOCAL" />
+      <updated>1706535023965</updated>
+    </task>
+    <task id="LOCAL-00150" summary="add image uploader">
+      <option name="closed" value="true" />
+      <created>1706705789516</created>
+      <option name="number" value="00150" />
+      <option name="presentableId" value="LOCAL-00150" />
+      <option name="project" value="LOCAL" />
+      <updated>1706705789516</updated>
+    </task>
+    <option name="localTasksCounter" value="151" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -715,13 +814,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="ui" />
-    <MESSAGE value="Reset All Passwords" />
-    <MESSAGE value="remove apps module" />
-    <MESSAGE value="add a button in job card to load existing screens" />
-    <MESSAGE value="add supplier accurate email address when sending to supplier" />
-    <MESSAGE value="This update enables the system admin to change job card app to fitting" />
-    <MESSAGE value="setting py reset" />
     <MESSAGE value="update accurate tax description when opening a job" />
     <MESSAGE value="more detailed issues showing and also service navigation" />
     <MESSAGE value="change new ticket sms number" />
@@ -740,7 +832,14 @@
     <MESSAGE value="auto close cronjobe" />
     <MESSAGE value="update the sents" />
     <MESSAGE value="take away sms" />
-    <option name="LAST_COMMIT_MESSAGE" value="take away sms" />
+    <MESSAGE value="sms re-enstated" />
+    <MESSAGE value="servicing model" />
+    <MESSAGE value="added recipe model" />
+    <MESSAGE value="retail module updated to have max length of 6 in recipe quantity" />
+    <MESSAGE value="modification made to point db to accurate port" />
+    <MESSAGE value="change unite data type" />
+    <MESSAGE value="add image uploader" />
+    <option name="LAST_COMMIT_MESSAGE" value="add image uploader" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -764,6 +863,11 @@
           <url>file://$PROJECT_DIR$/taskmanager/api.py</url>
           <line>3</line>
           <option name="timeStamp" value="6" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/maintenance/models.py</url>
+          <line>149</line>
+          <option name="timeStamp" value="7" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

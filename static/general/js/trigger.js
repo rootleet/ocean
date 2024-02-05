@@ -93,7 +93,7 @@ $(document).ready(function () { // wait for the document to finish loading
         //     if(status_code === 200){
         //         let count,trans 
         //         count = message['count']
-                
+
         //         // there is positive resposne
         //         if(count === 1){
         //             // there is product as expected
@@ -101,7 +101,7 @@ $(document).ready(function () { // wait for the document to finish loading
         //             let name,item_ref
         //             name = trans['name']
         //             item_ref = trans['item_ref']
-                    
+
         //             // add item
         //             Swal.fire({
         //                 'title':'STOCK RECORD',
@@ -114,7 +114,7 @@ $(document).ready(function () { // wait for the document to finish loading
         //             // let tr = `<tr><td><small>${barcode}</small></td><td><small>${name}</small></td><td><small>10</small></td></tr>`
 
         //             // $('#tbody').prepend(tr)
-                    
+
         //         } else {
         //             alert(`NO PRODUCT FOUND (${count})`)
         //         }
@@ -122,19 +122,19 @@ $(document).ready(function () { // wait for the document to finish loading
         //         alert(message)
         //     }
 
-            
+
         // } else {
         //     alert("BARCODE SHOULD ENTER")
         // }
     })
 
     // cmms input 
-    $('#stock_add_barcode').keypress(function(event) {
+    $('#stock_add_barcode').keypress(function (event) {
         // Check if Enter key is pressed (keycode 13)
         if (event.which === 13) {
-          cmms.stockFind()
+            cmms.stockFind()
         }
-      });
+    });
 
     // infographic
     $('#infographic').click(function () {
@@ -143,5 +143,49 @@ $(document).ready(function () { // wait for the document to finish loading
         setTimeout(exitFullscreen, 3000);
     });
 
+    // general form
+    $("#general_form").submit(function(e) {
+        e.preventDefault();
+    
+        // Get the action URL from the form
+        var actionUrl = $(this).attr("action");
+    
+        // Create FormData object
+        var formData = new FormData($(this)[0]);
+    
+        $.ajax({
+            type: "POST",
+            url: actionUrl,
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                console.log(response);
+            },
+            error: function(error) {
+                console.error(error);
+            }
+        });
+    });
+    
+
 });
+
+
+function submitForm(formId) {
+    var form = $("#" + formId);
+    var actionUrl = form.attr("action");
+
+    // Create FormData object
+    var formData = new FormData(form[0]);
+
+    // Return the jQuery AJAX promise
+    return $.ajax({
+        type: "POST",
+        url: actionUrl,
+        data: formData,
+        processData: false,
+        contentType: false
+    });
+}
 

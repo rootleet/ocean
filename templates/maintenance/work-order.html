@@ -1,0 +1,284 @@
+{% extends 'maintenance/base.html' %}
+{% load static %}
+
+{% block body %}
+
+<div class="card-header">
+    <div class="w-100 d-flex flex-wrap">
+        <div class="w-50 d-flex flex-wrap">
+            <button id="previous" class="btn btn-info btn-sm" style="margin: 2px;"><i
+                    class="fa fa-backward"></i></button>
+            <button id="next" class="btn btn-info btn-sm" style="margin: 2px;"><i class="fa fa-forward"></i></button>
+        </div>
+        <div class="w-50 d-flex flex-wrap justify-content-end">
+            <button id="transactions" style="margin-right: 2px;" class="btn btn-info btn-sm">Transactions</button>
+            <button id="material_request" class="btn btn-dark btn-sm">Material Requiest</button>
+        </div>
+    </div>
+</div>
+
+<div class="card-body overflow-hidden">
+    <div class="h-50 overflow-hidden">
+        <div class="container-fluid p-2 h-100">
+            <div class="row h-100">
+                <!--WORK DETAILS-->
+                <div class="col-sm-4 h-100">
+                    <div class="card shadow-none border border-primary h-100">
+                        <div class="card-header"><strong class="card-title">Work Details</strong></div>
+                        <div class="card-body p-2">
+                            <!--WORD ORDER-->
+                            <div class="input-group mb-2 input-group-sm">
+                                <div class="input-group-prepend rounded-0">
+                                    <span class="input-group-text rounded-0">WRK. Order</span>
+                                </div>
+                                <input readonly type="text" class="form-control rounded-0" id="wo_no">
+                            </div>
+
+                            <!--WORD REQUEST-->
+                            <div class="input-group input-group-sm mb-2">
+                                <div class="input-group-prepend rounded-0">
+                                    <span class="input-group-text rounded-0">Job Card</span>
+                                </div>
+                                <input readonly type="text" class="form-control rounded-0" id="wr_no">
+                            </div>
+
+
+                            <!--ASSET-->
+                            <div class="input-group input-group-sm mb-2">
+                                <div class="input-group-prepend rounded-0">
+                                    <span class="input-group-text rounded-0">ASSET</span>
+                                </div>
+                                <input readonly type="text" class="form-control rounded-0" id="asset">
+                                <div class="input-group-append rounded-0">
+                                    <span onclick="ment.showWoAsset()"
+                                        class="input-group-text rounded-0 bg-info">?</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- META DATA-->
+                <div class="col-sm-4 h-100">
+                    <div class="card shadow-none border border-primary h-100">
+                        <div class="card-header"><strong class="card-title">Meta Data</strong></div>
+                        <div class="card-body p-2">
+                            <!--LOCATION-->
+                            <div class="input-group input-group-sm mb-2">
+                                <div class="input-group-prepend rounded-0">
+                                    <span class="input-group-text rounded-0">Location</span>
+                                </div>
+                                <input type="text" readonly class="form-control rounded-0" id="location">
+                            </div>
+                            <!--STATUS-->
+                            <div class="input-group input-group-sm mb-2">
+                                <div class="input-group-prepend rounded-0">
+                                    <span class="input-group-text rounded-0">Status</span>
+                                </div>
+                                <input type="text" readonly class="form-control rounded-0" id="status">
+                            </div>
+
+                            <!--DATE TIME-->
+                            <div class="input-group input-group-sm mb-2">
+                                <div class="input-group-prepend rounded-0">
+                                    <span class="input-group-text rounded-0">Created Date</span>
+                                </div>
+                                <input type="text" readonly class="form-control rounded-0" id="date_time">
+                            </div>
+
+                            <!--OWNER-->
+                            <div class="input-group input-group-sm mb-2">
+                                <div class="input-group-prepend rounded-0">
+                                    <span class="input-group-text rounded-0">Created By</span>
+                                </div>
+                                <input type="text" readonly class="form-control rounded-0" id="owner">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--TECHNICAL-->
+                <div class="col-sm-4 h-100 overflow-hidden">
+                    <div class="card shadow-none border border-primary h-100">
+                        <div class="card-header"><strong class="card-title">Technical</strong></div>
+                        <div class="card-body p-2">
+                            <!--TECHNICIAN-->
+                            <div class="input-group input-group-sm mb-2">
+                                <div class="input-group-prepend rounded-0">
+                                    <span class="input-group-text rounded-0">Technician</span>
+                                </div>
+                                <input type="text" readonly class="form-control rounded-0" id="technician">
+                            </div>
+
+                            <strong>Evidence</strong><br>
+                            <img src="" style="width: 50% !important;" id="evidence" alt="Cannot Load Image"
+                                class="img-fluid">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="h-50 overflow-hidden card">
+        <div class="card-header">
+            <ul class="nav nav-pills">
+                <li class="nav-item">
+                    <a class="nav-link active" data-toggle="pill" href="#issue">ISSUE</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="pill" href="#analysis">Analysis</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="pill" href="#materials">Materials</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="pill" href="#attachments">Attachments</a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="card-body p-1 overflow-hidden">
+            <!-- Tab panes -->
+            <div class="tab-content h-100 overflow-hidden">
+                <div class="tab-pane container active" id="issue">
+                    <p>
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Odio debitis amet adipisci fugit ex
+                        magni fugiat ab eaque aperiam exercitationem numquam doloremque placeat corporis animi minus
+                        impedit, harum excepturi hic!
+                    </p>
+                </div>
+                <div class="tab-pane container fade" id="analysis">
+                    <p>
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Odio debitis amet adipisci fugit ex
+                        magni fugiat ab eaque aperiam exercitationem numquam doloremque placeat corporis animi minus
+                        impedit, harum excepturi hic!
+                    </p>
+                </div>
+                <div class="tab-pane container fade" id="materials">
+                    <button id="add_material" class="btn btn-info btn-sm">NEW</button>
+                    <hr>
+                    <div class="table-responsive">
+                        <table class="table table-sm table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Purpose</th>
+                                    <th>Quantity</th>
+                                    <th>Unit Price</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody id="mat_body">
+
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+                <div class="tab-pane container h-100 overflow-auto fade" id="attachments">
+                    <div class="table-responsive">
+                        <button id="new_attachment" class="btn btn-info btn-sm">NEW DOC</button>
+                        <table class="table table-sm table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Type</th>
+                                    <th>Description</th>
+                                    <th>File</th>
+                                </tr>
+                            </thead>
+                            <tbody id="wo_attches">
+                                <tr>
+                                    <td>bubu</td>
+                                    <td>bubu</td>
+                                    <td><a href="javascript:void(0)">bubu</a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    let x_ass = {};
+    ment.loadWo(`{{ wo.pk }}`);
+
+    $(document).ready(
+        function () {
+
+            $('#next').click(function () {
+                ment.loadWo($('#next').val())
+            });
+
+            $('#previous').click(function () {
+                ment.loadWo($('#previous').val())
+            });
+
+            // add material
+            $('#add_material').click(function () {
+                let form = "";
+                form += fom.text('mat_name', 'name of material', true);
+                form += fom.text('mat_descr', 'description of material', true);
+                form += fom.text('price', '', true);
+                form += fom.text('quantity', '', true)
+
+
+                amodal.setTitleText("NEW MATERIAL")
+                amodal.setBodyHtml(form)
+                amodal.setFooterHtml(`<button onclick='ment.saveWoMaterial()' class='btn btn-success w-100'>SAVE</button>`)
+                amodal.show()
+            });
+
+            // new attachment
+            $('#new_attachment').click(function () {
+                ment.woAttachmentForm()
+            });
+
+            // save att form
+            $('#save_wo_attachment').click(function () {
+                console.log("Hello")
+                // Serialize the form data
+                var formData = $('#att_evi').serialize();
+                console.table(formData)
+
+                // Make an AJAX request
+                $.ajax({
+                    type: 'POST',
+                    url: '/maintainance/upload-wo-attachment/',  // Replace with your actual API endpoint
+                    data: formData,
+                    success: function (response) {
+                        // Handle success response
+                        
+                        console.table(response);
+                    },
+                    error: function (error) {
+                        // Handle error
+                        console.error('Error:', error);
+                    }
+                });
+            
+            });
+            
+            // generate material request
+            $('#material_request').click(function () {
+                ment.generateMaterialRequest()
+            });
+
+            // transactions
+            $('#transactions').click(function(){
+                let url = `/maintainance/wo-track/${$('#wo_no').val()}/`
+                windowPopUp(url,"",1024,600)
+                
+            });
+
+        }
+
+    );
+</script>
+
+{% endblock %}

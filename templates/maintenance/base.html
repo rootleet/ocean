@@ -37,7 +37,7 @@
   <!-- Template Main CSS File -->
   <link href="{% static 'assets/css/style.css' %}" rel="stylesheet">
   <link href="{% static 'general/css/recorder.css' %}" rel="stylesheet">
-    <link rel="manifest" href="{% static 'general/manifest.json' %}">
+  <link rel="manifest" href="{% static 'general/manifest.json' %}">
 
 
 
@@ -63,21 +63,21 @@
   <script src="{% static 'general/js/record.js' %}"></script>
   <script src="{% static 'general/js/classes/user.js' %}"></script>
   <script src="{% static 'general/js/classes/po.js' %}"></script>
-    <script src="{% static 'general/js/classes/sales.js' %}"></script>
-    <script src="{% static 'general/js/classes/sms.js' %}"></script>
-    <script src="{% static 'general/js/classes/cmms.js' %}"></script>
-    <script src="{% static 'general/js/trigger.js' %}"></script>
-    <script src="{% static 'general/js/classes/api.js' %}"></script>
-    <script src="{% static 'general/js/classes/dev_mgmt.js' %}"></script>
-    <script src="{% static 'general/js/classes/ticket.js' %}"></script>
-    <script src="{% static 'general/js/classes/app.js' %}"></script>
-    <script src="{% static 'general/js/classes/docs.js' %}"></script>
-    <script src="{% static 'general/js/classes/anton.js' %}"></script>
-    <script src="{% static 'general/js/classes/reminder.js' %}"></script>
-    <script src="{% static 'general/js/classes/contact.js' %}"></script>
-    <script src="{% static 'general/js/classes/modal.js' %}"></script>
-    <script src="{% static 'general/js/classes/form.js' %}"></script>
-    <script src="{% static 'general/js/classes/maintenance.js' %}"></script>
+  <script src="{% static 'general/js/classes/sales.js' %}"></script>
+  <script src="{% static 'general/js/classes/sms.js' %}"></script>
+  <script src="{% static 'general/js/classes/cmms.js' %}"></script>
+  <script src="{% static 'general/js/trigger.js' %}"></script>
+  <script src="{% static 'general/js/classes/api.js' %}"></script>
+  <script src="{% static 'general/js/classes/dev_mgmt.js' %}"></script>
+  <script src="{% static 'general/js/classes/ticket.js' %}"></script>
+  <script src="{% static 'general/js/classes/app.js' %}"></script>
+  <script src="{% static 'general/js/classes/docs.js' %}"></script>
+  <script src="{% static 'general/js/classes/anton.js' %}"></script>
+  <script src="{% static 'general/js/classes/reminder.js' %}"></script>
+  <script src="{% static 'general/js/classes/contact.js' %}"></script>
+  <script src="{% static 'general/js/classes/modal.js' %}"></script>
+  <script src="{% static 'general/js/classes/form.js' %}"></script>
+  <script src="{% static 'general/js/classes/maintenance.js' %}"></script>
 
 
 
@@ -86,54 +86,55 @@
 
   </script>
 
-    <style>
-        .install-button {
-            display: none;
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            padding: 10px 20px;
-            background-color: #333;
-            color: #fff;
-            border: none;
-            cursor: pointer;
-        }
-        .tox-promotion{
-            display: none !important;
-        }
-    </style>
+  <style>
+    .install-button {
+      display: none;
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      padding: 10px 20px;
+      background-color: #333;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+    }
+
+    .tox-promotion {
+      display: none !important;
+    }
+  </style>
 </head>
 
 <body>
-    <!-- MODALS -->
-    <div id="g_modal" class="modal fade">
-        <div id="g_modal_size" class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="g_modal_title"></h5>
-                    <button class="close btn btn-outline-danger" data-bs-dismiss="modal">X</button>
-                </div>
-                <div class="modal-body">
-                    <div class="w-100" id="g_modal_body">
+  <!-- MODALS -->
+  <div id="g_modal" class="modal fade">
+    <div id="g_modal_size" class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="g_modal_title"></h5>
+          <button class="close btn btn-outline-danger" data-bs-dismiss="modal">X</button>
+        </div>
+        <div class="modal-body">
+          <div class="w-100" id="g_modal_body">
 
-                    </div>
-                </div>
-                <div class="modal-footer" id="g_footer"></div>
-            </div>
+          </div>
         </div>
+        <div class="modal-footer" id="g_footer"></div>
+      </div>
     </div>
-    <div class="modal" id="loader">
-        <div class="w-100 bg_trans_80 h-100 d-flex flex-wrap align-content-center justify-content-center">
-            <img src="{% static 'general/img/icons/2.gif' %}" alt="" class="img-fluid">
-            <div class="w-100 text-center">
-                <br>
-                <small class="text-info" id="error_msg"></small>
-            </div>
-        </div>
+  </div>
+  <div class="modal" id="loader">
+    <div class="w-100 bg_trans_80 h-100 d-flex flex-wrap align-content-center justify-content-center">
+      <img src="{% static 'general/img/icons/2.gif' %}" alt="" class="img-fluid">
+      <div class="w-100 text-center">
+        <br>
+        <small class="text-info" id="error_msg"></small>
+      </div>
     </div>
-    <script>
-        $('#loader').modal('show')
-    </script>
+  </div>
+  <script>
+    $('#loader').modal('show')
+  </script>
 
   <input type="hidden" id="autos_url" value="{% url 'autos' 'ajax' %}">
   <input type="hidden" id="search_url" value="{% url 'search' %}">
@@ -393,14 +394,41 @@
           <i class="bi bi-grid"></i>
           <span>Dashboard</span>
         </a>
-      </li><!-- End Dashboard Nav -->
+      </li>
 
-        <li class="nav-item">
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{% url 'new_maintain' %}">
+          <i class="bi bi-grid"></i>
+          <span>Work Request</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{% url 'work_order' %}">
+          <i class="bi bi-grid"></i>
+          <span>Work Order</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{% url 'maintenance' %}">
+          <i class="bi bi-grid"></i>
+          <span>Maintainance</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
         <a class="nav-link collapsed" href="{% url 'maint_asset_groups' %}">
           <i class="bi bi-grid"></i>
           <span>Asset Groups</span>
         </a>
-      </li><!-- End Dashboard Nav -->
+      </li>
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{% url 'maint_assets' %}">
+          <i class="bi bi-grid"></i>
+          <span>Assets</span>
+        </a>
+      </li>
 
 
 
@@ -426,11 +454,11 @@
 
     <section class="section h-100" style="height: 85vh !important">
       <div class="w-100 h-100 card overflow-hidden">
-          <button id="install-button" class="install-button">Install App</button>
+        <button id="install-button" class="install-button">Install App</button>
 
-          {% block body %}
+        {% block body %}
 
-          {% endblock %}
+        {% endblock %}
       </div>
     </section>
 
@@ -454,79 +482,77 @@
   <!-- Template Main JS File -->
   <script src="{% static 'assets/js/main.js' %}"></script>
 
-    <script>
+  <script>
 
-        $('#loader').delay(5000).modal('hide')
+    $('#loader').delay(5000).modal('hide')
 
-    </script>
+  </script>
 
 
-{% if messages %}
+  {% if messages %}
   <script>
     {% for message in messages %}
-      kasa.info(`{{ message }}`)
+    kasa.info(`{{ message }}`)
     {% endfor %}
   </script>
-{% endif %}
+  {% endif %}
 
-    <script>
-        let deferredPrompt;
+  <script>
+    let deferredPrompt;
 
-window.addEventListener('beforeinstallprompt', (event) => {
-    // Prevent the default prompt
-    console.log('beforeinstallprompt event fired');
-    event.preventDefault();
+    window.addEventListener('beforeinstallprompt', (event) => {
+      // Prevent the default prompt
+      console.log('beforeinstallprompt event fired');
+      event.preventDefault();
 
-    // Stash the event so it can be triggered later
-    deferredPrompt = event;
+      // Stash the event so it can be triggered later
+      deferredPrompt = event;
 
-    // Automatically trigger the install prompt
-    deferredPrompt.prompt();
+      // Automatically trigger the install prompt
+      deferredPrompt.prompt();
 
-    // Wait for the user to respond to the prompt
-    deferredPrompt.userChoice.then((choiceResult) => {
+      // Wait for the user to respond to the prompt
+      deferredPrompt.userChoice.then((choiceResult) => {
         if (choiceResult.outcome === 'accepted') {
-            console.log('User accepted the install prompt');
+          console.log('User accepted the install prompt');
         } else {
-            console.log('User dismissed the install prompt');
+          console.log('User dismissed the install prompt');
         }
 
         // Reset the deferredPrompt for future prompts
         deferredPrompt = null;
+      });
     });
-});
 
-window.addEventListener('load', () => {
-    const installButton = document.getElementById('install-button');
-    if (deferredPrompt) {
+    window.addEventListener('load', () => {
+      const installButton = document.getElementById('install-button');
+      if (deferredPrompt) {
         installButton.style.display = 'block';
 
         installButton.addEventListener('click', () => {
-            // Show the browser's install prompt
-            deferredPrompt.prompt();
+          // Show the browser's install prompt
+          deferredPrompt.prompt();
 
-            // Wait for the user to respond to the prompt
-            deferredPrompt.userChoice.then((choiceResult) => {
-                if (choiceResult.outcome === 'accepted') {
-                    console.log('User accepted the install prompt');
-                } else {
-                    console.log('User dismissed the install prompt');
-                }
+          // Wait for the user to respond to the prompt
+          deferredPrompt.userChoice.then((choiceResult) => {
+            if (choiceResult.outcome === 'accepted') {
+              console.log('User accepted the install prompt');
+            } else {
+              console.log('User dismissed the install prompt');
+            }
 
-                // Reset the deferredPrompt for future prompts
-                deferredPrompt = null;
+            // Reset the deferredPrompt for future prompts
+            deferredPrompt = null;
 
-                // Hide the custom install button
-                installButton.style.display = 'none';
-            });
+            // Hide the custom install button
+            installButton.style.display = 'none';
+          });
         });
-    }
-});
+      }
+    });
 
-    </script>
+  </script>
 
 </body>
 
 </html>
-
-

@@ -1,17 +1,19 @@
 class Anton {
 
     // calculate xyz
-    lineXyz(line){
+    lineXyz(line) {
         let x = $(`#x_${line}`).val()
         let y = $(`#y_${line}`).val()
-        let z = parseFloat(x*y).toFixed(2)
+        let z = parseFloat(x * y).toFixed(2)
         console.log(x)
         $(`#z_${line}`).val(z)
     }
 
     validateInputs(ids) {
         for (let i = 0; i < ids.length; i++) {
+            let id_string = ids[i];
             const value = $(`#${ids[i]}`).val();
+            console.log(`${id_string} = ${value}`);
             if (value === '' || value === undefined) {
                 // alert('False');
 
@@ -27,7 +29,7 @@ class Anton {
         return true;
     }
 
-    Inputs(ids){
+    Inputs(ids) {
         let xd = {};
         for (let i = 0; i < ids.length; i++) {
             xd[ids[i]] = $(`#${ids[i]}`).val()
@@ -36,27 +38,94 @@ class Anton {
         return xd;
     }
 
-    wait(time = 1){
+    wait(time = 1) {
         setTimeout(function () {
             console.log(waiting)
-        },time * 1000)
+        }, time * 1000)
     }
 
 
-    Users(){
+    Users() {
         let payload = {
-            'module':'users',
-            data : {}
+            'module': 'users',
+            data: {}
         }
 
         return api.call('VIEW', payload, '/apiv2/')
     }
 
     IsRequest(request) {
-        if(request['status_code'] === 200){
+        if (request['status_code'] === 200) {
             return true
         }
         return false;
+
+    }
+
+    fileType(file) {
+        let f_split = file.split('.')
+        if (f_split.length > 0) {
+            let ext = f_split[f_split.length - 1];
+            switch (ext.toLowerCase()) {
+                case 'png':
+                    return 'image'
+                    break;
+                case 'jpeg':
+                    return 'image'
+                    break;
+                case 'jpg':
+                    return 'image'
+                    break;
+                case 'pdf':
+                    return 'pdf'
+                    break;
+                case 'mp4':
+                    return 'video';
+                    break;
+
+                default:
+                    return `unknown : ${ext}`
+                    break;
+            }
+        } else {
+            return 'not_a_file'
+        }
+    }
+
+    viewFile(url = '', type = null, title = null, description = null) {
+
+        amodal.setTitleText("Error!!");
+        amodal.setBodyHtml("Cannot Load Resource")
+        if (url.length > 0) {
+            amodal.setTitleText(title)
+            let ft = this.fileType(url);
+            if (ft === 'image') {
+                amodal.setBodyHtml(
+                    `<img class='img-fluid' src='${url}' />`
+                );
+
+            }
+
+            else if (ft === 'pdf') {
+                amodal.setBodyHtml(`<embed src="${url}" width="100%" height="600px" />`);
+            }
+
+            else if (ft === 'video') {
+                amodal.setBodyHtml(`
+                <video width="100%" height="auto" controls>
+                    <source src="${url}" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+                `)
+            }
+
+            else {
+                amodal.setTitleText("Consufe!!")
+                amodal.setBodyHtml(`Cannot render resource type : ${ft} <br>Download file with link below <br> <a target='_blank' href='${url}'>>_Link_<</a>`)
+            }
+        }
+
+        amodal.show()
 
     }
 
@@ -71,7 +140,7 @@ class LineCalculate {
         const y = Number($(`#y_${line}`).val());
         let z;
 
-        switch(operator) {
+        switch (operator) {
             case 'sub': z = x - y; break;
             case 'mul': z = x * y; break;
             case 'div': z = x / y; break;
@@ -102,135 +171,137 @@ class LineCalculate {
 }
 
 class LineComment {
-    write(line){
+    write(line) {
         let name = $(`#name_${line}`).text()
         let already_comment = $(`#line${line}_comment`).val()
         Swal.fire({
-        title: ``,
-        html: `Enter Comment for ${name} <hr>
+            title: ``,
+            html: `Enter Comment for ${name} <hr>
           
           <textarea id="comment-textarea" class="form-control" required placeholder="Enter your comment here...">${already_comment}</textarea>
         `,
-        showCancelButton: true,
-        confirmButtonText: 'Submit',
-        preConfirm: () => {
-          const comment = document.getElementById('comment-textarea').value;
+            showCancelButton: true,
+            confirmButtonText: 'Submit',
+            preConfirm: () => {
+                const comment = document.getElementById('comment-textarea').value;
 
-          // Validate the input
-          if (!comment) {
-            Swal.showValidationMessage('Please select a comment type and enter a comment');
-          } else {
+                // Validate the input
+                if (!comment) {
+                    Swal.showValidationMessage('Please select a comment type and enter a comment');
+                } else {
 
-              $(`#line${line}_comment`).val(comment)
-              kasa.success("Writing Comment....")
+                    $(`#line${line}_comment`).val(comment)
+                    kasa.success("Writing Comment....")
 
-          }
-        }
-      });
+                }
+            }
+        });
     }
 }
 
 class Kasa {
-  alert(icon, message) {
-    Swal.fire({
-      icon: icon,
-      text: message,
-      timer: 3000,
-      showConfirmButton: false,
-      timerProgressBar: true,
-      allowOutsideClick: false,
-      onBeforeOpen: () => {
-        Swal.showLoading();
-        var b = Swal.getHtmlContainer().querySelector('b');
-        b.textContent = Swal.getTimerLeft();
+    alert(icon, message) {
 
-        var timerInterval = setInterval(() => {
-          b.textContent = Swal.getTimerLeft();
-        }, 100);
+        Swal.fire({
+            icon: icon,
+            text: message,
+            timer: 3000,
+            showConfirmButton: false,
+            timerProgressBar: true,
+            allowOutsideClick: false,
+            onBeforeOpen: () => {
+                Swal.showLoading();
+                var b = Swal.getHtmlContainer().querySelector('b');
+                b.textContent = Swal.getTimerLeft();
 
-        Swal.stopTimer();
-        setTimeout(() => {
-          Swal.resumeTimer();
-          Swal.hideLoading();
-          clearInterval(timerInterval);
-        }, 100);
-      }
-    });
-  }
+                var timerInterval = setInterval(() => {
+                    b.textContent = Swal.getTimerLeft();
+                }, 100);
 
-  success(message) {
-    this.alert('success', message);
-  }
+                Swal.stopTimer();
+                setTimeout(() => {
+                    Swal.resumeTimer();
+                    Swal.hideLoading();
+                    clearInterval(timerInterval);
+                }, 100);
+            }
+        });
+    }
 
-  error(message) {
-    this.alert('error', message);
-  }
+    success(message) {
+        this.alert('success', message);
+    }
 
-  info(message) {
-    this.alert('info', message);
-  }
+    error(message) {
+        this.alert('error', message);
+    }
 
-  warning(message) {
-    this.alert('warning', message);
-  }
+    info(message) {
+        this.alert('info', message);
+    }
 
-  question(message) {
-    this.alert('question', message);
-  }
+    warning(message) {
+        this.alert('warning', message);
+    }
 
-  set_message(message){
-      let payload = {
-          'module':'tools',
-          'data':{
-              'task':'set_message',
-              'message':message
-          }
-      }
+    question(message) {
+        this.alert('question', message);
+    }
 
-      api.call('PUT',payload,'/adapi/')
-  }
+    set_message(message) {
+        let payload = {
+            'module': 'tools',
+            'data': {
+                'task': 'set_message',
+                'message': message
+            }
+        }
 
-  html(message){
-      Swal.fire({
+        api.call('PUT', payload, '/adapi/')
+    }
+
+    html(message) {
+        Swal.fire({
             html: message,
             customClass: {
                 content: 'text-left'
             }
         });
 
-  }
+    }
 
-  confirm(message,reload=0,to='/'){
-       Swal.fire({
-        title: 'Confirmation',
-        text: message,
-        icon: 'question',
-        showCancelButton: true,
-        confirmButtonText: 'OK',
-        cancelButtonText: 'Cancel',
-        reverseButtons: true, // To swap the positions of "Cancel" and "OK" buttons
-      }).then((result) => {
-        // Check if the user clicked "OK"
-        if (result.isConfirmed) {
-          if(reload === 1){
-              if(to==='here'){
-                  location.reload()
-              } else {
-                  location.href = to
-              }
+    confirm(message, reload = 0, to = '/') {
+        Swal.fire({
+            title: 'Confirmation',
+            text: message,
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'OK',
+            cancelButtonText: 'Cancel',
+            reverseButtons: true, // To swap the positions of "Cancel" and "OK" buttons
+        }).then((result) => {
+            // Check if the user clicked "OK"
+            if (result.isConfirmed) {
+                if (reload === 1) {
+                    if (to === 'here') {
+                        location.reload()
+                    } else {
+                        location.href = to
+                    }
 
-          } else {
-              kasa.info('Thanks')
-          }
+                } else {
+                    kasa.info('Thanks')
+                }
 
-        } else {
-          Swal.fire('Cancelled', 'You cancelled the action', 'error');
-        }
-      });
-  }
+            } else {
+                Swal.fire('Cancelled', 'You cancelled the action', 'error');
+            }
+        });
+    }
 
     response(response) {
-        if(response['status_code'] === 200){
+        console.table(response)
+        if (response['status_code'] === 200) {
             kasa.success(response['message'])
         } else {
             kasa.error(response['message'])
@@ -239,51 +310,51 @@ class Kasa {
 }
 
 class reportCard {
-    setBody(data){
+    setBody(data) {
         $('#reportCardBody').html(data)
     }
 
-    setTitle(title){
+    setTitle(title) {
         $('#reportCardTitle').html(title)
     }
 
-    setTitleHtml(html){
+    setTitleHtml(html) {
         $('#reportCardTitle').html(html)
     }
-    getBody(){
+    getBody() {
         return $('#reportCardBody').html()
     }
-    setFooter(footer){
+    setFooter(footer) {
         $('#reportCardFooter').html(footer)
     }
 }
 
 class ReportCard {
-    export(doc,key,format){
+    export(doc, key, format) {
         let payload = {
-            'module':'',
-            'data':{
-                doc:doc,
-                key:key,
-                output:format
+            'module': '',
+            'data': {
+                doc: doc,
+                key: key,
+                output: format
             }
         }
-        return  api.call('POST',payload,'/reports/api/')
+        return api.call('POST', payload, '/reports/api/')
 
     }
 
-    download(doc,key,format){
-        kasa.html(`<a target="_blank" href="/${rops.export(doc,key,format)['message']}">DOWNLOAD</a>`)
+    download(doc, key, format) {
+        kasa.html(`<a target="_blank" href="/${rops.export(doc, key, format)['message']}">DOWNLOAD</a>`)
     }
 
 }
 
 class Loader {
-    show(){
+    show() {
         $('#loader').show()
     }
 
-    hide(){
+    hide() {
         $('#loader').hide()
     }
 }

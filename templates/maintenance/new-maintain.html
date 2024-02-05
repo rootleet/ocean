@@ -1,0 +1,75 @@
+{% extends 'maintenance/base.html' %}
+{% load static %}
+
+{% block body %}
+    <div class="card-header">
+        <div class="w-100 d-flex">
+            <div class="w-50"><strong class="card-title">Work Request</strong></div>
+        </div>
+    </div>
+    <div class="card-body overflow-hidden">
+        <div class="container-fluid h-100 overflow-hidden">
+            <div style="height: 40%" class="row overflow-hidden">
+                <div class="col-sm-4">
+                    <label for="entry_no_null">ENTRY</label>
+                    <input readonly type="text" value="{{ entry_no }}" id="entry_no_null" class="form-control rounded-0 mb-2">
+
+                    <label for="asset">ASSET</label>
+                    <select id="asset" class="form-control rounded-0 mb-2">
+                        {% for asset in assets %}
+                            <option value="{{ asset.pk }}">{{ asset.location.descr }} - {{ asset.name }} - {{ asset.sku }}</option>
+                        {% endfor %}
+                    </select>
+
+                    <label for="title">TITLE</label>
+                    <input type="text" id="title" class="form-control rounded-0 mb-2">
+
+                </div>
+
+                
+
+                <form id="main_evidence" action="{% url 'upload_evidence' %}" method="post" enctype="multipart/form-data" class="col-sm-4">
+                    <input type="hidden" readonly name="entry_no" id="entry_no">
+                    <label for="evidence">EVIDENCE</label>
+                    <input type="file" accept="image/*" class="form-control rounded-0" id="evidence" name="evidence">
+                </form>
+
+            </div>
+
+            <div class="row" style="height: 60%">
+                <div class="col-sm-12">
+                    <div class="card h-100">
+                        <div class="card-header">
+                            {% comment %} <ul class="nav nav-pills">
+                                  <li class="nav-item">
+                                    <a class="nav-link active" data-toggle="pill" href="#details">DETAILS</a>
+                                  </li>
+                            </ul> {% endcomment %}
+                            <strong class="card-title">Details</strong>
+                        </div>
+
+                        <div class="card-body p-0">
+                            <div class="tab-content">
+                                <div class="tab-pane p-3 container active" id="details">
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <textarea name="" id="detail" cols="30" rows="8"
+                                                      class="form-control"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="card-footer">
+        <button onclick="maintenance.saveNew()" class="btn btn-success">SAVE</button>
+    </div>
+
+{% endblock %}

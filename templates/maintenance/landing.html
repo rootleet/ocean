@@ -42,29 +42,198 @@
 
 {% block body %}
     <div class="card-header">
-        <div class="w-50 d-flex flex-wrap">
-            <button onclick="location.href='{% url 'new_maintain' %}'" class="btn btn-primary btn-sm" style="margin: 2px;"><i class="fa fa-plus"></i></button>
-            <button id="previous" class="btn btn-info btn-sm" style="margin: 2px;"><i class="fa fa-backward"></i></button>
-            <button id="next" class="btn btn-info btn-sm" style="margin: 2px;"><i class="fa fa-forward"></i></button>
+        <div class="w-100 d-flex flex-wrap">
+            <div class="w-50 d-flex flex-wrap">
+                <button onclick="location.href='{% url 'new_maintain' %}'" class="btn btn-primary btn-sm" style="margin: 2px;"><i class="fa fa-plus"></i></button>
+                <button id="previous" class="btn btn-info btn-sm" style="margin: 2px;"><i class="fa fa-backward"></i></button>
+                <button id="next" class="btn btn-info btn-sm" style="margin: 2px;"><i class="fa fa-forward"></i></button>
+            </div>
+            <div class="w-50 d-flex flex-wrap justify-content-end">
+                <button id="generate_wo"  class="btn btn-dark btn-sm">Generate WO</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-body">
+        <div class="container-fluid h-100 overflow-hidden">
+            <div style="height: 40%" class="row overflow-hidden">
+                <div class="col-sm-4">
+                    <strong>Document Detail</strong>
+                    <!--ENTRY-->
+                    <div class="input-group mb-2 input-group-sm">
+                        <div class="input-group-prepend rounded-">
+                            <span class="input-group-text rounded-0">ENTRY N<u>0</u></strong>
+                        </div>
+                        <input type="text" readonly class="form-control rounded-0" id="entry_no">
+                    </div>
+                    <!--TITLE-->
+                    <div class="input-group mb-2 input-group-sm">
+                        <div class="input-group-prepend rounded-">
+                            <span class="input-group-text rounded-0">TITLE</strong>
+                        </div>
+                        <input type="text" readonly class="form-control rounded-0" id="title">
+                    </div>
+
+                    <!--WORK ORDER-->
+                    <div class="input-group mb-2 input-group-sm">
+                        <div class="input-group-prepend rounded-">
+                            <span class="input-group-text rounded-0">Work Order</strong>
+                        </div>
+                        <input type="text" readonly class="form-control rounded-0" id="wo">
+                    </div>
+
+                </div>
+
+                <!--ASSET DETAILS-->
+                <div class="col-sm-4">
+                    <strong>Asset Details</strong>
+                    <!--LOCATION-->
+                    <div class="input-group mb-2 input-group-sm">
+                        <div class="input-group-prepend rounded-">
+                            <span class="input-group-text rounded-0">LOCATION</strong>
+                        </div>
+                        <input type="text" readonly class="form-control rounded-0" id="location">
+                    </div>
+                    <!--SKU-->
+                    <div class="input-group mb-2 input-group-sm">
+                        <div class="input-group-prepend rounded-">
+                            <span class="input-group-text rounded-0">BARCODE</strong>
+                        </div>
+                        <input type="text" readonly class="form-control rounded-0" id="barcode">
+                    </div>
+
+                    <!--DESCRIPTION-->
+                    <div class="input-group mb-3 input-group-sm">
+                        <div class="input-group-prepend rounded-">
+                            <span class="input-group-text rounded-0">NAME</strong>
+                        </div>
+                        <input type="text" readonly class="form-control rounded-0" id="asset_name">
+                    </div>
+                </div>
+
+                <div class="col-sm-4">
+                    <strong>Evidence</strong>
+                    <img src="" alt="" class="img-fluid" id="evidence">
+                </div>
+
+                
+
+            </div>
+
+            <div class="row" style="height: 60%">
+                <div class="col-sm-12">
+                    <div class="card h-100">
+                        <div class="card-header">
+                            {% comment %} <ul class="nav nav-pills">
+                                  <li class="nav-item">
+                                    <a class="nav-link active" data-toggle="pill" href="#details">DETAILS</a>
+                                  </li>
+                            </ul> {% endcomment %}
+                            <strong class="card-title">Details</strong>
+                        </div>
+
+                        <div class="card-body p-0">
+                            <div class="tab-content">
+                                <div class="tab-pane p-3 container active" id="details">
+                                    <div class="row">
+                                        <div class="col-sm-8">
+                                            <textarea readonly name="" id="description" cols="30" rows="8"
+                                                      class="form-control"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 
     <script>
         $(document).ready(function () {
             $('#next').click(function () {
-                alert("NEXT")
+                let pk = $('#next').val();
+                loadMaintenance(pk);
             })
         })
 
         $(document).ready(function () {
             $('#previous').click(function () {
-                alert("PREVIOUS")
+                let pk = $('#previous').val();
+                loadMaintenance(pk);
             })
         })
 
+        $(document).ready(function () {
+            $('#generate_wo').click(function(){
+                if(confirm("Are Your Sure?")){
+                    ment.generateWoScreen();
+                } else {
+                    kasa.info("Operation Cancelled")
+                }
+                
+            });
+        });
+
         function loadMaintenance(pk) {
             let doc = maintenance.getMentanance(pk);
-            console.table(doc)
+            if(anton.IsRequest(doc)){
+                let wr = doc.message[0];
+                let asset = wr['asset'];
+                let entry_no = wr['entry_no'];
+                let evidence = wr['evidence'];
+                let is_open = wr['is_open'];
+                let owner = wr['owner'];
+                let wr_date = wr['date'];
+                let wr_time = wr['time'];
+                let title = wr['title'];
+                let wo = wr['wo']
+                let wo_generate = wo['generated'];
+                let next = wr['next'];
+                let previous = wr['previous'];
+                
+
+                $('#entry_no').val(entry_no);
+                $('#title').val(title);
+                $('#location').val(`${asset['location']['code']} - ${asset['location']['name']}`)
+                $('#barcode').val(asset.sku);
+                $('#asset_name').val(asset.name)
+                $('#description').val(wr['description'])
+
+                if(wo_generate){
+                    $('#wo').val(wo['details']['wo_no'])
+                    $('#generate_wo').prop('disabled',true);
+                } else {
+                    $('#wo').val('Not Generated')
+                    $('#generate_wo').prop('disabled',false);
+                }
+                
+                // Navigation
+                $('#next').val(next);
+                $('#previous').val(previous);
+                if(next === 0){
+                    console.log("NEX DISABLED")
+                    $('#next').prop('disabled',true);
+                } else {
+                    $('#next').prop('disabled',false)
+                }
+
+                if(previous === 0){
+                    $('#previous').prop('disabled',true);
+                } else {
+                    $('#previous').prop('disabled',false)
+                }
+                
+
+                console.table(wr)
+
+            } else {
+                kasa.response(console.table(doc))
+            }
+            
         }
 
         loadMaintenance(`{{ maintenance.pk }}`)

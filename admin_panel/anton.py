@@ -98,3 +98,15 @@ def current_date():
 def new_sms(to, message):
     api = SmsApi.objects.get(is_default=1)
     Sms(api=api, to=to, message=message).save()
+
+
+def get_file_type(file_name):
+    import os
+    import mimetypes
+    _, file_extension = os.path.splitext(file_name)
+    file_extension = file_extension.lower()  # Convert to lowercase for consistency
+
+    # Use mimetypes to get the MIME type
+    mime_type, _ = mimetypes.guess_type(file_name)
+
+    return mime_type

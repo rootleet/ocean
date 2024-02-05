@@ -1,0 +1,75 @@
+{% extends 'maintenance/base.html' %}
+{% load static %}
+
+{% block body %}
+    <div class="card-header">
+            <div class="w-100 d-flex">
+                <div class="w-50 d-flex flex-wrap">
+                    <button onclick="location.href='{% url 'new_maintenance_asset' %}'" style="margin-right: 5px" class="btn btn-sm btn-primary"><i class="fa fa-plus-square"></i></button>
+                    <button style="margin-right: 5px" class="btn btn-sm btn-warning"><i class="fa fa-edit"></i></button>
+                    <button style="margin-right: 5px" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>
+                    <button id="previous" onclick="maintenance.loadAssetScreen(this.value)" disabled style="margin-right: 5px" class="btn btn-sm btn-info"><i class="fa fa-backward"></i></button>
+                    <button id="next" onclick="maintenance.loadAssetScreen(this.value)" disabled style="margin-right: 5px" class="btn btn-sm btn-info"><i class="fa fa-forward"></i></button>
+
+                </div>
+            </div>
+    </div>
+
+    <div class="card-body overflow-hidden">
+        <div class="h-50 w-100 h-100">
+            <div class="container-fluid p-1 h-100 overflow-hidden">
+                <div class="row h-50 overflow-hidden">
+                    <div class="col-sm-4">
+                        <label for="group">GROUP</label>
+                        <input placeholder="group" type="text" class="form-control form-control-sm mb-2 rounded-0" readonly id="group">
+
+                        <label for="sub_group">SUB GROUP</label>
+                        <input placeholder="group" type="text" class="form-control form-control-sm mb-2 rounded-0" id="sub_group" readonly>
+
+                        <label for="sku">SKU</label><input readonly placeholder="Barcode" type="text" class="form-control form-control-sm mb-2 rounded-0" id="sku">
+                        <label for="name">NAME</label><input readonly type="text" placeholder="Name" id="name" class="form-control form-control-sm mb-2 rounded-0">
+                    </div>
+
+                    <div class="col-sm-4">
+                        <label for="location">LOCATION</label>
+                        <input placeholder="location" type="text" class="form-control form-control-sm mb-2 rounded-0" id="location" readonly>
+
+                        <label for="brand">Brand</label><input type="text" id="brand" readonly class="form-control form-control-sm mb-2 rounded-0">
+                        <label for="origin">Origin</label><input type="text" id="origin" readonly class="form-control form-control-sm mb-2 rounded-0">
+                        <label for="color">Color</label><input type="color" id="color" disabled class="form-control form-control-sm mb-2 rounded-0">
+
+                    </div>
+
+                    <form method="post" id="upload_form" class="col-sm-4">
+
+                        <img id="previewImage" src="" alt="Image Preview" style="display:none; max-width: 300px; max-height: 300px;">
+                    </form>
+
+                </div>
+
+                <div class="row h-50 overflow-hidden">
+                    <div class="col-sm-12 h-100">
+                        <div class="card h-100 border shadow-none w-100">
+                            <div class="card-header"><strong class="card-title">Maintenance History</strong></div>
+                            <div class="card-body">
+                                <div class="table-responsive h-100">
+                                    <table class="table table-stripped">
+                                        <thead>
+                                            <tr><th>RECORD</th><th>ISSUE</th><th>DATE</th><th>REPORTED BY</th><th>ATTENDED BY</th><th>STATUS</th></tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        maintenance.loadAssetScreen(`{{ last.pk }}`)
+    </script>
+
+{% endblock %}

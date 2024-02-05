@@ -1,0 +1,88 @@
+{% extends 'maintenance/base.html' %}
+{% load static %}
+
+{% block body %}
+    <div class="card-header">
+            <div class="w-100 d-flex">
+                <div class="w-50 d-flex flex-wrap">
+
+                    <a title="cancel" id="cancel" class="m-1" href="javascript:void(0)"><i class="fa fa-backspace text-warning"></i></a>
+                    <a onclick="maintenance.save_new_asset()" title="save" id="save" class="m-1" href="javascript:void(0)"><i class="fa fa-save text-success"></i></a>
+                </div>
+            </div>
+    </div>
+
+    <div class="card-body overflow-auto">
+        <div class="h-50 w-100">
+            <div class="container-fluid p-1 h-100 overflow-hidden">
+                <div class="row h-100 overflow-hidden">
+                    <div class="col-sm-4">
+                        <label for="group">GROUP</label>
+                        <select onchange="loadSubs()" name="" id="group" class="form-control form-control-sm mb-2 rounded-0">
+                            <option value="">SELECT GROUP</option>
+                            {% for group in groups %}
+                                <option value="{{ group.pk }}">{{ group.name }}</option>
+                            {% endfor %}
+                        </select>
+
+                        <label for="sub_group">SUB GROUP</label>
+                        <select name="" id="sub_group" disabled class="form-control form-control-sm mb-2 rounded-0">
+                            <option value="">SELECT GROUP</option>
+                        </select>
+
+                        <label for="sku">SKU</label><input placeholder="Barcode" type="text" class="form-control form-control-sm mb-2 rounded-0" id="sku">
+                        <label for="name">NAME</label><input type="text" placeholder="Name" id="name" class="form-control form-control-sm mb-2 rounded-0">
+                    </div>
+
+                    <div class="col-sm-4">
+                        <label for="location">LOCATION</label>
+                        <select name="" id="location" class="form-control form-control-sm mb-2 rounded-0">
+                            <option value="">SELECT LOCATION</option>
+                            {% for location in locations %}
+                                <option value="{{ location.pk }}">{{ location.descr }}</option>
+                            {% endfor %}
+                        </select>
+
+                        <label for="brand">Brand</label><input type="text" id="brand" class="form-control form-control-sm mb-2 rounded-0">
+                        <label for="origin">Origin</label><input type="text" id="origin" class="form-control form-control-sm mb-2 rounded-0">
+                        <label for="color">Color</label><input type="color" id="color" class="form-control form-control-sm mb-2 rounded-0">
+
+                    </div>
+
+                    <form method="post" enctype="multipart/form-data" action="{% url 'upload_asset_image' %}" id="upload_form" class="col-sm-4">
+                        <input type="hidden" readonly required class="form-control" name="pk" id="pk" value="">
+                        <label for="image">IMAGE</label><input type="file" accept="image/*" id="image" name="image" class="form-control form-control-sm mb-2 rounded-0">
+                        <img id="previewImage" src="" alt="Image Preview" style="display:none; max-width: 300px; max-height: 300px;">
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+        function loadSubs() {
+            let pk = $('#group').val();
+            let group = maintenance.getGroup(pk);
+            if(anton.IsRequest(group)){
+                let subs = group.message[0]['subgroups'];
+                if(subs.length > 0){
+                    let options = '';
+                    for (let i = 0; i < subs.length; i++) {
+                        let  option = subs[i];
+                        options += `<option value="${option.pk}">${option.name}</option>`;
+                    };
+                    $('#sub_group').html(options);
+                    $('#sub_group').prop('disabled',false)
+                } else {
+                    $('#sub_group').prop('disabled',true)
+                    kasa.info("Group Has no subs")
+                }
+            } else {
+                kasa.response(group)
+            }
+        }
+    </script>
+
+{% endblock %}

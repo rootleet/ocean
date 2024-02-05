@@ -30,6 +30,7 @@
                                             <th>Name</th><th>Action</th>
                                         </tr>
                                     </thead>
+                                    <tbody  id="group_rows"></tbody>
                                 </table>
                             </div>
                         </div>
@@ -52,17 +53,53 @@
     </div>
 
     <script>
+        let grou_subs = {}
         function loadGroups(){
             let groups = maintenance.getGroup();
             if(anton.IsRequest(groups)){
                 let group_data = groups['message'];
-                console.table(groups.message)
+                let tr = "";
+                for (let d = 0; d < group_data.length ; d++) {
+                    let group = group_data[d]
+                    let name,pk,subs;
+                    name = group.name
+                    pk = group.pk
+                    subs = group.subgroups
+                    grou_subs[name] = subs
+
+
+                    tr += `<tr><td><a onclick="loadXSubs('${name}')" href="javascript:void(0)">${name}</a></td><td>Action</td></tr>`;
+                }
+
+                $('#group_rows').html(tr)
+
             } else {
                 kasa.response(groups)
             }
         }
 
+
         loadGroups()
+        function loadXSubs(name){
+
+            let subs = grou_subs[name];
+            if(subs.length > 0){
+                let tr = '';
+                for (let s = 0; s < subs.length; s++) {
+                    let sub = subs[s];
+                    let name = sub['name'];
+                    tr += `<tr><td>${name}</td><td><i class="fa fa-trash text-danger"></i></td></tr>`
+                }
+                let tb = `<table class="table table-sm"><thead><tr><th>Name</th><th>Action</th></tr></thead><tbody>${tr}</tbody></table>`;
+                amodal.setBodyHtml(tb);
+                amodal.setTitleText(`${name} Sub Groups`)
+                amodal.setFooterHtml(`<button onclick="maintenance.new_asset_sub_screen('${name}')" class="btn btn-info btn-sm">NEW SUB</button>`)
+                amodal.show();
+            } else {
+                maintenance.new_asset_sub_screen(name)
+            }
+
+        }
     </script>
 
 {% endblock %}

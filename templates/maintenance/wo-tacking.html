@@ -1,0 +1,115 @@
+{% extends 'maintenance/base.html' %}
+{% load static %}
+
+{% block body %}
+<div class="modal fade" id="tran_modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <strong class="modal-title">New Transaction</strong>
+            </div>
+            <div class="modal-body p-3">
+                <form method="post" enctype="multipart/form-data" action="/maintainance/save_trans/" id="n_t">
+                    {% csrf_token %}
+                    <input type="hidden" name="wo" id="wo_no" value="{{ wo.wo_no }}">
+                    <label for="title">Title</label>
+                    <input required type="text" name="title" id="title" class="form-control mb-2 rounded-0">
+
+                    <label for="details">Details</label>
+                    <textarea required name="details" id="details" cols="30" rows="5" class="form-control rounded-0 mb-2"></textarea>
+
+                    <label for="evidence">Evidence</label>
+                    <input type="file" name="evidence" id="evidence" class="form-control mb-2 rounded-0">
+
+
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button onclick="new_tran()" class="btn btn-success w-100">SAVE</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card-body p-2 overflow-auto">
+    <!--TOP-->
+    <div class="alert alert-info">
+        <h1>{{ wo.wr.record.title }}</h1>
+        <p>{{ wo.wr.record.description }}</p>
+    </div>
+
+    <!--TOOLS-->
+    <hr>
+    <div class="w-100 d-flex flex-wrap justify-content-center">
+        {% if wo.is_open %}
+        <button id="close_wo" class="btn btn-success" style="margin: 2px;">CLOSE</button>
+        <button id="new_transaction" class="btn btn-info" style="margin: 2px;">UPDATE</button>
+        {% else %}
+        <button id="generate_report" class="btn btn-primary" style="margin: 2px;">GENERATE REPORT</button>
+        {% endif %}
+        
+    </div>
+    <hr>
+
+    <div class="container">
+        <div class="row d-flex flex-wrap justify-content-center ">
+            {% if wo.transactions.available %}
+                {% for tran in wo.transactions.transactions %}
+                <div class="col-sm-8">
+                    <div class="card border border-info">
+                        <div class="card-header">
+                            <div class="w-100"><strong>{{ tran.title }}</strong></div>
+                            <small>{{ tran.date_time }}, {{ tran.owner }}</small>
+                        </div>
+                        <div class="card-body p-2">
+                            <p class="card-text">{{ tran.description }}</p>
+                            
+                            {% if tran.evidence.exist %}
+                            <a onclick="anton.viewFile(`{{ tran.evidence.file_info.url }}`,'{{ tran.evidence.file_info.type }}')" href="javascript:void(0)" class="card-link"> <i class="fa fa-paperclip"></i></a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+
+            {% else %}
+
+            No Transactions
+
+            {% endif %}
+        </div>
+    </div>
+
+</div>
+
+<script>
+    $(document).ready(function () {
+        // new transaction
+        $('#new_transaction').click(function () {
+            $('#tran_modal').modal('show');
+        });
+
+        // close work order
+        $('#close_wo').click(function(){
+            ment.closeWorkOrderscreen()
+        });
+
+        // generate report
+        $('#generate_report').click(function(){
+            ment.woReport()
+        });
+    });
+
+    function new_tran() {
+        let resp = {};
+        submitForm('n_t').then(function (response) {
+            kasa.response(response)
+            window.reload()
+        }).catch(function (error) {
+            kasa.response(response)
+        });
+        $('#tran_modal').modal('hide');
+        
+    }
+</script>
+{% endblock %}
