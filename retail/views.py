@@ -175,14 +175,20 @@ def products(request):
     }
     return render(request, 'retail/products.html', context=context)
 
+
 @login_required()
 def recipe(request):
     context = {
         'nav': True,
-        'closed':RecipeProduct.objects.filter(is_open=False)
+        'closed': RecipeProduct.objects.filter(is_open=False),
+        'stat': {
+            'done': RecipeProduct.objects.filter(is_open=False).count(),
+            'pending': RecipeProduct.objects.filter(is_open=True).count(),
+        }
 
     }
     return render(request, 'retail/recipe/landing.html', context=context)
+
 
 @login_required()
 def recipe_group(request, group_id):
@@ -192,19 +198,18 @@ def recipe_group(request, group_id):
     }
     return render(request, 'retail/recipe/recipe_group.html', context=context)
 
+
 @login_required()
 @csrf_exempt
 def upload_item_image(request):
     if request.method == 'POST':
-
         product_key = request.POST['prod_pk']
         image = request.FILES['prod_image']
-        
+
         product = RecipeProduct.objects.get(pk=product_key)
         grp_pk = product.group.pk
         product.image = image
         product.save()
-        messages.success(request,"Image Uploaded")
-    
+        messages.success(request, "Image Uploaded")
 
-    return redirect('recipe_group',grp_pk)
+    return redirect('recipe_group', grp_pk)

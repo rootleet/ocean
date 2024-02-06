@@ -872,7 +872,7 @@ def interface(request):
                     for item in items:
                         item_arr.append([item.name, item.si_unit, item.quantity])
 
-                    create_recipe_card(product.name, item_arr)
+                    create_recipe_card(product.name.replace('/',' '), item_arr)
 
                     success_response['message'] = "Recipe Closed"
                     product.is_open = False

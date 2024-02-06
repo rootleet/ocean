@@ -17,12 +17,67 @@
     <div class="card-body p-2 overflow-hidden">
         <div class="container h-100 overflow-hidden">
             <div class="row h-100 overflow-hidden">
+
+
+                <div class="col-lg-6">
+                  <div class="card p-2 shadow-none border border-info">
+                    <div class="card-body">
+
+                      <!-- Pie Chart -->
+                      <div id="pieChart" style="min-height: 400px;" class="echart"></div>
+
+                      <script>
+                        document.addEventListener("DOMContentLoaded", () => {
+                          echarts.init(document.querySelector("#pieChart")).setOption({
+                            title: {
+                              text: 'RECIPE COLLECTION STATIC',
+                              subtext: 'This is defined by closed and not closed products',
+                              left: 'center'
+                            },
+                            tooltip: {
+                              trigger: 'item'
+                            },
+                            legend: {
+                              orient: 'vertical',
+                              left: 'left'
+                            },
+                            series: [{
+                              name: 'My Issues',
+                              type: 'pie',
+                              radius: '50%',
+                              data: [{
+                                  value: {{ stat.done }},
+                                  name: 'Done'
+                                },
+                                {
+                                  value: {{ stat.pending }},
+                                  name: 'Pending'
+                                },
+
+                              ],
+                              emphasis: {
+                                itemStyle: {
+                                  shadowBlur: 10,
+                                  shadowOffsetX: 0,
+                                  shadowColor: 'rgba(0, 0, 0, 0.5)'
+                                }
+                              }
+                            }]
+                          });
+                        });
+                      </script>
+                      <!-- End Pie Chart -->
+
+                    </div>
+                  </div>
+                </div>
+
                 <div class="col-sm-6 h-100 overflow-auto">
                     <div class="table-responsive">
                         <table class="table table-sm table-bordered table-hover">
                             <thead>
                                 <tr>
-                                    <th>GROUP</th><th>PRODUCTS</th><th>STATUS</th>
+                                    <th>GROUP</th><th>PRODUCTS</th>
                                 </tr>
                             </thead>
                             <tbody id="recipes">

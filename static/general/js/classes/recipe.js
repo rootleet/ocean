@@ -37,7 +37,7 @@ class Recipe {
                                         <span onclick="location.href='/retail/recipe/group/${group.pk}/'" class="text-primary pointer">${group.name}</span>
                                     </td>
                                     <td>${group.products['counts']}</td>
-                                    <td>${is_open}</td>
+                                    
                                 </tr>
                     
                 `
