@@ -19,3 +19,14 @@ tuto1.pdf
 */__pycache__
 .mp4
 
+/static/general/uploads/
+/static/general/tmp/
+/static/general/task-reports/
+/static/general/scss/
+/static/general/article_images/
+/static/general/bolt_price_changes/
+/static/general/crm-logs-reports/
+/static/general/clerks/
+/static/general/bolt/
+/static/general/docs/
+/static/general/rmbg/
