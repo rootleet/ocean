@@ -240,7 +240,8 @@ def interface(request):
                 si_unit = data.get('si_unit')
 
                 RecipeProduct(group=group, name=name, barcode=barcode, si_unit=si_unit, owner=owner).save()
-                recipe = RecipeProduct.objects.get(group=group, name=name, barcode=barcode, si_unit=si_unit, owner=owner)
+                recipe = RecipeProduct.objects.get(group=group, name=name, barcode=barcode, si_unit=si_unit,
+                                                   owner=owner)
                 success_response['message'] = recipe.pk
 
             elif module == 'recipe_items':
@@ -730,7 +731,7 @@ def interface(request):
                             'barcode': product.barcode,
                             'si_unit': product.si_unit,
                             'recipe_items': product.recipe_items(),
-                            'image':product.image.url or 'none'
+                            'image': product.image.url or 'none'
                         })
 
                     arr.append({
@@ -756,7 +757,7 @@ def interface(request):
                 print(products)
 
                 for product in products:
-                    print(product)
+                    # print(product)
                     rec_list = []
                     for r in product.recipe():
                         rec_list.append({
@@ -775,7 +776,10 @@ def interface(request):
                             'count': product.recipe_items(),
                             'list': rec_list
                         },
-                        'is_open': product.is_open
+                        'is_open': product.is_open,
+                        'image': product.img_url(),
+                        'next': product.next(),
+                        'previous': product.prev()
                     })
 
                     success_response['message'] = arr
@@ -872,7 +876,7 @@ def interface(request):
                     for item in items:
                         item_arr.append([item.name, item.si_unit, item.quantity])
 
-                    create_recipe_card(product.name.replace('/',' '), item_arr)
+                    create_recipe_card(product.name.replace('/', ' '), item_arr)
 
                     success_response['message'] = "Recipe Closed"
                     product.is_open = False

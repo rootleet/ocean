@@ -1,6 +1,10 @@
+import os
+
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import ForeignKey
+
+from ocean import settings
 
 
 # CLERKS
@@ -134,7 +138,7 @@ class RecipeProduct(models.Model):
     edited_on = models.DateTimeField(auto_now=True)
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
 
-    image = models.ImageField(upload_to='static/retail/products/',default='static/retail/products/default.png')
+    image = models.ImageField(upload_to='static/retail/products/', default='static/recipe_card/recipe.png')
 
     class Meta:
         unique_together = (('name', 'owner', 'group'),)
@@ -144,6 +148,34 @@ class RecipeProduct(models.Model):
 
     def recipe(self):
         return Recipe.objects.filter(product=self)
+
+    def img_url(self):
+        if self.image and hasattr(self.image, 'url'):
+            evidence_url = self.image.url
+
+            # Check if the file actually exists
+            if os.path.exists(self.image.path):
+                return evidence_url
+            else:
+                # Return a default URL if the file doesn't exist
+                return '/static/recipe_card/recipe.png'
+        else:
+            # Return a default URL if no evidence is provided
+            return '/static/recipe_card/recipe.png'
+
+    def next(self):
+        val = 0
+        if RecipeProduct.objects.filter(pk__gt=self.pk).exists():
+            val = RecipeProduct.objects.filter(pk__gt=self.pk).first().pk
+
+        return val
+
+    def prev(self):
+        val = 0
+        if RecipeProduct.objects.filter(pk__lt=self.pk).exists():
+            val = RecipeProduct.objects.filter(pk__lt=self.pk).last().pk
+
+        return val
 
 
 class Recipe(models.Model):

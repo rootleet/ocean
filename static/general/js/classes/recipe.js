@@ -120,12 +120,15 @@ class Recipe {
     }
 
     loadRecipeItems(product_key){
+        console.log(product_key)
+        let message = "";
         let products = recipe.getRecipeProduct(product_key);
+        console.table(products)
 
         let tr = "";
         if(anton.IsRequest(products)){
 
-            let message = products.message[0];
+            message = products.message[0];
 
             let name,recipe,pk,is_open
             is_open = message.is_open
@@ -133,8 +136,22 @@ class Recipe {
             pk = message.pk
             recipe = message.recipe_items.list
 
+
             $('#prd_name').text(name)
+            $('#image').attr('src',`${message.image}`)
             $('#active_product').val(pk)
+
+            $('#prev').prop('disabled',true)
+            if(message.previous !== 0){
+                $('#prev').prop('disabled',false)
+            }
+
+            $('#next').prop('disabled',true)
+            if(message.next !== 0){
+                $('#next').prop('disabled',false)
+            }
+
+
             for (let it = 0; it < recipe.length ; it++) {
                 let id = it + 1;
                 let name,si,qty,item;
@@ -167,6 +184,8 @@ class Recipe {
         }
 
         $('#recipe_items').html(tr)
+        next = message.next
+        prev = message.previous
     }
 
     newRecipeLine(){
@@ -294,6 +313,9 @@ class Recipe {
         amodal.setFooterHtml('')
         amodal.show()
     }
+
+
+
 }
 
 const recipe = new Recipe()

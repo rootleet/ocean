@@ -1,0 +1,70 @@
+{% extends 'retail/base.html' %}
+{% load static %}
+
+{% block body %}
+    <div class="card-header">
+        <div class="w-100 d-flex flex-wrap">
+            <div class="w-50"></div>
+            <div class="w-50 d-flex flex-wrap justify-content-end">
+                <button id="prev" class="btn btn-sm btn-info" style="margin-left: 2px"><i class="fa fa-backward"></i></button>
+                <button id="next" class="btn btn-sm btn-info" style="margin-left: 2px"><i class="fa fa-forward"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-body overflow-hidden img_bg p-5" style="background: url('{% static 'general/img/recipe.jpg' %}')">
+        <div class="container bg-light h-100">
+            <div class="row h-100 overflow-hidden">
+
+                <div class="col-sm-6 h-100 p-5">
+                    <div class="card h-100">
+                        <div class="card-header">
+                            <strong class="card-title" id="prd_name">Product Name</strong>
+                        </div>
+
+                        <div class="card-body">
+                            <div class="table-responsive overflow-auto">
+                                <table class="table table-sm table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>ITEM</th><th>QUANTITY</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="recipe_items">
+                                        <tr>
+                                            <td>Item</td><th>1</th>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="col-sm-6 h-100 d-flex flex-wrap justify-content-center align-content-center">
+                    <div class="w-75">
+                        <img id="image" src="{% static 'general/img/recipe.jpg' %}" alt="" class="img-fluid">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let next = 0, prev = 0;
+        recipe.loadRecipeItems('{{ last_pk }}')
+
+        $(document).ready(function(){
+            // next
+            $('#next').click(function(){
+                recipe.loadRecipeItems(next)
+            });
+
+            // previous
+            $('#prev').click(function(){
+                recipe.loadRecipeItems(prev)
+            });
+        });
+    </script>
+{% endblock %}

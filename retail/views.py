@@ -213,3 +213,11 @@ def upload_item_image(request):
         messages.success(request, "Image Uploaded")
 
     return redirect('recipe_group', grp_pk)
+
+
+def recipe_card(request):
+    context = {
+        'nav': True,
+        'last_pk':RecipeProduct.objects.all().last().pk
+    }
+    return render(request, 'retail/recipe/card.html', context=context)
