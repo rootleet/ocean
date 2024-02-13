@@ -4,16 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ffcbf13e-d396-4071-9a24-4014a690f966" name="Changes" comment="- display products statistics base on open and closed in recipe gathering.&#10;&#10;- replace '/' in product name when generating recipe card&#10;&#10;- remove is_open column in products group display under recipe gathering">
-      <change afterPath="$PROJECT_DIR$/static/recipe_card/Chicken Roll.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/retail/recipe/card.html" afterDir="false" />
+    <list default="true" id="ffcbf13e-d396-4071-9a24-4014a690f966" name="Changes" comment="shwo recipe card">
+      <change afterPath="$PROJECT_DIR$/static/recipe_card/recipe.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/retail/products/71zX1SlrvnL._AC_SX355_.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/retail/products/COMPANY_SETUP.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/retail/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/retail/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/retail/retail_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/retail/retail_api.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/retail/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/retail/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/retail/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/retail/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/general/js/classes/recipe.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/general/js/classes/recipe.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/retail/recipe/landing.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/retail/recipe/landing.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/retail/recipe/card.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/retail/recipe/card.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -420,15 +417,7 @@
       <workItem from="1706705511464" duration="1239000" />
       <workItem from="1707200064597" duration="2859000" />
       <workItem from="1707552837248" duration="3316000" />
-      <workItem from="1707785856484" duration="4560000" />
-    </task>
-    <task id="LOCAL-00105" summary="more detailed issues showing and also service navigation">
-      <option name="closed" value="true" />
-      <created>1701951961879</created>
-      <option name="number" value="00105" />
-      <option name="presentableId" value="LOCAL-00105" />
-      <option name="project" value="LOCAL" />
-      <updated>1701951961879</updated>
+      <workItem from="1707785856484" duration="6981000" />
     </task>
     <task id="LOCAL-00106" summary="change new ticket sms number">
       <option name="closed" value="true" />
@@ -814,7 +803,15 @@
       <option name="project" value="LOCAL" />
       <updated>1707201623491</updated>
     </task>
-    <option name="localTasksCounter" value="154" />
+    <task id="LOCAL-00154" summary="shwo recipe card">
+      <option name="closed" value="true" />
+      <created>1707790753051</created>
+      <option name="number" value="00154" />
+      <option name="presentableId" value="LOCAL-00154" />
+      <option name="project" value="LOCAL" />
+      <updated>1707790753052</updated>
+    </task>
+    <option name="localTasksCounter" value="155" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -837,7 +834,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="change new ticket sms number" />
     <MESSAGE value="send all sms in ocean" />
     <MESSAGE value="issues reporting" />
     <MESSAGE value="last transaction added" />
@@ -862,7 +858,8 @@
     <MESSAGE value="add image uploader" />
     <MESSAGE value="git ignore uploaded" />
     <MESSAGE value="- display products statistics base on open and closed in recipe gathering.&#10;&#10;- replace '/' in product name when generating recipe card&#10;&#10;- remove is_open column in products group display under recipe gathering" />
-    <option name="LAST_COMMIT_MESSAGE" value="- display products statistics base on open and closed in recipe gathering.&#10;&#10;- replace '/' in product name when generating recipe card&#10;&#10;- remove is_open column in products group display under recipe gathering" />
+    <MESSAGE value="shwo recipe card" />
+    <option name="LAST_COMMIT_MESSAGE" value="shwo recipe card" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

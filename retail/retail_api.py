@@ -748,42 +748,45 @@ def interface(request):
 
             elif module == 'recipe_product':
                 key = data.get('key', '*')
-                print(key)
-                if key == '*':
-                    products = RecipeProduct.objects.all()
+                search_type = data.get('s_type', 'normal')
+
+                if search_type == 'by_name':
+                    products = RecipeProduct.objects.filter(
+                        name__icontains=key) if key != '*' else RecipeProduct.objects.all()
                 else:
                     products = RecipeProduct.objects.filter(pk=key)
 
-                print(products)
+                if products.count() > 0:
+                    for product in products:
+                        # print(product)
+                        rec_list = []
+                        for r in product.recipe():
+                            rec_list.append({
+                                'pk': r.pk,
+                                'name': r.name,
+                                'quantity': r.quantity,
+                                'si_unit': r.si_unit
+                            })
 
-                for product in products:
-                    # print(product)
-                    rec_list = []
-                    for r in product.recipe():
-                        rec_list.append({
-                            'pk': r.pk,
-                            'name': r.name,
-                            'quantity': r.quantity,
-                            'si_unit': r.si_unit
+                        arr.append({
+                            'pk': product.pk,
+                            'name': product.name,
+                            'barcode': product.barcode,
+                            'si_unit': product.si_unit,
+                            'recipe_items': {
+                                'count': product.recipe_items(),
+                                'list': rec_list
+                            },
+                            'is_open': product.is_open,
+                            'image': product.img_url(),
+                            'next': product.next(),
+                            'previous': product.prev()
                         })
 
-                    arr.append({
-                        'pk': product.pk,
-                        'name': product.name,
-                        'barcode': product.barcode,
-                        'si_unit': product.si_unit,
-                        'recipe_items': {
-                            'count': product.recipe_items(),
-                            'list': rec_list
-                        },
-                        'is_open': product.is_open,
-                        'image': product.img_url(),
-                        'next': product.next(),
-                        'previous': product.prev()
-                    })
-
-                    success_response['message'] = arr
-
+                        success_response['message'] = arr
+                else:
+                    success_response['status_code'] = 404
+                    success_response['message'] = "Product Not Found"
             elif module == 'recipe_item':
                 key = data.get('key', '*')
 

@@ -4,7 +4,9 @@
 {% block body %}
     <div class="card-header">
         <div class="w-100 d-flex flex-wrap">
-            <div class="w-50"></div>
+            <div class="w-50">
+                <input type="search" id="search" placeholder="food name" class="form-control form-control-sm rounded-0">
+            </div>
             <div class="w-50 d-flex flex-wrap justify-content-end">
                 <button id="prev" class="btn btn-sm btn-info" style="margin-left: 2px"><i class="fa fa-backward"></i></button>
                 <button id="next" class="btn btn-sm btn-info" style="margin-left: 2px"><i class="fa fa-forward"></i></button>
@@ -64,6 +66,42 @@
             // previous
             $('#prev').click(function(){
                 recipe.loadRecipeItems(prev)
+            });
+
+            // search
+             $('#search').on('keyup', function(event) {
+                if (event.key === 'Enter') {
+                    var inputValue = $(this).val();
+
+                    let payload = {
+                        module:'recipe_product',
+                        data:{
+                            s_type:'by_name',
+                            key:inputValue
+                        }
+                    };
+
+                    let response = api.call("VIEW",payload,recipe.api_interface);
+                    console.table(response)
+                    amodal.setTitleText("Product Search Result")
+                    if(anton.IsRequest(response)){
+                        let products = response.message
+                        let tr = "";
+                        for (let i = 0; i < products.length; i++) {
+                            let product = products[i];
+                            tr += `<tr><td><a onclick="recipe.loadRecipeItems('${product['pk']}')" href="javascript:void(0)">${product['name']}</a></td></tr>`
+                            console.table(product)
+                        }
+
+                        amodal.setBodyHtml(
+                            `<table class="table table-bordered table-sm">${tr}</table>`
+                        );
+
+                    } else {
+                        amodal.setBodyHtml(response.message)
+                    }
+                    amodal.show()
+                }
             });
         });
     </script>
