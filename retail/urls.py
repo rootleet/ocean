@@ -29,7 +29,8 @@ urlpatterns = [
     path('recipe/', views.recipe, name='recipe'),
     path('recipe/group/<int:group_id>/', views.recipe_group, name='recipe_group'),
     path('recipe/upload_item_image/',views.upload_item_image,name='upload_item_image'),
-    path('recipe/card/',views.recipe_card,name='recipe_card')
+    path('recipe/card/',views.recipe_card,name='recipe_card'),
+    path('stock/', views.stock, name='retail_stock')
 
 ]
 

@@ -537,13 +537,25 @@
         </ul>
       </li>
         {% endif %}
+
+    <!-- STOCK -->
+        {% if perms.retail.add_recipegroup %}
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="{% url 'recipe' %}">
+              <i class="bi bi-book"></i><span>STOCK</span>
+            </a>
+          </li>
+    {% endif %}
+    <!-- END OF STOCK -->
+
+
     {% if perms.retail.add_recipegroup %}
         <li class="nav-item">
-        <a class="nav-link collapsed" href="{% url 'recipe' %}">
-          <i class="bi bi-list"></i><span>RECIPES</span>
-        </a>
-      </li>
-            {% endif %}
+            <a class="nav-link collapsed" href="{% url 'retail_stock' %}">
+              <i class="bi bi-list"></i><span>RECIPES</span>
+            </a>
+          </li>
+    {% endif %}
 
 
 

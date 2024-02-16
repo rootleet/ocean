@@ -214,10 +214,18 @@ def upload_item_image(request):
 
     return redirect('recipe_group', grp_pk)
 
-
+@login_required()
 def recipe_card(request):
     context = {
         'nav': True,
         'last_pk':RecipeProduct.objects.all().last().pk
     }
     return render(request, 'retail/recipe/card.html', context=context)
+
+@login_required()
+def stock(request):
+    context = {
+        'nav':True,
+    }
+
+    return render(request,'retail/stock/frozen.html',context=context)
