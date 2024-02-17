@@ -2,5 +2,48 @@
 {% load static %}
 
 {% block body %}
+    <div class="card-header">
+        <div class="w-100 d-flex flex-wrap">
+            <div class="w-50"><strong class="card-title">RETAIL STOCK CHECK</strong></div>
+            <div class="w-50 d-flex flex-wrap justify-content-end">
+                <button id="retrieve" class="btn btn-sm btn-info">RETRIVE</button>
+            </div>
+        </div>
+    </div>
 
+    <div class="card-body">
+        <div class="table-response">
+            <table class="table datatable">
+                <thead>
+                    <tr>
+                        <th>LOCATION</th>
+                        <th>ENTRY</th>
+                        <th>REMARKS</th>
+                        <th>STATISTICS</th>
+                        <th>ACTIONS</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>001 - SPINTEX SHOP</td>
+                        <td>STOCKFREEZE001</td>
+                        <td>NONE</td>
+                        <td>1000 / 1000</td>
+                        <th>
+                            <i class="fa fa-eye text-info pointer" title="Count"></i>
+                        </th>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function(){
+            // retrieve stock frozen
+            $('#retrieve').click(function(){
+                retail.retrieveSockFreezeScreen();
+            });
+        });
+    </script>
 {% endblock %}

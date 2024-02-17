@@ -248,6 +248,37 @@ class Retail {
 
         $('#loader').hide()
     }
+
+    // STOCK SECTION
+    retrieveSockFreezeScreen(){
+        let form = ``;
+        form += fom.text('entry','frozen entry in mycom',true)
+        amodal.setTitleText("Retrieve Frozen")
+        amodal.setBodyHtml(form);
+        amodal.setFooterHtml(`<button onclick='retail.retrieveStock()' class='w-100 btn btn-success'>RETIRVE</button>`)
+        amodal.show()
+    }
+
+    retrieveStock(){
+        let ids = ['mypk','entry'];
+        if(anton.validateInputs(ids)){
+            let payload = {
+                module:'retrieve_frozen_stock',
+                data:anton.Inputs(ids)
+            }
+
+            let ret = api.call("PUT",payload,'/retail/api/');
+            if(anton.IsRequest(ret)){
+                console.table(ret)
+            } else {
+                kasa.response(ret)
+            }
+            
+        } else {
+            kasa.error("Fill All Fields")
+        }
+    }
+    // END OF STOCK SECTION
 }
 
 const retail = new Retail();

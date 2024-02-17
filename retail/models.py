@@ -3,6 +3,7 @@ import os
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import ForeignKey
+from admin_panel.models import Locations
 
 from ocean import settings
 
@@ -190,3 +191,17 @@ class Recipe(models.Model):
 
     class Meta:
         unique_together = (('name', 'owner', 'product'),)
+
+
+class StockHd(models.Model):
+    loc = models.ForeignKey(Locations,on_delete=models.CASCADE)
+    ref_no = models.CharField(max_length=10, unique=True, null=False, blank=False)
+    date_kept = models.CharField(max_length=100,null=False, blank=False)
+    remarks = models.TextField()
+    is_group = models.BooleanField(default=False)
+    st_grp = models.IntegerField()
+    end_grp = models.IntegerField()
+
+    created_on = models.DateTimeField(auto_now_add=True)
+    edited_on = models.DateTimeField(auto_now=True)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)

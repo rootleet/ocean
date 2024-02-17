@@ -10,11 +10,11 @@ from django.views.decorators.csrf import csrf_exempt
 from fpdf import FPDF
 from sympy import Product
 
-from admin_panel.models import Emails
+from admin_panel.models import Emails, Locations
 from ocean.settings import RET_DB_HOST, RET_DB_USER, RET_DB_PASS, RET_DB_NAME
 from retail.db import ret_cursor, get_stock
 from retail.models import BoltItems, BoltGroups, ProductSupplier, ProductGroup, ProductSubGroup, Products, Stock, \
-    RecipeGroup, RecipeProduct, Recipe
+    RecipeGroup, RecipeProduct, Recipe, StockHd
 from retail.retail_tools import create_recipe_card
 
 
@@ -264,6 +264,43 @@ def interface(request):
                     Recipe(product=product, name=name, owner=owner, quantity=qty, si_unit=si_unit).save()
 
                 success_response['message'] = "Recipe Saved Successfully"
+            
+            # retrieve frozen stock
+            elif module == 'retrieve_frozen_stock':
+                mypk = data.get('mypk')
+                entry = data.get('')
+
+                # db query
+                cursor = ret_cursor()
+                query = f"select loc_id,ref_no,ld_date,remarks,grp,grp_from,grp_to from stock_keep_hd where ref_no = '{entry}'"
+                cursor.execute(query)
+                hd = cursor.fetchone()
+
+                if hd:
+                    loc_id,ref_no,date_kept,remarks,is_group,st_grp,end_grp = hd
+                    owner = User.objects.get(pk=mypk)
+                    loc = Locations.objects.get(loc_id=loc_id)
+
+                    StockHd(
+                        loc = loc_id,ref_no=ref_no,date_kept=date_kept,
+                        remarks=remarks,is_group=is_group,st_grp=st_grp,end_grp=end_grp,owner=owner
+                    ).save()
+
+                    stock_hd = StockHd.objects.get(
+                        loc = loc_id,ref_no=ref_no,date_kept=date_kept,
+                        remarks=remarks,is_group=is_group,st_grp=st_grp,end_grp=end_grp,owner=owner
+                    )
+
+                    # save transactions
+                    
+
+
+                    
+                    success_response['status_code'] = 200
+                    success_response['message'] = loc_id
+                else:
+                    success_response['status_code'] = 404
+                    success_response['message'] = f"No stock keep for entry number {entry}"
 
             else:
                 success_response['status_code'] = 404

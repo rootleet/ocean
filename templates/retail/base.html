@@ -103,7 +103,7 @@
                         
                     </div>
                 </div>
-                <div class="footer" id="g_footer"></div>
+                <div class="modal-footer" id="g_footer"></div>
             </div>
         </div>
     </div>
@@ -541,7 +541,7 @@
     <!-- STOCK -->
         {% if perms.retail.add_recipegroup %}
         <li class="nav-item">
-            <a class="nav-link collapsed" href="{% url 'recipe' %}">
+            <a class="nav-link collapsed" href="{% url 'retail_stock' %}">
               <i class="bi bi-book"></i><span>STOCK</span>
             </a>
           </li>
@@ -551,7 +551,7 @@
 
     {% if perms.retail.add_recipegroup %}
         <li class="nav-item">
-            <a class="nav-link collapsed" href="{% url 'retail_stock' %}">
+            <a class="nav-link collapsed" href="{% url 'recipe' %}">
               <i class="bi bi-list"></i><span>RECIPES</span>
             </a>
           </li>
