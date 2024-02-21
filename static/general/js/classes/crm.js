@@ -187,6 +187,7 @@ class Crm {
 
     uploadCsvScreen(){
         let html = `
+        <a href="/static/general/crm-logs-reports/crm_upload_template.csv">Download Template</a><br>
         <label for="csv-file">Select CSV FILE</label>
         <input type="file" accept="text/csv" id="csv-file" class="form-control rounded-0 mb-2" >
         <button onclick="crm.uploadInCsv()" class="btn btn-success">PROCESS</button>`;
