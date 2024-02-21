@@ -9,7 +9,7 @@ class Videos(models.Model):
     key = models.TextField()
     title = models.TextField()
     descr = models.TextField()
-    file = models.FileField(upload_to=f'static/general/videos/')
+    file = models.FileField(upload_to=f'static/uploads/videos/')
 
     def thumbnail(self):
         file_path = f'/static/general/videos/{self.key}.jpg'

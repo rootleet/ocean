@@ -4,9 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ffcbf13e-d396-4071-9a24-4014a690f966" name="Changes" comment="enable uploading crm log files from excel">
+    <list default="true" id="ffcbf13e-d396-4071-9a24-4014a690f966" name="Changes" comment="added template file">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/general/js/classes/crm.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/general/js/classes/crm.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/admin_panel/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/admin_panel/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/appscenter/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blog/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/blog/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/community/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/community/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dolphine/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/dolphine/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/inventory/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/inventory/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/retail/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/retail/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stream/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/stream/models.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -67,6 +74,7 @@
     &quot;ASKED_MARK_IGNORED_FILES_AS_EXCLUDED&quot;: &quot;true&quot;,
     &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
     &quot;Django Server.DJANGO.executor&quot;: &quot;Run&quot;,
+    &quot;Docker.Docker Image.executor&quot;: &quot;Run&quot;,
     &quot;Docker.Dockerfile.executor&quot;: &quot;Run&quot;,
     &quot;Notification.DisplayName-DoNotAsk-JavaScript: Code Vision Performance&quot;: &quot;JavaScript: code vision performance watcher&quot;,
     &quot;Notification.DoNotAsk-JavaScript: Code Vision Performance&quot;: &quot;true&quot;,
@@ -217,8 +225,16 @@
             <list>
               <DockerEnvVarImpl>
                 <option name="name" value="DB_HOST" />
-                <option name="value" value="localhost" />
+                <option name="value" value="172.21.144.1" />
               </DockerEnvVarImpl>
+            </list>
+          </option>
+          <option name="volumeBindings">
+            <list>
+              <DockerVolumeBindingImpl>
+                <option name="containerPath" value="/app/static/" />
+                <option name="hostPath" value="C:\Users\reza\Desktop\xxx" />
+              </DockerVolumeBindingImpl>
             </list>
           </option>
         </settings>
@@ -266,8 +282,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Docker.Dockerfile" />
         <item itemvalue="Docker.Docker Image" />
+        <item itemvalue="Docker.Dockerfile" />
         <item itemvalue="Python.retail_api" />
       </list>
     </recent_temporary>
@@ -416,15 +432,8 @@
       <workItem from="1707785856484" duration="8077000" />
       <workItem from="1708051394927" duration="1453000" />
       <workItem from="1708444681938" duration="6382000" />
-      <workItem from="1708484322147" duration="1048000" />
-    </task>
-    <task id="LOCAL-00109" summary="issues reporting">
-      <option name="closed" value="true" />
-      <created>1702720250963</created>
-      <option name="number" value="00109" />
-      <option name="presentableId" value="LOCAL-00109" />
-      <option name="project" value="LOCAL" />
-      <updated>1702720250963</updated>
+      <workItem from="1708484322147" duration="3445000" />
+      <workItem from="1708532656565" duration="1960000" />
     </task>
     <task id="LOCAL-00110" summary="last transaction added">
       <option name="closed" value="true" />
@@ -810,7 +819,15 @@
       <option name="project" value="LOCAL" />
       <updated>1708487048962</updated>
     </task>
-    <option name="localTasksCounter" value="158" />
+    <task id="LOCAL-00158" summary="added template file">
+      <option name="closed" value="true" />
+      <created>1708487356500</created>
+      <option name="number" value="00158" />
+      <option name="presentableId" value="LOCAL-00158" />
+      <option name="project" value="LOCAL" />
+      <updated>1708487356500</updated>
+    </task>
+    <option name="localTasksCounter" value="159" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -833,7 +850,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="take away author" />
     <MESSAGE value="Set video static thumbnail" />
     <MESSAGE value="db interface changed for bolt" />
     <MESSAGE value="maintenance model removed" />
@@ -858,7 +874,8 @@
     <MESSAGE value="recipe card search" />
     <MESSAGE value="adding retail stock screen" />
     <MESSAGE value="enable uploading crm log files from excel" />
-    <option name="LAST_COMMIT_MESSAGE" value="enable uploading crm log files from excel" />
+    <MESSAGE value="added template file" />
+    <option name="LAST_COMMIT_MESSAGE" value="added template file" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

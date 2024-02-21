@@ -15,9 +15,9 @@ class articles(models.Model):
     tag = models.CharField(max_length=200)
     intro = models.TextField(default='none')
     meta = models.CharField(max_length=200, default='none')
-    image = models.ImageField(upload_to=f'static/general/img/articles',
+    image = models.ImageField(upload_to=f'static/uploads/articles',
                               default='static/general/img/articles/def_img.png')
-    thumbnail = models.ImageField(upload_to=f'static/general/img/articles',
+    thumbnail = models.ImageField(upload_to=f'static/uploads/articles',
                                   default='static/general/img/articles/def_thumb.png')
 
     date_created = models.DateField(auto_now_add=True)

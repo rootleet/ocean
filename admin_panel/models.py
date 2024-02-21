@@ -179,7 +179,7 @@ class MailQueues(models.Model):
 
 class MailAttachments(models.Model):
     mail = models.ForeignKey(MailQueues, on_delete=models.CASCADE)
-    attachment = models.FileField(upload_to='static/attachments/')
+    attachment = models.FileField(upload_to='static/uploads/attachments/')
 
 
 class Sales(models.Model):
@@ -283,7 +283,7 @@ class ProductMaster(models.Model):
     shrt_descr = models.TextField()
     barcode = models.CharField(unique=True, max_length=255)
     supplier = models.ForeignKey('SuppMaster', on_delete=models.CASCADE)
-    prod_img = models.FileField(upload_to=f'static/general/img/products/')
+    prod_img = models.FileField(upload_to=f'static/uploads/products/')
 
     created_by = models.IntegerField(default=0)
     created_on = models.DateTimeField(auto_now_add=True)
@@ -476,7 +476,7 @@ class TicketTrans(models.Model):
 class Files(models.Model):
     doc = models.CharField(max_length=3)
     cryp_key = models.CharField(max_length=60)
-    media = models.FileField(upload_to=f'static/assets/uploads/%Y%m%d')
+    media = models.FileField(upload_to=f'static/uploads/%Y%m%d')
 
     created_date = models.DateField(auto_now_add=True)
     created_time = models.TimeField(auto_now_add=True)
@@ -516,7 +516,7 @@ class UserAddOns(models.Model):
     news = models.IntegerField(default=1)
     phone = models.CharField(max_length=14, unique=True)
     app_version = models.ForeignKey('appconfig.VersionHistory', on_delete=models.CASCADE)
-    profile_pic = models.FileField(upload_to=f'static/general/img/users/')
+    profile_pic = models.FileField(upload_to=f'static/uploads/users/')
     pword_reset = models.IntegerField(default=1)
     api_token = models.TextField(null=True)
 
@@ -625,7 +625,7 @@ class SmsResponse(models.Model):
 
 class BulkSms(models.Model):
     api = models.ForeignKey('SmsApi', on_delete=models.CASCADE)
-    file = models.FileField(upload_to=f"static/files/{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}")
+    file = models.FileField(upload_to=f"static/uploads/bsms/{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}")
     message = models.TextField()
 
     created_date = models.DateField(auto_now_add=True)

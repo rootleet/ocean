@@ -16,7 +16,7 @@ class Clerk(models.Model):
     phone = models.CharField(max_length=10, unique=True, null=False)
     code = models.CharField(max_length=4, unique=True, null=False)
     pword = models.TextField()
-    img = models.ImageField(upload_to='static/general/clerks/', default='static/general/img/users/default.png')
+    img = models.ImageField(upload_to='static/uploads/clerks/', default='static/general/img/users/default.png')
 
     flag_dwn = models.IntegerField(default=1)
     flag_disable = models.IntegerField(default=0)
@@ -139,7 +139,7 @@ class RecipeProduct(models.Model):
     edited_on = models.DateTimeField(auto_now=True)
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
 
-    image = models.ImageField(upload_to='static/retail/products/', default='static/recipe_card/recipe.png')
+    image = models.ImageField(upload_to='static/uploads/retail/products/', default='static/recipe_card/recipe.png')
 
     class Meta:
         unique_together = (('name', 'owner', 'group'),)

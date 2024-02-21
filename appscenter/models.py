@@ -33,12 +33,12 @@ class AppsGroup(models.Model):
 
 class App(models.Model):
     provider = models.ForeignKey(AppProviders, on_delete=models.CASCADE, default=1, blank=False, null=False)
-    logo = models.ImageField(upload_to='static/apps/logos/', blank=True, null=True,default='static/apps/logos/default'
+    logo = models.ImageField(upload_to='static/uploads/apps/logos/', blank=True, null=True,default='static/apps/logos/default'
                                                                                            '.png')
     name = models.TextField()
     uni = models.CharField(max_length=60, unique=True)
     description = models.TextField()
-    file = models.FileField(upload_to=f"static/files/{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}")
+    file = models.FileField(upload_to=f"static/uploads/apps/{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}")
     root = models.TextField()
 
     created_date = models.DateField(auto_now_add=True)

@@ -152,7 +152,7 @@ class Assets(models.Model):
     processor = models.TextField()
 
     details = models.TextField()
-    image = models.FileField(upload_to=f'static/general/img/products/', default='static/general/img/products/asset.png')
+    image = models.FileField(upload_to=f'static/uploads/ccms_inv/products/', default='static/general/img/products/asset.png')
     tags = models.TextField(default='NULL')
 
     created_on = models.DateTimeField(auto_now_add=True)

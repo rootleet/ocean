@@ -9,7 +9,7 @@ from cryptography.fernet import Fernet
 
 
 class Files(models.Model):
-    file = models.FileField(upload_to='static/uploads/%Y/%m/%d/')
+    file = models.FileField(upload_to='static/uploads/dolphine/%Y/%m/%d/')
 
     size = models.TextField()
     type = models.TextField()
@@ -38,7 +38,7 @@ class Files(models.Model):
 class Documents(models.Model):
     doc = models.CharField(max_length=3)
     entry_no = models.TextField()
-    file = models.FileField(upload_to='static/uploads/%Y/%m/%d/')
+    file = models.FileField(upload_to='static/uploads/dolphine/%Y/%m/%d/')
 
 
 class ImgRv(models.Model):
