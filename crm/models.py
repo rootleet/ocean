@@ -9,7 +9,7 @@ def get_username_on_delete(user):
 # Create your models here.
 class Logs(models.Model):
     customer = models.TextField(null=False, blank=False)
-    flag = models.TextField()
+    success = models.BooleanField(default=True)
     phone = models.TextField()
     subject = models.TextField()
     description = models.TextField()

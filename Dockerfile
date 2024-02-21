@@ -21,6 +21,7 @@ RUN apt-get update && apt-get install -y unixodbc-dev
 WORKDIR /app
 
 # Copy the requirements.txt file and install Python dependencies
+
 COPY req.txt /app/
 RUN pip install --upgrade pip
 RUN pip install -r req.txt

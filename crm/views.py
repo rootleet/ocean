@@ -1,6 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import render
+from django.utils import timezone
 
 from crm.models import Logs, CrmUsers
 
@@ -13,7 +14,7 @@ def base(request):
         'page': {
             'title': "CRM",
         },
-        'logs': Logs.objects.filter(owner=request.user).order_by('-pk')
+        'logs': Logs.objects.filter(owner=request.user,created_date=timezone.now().date()).order_by('-pk')
     }
 
     return render(request, 'crm/logs.html', context=context)

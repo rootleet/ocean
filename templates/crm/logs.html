@@ -6,8 +6,11 @@
         <div class="w-100 d-flex">
             <div class="w-50"></div>
             <div class="w-50 d-flex flex-wrap justify-content-end">
-                <button onclick="crm.newLog()" style="margin-right: .2rem" class="btn btn-info">NEW</button>
+                <button onclick="crm.newLog()" style="margin-right: .2rem" class="btn btn-primary">NEW</button>
+                <button onclick="crm.uploadCsvScreen()" style="margin-right: .2rem" class="btn btn-info">UPLOAD</button>
+                {%  if user.request.is_superuser %}
                 <button onclick="crm.generateReports()" class="btn btn-warning">GENERATE REPORT</button>
+                {% endif %}
             </div>
         </div>
     </div>
@@ -26,7 +29,7 @@
                         <td><small>{{ log.customer }} <br>{{ log.position }}</small></td>
                         <td><i class="bx bx-phone"></i> <small>{{ log.phone }}</small> <br> <i class="bx bxs-inbox"></i> <small>{{ log.email }}</small></td>
                         <td><small>{{ log.created_date }}</small> <br><small>{{ log.created_time }}</small></td>
-                        <td><i class="text-{{ log.flag }}">{{ log.flag }}</i></td>
+                        <td><i class="text-{{ log.success }}">{{ log.success }}</i></td>
                         <td><i onclick="Swal.fire({title:`{{ log.subject }}`,
                         text:`{{ log.description }}`
                         })" class="fa fa-eye text-info"></i></td>

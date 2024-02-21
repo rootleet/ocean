@@ -184,6 +184,85 @@ class Crm {
 
         loader.hide()
     }
+
+    uploadCsvScreen(){
+        let html = `
+        <label for="csv-file">Select CSV FILE</label>
+        <input type="file" accept="text/csv" id="csv-file" class="form-control rounded-0 mb-2" >
+        <button onclick="crm.uploadInCsv()" class="btn btn-success">PROCESS</button>`;
+        amodal.setBodyHtml(html)
+        amodal.setTitleText("UPLOAD LOGS")
+        amodal.show()
+    }
+    uploadInCsv(){
+
+        const file = document.getElementById('csv-file').files[0]; // Replace 'csvFileInput' with the actual ID of your file input field
+
+        if (file) {
+          const reader = new FileReader();
+
+          reader.onload = function (e) {
+              const csvData = e.target.result;
+              const rows = csvData.split('\n');
+                let recs = 0;
+              // Loop through each row starting from the first row
+              let date;
+              for (let i = 1; i < rows.length; i++) {
+                  const rowData = rows[i].split(',');
+
+                  // Now you can access values using array index rowData[index]
+                  console.log(rowData);
+                  let sec, comp, person, position, phone, email, subject, flag, detail;
+                  sec = rowData[0];
+                  comp = rowData[1];
+                  person = rowData[2];
+                  position = rowData[3];
+                  phone = rowData[4];
+                  email = rowData[5];
+                  subject = rowData[6];
+                  flag = rowData[7];
+                  date = rowData[8]
+                  detail = rowData.slice(9).join(', ');
+                  console.log(detail)
+
+
+                  if (rowData.length > 8) {
+                      // prepare for api to send
+                      recs += 1;
+                      let data = {
+                          name: person,
+                          subject: subject,
+                          phone: phone,
+                          flag: flag,
+                          description: detail,
+                          mypk: $('#mypk').val(),
+                          company: comp,
+                          position: position,
+                          email: email,
+                          sector: sec, date: date
+                      };
+
+                      let payload = {
+                          'module': 'log',
+                          data: data
+                      };
+
+                      console.table(payload);
+
+                      let lg = api.call("PUT", payload, '/crm/api/');
+                      console.table(lg)
+
+                  }
+              }
+
+              kasa.confirm(`${recs} record(s) loged`,1,'here')
+            };
+
+            reader.readAsText(file);
+        }
+
+
+    }
 }
 
 const crm = new Crm()

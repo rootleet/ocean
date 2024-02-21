@@ -4,6 +4,7 @@ import sys
 from django.contrib.auth.models import User
 from django.db.models import Q
 from django.http import JsonResponse
+from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 
 from admin_panel.models import Emails, MailQueues, MailSenders, MailAttachments
@@ -43,9 +44,13 @@ def api_interface(request):
                 email = data.get('email')
                 sector = data.get('sector')
 
-                Logs(description=description, flag=flag, customer=name, phone=phone, subject=subject,
+                current_datetime = timezone.now()
+                formatted_date = current_datetime.strftime('%Y-%m-%d')
+                created_date = data.get('date',formatted_date)
+
+                Logs(description=description, success=flag, customer=name, phone=phone, subject=subject,
                      owner=User.objects.get(pk=mypk),
-                     company=company, position=position, email=email, sector=sector).save()
+                     company=company, position=position, email=email, sector=sector,created_date=created_date).save()
 
                 success_response['message'] = "Logged"
                 response = success_response
@@ -76,6 +81,7 @@ def api_interface(request):
                         'position': l.position,
                         'email': l.email,
                         'sector': l.sector,
+                        'success':l.success
                     }
                     lgo.append(obj)
 
