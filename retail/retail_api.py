@@ -351,6 +351,7 @@ def interface(request):
 
             elif module == 'price_change':
                 send = data.get('send_mail') or 'no'
+                rate_inc = data.get('rate_at',20)
                 cursor = ret_cursor()
                 import openpyxl
                 worksheet = openpyxl.Workbook()
@@ -396,7 +397,7 @@ def interface(request):
                             # print("CHANGE")
                             sheet[f"A{sheet_row}"] = barcode
                             sheet[f"B{sheet_row}"] = item.item_des
-                            sheet[f"C{sheet_row}"] = product[0] / (1 - 15 / 100)
+                            sheet[f"C{sheet_row}"] = product[0] / (1 - rate_inc / 100)
                             sheet_row += 1
                             item.price = price
 
