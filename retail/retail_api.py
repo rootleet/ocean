@@ -264,7 +264,7 @@ def interface(request):
                     Recipe(product=product, name=name, owner=owner, quantity=qty, si_unit=si_unit).save()
 
                 success_response['message'] = "Recipe Saved Successfully"
-            
+
             # retrieve frozen stock
             elif module == 'retrieve_frozen_stock':
                 mypk = data.get('mypk')
@@ -277,25 +277,22 @@ def interface(request):
                 hd = cursor.fetchone()
 
                 if hd:
-                    loc_id,ref_no,date_kept,remarks,is_group,st_grp,end_grp = hd
+                    loc_id, ref_no, date_kept, remarks, is_group, st_grp, end_grp = hd
                     owner = User.objects.get(pk=mypk)
                     loc = Locations.objects.get(loc_id=loc_id)
 
                     StockHd(
-                        loc = loc_id,ref_no=ref_no,date_kept=date_kept,
-                        remarks=remarks,is_group=is_group,st_grp=st_grp,end_grp=end_grp,owner=owner
+                        loc=loc_id, ref_no=ref_no, date_kept=date_kept,
+                        remarks=remarks, is_group=is_group, st_grp=st_grp, end_grp=end_grp, owner=owner
                     ).save()
 
                     stock_hd = StockHd.objects.get(
-                        loc = loc_id,ref_no=ref_no,date_kept=date_kept,
-                        remarks=remarks,is_group=is_group,st_grp=st_grp,end_grp=end_grp,owner=owner
+                        loc=loc_id, ref_no=ref_no, date_kept=date_kept,
+                        remarks=remarks, is_group=is_group, st_grp=st_grp, end_grp=end_grp, owner=owner
                     )
 
                     # save transactions
-                    
 
-
-                    
                     success_response['status_code'] = 200
                     success_response['message'] = loc_id
                 else:
@@ -360,8 +357,7 @@ def interface(request):
                 sheet = worksheet.active
                 sheet['A1'] = "SKU"
                 sheet['B1'] = "NAME"
-                sheet['C1'] = "CURRENT PRICE"
-                sheet['D1'] = "NEW PRICE"
+                sheet['C1'] = "PRICE"
                 sheet_row = 2
 
                 spintex_stock_book = openpyxl.Workbook()
@@ -400,8 +396,7 @@ def interface(request):
                             # print("CHANGE")
                             sheet[f"A{sheet_row}"] = barcode
                             sheet[f"B{sheet_row}"] = item.item_des
-                            sheet[f"C{sheet_row}"] = item.price
-                            sheet[f"D{sheet_row}"] = product[0]
+                            sheet[f"C{sheet_row}"] = product[0] / (1 - 15 / 100)
                             sheet_row += 1
                             item.price = price
 
