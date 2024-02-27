@@ -397,7 +397,7 @@ def interface(request):
                             # print("CHANGE")
                             sheet[f"A{sheet_row}"] = barcode
                             sheet[f"B{sheet_row}"] = item.item_des
-                            sheet[f"C{sheet_row}"] = product[0] / (1 - rate_inc / 100)
+                            sheet[f"C{sheet_row}"] = Decimal(product[0]) / Decimal((1 - rate_inc / 100))
                             sheet_row += 1
                             item.price = price
 
@@ -888,17 +888,7 @@ def interface(request):
                 items = BoltItems.objects.all()
 
                 for item in items:
-                    cursor = ret_cursor()
-                    barcode = item.barcode
-                    query = f"SELECT retail1 FROM prod_mast where barcode = '{barcode}'"
-                    cursor.execute(query)
-                    row = cursor.fetchone()
-                    retail1 = item.inv_price
-                    if row is not None:
-                        retail1 = row[0]
-
-                    item.price = retail1
-                    item.inv_price = retail1
+                    item.price = item.inv_price
                     item.save()
 
             elif module == 'close_recipe':
