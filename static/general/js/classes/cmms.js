@@ -31,7 +31,7 @@ class Cmms {
             return  api.call('VIEW', payload, '/cmms/api/')
     }
 
-    carJob(carNumber) {
+    async carJob(carNumber) {
 
         let response = cmms.carMaintainanceLog(carNumber)
         if (isJson(response)) {

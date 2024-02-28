@@ -99,7 +99,7 @@ class MaintenanceAsset(models.Model):
     location = models.ForeignKey(admin_panel.models.Locations, on_delete=models.SET_NULL, null=True)
 
     def image_link(self):
-        return 'NONE'
+        return self.image.name
 
 
 class Maintenance(models.Model):
@@ -183,18 +183,7 @@ class Maintenance(models.Model):
         return val
 
     def get_evidence_url(self):
-        if self.evidence and hasattr(self.evidence, 'url'):
-            evidence_url = self.evidence.url
-
-            # Check if the file actually exists
-            if os.path.exists(os.path.join(settings.STATIC_URL, evidence_url)):
-                return evidence_url
-            else:
-                # Return a default URL if the file doesn't exist
-                return 'static/general/img/users/default.png'
-        else:
-            # Return a default URL if no evidence is provided
-            return 'static/general/img/users/default.png'
+        return self.evidence.name or 'no-evidence'
 
 class MaintenanceTransactions(models.Model):
     maintenance = models.ForeignKey(Maintenance, on_delete=models.CASCADE)

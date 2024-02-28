@@ -138,9 +138,9 @@
   <input type="hidden" id="autos_url" value="{% url 'autos' 'ajax' %}">
   <input type="hidden" id="search_url" value="{% url 'search' %}">
   <input type="hidden" value="{{ request.user.pk }}" id="mypk">
-  {% if nav == True %}
+
   <!-- ======= Header ======= -->
-  <header id="header" class="header fixed-top d-flex align-items-center">
+  <header {% if nav != True %} style="display: none" {% endif %} id="header" class="header fixed-top d-flex align-items-center">
 
     <div class="d-flex align-items-center justify-content-between">
       <a href="{% url 'home' %}" class="logo d-flex align-items-center">
@@ -384,7 +384,7 @@
 
   <!-- ======= Sidebar ======= -->
 
-  <aside id="sidebar" class="sidebar">
+  <aside {% if nav != True %} style="display: none" {% endif %} id="sidebar" class="sidebar">
 
     <ul class="sidebar-nav" id="sidebar-nav">
 
@@ -643,7 +643,7 @@
     </ul>
 
   </aside><!-- End Sidebar-->
-  {% endif %}
+
 
   <main id="main" class="main">
 

@@ -292,6 +292,8 @@ class Maintenance {
             amodal.setFooterHtml(`<button class='btn btn-success' onclick='ment.generateWO()'>SAVE</button>`);
             amodal.show();
 
+
+
         } else {
             kasa.response(users);
         }
@@ -314,7 +316,7 @@ class Maintenance {
 
             if (anton.IsRequest(generate)) {
                 // load work request again
-                amodal.close()
+                amodal.hide()
                 kasa.info(generate.message['msg']);
                 loadMaintenance(`${generate.message['wr_pk']}`)
 
@@ -341,9 +343,10 @@ class Maintenance {
         let work_order_reponse = this.getWorkOrder(pk);
         if (anton.IsRequest(work_order_reponse)) {
             let wo = work_order_reponse.message[0];
-            
+            console.table(wo)
             let wr = wo['wr'];
             let asset = wr['asset'];
+
             x_ass = asset
             $('#wo_no').val(wo['entry_no'])
             $('#status').val(wo['is_open']);

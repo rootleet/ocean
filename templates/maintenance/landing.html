@@ -112,8 +112,8 @@
                 </div>
 
                 <div class="col-sm-4">
-                    <strong>Evidence</strong>
-                    <img src="" alt="" class="img-fluid" id="evidence">
+                    <strong>Evidence</strong><br>
+                    <img src="" alt="" class="img-fluid w-50" id="evidence">
                 </div>
 
                 
@@ -194,7 +194,10 @@
                 let wo_generate = wo['generated'];
                 let next = wr['next'];
                 let previous = wr['previous'];
-                
+
+                $('#evidence').attr('src',`${evidence}`)
+
+                console.table(wr)
 
                 $('#entry_no').val(entry_no);
                 $('#title').val(title);
