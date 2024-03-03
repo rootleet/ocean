@@ -156,7 +156,12 @@ def interface(request):
                     barcode = str(product[1]).strip()
                     item_des = product[2].strip()
                     group = product[3]
-                    sub_group = product[4].strip() or product[4]
+                    print(product[4])
+                    try: 
+                        sub_group = product[4].strip()
+                    except Exception as e:
+                        sub_group = product[4]
+                        
                     supplier = product[5]
                     retail1 = product[6]
 
