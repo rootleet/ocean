@@ -165,8 +165,17 @@ def interface(request):
                     if ProductSubGroup.objects.filter(name=sub_group).count() == 1:
                         subgroup = ProductSubGroup.objects.get(name=sub_group)
                         # delete product
-                        Products.objects.filter(code=code).delete()
-                        save, create = Products.objects.get_or_create(subgroup=subgroup, name=item_des, barcode=barcode,
+                        if Products.objects.filter(code=code).exists():
+                            # update
+                            prod = Products.objects.get(code=code)
+                            prod.barcode = barcode
+                            prod.name = item_des
+                            prod.price = retail1
+                            prod.subgroup = subgroup
+                            prod.save()
+                        else:
+                            # save new
+                            Products.objects.get_or_create(subgroup=subgroup, name=item_des, barcode=barcode,
                                                                       code=code, price=retail1)
                         saved = saved + 1
                     else:
