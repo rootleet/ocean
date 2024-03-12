@@ -34,11 +34,11 @@ class Crm {
               '  <option value="HR Manager">HR Manager</option>\n' +
               '  <option value="Operations Manager">Operations Manager</option>' +
               '<option value="Tranport Manager">Transport Manager</option>' +
-              '<option value="Receptionist">Receptionist</option>' +
+              '<option value="Receptionist">Receptionist</option><option value="manager">Manager</option>' +
               '<option value="Others">Others</option>' +
               '</select>' +
             '<label for="phone">PHONE</label><input type="tel" id="phone" class="form-control rounded-0 mb-2" placeholder="Phone Number">' +
-              '<label for="email">EMAIL ADDRESS</label><input id="email" type="email" class="form-control rounded-0 mb-2"><hr>' +
+              '<label for="email">EMAIL ADDRESS</label><input id="email" value="none" type="email" class="form-control rounded-0 mb-2"><hr>' +
               '<label for="subject">SUBJECT</label><input id="subject" class="form-control rounded-0 mb-2">' +
             '<label for="flag">FLAG</label><select id="flag" class="form-control rounded-0 mb-2">' +
             '<option value="" disabled selected>Select an option</option>' +

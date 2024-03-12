@@ -35,6 +35,10 @@ def api_interface(request):
             if module == 'log':
                 description = data.get('description')
                 flag = data.get('flag')
+                if flag == 'success':
+                    flag = True
+                else:
+                    flag = False
                 name = data.get('name')
                 phone = data.get('phone')
                 subject = data.get('subject')
@@ -44,6 +48,7 @@ def api_interface(request):
                 email = data.get('email')
                 sector = data.get('sector')
 
+                print(data)
                 current_datetime = timezone.now()
                 formatted_date = current_datetime.strftime('%Y-%m-%d')
                 created_date = data.get('date',formatted_date)
@@ -195,5 +200,6 @@ def api_interface(request):
         response[
             "message"] = f"An error of type {error_type} occurred on line {line_number} in file {tb_path}. Details: {str(e)}"
         # response["message"] = f"Details: {e}"
+        print(e)
 
     return JsonResponse(response, safe=False)
