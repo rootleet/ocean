@@ -484,7 +484,7 @@
 
 
 
-    {% if user.is_superuser %}
+    {% if perms.retail.view_products  %}
         <li class="nav-item">
         <a class="nav-link collapsed" href="{% url 'clerks' %}">
           <i class="bi bi-list"></i><span>CLERKS</span>
