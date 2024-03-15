@@ -281,6 +281,151 @@ class Reports {
     * END OF SERVICING
     * */
 
+    // CROM
+    crmLogsScreen(){
+        let form = `
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-6 mb-2">
+                        <label for="sector">SECTOR</label>
+                        <select name="sector" id="sector" class="form-control rounded-0">
+                            <option disabled selected >Select Sector</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-6 mb-2">
+                        <label for="position">POSITION</label>
+                        <select name="position" id="position" class="form-control rounded-0">
+                            <option disabled selected value="0">Select Position</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-6 mb-2">
+                        <label for="sector">Logs By</label>
+                        <select name="owner" id="owner" class="form-control rounded-0">
+                            <option value="0">Select User</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-6 mb-2">
+                        <label for="flag">Flag</label>
+                        <select name="flag" id="flag" class="form-control rounded-0">
+                            <option value="*">All</option>
+                            <option value="success">Successful</option>
+                            <option value="not_success">Unsuccessful</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-6 mb-2">
+                        <label for="start_date">Start Date</label>
+                        <input type="date" name="start_date" id="start_date" class="form-control rounded-0" >
+                    </div>
+                    <div class="col-sm-6 mb-2">
+                        <label for="end_date">End Date</label>
+                        <input type="date" name="end_date" id="end_date" class="form-control rounded-0" >
+                    </div>
+                </div>
+            </div>
+        `;
+        amodal.setTitleText('CRM Logs Report');
+        amodal.setBodyHtml(form);
+        amodal.setFooterHtml(`<button onclick="reports.crmLogs()" class="btn btn-success mx-2">Generate</button>`)
+
+
+        // file parts
+        let sectors = crm.getSector();
+        let positions = crm.getPosition();
+        let users = user.allUsers();
+
+        if(anton.IsRequest(sectors)){
+            let secs = sectors['message'];
+            let sec_opt = ``;
+            for(let s = 0; s < secs.length; s++){
+                let sec = secs[s];
+                sec_opt += `<option value="${sec['pk']}">${sec['name']}</option>`
+            }
+            $('#sector').append(sec_opt)
+            // validate position
+            if(anton.IsRequest(positions)){
+                // validate users
+                if(anton.IsRequest(users)){
+                    // all is valid
+                    let uss = users['message'];
+                    let poss = positions['message'];
+                    // set sectors
+                    let secter_options = `<option selected value="*">All Sectors</option>`;
+                    for(let s = 0; s < secs.length; s++){
+                        let sx = secs[s];
+                        secter_options += `<option value="${sx['pk']}">${sx['name']}</option>`
+                    }
+                    $('#sector').html(secter_options)
+
+                    // set positions
+                    let pos_options = `<option value="*" selected>All Positions</option>`;
+                    for(let p =0; p < poss.length; p++){
+                        let po = poss[p];
+                        pos_options += `<option value="${po['pk']}">${po['name']}</option>`;
+                    }
+                    $('#position').html(pos_options)
+
+
+                    // set user
+                    let user_options = `<option value="*" selected>All Users</option>`;
+                    for(let u = 0; u < uss.length; u++){
+                        let us = uss[u];
+                        user_options += `<option value="${us['pk']}">${us['fullname']}</option>`
+                    }
+                    $('#owner').html(user_options)
+                    //console.table(uss)
+                    // console.table(poss)
+                    // console.table(secs)
+
+                    amodal.show()
+                } else{kasa.response(users)}
+            }else{kasa.response(positions)}
+
+        } else{kasa.response(sectors)}
+
+    }
+    crmLogs(){
+        let fields = ['owner','flag','start_date','end_date','position','sector'];
+        if(anton.validateInputs(fields)){
+            let payload = {
+                module:'log',
+                data:anton.Inputs(fields)
+            }
+
+            let log_response = api.call('VIEW',payload,'/crm/api/');
+            if(anton.IsRequest(log_response)){
+                let logs = log_response['message'];
+                let header = ['COMPANY','SECTOR','PERSON','POSITION','DATE','PHONE','EMAIL','SUBJECT','STATUS','ACTION'];
+                let tr = '';
+                for(let lr = 0; lr < logs.length; lr ++){
+                    let row = logs[lr]
+                    tr += `
+                    
+                    <tr>
+                        <td>${row['company']}</td>
+                        <td>${row['sector']}</td>
+                        <td>${row['customer']}</td>
+                        <td>${row['position']}</td>
+                        <td>${row['date']}</td>
+                        <td>${row['phone']}</td>
+                        <td>${row['email']}</td>
+                        <td>${row['subject']}</td>
+                        <td>${row['success']}</td>
+                        <td><i onclick="amodal.setBodyHtml('${row['detail']}');amodal.show()" class="fa fa-eye text-info pointer"></i></td>
+                        
+                    </tr>
+                    
+                    `
+                }
+
+                reports.render(header,tr);
+                amodal.hide()
+                console.table(logs)
+            } else {kasa.response(log_response)}
+        } else {
+            kasa.error("Invalid Form")
+        }
+    }
+
 }
 
 const reports = new Reports()

@@ -9,12 +9,16 @@ from crm.models import Logs, CrmUsers
 # Create your views here.
 @login_required()
 def base(request):
+    if request.user.is_superuser:
+        logs = Logs.objects.filter(created_date=timezone.now().date()).order_by('-pk')
+    else:
+        logs = Logs.objects.filter(owner=request.user, created_date=timezone.now().date()).order_by('-pk')
     context = {
         'nav': True,
         'page': {
             'title': "CRM",
         },
-        'logs': Logs.objects.filter(owner=request.user,created_date=timezone.now().date()).order_by('-pk')
+        'logs': logs
     }
 
     return render(request, 'crm/logs.html', context=context)
@@ -30,3 +34,15 @@ def crm_users(request):
     }
 
     return render(request, 'crm/crm-users.html', context=context)
+
+
+def crm_tools(request):
+    context = {
+        'nav': True,
+        'page': {
+            'title': "CRM TOOLS",
+        },
+        'users': CrmUsers.objects.all().order_by('-pk')
+    }
+
+    return render(request, 'crm/crm-tools.html', context=context)

@@ -8,7 +8,7 @@ from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 
 from admin_panel.models import Emails, MailQueues, MailSenders, MailAttachments
-from crm.models import Logs, CrmUsers
+from crm.models import Logs, CrmUsers, Sector, Positions
 
 
 @csrf_exempt
@@ -33,17 +33,17 @@ def api_interface(request):
 
         if method == 'PUT':
             if module == 'log':
-                description = data.get('description')
+                description = data.get('details')
                 flag = data.get('flag')
                 if flag == 'success':
                     flag = True
                 else:
                     flag = False
-                name = data.get('name')
+                name = data.get('contact_person')
                 phone = data.get('phone')
                 subject = data.get('subject')
                 mypk = data.get('mypk')
-                company = data.get('company')
+                company = data.get('company_name')
                 position = data.get('position')
                 email = data.get('email')
                 sector = data.get('sector')
@@ -51,11 +51,12 @@ def api_interface(request):
                 print(data)
                 current_datetime = timezone.now()
                 formatted_date = current_datetime.strftime('%Y-%m-%d')
-                created_date = data.get('date',formatted_date)
+                created_date = data.get('date', formatted_date)
 
                 Logs(description=description, success=flag, customer=name, phone=phone, subject=subject,
                      owner=User.objects.get(pk=mypk),
-                     company=company, position=position, email=email, sector=sector,created_date=created_date).save()
+                     company=company, position_id=position, email=email, sector_id=sector,
+                     created_date=created_date).save()
 
                 success_response['message'] = "Logged"
                 response = success_response
@@ -69,13 +70,55 @@ def api_interface(request):
 
                 success_response['message'] = f"{us.first_name} {us.last_name} ADDED"
                 response = success_response
+            elif module == 'sector':
+                sector = data.get('sector')
+                own_pk = data.get('mypk')
+                owner = User.objects.get(pk=own_pk)
+                Sector(owner=owner, name=sector).save()
+                success_response['message'] = "Sector added"
+
+            elif module == 'position':
+                sector = data.get('position')
+                own_pk = data.get('mypk')
+                owner = User.objects.get(pk=own_pk)
+                Positions(owner=owner, name=sector).save()
+                success_response['message'] = "Position added"
 
         elif method == 'VIEW':
             if module == 'log':
-                owner = data.get('owner')
-                lg = Logs.objects.filter(owner=User.objects.get(pk=owner)).order_by('-pk')
+                from django.db.models import Q
+                from datetime import datetime
+
+                # Define your filters
+                owner_filter = data.get('owner',
+                                        '*')  # Replace "owner_name" with the actual owner name you want to filter on
+                flag_filter = data.get('flag')
+                flag = False
+                if flag_filter == 'success':
+                    flag = True
+                start_date = data.get('start_date',None)  # Replace with your start date
+                end_date = data.get('end_date',None)  # Replace with your end date
+                position_filter = data.get('position')  # Replace None with the actual position you want to filter on
+                sector_filter = data.get('sector')  # Replace None with the actual sector you want to filter on
+
+                queryset = Logs.objects.all()
+                if owner_filter != '*':
+                    queryset = queryset.filter(owner__id=owner_filter)
+
+                if flag_filter is not None and flag_filter != '*':
+                    queryset = queryset.filter(flag=flag)
+
+                if start_date is not None and end_date is not None:
+                    queryset = queryset.filter(created_date__range=(start_date, end_date))
+
+                if position_filter is not None and position_filter != '*':
+                    queryset = queryset.filter(position_id=position_filter)
+
+                if sector_filter is not None and position_filter != '*':
+                    queryset = queryset.filter(sector_id=sector_filter)
+
                 lgo = []
-                for l in lg:
+                for l in queryset:
                     obj = {
                         'customer': l.customer,
                         'subject': l.subject,
@@ -83,10 +126,11 @@ def api_interface(request):
                         'date': l.created_date,
                         'time': l.created_time,
                         'company': l.company,
-                        'position': l.position,
+                        'position': l.position.name,
                         'email': l.email,
-                        'sector': l.sector,
-                        'success':l.success
+                        'sector': l.sector.name,
+                        'success': l.success,
+                        'phone':l.phone
                     }
                     lgo.append(obj)
 
@@ -191,6 +235,39 @@ def api_interface(request):
                 success_response['message'] = "EMAILS LOG"
                 response = success_response
 
+            elif module == 'sector':
+                key = data.get('key', '*')
+                arr = []
+                if key == '*':
+                    sectors = Sector.objects.all().order_by('name')
+                else:
+                    sectors = Sector.objects.get(pk=key)
+
+                for sector in sectors:
+                    arr.append(sector.ob())
+
+                success_response['message'] = arr
+
+                response = success_response
+
+            elif module == 'position':
+                key = data.get('key', '*')
+                arr = []
+                if key == '*':
+                    positions = Positions.objects.all().order_by('name')
+                else:
+                    positions = Positions.objects.get(pk=key)
+
+                for position in positions:
+                    arr.append(position.ob())
+
+                success_response['message'] = arr
+
+                response = success_response
+
+
+            else:
+                response = {'message': 'NO MODULE FOUND', 'status_code': 404}
 
     except Exception as e:
         error_type, error_instance, traceback = sys.exc_info()

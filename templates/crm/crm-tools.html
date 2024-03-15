@@ -1,0 +1,104 @@
+{% extends 'crm/base.html' %}
+{% load static %}
+
+{% block crm %}
+
+    <div class="card-body p-2">
+        <div class="row h-50 overflow-hidden">
+            <div class="col-sm-4 py-1 h-100 overflow-hidden">
+                <div class="card shadow-none border border-primary h-100">
+                    <div class="card-header">
+                        <div class="w-100 d-flex">
+                            <div class="w-50"><strong class="card-title">Sectors</strong></div>
+                            <div class="w-50 d-flex flex-wrap justify-content-end">
+                                <button onclick="crm.newSectorScreen()" class="btn btn-sm btn-primary"><i class="fa fa-plus"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body p-1 overflow-auto">
+                        <div class="table-responsive">
+                            <table class="table table-sm table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Section</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="sectors">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-4 py-1 h-100 overflow-hidden">
+                <div class="card shadow-none h-100 border border-info overflow-hidden">
+                    <div class="card-header">
+                        <div class="w-100 d-flex">
+                            <div class="w-50"><strong class="card-title">Positions</strong></div>
+                            <div class="w-50 d-flex flex-wrap justify-content-end">
+                                <button onclick="crm.newPositionScreen()" class="btn btn-sm btn-info"><i class="fa fa-plus"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body p-1 overflow-auto">
+                        <div class="table-responsive">
+                            <table class="table table-sm table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Position</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="position">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+
+        function loadSectors(){
+            let sectors = crm.getSector('*');
+            if(anton.IsRequest(sectors)){
+                let secs = sectors['message'];
+                let tr = ``;
+                for (let i = 0; i < secs.length; i++) {
+                    let sec = secs[i]
+                    tr += `<tr><td colspan="2">${sec['name']}</td></tr>`
+                }
+
+                $('#sectors').html(tr)
+            } else {
+                kasa.response(sectors)
+            }
+        }
+
+        function loadPositions(){
+            let positions = crm.getPosition('*');
+            if(anton.IsRequest(positions)){
+                let poss = positions['message'];
+                let tr = ``;
+                for (let p = 0; p < poss.length; p++) {
+                    let pos = poss[p]
+                    tr += `<tr><td colspan="2">${pos['name']}</td></tr>`
+                }
+
+                $('#position').html(tr)
+            } else {
+                kasa.response(positions)
+            }
+        }
+
+        loadSectors()
+        loadPositions()
+
+
+    </script>
+{% endblock %}

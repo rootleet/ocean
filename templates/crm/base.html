@@ -72,6 +72,8 @@
     <script src="{% static 'general/js/classes/anton.js' %}"></script>
     <script src="{% static 'general/js/classes/cmms_cust.js' %}"></script>
     <script src="{% static 'general/js/classes/modal.js' %}"></script>
+    <script src="{% static 'general/js/classes/form.js' %}"></script>
+
 
 
   <script>
@@ -100,7 +102,7 @@
                         
                     </div>
                 </div>
-                <div class="footer" id="g_footer"></div>
+                <div class="modal-footer" id="g_footer"></div>
             </div>
         </div>
     </div>
@@ -510,7 +512,13 @@
     {% if user.is_superuser %}
       <li class="nav-item">
         <a class="nav-link collapsed" href="{% url 'crm_users' %}">
-          <i class="bi bi-tools"></i><span>USERS</span>
+          <i class="fa fa-user mr-2"></i> <span>USERS</span>
+        </a>
+      </li>
+
+        <li class="nav-item">
+        <a class="nav-link collapsed" href="{% url 'crm_tools' %}">
+          <i class="bi bi-tools"></i><span>Tools</span>
         </a>
       </li>
 

@@ -6,6 +6,42 @@ def get_username_on_delete(user):
     return user.username if user else None
 
 
+class Sector(models.Model):
+    name = models.CharField(max_length=255, unique=True)
+    owner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    is_active = models.BooleanField(default=True)
+
+    created_on = models.DateTimeField(auto_now_add=True)
+    updated_on = models.DateTimeField(auto_now=True)
+
+    def ob(self):
+        return {
+            'pk':self.pk,
+            'name': self.name,
+            'owner': self.owner.get_full_name(),
+            'is_active': self.is_active,
+            'created_on': self.created_on
+        }
+
+
+class Positions(models.Model):
+    name = models.CharField(max_length=255, unique=True)
+    owner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    is_active = models.BooleanField(default=True)
+
+    created_on = models.DateTimeField(auto_now_add=True)
+    updated_on = models.DateTimeField(auto_now=True)
+
+    def ob(self):
+        return {
+            'pk': self.pk,
+            'name': self.name,
+            'owner': self.owner.get_full_name(),
+            'is_active': self.is_active,
+            'created_on': self.created_on
+        }
+
+
 # Create your models here.
 class Logs(models.Model):
     customer = models.TextField(null=False, blank=False)
@@ -17,9 +53,10 @@ class Logs(models.Model):
     created_date = models.DateField(auto_now_add=True)
     created_time = models.TimeField(auto_now_add=True)
     company = models.TextField(blank=True)
-    position = models.TextField(blank=True)
+    position = models.ForeignKey(Positions, on_delete=models.SET_NULL, null=True)
     email = models.TextField(blank=True)
-    sector = models.TextField(blank=True)
+    sector = models.ForeignKey(Sector, on_delete=models.SET_NULL, null=True, blank=True)
+
 
 
 class CrmUsers(models.Model):
