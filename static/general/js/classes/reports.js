@@ -410,7 +410,7 @@ class Reports {
                         <td>${row['email']}</td>
                         <td>${row['subject']}</td>
                         <td>${row['success']}</td>
-                        <td><i onclick="amodal.setBodyHtml('${row['detail']}');amodal.show()" class="fa fa-eye text-info pointer"></i></td>
+                        <td><i onclick='amodal.setBodyHtml("${row['detail']}");amodal.show()' class="fa fa-eye text-info pointer"></i></td>
                         
                     </tr>
                     

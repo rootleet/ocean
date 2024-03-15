@@ -156,6 +156,7 @@ def api_interface(request):
                     owner = own.user
                     us_logs = Logs.objects.filter(owner=owner, created_date=today)
                     l_count = us_logs.count()
+
                     tr += (f'<tr><td style="border: 1px solid black;">{owner.first_name} {owner.last_name}</td><td '
                            f'style="border: 1px solid black;">{l_count}</tr></tr>')
                     if l_count > 0:
@@ -169,17 +170,18 @@ def api_interface(request):
                         sheet['C1'] = "POSITION"
                         sheet['D1'] = "PHONE"
                         sheet['E1'] = "EMAIL"
-                        sheet['F1'] = "FLAG"
+                        sheet['F1'] = "Success"
                         sheet['G1'] = "DETAILS"
 
                         x_row = 2
                         for lg in us_logs:
+                            print(lg)
                             comp_name = lg.company
                             contact_person = lg.customer
-                            position = lg.position
+                            position = lg.position.name
                             phone = lg.phone
                             email = lg.email
-                            flag = lg.flag
+                            flag = lg.success
                             detail = lg.description
 
                             sheet[f'A{x_row}'] = comp_name
@@ -205,6 +207,7 @@ def api_interface(request):
                 # add to emails
                 body = f'<table><tr><th style="border: 1px solid black;">USER</th><th style="border: 1px solid ' \
                        f'black;">LOGS</th></td>{tr}</table>'
+                print(tr)
                 cc = "uyinsolomon2@gmail.com,solomon@snedaghana.com"
                 # Emails(sent_from='crm@snedaghana.com', sent_to='bharat@snedaghana.com',
                 #        subject=f"CRM REPORTS ON {today}",
@@ -221,13 +224,7 @@ def api_interface(request):
                     subject=f"CRM REPORTS ON {today}",
                     cc=cc
                 ).save()
-                mail = MailQueues.objects.get(
-                    sender=MailSenders.objects.get(is_default=1),
-                    recipient='solomon@snedaghana.com',
-                    body=body,
-                    subject=f"CRM REPORTS ON {today}",
-                    cc=cc
-                )
+                mail = MailQueues.objects.all().last()
                 for attchment in attc.split(','):
                     if len(attchment) > 0:
                         MailAttachments(mail=mail, attachment=attchment).save()
