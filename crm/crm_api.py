@@ -7,6 +7,7 @@ from django.http import JsonResponse
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 
+from admin_panel.anton import make_md5_hash
 from admin_panel.models import Emails, MailQueues, MailSenders, MailAttachments, Reminder
 from crm.models import Logs, CrmUsers, Sector, Positions, FollowUp
 
@@ -194,7 +195,8 @@ def api_interface(request):
                         sheet_row += 1
 
                     # save file
-                    file_name = f'static/general/tmp/crm_report.xlsx'
+                    nn = make_md5_hash(datetime.now())
+                    file_name = f'static/general/tmp/crm_report_{nn}.xlsx'
                     book.save(file_name)
                     lgo = file_name
 

@@ -375,6 +375,8 @@ class Reports {
                     //console.table(uss)
                     // console.table(poss)
                     // console.table(secs)
+                    $('#start_date').val(first_of_month)
+                    $('#end_date').val(today)
 
                     amodal.show()
                 } else{kasa.response(users)}
@@ -383,48 +385,70 @@ class Reports {
         } else{kasa.response(sectors)}
 
     }
-    crmLogs(){
+    crmLogs(doc='JSON'){
         let fields = ['owner','flag','start_date','end_date','position','sector'];
         if(anton.validateInputs(fields)){
+            let inputs = anton.Inputs(fields);
+            inputs['doc'] = doc
             let payload = {
                 module:'log',
-                data:anton.Inputs(fields)
+                data:inputs
             }
 
             let log_response = api.call('VIEW',payload,'/crm/api/');
             if(anton.IsRequest(log_response)){
                 let logs = log_response['message'];
-                let header = ['COMPANY','SECTOR','PERSON','POSITION','DATE','PHONE','EMAIL','SUBJECT','STATUS','ACTION'];
-                let tr = '';
-                for(let lr = 0; lr < logs.length; lr ++){
-                    let row = logs[lr]
-                    tr += `
-                    
-                    <tr>
-                        <td>${row['company']}</td>
-                        <td>${row['sector']}</td>
-                        <td>${row['customer']}</td>
-                        <td>${row['position']}</td>
-                        <td>${row['date']}</td>
-                        <td>${row['phone']}</td>
-                        <td>${row['email']}</td>
-                        <td>${row['subject']}</td>
-                        <td>${row['success']}</td>
-                        <td><i onclick='amodal.setBodyHtml("${row['detail']}");amodal.show()' class="fa fa-eye text-info pointer"></i></td>
+                if(doc === 'JSON'){
+                    let header = ['COMPANY','SECTOR','PERSON','POSITION','DATE','PHONE','EMAIL','SUBJECT','STATUS','ACTION'];
+                    let tr = '';
+                    for(let lr = 0; lr < logs.length; lr ++){
+                        let row = logs[lr]
+                        tr += `
                         
-                    </tr>
-                    
-                    `
+                        <tr>
+                            <td>${row['company']}</td>
+                            <td>${row['sector']}</td>
+                            <td>${row['customer']}</td>
+                            <td>${row['position']}</td>
+                            <td>${row['date']}</td>
+                            <td>${row['phone']}</td>
+                            <td>${row['email']}</td>
+                            <td>${row['subject']}</td>
+                            <td>${row['success']}</td>
+                            <td><i onclick='amodal.setBodyHtml("${row['detail']}");amodal.show()' class="fa fa-eye text-info pointer"></i></td>
+                            
+                        </tr>
+                        
+                        `
+                    }
+                    let tit = `
+                        <div class="w-100 d-flex">
+                            <div class="w-50"><strong class="card-title">CRM Logs Report</strong></div>
+                            <div class="w-50 d-flex flex wrap">
+                                <input type="hidden" id="sector" value="${inputs['sector']}">
+                                <input type="hidden" id="flag" value="${inputs['flag']}">
+                                <input type="hidden" id="start_date" value="${inputs['start_date']}">
+                                <input type="hidden" id="end_date" value="${inputs['end_date']}">
+                                <input type="hidden" id="position" value="${inputs['position']}">
+                                <input type="hidden" id="owner" value="${inputs['owner']}">
+                                <button onclick="reports.crmLogs('excel')" class="btn btn-sm btn-info">Export Excel</button>
+                            </div>
+                        </div>
+                    `;
+                    reports.render(header,tr,tit);
+                    amodal.hide()
+                } else if (doc === 'excel'){
+                    kasa.html(`Download <a href="/${logs}" target="_blank">Report</a>`)
                 }
 
-                reports.render(header,tr);
-                amodal.hide()
+
                 console.table(logs)
             } else {kasa.response(log_response)}
         } else {
             kasa.error("Invalid Form")
         }
     }
+
 
 }
 
