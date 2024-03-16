@@ -517,6 +517,7 @@
       </li>
 
     {% if user.is_superuser %}
+        <hr>
       <li class="nav-item">
         <a class="nav-link collapsed" href="{% url 'crm_users' %}">
           <i class="bi bi-person-rolodex"></i> <span>USERS</span>
@@ -557,7 +558,7 @@
   <main id="main" class="main">
 
     <div class="pagetitle">
-      <h1>{{ page.title }}</h1>
+{#      <h1>{{ page.title }}</h1>#}
       <nav>
         {# <ol class="breadcrumb">#}
           {# <li class="breadcrumb-item"><a href="index.html">Home</a></li>#}

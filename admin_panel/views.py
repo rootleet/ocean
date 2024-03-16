@@ -2540,3 +2540,16 @@ def set_department(request):
     add_on.department = deptmt
     add_on.save()
     return redirect('all-users')
+
+@csrf_exempt
+def log500(request):
+    if request.method == 'POST':
+        form = request.POST
+        print(form)
+        path = form['path']
+        what = form['what']
+
+        from admin_panel.models import  Log500
+        Log500(path=path, what=what).save()
+        messages.success(request, "Page Error has been reported")
+        return redirect('home')

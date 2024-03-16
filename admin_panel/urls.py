@@ -119,6 +119,7 @@ urlpatterns = [
     path('adapi/', admin_api.index, name='adapi'),
 
     path('evat/',views.evat_keys,name='evat_keys'),
+    path('log-500/',views.log500,name='log_500')
 
 
 ]

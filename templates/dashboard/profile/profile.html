@@ -2,39 +2,38 @@
 {% load static %}
 
 {% block body %}
-    <div class="card-header"><a style="width: fit-content" href="{% url 'home' %}" class="btn btn-info">HOME</a></div>
-    <div class="card-body p-2">
-        <div class="container-fluid h-100 p-2">
+    <div class="card-body overflow-auto">
+        <div class="container-fluid overflow-auto p-2">
 
-            <div class="row h-100 overflow-auto">
-                <div class="col-xl-4 h-100 overflow-auto">
+            <div class="jumbotron py-5 d-flex flex-wrap align-content-center text-center bg-dark">
 
-                  <div class="profile-card pt-4 d-flex flex-column align-items-center">
-
-                      <div style="height: 200px; width: 200px" class="mx-auto overflow-hidden rounded-circle shadow text-center">
-                          {% if ad_on.profile_pic %}
-                            <img src="{{ ad_on.profile_pic.url }}" alt="Profile" class="rounded-circle img-thumbnail shadow img-fluid">
-                          {% else %}
-                              <img src="{% static 'assets/img/users/user_sm.png' %}" class="img-fluid w-100" alt="Profile">
-                          {% endif %}
-                      </div>
-                        <hr>
-                      <h2>{{ user.first_name }} {{ user.last_name }}</h2>
-                      <h3>{{ user.position }}</h3>
-                      <div class="social-links mt-2">
+                <div class="w-100 d-flex flex-wrap justify-content-center">
+                    <div style="height: 150px; width: 150px" class="mx-auto overflow-hidden rounded-circle shadow text-center">
+                              {% if ad_on.profile_pic %}
+                                <img src="{{ ad_on.profile_pic.url }}" alt="Profile" class="rounded-circle img-thumbnail shadow img-fluid">
+                              {% else %}
+                                  <img src="{{ ad_on.profile_pic.url }}" class="img-fluid w-100" alt="Profile">
+                              {% endif %}
+                    </div>
+                </div>
+                <div class="w-100 text-center">
+                    <h1 class="text-light">{{ user.first_name }} {{ user.last_name }}</h1>
+                    <div class="social-links mt-2">
                         <a href="#" class="twitter"><i class="bi bi-twitter"></i></a>
                         <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
                         <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
                         <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
                       </div>
-                    </div>
-
                 </div>
+            </div>
 
-                <div class="col-xl-8 overflow-auto h-100">
 
-                  <div class="card h-100 overflow-auto">
-                    <div class="card-body overflow-auto pt-3">
+
+
+                <div class="w-100">
+
+
+                    <div class="overflow-auto pt-3">
                       <!-- Bordered Tabs -->
                       <ul class="nav nav-tabs nav-tabs-bordered">
 
@@ -57,7 +56,7 @@
                       </ul>
                       <div class="tab-content pt-2">
 
-                        <div class="tab-pane fade show active profile-overview" id="profile-overview">
+                        <div class="tab-pane container fade show active profile-overview" id="profile-overview">
                           <h5 class="card-title">About Me</h5>
                           <p class="small fst-italic">{{ ad_on.about }}</p>
 
@@ -100,7 +99,7 @@
 
                         </div>
 
-                        <div class="tab-pane fade overflow-auto profile-edit pt-3" id="profile-edit">
+                        <div class="tab-pane container fade profile-edit pt-3" id="profile-edit">
 
                           <!-- Profile Edit Form -->
                           <form method="post" enctype="multipart/form-data" action="{% url 'update_profile' %}">
@@ -183,7 +182,7 @@
 
                         </div>
 
-                        <div class="tab-pane fade pt-3" id="profile-settings">
+                        <div class="tab-pane container fade pt-3" id="profile-settings">
 
                           <!-- Settings Form -->
                           <form method="post" action="{% url 'update_user_settings' %}">
@@ -233,7 +232,7 @@
 
                         </div>
 
-                        <div class="tab-pane fade pt-3" id="profile-change-password">
+                        <div class="tab-pane fade container pt-3" id="profile-change-password">
                           <!-- Change Password Form -->
                           <form>
 
@@ -268,10 +267,8 @@
                       </div><!-- End Bordered Tabs -->
 
                     </div>
-                  </div>
 
                 </div>
-      </div>
 
         </div>
     </div>

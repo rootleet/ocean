@@ -4,34 +4,30 @@
 {% block crm %}
     <div class="card-header">
         <div class="w-100 d-flex">
-            <div class="w-50"></div>
-            <div class="w-50 d-flex flex-wrap justify-content-end">
-                <button onclick="crm.newLog()" style="margin-right: .2rem" class="btn btn-primary">NEW</button>
-                <button onclick="crm.uploadCsvScreen()" style="margin-right: .2rem" class="btn btn-info">UPLOAD</button>
-                {%  if user.request.is_superuser %}
-                <button onclick="crm.generateReports()" class="btn btn-warning">GENERATE REPORT</button>
-                {% endif %}
+            <div class="w-50">
+                <strong class="card-title">Follow Ups</strong>
             </div>
+
         </div>
     </div>
     <div class="card-body overflow-hidden">
 
         <table class="table datatable">
             <thead>
-                <tr>
+                <tr >
                     <th>COMPANY</th><th>PERSON</th><th>CONTACT</th><th>DATE</th><th>FLAG</th><th>action</th>
                 </tr>
             </thead>
             <tbody>
                 {% for log in logs %}
-                    <tr>
+                    <tr class="{% if log.daypass %}text-danger{% endif %}">
                         <td>
                             <small>{{ log.log.company }}</small><br>
                             <small>{{ log.log.sector.name }}</small>
                         </td>
                         <td><small>{{ log.log.customer }} <br>{{ log.log.position.name }}</small></td>
                         <td><i class="bx bx-phone"></i> <small>{{ log.log.phone }}</small> <br> <i class="bx bxs-inbox"></i> <small>{{ log.log.email }}</small></td>
-                        <td><small>{{ log.log.created_date }}</small> <br><small>{{ log.log.created_time }}</small></td>
+                        <td><small class="bi bi-list-check"> {{ log.log.created_date }}</small> <br><small class="bi bi-broadcast"> {{ log.follow_date }}</small></td>
                         <td><i class="text-{{ log.log.success }}">{{ log.log.success }}</i></td>
                         <td><i onclick="Swal.fire({title:`{{ log.log.subject }}`,
                         text:`{{ log.log.description }}`

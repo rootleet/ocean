@@ -508,7 +508,7 @@ class Departments(models.Model):
 
 class UserAddOns(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    about = models.TextField()
+    about = models.TextField(default='None')
     company = models.TextField()
     position = models.TextField()
     country = models.TextField()
@@ -787,3 +787,11 @@ class EvatCredentials(models.Model):
             return 'INACTIVE'
         else:
             return 'UNKNOWN'
+
+
+class Log500(models.Model):
+
+    path = models.TextField()
+    what = models.TextField()
+    created_date = models.DateField(auto_now_add=True)
+    created_time = models.TimeField(auto_now_add=True)

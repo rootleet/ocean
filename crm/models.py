@@ -1,5 +1,8 @@
+import datetime
+
 from django.contrib.auth.models import User
 from django.db import models
+from django.utils import timezone
 
 
 def get_username_on_delete(user):
@@ -60,13 +63,19 @@ class Logs(models.Model):
 
 class FollowUp(models.Model):
     log = models.ForeignKey(Logs, on_delete=models.CASCADE, null=False, blank=False)
-    owner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=False,related_name='follow_up_user')
+    owner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=False, related_name='follow_up_user')
     follow_date = models.DateField(null=False, blank=False)
 
     is_open = models.BooleanField(default=True)
 
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
+
+    def daypass(self):
+        if self.follow_date <= datetime.date.today():
+            return True
+        else:
+            return False
 
 
 class CrmUsers(models.Model):

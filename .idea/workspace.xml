@@ -4,20 +4,20 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ffcbf13e-d396-4071-9a24-4014a690f966" name="Changes" comment="CRM Logs are done successfuly, logs are generated for previeing">
+    <list default="true" id="ffcbf13e-d396-4071-9a24-4014a690f966" name="Changes" comment="CMMS logs patched with reminders">
       <change afterPath="$PROJECT_DIR$/static/attachments/DADDY_DADDY_CRM_REPORT_2024_03_15_16_48_03.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/crm/follow.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/uploads/users/Alormenu.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/500.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/admin_panel/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/admin_panel/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/crm/crm_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/crm/crm_api.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/admin_panel/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/admin_panel/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/admin_panel/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/admin_panel/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/crm/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/crm/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/crm/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/crm/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/crm/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/crm/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/general/js/classes/crm.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/general/js/classes/crm.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/general/js/classes/form.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/general/js/classes/form.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/general/js/classes/modal.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/general/js/classes/modal.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ocean/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/ocean/settings.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/crm/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/crm/base.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/crm/follow.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/crm/follow.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/crm/logs.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/crm/logs.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/dashboard/profile/profile.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/dashboard/profile/profile.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -72,43 +72,43 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;ASKED_MARK_IGNORED_FILES_AS_EXCLUDED&quot;: &quot;true&quot;,
-    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
-    &quot;Django Server.DJANGO.executor&quot;: &quot;Run&quot;,
-    &quot;Docker.Docker Image.executor&quot;: &quot;Run&quot;,
-    &quot;Docker.Dockerfile.executor&quot;: &quot;Run&quot;,
-    &quot;Notification.DisplayName-DoNotAsk-JavaScript: Code Vision Performance&quot;: &quot;JavaScript: code vision performance watcher&quot;,
-    &quot;Notification.DoNotAsk-JavaScript: Code Vision Performance&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.OpenDjangoStructureViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;django.template.preview.state&quot;: &quot;SHOW_EDITOR_AND_PREVIEW&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/reza/Documents/GitHub/ocean/templates&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "ASKED_MARK_IGNORED_FILES_AS_EXCLUDED": "true",
+    "DefaultHtmlFileTemplate": "HTML File",
+    "Django Server.DJANGO.executor": "Run",
+    "Docker.Docker Image.executor": "Run",
+    "Docker.Dockerfile.executor": "Run",
+    "Notification.DisplayName-DoNotAsk-JavaScript: Code Vision Performance": "JavaScript: code vision performance watcher",
+    "Notification.DoNotAsk-JavaScript: Code Vision Performance": "true",
+    "RunOnceActivity.OpenDjangoStructureViewOnStart": "true",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "django.template.preview.state": "SHOW_EDITOR_AND_PREVIEW",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "C:/Users/reza/Documents/GitHub/ocean",
+    "node.js.detected.package.eslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "vue.rearranger.settings.migration": "true"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;DatabaseDriversLRU&quot;: [
-      &quot;mysql&quot;
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "mysql"
     ]
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\reza\Documents\GitHub\ocean" />
       <recent name="C:\Users\reza\Documents\GitHub\ocean\templates" />
       <recent name="C:\Users\reza\Documents\GitHub\ocean\static\general\img" />
       <recent name="C:\Users\reza\Documents\GitHub\ocean\cronjobs" />
       <recent name="C:\Users\reza\Documents\GitHub\ocean\maintainance" />
-      <recent name="C:\Users\reza\Documents\GitHub\ocean\cronjobs\retail" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\reza\Documents\GitHub\ocean\templates\retail" />
@@ -448,15 +448,7 @@
       <workItem from="1710246475882" duration="1914000" />
       <workItem from="1710280210457" duration="13428000" />
       <workItem from="1710505478328" duration="3068000" />
-      <workItem from="1710518469871" duration="13935000" />
-    </task>
-    <task id="LOCAL-00121" summary="Maintaiance done">
-      <option name="closed" value="true" />
-      <created>1703104185227</created>
-      <option name="number" value="00121" />
-      <option name="presentableId" value="LOCAL-00121" />
-      <option name="project" value="LOCAL" />
-      <updated>1703104185228</updated>
+      <workItem from="1710518469871" duration="24074000" />
     </task>
     <task id="LOCAL-00122" summary="auto close jobs">
       <option name="closed" value="true" />
@@ -842,7 +834,15 @@
       <option name="project" value="LOCAL" />
       <updated>1710522702502</updated>
     </task>
-    <option name="localTasksCounter" value="170" />
+    <task id="LOCAL-00170" summary="CMMS logs patched with reminders">
+      <option name="closed" value="true" />
+      <created>1710590837291</created>
+      <option name="number" value="00170" />
+      <option name="presentableId" value="LOCAL-00170" />
+      <option name="project" value="LOCAL" />
+      <updated>1710590837291</updated>
+    </task>
+    <option name="localTasksCounter" value="171" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -865,7 +865,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="auto close jobs" />
     <MESSAGE value="auto close cronjobe" />
     <MESSAGE value="update the sents" />
     <MESSAGE value="take away sms" />
@@ -890,7 +889,8 @@
     <MESSAGE value="add 404, and run app with insecure" />
     <MESSAGE value="update retail perissions" />
     <MESSAGE value="CRM Logs are done successfuly, logs are generated for previeing" />
-    <option name="LAST_COMMIT_MESSAGE" value="CRM Logs are done successfuly, logs are generated for previeing" />
+    <MESSAGE value="CMMS logs patched with reminders" />
+    <option name="LAST_COMMIT_MESSAGE" value="CMMS logs patched with reminders" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
