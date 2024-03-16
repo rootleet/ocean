@@ -16,7 +16,7 @@ class Sector(models.Model):
 
     def ob(self):
         return {
-            'pk':self.pk,
+            'pk': self.pk,
             'name': self.name,
             'owner': self.owner.get_full_name(),
             'is_active': self.is_active,
@@ -57,6 +57,16 @@ class Logs(models.Model):
     email = models.TextField(blank=True)
     sector = models.ForeignKey(Sector, on_delete=models.SET_NULL, null=True, blank=True)
 
+
+class FollowUp(models.Model):
+    log = models.ForeignKey(Logs, on_delete=models.CASCADE, null=False, blank=False)
+    owner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=False,related_name='follow_up_user')
+    follow_date = models.DateField(null=False, blank=False)
+
+    is_open = models.BooleanField(default=True)
+
+    created_on = models.DateTimeField(auto_now_add=True)
+    updated_on = models.DateTimeField(auto_now=True)
 
 
 class CrmUsers(models.Model):

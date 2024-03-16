@@ -73,6 +73,7 @@
     <script src="{% static 'general/js/classes/cmms_cust.js' %}"></script>
     <script src="{% static 'general/js/classes/modal.js' %}"></script>
     <script src="{% static 'general/js/classes/form.js' %}"></script>
+    <script src="{% static 'general/js/classes/crm.js' %}"></script>
 
 
 
@@ -505,14 +506,20 @@
 {#      </li>#}
     <li class="nav-item">
         <a class="nav-link collapsed" href="{% url 'crm' %}">
-          <i class="bi bi-tools"></i><span>LOGS</span>
+          <i class="bi bi-list-check"></i><span>LOGS </span><span class="badge bg-info">{{ mylogcount }}</span>
+        </a>
+      </li>
+
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="{% url 'follows' %}">
+          <i class="bi bi-broadcast"></i><span>Follow Up </span><span class="badge bg-info">{{ mylogcount }}</span>
         </a>
       </li>
 
     {% if user.is_superuser %}
       <li class="nav-item">
         <a class="nav-link collapsed" href="{% url 'crm_users' %}">
-          <i class="fa fa-user mr-2"></i> <span>USERS</span>
+          <i class="bi bi-person-rolodex"></i> <span>USERS</span>
         </a>
       </li>
 

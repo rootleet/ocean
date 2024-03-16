@@ -7,8 +7,8 @@ from django.http import JsonResponse
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 
-from admin_panel.models import Emails, MailQueues, MailSenders, MailAttachments
-from crm.models import Logs, CrmUsers, Sector, Positions
+from admin_panel.models import Emails, MailQueues, MailSenders, MailAttachments, Reminder
+from crm.models import Logs, CrmUsers, Sector, Positions, FollowUp
 
 
 @csrf_exempt
@@ -57,9 +57,35 @@ def api_interface(request):
                      owner=User.objects.get(pk=mypk),
                      company=company, position_id=position, email=email, sector_id=sector,
                      created_date=created_date).save()
+                saved_log = Logs.objects.filter(
+                    description=description, success=flag, customer=name, phone=phone, subject=subject,
+                    owner=User.objects.get(pk=mypk),
+                    company=company, position_id=position, email=email, sector_id=sector,
+                    created_date=created_date
+                ).last().pk
 
-                success_response['message'] = "Logged"
+                success_response['message'] = saved_log
                 response = success_response
+
+            elif module == 'follow_up':
+                print(data)
+                log = data.get('log')
+                mypk = data.get('mypk')
+                follow_date = data.get('follow_date')
+
+                lg = Logs.objects.get(pk=log)
+                owner = User.objects.get(pk=mypk)
+
+                FollowUp(log=lg, owner=owner, follow_date=follow_date).save()
+
+                # add reminder
+                Reminder(title="Customer Follow Up", message=f"Follow up with {lg.customer} about {lg.subject}",
+                         rem_date=follow_date, rem_time="08:30:00", owner=owner, read_only=True).save()
+
+                success_response['message'] = "Follow Up Added"
+                response = success_response
+
+
             elif module == 'add_user':
                 us_pk = data.get('user')
                 us = User.objects.get(pk=us_pk)
@@ -89,6 +115,7 @@ def api_interface(request):
                 from django.db.models import Q
                 from datetime import datetime
 
+                doc = data.get('doc', 'JSON')
                 # Define your filters
                 owner_filter = data.get('owner',
                                         '*')  # Replace "owner_name" with the actual owner name you want to filter on
@@ -96,8 +123,8 @@ def api_interface(request):
                 flag = False
                 if flag_filter == 'success':
                     flag = True
-                start_date = data.get('start_date',None)  # Replace with your start date
-                end_date = data.get('end_date',None)  # Replace with your end date
+                start_date = data.get('start_date', None)  # Replace with your start date
+                end_date = data.get('end_date', None)  # Replace with your end date
                 position_filter = data.get('position')  # Replace None with the actual position you want to filter on
                 sector_filter = data.get('sector')  # Replace None with the actual sector you want to filter on
 
@@ -118,21 +145,58 @@ def api_interface(request):
                     queryset = queryset.filter(sector_id=sector_filter)
 
                 lgo = []
-                for l in queryset:
-                    obj = {
-                        'customer': l.customer,
-                        'subject': l.subject,
-                        'detail': l.description,
-                        'date': l.created_date,
-                        'time': l.created_time,
-                        'company': l.company,
-                        'position': l.position.name,
-                        'email': l.email,
-                        'sector': l.sector.name,
-                        'success': l.success,
-                        'phone':l.phone
-                    }
-                    lgo.append(obj)
+                if doc == 'JSON':
+                    for l in queryset:
+                        obj = {
+                            'customer': l.customer,
+                            'subject': l.subject,
+                            'detail': l.description,
+                            'date': l.created_date,
+                            'time': l.created_time,
+                            'company': l.company,
+                            'position': l.position.name,
+                            'email': l.email,
+                            'sector': l.sector.name,
+                            'success': l.success,
+                            'phone': l.phone
+                        }
+
+                        lgo.append(obj)
+                elif doc == 'excel':
+                    import openpyxl
+                    book = openpyxl.Workbook()
+                    sheet = book.active
+                    sheet.title = "CRM Report"
+
+                    sheet["A1"] = "Company"
+                    sheet["B1"] = "Sector"
+                    sheet['C1'] = "Contact Person"
+                    sheet['D1'] = "Position"
+                    sheet['E1'] = "Entry Date"
+                    sheet['F1'] = "Phone"
+                    sheet['G1'] = 'Email'
+                    sheet['H1'] = "Subject"
+                    sheet['I1'] = "Statue"
+                    sheet['J1'] = "Response"
+
+                    sheet_row = 2
+                    for log in queryset:
+                        sheet[f"A{sheet_row}"] = log.company
+                        sheet[f"B{sheet_row}"] = log.sector.name
+                        sheet[f"C{sheet_row}"] = log.customer
+                        sheet[f"D{sheet_row}"] = log.position.name
+                        sheet[f"E{sheet_row}"] = log.created_date
+                        sheet[f"F{sheet_row}"] = log.phone
+                        sheet[f"G{sheet_row}"] = log.email
+                        sheet[f"H{sheet_row}"] = log.subject
+                        sheet[f"I{sheet_row}"] = log.success
+                        sheet[f"J{sheet_row}"] = log.description
+                        sheet_row += 1
+
+                    # save file
+                    file_name = f'static/general/tmp/crm_report.xlsx'
+                    book.save(file_name)
+                    lgo = file_name
 
                 success_response['message'] = lgo
                 response = success_response

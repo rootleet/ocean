@@ -1,4 +1,16 @@
 class Crm {
+    newScreen(){
+        let html = `
+            <div class="container"><div class="row" style="height: 20vh">
+                <div class="col-sm-6"><button class="btn btn-outline-info w-100 h-100">Follow Up</button></div>
+                <div class="col-sm-6"><button onclick="crm.newLog()" class="btn btn-outline-success w-100 h-100">New Response</button></div>
+            </div></div>
+        `
+
+        pop.setTitleText("Customer Response")
+        pop.setBodyHtml(html)
+        pop.show()
+    }
     newLog(){
         let form = '';
         let sectors = this.getSector('*');
@@ -22,17 +34,45 @@ class Crm {
                 }
 
                 // create form now
-                form += fom.select('sector',sec_options,'',true);
-                form += fom.input('text','company_name','',true);
-                form += fom.input('text','contact_person','',true);
-                form += fom.select('position',post_options,'',true);
-                form += fom.text('phone','',true);
-                form += fom.email('email','',true);
-                form += fom.text('subject','',true);
-                form += fom.select('flag',`
+                let sector = fom.select('sector',sec_options,'',true);
+                let comp_name = fom.input('text','company_name','',true);
+                let secomp = `<div class="row">
+                                        <div class="col-sm-6">${sector}</div><div class="col-sm-6">${comp_name}</div>
+                                    </div><hr>`
+
+                let cont_per = fom.input('text','contact_person','',true);
+                let pos = fom.select('position',post_options,'',true);
+                let phone = fom.text('phone','',true);
+                let email = fom.email('email','',true);
+                let contact = `
+                    <div class="row">
+                        <div class="col-sm-6">${cont_per}</div><div class="col-sm-6">${pos}</div>
+                        <div class="col-sm-6">${phone}</div><div class="col-sm-6">${email}</div>
+                    </div><hr>
+                `
+                form += secomp;
+                form += contact;
+                //form += fom.select('sector',sec_options,'',true);
+                //form += fom.input('text','company_name','',true);
+                //form += fom.input('text','contact_person','',true);
+                //form += fom.select('position',post_options,'',true);
+                let flag = `<label class="text-info" for="flag">FLAG </label>
+                <select id="flag" onchange="followUpCheck()" name="flag" class="form-control mb-2 rounded-0"><
                                     <option>Select Flag</option>
                                     <option value="success">Success</option>
-                                    <option value="unreachable">Unreachable</option>`,true);
+                                    <option value="unreachable">Unreachable</option></select>`;
+
+                console.log(flag)
+                let f_date = `<div id="f_date"></div>`
+
+                let ff = `
+                    <div class="row"><div class="col-sm-6">${flag}</div><div class="col-sm-6">${f_date}</div></div><hr>
+                `
+
+                form += ff;
+
+
+                form += fom.text('subject','',true);
                 form += fom.textarea('details',5,true);
 
                 amodal.setTitleText("New Log");
@@ -387,11 +427,55 @@ class Crm {
     saveNewLog(){
         let fields = ['sector','company_name','contact_person','position','phone','email','subject','flag','details','mypk'];
         if(anton.validateInputs(fields)){
-            let payload = {
-                module:'log',
-                data:anton.Inputs(fields)
-            };
-            kasa.confirm(api.call('PUT',payload,'/crm/api/')['message'],1,'here')
+            let inputs = anton.Inputs(fields);
+            let errors = 0;
+            let error_message = '';
+            // validate dates
+            if(inputs['flag'] !== 'success'){
+                // validate follow-up date
+                if(anton.validateInputs(['follow_up_date'])){
+
+                } else {
+                    errors += 1;
+                    error_message += "Invalid Follow Up Date | "
+                }
+            }
+
+            if(errors === 0){
+                let payload = {
+                    module:'log',
+                    data:inputs
+                };
+                let save_log = api.call('PUT',payload,'/crm/api/');
+                if(anton.IsRequest(save_log)){
+
+
+                    if(inputs['flag'] !== 'success'){
+                        // save follow up
+                        let log = save_log['message'];
+                        let follow_load = {
+                            module:'follow_up',
+                            data:{
+                                log:log,
+                                mypk:$('#mypk').val(),
+                                follow_date:$('#follow_up_date').val()
+                            }
+                        };
+                        let save_follow = api.call('PUT',follow_load,'/crm/api/');
+                        if(anton.IsRequest(save_follow)){
+                            kasa.confirm("Log Saved with follow up and reminder..",1,'here')
+                        } else {
+                            kasa.response(save_follow);
+                        }
+                    } else {
+                        kasa.confirm("Log Saved..",1,'here')
+                    }
+
+                } else {
+                    kasa.response(save_log)
+                }
+            }
+
         } else {
             kasa.error("Invalid Form")
         }

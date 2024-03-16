@@ -743,6 +743,8 @@ class Reminder(models.Model):
     resp_code = models.TextField(default='null')
     resp_message = models.TextField(default='null')
 
+    read_only = models.BooleanField(default=False)
+
 
 class Contacts(models.Model):
     full_name = models.TextField()

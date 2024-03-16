@@ -21,7 +21,8 @@ urlpatterns = [
     path('', views.base, name='crm'),
     path('api/',crm_api.api_interface,name='crm_api'),
     path('users/',views.crm_users,name='crm_users'),
-    path('tools/',views.crm_tools,name='crm_tools')
+    path('tools/',views.crm_tools,name='crm_tools'),
+    path('follow-up/',views.follows,name='follows')
 
 ]
 

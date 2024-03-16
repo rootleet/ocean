@@ -26,15 +26,15 @@
                 {% for log in logs %}
                     <tr>
                         <td>
-                            <small>{{ log.company }}</small><br>
-                            <small>{{ log.sector.name }}</small>
+                            <small>{{ log.log.company }}</small><br>
+                            <small>{{ log.log.sector.name }}</small>
                         </td>
-                        <td><small>{{ log.customer }} <br>{{ log.position.name }}</small></td>
-                        <td><i class="bx bx-phone"></i> <small>{{ log.phone }}</small> <br> <i class="bx bxs-inbox"></i> <small>{{ log.email }}</small></td>
-                        <td><small>{{ log.created_date }}</small> <br><small>{{ log.created_time }}</small></td>
-                        <td><i class="text-{{ log.success }}">{{ log.success }}</i></td>
-                        <td><i onclick="Swal.fire({title:`{{ log.subject }}`,
-                        text:`{{ log.description }}`
+                        <td><small>{{ log.log.customer }} <br>{{ log.log.position.name }}</small></td>
+                        <td><i class="bx bx-phone"></i> <small>{{ log.log.phone }}</small> <br> <i class="bx bxs-inbox"></i> <small>{{ log.log.email }}</small></td>
+                        <td><small>{{ log.log.created_date }}</small> <br><small>{{ log.log.created_time }}</small></td>
+                        <td><i class="text-{{ log.log.success }}">{{ log.log.success }}</i></td>
+                        <td><i onclick="Swal.fire({title:`{{ log.log.subject }}`,
+                        text:`{{ log.log.description }}`
                         })" class="fa fa-eye text-info"></i></td>
                     </tr>
                 {% endfor %}

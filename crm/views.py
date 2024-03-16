@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from django.utils import timezone
 
-from crm.models import Logs, CrmUsers
+from crm.models import Logs, CrmUsers, FollowUp
 
 
 # Create your views here.
@@ -22,6 +22,22 @@ def base(request):
     }
 
     return render(request, 'crm/logs.html', context=context)
+
+
+def follows(request):
+    if request.user.is_superuser:
+        logs = FollowUp.objects.filter(is_open=True).order_by('-pk')
+    else:
+        logs = FollowUp.objects.filter(owner=request.user, is_open=True).order_by('-pk')
+    context = {
+        'nav': True,
+        'page': {
+            'title': "CRM Follow Up",
+        },
+        'logs': logs
+    }
+
+    return render(request, 'crm/follow.html', context=context)
 
 
 def crm_users(request):

@@ -4,22 +4,20 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ffcbf13e-d396-4071-9a24-4014a690f966" name="Changes" comment="update retail perissions">
-      <change afterPath="$PROJECT_DIR$/static/uploads/bsms/2024-03-05_12-44-28/loyalty_customers.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/uploads/bsms/2024-03-05_12-44-28/xxxx.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/uploads/dolphine/2024/03/04/py_excel.zip" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/crm/crm-tools.html" afterDir="false" />
+    <list default="true" id="ffcbf13e-d396-4071-9a24-4014a690f966" name="Changes" comment="CRM Logs are done successfuly, logs are generated for previeing">
+      <change afterPath="$PROJECT_DIR$/static/attachments/DADDY_DADDY_CRM_REPORT_2024_03_15_16_48_03.xlsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/crm/follow.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/admin_panel/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/admin_panel/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/crm/crm_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/crm/crm_api.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/crm/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/crm/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/crm/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/crm/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/crm/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/crm/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/static/general/js/classes/crm.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/general/js/classes/crm.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/general/js/classes/reports.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/general/js/classes/reports.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/general/js/classes/form.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/general/js/classes/form.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/general/js/classes/modal.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/general/js/classes/modal.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/crm/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/crm/base.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/crm/logs.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/crm/logs.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/reports/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/reports/base.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -449,23 +447,8 @@
       <workItem from="1709645172857" duration="875000" />
       <workItem from="1710246475882" duration="1914000" />
       <workItem from="1710280210457" duration="13428000" />
-      <workItem from="1710505478328" duration="2965000" />
-    </task>
-    <task id="LOCAL-00119" summary="Sending servicing to provider">
-      <option name="closed" value="true" />
-      <created>1703082618200</created>
-      <option name="number" value="00119" />
-      <option name="presentableId" value="LOCAL-00119" />
-      <option name="project" value="LOCAL" />
-      <updated>1703082618201</updated>
-    </task>
-    <task id="LOCAL-00120" summary="add service analysis">
-      <option name="closed" value="true" />
-      <created>1703083880284</created>
-      <option name="number" value="00120" />
-      <option name="presentableId" value="LOCAL-00120" />
-      <option name="project" value="LOCAL" />
-      <updated>1703083880284</updated>
+      <workItem from="1710505478328" duration="3068000" />
+      <workItem from="1710518469871" duration="13935000" />
     </task>
     <task id="LOCAL-00121" summary="Maintaiance done">
       <option name="closed" value="true" />
@@ -843,7 +826,23 @@
       <option name="project" value="LOCAL" />
       <updated>1710319170806</updated>
     </task>
-    <option name="localTasksCounter" value="168" />
+    <task id="LOCAL-00168" summary="CRM Logs are done successfuly, logs are generated for previeing">
+      <option name="closed" value="true" />
+      <created>1710508612362</created>
+      <option name="number" value="00168" />
+      <option name="presentableId" value="LOCAL-00168" />
+      <option name="project" value="LOCAL" />
+      <updated>1710508612363</updated>
+    </task>
+    <task id="LOCAL-00169" summary="CRM Logs are done successfuly, logs are generated for previeing">
+      <option name="closed" value="true" />
+      <created>1710522702502</created>
+      <option name="number" value="00169" />
+      <option name="presentableId" value="LOCAL-00169" />
+      <option name="project" value="LOCAL" />
+      <updated>1710522702502</updated>
+    </task>
+    <option name="localTasksCounter" value="170" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -866,7 +865,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="Maintaiance done" />
     <MESSAGE value="auto close jobs" />
     <MESSAGE value="auto close cronjobe" />
     <MESSAGE value="update the sents" />
@@ -891,7 +889,8 @@
     <MESSAGE value="mark price by a mile" />
     <MESSAGE value="add 404, and run app with insecure" />
     <MESSAGE value="update retail perissions" />
-    <option name="LAST_COMMIT_MESSAGE" value="update retail perissions" />
+    <MESSAGE value="CRM Logs are done successfuly, logs are generated for previeing" />
+    <option name="LAST_COMMIT_MESSAGE" value="CRM Logs are done successfuly, logs are generated for previeing" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

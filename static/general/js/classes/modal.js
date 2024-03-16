@@ -54,3 +54,4 @@ class Modal {
 }
 
 const amodal = new Modal()
+const pop = new Modal()
