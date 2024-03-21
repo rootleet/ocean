@@ -358,15 +358,20 @@ def index(request):
                         # get tasks
                         user_tasks = Tasks.objects.filter(owner=user)
                         sheet_count = 2
+                        updt = False
                         for task in user_tasks:
                             title = task.title
                             descr = remove_html_tags(task.description)
                             last_transaction_time = "NO TRANSACTION"
                             last_transaction = "NO TRANSACTION"
+
                             if task.transaction().count() > 0:
                                 transactions = task.transaction().last()
-                                last_transaction = remove_html_tags(transactions.description)
-                                last_transaction_time = transactions.created_date
+                                if not transactions.reported:
+                                    last_transaction = remove_html_tags(transactions.description)
+                                    last_transaction_time = transactions.created_date
+                                    transactions.reported = True
+                                    updt = True
 
                             sheet[f"A{sheet_count}"] = title
                             sheet[f'B{sheet_count}'] = descr
@@ -390,6 +395,8 @@ def index(request):
 
                         workbook.save(file_name)
                         files += f"{file_name1},"
+                        if updt:
+                            transactions.save()
                     response['message'] = files
                     response['status_code'] = 200
                     DepartmentReportMailQue(department=department, files=files).save()

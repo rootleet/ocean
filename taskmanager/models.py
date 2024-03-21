@@ -4,7 +4,6 @@ from django.db import models
 from ocean import settings
 
 
-
 # Create your models here.
 class Tasks(models.Model):
     title = models.TextField()
@@ -56,3 +55,5 @@ class TaskTransactions(models.Model):
     updated_time = models.TimeField(auto_now=True)
     status = models.IntegerField(default=1)  # 1 active, 0 deleted, 2 done
     owner = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True)
+
+    reported = models.BooleanField(default=False)
