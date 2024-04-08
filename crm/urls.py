@@ -22,7 +22,10 @@ urlpatterns = [
     path('api/',crm_api.api_interface,name='crm_api'),
     path('users/',views.crm_users,name='crm_users'),
     path('tools/',views.crm_tools,name='crm_tools'),
-    path('follow-up/',views.follows,name='follows')
+    path('follow-up/',views.follows,name='follows'),
+    path('contacts/',views.contacts,name='crm_contacts'),
+    path('campaigns/',views.campaigns,name='campaigns'),
+    path('campaigns/new/',views.new_campaign,name='new_campaign')
 
 ]
 

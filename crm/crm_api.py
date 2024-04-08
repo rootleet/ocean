@@ -8,8 +8,8 @@ from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 
 from admin_panel.anton import make_md5_hash
-from admin_panel.models import Emails, MailQueues, MailSenders, MailAttachments, Reminder
-from crm.models import Logs, CrmUsers, Sector, Positions, FollowUp
+from admin_panel.models import Emails, MailQueues, MailSenders, MailAttachments, Reminder, Sms, SmsApi
+from crm.models import Logs, CrmUsers, Sector, Positions, FollowUp, Campaigns
 
 
 @csrf_exempt
@@ -85,8 +85,6 @@ def api_interface(request):
 
                 success_response['message'] = "Follow Up Added"
                 response = success_response
-
-
             elif module == 'add_user':
                 us_pk = data.get('user')
                 us = User.objects.get(pk=us_pk)
@@ -110,6 +108,58 @@ def api_interface(request):
                 owner = User.objects.get(pk=own_pk)
                 Positions(owner=owner, name=sector).save()
                 success_response['message'] = "Position added"
+
+            elif module == "campaign":
+                description = data.get('description')
+                email_template = data.get('email_template')
+                sms_template = data.get('sms_template')
+                title = data.get('title')
+                c_type = data.get('type')
+                subject = data.get('subject')
+
+                uni = make_md5_hash(f"{description,email_template,sms_template,title}")
+
+                Campaigns(title=title,type=c_type,description=description,email_template=email_template,sms_template=sms_template,uni=uni).save()
+
+                camp = Campaigns.objects.get(uni=uni)
+
+                tot = 0
+                sms_tot = 0
+                em_tot = 0
+
+                if c_type == 'auto':
+                    tot =+ 1
+                    # populate emails
+                    logs = Logs.objects.all()
+                    for lo in logs:
+                        em = lo.email
+                        tel = lo.phone.replace('+233','0')
+
+                        # Que Email
+                        MailQueues(
+                            sender=MailSenders.objects.get(is_default=1),
+                            recipient=em,
+                            body=email_template,
+                            subject=subject,
+                        ).save()
+                        em_tot =+ 1
+
+                        # que sms
+                        if len(tel) == 10:
+                            Sms(
+                                api=SmsApi.objects.get(is_default=1),
+                                to=tel,
+                                message=sms_template,
+                            ).save()
+                            sms_tot =+ 1
+
+                    success_response['message'] = f"Total: {tot}, Emails Sent: {em_tot}, SMS Sent: {sms_tot}"
+                    response = success_response
+
+
+
+                        
+
 
         elif method == 'VIEW':
             if module == 'log':
@@ -328,6 +378,20 @@ def api_interface(request):
 
                 response = success_response
 
+            elif module == 'contacts':
+                c_type = data.get('type')
+                arr = []
+                # get emails from logs
+                lgs = Logs.objects.all()
+                for lg in lgs:
+                    arr.append({
+                        'first_name': lg.customer.split(' ')[0],
+                        'last_name': lg.customer.split(' ')[-1],
+                        'contact': lg.email if c_type == 'email' else lg.phone
+                    })
+
+                success_response['message'] = arr
+                response = success_response
 
             else:
                 response = {'message': 'NO MODULE FOUND', 'status_code': 404}

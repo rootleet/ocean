@@ -91,3 +91,23 @@ class CrmUsers(models.Model):
 
     def logscount(self):
         return Logs.objects.filter(owner=self.user).count()
+
+
+class Campaigns(models.Model):
+    uni = models.CharField(unique=True, max_length=65)
+    title = models.TextField()
+    type = models.TextField()
+    description = models.TextField()
+    email_template = models.TextField()
+    sms_template = models.TextField()
+    created_on = models.DateTimeField(auto_now_add=True)
+
+
+class CampaignTargets(models.Model):
+    campaign = models.ForeignKey(Campaigns,on_delete=models.CASCADE)
+    contact = models.CharField(max_length=65)
+    name = models.TextField()
+
+    class Meta:
+        unique_together = (('campaign', 'contact'),)
+

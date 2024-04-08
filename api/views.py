@@ -995,10 +995,11 @@ def api_call(request, module, crud):
             # start of getting queued sms
             if crud == 'getMessages':
                 sms_id = api_body['sms_id']
+                limit = api_body.get('limit',10)
                 rec = []
                 if sms_id == '*':
                     # all
-                    sms_fetch = Sms.objects.filter(id__gt=0)
+                    sms_fetch = Sms.objects.filter(id__gt=0).order_by('-id')[:limit]
                 else:
                     sms_fetch = Sms.objects.filter(id=sms_id)
 

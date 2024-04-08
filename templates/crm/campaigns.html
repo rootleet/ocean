@@ -1,0 +1,31 @@
+{% extends 'crm/base.html' %}
+{% load static %}
+
+{% block crm %}
+    <div class="card-header">
+        <div class="w-100 d-flex">
+            <div class="w-50"><strong class="card-title">{{ page.title }}</strong></div>
+            <div class="w-50 d-flex flex-wrap justify-content-end">
+                <button onclick="location.href='{% url 'new_campaign' %}'" class="btn btn-info">NEW CAMPAIGN</button>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table datatable">
+                <thead>
+                    <tr><th>TYPE</th><th>TITLE</th><th>DATE CREATED</th><th>OWNER</th><th>ACTION</th></tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        let tr = `<tr><td>STATUS</td><td>TITLE</td><td>DATE CREATED</td><td>OWNER</td><td>ACTION</td></tr>`;
+
+        $('tbody').html(tr);
+    </script>
+{% endblock %}

@@ -1,0 +1,60 @@
+{% extends 'crm/base.html' %}
+{% load static %}
+
+{% block crm %}
+    <div class="card-header">
+        <div class="w-100 d-flex">
+            <div class="w-50"><strong class="card-title">{{ page.title }}</strong></div>
+            <div class="w-50 d-flex flex-wrap justify-content-end">
+                <button onclick="crm.saveCampaign()" class="btn btn-info">SAVE</button>
+            </div>
+        </div>
+    </div>
+    <div class="card-body overflow-hidden p-2">
+        <div class="container h-100 overflow-auto">
+            <div class="row h-100">
+                <div class="col-sm-4">
+
+                    <div class="input-group mb-2">
+                        <label class="w-100 text-info" for="type">Type</label>
+                        <select name="" id="type" class="form-control rounded-0">
+                            <option value="auto">AUTO</option>
+                            <option value="custom">CUSTOM</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group mb-2">
+                        <label class="w-100 text-info" for="title">Title</label>
+                        <input type="text" class="form-control rounded-0" id="title">
+                    </div>
+
+                    <div class="input-group mb-2">
+                        <label class="text-info w-100" for="description">Description</label>
+                        <textarea id="description" class="form-control rounded-0" cols="30" rows="5"></textarea>
+                    </div>
+
+                </div>
+                <div class="col-sm-8 h-100">
+                    <div class="w-100 shadow p-2">
+                        <label class="text-info" for="sms_template">SMS Template</label>
+                        <textarea id="sms_template" class="form-control rounded-0" cols="30" rows="3"></textarea>
+                    </div>
+                    <hr>
+                    <div class="w-100 shadow p-2">
+                        <label class="text-info w-100" for="subject">Email Subject</label>
+                        <input type="text" class="form-control rounded-0 mb-2" id="subject">
+                        <label class="text-info" for="email_template">EMAIL Template</label>
+                        <textarea id="email_template" class="form-control rounded-0" cols="30" rows="10"></textarea>
+                        <button onclick="crm.previewCampaignEmailTemplate()" class="btn mt-2 btn-info">PREVIEW</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let tr = `<tr><td>STATUS</td><td>TITLE</td><td>DATE CREATED</td><td>OWNER</td><td>ACTION</td></tr>`;
+
+        $('tbody').html(tr);
+    </script>
+{% endblock %}

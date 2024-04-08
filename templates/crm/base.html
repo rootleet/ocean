@@ -7,7 +7,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>OCEAN</title>
+  <title>OCEAN - {{ page.title }}</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -518,6 +518,16 @@
 
     {% if user.is_superuser %}
         <hr>
+        <li class="nav-item">
+        <a class="nav-link collapsed" href="{% url 'crm_contacts' %}">
+          <i class="bi bi-person-rolodex"></i> <span>Contacts</span>
+        </a>
+      </li>
+        <li class="nav-item">
+        <a class="nav-link collapsed" href="{% url 'campaigns' %}">
+          <i class="bi bi-person-rolodex"></i> <span>Campaigns</span>
+        </a>
+      </li>
       <li class="nav-item">
         <a class="nav-link collapsed" href="{% url 'crm_users' %}">
           <i class="bi bi-person-rolodex"></i> <span>USERS</span>

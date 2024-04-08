@@ -1,4 +1,7 @@
 class Crm {
+    constructor() {
+        let api_int = '/crm/api/';
+    }
     newScreen(){
         let html = `
             <div class="container"><div class="row" style="height: 20vh">
@@ -476,6 +479,95 @@ class Crm {
                 }
             }
 
+        } else {
+            kasa.error("Invalid Form")
+        }
+    }
+
+    PreviewContacts(val) {
+        let payload = {
+            module:'contacts',
+            data:{
+                type:val
+            }
+        };
+
+        let unknown_dom = ``;
+        let email_dom = `<table class="table table-responsive datatable">
+                <thead>
+                    <tr>
+                        <th>First Name</th><th>Last Name</th><th>Address</th>
+                    </tr>
+                </thead>
+                <tbody id="emailBody">
+
+                </tbody>
+            </table>`;
+        let mobile_dom = `<table class="table table-responsive datatable">
+                <thead>
+                    <tr>
+                        <th>First Name</th><th>Last Name</th><th>Mobile</th>
+                    </tr>
+                </thead>
+                <tbody id="emailBody">
+
+                </tbody>
+            </table>`;
+        let cont = $('#container');
+        if(val === 'email'){
+            cont.html(email_dom)
+        } else if (val === 'mobile'){
+            cont.html(mobile_dom)
+        } else {
+            cont.html(unknown_dom)
+        }
+
+        // send payload
+        let response = api.call('VIEW',payload,'/crm/api/')
+        if(anton.IsRequest(response)){
+            console.table(response)
+            if(val === 'email' || val === 'mobile'){
+                let resp = response['message'];
+                let rows = "";
+                for(let r = 0; r < resp.length; r++){
+                    let row = resp[r];
+                    rows += `<tr><td>${row['first_name']}</td><td>${row['last_name']}</td><td>${row['contact']}</td></tr>`
+                    console.table(row)
+                }
+
+                $('tbody').html(rows)
+            }
+        } else {
+            kasa.response(response)
+        }
+        console.table(payload)
+
+    }
+
+    previewCampaignEmailTemplate() {
+        let temp = $('#email_template');
+        amodal.setBodyHtml(temp.val());
+        amodal.setTitleText("Campaign Email Template");
+        amodal.setSize('L');
+        amodal.show();
+    }
+
+    saveCampaign() {
+        let ids = ['type','title','description','sms_template','email_template','subject'];
+        if(anton.validateInputs(ids)){
+            let payload = {
+                module:'campaign',
+                data:anton.Inputs(ids)
+            }
+
+            let sv = api.call('PUT',payload,'/crm/api/');
+            if(anton.IsRequest(sv)){
+                kasa.confirm(sv['message'],1,'/crm/campaigns/')
+            } else {
+                kasa.response(sv)
+            }
+
+            console.table(payload)
         } else {
             kasa.error("Invalid Form")
         }

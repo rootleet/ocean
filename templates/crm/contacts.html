@@ -1,0 +1,36 @@
+{% extends 'crm/base.html' %}
+{% load  static %}
+
+{% block crm %}
+    <div class="card-header">
+        <div class="w-100 d-flex">
+            <div class="w-50"></div>
+            <div class="w-50 d-flex flex-wrap justify-content-end">
+                <label for="switch_contacts">Contact Type: </label>
+                <select name="" id="switch_contacts" class="form-control w-25 form-control-sm">
+                    <option value="email">Emails</option>
+                    <option value="mobile">Mobile Number</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-body overflow-hidden">
+        <div id="container" class="table-responsive overflow-auto h-100">
+
+        </div>
+    </div>
+
+
+    <script>
+
+        crm.PreviewContacts('email')
+
+        $(document).ready(
+            $('#switch_contacts').change(function(){
+                let val = this.value;
+                crm.PreviewContacts(val)
+            })
+        );
+    </script>
+{% endblock %}

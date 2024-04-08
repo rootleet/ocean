@@ -62,3 +62,24 @@ def crm_tools(request):
     }
 
     return render(request, 'crm/crm-tools.html', context=context)
+
+
+def contacts(request):
+    return render(request,'crm/contacts.html',context={
+        'nav':True,
+        'page':{'title':"CRM Contacts"}
+    })
+
+
+def campaigns(request):
+    return render(request, 'crm/campaigns.html', context={
+        'nav': True,
+        'page': {'title': "Campaigns"}
+    })
+
+
+def new_campaign(request):
+    return render(request, 'crm/campaigns-new.html', context={
+        'nav': True,
+        'page': {'title': "New Campaigns"}
+    })
