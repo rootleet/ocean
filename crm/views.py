@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from django.utils import timezone
 
+from admin_panel.models import SmsApi, MailSenders
 from crm.models import Logs, CrmUsers, FollowUp
 
 
@@ -23,7 +24,7 @@ def base(request):
 
     return render(request, 'crm/logs.html', context=context)
 
-
+@login_required()
 def follows(request):
     if request.user.is_superuser:
         logs = FollowUp.objects.filter(is_open=True).order_by('-pk')
@@ -39,7 +40,7 @@ def follows(request):
 
     return render(request, 'crm/follow.html', context=context)
 
-
+@login_required()
 def crm_users(request):
     context = {
         'nav': True,
@@ -51,7 +52,7 @@ def crm_users(request):
 
     return render(request, 'crm/crm-users.html', context=context)
 
-
+@login_required()
 def crm_tools(request):
     context = {
         'nav': True,
@@ -63,23 +64,25 @@ def crm_tools(request):
 
     return render(request, 'crm/crm-tools.html', context=context)
 
-
+@login_required()
 def contacts(request):
-    return render(request,'crm/contacts.html',context={
-        'nav':True,
-        'page':{'title':"CRM Contacts"}
+    return render(request, 'crm/contacts.html', context={
+        'nav': True,
+        'page': {'title': "CRM Contacts"}
     })
 
-
+@login_required()
 def campaigns(request):
     return render(request, 'crm/campaigns.html', context={
         'nav': True,
         'page': {'title': "Campaigns"}
     })
 
-
+@login_required()
 def new_campaign(request):
     return render(request, 'crm/campaigns-new.html', context={
         'nav': True,
-        'page': {'title': "New Campaigns"}
+        'page': {'title': "New Campaigns"},
+        'smsapis': SmsApi.objects.all(),
+        'mss':MailSenders.objects.all()
     })

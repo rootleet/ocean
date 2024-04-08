@@ -117,9 +117,10 @@ def api_interface(request):
                 c_type = data.get('type')
                 subject = data.get('subject')
 
-                uni = make_md5_hash(f"{description,email_template,sms_template,title}")
+                uni = make_md5_hash(f"{description, email_template, sms_template, title}")
 
-                Campaigns(title=title,type=c_type,description=description,email_template=email_template,sms_template=sms_template,uni=uni).save()
+                Campaigns(title=title, type=c_type, description=description, email_template=email_template,
+                          sms_template=sms_template, uni=uni).save()
 
                 camp = Campaigns.objects.get(uni=uni)
 
@@ -128,40 +129,41 @@ def api_interface(request):
                 em_tot = 0
 
                 if c_type == 'auto':
-                    tot =+ 1
+                    tot = + 1
                     # populate emails
                     logs = Logs.objects.all()
                     for lo in logs:
                         em = lo.email
-                        tel = lo.phone.replace('+233','0')
+                        tel = lo.phone.replace('+233', '0')
 
                         # Que Email
                         MailQueues(
-                            sender=MailSenders.objects.get(is_default=1),
+                            sender=MailSenders.objects.get(pk=data.get('em_sender')),
                             recipient=em,
                             body=email_template,
                             subject=subject,
                         ).save()
-                        em_tot =+ 1
+                        em_tot = + 1
 
                         # que sms
                         if len(tel) == 10:
                             Sms(
-                                api=SmsApi.objects.get(is_default=1),
+                                api=SmsApi.objects.get(pk=data.get('sms_api')),
                                 to=tel,
                                 message=sms_template,
                             ).save()
-                            sms_tot =+ 1
+                            sms_tot = + 1
 
                     success_response['message'] = f"Total: {tot}, Emails Sent: {em_tot}, SMS Sent: {sms_tot}"
                     response = success_response
 
 
 
-                        
+
 
 
         elif method == 'VIEW':
+            arr = []
             if module == 'log':
                 from django.db.models import Q
                 from datetime import datetime
@@ -389,6 +391,19 @@ def api_interface(request):
                         'last_name': lg.customer.split(' ')[-1],
                         'contact': lg.email if c_type == 'email' else lg.phone
                     })
+
+                success_response['message'] = arr
+                response = success_response
+
+            elif module == 'campaign':
+                key = data.get('key','')
+                if key == '*':
+                    campaigns = Campaigns.objects.all().order_by('-pk')
+                else:
+                    campaigns = Campaigns.objects.filter(pk=key)
+
+                for camp in campaigns:
+                    arr.append(camp.obj())
 
                 success_response['message'] = arr
                 response = success_response

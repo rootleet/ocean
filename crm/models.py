@@ -102,12 +102,23 @@ class Campaigns(models.Model):
     sms_template = models.TextField()
     created_on = models.DateTimeField(auto_now_add=True)
 
+    def obj(self):
+        return {
+            'uni': self.uni,
+            'pk': self.pk,
+            'title': self.title,
+            'type': self.type,
+            'description': self.description,
+            'email_template': self.email_template,
+            'sms_template': self.sms_template,
+            'date':self.created_on
+        }
+
 
 class CampaignTargets(models.Model):
-    campaign = models.ForeignKey(Campaigns,on_delete=models.CASCADE)
+    campaign = models.ForeignKey(Campaigns, on_delete=models.CASCADE)
     contact = models.CharField(max_length=65)
     name = models.TextField()
 
     class Meta:
         unique_together = (('campaign', 'contact'),)
-

@@ -553,7 +553,7 @@ class Crm {
     }
 
     saveCampaign() {
-        let ids = ['type','title','description','sms_template','email_template','subject'];
+        let ids = ['type','title','description','sms_template','email_template','subject','em_sender','sms_api'];
         if(anton.validateInputs(ids)){
             let payload = {
                 module:'campaign',
@@ -571,6 +571,34 @@ class Crm {
         } else {
             kasa.error("Invalid Form")
         }
+    }
+
+    PreviewCampaigns() {
+        let camps = this.Campaigns('*');
+        if(anton.IsRequest(camps)){
+            let cmps = camps['message'];
+            let rows = ""
+            console.table(camps)
+            for(let x = 0; x < cmps.length; x++){
+                let row = cmps[x];
+                console.table(row)
+                rows += `<tr><td>${row['type']}</td><td>${row['title']}</td><td>${row['date']}</td><td>OWNER</td><td>ACTION</td></tr>`
+            }
+            $('tbody').html(rows);
+        } else {
+            kasa.response(camps)
+        }
+    }
+
+    Campaigns(pk) {
+        let payload = {
+            module:'campaign',
+            data:{
+                key:pk
+            }
+        }
+
+        return api.call('VIEW',payload,'/crm/api/')
     }
 }
 

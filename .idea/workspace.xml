@@ -4,20 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ffcbf13e-d396-4071-9a24-4014a690f966" name="Changes" comment="Export crm reports to excel enabled">
-      <change afterPath="$PROJECT_DIR$/DockerfileXXX" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/crm/campaigns-new.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/crm/campaigns.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/crm/contacts.html" afterDir="false" />
+    <list default="true" id="ffcbf13e-d396-4071-9a24-4014a690f966" name="Changes" comment="Added campaign creation in CRM">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/crm/crm_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/crm/crm_api.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/crm/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/crm/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/crm/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/crm/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/crm/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/crm/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/static/general/js/classes/crm.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/general/js/classes/crm.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/crm/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/crm/base.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/crm/campaigns-new.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/crm/campaigns-new.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/crm/campaigns.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/crm/campaigns.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -452,15 +446,7 @@
       <workItem from="1710735283143" duration="593000" />
       <workItem from="1711039123383" duration="2448000" />
       <workItem from="1712411036139" duration="9730000" />
-      <workItem from="1712555786208" duration="2554000" />
-    </task>
-    <task id="LOCAL-00125" summary="update the sents">
-      <option name="closed" value="true" />
-      <created>1703160897637</created>
-      <option name="number" value="00125" />
-      <option name="presentableId" value="LOCAL-00125" />
-      <option name="project" value="LOCAL" />
-      <updated>1703160897637</updated>
+      <workItem from="1712555786208" duration="6493000" />
     </task>
     <task id="LOCAL-00126" summary="take away sms">
       <option name="closed" value="true" />
@@ -846,7 +832,15 @@
       <option name="project" value="LOCAL" />
       <updated>1711040259879</updated>
     </task>
-    <option name="localTasksCounter" value="174" />
+    <task id="LOCAL-00174" summary="Added campaign creation in CRM">
+      <option name="closed" value="true" />
+      <created>1712558405915</created>
+      <option name="number" value="00174" />
+      <option name="presentableId" value="LOCAL-00174" />
+      <option name="project" value="LOCAL" />
+      <updated>1712558405916</updated>
+    </task>
+    <option name="localTasksCounter" value="175" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -869,7 +863,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="take away sms" />
     <MESSAGE value="sms re-enstated" />
     <MESSAGE value="servicing model" />
     <MESSAGE value="added recipe model" />
@@ -894,7 +887,8 @@
     <MESSAGE value="CMMS logs patched with reminders" />
     <MESSAGE value="error 500 adjusted proper.&#10;Follow ups configured proper" />
     <MESSAGE value="Export crm reports to excel enabled" />
-    <option name="LAST_COMMIT_MESSAGE" value="Export crm reports to excel enabled" />
+    <MESSAGE value="Added campaign creation in CRM" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added campaign creation in CRM" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

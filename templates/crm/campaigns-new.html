@@ -33,14 +33,30 @@
                         <textarea id="description" class="form-control rounded-0" cols="30" rows="5"></textarea>
                     </div>
 
-                </div>
-                <div class="col-sm-8 h-100">
+                    <hr>
                     <div class="w-100 shadow p-2">
+
+                        <label class="text-info" for="sms_api">Select SMS APi</label>
+                        <select name="" id="sms_api" class="form-control rounded-0 mb-2">
+                            {% for sm in smsapis %}
+                                <option value="{{ sm.pk }}">{{ sm.sender_id }}</option>
+                            {% endfor %}
+                        </select>
                         <label class="text-info" for="sms_template">SMS Template</label>
                         <textarea id="sms_template" class="form-control rounded-0" cols="30" rows="3"></textarea>
                     </div>
+
+                </div>
+                <div class="col-sm-8 h-100">
+
                     <hr>
                     <div class="w-100 shadow p-2">
+                        <label class="text-info" for="em_sender">Select Email Sender</label>
+                        <select name="" id="em_sender" class="form-control rounded-0 mb-2">
+                            {% for em in mss %}
+                                <option value="{{ em.pk }}">{{ em.address }}</option>
+                            {% endfor %}
+                        </select>
                         <label class="text-info w-100" for="subject">Email Subject</label>
                         <input type="text" class="form-control rounded-0 mb-2" id="subject">
                         <label class="text-info" for="email_template">EMAIL Template</label>
