@@ -9,3 +9,18 @@
 .bg_trans_30{
     background: rgb(0, 0, 0);
 }
+
+.inbtn{
+    height: 100px;
+    width: 25%;
+}
+
+.nav-btn
+{
+    height: 30px;
+    min-width: 30px;
+    overflow: hidden !important;
+    margin: 0 3px 0 1px !important;
+    border-radius: 0px !important;
+    font-size: small;
+}

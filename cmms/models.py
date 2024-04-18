@@ -280,3 +280,24 @@ class DealTransactions(models.Model):
     created_time = models.TimeField(auto_now_add=True)
     updated_date = models.DateField(auto_now=True)
     updated_time = models.TimeField(auto_now=True)
+
+
+class SalesAssetsGroup(models.Model):
+    name = models.TextField()
+
+    created_date = models.DateField(auto_now_add=True)
+    created_time = models.TimeField(auto_now_add=True)
+    updated_date = models.DateField(auto_now=True)
+    updated_time = models.TimeField(auto_now=True)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
+    def obj(self):
+        return {
+            'name': self.name,
+            'created_date': self.created_date,
+            'created_time': self.created_time,
+            'updated_date': self.created_date,
+            'owner':self.owner.get_fullname()
+
+        }
+

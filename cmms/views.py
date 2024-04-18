@@ -282,3 +282,25 @@ def service_customer(request,customer_code):
         'customer':customer_code
     }
     return render(request, 'cmms/service/customer.html', context=context)
+
+
+def sales(request):
+    context = {
+        'nav': True,
+        'page': {
+
+            'title': "Sales"
+        }
+    }
+    return render(request, 'cmms/service/sales.html', context=context)
+
+
+def sales_assets(request):
+    context = {
+        'nav': True,
+        'page': {
+
+            'title': "Sales / Assets"
+        }
+    }
+    return render(request, 'cmms/sales/assets.html', context=context)

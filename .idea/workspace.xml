@@ -5,13 +5,26 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ffcbf13e-d396-4071-9a24-4014a690f966" name="Changes" comment="Added campaign creation in CRM">
+      <change afterPath="$PROJECT_DIR$/req_old.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/cmms/sales/assets.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/cmms/service/sales.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmms/cmms_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/cmms/cmms_api.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmms/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/cmms/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmms/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/cmms/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmms/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/cmms/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/crm/crm_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/crm/crm_api.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/crm/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/crm/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/crm/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/crm/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/req.txt" beforeDir="false" afterPath="$PROJECT_DIR$/req.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/general/css/colors.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/general/css/colors.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/general/js/classes/anton.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/general/js/classes/anton.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/static/general/js/classes/crm.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/general/js/classes/crm.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/crm/campaigns-new.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/crm/campaigns-new.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/crm/campaigns.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/crm/campaigns.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/general/js/classes/sales.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/general/js/classes/sales.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/cmms/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/cmms/base.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/crm/follow.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/crm/follow.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/crm/logs.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/crm/logs.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -446,15 +459,13 @@
       <workItem from="1710735283143" duration="593000" />
       <workItem from="1711039123383" duration="2448000" />
       <workItem from="1712411036139" duration="9730000" />
-      <workItem from="1712555786208" duration="6493000" />
-    </task>
-    <task id="LOCAL-00126" summary="take away sms">
-      <option name="closed" value="true" />
-      <created>1703160961099</created>
-      <option name="number" value="00126" />
-      <option name="presentableId" value="LOCAL-00126" />
-      <option name="project" value="LOCAL" />
-      <updated>1703160961099</updated>
+      <workItem from="1712555786208" duration="6720000" />
+      <workItem from="1712586772187" duration="958000" />
+      <workItem from="1712658860727" duration="1829000" />
+      <workItem from="1713262258800" duration="167000" />
+      <workItem from="1713279778552" duration="659000" />
+      <workItem from="1713330692923" duration="7143000" />
+      <workItem from="1713379531779" duration="7541000" />
     </task>
     <task id="LOCAL-00127" summary="sms re-enstated">
       <option name="closed" value="true" />
@@ -840,7 +851,15 @@
       <option name="project" value="LOCAL" />
       <updated>1712558405916</updated>
     </task>
-    <option name="localTasksCounter" value="175" />
+    <task id="LOCAL-00175" summary="Added campaign creation in CRM">
+      <option name="closed" value="true" />
+      <created>1712584342697</created>
+      <option name="number" value="00175" />
+      <option name="presentableId" value="LOCAL-00175" />
+      <option name="project" value="LOCAL" />
+      <updated>1712584342697</updated>
+    </task>
+    <option name="localTasksCounter" value="176" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -902,11 +921,6 @@
           <url>file://$PROJECT_DIR$/taskmanager/views.py</url>
           <line>28</line>
           <option name="timeStamp" value="4" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/cmms/cmms_api.py</url>
-          <line>1272</line>
-          <option name="timeStamp" value="5" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/taskmanager/api.py</url>

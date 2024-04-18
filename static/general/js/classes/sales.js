@@ -101,6 +101,40 @@ class Sales {
         console.table(sales_summary)
         $("#total").text(sales_summary.message)
     }
+
+    viewAssetGroups(){
+        amodal.setTitleText("ASSET GROUPS")
+        let tr = `<tr><td>Group 1</td><th>void</th></tr>`;
+        let table = `
+            <button class="tn btn-sm btn-info" onclick="sales.newAssetGroup()">NEW</button>
+            <table class="table table-sm table-striped">
+                <thead><tr><th>Name</th><th>Action</th></tr></thead>
+                <tbody>${tr}</tbody>
+            </table>
+        `;
+        amodal.setBodyHtml(table);
+        amodal.show()
+    }
+
+    newAssetGroup() {
+        let form = fom.text('g_name','',true);
+        amodal.setTitleText('Creating New Asset Group')
+        amodal.setBodyHtml(form);
+        amodal.setFooterHtml(`<button class="btn btn-success" onclick="sales.saveAssetGroup()">SAVE</button>`)
+    }
+
+    saveAssetGroup() {
+        let id = ['g_name'];
+        if(anton.validateInputs(id)){
+            let payload = {
+                module:'asset_group',
+                data:anton.Inputs(id)
+            };
+            kasa.confirm(api.call('PUT',payload,'/cmms/api/')['message'],1,'here')
+        } else {
+            kasa.error("Invalid FOrm")
+        }
+    }
 }
 
 const sales = new Sales()

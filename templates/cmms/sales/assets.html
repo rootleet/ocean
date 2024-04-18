@@ -1,0 +1,99 @@
+{% extends 'cmms/base.html' %}
+{% load static %}
+
+{% block cmms %}
+    <div class="card-header">
+        <div class="w-100 d-flex flex-wrap">
+            <div class="w-50 d-flex flex-wrap">
+                <button id="new" class="btn nav-btn btn-sm btn-primary mr-1">
+                    <i class="fa fa-plus"></i>
+                </button>
+                <button id="edit" class="btn nav-btn btn-sm btn-warning mr-1">
+                    <i class="fa fa-edit"></i>
+                </button>
+                <button id="previous" class="btn nav-btn btn-sm btn-info mr-1">
+                    <i class="fa fa-backward"></i>
+                </button>
+                <button id="next" class="btn nav-btn btn-sm btn-info mr-1">
+                    <i class="fa fa-forward"></i>
+                </button>
+            </div>
+
+            <div class="w-50 d-flex flex-wrap p-2 justify-content-end">
+                <button id="asset_groups" class="btn p-1 btn-info btn-sm nav-btn">
+                    Asset Group
+                </button>
+                <button class="btn p-1 btn-info btn-sm nav-btn">
+                    Asset List
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="card-body p-2">
+        <div class="container-fluid h-100">
+            <div class="row h-25 overflow-auto">
+                <div class="col-sm-4">
+                    <!-- Manufacturer -->
+                    <div class="row mb-2">
+                        <label for="asset_manufacturer" class="col-sm-4">Manufacturer</label>
+                        <div class="col-sm-8">
+                            <select class="form-control rounded-0" id="asset_manufacturer"></select>
+                        </div>
+                    </div>
+
+                    <!-- Origin -->
+                    <div class="row mb-2">
+                        <label for="origin" class="col-sm-4">Origin</label>
+                        <div class="col-sm-8">
+                            <select class="form-control rounded-0" id="origin"></select>
+                        </div>
+                    </div>
+
+                    <!-- SUPPLYEr -->
+                    <div class="row">
+                        <label for="supplier" class="col-sm-4">Supplier</label>
+                        <div class="col-sm-8">
+                            <select class="form-control rounded-0" id="supplier"></select>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+
+            <!-- MODELS -->
+            <div class="row h-75 overflow-auto table-responsive">
+                <table class="datatable">
+                    <thead>
+                        <tr>
+                            <th>Brand</th>
+                            <th>Model</th>
+                            <th>Year</th>
+                            <th>Stock</th>
+                            <th>Doc.</th>
+                            <th>Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><a href="#">Camry</a></td>
+                            <td>Spider</td>
+                            <td>2025</td>
+                            <td>10</td>
+                            <td>0</td>
+                            <td>$1,000.00</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function(){
+            $('#asset_groups').click(function(){
+                sales.viewAssetGroups()
+            });
+        })
+    </script>
+{% endblock %}

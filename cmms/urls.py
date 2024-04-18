@@ -31,6 +31,8 @@ urlpatterns = [
     path('stock/frozen/', views.forezen, name='frozen-stock'),
     path('stock/count/edit/<pk>/', views.edit_stock_count, name='edit_stock_count'),
 
+    path('sales/',views.sales,name='sales'),
+    path('sales/assets/',views.sales_assets,name='sales_assets'),
     path('sales/customers/', views.customer_sales, name='customer_sales'),
     path('sales/new-customer/', views.new_sales_customer, name='new_sales_customer'),
     path('sales/save-customer/', views.save_sales_customer, name='save_sales_customer'),

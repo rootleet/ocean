@@ -157,11 +157,6 @@ def api_interface(request):
                     success_response['message'] = f"Total: {tot}, Emails Sent: {em_tot}, SMS Sent: {sms_tot}"
                     response = success_response
 
-
-
-
-
-
         elif method == 'VIEW':
             arr = []
             if module == 'log':
@@ -410,6 +405,26 @@ def api_interface(request):
 
             else:
                 response = {'message': 'NO MODULE FOUND', 'status_code': 404}
+
+        elif method == 'PATCH':
+            if module == 'follow_up':
+                pk = data.get('f_pk')
+                ext_date = data.get('date')
+                new_reason = data.get('new_reason')
+
+                folo = FollowUp.objects.get(pk=pk)
+                reason = folo.reason
+
+                folo.follow_date = ext_date
+                folo.reason = f"{reason}###{new_reason}"
+
+                folo.save()
+                success_response['message'] = f"FOLLOWED UP date adjusted to {ext_date}"
+                response = success_response
+
+            else:
+                response = {'message': f'NO MODULE {module}', 'status_code': 404}
+
 
     except Exception as e:
         error_type, error_instance, traceback = sys.exc_info()

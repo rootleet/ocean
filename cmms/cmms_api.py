@@ -1264,6 +1264,16 @@ def api(request):
                     response['status'] = 505
                     response['message'] = str(e)
 
+            elif module == 'asset_group':
+                g_name = data.get('g_name')
+                o_pk = data.get('mypk')
+                owner = User.objects.get(pk=o_pk)
+                SalesAssetsGroup(name=g_name,owner=owner).save()
+                response['status_code'] = 200
+                response['message'] = "Asset Group Saved"
+            else:
+                response['status_code'] = 404
+                response['message'] = "Invalid Module"
         elif method == 'PATCH':
             if module == 'stock':
                 stage = data.get('stage')

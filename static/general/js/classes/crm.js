@@ -62,7 +62,7 @@ class Crm {
                 let flag = `<label class="text-info" for="flag">FLAG </label>
                 <select id="flag" onchange="followUpCheck()" name="flag" class="form-control mb-2 rounded-0"><
                                     <option>Select Flag</option>
-                                    <option value="success">Success</option>
+                                    <option value="success">Reachable</option>
                                     <option value="unreachable">Unreachable</option></select>`;
 
                 console.log(flag)
@@ -74,14 +74,22 @@ class Crm {
 
                 form += ff;
 
-
-                form += fom.text('subject','',true);
+                let sub_options = `
+                    <option value="Car Sales">Car Sales</option>
+                    <option value="Spare Parts">Spare Parts</option>
+                    <option value="Servicing">Serving</option>
+                    <option value="Other">Others</option>
+                `
+                form += fom.select('subject',sub_options,'',true);
                 form += fom.textarea('details',5,true);
+
 
                 amodal.setTitleText("New Log");
                 amodal.setBodyHtml(form);
                 amodal.setFooterHtml(`<button onclick="crm.saveNewLog()" class="btn btn-success">SAVE</button>`)
                 amodal.show()
+                let follow = fom.date('follow_up_date','',true);
+                    $('#f_date').html(follow)
 
             } else {
                 kasa.response(positions)
@@ -428,21 +436,15 @@ class Crm {
     }
 
     saveNewLog(){
-        let fields = ['sector','company_name','contact_person','position','phone','email','subject','flag','details','mypk'];
+        let fields = ['sector','company_name','contact_person','position','phone','subject','flag','details','mypk'];
         if(anton.validateInputs(fields)){
             let inputs = anton.Inputs(fields);
+            inputs['email'] = $('#email').val()
             let errors = 0;
             let error_message = '';
             // validate dates
-            if(inputs['flag'] !== 'success'){
-                // validate follow-up date
-                if(anton.validateInputs(['follow_up_date'])){
+            let f_date = $('#follow_up_date').val()
 
-                } else {
-                    errors += 1;
-                    error_message += "Invalid Follow Up Date | "
-                }
-            }
 
             if(errors === 0){
                 let payload = {
@@ -453,7 +455,7 @@ class Crm {
                 if(anton.IsRequest(save_log)){
 
 
-                    if(inputs['flag'] !== 'success'){
+                    if(f_date.length > 0){
                         // save follow up
                         let log = save_log['message'];
                         let follow_load = {
@@ -599,6 +601,34 @@ class Crm {
         }
 
         return api.call('VIEW',payload,'/crm/api/')
+    }
+
+    extendFollowUpScreen(pk){
+        amodal.setTitleText("Extending Follow Up")
+        amodal.setBodyHtml(`
+            <input type="text" readonly class="form-control rounded-0 mb-2" value="${pk}" id="f_pk">
+            <input type="date" class="form-control rounded-0 mb-2" id="date" >
+            <textarea name="" id="new_reason" class="form-control rounded-0 mb-2" cols="30" rows="10"></textarea>
+        `)
+        amodal.setFooterHtml(`<button onclick="crm.extendFollowUp()" class="btn btn-success my-2">Extend</button>`)
+        amodal.show()
+    }
+    extendFollowUp() {
+        let ids = ['date','new_reason','f_pk']
+
+        if(anton.validateInputs(ids)){
+            let payload = {
+                module:'follow_up',
+                data:anton.Inputs(ids)
+            }
+
+
+            let patch = api.call('PATCH',payload,'/crm/api/');
+            kasa.confirm(patch['message'],1,'here')
+        } else {
+            kasa.error("Invalid Field")
+        }
+
     }
 }
 

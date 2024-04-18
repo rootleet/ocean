@@ -1,0 +1,38 @@
+{% extends 'cmms/base.html' %}
+{% load static %}
+
+{% block cmms %}
+
+    <div class="card-body p-2">
+            <div class="container-fluid h-100 overflow-hidden">
+                <div class="w-100 d-flex flex-wrap">
+                    <div class="inbtn p-1">
+                        <button onclick="location.href='{% url 'sales_assets' %}'" class="btn w-100 h-100 btn-outline-info">
+                            <i class="fa fa-car"></i><br>
+                            ASSETS
+                        </button>
+                    </div>
+
+                    <div class="inbtn p-1">
+                        <button class="btn w-100 h-100 btn-outline-info">
+                            <i class="fa fa-car"></i><br>
+                            ONGOING SALES
+                        </button>
+                    </div>
+                    <div class="inbtn p-1">
+                        <button class="btn w-100 h-100 btn-outline-info">
+                            <i class="fa fa-car"></i><br>
+                            CUSTOMERS
+                        </button>
+                    </div>
+                    <div class="inbtn p-1">
+                        <button class="btn w-100 h-100 btn-outline-info">
+                            <i class="fa fa-car"></i><br>
+                            SALES
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+{% endblock %}

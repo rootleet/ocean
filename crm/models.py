@@ -71,6 +71,8 @@ class FollowUp(models.Model):
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
 
+    reason = models.TextField()
+
     def daypass(self):
         if self.follow_date <= datetime.date.today():
             return True

@@ -275,9 +275,8 @@ class Kasa {
             title: 'Confirmation',
             text: message,
             icon: 'question',
-            showCancelButton: true,
+            showCancelButton: false,
             confirmButtonText: 'OK',
-            cancelButtonText: 'Cancel',
             reverseButtons: true, // To swap the positions of "Cancel" and "OK" buttons
         }).then((result) => {
             // Check if the user clicked "OK"

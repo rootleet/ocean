@@ -19,7 +19,7 @@
         <table class="table datatable">
             <thead>
                 <tr>
-                    <th>COMPANY</th><th>PERSON</th><th>CONTACT</th><th>DATE</th><th>FLAG</th><th>action</th>
+                    <th>COMPANY</th><th>PERSON</th><th>CONTACT</th><th>DATE</th><th>action</th>
                 </tr>
             </thead>
             <tbody>
@@ -32,7 +32,7 @@
                         <td><small>{{ log.customer }} <br>{{ log.position.name }}</small></td>
                         <td><i class="bx bx-phone"></i> <small>{{ log.phone }}</small> <br> <i class="bx bxs-inbox"></i> <small>{{ log.email }}</small></td>
                         <td><small>{{ log.created_date }}</small> <br><small>{{ log.created_time }}</small></td>
-                        <td><i class="text-{{ log.success }}">{{ log.success }}</i></td>
+
                         <td><i onclick="Swal.fire({title:`{{ log.subject }}`,
                         text:`{{ log.description }}`
                         })" class="fa fa-eye text-info"></i></td>
@@ -51,8 +51,11 @@
                     // show follup date
                     let follow = fom.date('follow_up_date','',true);
                     $('#f_date').html(follow)
+                    let person = $('#contact_person').val()
+                    $('#details').val(`Tried contacting ${person} but not reachable \n......`)
                 } else {
-                    $('#f_date').html('')
+                    {#$('#f_date').html('')#}
+                    $('#details').val('')
                 }
         }
     </script>

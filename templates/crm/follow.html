@@ -15,7 +15,7 @@
         <table class="table datatable">
             <thead>
                 <tr >
-                    <th>COMPANY</th><th>PERSON</th><th>CONTACT</th><th>DATE</th><th>FLAG</th><th>action</th>
+                    <th>COMPANY</th><th>PERSON</th><th>CONTACT</th><th>DATE</th><th>action</th>
                 </tr>
             </thead>
             <tbody>
@@ -27,11 +27,19 @@
                         </td>
                         <td><small>{{ log.log.customer }} <br>{{ log.log.position.name }}</small></td>
                         <td><i class="bx bx-phone"></i> <small>{{ log.log.phone }}</small> <br> <i class="bx bxs-inbox"></i> <small>{{ log.log.email }}</small></td>
-                        <td><small class="bi bi-list-check"> {{ log.log.created_date }}</small> <br><small class="bi bi-broadcast"> {{ log.follow_date }}</small></td>
-                        <td><i class="text-{{ log.log.success }}">{{ log.log.success }}</i></td>
-                        <td><i onclick="Swal.fire({title:`{{ log.log.subject }}`,
+                        <td>
+                            <small class="bi bi-list-check"> {{ log.log.created_date }}</small>
+                            <br><small class="bi bi-broadcast"> {{ log.follow_date }}</small>
+                        </td>
+
+                        <td>
+                            <i onclick="Swal.fire({title:`{{ log.log.subject }}`,
                         text:`{{ log.log.description }}`
-                        })" class="fa fa-eye text-info"></i></td>
+                        })" class="fa fa-eye text-info"></i>
+
+                            <button onclick="crm.extendFollowUpScreen('{{ log.pk }}')" class="btn btn-nav btn-info">Extend</button>
+
+                        </td>
                     </tr>
                 {% endfor %}
             </tbody>
