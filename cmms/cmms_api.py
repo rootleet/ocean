@@ -1137,9 +1137,11 @@ def api(request):
                                 cursor = db()
 
                                 q = f"SELECT sell_price FROM product_master where barcode = '{barcode}'"
-                                value = cursor.execute(q).fetchone()[0]
-                                if value is None:
+                                vq = cursor.execute(q)
+                                if vq is None:
                                     value = 0.00
+                                else:
+                                    value = cursor.execute(q).fetchone()[0]
 
                                 print({'VAL': value, 'diff': Decimal(str(diff)), 'frozen': Decimal(str(frozen)),
                                        'counted': Decimal(counted)})
@@ -1289,7 +1291,6 @@ def api(request):
                     header = data.get('header')
                     count_pk = header.get('count_pk')
 
-                    print(data)
 
                     # print(data)
                     if StockCountHD.objects.filter(pk=count_pk).count() == 1:

@@ -1151,7 +1151,7 @@ class Cmms {
 
     saveCount(task='new'){
         // validate header
-        const ids = ["loc", "ref_freeze", "remark", "comment",'ref_pk']
+        const ids = ["loc", "ref_freeze", "remark", "comment"]
         if(anton.validateInputs(ids)){
             // validate transactions
             let trans = $('#devsBody tr')
