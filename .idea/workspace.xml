@@ -4,27 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ffcbf13e-d396-4071-9a24-4014a690f966" name="Changes" comment="Added campaign creation in CRM">
-      <change afterPath="$PROJECT_DIR$/req_old.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/cmms/sales/assets.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/cmms/service/sales.html" afterDir="false" />
+    <list default="true" id="ffcbf13e-d396-4071-9a24-4014a690f966" name="Changes" comment="CHECK CMMS EXTENDED">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmms/cmms_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/cmms/cmms_api.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmms/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/cmms/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmms/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/cmms/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmms/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/cmms/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/crm/crm_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/crm/crm_api.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/crm/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/crm/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/req.txt" beforeDir="false" afterPath="$PROJECT_DIR$/req.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/general/css/colors.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/general/css/colors.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/general/js/classes/anton.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/general/js/classes/anton.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/general/js/classes/crm.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/general/js/classes/crm.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/general/js/classes/sales.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/general/js/classes/sales.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/cmms/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/cmms/base.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/crm/follow.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/crm/follow.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/crm/logs.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/crm/logs.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -466,14 +448,8 @@
       <workItem from="1713279778552" duration="659000" />
       <workItem from="1713330692923" duration="7143000" />
       <workItem from="1713379531779" duration="7541000" />
-    </task>
-    <task id="LOCAL-00127" summary="sms re-enstated">
-      <option name="closed" value="true" />
-      <created>1703161093831</created>
-      <option name="number" value="00127" />
-      <option name="presentableId" value="LOCAL-00127" />
-      <option name="project" value="LOCAL" />
-      <updated>1703161093831</updated>
+      <workItem from="1713827526123" duration="446000" />
+      <workItem from="1713872174744" duration="2218000" />
     </task>
     <task id="LOCAL-00128" summary="sms re-enstated">
       <option name="closed" value="true" />
@@ -859,7 +835,15 @@
       <option name="project" value="LOCAL" />
       <updated>1712584342697</updated>
     </task>
-    <option name="localTasksCounter" value="176" />
+    <task id="LOCAL-00176" summary="CHECK CMMS EXTENDED">
+      <option name="closed" value="true" />
+      <created>1713874153244</created>
+      <option name="number" value="00176" />
+      <option name="presentableId" value="LOCAL-00176" />
+      <option name="project" value="LOCAL" />
+      <updated>1713874153244</updated>
+    </task>
+    <option name="localTasksCounter" value="177" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -882,7 +866,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="sms re-enstated" />
     <MESSAGE value="servicing model" />
     <MESSAGE value="added recipe model" />
     <MESSAGE value="retail module updated to have max length of 6 in recipe quantity" />
@@ -907,7 +890,8 @@
     <MESSAGE value="error 500 adjusted proper.&#10;Follow ups configured proper" />
     <MESSAGE value="Export crm reports to excel enabled" />
     <MESSAGE value="Added campaign creation in CRM" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added campaign creation in CRM" />
+    <MESSAGE value="CHECK CMMS EXTENDED" />
+    <option name="LAST_COMMIT_MESSAGE" value="CHECK CMMS EXTENDED" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

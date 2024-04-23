@@ -27,7 +27,7 @@ def api(request):
     global header
     method = request.method
     response = {"status_code": "", "status": "", "message": ""}
-
+    ce = ""
     try:
         body = json.loads(request.body)
         module = body.get('module')
@@ -1136,7 +1136,8 @@ def api(request):
                                 # get this item value
                                 cursor = db()
 
-                                q = f"SELECT sell_price FROM product_master where barcode = '{barcode}'"
+                                q = f"SELECT sell_price FROM product_master where barcode = '" + barcode + "'"
+                                ce = q
                                 vq = cursor.execute(q)
                                 if vq is None:
                                     value = 0.00
@@ -1270,7 +1271,7 @@ def api(request):
                 g_name = data.get('g_name')
                 o_pk = data.get('mypk')
                 owner = User.objects.get(pk=o_pk)
-                SalesAssetsGroup(name=g_name,owner=owner).save()
+                SalesAssetsGroup(name=g_name, owner=owner).save()
                 response['status_code'] = 200
                 response['message'] = "Asset Group Saved"
             else:
@@ -1290,7 +1291,6 @@ def api(request):
                 if stage == 'save_cont':
                     header = data.get('header')
                     count_pk = header.get('count_pk')
-
 
                     # print(data)
                     if StockCountHD.objects.filter(pk=count_pk).count() == 1:
