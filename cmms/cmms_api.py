@@ -1171,7 +1171,7 @@ def api(request):
                             response['status_code'] = 500
                             response['status'] = 'error'
                             line_number = traceback.extract_tb(e.__traceback__)[-1].lineno
-                            response['message'] = f"Error occurred at line {line_number}: {str(e)} - {ce}"
+                            response['message'] = f"Error occurred at line {line_number}:  - {ce}"
 
 
 
