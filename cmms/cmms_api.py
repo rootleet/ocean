@@ -1146,9 +1146,6 @@ def api(request):
 
                                 value = 0
 
-                                print({'VAL': value, 'diff': Decimal(str(diff)), 'frozen': Decimal(str(frozen)),
-                                       'counted': Decimal(counted)})
-
                                 diff_val = Decimal(value) * Decimal(diff)
                                 froze_val = Decimal(value) * Decimal(frozen)
                                 counted_val = Decimal(value) * Decimal(counted)
