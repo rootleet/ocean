@@ -1153,7 +1153,7 @@ def api(request):
                                 froze_val = Decimal(value) * Decimal(frozen)
                                 counted_val = Decimal(value) * Decimal(counted)
 
-                                cursor.close()
+
 
                                 # save tran
                                 StockCountTrans.objects.create(stock_count_hd=count_hd, item_ref=ref, barcode=barcode,
