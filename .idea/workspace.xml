@@ -4,8 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ffcbf13e-d396-4071-9a24-4014a690f966" name="Changes" comment="CHECK CMMS EXTENDED">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="ffcbf13e-d396-4071-9a24-4014a690f966" name="Changes" comment="track query">
       <change beforePath="$PROJECT_DIR$/cmms/cmms_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/cmms/cmms_api.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -449,15 +448,7 @@
       <workItem from="1713330692923" duration="7143000" />
       <workItem from="1713379531779" duration="7541000" />
       <workItem from="1713827526123" duration="446000" />
-      <workItem from="1713872174744" duration="2218000" />
-    </task>
-    <task id="LOCAL-00128" summary="sms re-enstated">
-      <option name="closed" value="true" />
-      <created>1703171180066</created>
-      <option name="number" value="00128" />
-      <option name="presentableId" value="LOCAL-00128" />
-      <option name="project" value="LOCAL" />
-      <updated>1703171180067</updated>
+      <workItem from="1713872174744" duration="2401000" />
     </task>
     <task id="LOCAL-00129" summary="sms re-enstated">
       <option name="closed" value="true" />
@@ -843,7 +834,15 @@
       <option name="project" value="LOCAL" />
       <updated>1713874153244</updated>
     </task>
-    <option name="localTasksCounter" value="177" />
+    <task id="LOCAL-00177" summary="track query">
+      <option name="closed" value="true" />
+      <created>1713874891494</created>
+      <option name="number" value="00177" />
+      <option name="presentableId" value="LOCAL-00177" />
+      <option name="project" value="LOCAL" />
+      <updated>1713874891494</updated>
+    </task>
+    <option name="localTasksCounter" value="178" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -866,7 +865,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="servicing model" />
     <MESSAGE value="added recipe model" />
     <MESSAGE value="retail module updated to have max length of 6 in recipe quantity" />
     <MESSAGE value="modification made to point db to accurate port" />
@@ -891,7 +889,8 @@
     <MESSAGE value="Export crm reports to excel enabled" />
     <MESSAGE value="Added campaign creation in CRM" />
     <MESSAGE value="CHECK CMMS EXTENDED" />
-    <option name="LAST_COMMIT_MESSAGE" value="CHECK CMMS EXTENDED" />
+    <MESSAGE value="track query" />
+    <option name="LAST_COMMIT_MESSAGE" value="track query" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
