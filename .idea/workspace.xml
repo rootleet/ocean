@@ -5,6 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ffcbf13e-d396-4071-9a24-4014a690f966" name="Changes" comment="track query">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmms/cmms_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/cmms/cmms_api.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -448,15 +449,7 @@
       <workItem from="1713330692923" duration="7143000" />
       <workItem from="1713379531779" duration="7541000" />
       <workItem from="1713827526123" duration="446000" />
-      <workItem from="1713872174744" duration="3822000" />
-    </task>
-    <task id="LOCAL-00135" summary="servicing model">
-      <option name="closed" value="true" />
-      <created>1704294768965</created>
-      <option name="number" value="00135" />
-      <option name="presentableId" value="LOCAL-00135" />
-      <option name="project" value="LOCAL" />
-      <updated>1704294768965</updated>
+      <workItem from="1713872174744" duration="4246000" />
     </task>
     <task id="LOCAL-00136" summary="servicing model">
       <option name="closed" value="true" />
@@ -842,7 +835,15 @@
       <option name="project" value="LOCAL" />
       <updated>1713876132122</updated>
     </task>
-    <option name="localTasksCounter" value="184" />
+    <task id="LOCAL-00184" summary="track query">
+      <option name="closed" value="true" />
+      <created>1713876516156</created>
+      <option name="number" value="00184" />
+      <option name="presentableId" value="LOCAL-00184" />
+      <option name="project" value="LOCAL" />
+      <updated>1713876516156</updated>
+    </task>
+    <option name="localTasksCounter" value="185" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
