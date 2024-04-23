@@ -1134,15 +1134,17 @@ def api(request):
                                 row_iss = tran.get('row_iss')
 
                                 # get this item value
-                                cursor = db()
+                                # cursor = db()
+                                #
+                                # q = f"SELECT sell_price FROM product_master where barcode = '{barcode}'"
+                                # ce = q + f" {barcode}"
+                                # vq = cursor.execute(q)
+                                # if vq is None:
+                                #     value = 0.00
+                                # else:
+                                #     value = cursor.execute(q).fetchone()[0]
 
-                                q = f"SELECT sell_price FROM product_master where barcode = '{barcode}'"
-                                ce = q + f" {barcode}"
-                                vq = cursor.execute(q)
-                                if vq is None:
-                                    value = 0.00
-                                else:
-                                    value = cursor.execute(q).fetchone()[0]
+                                value = 0
 
                                 print({'VAL': value, 'diff': Decimal(str(diff)), 'frozen': Decimal(str(frozen)),
                                        'counted': Decimal(counted)})
