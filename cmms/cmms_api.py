@@ -1136,8 +1136,8 @@ def api(request):
                                 # get this item value
                                 cursor = db()
 
-                                q = f"SELECT sell_price FROM product_master where barcode = '" + barcode + "'"
-                                ce = q
+                                q = f"SELECT sell_price FROM product_master where barcode = '{barcode}'"
+                                ce = q + f" {barcode}"
                                 vq = cursor.execute(q)
                                 if vq is None:
                                     value = 0.00
