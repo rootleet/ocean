@@ -418,7 +418,8 @@ def api(request):
                                     'item_ref': ref,
                                     'barcode': barcode,
                                     'name': name,
-                                    'qty': qty
+                                    'qty': qty,
+                                    'price': t.price
                                 })
 
                             response['message'] = {
@@ -499,7 +500,7 @@ def api(request):
                             response['status_code'] = 200
                         except Exception as e:
                             response['status_code'] = 500
-                            response['message'] = str(e)
+                            response['message'] = f"{str(e)} line : 502"
 
                     elif stage == 'export':
                         doc = data.get('doc')
@@ -1004,7 +1005,6 @@ def api(request):
                     qty = data.get('qty')
                     myName = data.get('user')
 
-                    username = myName
                     server = f"{DB_SERVER},{DB_PORT}"
                     database = DB_NAME
                     username = DB_USER
@@ -1077,9 +1077,10 @@ def api(request):
                                     barcode = tran['barcode']
                                     qty = tran['qty']
                                     name = tran['name']
+                                    price = tran['price']
 
                                     StockFreezeTrans.objects.create(entry_id=stock_freeze_hd.pk, item_ref=ref,
-                                                                    barcode=barcode, qty=qty, name=name)
+                                                                    barcode=barcode, qty=qty, name=name, price=price)
 
                                 response['message'] = "SAVED"
                                 response['status_code'] = 200
@@ -1113,7 +1114,7 @@ def api(request):
                         try:
 
                             frozen = StockFreezeHd.objects.get(pk=frozen_ref)
-                            frozen.status = 2
+
 
                             if StockCountHD.objects.filter(frozen=frozen, comment=comment, owner=owner).exists():
                                 # delete
@@ -1127,38 +1128,34 @@ def api(request):
                                 ref = tran.get('ref')
                                 barcode = tran.get('barcode')
                                 name = tran.get('name')
-                                frozen = tran.get('frozen')
+                                frozen_qty = tran.get('frozen')
                                 counted = tran.get('counted')
                                 diff = tran.get('diff')
                                 row_comment = tran.get('row_comment')
                                 row_iss = tran.get('row_iss')
 
-                                # get this item value
-                                # cursor = db()
-                                #
-                                # q = f"SELECT sell_price FROM product_master where barcode = '{barcode}'"
-                                # ce = q + f" {barcode}"
-                                # vq = cursor.execute(q)
-                                # if vq is None:
-                                #     value = 0.00
-                                # else:
-                                #     value = cursor.execute(q).fetchone()[0]
+                                value = tran.get('price')
 
-                                value = 0
+                                print("#DIFF * VAL#", barcode)
+                                print('## ', diff, value)
+                                diff_val = Decimal(diff) * Decimal(value)
 
-                                diff_val = 0
-                                froze_val = 0
-                                counted_val = 0
+                                print("#FROZEN * VAL#", barcode)
+                                print('## ', frozen_qty, value)
+                                froze_val = Decimal(frozen_qty) * Decimal(value)
 
-
+                                print("#DIFF * VAL#", barcode)
+                                print('## ', counted, value)
+                                counted_val = Decimal(counted) * Decimal(value)
 
                                 # save tran
                                 StockCountTrans.objects.create(stock_count_hd=count_hd, item_ref=ref, barcode=barcode,
-                                                               name=name, froze_qty=frozen, counted_qty=counted,
+                                                               name=name, froze_qty=frozen_qty, counted_qty=counted,
                                                                diff_qty=diff, comment=row_comment, issue=row_iss,
                                                                froze_val=froze_val, diff_val=diff_val,
                                                                counted_val=counted_val)
 
+                            frozen.status = 2
                             frozen.save()
                             response['status_code'] = 200
                             response['status'] = 'success'

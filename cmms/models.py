@@ -181,6 +181,7 @@ class StockFreezeTrans(models.Model):
     barcode = models.CharField(max_length=100, blank=False, null=False)
     name = models.TextField(blank=False, null=False)
     qty = models.DecimalField(max_digits=10, decimal_places=3)
+    price = models.DecimalField(max_digits=10, decimal_places=3, default=0.0)
 
 
 class SalesCustomers(models.Model):

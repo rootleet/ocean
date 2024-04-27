@@ -49,9 +49,10 @@
                       <th>ITEM REF</th>
                       <th>BARCODE</th>
                       <th>DESCRIPTION</th>
-                      <th style="width:160px">FROZEN QTY</th>
-                      <th style="width:160px">COUNTED</th>
-                      <th style="width:160px">DIFFERENCE</th>
+                      <th style="width:100px">PRICE</th>
+                      <th style="width:100px">FZ QTY</th>
+                      <th style="width:100px">CT QTY</th>
+                      <th style="width:100px">DIFF QTY</th>
                       <th>DETAIL</th>
                       <th>COMMENT</th>
                   </tr>
@@ -110,6 +111,7 @@
                         name_id = `name_${row}`,
                         x_id = `x_${row}`,
                         y_id = `y_${row}`,
+                        price_id = `price_${row}`,
                         z_id = `z_${row}`;
 
 
@@ -119,9 +121,10 @@
                             <td id="${ref_id}">${tran['item_ref']}</td>
                             <td id="${bc_id}">${tran['barcode']}</td>
                             <td id="${name_id}">${tran['name']}</td>
-                            <td ><input class="form-control form-control-sm rounded-0" style="width:150px" onkeyup="lincal.sub(${row})" type="text" id="${y_id}" disabled value="${tran['qty']}"></td>
-                            <td><input class="form-control form-control-sm rounded-0" style="width:150px" value="0.00" onkeyup="lincal.sub(${row})" id="${x_id}" type="text"></td>
-                            <td><input class="form-control form-control-sm rounded-0" style="width:150px" onkeyup="anton.lineXyz(${row})" type="text" id="${z_id}" disabled ></td>
+                            <td ><input class="form-control form-control-sm rounded-0" style="width:100px" type="text" id="${price_id}" disabled value="${tran['price']}"></td>
+                            <td ><input class="form-control form-control-sm rounded-0" style="width:100px"  type="text" id="${y_id}" disabled value="${tran['qty']}"></td>
+                            <td><input class="form-control form-control-sm rounded-0" style="width:100px" value="0.00" onchange="lincal.sub(${row})" id="${x_id}" type="text"></td>
+                            <td><input class="form-control form-control-sm rounded-0" style="width:100px" onkeyup="anton.lineXyz(${row})" type="text" id="${z_id}" disabled ></td>
                             <td>
                                 <select class="form-control form-control-sm rounded-0" name="" id="iss_${row}">
                                     <option selected value="no_iss">Accurate</option>

@@ -4,9 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ffcbf13e-d396-4071-9a24-4014a690f966" name="Changes" comment="track query">
+    <list default="true" id="ffcbf13e-d396-4071-9a24-4014a690f966" name="Changes" comment="remove user profile error">
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/3a6a5de2-5c16-4c61-8911-ff2a73819934.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/3a6a5de2-5c16-4c61-8911-ff2a73819934.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/59b51993-8727-4f79-b918-a1f1762c73bf.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/59b51993-8727-4f79-b918-a1f1762c73bf.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmms/cmms_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/cmms/cmms_api.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmms/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/cmms/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ocean/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/ocean/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/general/js/classes/cmms.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/general/js/classes/cmms.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/cmms/count.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/cmms/count.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/cmms/new_stock.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/cmms/new_stock.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -34,14 +42,12 @@
     &quot;assignee&quot;: &quot;rootleet&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings">
-    <option name="selectedUrlAndAccountId">
-      <UrlAndAccount>
-        <option name="accountId" value="db4189a1-ab93-4c29-91e8-751b521b3b54" />
-        <option name="url" value="https://github.com/rootleet/ocean.git" />
-      </UrlAndAccount>
-    </option>
-  </component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/rootleet/ocean.git&quot;,
+    &quot;accountId&quot;: &quot;db4189a1-ab93-4c29-91e8-751b521b3b54&quot;
+  }
+}</component>
   <component name="HighlightingSettingsPerFile">
     <setting file="mock:///pre-request-script-f9aca2c2.js" root0="FORCE_HIGHLIGHTING" />
     <setting file="mock:///test-script-f9aca2c2.js" root0="FORCE_HIGHLIGHTING" />
@@ -284,7 +290,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-python-sdk-5a2391486177-2887949eec09-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-233.13763.11" />
+        <option value="bundled-js-predefined-1d06a55b98c1-74d2a5396914-JavaScript-PY-241.14494.241" />
+        <option value="bundled-python-sdk-0509580d9d50-28c9f5db9ffe-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-241.14494.241" />
       </set>
     </attachedChunks>
   </component>
@@ -449,31 +456,9 @@
       <workItem from="1713330692923" duration="7143000" />
       <workItem from="1713379531779" duration="7541000" />
       <workItem from="1713827526123" duration="446000" />
-      <workItem from="1713872174744" duration="4246000" />
-    </task>
-    <task id="LOCAL-00136" summary="servicing model">
-      <option name="closed" value="true" />
-      <created>1704299120882</created>
-      <option name="number" value="00136" />
-      <option name="presentableId" value="LOCAL-00136" />
-      <option name="project" value="LOCAL" />
-      <updated>1704299120882</updated>
-    </task>
-    <task id="LOCAL-00137" summary="servicing model">
-      <option name="closed" value="true" />
-      <created>1704299641544</created>
-      <option name="number" value="00137" />
-      <option name="presentableId" value="LOCAL-00137" />
-      <option name="project" value="LOCAL" />
-      <updated>1704299641545</updated>
-    </task>
-    <task id="LOCAL-00138" summary="added recipe model">
-      <option name="closed" value="true" />
-      <created>1704770164719</created>
-      <option name="number" value="00138" />
-      <option name="presentableId" value="LOCAL-00138" />
-      <option name="project" value="LOCAL" />
-      <updated>1704770164719</updated>
+      <workItem from="1713872174744" duration="4712000" />
+      <workItem from="1714141450322" duration="1692000" />
+      <workItem from="1714161908210" duration="8924000" />
     </task>
     <task id="LOCAL-00139" summary="added recipe model">
       <option name="closed" value="true" />
@@ -843,7 +828,31 @@
       <option name="project" value="LOCAL" />
       <updated>1713876516156</updated>
     </task>
-    <option name="localTasksCounter" value="185" />
+    <task id="LOCAL-00185" summary="track query">
+      <option name="closed" value="true" />
+      <created>1713876956830</created>
+      <option name="number" value="00185" />
+      <option name="presentableId" value="LOCAL-00185" />
+      <option name="project" value="LOCAL" />
+      <updated>1713876956830</updated>
+    </task>
+    <task id="LOCAL-00186" summary="remove user profile error">
+      <option name="closed" value="true" />
+      <created>1714143185639</created>
+      <option name="number" value="00186" />
+      <option name="presentableId" value="LOCAL-00186" />
+      <option name="project" value="LOCAL" />
+      <updated>1714143185639</updated>
+    </task>
+    <task id="LOCAL-00187" summary="remove user profile error">
+      <option name="closed" value="true" />
+      <created>1714143378736</created>
+      <option name="number" value="00187" />
+      <option name="presentableId" value="LOCAL-00187" />
+      <option name="project" value="LOCAL" />
+      <updated>1714143378736</updated>
+    </task>
+    <option name="localTasksCounter" value="188" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -866,7 +875,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="added recipe model" />
     <MESSAGE value="retail module updated to have max length of 6 in recipe quantity" />
     <MESSAGE value="modification made to point db to accurate port" />
     <MESSAGE value="change unite data type" />
@@ -891,7 +899,8 @@
     <MESSAGE value="Added campaign creation in CRM" />
     <MESSAGE value="CHECK CMMS EXTENDED" />
     <MESSAGE value="track query" />
-    <option name="LAST_COMMIT_MESSAGE" value="track query" />
+    <MESSAGE value="remove user profile error" />
+    <option name="LAST_COMMIT_MESSAGE" value="remove user profile error" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

@@ -966,6 +966,7 @@ class Cmms {
                     let tran = trans[i]
                     let item_ref = tran['item_ref'];
                     let qty = tran['qty'];
+                    let un_price = tran['unit_price'];
 
                     // let product = cmms.getProduct('single',item_ref,'item_ref');
                     let barcode, name;
@@ -986,6 +987,7 @@ class Cmms {
                     <td><input class="form-control form-control-sm rounded-0" id="barcode_${row_count}" type="text" readonly value="${barcode}"></td>
                     <td><input class="form-control form-control-sm rounded-0" id="name_${row_count}" type="text" readonly value="${name}"></td>
                     <td><input class="form-control form-control-sm rounded-0" id="qty_row_${row_count}" type="number" readonly value="${qty}"></td>
+                    <td><input class="form-control form-control-sm rounded-0" id="price_${row_count}" type="number" readonly value="${un_price}"></td>
                     
                 </tr>`);
 
@@ -1041,17 +1043,19 @@ class Cmms {
 
             for (let r = 0; r < rows.length; r++) {
                 let line = r+1
-                let ref_id,bc_id,qty_id,name_id;
+                let ref_id,bc_id,qty_id,name_id,price_id;
                 ref_id = `ref_${line}`
                 bc_id = `barcode_${line}`
                 qty_id = `qty_row_${line}`
                 name_id = `name_${line}`
+                price_id = `price_${line}`
 
                 let tran = {
                     ref:$(`#${ref_id}`).val(),
                     barcode:$(`#${bc_id}`).val(),
                     qty:$(`#${qty_id}`).val(),
-                    name:$(`#${name_id}`).val()
+                    name:$(`#${name_id}`).val(),
+                    price:$(`#${price_id}`).val()
                 }
 
                 // let tr = rows[r]
@@ -1168,7 +1172,7 @@ class Cmms {
                 for (let t = 0; t < count; t++) {
                     let i = t + 1;
                     let tran = trans[t]
-                    let ref,bc,name,frozen,counted,diff,row_comment,row_iss
+                    let ref,bc,name,frozen,counted,diff,row_comment,row_iss,price
 
                     ref = $(`#ref_${i}`)
                     bc = $(`#bc_${i}`)
@@ -1176,6 +1180,7 @@ class Cmms {
                     frozen = $(`#y_${i}`)
                     counted = $(`#x_${i}`)
                     diff = $(`#z_${i}`);
+                    price = $(`#price_${i}`)
                     row_comment = $(`#line${i}_comment`).val();
                     row_iss = $(`#iss_${i}`).val()
 
@@ -1187,8 +1192,11 @@ class Cmms {
                         counted:counted.val(),
                         diff:diff.val(),
                         row_comment:row_comment,
-                        row_iss:row_iss
+                        row_iss:row_iss,
+                        price:price.val()
                     }
+
+                    console.table(this_tr)
 
 
 
