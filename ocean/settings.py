@@ -212,8 +212,8 @@ AUTHENTICATION_BACKENDS = [
 
 # CMMS DATA PARAMETERS
 
-DB_SERVER = '192.168.2.4' if DEBUG is False else 'localhost'
-DB_PORT = '1237' if DEBUG is False else '1433'
+DB_SERVER = '192.168.2.4' if DEBUG is False else '192.168.2.4'
+DB_PORT = '1237' if DEBUG is False else '1237'
 DB_USER = 'sa'
 DB_PASSWORD = 'sa@123456'
 DB_NAME = 'CMMS'
