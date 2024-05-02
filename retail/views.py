@@ -171,7 +171,7 @@ def products(request):
         'page': {
             'title': "Product Master"
         },
-        'items': Products.objects.all()[:10]
+        'items': Products.objects.all()
     }
     return render(request, 'retail/products.html', context=context)
 
