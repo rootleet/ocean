@@ -1,6 +1,9 @@
 #!/bin/bash
 echo "RETAILER"
 
+printf "CHECKING STOCK MONITOR"
+./update_stock.sh
+
 printf "SYNCING SUPPLIERS.... \n"
 ./sync_retail_suppliers.sh
 

@@ -4,20 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ffcbf13e-d396-4071-9a24-4014a690f966" name="Changes" comment="Fixed stock clear issue">
-      <change afterPath="$PROJECT_DIR$/cronjobs/retail/stock_monitor.sh" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/retail/prodMast.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/retail/stock/minotoring.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/retail/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/retail/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/retail/retail_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/retail/retail_api.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/retail/retail_tools.py" beforeDir="false" afterPath="$PROJECT_DIR$/retail/retail_tools.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/retail/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/retail/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/retail/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/retail/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/general/js/classes/retail.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/general/js/classes/retail.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/retail/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/retail/base.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/retail/products.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/retail/products.html" afterDir="false" />
-    </list>
+    <list default="true" id="ffcbf13e-d396-4071-9a24-4014a690f966" name="Changes" comment="add stock monitor" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -461,15 +448,7 @@
       <workItem from="1713872174744" duration="4712000" />
       <workItem from="1714141450322" duration="1692000" />
       <workItem from="1714161908210" duration="9200000" />
-      <workItem from="1714658559506" duration="5571000" />
-    </task>
-    <task id="LOCAL-00140" summary="added recipe model">
-      <option name="closed" value="true" />
-      <created>1706109852547</created>
-      <option name="number" value="00140" />
-      <option name="presentableId" value="LOCAL-00140" />
-      <option name="project" value="LOCAL" />
-      <updated>1706109852547</updated>
+      <workItem from="1714658559506" duration="5769000" />
     </task>
     <task id="LOCAL-00141" summary="retail module updated to have max length of 6 in recipe quantity">
       <option name="closed" value="true" />
@@ -855,7 +834,15 @@
       <option name="project" value="LOCAL" />
       <updated>1714205366136</updated>
     </task>
-    <option name="localTasksCounter" value="189" />
+    <task id="LOCAL-00189" summary="add stock monitor">
+      <option name="closed" value="true" />
+      <created>1714667620203</created>
+      <option name="number" value="00189" />
+      <option name="presentableId" value="LOCAL-00189" />
+      <option name="project" value="LOCAL" />
+      <updated>1714667620204</updated>
+    </task>
+    <option name="localTasksCounter" value="190" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -878,7 +865,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="modification made to point db to accurate port" />
     <MESSAGE value="change unite data type" />
     <MESSAGE value="add image uploader" />
     <MESSAGE value="git ignore uploaded" />
@@ -903,7 +889,8 @@
     <MESSAGE value="track query" />
     <MESSAGE value="remove user profile error" />
     <MESSAGE value="Fixed stock clear issue" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed stock clear issue" />
+    <MESSAGE value="add stock monitor" />
+    <option name="LAST_COMMIT_MESSAGE" value="add stock monitor" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
