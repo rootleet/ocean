@@ -94,6 +94,7 @@ class Products(models.Model):
     barcode = models.CharField(unique=True, max_length=100, null=False, blank=False)
     name = models.TextField(null=False)
     price = models.DecimalField(decimal_places=2, max_digits=60)
+    stock_monitor = models.BooleanField(default=False)
 
     def is_on_bolt(self):
         barcode = self.barcode.strip()
@@ -110,6 +111,29 @@ class Stock(models.Model):
 
     class Meta:
         unique_together = (('product', 'location'),)
+
+
+class StockMonitor(models.Model):
+    product = models.ForeignKey(Products, on_delete=models.CASCADE)
+    location = models.CharField(max_length=3, null=False, blank=False)
+    stock_qty = models.DecimalField(decimal_places=2, max_digits=10, default=0.00)
+
+    valid = models.BooleanField(default=False)
+
+    created_on = models.DateTimeField(auto_now_add=True)
+    edited_on = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = (('product', 'location'),)
+
+    def obj(self):
+        return {
+            'name':self.product.name.strip(),
+            'barcode':self.product.barcode.strip(),
+            'location':self.location,
+            'stock':self.stock_qty,
+            'valid':self.valid
+        }
 
 
 class RecipeGroup(models.Model):

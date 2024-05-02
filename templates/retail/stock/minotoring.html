@@ -1,0 +1,46 @@
+{% extends 'retail/base.html' %}
+{% load static %}
+
+{% block body %}
+    <div class="card-header">
+        <div class="w-100 d-flex flex-wrap">
+            <div class="w-50"><strong class="card-title">RETAIL STOCK CHECK</strong></div>
+            <div class="w-50 d-flex flex-wrap justify-content-end">
+                <select name="" id="stk_chng" style="width: fit-content" class="form-control rounded-0">
+                    <option value="*">All</option>
+                    <option value="accurate">Valid</option>
+                    <option value="not_accurate">Invalid</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-body">
+        <div class="table-response">
+            <table class="table table-sm table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th>LOCATION</th>
+                        <th>BARCODE</th>
+                        <th>PRODUCT</th>
+                        <th>STOCK</th>
+                        <th>VALID</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function(){
+            retail.retrieveStockMonitoring('*')
+            // retrieve stock frozen
+            $('#stk_chng').change(function(){
+                retail.retrieveStockMonitoring(`${$('#stk_chng').val()}`);
+            });
+        });
+    </script>
+{% endblock %}

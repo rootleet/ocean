@@ -279,6 +279,60 @@ class Retail {
         }
     }
     // END OF STOCK SECTION
+
+    stockMonitoringFlag(pk = 0,flag=false){
+        let payload = {
+            module:'flag_stock_monitoring',
+            data:{
+                prod_pk:pk,
+                flag:flag
+            }
+        }
+
+        return api.call('PATCH',payload,'/retail/api/')
+    }
+
+    // enable stock
+    enableMonitoring(pk){
+        kasa.confirm(this.stockMonitoringFlag(pk,true)['message'],1,'here')
+    }
+    // disable
+    disableMonitoring(pk){
+        kasa.confirm(this.stockMonitoringFlag(pk,false)['message'],1,'here')
+    }
+
+    stockMonitoring(accuracy = '*'){
+        let payload = {
+            module:'see_stock_monitor',
+            data:{
+                "filter":accuracy
+            }
+        }
+
+        return api.call('VIEW',payload,'/retail/api/')
+    }
+
+    retrieveStockMonitoring(accuracy='*') {
+        let resp = this.stockMonitoring(accuracy);
+        if(anton.IsRequest(resp)){
+            let stocks = resp['message'];
+            if(stocks.length > 0){
+                let tr = ``;
+                for(let s = 0; s < stocks.length; s++){
+                    let stock = stocks[s];
+                    tr += `
+                        <tr><td>${stock['location']}</td><td>${stock['barcode']}</td><td>${stock['name']}</td><td>${stock['stock']}</td><td>${stock['valid']}</td></tr>
+                    `
+                }
+
+                $('tbody').html(tr)
+            } else {
+                $('tbody').html(`<tr><td class="text-danger">NO RECORDS</td></tr>`)
+            }
+        } else {
+            kasa.response(resp)
+        }
+    }
 }
 
 const retail = new Retail();

@@ -14,7 +14,8 @@ from admin_panel.models import Emails, Locations
 from ocean.settings import RET_DB_HOST, RET_DB_USER, RET_DB_PASS, RET_DB_NAME
 from retail.db import ret_cursor, get_stock
 from retail.models import BoltItems, BoltGroups, ProductSupplier, ProductGroup, ProductSubGroup, Products, Stock, \
-    RecipeGroup, RecipeProduct, Recipe, StockHd
+    RecipeGroup, RecipeProduct, Recipe, StockHd, StockMonitor
+from retail.prodMast import ProdMaster
 from retail.retail_tools import create_recipe_card
 
 
@@ -157,11 +158,11 @@ def interface(request):
                     item_des = product[2].strip()
                     group = product[3]
                     print(product[4])
-                    try: 
+                    try:
                         sub_group = product[4].strip()
                     except Exception as e:
                         sub_group = product[4]
-                        
+
                     supplier = product[5]
                     retail1 = product[6]
 
@@ -181,7 +182,7 @@ def interface(request):
                         else:
                             # save new
                             Products.objects.get_or_create(subgroup=subgroup, name=item_des, barcode=barcode,
-                                                                      code=code, price=retail1)
+                                                           code=code, price=retail1)
                         saved = saved + 1
                     else:
                         not_synced = not_synced + 1
@@ -315,6 +316,8 @@ def interface(request):
                     success_response['status_code'] = 404
                     success_response['message'] = f"No stock keep for entry number {entry}"
 
+
+
             else:
                 success_response['status_code'] = 404
                 success_response['message'] = f"no {method} method with module called {module}"
@@ -367,7 +370,7 @@ def interface(request):
 
             elif module == 'price_change':
                 send = data.get('send_mail') or 'no'
-                rate_inc = data.get('rate_at',20)
+                rate_inc = data.get('rate_at', 20)
                 cursor = ret_cursor()
                 import openpyxl
                 worksheet = openpyxl.Workbook()
@@ -893,11 +896,108 @@ def interface(request):
                 book.save(file_name)
                 success_response['message'] = f'/{file_name}'
 
+            elif module == 'stock_monitor':
+                # get enabled stocks
+                products = Products.objects.filter(stock_monitor=True)
+                for product in products:
+                    pk = product.pk
+                    code = product.code
+                    pm = ProdMaster()
+                    stk = pm.get_stock(code)
+
+                    nia = stk['nia']
+                    osu = stk['osu']
+                    spintex = stk['spintex']
+                    warehouse = stk['warehouse']
+                    vegetables = stk['vegetables']
+                    kitchen = stk['kitchen']
+                    total = stk['total']
+                    sales = stk['sales']
+
+                    # spintex
+                    sp = False
+                    if spintex >= 0:
+                        sp = True
+
+                    if StockMonitor.objects.filter(location='001', product=product).exists():
+                        stp = StockMonitor.objects.get(location='001', product=product)
+                        stp.stock_qty = spintex
+                        stp.valid = sp
+                        stp.save()
+                    else:
+                        StockMonitor(location='001', product=product, stock_qty=spintex,valid=sp).save()
+
+                    ## NIA
+                    ni = False
+                    if nia >= 0:
+                        ni = True
+
+                    if StockMonitor.objects.filter(location='202', product=product).exists():
+                        stp = StockMonitor.objects.get(location='202', product=product)
+                        stp.stock_qty = nia
+                        stp.valid = ni
+                        stp.save()
+                    else:
+                        StockMonitor(location='202', product=product, stock_qty=nia,valid=ni).save()
+
+                    os = False
+                    if osu >= 0:
+                        os = True
+
+                    if StockMonitor.objects.filter(location='205', product=product).exists():
+                        stp = StockMonitor.objects.get(location='205', product=product)
+                        stp.stock_qty = os
+                        stp.valid = sp
+                        stp.save()
+                    else:
+                        StockMonitor(location='205', product=product, stock_qty=osu,valid=os).save()
+
+                    # kitchen
+                    kt = False
+                    if kitchen >= 0:
+                        kt = True
+
+                    if StockMonitor.objects.filter(location='201', product=product).exists():
+                        stp = StockMonitor.objects.get(location='201', product=product)
+                        stp.stock_qty = kitchen
+                        stp.valid = kt
+                        stp.save()
+                    else:
+                        StockMonitor(location='201', product=product, stock_qty=kitchen,valid=kt).save()
+
+                    # warehouse
+                    wh = False
+                    if warehouse >= 0:
+                        wh = True
+
+                    if StockMonitor.objects.filter(location='999', product=product).exists():
+                        stp = StockMonitor.objects.get(location='999', product=product)
+                        stp.stock_qty = warehouse
+                        stp.valid = wh
+                        stp.save()
+                    else:
+                        StockMonitor(location='999', product=product, stock_qty=warehouse, valid=wh).save()
+
+            elif module == 'see_stock_monitor':
+                arr = []
+                filter =  data.get('filter','*')
+                if filter == 'not_accurate':
+                    all_m = StockMonitor.objects.filter(valid=False)
+                elif filter == 'accurate':
+                    all_m = StockMonitor.objects.filter(valid=True)
+                else:
+                    all_m = StockMonitor.objects.all()
+
+                for m in all_m:
+                    arr.append(m.obj())
+
+                success_response['message'] = arr
+                response = success_response
+
 
             else:
                 success_response['status_code'] = 404
                 success_response['message'] = f"no {method} method with module called {module}"
-
 
         elif method == 'PATCH':
             if module == 'price_update':
@@ -928,6 +1028,18 @@ def interface(request):
                     success_response['status_code'] = 404
                     success_response['message'] = "No Recipe Items"
 
+            # flag stock monitoring
+            elif module == 'flag_stock_monitoring':
+                prod_pk = data.get('prod_pk')
+                flag = data.get('flag')
+
+                product = Products.objects.get(pk=prod_pk)
+                name = product.name
+                current = product.stock_monitor
+                product.stock_monitor = flag
+                product.save()
+
+                success_response['message'] = f"Minitory flag changed for product {name} from {current} to {flag} "
         response = success_response
 
     except Exception as e:

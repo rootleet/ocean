@@ -171,7 +171,7 @@ def products(request):
         'page': {
             'title': "Product Master"
         },
-        'items': Products.objects.all()
+        'items': Products.objects.all()[:10]
     }
     return render(request, 'retail/products.html', context=context)
 
@@ -229,3 +229,11 @@ def stock(request):
     }
 
     return render(request,'retail/stock/frozen.html',context=context)
+
+@login_required()
+def stock_monitor(request):
+    context = {
+        'nav': True,
+    }
+
+    return render(request, 'retail/stock/minotoring.html', context=context)

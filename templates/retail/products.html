@@ -5,7 +5,7 @@
         <div class="w-100 h-100 d-flex flex-wrap">
             <div class="w-25 h-100"><strong class="card-title">PRODUCTS LIST</strong></div>
             <div class="w-75 h-100 d-flex flex-wrap justify-content-end align-content-center">
-
+                <a class='btn btn-outline-info mr-1 rounded-0' style='margin-right: 2px'>NEGATIVE FLAG</a>
                 <a href="javascript:void(0)" style="border-radius: 0 !important" onclick="retail.export_retail_products('*')" class="btn btn-outline-warning"><i class="fa fa-file-excel"></i> Export</a>
             </div>
         </div>
@@ -20,7 +20,8 @@
                     <th>BARCODE</th>
                     <th>NAME</th>
                     <th>PRICE</th>
-                    <th>IS_ON_BOLT</th>
+                    <th>STOCK MON.</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody id="tbody">
@@ -31,7 +32,20 @@
                         <td><small>{{ item.barcode }}</small></td>
                         <td><small>{{ item.name | slice:'28' }}</small></td>
                         <td><small>{{ item.price }}</small></td>
-                        <td><small>{{ item.is_on_bolt }}</small></td>
+                        <td><small>{{ item.stock_monitor }}</small></td>
+                        <td>
+                            <div class="dropdown dropleft">
+                                <span data-toggle="dropdown" class="bx bx-collapse-horizontal"></span>
+                                <div class="dropdown-menu">
+                                    
+                                    {% if item.stock_monitor is True %}
+                                        <a class="dropdown-item text-danger" onclick="retail.disableMonitoring('{{ item.pk }}')" href="javascript:void(0)">Dis Stock Flag</a>
+                                    {% else %}
+                                        <a class="dropdown-item text-success" onclick="retail.enableMonitoring('{{ item.pk }}')" href="javascript:void(0)">En Stock Flag</a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </td>
                     </tr>
                 {% endfor %}
             </tbody>

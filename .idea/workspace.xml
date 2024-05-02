@@ -4,7 +4,20 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ffcbf13e-d396-4071-9a24-4014a690f966" name="Changes" comment="Fixed stock clear issue" />
+    <list default="true" id="ffcbf13e-d396-4071-9a24-4014a690f966" name="Changes" comment="Fixed stock clear issue">
+      <change afterPath="$PROJECT_DIR$/cronjobs/retail/stock_monitor.sh" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/retail/prodMast.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/retail/stock/minotoring.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/retail/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/retail/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/retail/retail_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/retail/retail_api.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/retail/retail_tools.py" beforeDir="false" afterPath="$PROJECT_DIR$/retail/retail_tools.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/retail/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/retail/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/retail/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/retail/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/general/js/classes/retail.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/general/js/classes/retail.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/retail/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/retail/base.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/retail/products.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/retail/products.html" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -56,43 +69,43 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;ASKED_MARK_IGNORED_FILES_AS_EXCLUDED&quot;: &quot;true&quot;,
-    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
-    &quot;Django Server.DJANGO.executor&quot;: &quot;Run&quot;,
-    &quot;Docker.Docker Image.executor&quot;: &quot;Run&quot;,
-    &quot;Docker.Dockerfile.executor&quot;: &quot;Run&quot;,
-    &quot;Notification.DisplayName-DoNotAsk-JavaScript: Code Vision Performance&quot;: &quot;JavaScript: code vision performance watcher&quot;,
-    &quot;Notification.DoNotAsk-JavaScript: Code Vision Performance&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.OpenDjangoStructureViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;django.template.preview.state&quot;: &quot;SHOW_EDITOR_AND_PREVIEW&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/reza/Documents/GitHub/ocean&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "ASKED_MARK_IGNORED_FILES_AS_EXCLUDED": "true",
+    "DefaultHtmlFileTemplate": "HTML File",
+    "Django Server.DJANGO.executor": "Run",
+    "Docker.Docker Image.executor": "Run",
+    "Docker.Dockerfile.executor": "Run",
+    "Notification.DisplayName-DoNotAsk-JavaScript: Code Vision Performance": "JavaScript: code vision performance watcher",
+    "Notification.DoNotAsk-JavaScript: Code Vision Performance": "true",
+    "RunOnceActivity.OpenDjangoStructureViewOnStart": "true",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "django.template.preview.state": "SHOW_EDITOR_AND_PREVIEW",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "C:/Users/reza/Documents/GitHub/ocean/cronjobs/retail",
+    "node.js.detected.package.eslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "vue.rearranger.settings.migration": "true"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;DatabaseDriversLRU&quot;: [
-      &quot;mysql&quot;
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "mysql"
     ]
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\reza\Documents\GitHub\ocean\cronjobs\retail" />
       <recent name="C:\Users\reza\Documents\GitHub\ocean" />
       <recent name="C:\Users\reza\Documents\GitHub\ocean\templates" />
       <recent name="C:\Users\reza\Documents\GitHub\ocean\static\general\img" />
       <recent name="C:\Users\reza\Documents\GitHub\ocean\cronjobs" />
-      <recent name="C:\Users\reza\Documents\GitHub\ocean\maintainance" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\reza\Documents\GitHub\ocean\templates\retail" />
@@ -448,6 +461,7 @@
       <workItem from="1713872174744" duration="4712000" />
       <workItem from="1714141450322" duration="1692000" />
       <workItem from="1714161908210" duration="9200000" />
+      <workItem from="1714658559506" duration="5571000" />
     </task>
     <task id="LOCAL-00140" summary="added recipe model">
       <option name="closed" value="true" />

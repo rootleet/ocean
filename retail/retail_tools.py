@@ -57,3 +57,4 @@ def create_recipe_card(product_name, recipe_items):
     # Save the image
     file_name = f"static/recipe_card/{product_name}.png"
     image.save(file_name)
+

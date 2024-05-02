@@ -540,11 +540,24 @@
 
     <!-- STOCK -->
         {% if perms.retail.add_recipegroup %}
-        <li class="nav-item">
-            <a class="nav-link collapsed" href="{% url 'retail_stock' %}">
-              <i class="bi bi-book"></i><span>STOCK</span>
+            <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#stock-nav" data-bs-toggle="collapse" href="#">
+          <i class="bx bx-food-menu"></i><span>Stock</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="stock-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <a href="{% url 'stock_monitor' %}">
+              <i class="bi bi-circle"></i><span>Retail Stock Monitor</span>
             </a>
           </li>
+            <li>
+            <a href="{% url 'retail_stock' %}">
+              <i class="bi bi-alarm-fill"></i><span>Retail Stock Count</span>
+            </a>
+          </li>
+
+        </ul>
+      </li>
     {% endif %}
     <!-- END OF STOCK -->
 
