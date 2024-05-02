@@ -6,7 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="ffcbf13e-d396-4071-9a24-4014a690f966" name="Changes" comment="add stock update cron job">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/retail/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/retail/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cronjobs/retail/retail.sh" beforeDir="false" afterPath="$PROJECT_DIR$/cronjobs/retail/retail.sh" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -452,15 +452,7 @@
       <workItem from="1714141450322" duration="1692000" />
       <workItem from="1714161908210" duration="9200000" />
       <workItem from="1714658559506" duration="5769000" />
-      <workItem from="1714670507886" duration="173000" />
-    </task>
-    <task id="LOCAL-00142" summary="modification made to point db to accurate port">
-      <option name="closed" value="true" />
-      <created>1706524181688</created>
-      <option name="number" value="00142" />
-      <option name="presentableId" value="LOCAL-00142" />
-      <option name="project" value="LOCAL" />
-      <updated>1706524181688</updated>
+      <workItem from="1714670507886" duration="306000" />
     </task>
     <task id="LOCAL-00143" summary="change unite data type">
       <option name="closed" value="true" />
@@ -846,7 +838,15 @@
       <option name="project" value="LOCAL" />
       <updated>1714670649689</updated>
     </task>
-    <option name="localTasksCounter" value="191" />
+    <task id="LOCAL-00191" summary="add stock update cron job">
+      <option name="closed" value="true" />
+      <created>1714670768251</created>
+      <option name="number" value="00191" />
+      <option name="presentableId" value="LOCAL-00191" />
+      <option name="project" value="LOCAL" />
+      <updated>1714670768251</updated>
+    </task>
+    <option name="localTasksCounter" value="192" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
