@@ -4,9 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ffcbf13e-d396-4071-9a24-4014a690f966" name="Changes" comment="add stock update cron job">
+    <list default="true" id="ffcbf13e-d396-4071-9a24-4014a690f966" name="Changes" comment="stock monitor interface changed">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cronjobs/retail/stock_monitor.sh" beforeDir="false" afterPath="$PROJECT_DIR$/cronjobs/retail/stock_monitor.sh" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -452,15 +451,8 @@
       <workItem from="1714141450322" duration="1692000" />
       <workItem from="1714161908210" duration="9200000" />
       <workItem from="1714658559506" duration="5769000" />
-      <workItem from="1714670507886" duration="709000" />
-    </task>
-    <task id="LOCAL-00144" summary="change unite data type">
-      <option name="closed" value="true" />
-      <created>1706531052992</created>
-      <option name="number" value="00144" />
-      <option name="presentableId" value="LOCAL-00144" />
-      <option name="project" value="LOCAL" />
-      <updated>1706531052992</updated>
+      <workItem from="1714670507886" duration="2467000" />
+      <workItem from="1714714252296" duration="1021000" />
     </task>
     <task id="LOCAL-00145" summary="change unite data type">
       <option name="closed" value="true" />
@@ -846,7 +838,15 @@
       <option name="project" value="LOCAL" />
       <updated>1714670859125</updated>
     </task>
-    <option name="localTasksCounter" value="193" />
+    <task id="LOCAL-00193" summary="stock monitor interface changed">
+      <option name="closed" value="true" />
+      <created>1714684504865</created>
+      <option name="number" value="00193" />
+      <option name="presentableId" value="LOCAL-00193" />
+      <option name="project" value="LOCAL" />
+      <updated>1714684504867</updated>
+    </task>
+    <option name="localTasksCounter" value="194" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -869,7 +869,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="add image uploader" />
     <MESSAGE value="git ignore uploaded" />
     <MESSAGE value="- display products statistics base on open and closed in recipe gathering.&#10;&#10;- replace '/' in product name when generating recipe card&#10;&#10;- remove is_open column in products group display under recipe gathering" />
     <MESSAGE value="shwo recipe card" />
@@ -894,7 +893,8 @@
     <MESSAGE value="Fixed stock clear issue" />
     <MESSAGE value="add stock monitor" />
     <MESSAGE value="add stock update cron job" />
-    <option name="LAST_COMMIT_MESSAGE" value="add stock update cron job" />
+    <MESSAGE value="stock monitor interface changed" />
+    <option name="LAST_COMMIT_MESSAGE" value="stock monitor interface changed" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
