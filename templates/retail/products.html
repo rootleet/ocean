@@ -15,6 +15,7 @@
         <table class="table datatable">
             <thead>
                 <tr>
+                    <th>KEY</th>
                     <th>GROUP</th>
                     <th>SUB GROUP</th>
                     <th>BARCODE</th>
@@ -27,6 +28,7 @@
             <tbody id="tbody">
                 {% for item in items %}
                     <tr class="">
+                        <td><small>{{ item.pk }}</small></td>
                         <td><small>{{ item.subgroup.group.name | slice:':10' }}</small></td>
                         <td><small>{{ item.subgroup.name | slice:'20' }}</small></td>
                         <td><small>{{ item.barcode }}</small></td>
@@ -52,6 +54,19 @@
         </table>
     </div>
 
+    <div class='card-footer'>
+        {% if is_previous %}
+        <button onclick="location.href='{% url 'products' preious %}'" class='btn btn-info btn-sn'>PREVIOS</button>
+        {% else %}
+        <button disabled class='btn btn-info btn-sn'>PREVIOS</button>
+        {% endif %}
+        
+        {% if is_next %}
+        <button onclick="location.href='{% url 'products' next %}'" class='btn btn-info btn-sn'>NEXT</button>
+        {% else %}
+        <button disabled class='btn btn-info btn-sn'>NEXT</button>
+        {% endif %}
+    </div>
     <script>
         //retail.loadProducts()
     </script>

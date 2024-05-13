@@ -1,4 +1,5 @@
 import json
+import os
 import sys
 
 from django.http import JsonResponse
@@ -281,14 +282,14 @@ def interface(request):
                 # attachments
                 msg.attach(MIMEText(html_content, 'html'))
                 attachments = MailAttachments.objects.filter(mail=mail)
-                print(attachments.count)
+                
                 for attachment in attachments:
                     attachment_filename = attachment.attachment.path
-                    file_name = attachment_filename.split('/')[-1]
+                    file_name = os.path.basename(attachment_filename)
                     try:
                         with open(attachment_filename, 'rb') as attached:
-                            part = MIMEApplication(attached)
-                            part.add_header('Content-Disposition', 'attachment',filename=file_name)
+                            part = MIMEApplication(attached.read())  # Read the content of the file
+                            part.add_header('Content-Disposition', f'attachment; filename="{file_name}"')
                             msg.attach(part)
                     except FileNotFoundError:
                         print(f"File not found: {attachment_filename}")
@@ -316,6 +317,7 @@ def interface(request):
 
                     message = f"COULD NOT SEND EMAIL {str(e)}"
                     response['message'] = message
+                    
                 success_response['message'] = f"{mails.count()} Sent"
                 response = success_response
 

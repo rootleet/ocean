@@ -163,15 +163,57 @@ def bolt_groups(request):
     }
     return render(request, 'retail/bolt-groups.html', context=context)
 
+from django.core.paginator import Paginator, Page
+class CustomPaginator(Paginator):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.batch_size = 500
+
+    def page(self, number):
+        number = self.validate_number(number)
+        bottom = (number - 1) * self.batch_size
+        top = bottom + self.batch_size
+        if top > self.count:
+            top = self.count
+        return Page(self.object_list[bottom:top], number, self)
+
+def has_next_page(current_page, paginator):
+    return current_page.has_next()
 
 @login_required()
-def products(request):
+def products(request,page=1):
+    page_size = 500
+    ct = page * page_size
+    lt = abs(page_size - ct)
+    
+
+    all_products = Products.objects.all()[:ct]
+    last_500_products = list(all_products)[lt:]
+
+    last_pk = last_500_products[-1].pk
+    first_pk = last_500_products[0].pk
+    
+    print(first_pk,last_pk)
+   
+    next_page = False
+    if Products.objects.filter(pk__gt=last_pk):
+        next_page = True
+    previous_page = False
+    if Products.objects.filter(pk__lt=first_pk):
+        previous_page = True
+    
+        
+
     context = {
         'nav': True,
         'page': {
             'title': "Product Master"
         },
-        'items': Products.objects.all()
+        'items': last_500_products,
+        'is_next':next_page,
+        'next':page + 1,
+        'is_previous':previous_page,
+        'preious':page - 1
     }
     return render(request, 'retail/products.html', context=context)
 

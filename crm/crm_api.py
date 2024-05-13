@@ -312,7 +312,7 @@ def api_interface(request):
                         formatted_datetime = current_datetime.strftime("%Y_%m_%d_%H_%M_%S")
                         file_name1 = f"{owner.first_name}_{owner.last_name}_CRM_REPORT_{formatted_datetime}.xlsx"
 
-                        file_name = f"static/attachments/{file_name1}"
+                        file_name = f"static/general/crm-logs-reports/{file_name1}"
                         attc += f"{file_name},"
                         workbook.save(file_name)
                         print(file_name)
