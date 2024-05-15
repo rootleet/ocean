@@ -1,7 +1,7 @@
 {% extends 'dashboard/products/prod_base.html' %}
 {% load static %}
 
-{% block prod %}
+{% block body %}
 
     <div class="w-100" style="height: 80vh">
 
@@ -24,27 +24,25 @@
             </div>
         </div>
 
-        <div class="w-100 h-25 p-2">
-            <div class="w-100 h-100 card">
+        <div class="w-100 card-body h-100 p-2">
+            <div class="w-100 h-25">
                 <div class="card-body">
                     <div class="w-100 h-100">
                         <button data-bs-target="#appAsign" data-bs-toggle="modal" class="btn btn-sm btn-info">ASSIGN APP</button>
                     </div>
                 </div>
             </div>
+
+            <div class="h-75">
+                System
+                <table class="table table-sm">
+                    <thead>
+                        <tr></tr>
+                    </thead>
+                </table>
+            </div>
         </div>
 
-    </div>
-    <div class="card">
-        <div class="card-body">
-            System
-            <hr>
-            <table class="table table-sm">
-                <thead>
-                    <tr></tr>
-                </thead>
-            </table>
-        </div>
     </div>
 
 {% endblock %}
