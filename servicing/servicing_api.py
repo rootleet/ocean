@@ -180,6 +180,7 @@ def interface(request):
                               f"<strong>Email : </strong> <a href='mailto:{client.email}'>{client.email}</a>")
 
                 Sms(api=sms_api, message=tech_message, to=tech_number).save()
+                
                 Emails(sent_from='issues@snedaghana.loc', sent_to=technician.technician.email,
                        subject=f"NEW TICKET!! {ticket_title}", body=email_body).save()
                 success_response['message'] = "Job Opened"
