@@ -4,15 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ffcbf13e-d396-4071-9a24-4014a690f966" name="Changes" comment="stock monitor interface changed">
+    <list default="true" id="ffcbf13e-d396-4071-9a24-4014a690f966" name="Changes" comment="create crom logs with live data">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/crm/crm_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/crm/crm_api.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/reports/reports_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/reports/reports_api.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/retail/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/retail/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/retail/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/retail/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/static/attachments/DADDY_DADDY_CRM_REPORT_2024_03_15_16_48_03.xlsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/retail/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/retail/base.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/retail/products.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/retail/products.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -461,23 +455,8 @@
       <workItem from="1714670507886" duration="2467000" />
       <workItem from="1714714252296" duration="5515000" />
       <workItem from="1714945529075" duration="1158000" />
-      <workItem from="1715620603803" duration="312000" />
-    </task>
-    <task id="LOCAL-00146" summary="change unite data type">
-      <option name="closed" value="true" />
-      <created>1706532468663</created>
-      <option name="number" value="00146" />
-      <option name="presentableId" value="LOCAL-00146" />
-      <option name="project" value="LOCAL" />
-      <updated>1706532468663</updated>
-    </task>
-    <task id="LOCAL-00147" summary="change unite data type">
-      <option name="closed" value="true" />
-      <created>1706533038327</created>
-      <option name="number" value="00147" />
-      <option name="presentableId" value="LOCAL-00147" />
-      <option name="project" value="LOCAL" />
-      <updated>1706533038328</updated>
+      <workItem from="1715620603803" duration="421000" />
+      <workItem from="1715789489033" duration="585000" />
     </task>
     <task id="LOCAL-00148" summary="change unite data type">
       <option name="closed" value="true" />
@@ -855,7 +834,23 @@
       <option name="project" value="LOCAL" />
       <updated>1714715830460</updated>
     </task>
-    <option name="localTasksCounter" value="195" />
+    <task id="LOCAL-00195" summary="create crom logs with live data">
+      <option name="closed" value="true" />
+      <created>1715621091334</created>
+      <option name="number" value="00195" />
+      <option name="presentableId" value="LOCAL-00195" />
+      <option name="project" value="LOCAL" />
+      <updated>1715621091335</updated>
+    </task>
+    <task id="LOCAL-00196" summary="create crom logs with live data">
+      <option name="closed" value="true" />
+      <created>1715789641391</created>
+      <option name="number" value="00196" />
+      <option name="presentableId" value="LOCAL-00196" />
+      <option name="project" value="LOCAL" />
+      <updated>1715789641392</updated>
+    </task>
+    <option name="localTasksCounter" value="197" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -878,7 +873,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="git ignore uploaded" />
     <MESSAGE value="- display products statistics base on open and closed in recipe gathering.&#10;&#10;- replace '/' in product name when generating recipe card&#10;&#10;- remove is_open column in products group display under recipe gathering" />
     <MESSAGE value="shwo recipe card" />
     <MESSAGE value="recipe card search" />
@@ -903,7 +897,8 @@
     <MESSAGE value="add stock monitor" />
     <MESSAGE value="add stock update cron job" />
     <MESSAGE value="stock monitor interface changed" />
-    <option name="LAST_COMMIT_MESSAGE" value="stock monitor interface changed" />
+    <MESSAGE value="create crom logs with live data" />
+    <option name="LAST_COMMIT_MESSAGE" value="create crom logs with live data" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

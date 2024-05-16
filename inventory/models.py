@@ -3,8 +3,11 @@ from jsonfield import JSONField
 from django.conf import settings
 from django.db import models
 from django.db.models import Sum
+from django.contrib.auth.models import User
 
-from admin_panel.models import SuppMaster, Locations, ProductMaster
+from admin_panel.models import SuppMaster, Locations, ProductMaster, UserAddOns
+import appscenter
+
 
 
 # price master
@@ -198,12 +201,112 @@ class Computer(models.Model):
     updated_time = models.TimeField(auto_now=True)
     status = models.IntegerField(default=1)
 
-    def __str__(self):
-        return self.mac_address
+    # def __str__(self):
+    #     return self.mac_address
+
+    owner = models.ForeignKey(User,on_delete=models.SET_NULL, null=True, blank=True)
+
+    def logs(self):
+        return DeviceLogs.objects.filter(device=self)
+
+    def assign_to(self):
+        obj = {
+            'pk':0,
+            'name':"Unassigned",
+            'email':"Unknown",
+            'phone':'Unknown',
+            'department':'Unknown'
+        }
+
+        if self.owner:
+            # check if user is in add on
+            obj['pk'] = self.owner.pk,
+            obj['name'] = self.owner.get_full_name()
+            obj['email'] = self.owner.email
+
+            if UserAddOns.objects.filter(user=self.owner).count() == 1:
+                adon = UserAddOns.objects.get(user=self.owner)
+                obj['phone'] = adon.phone
+                obj['department'] = adon.dept()
+                
+
+        return obj
+
+    def more_info(self):
+        if ComputerMoreInfo.objects.filter(computer=self).count == 1:
+            return ComputerMoreInfo.objects.get(computer=self)
+        else:
+            return {}
+        
+    def is_online(self):
+        from datetime import datetime, timedelta
+        date_str = self.updated_date
+        time_str = self.updated_time
+
+        date_time_sp = f"{date_str} {time_str}".split(".")
+        date_time = date_time_sp[0]
+    
+        # print(date_time)
+        online = False
+        # Combine date and time strings
+        
+        datetime_combined = datetime.strptime(date_time, "%Y-%m-%d %H:%M:%S")
+    
+
+        # Get current time with five-minute buffer
+        current_time = datetime.now() + timedelta(minutes=5)
+        ct = datetime.strptime(str(datetime.now()).split('.')[0],"%Y-%m-%d %H:%M:%S")
+        s_sub = ct - datetime_combined
+        
+
+        av = datetime.strptime(str(s_sub), "%H:%M:%S") <= datetime.strptime("00:01:00", "%H:%M:%S")
+        
+
+
+        if av:
+            online = True
+        else:
+            online = False
+        
+        return online
+    
+    def last_breath(self):
+        from datetime import datetime, timedelta
+        date_str = self.updated_date
+        time_str = self.updated_time
+
+        date_time_sp = f"{date_str} {time_str}".split(".")
+        date_time = date_time_sp[0]
+
+        return date_time
+    
+    def apps(self):
+        
+        obj = {
+            'count':0,
+            'objects':{}
+        }
+
+        if appscenter.models.AppAssign.objects.filter(mach=self).exists:
+            aps = appscenter.models.AppAssign.objects.filter(mach=self)
+            obj['count'] = aps.count()
+            arr = []
+            for ap in aps:
+                arr.append({
+                    'name':ap.app.name,
+                    'description':ap.app.description
+                })
+
+            obj['objects'] = arr
+
+        print(obj)
+
+        return obj
+
 
 
 class ComputerMoreInfo(models.Model):
-    computer = models.ForeignKey('Computer', on_delete=models.CASCADE)
+    computer = models.OneToOneField('Computer', on_delete=models.CASCADE)
     department = models.ForeignKey('admin_panel.Department', on_delete=models.SET_NULL,null=True)
 
     monitor = models.TextField()
@@ -220,10 +323,29 @@ class ComputerMoreInfo(models.Model):
     updated_time = models.TimeField(auto_now=True)
     status = models.IntegerField(default=1)
 
+    
+
+    def my_self(self):
+        return {
+            'monitor':self.monitor,
+            'keyboard':self.keyboard,
+            'mouse':self.mouse,
+            'ups':self.ups,
+            'assign_to':self.assign_to()
+        }
 
 class ComputerGroup(models.Model):
     name = models.CharField(max_length=255)
 
     def __str__(self):
         return self.name
+
+
+class DeviceLogs(models.Model):
+    device = models.ForeignKey(Computer,on_delete=models.CASCADE,null=False, blank=False)
+    title = models.TextField()
+    description = models.TextField()
+
+
+    loged_on = models.DateTimeField(auto_now=True)
 

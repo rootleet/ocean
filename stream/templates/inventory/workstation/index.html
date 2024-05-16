@@ -67,6 +67,7 @@
 
         // get devices
         let devices = api.view(data)
+        console.table(devices)
 
         if(isJson(JSON.stringify(devices))){
             // get pats

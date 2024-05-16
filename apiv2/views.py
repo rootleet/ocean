@@ -20,7 +20,7 @@ from api.extras import get_stock, suppler_details, cardex
 from appscenter.models import AppsGroup, App, AppAssign, VersionControl
 from community.models import tags
 from dolphine.models import Documents
-from inventory.models import Computer, PoHd, PoTran
+from inventory.models import Computer, DeviceLogs, PoHd, PoTran
 
 
 @csrf_exempt
@@ -253,6 +253,18 @@ def api_function(request):
                             response['message'] = "Task not found!!"
 
 
+                elif module == 'assign_device':
+                    user_pk = data.get('user')
+                    dev_pk = data.get('device')
+                    t_user = User.objects.get(pk=user_pk)
+
+                    device = Computer.objects.get(pk=dev_pk)
+                    d_log = device
+                    device.owner = t_user
+                    device.save()
+                    
+                    DeviceLogs(device=d_log,title="User Assign",description=f"Device has been assigned to {t_user.first_name} {t_user.last_name}").save()
+
             except KeyError as e:
                 response["status_code"] = 400
                 response["status"] = "Bad Request"
@@ -381,6 +393,7 @@ def api_function(request):
                                 "model": device.model,
                                 "os": device.os,
                                 "sku": device.sku,
+                                "owner":device.more_info()
                             },
                             'printers': printer_list,
                             'timestamp': {

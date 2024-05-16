@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
-from admin_panel.models import ProductMaster, SuppMaster, Locations, UnitMembers
+from admin_panel.models import ProductMaster, SuppMaster, Locations, UnitMembers, UserAddOns
 from django.contrib.auth import authenticate, login as auth_login, logout
 from django.contrib.auth.decorators import login_required
 
@@ -150,14 +150,21 @@ def save_workstation(request):
 def view_workstation(request, mac_addr):
     page['title'] = 'Workstation'
     apps = App.objects.all()
-    context = {
-        'page': page,
-        'nav': True,
-        'apps': apps,
-        'dev': Computer.objects.get(mac_address=mac_addr)
 
-    }
-    return render(request, 'inventory/workstation/view.html', context=context)
+    if Computer.objects.filter(mac_address=mac_addr).exists():
+        device = Computer.objects.get(mac_address=mac_addr)
+        
+        context = {
+            'page': page,
+            'nav': True,
+            'apps': apps,
+            'dev': device,
+            'users':UserAddOns.objects.all()
+
+        }
+        return render(request, 'inventory/workstation/view.html', context=context)
+    else:
+        return redirect('workstation')
 
 
 def new_products(request):

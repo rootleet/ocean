@@ -5,6 +5,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
 
+from admin_panel.models import Sms, SmsApi
 from appconfig.form import NewApp, NewVersion
 from appscenter.models import AppsGroup, App, AppAssign, AppProviders
 from blog.anton import make_md5
@@ -75,13 +76,28 @@ def save_app_update(request):
         try:
             form.save()
             version = form.cleaned_data['version_no']
+            description = form.cleaned_data['description']
+            
             appx = App.objects.get(pk=form.cleaned_data['app'].pk)
+            app_name = appx.name
+            ap = appx
             appx.version = version
             appx.save()
+            msg = f"Software Update \nSoftware: {app_name}\nUpdate Detail: {description}. \nNote: Your device is expected to update automatically, but if you still face same issue after a while or a new issue after the update, please inform IT Department 054 631 00 11"
+            # get all users with this app
+            app_assign = AppAssign.objects.filter(app=ap)
+            for app_ass in app_assign:
+                device = app_ass.mach
+                dev_owner = device.assign_to()
+                if dev_owner['phone'] != 'unknown':
+                    recipient = dev_owner['phone']
+                    Sms(api=SmsApi.objects.get(is_default=True),to = recipient,message = msg).save()
             # return HttpResponse("DONE")
+            # alert users
             messages.success(request, "VERSION SAVED")
         except Exception as e:
             # return HttpResponse(e)
             messages.error(request, e)
+            return HttpResponse(str(e))
 
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))

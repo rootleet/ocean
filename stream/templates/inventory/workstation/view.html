@@ -24,25 +24,225 @@
             </div>
         </div>
 
-        <div class="w-100 card-body h-100 p-2">
-            <div class="w-100 h-25">
-                <div class="card-body">
-                    <div class="w-100 h-100">
-                        <button data-bs-target="#appAsign" data-bs-toggle="modal" class="btn btn-sm btn-info">ASSIGN APP</button>
+        <div class="modal" id="userAsign">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <label for="app">SELECT USER</label>
+                        <select name="user" id="new_assign_user" class="form-control mb-2">
+                            {% for us in users %}
+                                <option value="{{ us.user.pk }}">{{ us.user.first_name }} {{ us.user.last_name }}</option>
+                            {% endfor %}
+                        </select>
+
+                        <input type="hidden" value="{{dev.pk}}" id="device_id">
+                        
+                    </div>
+                    <div class="modal-footer">
+                        <button onclick="assign()" class="btn btn-success w-100">ASSIGN</button>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <div class="h-75">
-                System
-                <table class="table table-sm">
-                    <thead>
-                        <tr></tr>
-                    </thead>
-                </table>
+        <div class='card-header'>
+            <div class='w-100 d-flex flex-wrap justify-content-between'>
+                <div class='w-25 d-flex flex-wrap'>
+                    <button class='btn btn-info btn-sm rounded-0'>ASSIGN APP</button>
+                </div>
+                <div class='w-25'></div>
+                <div class='w-25'></div>
+            </div>
+        </div>
+
+        <div class='card-body'>
+            <div class='w-100 h-100 overflow-hidden'>
+                <div class='container-fluid p-2'>
+                    <div class='row'>
+                        <div class='col-sm-4'>
+                            <button style="height: 100px !important;" class="btn border w-100 btn-light">
+                                STATUS
+                                {% if dev.is_online %}
+                                    <h2  class="text-success">ONLINE</h2>
+                                {%else %}
+                                    <h2 class="text-danger">OFFLINE</h2>
+                                {% endif %}
+                                <span class="text-info">{{dev.last_breath}} / {{dev.ip_address}}</span>
+                            </button>
+                        </div>
+                        <div class='col-sm-4'>
+                            <button data-bs-toggle="modal" data-bs-target="#appAsign" style="height: 100px !important;" class="btn border w-100 btn-light">
+                                APPS
+                                <h1>{{ dev.apps.count }}</h1>
+                            </button>
+                        </div>
+                        <div class='col-sm-4'>
+                            <button disabled style="height: 100px !important;" class="btn border w-100 btn-light">
+                            </button>
+                        </div>
+                        
+                        <div class="col-sm-12">
+                            <hr>
+                        </div>
+                        <!--OWNER DETAILS-->
+                        <div class="col-sm-4">
+                            <!--NAME-->
+                            <div class="row my-2">
+                                <div class="col-sm-4"><label for="#">Owner</label></div>
+                                <div class="col-sm-6">
+                                    <input value="{{dev.assign_to.name}}" type="text" id="owner" disabled class="form-control rounded-0">
+                                </div>
+                                <div class="col-sm-2">
+                                    <button data-bs-toggle="modal" data-bs-target="#userAsign" 
+                                    title="PC NAME : {{dev.computer_name}}, 
+                                    ACTIVE USER : {{dev.logged_on_user}},
+                                    SKU : {{dev.sku}},
+                                    MODEL : {{dev.model}}" 
+                                    class="btn btn-info h-100 rounded-0">i</button>
+                                </div>
+                            </div>
+                            <!--Phone-->
+                            <div class="row my-2">
+                                <div class="col-sm-4"><label for="#">Phone</label></div>
+                                <div class="col-sm-8">
+                                    <input value="{{dev.assign_to.phone}}" type="text" id="owner" disabled class="form-control rounded-0">
+                                </div>
+                            </div>
+                            <!--EMAIL-->
+                            <div class="row my-2">
+                                <div class="col-sm-4"><label for="#">Email</label></div>
+                                <div class="col-sm-8">
+                                    <input value="{{dev.assign_to.email}}" type="text" id="owner" disabled class="form-control rounded-0">
+                                </div>
+                            </div>
+                            <!--DEPARTMENT-->
+                            <div class="row my-2">
+                                <div class="col-sm-4"><label for="#">Department</label></div>
+                                <div class="col-sm-8">
+                                    <input type="text" value="{{dev.assign_to.department}}" id="owner" disabled class="form-control rounded-0">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--SPEC-->
+                        <div class="col-sm-4">
+                            <!--NAME-->
+                            <div class="row my-2">
+                                <div class="col-sm-4"><label for="#">Storage</label></div>
+                                <div class="col-sm-6">
+                                    <input value="{{dev.storage_size}}" type="text" id="owner" disabled class="form-control rounded-0">
+                                </div>
+                                <div class="col-sm-2">
+                                    <button data-bs-toggle="tooltip" title="USED : {{dev.used_storage}}, REMAINING : {{dev.remaining_storage}}" class="btn btn-info h-100 rounded-0">i</button>
+                                </div>
+                            </div>
+                            <!--Phone-->
+                            <div class="row my-2">
+                                <div class="col-sm-4"><label for="#">Memory</label></div>
+                                <div class="col-sm-8">
+                                    <input type="text" value="{{dev.ram_size}}" id="owner" disabled class="form-control rounded-0">
+                                </div>
+                            </div>
+                            <!--EMAIL-->
+                            <div class="row my-2">
+                                <div class="col-sm-4"><label for="#">Processor</label></div>
+                                <div class="col-sm-8">
+                                    <input value="{{dev.cpu}}" type="text" id="owner" disabled class="form-control rounded-0">
+                                </div>
+                            </div>
+                            <!--DEPARTMENT-->
+                            <div class="row my-2">
+                                <div class="col-sm-4"><label for="#">Manufacturer</label></div>
+                                <div class="col-sm-8">
+                                    <input type="text" value="{{dev.manufacturer}}" id="owner" disabled class="form-control rounded-0">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--ADD ONS-->
+                        <div class="col-sm-4">
+                            <!--NAME-->
+                            <div class="row my-2">
+                                <div class="col-sm-4"><label for="#">Monitor</label></div>
+                                <div class="col-sm-6">
+                                    <input value="{{dev.more_info.monitor}}" type="text" id="owner" disabled class="form-control rounded-0">
+                                </div>
+                                <div class="col-sm-2">
+                                    <button data-bs-toggle="tooltip" title="USED : {{dev.used_storage}}, REMAINING : {{dev.remaining_storage}}" class="btn btn-info h-100 rounded-0">i</button>
+                                </div>
+                            </div>
+                            <!--Phone-->
+                            <div class="row my-2">
+                                <div class="col-sm-4"><label for="#">UPS</label></div>
+                                <div class="col-sm-8">
+                                    <input value="{{dev.more_info.ups}}" type="text" id="owner" disabled class="form-control rounded-0">
+                                </div>
+                            </div>
+                            <!--EMAIL-->
+                            <div class="row my-2">
+                                <div class="col-sm-4"><label for="#">Printer</label></div>
+                                <div class="col-sm-8">
+                                    <input value="{{dev.printer}}" type="text" id="owner" disabled class="form-control rounded-0">
+                                </div>
+                            </div>
+                            <!--DEPARTMENT-->
+                            <div class="row my-2">
+                                <div class="col-sm-4"><label for="#">Keyboard / Mouse</label></div>
+                                <div class="col-sm-8">
+                                    <input value="{{dev.more_info.keyboard}} / {{dev.more_info.mouse}}" type="text" id="owner" disabled class="form-control rounded-0">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12">
+                            <hr>
+                        </div>
+                        <!--LOGS-->
+                        <div class="col-sm-12 my-2">
+                            <table class="table datatable">
+                                <thead>
+                                    <tr>
+                                        <th>DATE</th>
+                                        <th>Title</th>
+                                        <th>Description</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for log in dev.logs %}
+                                        <tr>
+                                            <td>{{log.loged_on}}</td>
+                                            <td>{{log.title}}</td>
+                                            <td>{{log.description}}</td>
+                                            <td></td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
     </div>
+
+    <script>
+        function assign(){
+            let payload = {
+                'module':'assign_device',
+                'data':{
+                    'user':$('#new_assign_user').val(),
+                    'device':$('#device_id').val()
+                }
+            }
+
+            console.log(payload)
+
+            let send = api.put(payload);
+
+            kasa.confirm(send['message'],1,'here')
+        }
+    </script>
 
 {% endblock %}
