@@ -83,9 +83,8 @@ def save_app_update(request):
             ap = appx
             appx.version = version
             appx.save()
-            msg = (f"Software Update \n\nSoftware: {app_name}\n\nUpdate Detail: {description}. \n\nNote: Your device "
-                   f"is expected to update automatically, but if you still face same issue after a while or a new "
-                   f"issue after the update, please inform IT Department 054 631 00 11")
+            msg = (f"Software Update \n\nSoftware: {app_name}\n\nUpdate Detail: {description}. \n\nNote: Updates are automated. If "
+                   f"issue persists after the update, please inform IT Department 054 631 00 11")
             # get all users with this app
             app_assign = AppAssign.objects.filter(app=ap)
             for app_ass in app_assign:
