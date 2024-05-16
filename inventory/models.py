@@ -189,7 +189,7 @@ class Computer(models.Model):
     manufacturer = models.CharField(max_length=255)
     model = models.CharField(max_length=255)
     os = models.CharField(max_length=255)
-    sku = models.CharField(max_length=255)
+    sku = models.CharField(max_length=255,unique=True)
     printer = models.TextField()
     logged_on_user = models.CharField(max_length=255)
     computer_name = models.CharField(max_length=255)

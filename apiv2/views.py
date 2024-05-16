@@ -78,10 +78,10 @@ def api_function(request):
 
                     # check if record with mac address exists in database
                     try:
-                        computer = Computer.objects.get(mac_address=mac_address)
+                        computer = Computer.objects.get(sku=sku)
                         response["message"] = "Device updated successfully"
                     except Computer.DoesNotExist:
-                        computer = Computer(mac_address=mac_address)
+                        computer = Computer(sku=sku)
                         response["message"] = "Device added successfully"
 
                     # update or create new record
@@ -100,6 +100,7 @@ def api_function(request):
                     computer.printer = printer
                     computer.logged_on_user = logged_on_user
                     computer.computer_name = computer_name
+                    computer.mac_address = mac_address
                     computer.save()
 
                 elif module == 'ticket':
