@@ -76,12 +76,13 @@ class Docs {
             }
         }
 
-        let fetch = api.view(data)
-        let status = fetch['status_code']
+        let call = api.view(data)
+        console.table(call)
+        let status = call['status_code']
 
         if(status === 200){
             // access values
-            let response = fetch['message']
+            let response = call['message']
             let header,trans
             header = response['header']
             $('#ent_num').val(header['pk'])
@@ -102,7 +103,38 @@ class Docs {
             $('#taxable_amt').val(tax['taxable_amt'])
             $('#tax_amt').val(vat)
 
-            console.table(extra)
+            let nav = header['nav']
+            if(nav){
+                let next = nav['next'], previous = nav['previous'];
+
+                if(next > 0){
+                    $('#next').prop('disabled',false)
+                    $('#next').val(next)
+                } else {
+                    $('#next').prop('disabled',true)
+                    $('#next').val(0)
+                }
+
+                if(previous > 0){
+                    $('#previous').prop('disabled',false)
+                    $('#previous').val(previous)
+                } else {
+                    $('#previous').prop('disabled',true)
+                    $('#next').val(0)
+                }
+                
+            }
+
+            if(header['status']){
+                let status = header['status'];
+                if(status === 0){
+                    // not approved
+                    $('#approve').prop('disabled',false)
+                } else {
+                    // approved
+                    $('#approve').prop('disabled',true)
+                }
+            }
             trans = response['trans']
             let tr = ''
             for (let t = 0; t < trans.length; t++) {

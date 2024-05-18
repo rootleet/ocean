@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
-from admin_panel.models import ProductMaster, SuppMaster, Locations, UnitMembers, UserAddOns
+from admin_panel.models import PackingMaster, ProductGroup, ProductGroupSub, ProductMaster, SuppMaster, Locations, TaxMaster, UnitMembers, UserAddOns
 from django.contrib.auth import authenticate, login as auth_login, logout
 from django.contrib.auth.decorators import login_required
 
@@ -146,7 +146,7 @@ def save_workstation(request):
         else:
             return HttpResponse(form)
 
-
+@login_required(login_url='/login/')
 def view_workstation(request, mac_addr):
     page['title'] = 'Workstation'
     apps = App.objects.all()
@@ -166,9 +166,38 @@ def view_workstation(request, mac_addr):
     else:
         return redirect('workstation')
 
-
+@login_required(login_url='/login/')
 def new_products(request):
+    groups = ProductGroup.objects.filter(status=1)
+    taxes = TaxMaster.objects.filter(status=1)
+    packs = PackingMaster.objects.filter(status=1)
+    supps = SuppMaster.objects.filter(status=1)
+
+    if groups.count() < 1:
+        messages.error(request, "done%%Create groups before you can add products")
+        return redirect('inventory_tools')
+
+    if supps.count() < 1:
+        messages.error(request, "done%%Create or enable at least one supplier before you can add products")
+        return redirect('inventory_tools')
+
+    if ProductGroupSub.objects.filter(status=1).count() < 1:
+        messages.error(request, "done%%Create or enable at least one sub group before you can add products")
+        return redirect('inventory_tools')
+
+    if taxes.count() < 1:
+        messages.error(request, "done%%Create or enable at least one tax group before you can add products")
+        return redirect('inventory_tools')
+
+    if packs.count() < 1:
+        messages.error(request, "done%%Create or enable at least one packaging before you can add products")
+        return redirect('inventory_tools')
+
     context = {
-        'nav':True
+        'nav': True,
+        'page_title': 'Products Master | New',
+        'groups': groups, 'taxes': taxes, 'packs': packs, 'supps': supps
     }
+    return render(request, 'dashboard/products/newV2.html', context=context)
+    return render(request,'dashboard/products/new.html',context=context)
     return render(request,'inventory/product/new.html',context=context)

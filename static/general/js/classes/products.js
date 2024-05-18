@@ -219,7 +219,9 @@ class Products {
     ApprTrans(doc,entry)
     {
         let api_rsp,status,message
-        api_rsp = apiv2('doc_approve','approve',{'doc':doc,'entry':entry,'user':$('#mypk').val()})
+        let payload = {'doc':doc,'entry':entry,'user':$('#mypk').val()}
+        // console.table(payload)
+        api_rsp = apiv2('doc_approve','approve',payload)
         status = api_rsp['status']
         message = api_rsp['message']
 

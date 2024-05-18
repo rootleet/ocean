@@ -1,12 +1,12 @@
 {% extends 'dashboard/products/prod_base.html' %}
 
-{% block prod %}
+{% block body %}
 
 
 
-    <div class="w-100 p-2 h-100">
+    
 
-        <div class="card h-100">
+        
             <div class="card-header d-flex flex-wrap justify-content-between">
                 <button style="height: fit-content" class="btn btn-primary btn-sm" onclick="location.href='{% url 'new-grn' %}'">NEW</button>
                 <div class="w-50 d-flex flex-wrap justify-content-end">
@@ -56,8 +56,8 @@
                                 <button title="Approve" data-bs-toggle="tooltip"
                                         onclick="if(confirm('ARE YOU SURE?')){productMaster.ApprTrans('grn',this.value); grn.loadGrn(this.value)}"
                                         id="approve" class="btn btn-sm m-1 btn-success">APPROVE</button>
-                                <button title="Print Document" data-bs-toggle="tooltip" id="print" onclick="po.Print(this.value)" class="btn btn-sm m-1 btn-dark bi bi-printer"></button>
-                                <button title="Documents" data-bs-toggle="tooltip" id="print" onclick="grn.loadGrDocs($('#print').val())" class="btn btn-sm m-1 btn-info bi bi-file-image"></button>
+                                <button title="Print Document" data-bs-toggle="tooltip" id="print" class="btn btn-sm m-1 btn-dark bi bi-printer"></button>
+                                <button title="Documents" data-bs-toggle="tooltip"  onclick="grn.loadGrDocs($('#print').val())" class="btn btn-sm m-1 btn-info bi bi-file-image"></button>
 
                             </div>
                             <br>
@@ -90,13 +90,35 @@
                 </div>
             </div>
 
-        </div>
+      
 
         <script>
             grn.loadGrn('{{ entry }}')
 
+           
+
+            $(document).ready(function(){
+                $('#print').click(function(){
+                    let payload = {
+                        "data":{
+                            "doc":"print",
+                            "document":"grn",
+                            "pk":4
+                        }
+                    }
+
+                    let call = api.call('VIEW',payload,'/reports/api/');
+                    if(anton.IsRequest(call)){
+                        let file_link = `/${call['message']}`;
+                        anton.printPDF(file_link)
+                    } else {
+                        kasa.response(call)
+                    }
+                });
+            });
+
         </script>
 
-    </div>
+    
 
 {% endblock %}

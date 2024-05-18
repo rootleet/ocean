@@ -1,9 +1,9 @@
 {% extends 'dashboard/products/prod_base.html' %}
 {% load static %}
 
-{% block prod %}
+{% block body %}
     <input type="hidden" id="owner" value="{{ request.user.pk }}">
-    <div class="w-100 p-2 h-100">
+   
 
         <div class="modal" id="addItem" data-backdrop="false">
             <div class="modal-dialog">
@@ -28,11 +28,10 @@
             </div>
         </div>
 
-        <form class="card h-100">
+        
             <div class="card-header">
 
                 <button onclick="docs.save('PO')" type="button" data-toggle="modal"  class="btn btn-success btn-sm">SAVE</button>
-{#                <button  type="button" data-toggle="modal" data-target="#addItem" class="btn btn-warning btn-sm">INSERT ROW</button>#}
                 <button type="button" onclick="productMaster.productSearcScreen('PO')" class="btn btn-info btn-sm">INSERT</button>
             </div>
             <div class="panel-sub-heading">
@@ -95,24 +94,14 @@
                             </tr>
                         </thead>
                         <tbody id="tBody">
-{#                            <tr id="row_1" class="pointer">#}
-{#                                <td id="line_1">1</td>#}
-{#                                <td id="barcode_1">barcode</td>#}
-{#                                <td id="descriptopn_1">description</td>#}
-{#                                <td id="packing_1">pack</td>#}
-{#                                <td id="pack_qty_q"><input style="width: 100px" type="number" min="1" class="form-control form-control-sm rounded-0"></td>#}
-{#                                <td id="tran_qty_1"><input style="width: 100px" type="number" min="1" class="form-control form-control-sm rounded-0"></td>#}
-{#                                <td id="unit_cost_1"><input style="width: 100px" type="number" min="1" class="form-control form-control-sm rounded-0"></td>#}
-{#                                <td id="total_cost_1"><input style="width: 100px" type="number" min="1" class="form-control form-control-sm rounded-0"></td>#}
-{#                            </tr>#}
+
                         </tbody>
                     </table>
                 </div>
             </div>
 
-        </form>
+        
 
-    </div>
 
 {% endblock %}
 

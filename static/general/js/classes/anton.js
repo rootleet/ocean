@@ -129,6 +129,17 @@ class Anton {
 
     }
 
+    printPDF(url) {
+                
+        var iframe = document.createElement('iframe');
+        iframe.style.display = 'none';
+        iframe.src = url;
+        document.body.appendChild(iframe);
+        iframe.onload = function() {
+            iframe.contentWindow.print();
+        };
+    }
+
 
 
 

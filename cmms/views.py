@@ -271,7 +271,7 @@ def sales_deal(request,customer):
         messages.error(request,f"NO CUSTOMER WITH URL {customer}")
         return redirect('customer_sales')
 
-
+@login_required()
 def service_customer(request,customer_code):
     context = {
         'nav': True,
@@ -283,7 +283,7 @@ def service_customer(request,customer_code):
     }
     return render(request, 'cmms/service/customer.html', context=context)
 
-
+@login_required()
 def sales(request):
     context = {
         'nav': True,
@@ -294,7 +294,7 @@ def sales(request):
     }
     return render(request, 'cmms/service/sales.html', context=context)
 
-
+@login_required()
 def sales_assets(request):
     context = {
         'nav': True,
@@ -304,3 +304,14 @@ def sales_assets(request):
         }
     }
     return render(request, 'cmms/sales/assets.html', context=context)
+
+@login_required()
+def new_sales_asset(request):
+    context = {
+        'nav': True,
+        'page': {
+
+            'title': "Sales / Assets/ New"
+        }
+    }
+    return render(request, 'cmms/sales/new_asset.html', context=context)

@@ -844,7 +844,10 @@ def api_function(request):
                                 'id': hd.supplier.company
                             },
                             'date': hd.created_on, 'owner': hd.created_by.username,
-                            'taxable': hd.is_taxable(), 'remarks': hd.remark
+                            'taxable': hd.is_taxable(), 'remarks': hd.remark,
+                            'nav':hd.nav(),
+                            'status':hd.status,
+                            'open':hd.open
                         }
                         trans = {}
 

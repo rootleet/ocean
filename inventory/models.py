@@ -29,7 +29,7 @@ class PoHd(models.Model):
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     created_on = models.DateTimeField(auto_now_add=True)
     edited_on = models.DateTimeField(auto_now=True)
-    status = models.IntegerField(default=0)
+    status = models.IntegerField(default=0) #0 created, 1 approved
     open = models.IntegerField(default=1)
 
     def trans(self):
@@ -74,6 +74,26 @@ class PoHd(models.Model):
 
     def new_amt(self):
         return Decimal(self.total_amt()) + Decimal(self.tax_amt()['tax_amt'])
+    
+    def nav(self):
+        obj = {}
+        if PoHd.objects.filter(pk__gt=self.pk).exists():
+            nt = PoHd.objects.filter(pk__gt=self.pk)
+            nxt = nt.first()
+            obj['next'] = nxt.pk
+        else:
+            obj['next'] = 0
+
+        if PoHd.objects.filter(pk__lt=self.pk).exists():
+            nt = PoHd.objects.filter(pk__lt=self.pk)
+            nxt = nt.last()
+            obj['previous'] = nxt.pk
+        else:
+            obj['previous'] = 0
+
+        return obj
+
+
 
 
 # purchase trans
@@ -106,10 +126,25 @@ class GrnHd(models.Model):
     status = models.IntegerField(default=0)
 
     def trans(self):
-        return GrnTran.objects.get(entry_no=self.pk)
+        return GrnTran.objects.filter(entry_no=self.pk)
 
     def tran_count(self):
         return GrnTran.objects.filter(entry_no=self.pk).count()
+    
+    def cost(self):
+        obj = {
+                'taxable': self.taxable,
+                'taxable_amt': GrnTran.objects.filter(entry_no=self.pk).aggregate(Sum('tot_cost'))[
+                                        'tot_cost__sum'],
+                'tax_nhis': 0.00,
+                'tax_gfund': 0.00,
+                'tax_covid': 0.00,
+                'tax_vat': 0.00,
+                'tax_amt': 0.00,
+                'levies': 0.00
+        }
+
+        return obj
 
 
 # GRN trans

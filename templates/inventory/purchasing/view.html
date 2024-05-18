@@ -1,15 +1,15 @@
 {% extends 'dashboard/products/prod_base.html' %}
 
-{% block prod %}
+{% block body %}
 
-    <div class="w-100 p-2 h-100">
+    
 
         <div class="card h-100">
             <div class="card-header d-flex flex-wrap justify-content-between">
                 <button style="height: fit-content" class="btn btn-primary btn-sm" onclick="location.href='{% url 'new_purchasing_order' %}'">NEW</button>
                 <div class="w-50 d-flex flex-wrap justify-content-end">
-                                <button id="prev" onclick="po.loadTrans($('#prev').val())" class="btn btn-info btn-sm mx-2 bi bi-skip-backward"></button>
-                                <button id="next" onclick="po.loadTrans($('#next').val())" class="btn btn-info btn-sm bi bi-skip-forward"></button>
+                                <button id="previous" class="btn btn-info btn-sm mx-2 bi bi-skip-backward"></button>
+                                <button id="next" class="btn btn-info btn-sm bi bi-skip-forward"></button>
 
                             </div>
             </div>
@@ -51,7 +51,7 @@
                         </div>
                         <div class="col-sm-3">
                             <div class="w-100 d-flex flex-wrap">
-                                <button title="Approve" data-bs-toggle="tooltip"  onclick="if(confirm('ARE YOU SURE?')){productMaster.ApprTrans('po',this.value); po.loadTrans(this.value)}" id="approve" class="btn btn-sm m-1 btn-success">APPROVE</button>
+                                <button title="Approve" data-bs-toggle="tooltip" id="approve" class="btn btn-sm m-1 btn-success">APPROVE</button>
                                 <button title="Print Document" data-bs-toggle="tooltip" id="print" onclick="po.Print(this.value)" class="btn btn-sm m-1 btn-dark bi bi-printer"></button>
                             </div>
                             <br>
@@ -88,9 +88,43 @@
         </div>
 
         <script>
+            let po_id = `{{ po }}`;
             docs.view('PO',{{ po }})
+
+
+            $(document).ready(function(){
+                $('#approve').click(function(){
+                    if(confirm('ARE YOU SURE?')){
+                        let entry_no = $('#ent_num').val();
+                        productMaster.ApprTrans('po',entry_no); 
+                        docs.view('PO',entry_no)
+                    }
+                })
+
+                // next
+                $('#next').click(function(){
+                    let id = $('#next').val();
+                    if(id > 0){
+                        docs.view('PO',{{ id }})
+                    } else {
+                        kasa.error(`Cannot pass ${id} to load transactions`)
+                    }
+                });
+
+                $('#previous').click(function(){
+                    let id = $('#previous').val();
+                    if(id > 0){
+                        docs.view('PO',{{ id }})
+                    } else {
+                        kasa.error(`Cannot pass ${id} to load transactions`)
+                    }
+                });
+
+            });
+
+
         </script>
 
-    </div>
+    
 
 {% endblock %}

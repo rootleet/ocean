@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import Sum
 
@@ -284,7 +285,9 @@ class DealTransactions(models.Model):
 
 
 class SalesAssetsGroup(models.Model):
-    name = models.TextField()
+    name = models.CharField(unique=True, max_length=50)
+    origin = models.CharField(null=False, max_length=200)
+    supplier = models.CharField(null=False, max_length=200)
 
     created_date = models.DateField(auto_now_add=True)
     created_time = models.TimeField(auto_now_add=True)
@@ -298,7 +301,74 @@ class SalesAssetsGroup(models.Model):
             'created_date': self.created_date,
             'created_time': self.created_time,
             'updated_date': self.created_date,
-            'owner':self.owner.get_fullname()
+            'owner': "None",
+            'supplier': self.supplier,
+            'origin': self.origin
 
         }
 
+
+# car sales models
+
+class CarOrigin(models.Model):
+    country = models.CharField(max_length=100,unique=True)
+
+    created_by = models.ForeignKey(User,on_delete=models.CASCADE)
+    created_on = models.DateField(auto_now_add=True)
+    is_active = models.BooleanField(default=True)
+    def __str__(self):
+        return f"{self.country}"
+
+
+
+class CarManufacturer(models.Model):
+    name = models.CharField(max_length=100,unique=True)
+    origin = models.ForeignKey(CarOrigin, on_delete=models.CASCADE)
+
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_on = models.DateField(auto_now_add=True)
+    is_active = models.BooleanField(default=True)
+    def __str__(self):
+        return self.name
+
+
+class CarSupplier(models.Model):
+    name = models.CharField(max_length=100)
+    origin = models.ForeignKey(CarOrigin, on_delete=models.CASCADE)
+    email = models.CharField(null=False, max_length=200, unique=True)
+    phone = models.CharField(null=False, max_length=200, unique=True)
+    website = models.TextField()
+
+    def __str__(self):
+        return self.name
+
+
+class Car(models.Model):
+    name = models.CharField(max_length=100)
+    manufacturer = models.ForeignKey(CarManufacturer, on_delete=models.CASCADE)
+    origin = models.ForeignKey(CarOrigin, on_delete=models.CASCADE)
+    year = models.PositiveIntegerField()
+
+    def __str__(self):
+        return self.name
+
+
+class CarModel(models.Model):
+    car = models.ForeignKey(Car, on_delete=models.CASCADE)
+    model_name = models.CharField(max_length=100)
+    year = models.PositiveIntegerField()
+    body_type = models.CharField(max_length=50)
+    engine_type = models.CharField(max_length=50)
+    price = models.DecimalField(max_digits=10, decimal_places=3, default=0.0)
+
+    def __str__(self):
+        return f"{self.model_name} ({self.year})"
+
+class CarSpecification(models.Model):
+    car_model = models.ForeignKey(CarModel, on_delete=models.CASCADE)
+    specification_name = models.CharField(max_length=100)
+    specification_value = models.CharField(max_length=100)
+
+    def __str__(self):
+        return f"{self.specification_name}: {self.specification_value}"
+# end of car sales models

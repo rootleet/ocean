@@ -1,9 +1,9 @@
 {% extends 'dashboard/products/prod_base.html' %}
 {% load static %}
 
-{% block prod %}
+{% block body %}
     <input type="hidden" id="owner" value="{{ request.user.pk }}">
-    <div class="w-100 p-2 h-100">
+
 
         <div class="modal" id="addItem" data-backdrop="false">
             <div class="modal-dialog">
@@ -28,7 +28,7 @@
             </div>
         </div>
 
-        <form class="card h-75">
+        
             <div class="card-header">
 
                 <div class="w-100 d-flex flex-wrap">
@@ -77,8 +77,7 @@
                             <!-- REFERENCE -->
                             <label for="type">Ref : </label> <br> <input readonly type="text" id="ref" value="direct" class="anton-form-tool"><br>
                             <label for="taxable" class="w-">Taxable : </label> <br> <select required name="taxable" id="taxable" class="anton-select-tool">
-{#                                <option value="1">YES</option>#}
-{#                                <option value="0">NO</option>#}
+
                             </select>
                         </div>
 
@@ -170,24 +169,14 @@
                             </tr>
                         </thead>
                         <tbody id="tbody">
-{#                            <tr class="row_">#}
-{#                                <td>1</td>#}
-{#                                <td><input type="text" id="barcode_" value="barcode" readonly class="anton-form-tool"></td>#}
-{#                                <td><input type="text" id="descr_" value="descr" readonly class="anton-form-tool"></td>#}
-{#                                <td><input type="text" id="packing_" value="pack" readonly class="anton-form-tool"></td>#}
-{#                                <td><input type="text" id="pack_descr_" value="pack descr" readonly class="anton-form-tool"></td>#}
-{#                                <td><input type="number" style="width: 70px" id="qty_" value="1" class="anton-form-tool"></td>#}
-{#                                <td><input type="number" style="width: 70px" id="uni_cost_" value="1" class="anton-form-tool"></td>#}
-{#                                <td><input type="number" style="width: 70px" id="tot_cost_" value="1" class="anton-form-tool"></td>#}
-{#                            </tr>#}
+
                         </tbody>
                     </table>
                 </div>
             </div>
 
-        </form>
 
-    </div>
+
 
 {% endblock %}
 

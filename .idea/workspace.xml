@@ -4,9 +4,39 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ffcbf13e-d396-4071-9a24-4014a690f966" name="Changes" comment="create crom logs with live data">
+    <list default="true" id="ffcbf13e-d396-4071-9a24-4014a690f966" name="Changes" comment="enhanced software message after applied">
+      <change afterPath="$PROJECT_DIR$/static/uploads/appversion/hello-update.zip" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/uploads/appversion/hello-update_70jvEGT.zip" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/uploads/appversion/hello-update_ALCO5Kf.zip" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/uploads/appversion/hello-update_DoNakq3.zip" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/uploads/appversion/hello-update_JHTNAq8.zip" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/uploads/appversion/hello-update_esz8gFa.zip" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/uploads/products/STOCK_PROPOSAL.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/cmms/sales/new_asset.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apiv2/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/apiv2/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmms/cmms_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/cmms/cmms_api.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmms/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/cmms/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmms/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/cmms/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmms/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/cmms/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/inventory/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/inventory/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/inventory/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/inventory/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/reports_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/reports/reports_api.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/static/attachments/DADDY_DADDY_CRM_REPORT_2024_03_15_16_48_03.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/general/js/admin.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/general/js/admin.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/general/js/classes/anton.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/general/js/classes/anton.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/general/js/classes/docs.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/general/js/classes/docs.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/general/js/classes/grn.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/general/js/classes/grn.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/general/js/classes/products.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/general/js/classes/products.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/general/js/classes/sales.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/general/js/classes/sales.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/cmms/sales/assets.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/cmms/sales/assets.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/dashboard/products/new.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/dashboard/products/new.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/dashboard/products/prod_base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/dashboard/products/prod_base.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/inventory/grn/new.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/inventory/grn/new.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/inventory/grn/view.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/inventory/grn/view.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/inventory/purchasing/new.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/inventory/purchasing/new.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/inventory/purchasing/view.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/inventory/purchasing/view.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -102,7 +132,7 @@
       <recent name="C:\Users\reza\Documents\GitHub\ocean\static\general\js\classes" />
     </key>
   </component>
-  <component name="RunManager" selected="Docker.Dockerfile">
+  <component name="RunManager" selected="Django Server.DJANGO">
     <configuration default="true" type="docker-deploy" factoryName="docker-image" temporary="true">
       <deployment type="docker-image">
         <settings />
@@ -161,8 +191,8 @@
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
         <env name="DJANGO_SETTINGS_MODULE" value="ocean.settings" />
+        <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="C:\Users\reza\Documents\GitHub\ocean\venv\Scripts\python.exe" />
       <option name="SDK_NAME" value="Python 3.11 (ocean)" />
@@ -271,6 +301,12 @@
       </deployment>
       <method v="2" />
     </configuration>
+    <list>
+      <item itemvalue="Django Server.DJANGO" />
+      <item itemvalue="Docker.Docker Image" />
+      <item itemvalue="Docker.Dockerfile" />
+      <item itemvalue="Python.retail_api" />
+    </list>
     <recent_temporary>
       <list>
         <item itemvalue="Docker.Docker Image" />
@@ -457,38 +493,9 @@
       <workItem from="1714945529075" duration="1158000" />
       <workItem from="1715620603803" duration="421000" />
       <workItem from="1715789489033" duration="585000" />
-    </task>
-    <task id="LOCAL-00148" summary="change unite data type">
-      <option name="closed" value="true" />
-      <created>1706534588906</created>
-      <option name="number" value="00148" />
-      <option name="presentableId" value="LOCAL-00148" />
-      <option name="project" value="LOCAL" />
-      <updated>1706534588906</updated>
-    </task>
-    <task id="LOCAL-00149" summary="change unite data type">
-      <option name="closed" value="true" />
-      <created>1706535023965</created>
-      <option name="number" value="00149" />
-      <option name="presentableId" value="LOCAL-00149" />
-      <option name="project" value="LOCAL" />
-      <updated>1706535023965</updated>
-    </task>
-    <task id="LOCAL-00150" summary="add image uploader">
-      <option name="closed" value="true" />
-      <created>1706705789516</created>
-      <option name="number" value="00150" />
-      <option name="presentableId" value="LOCAL-00150" />
-      <option name="project" value="LOCAL" />
-      <updated>1706705789516</updated>
-    </task>
-    <task id="LOCAL-00151" summary="git ignore uploaded">
-      <option name="closed" value="true" />
-      <created>1707200266980</created>
-      <option name="number" value="00151" />
-      <option name="presentableId" value="LOCAL-00151" />
-      <option name="project" value="LOCAL" />
-      <updated>1707200266981</updated>
+      <workItem from="1715850291581" duration="1602000" />
+      <workItem from="1715906336826" duration="2662000" />
+      <workItem from="1715975220163" duration="12000000" />
     </task>
     <task id="LOCAL-00152" summary="git ignore uploaded">
       <option name="closed" value="true" />
@@ -850,7 +857,39 @@
       <option name="project" value="LOCAL" />
       <updated>1715789641392</updated>
     </task>
-    <option name="localTasksCounter" value="197" />
+    <task id="LOCAL-00197" summary="create crom logs with live data">
+      <option name="closed" value="true" />
+      <created>1715850556411</created>
+      <option name="number" value="00197" />
+      <option name="presentableId" value="LOCAL-00197" />
+      <option name="project" value="LOCAL" />
+      <updated>1715850556412</updated>
+    </task>
+    <task id="LOCAL-00198" summary="create crom logs with live data">
+      <option name="closed" value="true" />
+      <created>1715851043862</created>
+      <option name="number" value="00198" />
+      <option name="presentableId" value="LOCAL-00198" />
+      <option name="project" value="LOCAL" />
+      <updated>1715851043862</updated>
+    </task>
+    <task id="LOCAL-00199" summary="enhanced software message after applied">
+      <option name="closed" value="true" />
+      <created>1715851585018</created>
+      <option name="number" value="00199" />
+      <option name="presentableId" value="LOCAL-00199" />
+      <option name="project" value="LOCAL" />
+      <updated>1715851585018</updated>
+    </task>
+    <task id="LOCAL-00200" summary="enhanced software message after applied">
+      <option name="closed" value="true" />
+      <created>1715851884739</created>
+      <option name="number" value="00200" />
+      <option name="presentableId" value="LOCAL-00200" />
+      <option name="project" value="LOCAL" />
+      <updated>1715851884739</updated>
+    </task>
+    <option name="localTasksCounter" value="201" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -873,7 +912,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="- display products statistics base on open and closed in recipe gathering.&#10;&#10;- replace '/' in product name when generating recipe card&#10;&#10;- remove is_open column in products group display under recipe gathering" />
     <MESSAGE value="shwo recipe card" />
     <MESSAGE value="recipe card search" />
     <MESSAGE value="adding retail stock screen" />
@@ -898,7 +936,8 @@
     <MESSAGE value="add stock update cron job" />
     <MESSAGE value="stock monitor interface changed" />
     <MESSAGE value="create crom logs with live data" />
-    <option name="LAST_COMMIT_MESSAGE" value="create crom logs with live data" />
+    <MESSAGE value="enhanced software message after applied" />
+    <option name="LAST_COMMIT_MESSAGE" value="enhanced software message after applied" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

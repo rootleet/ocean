@@ -37,7 +37,7 @@
                     <div class="row mb-2">
                         <label for="asset_manufacturer" class="col-sm-4">Manufacturer</label>
                         <div class="col-sm-8">
-                            <select disabled class="form-control rounded-0" id="asset_manufacturer">
+                            <select class="form-control rounded-0" id="asset_manufacturer">
                                 <option value="">Toyota</option>
                             </select>
                         </div>
@@ -47,9 +47,7 @@
                     <div class="row mb-2">
                         <label for="origin" class="col-sm-4">Origin</label>
                         <div class="col-sm-8">
-                            <select disabled class="form-control rounded-0" id="origin">
-                                <option value="Benz">Benz</option>
-                            </select>
+                            <input type="text" disabled class="form-control rounded-0" id="origin">
                         </div>
                     </div>
 
@@ -57,13 +55,21 @@
                     <div class="row">
                         <label for="supplier" class="col-sm-4">Supplier</label>
                         <div class="col-sm-8">
-                            <select disabled class="form-control rounded-0" id="supplier">
-                                <option value="">Chandlok</option>
-                            </select>
+                            <input type="text" disabled class="form-control rounded-0" id="supplier">
                         </div>
                     </div>
 
 
+                </div>
+
+                <div class="col-sm-4">
+                    <!-- NAME-->
+                    <div class="row">
+                        <label for="supplier" class="col-sm-4">Name</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control rounded-0" id="name">
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -98,13 +104,47 @@
     </div>
 
     <script>
+
+        function loadAssetGroups(){
+            let asset_groups = sales.getAssetGroup('*');
+            if(anton.IsRequest(asset_groups)){
+                let groups = asset_groups['message'];
+                let option = `<option selected disabled value="" >Select Manufacturer</option>`
+                for(let g = 0; g < groups.length; g++){
+                    let group = groups[g]
+                    option +=`<option  value="${group['pk']}" >${group['name']}</option>`
+                }
+
+                $('#asset_manufacturer').html(option)
+            } else {
+                kasa.response(asset_groups)
+            }
+        }
         $(document).ready(function(){
+
+            // load asset groups
+            loadAssetGroups();
+
             $('#asset_groups').click(function(){
                 sales.viewAssetGroups()
             });
 
-            $('#new').click(function(){
-                location.href = '/cmms/sales/assets/new/'
+            // set asset details
+            $('#asset_manufacturer').change(function(){
+                let ids = ['asset_manufacturer'];
+                if(anton.validateInputs(ids)){
+                    let manufact = sales.getAssetGroup($('#asset_manufacturer').val());
+                    if(anton.IsRequest(manufact)){
+                        let manf = manufact['message'][0];
+                        $('#supplier').val(manf['supplier'])
+                        $('#origin').val(manf['origin'])
+                    } else {
+                        kasa.response(manufact)
+                    }
+
+                } else {
+                    kasa.error("Select Valid Manufacture")
+                }
             });
         })
     </script>

@@ -7,6 +7,7 @@ from django.views.decorators.csrf import csrf_exempt
 from fpdf import FPDF
 
 from admin_panel.models import Emails, MailQueues, MailAttachments
+from inventory.models import GrnHd
 from meeting.models import MeetingHD
 from reports.models import ReportForms, ReportLegend, LegendSubs, DepartmentReportMailQue
 from taskmanager.models import Tasks
@@ -321,6 +322,81 @@ def interface(request):
                 success_response['message'] = f"{mails.count()} Sent"
                 response = success_response
 
+        elif  doc == 'print':
+            document = data.get('document')
+            if document == 'grn':
+                entry_key = data.get('pk')
+                header = GrnHd.objects.filter(pk=entry_key)
+                if header.count() == 1:
+                    hd = header.last()
+                    pdf = FPDF()
+                    pdf.add_page('P')
+
+                    # supplier
+                    pdf.set_font('Arial', 'B', 10)
+                    pdf.cell(190, 10, 'GOODS RECIEVING NOTE', 0, 1, 'C')
+                    pdf.set_font('Arial', 'B', 8)
+                    pdf.cell(20, 5, "Supplier :  ", 0, 0)
+                    pdf.set_font('Arial', '', 8)
+                    pdf.cell(100, 5, hd.supplier.company, 0, 1)
+
+                    # Tax Amount
+                    pdf.set_font('Arial', 'B', 8)
+                    pdf.cell(20, 5, "Date :  ", 0, 0)
+                    pdf.set_font('Arial', '', 8)
+                    pdf.cell(100, 5, f"{hd.created_on}", 0, 1)
+
+                    # Tax Amount
+                    pdf.set_font('Arial', 'B', 8)
+                    pdf.cell(20, 5, "Entry No :  ", 0, 0)
+                    pdf.set_font('Arial', '', 8)
+                    pdf.cell(100, 5, f"{hd.pk}", 0, 1)
+
+                    
+
+                    # location
+                    pdf.set_font('Arial', 'B', 8)
+                    pdf.cell(20, 5, "Location :  ", 0, 0)
+                    pdf.set_font('Arial', '', 8)
+                    pdf.cell(100, 5, hd.loc.descr, 0, 1)
+                    
+                    cost = hd.cost()
+                    total_amount = cost['taxable_amt']
+                    
+                    # Net Amount
+                    pdf.set_font('Arial', 'B', 8)
+                    pdf.cell(20, 5, "Amount :  ", 0, 0)
+                    pdf.set_font('Arial', '', 8)
+                    pdf.cell(100, 5, f"{total_amount}", 0, 1)
+
+                    
+                    # table header
+                    pdf.set_font('Arial', 'B', 8)
+                    pdf.cell(45, 5, "BARCODE", 1, 0)
+                    pdf.cell(90, 5, "NAME", 1, 0)
+                    pdf.cell(15, 5, "PACKING", 1, 0)
+                    pdf.cell(15, 5, "PRICE", 1, 0)
+                    pdf.cell(15, 5, "QTY", 1, 0)
+                    pdf.cell(15, 5, "TOTAL", 1, 1)
+
+                    pdf.set_font('Arial', '', 8)
+                    for tran in hd.trans():
+                        pdf.cell(45, 5, tran.product.barcode[:10], 1, 0)
+                        pdf.cell(90, 5, tran.product.descr[:60], 1, 0)
+                        pdf.cell(15, 5, f"{tran.packing.packing_un.code} ({tran.packing.pack_qty})", 1, 0)
+                        pdf.cell(15, 5, f"{tran.un_cost}", 1, 0)
+                        pdf.cell(15, 5, f"{tran.qty}", 1, 0)
+                        pdf.cell(15, 5, f"{tran.tot_cost}", 1, 1)
+
+
+                    file_name = f"static/general/servicing/grn.pdf"
+                    pdf.output(file_name)
+                    success_response['message'] = file_name
+                    response = success_response
+                else:
+                    raise Exception("Cannot find document")
+            else:
+                raise Exception("Unknown Printing Document Type")
 
     except Exception as e:
         error_type, error_instance, traceback = sys.exc_info()

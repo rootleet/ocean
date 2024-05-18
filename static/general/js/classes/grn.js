@@ -206,9 +206,12 @@ class Grn {
     retrievePo(po_number){
         let po_req = apiv2('po','get',{"entry":po_number})
         let po_response = JSON.parse(po_req)
+        console.table(po_response)
+        console.log('SOME TIME')
 
         if(po_response['status'] === 200)
         {
+            
             // there is response
             let response = po_response['message']
             let header,cost,trans
@@ -383,7 +386,7 @@ class Grn {
         } else
         {
             // wrong response
-
+            kasa.error("Cannot load PO")
         }
     }
 
@@ -399,6 +402,7 @@ class Grn {
             let header,trans
             header = message['header']
             trans = message['trans']
+            console.table(message)
 
             $('#loc').val(`${header['loc_code']} - ${header['loc_descr']}`)
             $('#supplier').val(header['supp_descr'])
@@ -408,7 +412,7 @@ class Grn {
             $('#t_owner').val(header['owner'])
             $('#print').val(header['pk'])
             $('#approve').val(header['pk'])
-            console.table(trans)
+            
             if(trans['count'] > 0)
             {
                 // make trans row

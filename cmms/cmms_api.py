@@ -26,7 +26,7 @@ from cmms.extra import db
 def api(request):
     global header
     method = request.method
-    response = {"status_code": "", "status": "", "message": ""}
+    response = {"status_code": "", "message": ""}
     ce = ""
     try:
         body = json.loads(request.body)
@@ -35,6 +35,7 @@ def api(request):
 
         if method == 'VIEW':
             try:
+                arr = []
                 if module == 'product':
                     scope = data.get('range')
                     item_uni = data.get('item_uni')
@@ -972,6 +973,36 @@ def api(request):
                         response['status_code'] = 404
                         response['message'] = f"NO RECORD FOR {request_number}"
 
+                elif module == 'asset_group':
+                    target = data.get('target', '*')
+                    if target == '*':
+                        groups = SalesAssetsGroup.objects.all()
+                    else:
+                        groups = SalesAssetsGroup.objects.filter(pk=target)
+
+                    # loop through groups
+                    for group in groups:
+                        # add to list
+                        arr.append(group.obj())
+
+                    response['status_code'] = 200
+                    response['message'] = arr
+
+                elif module == 'CarOrigin':
+                    key = data.get('key', '*')
+                    if key == '*':
+                        ogs = CarOrigin.objects.all().order_by('country')
+                    else:
+                        ogs = CarOrigin.objects.filter(pk=key).order_by('country')
+                    arr = []
+                    for og in ogs:
+                        arr.append({
+                            'country': og.country,
+                            'pk': og.pk
+                        })
+
+                    response['status_code'] = 200
+                    response['message'] = arr
 
             except Exception as e:
                 response['status'] = 'error'
@@ -983,296 +1014,329 @@ def api(request):
                 response['message'] = f"Error occurred at line {line_number}: {str(e)}"
 
         elif method == 'PUT':
-            if module == 'stock':
-                stage = data.get('stage')
-                if stage == 'hd':
-                    loc = data.get('loc')
-                    remark = data.get('remark')
+            try:
+                response['status_code'] = 200
+                response['message'] = "Creation Successful"
+                if module == 'stock':
+                    stage = data.get('stage')
+                    if stage == 'hd':
+                        loc = data.get('loc')
+                        remark = data.get('remark')
 
-                    # check if there is open hd
-                    if StockCountHD.objects.filter(status=1).exists():
-                        response['message'] = "There is an open stock take"
-                        response['status_code'] = 505
-                        response['status'] = 'WARNING'
+                        # check if there is open hd
+                        if StockCountHD.objects.filter(status=1).exists():
+                            response['message'] = "There is an open stock take"
+                            response['status_code'] = 505
+                            response['status'] = 'WARNING'
 
-                    else:
-                        # open stock
-                        StockCountHD(loc=loc, remark=remark).save()
-                        response['status_code'] = 200
-                        response['status'] = 'success'
-                elif stage == 'tran':
-                    item_ref = data.get('item_ref')
-                    qty = data.get('qty')
-                    myName = data.get('user')
-
-                    server = f"{DB_SERVER},{DB_PORT}"
-                    database = DB_NAME
-                    username = DB_USER
-                    password = DB_PASSWORD
-                    driver = '{ODBC Driver 17 for SQL Server}'  # Change this to the driver you're using
-                    connection_string = f"DRIVER={driver};SERVER={server};DATABASE={database};UID={username};PWD={password}"
-                    connection = pyodbc.connect(connection_string)
-                    cursor = connection.cursor()
-
-                    query = f"select barcode,item_ref,item_des1,sell_price from product_master where item_ref = '{item_ref}'"
-                    cursor.execute(query)
-
-                    row = cursor.fetchone()
-                    if row:
-                        barcode = row[0].strip()
-                        name = row[2].strip()
-                        if row[3] is None:
-                            sell_price = 0.00
                         else:
-                            sell_price = row[3]
+                            # open stock
+                            StockCountHD(loc=loc, remark=remark).save()
+                            response['status_code'] = 200
+                            response['status'] = 'success'
+                    elif stage == 'tran':
+                        item_ref = data.get('item_ref')
+                        qty = data.get('qty')
+                        myName = data.get('user')
 
-                        val = Decimal(qty) * Decimal(sell_price)
-                        hd = StockCountHD.objects.get(status=1)
-                        StockCountTrans(stock_count_hd=hd, item_ref=item_ref, barcode=barcode, name=name,
-                                        sell_price=sell_price, quantity=qty, owner=myName, value=val).save()
+                        server = f"{DB_SERVER},{DB_PORT}"
+                        database = DB_NAME
+                        username = DB_USER
+                        password = DB_PASSWORD
+                        driver = '{ODBC Driver 17 for SQL Server}'  # Change this to the driver you're using
+                        connection_string = f"DRIVER={driver};SERVER={server};DATABASE={database};UID={username};PWD={password}"
+                        connection = pyodbc.connect(connection_string)
+                        cursor = connection.cursor()
 
-                        response['status_code'] = 200
-                        response['status'] = 'success'
-                        response['message'] = f"ITEM {name} Added"
-                        cursor.close()
+                        query = f"select barcode,item_ref,item_des1,sell_price from product_master where item_ref = '{item_ref}'"
+                        cursor.execute(query)
 
-                    else:
-                        response['status_code'] = 404
-                        response['status'] = 'error'
-                        response['message'] = f"could not find item with ref {item_ref}"
-                elif stage == 'comment':
-                    comment_pk = data.get('comment_pk')
-                    comment = data.get('comment')
-                    issue = data.get('issue')
+                        row = cursor.fetchone()
+                        if row:
+                            barcode = row[0].strip()
+                            name = row[2].strip()
+                            if row[3] is None:
+                                sell_price = 0.00
+                            else:
+                                sell_price = row[3]
 
-                    if StockCountTrans.objects.filter(pk=comment_pk).count() == 1:
-                        # update
-                        coun = StockCountTrans.objects.get(pk=comment_pk)
-                        coun.comment = comment
-                        coun.issue = issue
-                        coun.save()
-                        response['message'] = "Comment Updated"
-                    else:
-                        response['message'] = f"No count with pk as {comment_pk}"
-                elif stage == 'save_frozen':
+                            val = Decimal(qty) * Decimal(sell_price)
+                            hd = StockCountHD.objects.get(status=1)
+                            StockCountTrans(stock_count_hd=hd, item_ref=item_ref, barcode=barcode, name=name,
+                                            sell_price=sell_price, quantity=qty, owner=myName, value=val).save()
 
-                    header = data.get('header')
-                    trans = data.get('trans')
+                            response['status_code'] = 200
+                            response['status'] = 'success'
+                            response['message'] = f"ITEM {name} Added"
+                            cursor.close()
 
-                    if len(trans) > 0:
+                        else:
+                            response['status_code'] = 404
+                            response['status'] = 'error'
+                            response['message'] = f"could not find item with ref {item_ref}"
+                    elif stage == 'comment':
+                        comment_pk = data.get('comment_pk')
+                        comment = data.get('comment')
+                        issue = data.get('issue')
 
-                        try:
-                            loc_id = header.get('loc')
-                            frozen_ref = header.get('frozen_ref')
-                            remarks = header.get('remarks')
-                            us_pk = header.get('owner')
+                        if StockCountTrans.objects.filter(pk=comment_pk).count() == 1:
+                            # update
+                            coun = StockCountTrans.objects.get(pk=comment_pk)
+                            coun.comment = comment
+                            coun.issue = issue
+                            coun.save()
+                            response['message'] = "Comment Updated"
+                        else:
+                            response['message'] = f"No count with pk as {comment_pk}"
+                    elif stage == 'save_frozen':
 
-                            owner = get_object_or_404(User, pk=us_pk)
-                            stock_freeze_hd = StockFreezeHd.objects.create(loc_id=loc_id, ref=frozen_ref,
-                                                                           remarks=remarks, owner=owner)
+                        header = data.get('header')
+                        trans = data.get('trans')
+
+                        if len(trans) > 0:
 
                             try:
-                                for tran in trans:
-                                    ref = tran['ref']
-                                    barcode = tran['barcode']
-                                    qty = tran['qty']
-                                    name = tran['name']
-                                    price = tran['price']
+                                loc_id = header.get('loc')
+                                frozen_ref = header.get('frozen_ref')
+                                remarks = header.get('remarks')
+                                us_pk = header.get('owner')
 
-                                    StockFreezeTrans.objects.create(entry_id=stock_freeze_hd.pk, item_ref=ref,
-                                                                    barcode=barcode, qty=qty, name=name, price=price)
+                                owner = get_object_or_404(User, pk=us_pk)
+                                stock_freeze_hd = StockFreezeHd.objects.create(loc_id=loc_id, ref=frozen_ref,
+                                                                               remarks=remarks, owner=owner)
 
-                                response['message'] = "SAVED"
-                                response['status_code'] = 200
+                                try:
+                                    for tran in trans:
+                                        ref = tran['ref']
+                                        barcode = tran['barcode']
+                                        qty = tran['qty']
+                                        name = tran['name']
+                                        price = tran['price']
+
+                                        StockFreezeTrans.objects.create(entry_id=stock_freeze_hd.pk, item_ref=ref,
+                                                                        barcode=barcode, qty=qty, name=name, price=price)
+
+                                    response['message'] = "SAVED"
+                                    response['status_code'] = 200
+                                except Exception as e:
+                                    stock_freeze_hd.delete()
+                                    line_number = traceback.extract_tb(e.__traceback__)[-1].lineno
+                                    response['message'] = f"Error occurred at line {line_number}: {str(e)}"
+
                             except Exception as e:
-                                stock_freeze_hd.delete()
                                 line_number = traceback.extract_tb(e.__traceback__)[-1].lineno
                                 response['message'] = f"Error occurred at line {line_number}: {str(e)}"
 
-                        except Exception as e:
-                            line_number = traceback.extract_tb(e.__traceback__)[-1].lineno
-                            response['message'] = f"Error occurred at line {line_number}: {str(e)}"
 
+                        else:
 
-                    else:
+                            response['message'] = f" {len(trans)} Transactions cannot be empty"
+                            response['status'] = "EMPTY"
+                            response['status_code'] = 100
+                    elif stage == 'save_cont':
+                        header = data.get('header')
+                        trans = data.get('trans')
+                        count_pk = header.get('count_pk')
+                        task = header.get('task')
 
-                        response['message'] = f" {len(trans)} Transactions cannot be empty"
-                        response['status'] = "EMPTY"
-                        response['status_code'] = 100
-                elif stage == 'save_cont':
-                    header = data.get('header')
-                    trans = data.get('trans')
-                    count_pk = header.get('count_pk')
-                    task = header.get('task')
+                        frozen_ref = header.get('ref')
+                        comment = header.get('comment')
+                        owner_pk = header.get('owner_pk')
+                        owner = User.objects.get(pk=owner_pk)
 
-                    frozen_ref = header.get('ref')
-                    comment = header.get('comment')
-                    owner_pk = header.get('owner_pk')
-                    owner = User.objects.get(pk=owner_pk)
+                        if StockFreezeHd.objects.filter(pk=frozen_ref).count() == 1:
+                            try:
 
-                    if StockFreezeHd.objects.filter(pk=frozen_ref).count() == 1:
-                        try:
+                                frozen = StockFreezeHd.objects.get(pk=frozen_ref)
 
-                            frozen = StockFreezeHd.objects.get(pk=frozen_ref)
+                                if StockCountHD.objects.filter(frozen=frozen, comment=comment, owner=owner).exists():
+                                    # delete
+                                    StockCountHD.objects.get(frozen=frozen, comment=comment, owner=owner).delete()
+                                StockCountHD(frozen=frozen, comment=comment, owner=owner).save()
+                                count_hd = StockCountHD.objects.get(frozen=frozen, comment=comment, owner=owner)
 
+                                # save trans
+                                for tran in trans:
+                                    print(tran)
+                                    ref = tran.get('ref')
+                                    barcode = tran.get('barcode')
+                                    name = tran.get('name')
+                                    frozen_qty = tran.get('frozen')
+                                    counted = tran.get('counted')
+                                    diff = tran.get('diff')
+                                    row_comment = tran.get('row_comment')
+                                    row_iss = tran.get('row_iss')
 
-                            if StockCountHD.objects.filter(frozen=frozen, comment=comment, owner=owner).exists():
-                                # delete
-                                StockCountHD.objects.get(frozen=frozen, comment=comment, owner=owner).delete()
-                            StockCountHD(frozen=frozen, comment=comment, owner=owner).save()
-                            count_hd = StockCountHD.objects.get(frozen=frozen, comment=comment, owner=owner)
+                                    value = tran.get('price')
 
-                            # save trans
-                            for tran in trans:
-                                print(tran)
-                                ref = tran.get('ref')
-                                barcode = tran.get('barcode')
-                                name = tran.get('name')
-                                frozen_qty = tran.get('frozen')
-                                counted = tran.get('counted')
-                                diff = tran.get('diff')
-                                row_comment = tran.get('row_comment')
-                                row_iss = tran.get('row_iss')
+                                    print("#DIFF * VAL#", barcode)
+                                    print('## ', diff, value)
+                                    diff_val = Decimal(diff) * Decimal(value)
 
-                                value = tran.get('price')
+                                    print("#FROZEN * VAL#", barcode)
+                                    print('## ', frozen_qty, value)
+                                    froze_val = Decimal(frozen_qty) * Decimal(value)
 
-                                print("#DIFF * VAL#", barcode)
-                                print('## ', diff, value)
-                                diff_val = Decimal(diff) * Decimal(value)
+                                    print("#DIFF * VAL#", barcode)
+                                    print('## ', counted, value)
+                                    counted_val = Decimal(counted) * Decimal(value)
 
-                                print("#FROZEN * VAL#", barcode)
-                                print('## ', frozen_qty, value)
-                                froze_val = Decimal(frozen_qty) * Decimal(value)
+                                    # save tran
+                                    StockCountTrans.objects.create(stock_count_hd=count_hd, item_ref=ref, barcode=barcode,
+                                                                   name=name, froze_qty=frozen_qty, counted_qty=counted,
+                                                                   diff_qty=diff, comment=row_comment, issue=row_iss,
+                                                                   froze_val=froze_val, diff_val=diff_val,
+                                                                   counted_val=counted_val)
 
-                                print("#DIFF * VAL#", barcode)
-                                print('## ', counted, value)
-                                counted_val = Decimal(counted) * Decimal(value)
-
-                                # save tran
-                                StockCountTrans.objects.create(stock_count_hd=count_hd, item_ref=ref, barcode=barcode,
-                                                               name=name, froze_qty=frozen_qty, counted_qty=counted,
-                                                               diff_qty=diff, comment=row_comment, issue=row_iss,
-                                                               froze_val=froze_val, diff_val=diff_val,
-                                                               counted_val=counted_val)
-
-                            frozen.status = 2
-                            frozen.save()
-                            response['status_code'] = 200
-                            response['status'] = 'success'
-                            response['message'] = "Stock Count Saved"
+                                frozen.status = 2
+                                frozen.save()
+                                response['status_code'] = 200
+                                response['status'] = 'success'
+                                response['message'] = "Stock Count Saved"
 
 
 
-                        except Exception as e:
-                            response['status_code'] = 500
-                            response['status'] = 'error'
-                            line_number = traceback.extract_tb(e.__traceback__)[-1].lineno
-                            response['message'] = f"Error occurred at line {line_number}:  - {e}"
+                            except Exception as e:
+                                response['status_code'] = 500
+                                response['status'] = 'error'
+                                line_number = traceback.extract_tb(e.__traceback__)[-1].lineno
+                                response['message'] = f"Error occurred at line {line_number}:  - {e}"
 
 
 
-                    else:
-                        response['statys_code'] = 404
-                        response['message'] = f"CANNOT FIND FROZEN with entry {frozen_ref}"
+                        else:
+                            response['statys_code'] = 404
+                            response['message'] = f"CANNOT FIND FROZEN with entry {frozen_ref}"
 
-            elif module == 'sales_deal':
-                sales_rep = data.get('sales_rep')
-                sales_cust = data.get('sales_customer')
+                elif module == 'sales_deal':
+                    sales_rep = data.get('sales_rep')
+                    sales_cust = data.get('sales_customer')
 
-                pur_rep_name = data.get('pur_rep_name')
-                pur_rep_email = data.get('pur_rep_email')
-                pur_rep_phone = data.get('pur_rep_phone')
+                    pur_rep_name = data.get('pur_rep_name')
+                    pur_rep_email = data.get('pur_rep_email')
+                    pur_rep_phone = data.get('pur_rep_phone')
 
-                asset = data.get('asset')
-                model = data.get('model')
+                    asset = data.get('asset')
+                    model = data.get('model')
 
-                stock_type = data.get('stock_type')
-                requirement = data.get('requirement')
+                    stock_type = data.get('stock_type')
+                    requirement = data.get('requirement')
 
-                # validate
-                try:
-                    customer = SalesCustomers.objects.get(pk=sales_cust)
-                    owner = User.objects.get(pk=sales_rep)
+                    # validate
+                    try:
+                        customer = SalesCustomers.objects.get(pk=sales_cust)
+                        owner = User.objects.get(pk=sales_rep)
 
-                    SalesDeals(customer=customer, owner=owner, pur_rep_name=pur_rep_name, pur_rep_phone=pur_rep_phone,
-                               pur_rep_email=pur_rep_email, asset=asset, model=model,
-                               stock_type=stock_type, requirement=requirement).save()
+                        SalesDeals(customer=customer, owner=owner, pur_rep_name=pur_rep_name, pur_rep_phone=pur_rep_phone,
+                                   pur_rep_email=pur_rep_email, asset=asset, model=model,
+                                   stock_type=stock_type, requirement=requirement).save()
 
-                    # save in logs
-                    desc = (f"Initiated discussion with {pur_rep_name} from {customer.company} regarding car "
-                            f"purchase. Asset presented is"
-                            f"{asset} with model of {model}. He has a requirement which is {requirement}")
-                    Logs(owner=owner, description=desc, phone=pur_rep_phone, flag='success', subject="Car Purchase",
-                         customer=pur_rep_name).save()
+                        # save in logs
+                        desc = (f"Initiated discussion with {pur_rep_name} from {customer.company} regarding car "
+                                f"purchase. Asset presented is"
+                                f"{asset} with model of {model}. He has a requirement which is {requirement}")
+                        Logs(owner=owner, description=desc, phone=pur_rep_phone, flag='success', subject="Car Purchase",
+                             customer=pur_rep_name).save()
 
-                    response['status_code'] = 200
-                    response['message'] = "DEAL CREATED"
-                except Exception as e:
-                    response['status_code'] = 505
-                    response['message'] = str(e)
+                        response['status_code'] = 200
+                        response['message'] = "DEAL CREATED"
+                    except Exception as e:
+                        response['status_code'] = 505
+                        response['message'] = str(e)
 
-            elif module == 'deal_transaction':
-                dealkey = data.get('deal')
-                title = data.get('title')
-                detail = data.get('detail')
-                ownerkey = data.get('owner')
+                elif module == 'deal_transaction':
+                    dealkey = data.get('deal')
+                    title = data.get('title')
+                    detail = data.get('detail')
+                    ownerkey = data.get('owner')
 
-                try:
-                    deal = SalesDeals.objects.get(pk=dealkey)
-                    owner = User.objects.get(pk=ownerkey)
-                    DealTransactions(deal=deal, title=title, details=detail, owner=owner).save()
+                    try:
+                        deal = SalesDeals.objects.get(pk=dealkey)
+                        owner = User.objects.get(pk=ownerkey)
+                        DealTransactions(deal=deal, title=title, details=detail, owner=owner).save()
 
-                    response['status_code'] = 200
-                    response['message'] = "TRANSACTION ADDED"
-                except Exception as e:
-                    response['status_code'] = 500
-                    response['message'] = str(e)
+                        response['status_code'] = 200
+                        response['message'] = "TRANSACTION ADDED"
+                    except Exception as e:
+                        response['status_code'] = 500
+                        response['message'] = str(e)
 
-            elif module == 'sales_customer':
-                try:
-                    type_of_client = data.get('type_of_client')
-                    sector_of_company = data.get('sector_of_company')
-                    company = data.get('company')
-                    region = data.get('region')
-                    address = data.get('address')
-                    city = data.get('city')
-                    phone = data.get('phone')
-                    email = data.get('email')
-                    fax = data.get('fax')
+                elif module == 'sales_customer':
+                    try:
+                        type_of_client = data.get('type_of_client')
+                        sector_of_company = data.get('sector_of_company')
+                        company = data.get('company')
+                        region = data.get('region')
+                        address = data.get('address')
+                        city = data.get('city')
+                        phone = data.get('phone')
+                        email = data.get('email')
+                        fax = data.get('fax')
 
-                    position = data.get('position')
-                    first_name = data.get('first_name')
-                    last_name = data.get('last_name')
-                    note = data.get('note')
+                        position = data.get('position')
+                        first_name = data.get('first_name')
+                        last_name = data.get('last_name')
+                        note = data.get('note')
 
-                    url = data.get('url')
-                    owner_pk = data.get('owner')
-                    # save
-                    owner = User.objects.get(pk=owner_pk)
-                    reg = GeoCity.objects.get(pk=region)
-                    cit = GeoCitySub.objects.get(pk=city)
+                        url = data.get('url')
+                        owner_pk = data.get('owner')
+                        # save
+                        owner = User.objects.get(pk=owner_pk)
+                        reg = GeoCity.objects.get(pk=region)
+                        cit = GeoCitySub.objects.get(pk=city)
 
-                    SalesCustomers(sector_of_company=sector_of_company, type_of_client=type_of_client, company=company,
-                                   region=reg, city=cit,
-                                   mobile=phone, email=email, fax=fax, address=address, first_name=first_name,
-                                   last_name=last_name, position=position,
-                                   note=note, name=f"{first_name} {last_name}", url=url, owner=owner).save()
-                    response['status'] = 200
-                    response['message'] = "CUSTOMER SAVED"
-                except Exception as e:
-                    response['status'] = 505
-                    response['message'] = str(e)
+                        SalesCustomers(sector_of_company=sector_of_company, type_of_client=type_of_client, company=company,
+                                       region=reg, city=cit,
+                                       mobile=phone, email=email, fax=fax, address=address, first_name=first_name,
+                                       last_name=last_name, position=position,
+                                       note=note, name=f"{first_name} {last_name}", url=url, owner=owner).save()
+                        response['status'] = 200
+                        response['message'] = "CUSTOMER SAVED"
+                    except Exception as e:
+                        response['status'] = 505
+                        response['message'] = str(e)
 
-            elif module == 'asset_group':
-                g_name = data.get('g_name')
-                o_pk = data.get('mypk')
-                owner = User.objects.get(pk=o_pk)
-                SalesAssetsGroup(name=g_name, owner=owner).save()
-                response['status_code'] = 200
-                response['message'] = "Asset Group Saved"
-            else:
-                response['status_code'] = 404
-                response['message'] = "Invalid Module"
+                elif module == 'asset_group':
+                    try:
+                        g_name = data.get('g_name')
+                        o_pk = data.get('mypk')
+
+                        owner = User.objects.get(pk=o_pk)
+                        SalesAssetsGroup(name=g_name, owner=owner).save()
+                        response['status_code'] = 200
+                        response['message'] = "Asset Group Saved"
+                    except Exception as e:
+                        response['status_code'] = 500
+                        response['message'] = str(e)
+
+                elif module == 'CarOrigin':
+
+                    try:
+                        country = data.get('country')
+                        mypk = data.get('mypk')
+
+                        owner = User.objects.get(pk=mypk)
+                        CarOrigin(created_by=owner, country=country).save()
+                        response['status_code'] = 200
+                        response['message'] = f"Origin created successfully"
+                    except Exception as e:
+                        response['status_code'] = 505
+                        response['message'] = str(e)
+
+                elif module == 'CarManufacturer':
+                    name = data.get('name')
+                    o_key = data.get('o_key')
+                    origin = CarOrigin.objects.get(pk=o_key)
+                    mypk = data.get('mypk')
+                    owner = User.objects.get(pk=mypk)
+                    CarManufacturer(name=name,origin=origin,created_by=owner).save()
+
+                else:
+                    response['status_code'] = 404
+                    response['message'] = "Invalid Module"
+            except Exception as e:
+                response['status_code'] = 505
+                response['message'] = str(e)
         elif method == 'PATCH':
             if module == 'stock':
                 stage = data.get('stage')

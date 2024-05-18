@@ -95,6 +95,7 @@ def api_call(request, module, crud):
     }
     try:
         api_body = json.loads(request.body)
+        print("body sent",api_body)
     except Exception as e:
         response['message'] = 'NO API BODY'
         return JsonResponse(response, safe=False)
@@ -198,7 +199,7 @@ def api_call(request, module, crud):
             elif crud == 'get':
                 data = api_body
                 entry = data['entry']
-
+                print(api_body)
                 meg = {}
 
                 if PoHd.objects.filter(pk=entry).exists():
@@ -234,11 +235,10 @@ def api_call(request, module, crud):
 
                         for transaction in transactions:
                             p_packing = {
-                                'pk': transaction.packing.pk,
-                                'pack_qty': transaction.packing.pack_qty,
-                                'packing_type': transaction.packing.packing_type,
-                                'code': transaction.packing.packing_un.code,
-                                'descr': transaction.packing.packing_un.descr,
+                                
+                                'pack_qty': transaction.pack_qty,
+                                'code': transaction.packing,
+                                'descr': transaction.packing,
 
                             }
                             this_trans = {
@@ -800,6 +800,8 @@ def api_call(request, module, crud):
             document = api_body['doc']
             entry = api_body['entry']
             user = api_body['user']
+
+            print(api_body)
             doc_found = 0
             doc_setup = {
                 'grn': GrnHd.objects.filter(pk=entry),
@@ -1326,8 +1328,9 @@ def api_call(request, module, crud):
                 response['message'] = 'CMMS'
 
     except Exception as e:
+        import traceback
         response['status_code'] = 505
-        response['message'] = str(e)
+        response['message'] = f"{e} {traceback.print_exc(limit=1)} - {traceback.format_exc()}"
     return JsonResponse(response, safe=False)
 
 

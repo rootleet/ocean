@@ -103,16 +103,28 @@ class Sales {
     }
 
     viewAssetGroups(){
+        let assets = this.getAssetGroup('*');
+        if(anton.IsRequest(assets)){
+            let tr = ``;
+            let groups = assets['message'];
+            for(let g= 0; g < groups.length; g++){
+                let group = groups[g]
+                tr += `<tr><td>${group['name']}</td><th>void</th></tr>`;
+            }
+            let table = `
+                <button class="tn btn-sm btn-info" onclick="sales.newAssetGroup()">NEW</button>
+                <table class="table table-sm table-striped">
+                    <thead><tr><th>Name</th><th>Action</th></tr></thead>
+                    <tbody>${tr}</tbody>
+                </table>
+            `;
+            amodal.setBodyHtml(table);
+        } else {
+            amodal.setBodyHtml(`<div class="alert alert-danger">${assets['message']}</div>`)
+        }
+        console.table(assets)
         amodal.setTitleText("ASSET GROUPS")
-        let tr = `<tr><td>Group 1</td><th>void</th></tr>`;
-        let table = `
-            <button class="tn btn-sm btn-info" onclick="sales.newAssetGroup()">NEW</button>
-            <table class="table table-sm table-striped">
-                <thead><tr><th>Name</th><th>Action</th></tr></thead>
-                <tbody>${tr}</tbody>
-            </table>
-        `;
-        amodal.setBodyHtml(table);
+
         amodal.show()
     }
 
@@ -124,7 +136,7 @@ class Sales {
     }
 
     saveAssetGroup() {
-        let id = ['g_name'];
+        let id = ['g_name','mypk'];
         if(anton.validateInputs(id)){
             let payload = {
                 module:'asset_group',
@@ -135,6 +147,20 @@ class Sales {
             kasa.error("Invalid FOrm")
         }
     }
+
+    getAssetGroup(pk='*'){
+        let payload = {
+            module:'asset_group',
+            data:{
+                target:'*'
+            }
+        }
+
+        return  api.call('VIEW',payload,'/cmms/api/')
+    }
+
+    // load asset groups for asset creating
+
 }
 
 const sales = new Sales()
