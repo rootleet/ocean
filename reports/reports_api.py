@@ -394,7 +394,7 @@ def interface(request):
                     success_response['message'] = file_name
                     response = success_response
                 else:
-                    raise Exception("Cannot find document")
+                    raise Exception(f"Cannot find document {entry_key}")
             else:
                 raise Exception("Unknown Printing Document Type")
 
