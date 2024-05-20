@@ -110,3 +110,15 @@ def get_file_type(file_name):
     mime_type, _ = mimetypes.guess_type(file_name)
 
     return mime_type
+
+
+def format_currency(amount):
+    import locale
+
+    # Set locale to the user's default setting (for example, 'en_US' for US)
+    locale.setlocale(locale.LC_ALL, '')
+    # Strip the currency symbol and return the formatted string
+    try:
+        return locale.currency(amount, grouping=True).strip(locale.localeconv()['currency_symbol']).strip()
+    except Exception as e:
+        return amount

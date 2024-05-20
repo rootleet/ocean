@@ -6,6 +6,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from fpdf import FPDF
 
+from admin_panel.anton import format_currency
 from admin_panel.models import Emails, MailQueues, MailAttachments
 from inventory.models import GrnHd
 from meeting.models import MeetingHD
@@ -367,26 +368,26 @@ def interface(request):
                     pdf.set_font('Arial', 'B', 8)
                     pdf.cell(20, 5, "Amount :  ", 0, 0)
                     pdf.set_font('Arial', '', 8)
-                    pdf.cell(100, 5, f"{total_amount}", 0, 1)
+                    pdf.cell(100, 5, f"{format_currency(total_amount)}", 0, 1)
 
                     
                     # table header
                     pdf.set_font('Arial', 'B', 8)
                     pdf.cell(45, 5, "BARCODE", 1, 0)
-                    pdf.cell(90, 5, "NAME", 1, 0)
-                    pdf.cell(15, 5, "PACKING", 1, 0)
-                    pdf.cell(15, 5, "PRICE", 1, 0)
-                    pdf.cell(15, 5, "QTY", 1, 0)
-                    pdf.cell(15, 5, "TOTAL", 1, 1)
+                    pdf.cell(70, 5, "NAME", 1, 0)
+                    pdf.cell(20, 5, "PACKING", 1, 0)
+                    pdf.cell(20, 5, "PRICE", 1, 0)
+                    pdf.cell(20, 5, "QTY", 1, 0)
+                    pdf.cell(20, 5, "TOTAL", 1, 1)
 
                     pdf.set_font('Arial', '', 8)
                     for tran in hd.trans():
                         pdf.cell(45, 5, tran.product.barcode[:10], 1, 0)
-                        pdf.cell(90, 5, tran.product.descr[:60], 1, 0)
-                        pdf.cell(15, 5, f"{tran.packing.packing_un.code} ({tran.packing.pack_qty})", 1, 0)
-                        pdf.cell(15, 5, f"{tran.un_cost}", 1, 0)
-                        pdf.cell(15, 5, f"{tran.qty}", 1, 0)
-                        pdf.cell(15, 5, f"{tran.tot_cost}", 1, 1)
+                        pdf.cell(70, 5, tran.product.descr[:60], 1, 0)
+                        pdf.cell(20, 5, f"{tran.packing.packing_un.code} ({tran.packing.pack_qty})", 1, 0)
+                        pdf.cell(20, 5, f"{tran.un_cost}", 1, 0)
+                        pdf.cell(20, 5, f"{tran.qty}", 1, 0)
+                        pdf.cell(20, 5, f"{tran.tot_cost}", 1, 1)
 
 
                     file_name = f"static/general/servicing/grn.pdf"
