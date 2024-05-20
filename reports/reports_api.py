@@ -156,14 +156,14 @@ def interface(request):
                         server.starttls()
                         server.login(sender_email, sender_password)
                         server.sendmail(sender_email, head_email, msg.as_string())
-                        deptt.append({'department':mails.department.name,'files':ff})
+                        deptt.append({'department': mails.department.name, 'files': ff})
                         mails.status = 1
                         mails.save()
 
                     except Exception as e:
                         # response['status_code'] = 505
                         # response['message'] = str(e)
-                        deptt.append({'department':mails.department.name,'files':e})
+                        deptt.append({'department': mails.department.name, 'files': e})
                         message = f"COULD NOT SEND EMAIL {str(e)}"
                         print("Error sending email:", e)
                     finally:
@@ -284,7 +284,7 @@ def interface(request):
                 # attachments
                 msg.attach(MIMEText(html_content, 'html'))
                 attachments = MailAttachments.objects.filter(mail=mail)
-                
+
                 for attachment in attachments:
                     attachment_filename = attachment.attachment.path
                     file_name = os.path.basename(attachment_filename)
@@ -319,11 +319,11 @@ def interface(request):
 
                     message = f"COULD NOT SEND EMAIL {str(e)}"
                     response['message'] = message
-                    
+
                 success_response['message'] = f"{mails.count()} Sent"
                 response = success_response
 
-        elif  doc == 'print':
+        elif doc == 'print':
             document = data.get('document')
             if document == 'grn':
                 entry_key = data.get('pk')
@@ -353,24 +353,21 @@ def interface(request):
                     pdf.set_font('Arial', '', 8)
                     pdf.cell(100, 5, f"{hd.pk}", 0, 1)
 
-                    
-
                     # location
                     pdf.set_font('Arial', 'B', 8)
                     pdf.cell(20, 5, "Location :  ", 0, 0)
                     pdf.set_font('Arial', '', 8)
                     pdf.cell(100, 5, hd.loc.descr, 0, 1)
-                    
+
                     cost = hd.cost()
                     total_amount = cost['taxable_amt']
-                    
+
                     # Net Amount
                     pdf.set_font('Arial', 'B', 8)
                     pdf.cell(20, 5, "Amount :  ", 0, 0)
                     pdf.set_font('Arial', '', 8)
                     pdf.cell(100, 5, f"{format_currency(total_amount)}", 0, 1)
 
-                    
                     # table header
                     pdf.set_font('Arial', 'B', 8)
                     pdf.cell(45, 5, "BARCODE", 1, 0)
@@ -385,10 +382,9 @@ def interface(request):
                         pdf.cell(45, 5, tran.product.barcode[:10], 1, 0)
                         pdf.cell(70, 5, tran.product.descr[:60], 1, 0)
                         pdf.cell(20, 5, f"{tran.packing.packing_un.code} ({tran.packing.pack_qty})", 1, 0)
-                        pdf.cell(20, 5, f"{tran.un_cost}", 1, 0)
+                        pdf.cell(20, 5, f"{format_currency(tran.un_cost)}", 1, 0)
                         pdf.cell(20, 5, f"{tran.qty}", 1, 0)
-                        pdf.cell(20, 5, f"{tran.tot_cost}", 1, 1)
-
+                        pdf.cell(20, 5, f"{format_currency(tran.tot_cost)}", 1, 1)
 
                     file_name = f"static/general/servicing/grn.pdf"
                     pdf.output(file_name)
