@@ -67,7 +67,9 @@
                                         <td>
                                             <div class="w-100 d-flex flex-wrap justify-content-between">
                                                 <i class="fa pointer text-info fa-eye mr-2"></i>
+                                                {% if user.is_authenticated %}
                                                 <i onclick="location.href='{% url 'delete_file' file.enc %}'" class="fa text-danger pointer fa-trash"></i>
+                                                {% endif %}
                                             </div>
                                         </td>
                                     </tr>
