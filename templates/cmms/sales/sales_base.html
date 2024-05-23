@@ -504,62 +504,49 @@
 {#      </li>#}
 
     {% if user.is_superuser %}
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="{% url 'cmms-tools' %}">
-          <i class="bi bi-tools"></i><span>TOOLS</span>
+        <li class="nav-item">
+        <a class="nav-link collapsed" href="{% url 'home' %}">
+          <i class="bi bi-tools"></i><span>Dashboard</span>
         </a>
       </li>
-
-
-      <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#Community-nav" data-bs-toggle="collapse" href="#">
-          <i class="bi bi-boxes"></i><span>Stock</span><i class="bi bi-chevron-down ms-auto"></i>
-        </a>
-        <ul id="Community-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-{#          <li>#}
-{#            <a href="{% url 'stock' %}">#}
-{#              <i class="bi bi-boxes"></i><span>Stock</span>#}
-{#            </a>#}
-{#          </li>#}
-            <li>
-            <a href="{% url 'frozen-stock' %}">
-              <i class="bi bi-boxes"></i><span>Frozen</span>
-            </a>
-          </li>
-          <li>
-            <a href='{% url 'stock-count' %}'>
-              <i class='bi bi-record'></i> Count
-            </a>
-          </li>
-
-        </ul>
-      </li>
-    {% endif %}
-    <li class="nav-item">
+        <li class="nav-item">
         <a class="nav-link collapsed" href="{% url 'sales' %}">
-          <i class="bi bi-tools"></i><span>SALES</span>
+          <i class="bi bi-file"></i><span>Proforma</span>
         </a>
       </li>
-    <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#customer-nav" data-bs-toggle="collapse" href="#">
-          <i class="bi bi-people"></i><span>CUST MGMT</span><i class="bi bi-chevron-down ms-auto"></i>
+        <li class="nav-item">
+        <a class="nav-link collapsed" href="{% url 'prod_appr_req' %}">
+          <i class="bi bi-file"></i><span>Proforma Approval</span>
         </a>
-        <ul id="customer-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-
-            <li>
-            <a href="{% url 'customer_sales' %}">
-              <i class="bi bi-boxes"></i><span>SALES</span>
-            </a>
-          </li>
-
-          <li>
-            <a href='{% url 'service_customers' %}'>
-              <i class='bi bi-record'></i> Servicing
-            </a>
-          </li>
-
-        </ul>
       </li>
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{% url 'sales_tools' %}">
+          <i class="bi bi-tools"></i><span>Tools</span>
+        </a>
+      </li>
+
+        <li class="nav-item">
+        <a class="nav-link collapsed" href="{% url 'sales_assets' %}">
+          <i class="bi bi-tools"></i><span>Assets</span>
+        </a>
+      </li>
+
+        <li class="nav-item">
+        <a class="nav-link collapsed" href="{% url 'customer_sales' %}">
+          <i class="bi bi-people"></i><span>Customers</span>
+        </a>
+      </li>
+
+
+
+        <li class="nav-item">
+        <a class="nav-link collapsed" href="">
+          <i class="bi bi-tools"></i><span>Invoice</span>
+        </a>
+      </li>
+
+
+    {% endif %}
 
 
 

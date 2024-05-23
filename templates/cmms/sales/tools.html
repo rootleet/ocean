@@ -1,0 +1,118 @@
+{% extends 'cmms/base.html' %}
+
+{% block cmms %}
+
+    <div class="card-body p-3 h-100 overflow-hidden">
+        <div class="container-fluid p-0 h-100 overflow-hidden">
+            <div class="row h-100 overflow-hidden">
+                <!-- ORIGIN -->
+                <div class="col-sm-6 py-2 h-50">
+                    <div class="card border bg-info-light h-100">
+                        <div class="card-header">
+                            <div class="w-100 d-flex">
+                               <div class="w-50"> <strong class="card-title">Origin</strong></div>
+                                <div class="w-50 d-flex flex-wrap justify-content-end">
+                                    <button id="new_origin" class="btn btn-info">NEW</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card-body">
+                            <table class="table table-sm">
+                                <tbody id="origins_table">
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- MANUFACTURER -->
+                <div class="col-sm-6 py-2 h-50">
+                    <div class="card border bg-primary-light h-100">
+                        <div class="card-header">
+                            <div class="w-100 d-flex">
+                               <div class="w-50"> <strong class="card-title">Manufacturer</strong></div>
+                                <div class="w-50 d-flex flex-wrap justify-content-end">
+                                    <button id="new_manufacturer" class="btn btn-info">NEW</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card-body">
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Origin</th>
+                                        <th>Name</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="man_table">
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- SUPPLIER -->
+                <div class="col-sm-6 py-2 h-50">
+                    <div class="card border bg-dark-light h-100">
+                        <div class="card-header">
+                            <div class="w-100 d-flex">
+                               <div class="w-50"> <strong class="card-title">Supplier</strong></div>
+                                <div class="w-50 d-flex flex-wrap justify-content-end">
+                                    <button id="new_supplier" class="btn btn-info">NEW</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card-body">
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Origin</th>
+                                        <th>Name</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="supplier_table">
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        $(document).ready(function(){
+
+            sales.loadOrigins()
+            sales.loadManufacturer()
+            sales.loadSupplier()
+            // new origin
+            $('#new_origin').click(function(){
+                sales.newOrigin()
+            });
+
+            // new manufacturer
+            $('#new_manufacturer').click(function (){
+                sales.newManufacturer()
+            });
+
+            // new supplier
+            $('#new_supplier').click(function (){
+                sales.newSupplier()
+            });
+        });
+    </script>
+
+{% endblock %}

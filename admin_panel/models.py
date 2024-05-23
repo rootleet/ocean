@@ -140,6 +140,7 @@ class MailSenders(models.Model):
     is_active = models.BooleanField(default=True)
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     added_on = models.DateTimeField(auto_now_add=True)
+    purpose = models.CharField(max_length=200,null=True,blank=True)
 
     def mail_counts(self):
         return {

@@ -205,21 +205,21 @@ def save_sales_customer(request):
             else:
                 messages.error(request, "FORM IS INVALID")
         except Exception as e:
-            messages.error(request,e)
+            messages.error(request, e)
     else:
         messages.error(request, "WRONG REQUEST METHOD")
 
     return redirect('customer_sales')
 
 
-def sales_customer_transactions(request, customer):
-    context = {
-        'page': {
-            'title': ""
-        },
-        'cust': SalesCustomers.objects.get(pk=customer)
-    }
-    return render(request, 'cmms/sales_transactions.html', context=context)
+# def sales_customer_transactions(request, customer):
+#     context = {
+#         'page': {
+#             'title': ""
+#         },
+#         'cust': SalesCustomers.objects.get(pk=customer)
+#     }
+#     return render(request, 'cmms/sales_transactions.html', context=context)
 
 @login_required()
 def save_sales_transaction(request):
@@ -242,6 +242,7 @@ def save_sales_transaction(request):
 
     return redirect('customer_sales')
 
+
 @login_required()
 def service_customers(request):
     context = {
@@ -253,8 +254,9 @@ def service_customers(request):
     }
     return render(request, 'cmms/service/customers.html', context=context)
 
+
 @login_required()
-def sales_deal(request,customer):
+def sales_deal(request, customer):
     # validate customer
     if SalesCustomers.objects.filter(url=customer).count() == 1:
         cust = SalesCustomers.objects.get(url=customer)
@@ -263,25 +265,27 @@ def sales_deal(request,customer):
             'page': {
                 'title': f"{cust.company} / DEALS"
             },
-            'customer':cust
+            'customer': cust
         }
 
-        return render(request,'cmms/sales-cust.html',context=context)
+        return render(request, 'cmms/sales-cust.html', context=context)
     else:
-        messages.error(request,f"NO CUSTOMER WITH URL {customer}")
+        messages.error(request, f"NO CUSTOMER WITH URL {customer}")
         return redirect('customer_sales')
 
+
 @login_required()
-def service_customer(request,customer_code):
+def service_customer(request, customer_code):
     context = {
         'nav': True,
         'page': {
 
             'title': "SERVICE CUSTOMER"
         },
-        'customer':customer_code
+        'customer': customer_code
     }
     return render(request, 'cmms/service/customer.html', context=context)
+
 
 @login_required()
 def sales(request):
@@ -289,21 +293,41 @@ def sales(request):
         'nav': True,
         'page': {
 
-            'title': "Sales"
-        }
+            'title': "Sales / Proforma"
+        },
+        'proformas': ProformaInvoice.objects.all()
     }
     return render(request, 'cmms/service/sales.html', context=context)
 
+
 @login_required()
-def sales_assets(request):
+def proforma_approval_requests(request):
     context = {
         'nav': True,
         'page': {
 
-            'title': "Sales / Assets"
-        }
+            'title': "Sales / Proforma / Approval"
+        },
+        'proformas': ProformaInvoice.objects.filter(approval_request=True,is_approved=False)
     }
-    return render(request, 'cmms/sales/assets.html', context=context)
+    return render(request, 'cmms/service/pending_proforma.html', context=context)
+
+
+@login_required()
+def sales_assets(request):
+    if Car.objects.filter(pk__gt=0).exists():
+        last_pk = Car.objects.all().last().pk
+        context = {
+            'nav': True,
+            'page': {
+                'title': "Sales / Assets"
+            },
+            'last_pk': last_pk
+        }
+        return render(request, 'cmms/sales/assets.html', context=context)
+    else:
+        return redirect('new_sales_assets')
+
 
 @login_required()
 def new_sales_asset(request):
@@ -315,3 +339,33 @@ def new_sales_asset(request):
         }
     }
     return render(request, 'cmms/sales/new_asset.html', context=context)
+
+
+@login_required()
+def sales_tools(request):
+    context = {
+        'nav': True,
+        'page': {
+
+            'title': "Sales / Tools"
+        }
+    }
+    return render(request, 'cmms/sales/tools.html', context=context)
+
+
+def model_spec(request, model_pk):
+    if CarModel.objects.filter(pk=model_pk).count() == 1:
+        mod = CarModel.objects.get(pk=model_pk)
+        context = {
+            'nav': True,
+            'page': {
+
+                'title': f"Sales / {mod.model_name} / Specs",
+
+            },
+            'model': mod
+        }
+
+        return render(request, 'cmms/sales/model_spec.html', context=context)
+    else:
+        return HttpResponse("Invalid Model")

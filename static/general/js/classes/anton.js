@@ -108,6 +108,7 @@ class Anton {
 
             else if (ft === 'pdf') {
                 amodal.setBodyHtml(`<embed src="${url}" width="100%" height="600px" />`);
+                amodal.setSize('XL')
             }
 
             else if (ft === 'video') {

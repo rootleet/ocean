@@ -236,3 +236,6 @@ RET_DB_NAME = 'SMSEXPV17'
 RET_DB_USER = 'sa'
 RET_DB_PASS = 'sa@123456'
 RET_DB_PORT = ''
+
+# approvers email
+CMMS_PROF_APPROVER = 'uyinsolomon2@gmail.com'

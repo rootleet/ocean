@@ -10,9 +10,11 @@ from django.shortcuts import redirect, render, get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from fpdf import FPDF
 
+from admin_panel.anton import make_md5_hash, format_currency
+from admin_panel.models import MailQueues, MailSenders, MailAttachments
 from cmms.forms import NewSalesCustomer, NewSaleTransactions
 from crm.models import Logs
-from ocean.settings import DB_SERVER, DB_NAME, DB_USER, DB_PORT, DB_PASSWORD
+from ocean.settings import DB_SERVER, DB_NAME, DB_USER, DB_PORT, DB_PASSWORD, CMMS_PROF_APPROVER
 from django.contrib.auth import get_user_model
 import pyodbc
 from cmms.models import *
@@ -1004,6 +1006,268 @@ def api(request):
                     response['status_code'] = 200
                     response['message'] = arr
 
+                elif module == 'CarManufacturer':
+                    key = data.get('key', '*')
+                    if key == '*':
+                        manfs = CarManufacturer.objects.all().order_by('name')
+                    else:
+                        manfs = CarManufacturer.objects.filter(pk=key).order_by('name')
+                    arr = []
+                    for man in manfs:
+                        arr.append({
+                            'origin': man.origin.country,
+                            'pk': man.pk,
+                            'name': man.name
+                        })
+
+                    response['status_code'] = 200
+                    response['message'] = arr
+
+                elif module == 'Car':
+                    key = data.get('key', '*')
+                    if key == '*':
+                        cars = Car.objects.all().order_by('name')
+                    else:
+                        cars = Car.objects.filter(pk=key).order_by('name')
+                    arr = []
+                    for car in cars:
+                        arr.append(car.myself())
+
+                    response['status_code'] = 200
+                    response['message'] = arr
+
+
+                elif module == 'CarSupplier':
+                    key = data.get('key', '*')
+                    if key == '*':
+                        manfs = CarSupplier.objects.all().order_by('name')
+                    else:
+                        manfs = CarSupplier.objects.filter(pk=key).order_by('name')
+                    arr = []
+                    for man in manfs:
+                        arr.append({
+                            'origin': man.origin.country,
+                            'pk': man.pk,
+                            'name': man.name,
+                            'email': man.email,
+                            'phone': man.phone,
+                            'website': man.website,
+                            'created_on': man.created_on,
+                            'created_by': man.created_by.first_name
+                        })
+
+                    response['status_code'] = 200
+                    response['message'] = arr
+
+                elif module == 'CarModel':
+                    key = data.get('key', '*')
+                    if key == '*':
+                        mods = CarModel.objects.all().order_by('model_name')
+                    else:
+                        mods = CarModel.objects.filter(pk=key).order_by('model_name')
+
+                    for mod in mods:
+                        arr.append(mod.myself())
+                    response['message'] = arr
+                    response['status_code'] = 200
+
+                elif module == 'ModelsByCar':
+                    arr = []
+                    car_key = data.get('key')
+                    car = Car.objects.get(pk=car_key)
+                    car_models = CarModel.objects.filter(car=car)
+                    for car_model in car_models:
+                        arr.append(car_model.myself())
+                    response['message'] = arr
+                    response['status_code'] = 200
+
+                elif module == 'CarSpecification':
+                    car_mod = data.get('car_model')
+                    part = data.get('part', '*')
+                    if part == '*':
+                        css = CarSpecification.objects.filter(car_model_id=car_mod).order_by('specification_name')
+                    else:
+                        css = CarSpecification.objects.filter(car_model_id=car_mod, part=part).order_by(
+                            'specification_name')
+
+                    for cs in css:
+                        arr.append(cs.obj())
+                    response['message'] = arr
+                    response['status_code'] = 200
+
+                elif module == 'PrintProformaInvoice':
+                    proforma_key = data.get('key')
+                    proforma = ProformaInvoice.objects.get(pk=proforma_key)
+                    from fpdf import FPDF
+
+                    class PDF(FPDF):
+                        def header(self):
+                            # Set up a border around the page
+                            self.set_line_width(0.5)
+                            self.rect(5.0, 5.0, 200.0, 287.0)
+
+                        def footer(self):
+                            # Go to 1.5 cm from bottom
+                            self.set_y(-15)
+                            # Select Arial italic 8
+                            self.set_font('Arial', 'I', 8)
+                            # Page number
+                            self.cell(0, 10, f'Page {self.page_no()}', 0, 0, 'C')
+
+                    # Create instance of FPDF class
+                    pdf = PDF(unit='mm')
+                    page_with = 95 * 2
+
+                    # Add a page
+                    pdf.add_page()
+                    # Add an image
+                    pdf.image('static/general/img/sneda_motors_logo.png', x=10, y=6, w=30)
+                    pdf.set_font('Arial', '', 6)
+                    pdf.cell(0, 3, '+233 244 313 960 | +233 205 046 431', 0, 1, 'R')
+                    pdf.cell(0, 3, 'P.O Box GP 3471, Accra, Ghana', 0, 1, 'R')
+                    pdf.cell(0, 3, 'Plot No. 82A, Spintex Road', 0, 1, 'R')
+                    pdf.cell(0, 3, 'www.snedamotors.com', 0, 1, 'R')
+                    # Set font
+                    pdf.set_font('Arial', 'B', 12)
+
+                    # Add a cell# Set fill color to black
+                    pdf.ln(10)
+                    text_bg_color = (230, 230, 230)
+                    pdf.set_fill_color(*text_bg_color)
+                    pdf.cell(page_with / 2, 10, 'PROFORMA INVOICE', 0, 0, 'L', fill=True)
+                    pdf.cell(page_with / 2, 10, f'Entry N0. : {proforma.pk}', 0, 1, 'R', fill=True)
+                    pdf.ln(5)
+                    text_bg_color = (255, 0, 0)
+
+                    # header
+                    #customer
+                    pdf.set_font('Arial', 'B', 8)
+                    pdf.cell(20, 5, f"Company", 1, 0, 'L')
+                    pdf.set_font('Arial', '', 8)
+                    pdf.cell(60, 5, f"{proforma.customer.company}", 1, 0, 'L')
+                    pdf.set_font('Arial', 'B', 8)
+                    pdf.cell(20, 5, "Attn. By", 1, 0, 'L')
+                    pdf.set_font('Arial', '', 8)
+                    pdf.cell(40, 5, f"{proforma.created_by.get_full_name()}", 1, 0, 'C')
+                    pdf.set_font('Arial', 'B', 8)
+                    pdf.cell(20, 5, f"QTY", 1, 0, 'L')
+                    pdf.set_font('Arial', '', 8)
+                    pdf.cell(30, 5, f"{format_currency(proforma.quantity)}", 1, 1, 'R')
+                    #rep
+                    pdf.set_font('Arial', 'B', 8)
+                    pdf.cell(20, 5, "Personal", 1, 0, 'L')
+                    pdf.set_font('Arial', '', 8)
+                    pdf.cell(60, 5, f"{proforma.customer.name}", 1, 0, 'L')
+                    pdf.set_font('Arial', 'B', 8)
+                    pdf.cell(20, 5, "Payment", 1, 0, 'L')
+                    pdf.set_font('Arial', '', 8)
+                    pdf.cell(40, 5, "CASH", 1, 0, 'C')
+                    pdf.set_font('Arial', 'B', 8)
+                    pdf.cell(20, 5, f"Price", 1, 0, 'L')
+                    pdf.set_font('Arial', '', 8)
+                    pdf.cell(30, 5, f"{proforma.currency} {format_currency(proforma.price)}", 1, 1, 'R')
+
+                    #currency
+                    pdf.set_font('Arial', 'B', 8)
+                    pdf.cell(20, 5, "Telephone", 1, 0, 'L')
+                    pdf.set_font('Arial', '', 8)
+                    pdf.cell(60, 5, f"{proforma.customer.mobile}", 1, 0, 'L')
+                    pdf.set_font('Arial', 'B', 8)
+                    pdf.cell(20, 5, "Currency", 1, 0, 'L')
+                    pdf.set_font('Arial', '', 8)
+                    pdf.cell(40, 5, f"{proforma.currency}", 1, 0, 'C')
+                    pdf.set_font('Arial', 'B', 8)
+                    pdf.cell(20, 5, f"Net", 1, 0, 'L')
+                    pdf.set_font('Arial', '', 8)
+                    pdf.cell(30, 5, f"{proforma.currency} {format_currency(proforma.net_amount)}", 1, 1, 'R')
+
+                    # contact
+                    pdf.set_font('Arial', 'B', 8)
+                    pdf.cell(20, 5, "Email", 1, 0, 'L')
+                    pdf.set_font('Arial', '', 8)
+                    pdf.cell(60, 5, f"{proforma.customer.email}", 1, 0, 'L')
+                    pdf.set_font('Arial', 'B', 8)
+                    pdf.cell(20, 5, "Address", 1, 0, 'L')
+                    pdf.set_font('Arial', '', 8)
+                    pdf.cell(40, 5, f"{proforma.customer.address}", 1, 0, 'C')
+                    pdf.set_font('Arial', 'B', 8)
+                    pdf.cell(20, 5, f"Tax", 1, 0, 'L')
+                    pdf.set_font('Arial', '', 8)
+                    pdf.cell(30, 5, f"{proforma.currency} {format_currency(proforma.tax_amount)}", 1, 1, 'R')
+
+                    ## car
+                    # manufacturer
+                    pdf.set_font('Arial', 'B', 8)
+                    pdf.cell(20, 5, "Asset", 1, 0, 'L')
+                    pdf.set_font('Arial', '', 8)
+                    pdf.cell(120, 5,
+                             f"{proforma.car_model.car.manufacturer.name} / {proforma.car_model.model_name} / {proforma.car_model.year} / {proforma.chassis}",
+                             1, 0, 'L')
+                    pdf.set_font('Arial', 'B', 8)
+                    pdf.cell(20, 5, f"Payable", 1, 0, 'L')
+                    pdf.set_font('Arial', '', 8)
+                    pdf.cell(30, 5, f"{proforma.currency} {format_currency(proforma.taxable_amount)}", 1, 1, 'R')
+
+                    # prices
+
+                    pdf.ln(10)
+                    #technocal
+                    techs = ProformaInvoiceSpec.objects.filter(part='tech', proforma=proforma)
+                    pdf.set_font('Arial', 'B', 8)
+                    pdf.cell(0, 5, "Technical Features", 0, 1)
+                    for tech in techs:
+                        pdf.set_font('Arial', 'B', 7)
+                        pdf.cell(40, 4, f"{tech.specification_name}", 0, 0)
+                        pdf.set_font('Arial', "", 7)
+                        pdf.cell(149, 4, f"{tech.specification_value}", 0, 1)
+
+                    pdf.ln(5)
+                    # interir
+                    intts = ProformaInvoiceSpec.objects.filter(part='int', proforma=proforma)
+                    pdf.set_font('Arial', 'B', 8)
+                    pdf.cell(0, 5, "Interior", 0, 1)
+                    for intt in intts:
+                        pdf.set_font('Arial', 'B', 7)
+                        pdf.cell(40, 4, f"{intt.specification_name}", 0, )
+                        pdf.set_font('Arial', "", 7)
+                        pdf.cell(150, 4, f"{intt.specification_value}", 0, 1)
+
+                    pdf.ln(5)
+                    # exteriors
+                    exts = ProformaInvoiceSpec.objects.filter(part='ext', proforma=proforma)
+                    pdf.set_font('Arial', 'B', 8)
+                    pdf.cell(0, 5, "Exterior", 0, 1)
+                    for ext in exts:
+                        pdf.set_font('Arial', 'B', 7)
+                        pdf.cell(40, 4, f"{ext.specification_name}", 0, 0)
+                        pdf.set_font('Arial', "", 7)
+                        pdf.cell(140, 4, f"{ext.specification_value}", 0, 1)
+
+                    pdf.ln(5)
+                    pdf.set_font('Arial', "", 8)
+                    pdf.set_text_color(0, 0, 255)
+                    pdf.multi_cell(0, 5, "For your purchase, full payment is required at the time of order "
+                                         "confirmation. We accept Ghanaian Cedis (GHS) at the prevailing market "
+                                         "exchange rate on the date of payment. You can find the current exchange rate "
+                                         "online or through your bank. This quotation is valid for a period of 8 to 12 "
+                                         "weeks from the date of issuance. Prices may be subject to change after this "
+                                         "period. We offer a fast and efficient delivery service. You can expect to "
+                                         "receive your purchase within 5 working days after your payment is confirmed.")
+                    pdf.set_text_color(0, 0, 0)  # Black (0, 0, 0)
+
+                    pdf.ln(10)
+                    pdf.cell(30, 10, f'{proforma.created_by.get_full_name()}', 1, 0, 'C')
+                    pdf.cell(130, 10, '', 0, 0)
+                    pdf.cell(30, 10, f'{proforma.approver()}', 1, 1, 'C')
+                    pdf.cell(30, 10, 'PREPARED BY', 0, 0, 'C')
+                    pdf.cell(130, 10, '', 0, 0)
+                    pdf.cell(30, 10, 'CONFIRMED BY', 0, 1, 'C')
+                    # Output the PDF to 10 file
+                    file_name = f"static/uploads/attachments/{proforma.customer.name}_{proforma.car_model.model_name}.pdf"
+                    pdf.output(file_name)
+                    response['message'] = file_name
+                    response['status_code'] = 200
+
             except Exception as e:
                 response['status'] = 'error'
                 response['status_code'] = 505
@@ -1114,7 +1378,8 @@ def api(request):
                                         price = tran['price']
 
                                         StockFreezeTrans.objects.create(entry_id=stock_freeze_hd.pk, item_ref=ref,
-                                                                        barcode=barcode, qty=qty, name=name, price=price)
+                                                                        barcode=barcode, qty=qty, name=name,
+                                                                        price=price)
 
                                     response['message'] = "SAVED"
                                     response['status_code'] = 200
@@ -1182,7 +1447,8 @@ def api(request):
                                     counted_val = Decimal(counted) * Decimal(value)
 
                                     # save tran
-                                    StockCountTrans.objects.create(stock_count_hd=count_hd, item_ref=ref, barcode=barcode,
+                                    StockCountTrans.objects.create(stock_count_hd=count_hd, item_ref=ref,
+                                                                   barcode=barcode,
                                                                    name=name, froze_qty=frozen_qty, counted_qty=counted,
                                                                    diff_qty=diff, comment=row_comment, issue=row_iss,
                                                                    froze_val=froze_val, diff_val=diff_val,
@@ -1227,7 +1493,8 @@ def api(request):
                         customer = SalesCustomers.objects.get(pk=sales_cust)
                         owner = User.objects.get(pk=sales_rep)
 
-                        SalesDeals(customer=customer, owner=owner, pur_rep_name=pur_rep_name, pur_rep_phone=pur_rep_phone,
+                        SalesDeals(customer=customer, owner=owner, pur_rep_name=pur_rep_name,
+                                   pur_rep_phone=pur_rep_phone,
                                    pur_rep_email=pur_rep_email, asset=asset, model=model,
                                    stock_type=stock_type, requirement=requirement).save()
 
@@ -1285,7 +1552,8 @@ def api(request):
                         reg = GeoCity.objects.get(pk=region)
                         cit = GeoCitySub.objects.get(pk=city)
 
-                        SalesCustomers(sector_of_company=sector_of_company, type_of_client=type_of_client, company=company,
+                        SalesCustomers(sector_of_company=sector_of_company, type_of_client=type_of_client,
+                                       company=company,
                                        region=reg, city=cit,
                                        mobile=phone, email=email, fax=fax, address=address, first_name=first_name,
                                        last_name=last_name, position=position,
@@ -1329,7 +1597,121 @@ def api(request):
                     origin = CarOrigin.objects.get(pk=o_key)
                     mypk = data.get('mypk')
                     owner = User.objects.get(pk=mypk)
-                    CarManufacturer(name=name,origin=origin,created_by=owner).save()
+                    CarManufacturer(name=name, origin=origin, created_by=owner).save()
+
+                elif module == 'CarModel':
+                    model_name = data.get('model_name')
+                    car_key = data.get('car')
+                    mypk = data.get('mypk')
+                    year = data.get('year')
+                    price = data.get('price')
+                    car = Car.objects.get(pk=car_key)
+                    created_by = User.objects.get(pk=mypk)
+
+                    CarModel(model_name=model_name, car=car, created_by=created_by, year=year, price=price).save()
+
+
+                elif module == 'CarSupplier':
+                    o_key = data.get('o_key')
+                    origin = CarOrigin.objects.get(pk=o_key)
+                    mypk = data.get('mypk')
+                    created_by = User.objects.get(pk=mypk)
+                    name = data.get('name')
+                    email = data.get('email')
+                    phone = data.get('phone')
+                    website = data.get('website')
+
+                    CarSupplier(origin=origin, created_by=created_by, name=name, email=email, phone=phone,
+                                website=website).save()
+
+                elif module == 'CarSpecification':
+                    mypk = data.get('mypk')
+                    part = data.get('part')
+                    created_by = User.objects.get(pk=mypk)
+                    mod = data.get('model')
+                    car_model = CarModel.objects.get(pk=mod)
+                    name = data.get('name')
+                    value = data.get('value')
+                    CarSpecification(car_model=car_model, specification_name=name, specification_value=value,
+                                     created_by=created_by, part=part).save()
+
+                elif module == 'Car':
+                    name = data.get('name')
+                    supp_key = data.get('supplier')
+                    supplier = CarSupplier.objects.get(pk=supp_key)
+                    manf_key = data.get('manufacturer')
+                    manufacturer = CarManufacturer.objects.get(pk=manf_key)
+                    mypk = data.get('mypk')
+                    created_by = User.objects.get(pk=mypk)
+
+                    Car(name=name, supplier=supplier, created_by=created_by, manufacturer=manufacturer).save()
+
+                elif module == 'ProformaInvoice':
+                    model_pk = data.get('model')
+                    car_model = CarModel.objects.get(pk=model_pk)
+                    customer_pk = data.get('customer')
+                    customer = SalesCustomers.objects.get(pk=customer_pk)
+                    mypk = data.get('mypk')
+                    created_by = User.objects.get(pk=mypk)
+
+                    currency = data.get('currency')
+
+                    taxable = data.get('taxable')
+                    chassis = data.get('chassis')
+                    price = car_model.price
+
+                    quantity = data.get('quantity')
+                    taxable_amount = Decimal(quantity) * Decimal(price)
+                    if taxable == 'YES':
+                        tax_amount = Decimal(taxable_amount) * Decimal(0.219)
+                    else:
+                        tax_amount = 0
+                    net_amount = taxable_amount - tax_amount
+
+                    if ProformaInvoice.objects.filter(car_model=car_model, customer=customer).count() == 0:
+
+                        p_uni = make_md5_hash(f"{customer_pk}{car_model.model_name}")
+                        # save proforma
+                        ProformaInvoice(
+                            uni=p_uni,
+                            chassis=chassis,
+                            car_model=car_model,
+                            customer=customer,
+                            created_by=created_by,
+                            currency=currency,
+                            price=price,
+                            quantity=quantity,
+                            taxable_amount=taxable_amount,
+                            tax_amount=tax_amount,
+                            net_amount=net_amount
+                        ).save()
+
+                        # get proforma
+                        proforma = ProformaInvoice.objects.get(
+                            uni=p_uni
+                        )
+
+                        # get car model specifications
+                        model_specifications = CarSpecification.objects.filter(car_model=car_model)
+                        for spec in model_specifications:
+                            part = spec.part
+                            specification_name = spec.specification_name
+                            specification_value = spec.specification_value
+
+                            ProformaInvoiceSpec(
+                                proforma=proforma,
+                                created_by=created_by,
+                                part=part,
+                                specification_name=specification_name,
+                                specification_value=specification_value
+                            ).save()
+
+                        # response
+                        response['status_code'] = 200
+                        response['message'] = "Profoma Created"
+                    else:
+                        response['status_code'] = 505
+                        response['message'] = "There is a pending PO for same customer and car that is opened"
 
                 else:
                     response['status_code'] = 404
@@ -1338,122 +1720,266 @@ def api(request):
                 response['status_code'] = 505
                 response['message'] = str(e)
         elif method == 'PATCH':
-            if module == 'stock':
-                stage = data.get('stage')
-                task = data.get('task')
-                if stage == 'hd':
-                    if task == 'close':
-                        opened = StockCountHD.objects.filter(status=1).last()
-                        opened.status = 2
-                        opened.save()
-                        response = {'status': 200, 'status_code': 'success', 'message': "OPENED COUNT closed"}
+            try:
+                if module == 'stock':
+                    stage = data.get('stage')
+                    task = data.get('task')
+                    if stage == 'hd':
+                        if task == 'close':
+                            opened = StockCountHD.objects.filter(status=1).last()
+                            opened.status = 2
+                            opened.save()
+                            response = {'status': 200, 'status_code': 'success', 'message': "OPENED COUNT closed"}
 
-                if stage == 'save_cont':
-                    header = data.get('header')
-                    count_pk = header.get('count_pk')
+                    if stage == 'save_cont':
+                        header = data.get('header')
+                        count_pk = header.get('count_pk')
 
-                    # print(data)
-                    if StockCountHD.objects.filter(pk=count_pk).count() == 1:
-                        c_hd = StockCountHD.objects.get(pk=count_pk)
-                        c_hd.comment = header.get('comment')
+                        # print(data)
+                        if StockCountHD.objects.filter(pk=count_pk).count() == 1:
+                            c_hd = StockCountHD.objects.get(pk=count_pk)
+                            c_hd.comment = header.get('comment')
 
-                        trans = data.get('trans')
+                            trans = data.get('trans')
 
-                        # delete all trans
-                        # delete this tran and add again
+                            # delete all trans
+                            # delete this tran and add again
 
-                        for tran in trans:
+                            for tran in trans:
 
-                            print(tran)
-                            ref = tran.get('ref')
-                            barcode = tran.get('barcode').strip()
-                            name = tran.get('name')
-                            frozen = tran.get('frozen')
-                            counted = str(tran.get('counted'))
-                            diff = tran.get('diff')
-                            row_comment = tran.get('row_comment')
-                            row_iss = tran.get('row_iss')
-                            StockCountTrans.objects.filter(stock_count_hd=c_hd, item_ref=ref).delete()
-                            cursor = db()
-                            q = f"SELECT sell_price FROM product_master where barcode = '{barcode}'"
+                                print(tran)
+                                ref = tran.get('ref')
+                                barcode = tran.get('barcode').strip()
+                                name = tran.get('name')
+                                frozen = tran.get('frozen')
+                                counted = str(tran.get('counted'))
+                                diff = tran.get('diff')
+                                row_comment = tran.get('row_comment')
+                                row_iss = tran.get('row_iss')
+                                StockCountTrans.objects.filter(stock_count_hd=c_hd, item_ref=ref).delete()
+                                cursor = db()
+                                q = f"SELECT sell_price FROM product_master where barcode = '{barcode}'"
 
-                            if cursor.execute(q).fetchone() is None:
-                                value = 0.00
-                            else:
-                                value = cursor.execute(q).fetchone()[0]
+                                if cursor.execute(q).fetchone() is None:
+                                    value = 0.00
+                                else:
+                                    value = cursor.execute(q).fetchone()[0]
 
-                            diff_val = Decimal(value) * Decimal(diff)
-                            froze_val = Decimal(value) * Decimal(frozen)
-                            counted_val = Decimal(value) * Decimal(counted)
+                                diff_val = Decimal(value) * Decimal(diff)
+                                froze_val = Decimal(value) * Decimal(frozen)
+                                counted_val = Decimal(value) * Decimal(counted)
 
-                            cursor.close()
+                                cursor.close()
 
-                            # save tran
-                            StockCountTrans.objects.create(stock_count_hd=c_hd, item_ref=ref, barcode=barcode,
-                                                           name=name, froze_qty=frozen, counted_qty=counted,
-                                                           diff_qty=diff, comment=row_comment, issue=row_iss,
-                                                           diff_val=diff_val, froze_val=froze_val,
-                                                           counted_val=counted_val, sell_price=value)
-                        c_hd.save()
-                        response['message'] = "UPDATE SUCCESSFUL"
-                    else:
-                        var = response['status_code'] = 404
-                        response['message'] = f"CANNOT FIND DOCUMENT with key {count_pk}"
+                                # save tran
+                                StockCountTrans.objects.create(stock_count_hd=c_hd, item_ref=ref, barcode=barcode,
+                                                               name=name, froze_qty=frozen, counted_qty=counted,
+                                                               diff_qty=diff, comment=row_comment, issue=row_iss,
+                                                               diff_val=diff_val, froze_val=froze_val,
+                                                               counted_val=counted_val, sell_price=value)
+                            c_hd.save()
+                            response['message'] = "UPDATE SUCCESSFUL"
+                        else:
+                            var = response['status_code'] = 404
+                            response['message'] = f"CANNOT FIND DOCUMENT with key {count_pk}"
 
-            elif module == 'approve':
-                doc = data.get('doc')
-                key = data.get('key')
-
-                if doc == 'FR':
-                    hd = StockFreezeHd.objects.filter(pk=key)
-                    count = hd.count()
-                elif doc == 'STK':
-                    # approved counted stock
-                    hd = StockCountHD.objects.filter(pk=key)
-                    count = hd.count()
-                else:
-                    count = 0
-
-                if count == 1:
-                    try:
-                        head = hd.last()
-                        head.approve = 1
-                        head.save()
-
-                        response['status_code'] = 200
-                        response['status'] = 'success'
-                        response['message'] = f"APPROVED {doc} = {key}"
-                    except Exception as e:
-                        response['status_code'] = 505
-                        response['status'] = 'error'
-                        response['message'] = str(e)
-
-                else:
-                    response['status_code'] = 404
-                    response['status'] = 'error'
-                    response['message'] = f"Count not find matching document ({doc} - {key})"
-
-            elif module == 'close':
-                doc = data.get('doc')
-
-                if doc == 'deal':
-                    owner = data.get('closer')
-                    finale = data.get('finale')
-                    closer = User.objects.get(pk=owner)
+                elif module == 'approve':
+                    doc = data.get('doc')
                     key = data.get('key')
-                    deal = SalesDeals.objects.get(pk=key)
-                    message = data.get('message')
 
-                    # update transactions
-                    DealTransactions(title='CLOSED', details=message, deal=deal, owner=closer).save()
+                    if doc == 'FR':
+                        hd = StockFreezeHd.objects.filter(pk=key)
+                        count = hd.count()
+                    elif doc == 'STK':
+                        # approved counted stock
+                        hd = StockCountHD.objects.filter(pk=key)
+                        count = hd.count()
+                    else:
+                        count = 0
 
-                    deal.status = 1
-                    deal.finale = finale
-                    deal.save()
+                    if count == 1:
+                        try:
+                            head = hd.last()
+                            head.approve = 1
+                            head.save()
 
-                    response['message'] = 'DEAL CLOSED'
+                            response['status_code'] = 200
+                            response['status'] = 'success'
+                            response['message'] = f"APPROVED {doc} = {key}"
+                        except Exception as e:
+                            response['status_code'] = 505
+                            response['status'] = 'error'
+                            response['message'] = str(e)
 
+                    else:
+                        response['status_code'] = 404
+                        response['status'] = 'error'
+                        response['message'] = f"Count not find matching document ({doc} - {key})"
 
+                elif module == 'close':
+                    doc = data.get('doc')
+
+                    if doc == 'deal':
+                        owner = data.get('closer')
+                        finale = data.get('finale')
+                        closer = User.objects.get(pk=owner)
+                        key = data.get('key')
+                        deal = SalesDeals.objects.get(pk=key)
+                        message = data.get('message')
+
+                        # update transactions
+                        DealTransactions(title='CLOSED', details=message, deal=deal, owner=closer).save()
+
+                        deal.status = 1
+                        deal.finale = finale
+                        deal.save()
+
+                        response['message'] = 'DEAL CLOSED'
+
+                elif module == 'ModelPriceChange':
+                    model_key = data.get('model_key')
+                    mod = CarModel.objects.get(pk=model_key)
+                    model_name = mod.model_name
+                    mod.price = data.get('new_price')
+                    mod.save()
+                    response['status_code'] = 200
+                    response['message'] = f"Price Changed For {model_name}"
+
+                elif module == 'CarSpecifications':
+                    pk = data.get('pk')
+                    key = data.get('key')
+                    value = data.get('value')
+                    part = data.get('part')
+
+                    # get spec
+                    spec = CarSpecification.objects.get(pk=pk)
+
+                    # set new values
+                    spec.part = part
+                    spec.specification_name = key
+                    spec.specification_value = value
+
+                    # save spec
+                    spec.save()
+
+                    # response
+                    response['status_code'] = 200
+                    response['message'] = f"Spec Updated Successfully"
+                elif module == 'UpdateProformaInvoiceSpec':
+                    pk = data.get('key')
+                    mypk = data.get('mypk')
+                    created_by = User.objects.get(pk=mypk)
+                    proforma = ProformaInvoice.objects.get(pk=pk)
+                    # delete specs
+                    ProformaInvoiceSpec.objects.filter(proforma=proforma).delete()
+
+                    # insert new
+                    car_model = proforma.car_model
+                    model_specifications = CarSpecification.objects.filter(car_model=car_model)
+                    for spec in model_specifications:
+                        spec_name = spec.specification_name
+                        spec_value = spec.specification_value
+                        spec_part = spec.part
+                        # insert into new specs
+                        ProformaInvoiceSpec(
+                            proforma=proforma,
+                            part=spec_part,
+                            specification_name=spec_name,
+                            specification_value=spec_value,
+                            created_by=created_by
+                        ).save()
+                    response['status_code'] = 200
+                    response['message'] = "Proforma Specifications Updated"
+                elif module == 'request_proforma_approval':
+                    pk = data.get('key')
+                    mypk = data.get('mypk')
+                    proforma = ProformaInvoice.objects.get(pk=pk)
+                    pf_keep = proforma
+                    request_by = User.objects.get(pk=mypk)
+                    mail_sender = MailSenders.objects.get(purpose='sales_proforma')
+                    if proforma.approval_request:
+                        raise Exception("Approval Sent Already, Please follow up with Approves")
+                    # flag send
+
+                    # send notification
+                    subject = "Proforma Approval"
+                    msg = f"There is an approval request for a proforma document from {request_by.get_full_name()}. Details is as below"
+                    msg += f"<p><strong>Customer: </strong>{pf_keep.customer.name}</p>"
+                    msg += f"<p><strong>Asset: </strong>{pf_keep.car_model.car.manufacturer.name} / {pf_keep.car_model.model_name} / {pf_keep.car_model.year} / {pf_keep.chassis}</p>"
+                    msg += f"<p><strong>Price: </strong>{pf_keep.currency} {format_currency(pf_keep.price)}</p>"
+                    msg += f"<p><strong>Quantity: </strong>{format_currency(pf_keep.quantity)}</p>"
+                    msg += f"<p><strong>Taxable Amount: </strong>{pf_keep.currency} {format_currency(pf_keep.net_amount)}</p>"
+                    msg += f"<p><strong>Tax Amount: </strong>{pf_keep.currency} {format_currency(pf_keep.tax_amount)}</p>"
+                    msg += f"<p><strong>Amount Payable: </strong>{pf_keep.currency} {format_currency(pf_keep.taxable_amount)}</p>"
+
+                    msg += f"<a href='#'>Approve</a>"
+
+                    # que email
+
+                    proforma.approval_request = True
+                    proforma.save()
+                    # insert transactions
+                    ProformaTransactions(
+                        proforma=proforma,
+                        task='Approval Request',
+                        created_by=request_by
+                    ).save()
+
+                    MailQueues(
+                        sender=mail_sender,
+                        recipient=CMMS_PROF_APPROVER,
+                        subject=subject,
+                        body=msg
+                    ).save()
+
+                    response['status_code'] = 200
+                    response['message'] = "Approval Request Sent!!"
+                elif module == 'approve_proforma':
+                    mypk = data.get('mypk')
+                    approved_by = User.objects.get(pk=mypk)
+                    prof_pk = data.get('key')
+                    proforma = ProformaInvoice.objects.get(pk=prof_pk)
+                    proforma.is_approved = True
+                    proforma.approved_by = approved_by
+                    proforma.save()
+
+                    ProformaTransactions(
+                        proforma=proforma,
+                        task='Approval Request',
+                        created_by=approved_by
+                    ).save()
+                    response['status_code'] = 200
+                    response['message'] = "Document Approved"
+                elif module == 'send_proforma':
+                    prof_key = data.get('key')
+                    mypk = data.get('mypk')
+                    proforma = ProformaInvoice.objects.get(pk=prof_key)
+                    sent_by = User.objects.get(pk=mypk)
+
+                    # create email
+                    mail_sender = MailSenders.objects.get(purpose='sales_proforma')
+                    msg = ""
+                    if proforma.is_sent == False:
+                        mob = MailQueues.objects.get_or_create(
+                            sender=mail_sender,
+                            recipient=proforma.customer.email,
+                            subject=f'Proforma Invoice for {proforma.car_model.model_name}',
+                            body=msg
+                        )
+
+                        ## add attachment
+                        MailAttachments(
+                            mail=mob,
+                            attachment=f'static/uploads/attachments/{proforma.customer.name}_{proforma.car_model.model_name}.pdf'
+                        ).save()
+
+                        proforma.is_sent = True
+                        proforma.sent_by = sent_by
+                        proforma.save()
+
+            except Exception as e:
+                response['status_code'] = 500
+                response['message'] = str(e)
         elif method == 'DELETE':
             module = body.get('module') or 'before'
             doc = data.get('doc')
@@ -1492,6 +2018,13 @@ def api(request):
                 name = customer.name
                 customer.delete()
                 response['message'] = f"{name} deleted"
+
+            elif module == 'CarSpecifications':
+                pk = data.get('pk')
+                CarSpecification.objects.get(pk=pk).delete()
+
+                response['status_code'] = 200
+                response['message'] = "Spec Deleted"
 
     except json.JSONDecodeError as e:
         response["status_code"] = 400

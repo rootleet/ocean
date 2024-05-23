@@ -5,38 +5,25 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ffcbf13e-d396-4071-9a24-4014a690f966" name="Changes" comment="enhanced software message after applied">
-      <change afterPath="$PROJECT_DIR$/static/uploads/appversion/hello-update.zip" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/uploads/appversion/hello-update_70jvEGT.zip" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/uploads/appversion/hello-update_ALCO5Kf.zip" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/uploads/appversion/hello-update_DoNakq3.zip" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/uploads/appversion/hello-update_JHTNAq8.zip" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/uploads/appversion/hello-update_esz8gFa.zip" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/uploads/products/STOCK_PROPOSAL.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/cmms/sales/new_asset.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/general/img/signature.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/general/img/sneda_motors_logo.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/uploads/dolphine/2024/05/21/EXPIRY_AS_JUNE.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/cmms/sales/model_spec.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/cmms/sales/sales_base.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/cmms/sales/tools.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/cmms/service/pending_proforma.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apiv2/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/apiv2/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/admin_panel/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/admin_panel/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmms/cmms_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/cmms/cmms_api.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmms/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/cmms/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmms/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/cmms/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmms/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/cmms/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/inventory/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/inventory/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/inventory/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/inventory/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/reports/reports_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/reports/reports_api.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/attachments/DADDY_DADDY_CRM_REPORT_2024_03_15_16_48_03.xlsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/general/js/admin.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/general/js/admin.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ocean/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/ocean/settings.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/static/general/js/classes/anton.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/general/js/classes/anton.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/general/js/classes/docs.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/general/js/classes/docs.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/general/js/classes/grn.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/general/js/classes/grn.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/general/js/classes/products.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/general/js/classes/products.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/static/general/js/classes/sales.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/general/js/classes/sales.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/cmms/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/cmms/base.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/cmms/sales/assets.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/cmms/sales/assets.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/dashboard/products/new.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/dashboard/products/new.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/dashboard/products/prod_base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/dashboard/products/prod_base.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/inventory/grn/new.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/inventory/grn/new.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/inventory/grn/view.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/inventory/grn/view.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/inventory/purchasing/new.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/inventory/purchasing/new.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/inventory/purchasing/view.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/inventory/purchasing/view.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/cmms/service/sales.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/cmms/service/sales.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,8 +37,8 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="JavaScript File" />
-        <option value="HTML File" />
         <option value="Python Script" />
+        <option value="HTML File" />
       </list>
     </option>
   </component>
@@ -105,12 +92,13 @@
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
     &quot;django.template.preview.state&quot;: &quot;SHOW_EDITOR_AND_PREVIEW&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/reza/Documents/GitHub/ocean/cronjobs/retail&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/reza/Documents/GitHub/ocean/static/general/img&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;C:\\Program Files\\JetBrains\\PyCharm 2024.1\\plugins\\javascript-impl\\jsLanguageServicesImpl\\external&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
   &quot;keyToStringList&quot;: {
@@ -121,10 +109,10 @@
 }</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\reza\Documents\GitHub\ocean\static\general\img" />
       <recent name="C:\Users\reza\Documents\GitHub\ocean\cronjobs\retail" />
       <recent name="C:\Users\reza\Documents\GitHub\ocean" />
       <recent name="C:\Users\reza\Documents\GitHub\ocean\templates" />
-      <recent name="C:\Users\reza\Documents\GitHub\ocean\static\general\img" />
       <recent name="C:\Users\reza\Documents\GitHub\ocean\cronjobs" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
@@ -191,8 +179,8 @@
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
-        <env name="DJANGO_SETTINGS_MODULE" value="ocean.settings" />
         <env name="PYTHONUNBUFFERED" value="1" />
+        <env name="DJANGO_SETTINGS_MODULE" value="ocean.settings" />
       </envs>
       <option name="SDK_HOME" value="C:\Users\reza\Documents\GitHub\ocean\venv\Scripts\python.exe" />
       <option name="SDK_NAME" value="Python 3.11 (ocean)" />
@@ -495,47 +483,10 @@
       <workItem from="1715789489033" duration="585000" />
       <workItem from="1715850291581" duration="1602000" />
       <workItem from="1715906336826" duration="2662000" />
-      <workItem from="1715975220163" duration="12000000" />
-    </task>
-    <task id="LOCAL-00152" summary="git ignore uploaded">
-      <option name="closed" value="true" />
-      <created>1707200425369</created>
-      <option name="number" value="00152" />
-      <option name="presentableId" value="LOCAL-00152" />
-      <option name="project" value="LOCAL" />
-      <updated>1707200425370</updated>
-    </task>
-    <task id="LOCAL-00153" summary="- display products statistics base on open and closed in recipe gathering.&#10;&#10;- replace '/' in product name when generating recipe card&#10;&#10;- remove is_open column in products group display under recipe gathering">
-      <option name="closed" value="true" />
-      <created>1707201623491</created>
-      <option name="number" value="00153" />
-      <option name="presentableId" value="LOCAL-00153" />
-      <option name="project" value="LOCAL" />
-      <updated>1707201623491</updated>
-    </task>
-    <task id="LOCAL-00154" summary="shwo recipe card">
-      <option name="closed" value="true" />
-      <created>1707790753051</created>
-      <option name="number" value="00154" />
-      <option name="presentableId" value="LOCAL-00154" />
-      <option name="project" value="LOCAL" />
-      <updated>1707790753052</updated>
-    </task>
-    <task id="LOCAL-00155" summary="recipe card search">
-      <option name="closed" value="true" />
-      <created>1707815382156</created>
-      <option name="number" value="00155" />
-      <option name="presentableId" value="LOCAL-00155" />
-      <option name="project" value="LOCAL" />
-      <updated>1707815382156</updated>
-    </task>
-    <task id="LOCAL-00156" summary="adding retail stock screen">
-      <option name="closed" value="true" />
-      <created>1708053168314</created>
-      <option name="number" value="00156" />
-      <option name="presentableId" value="LOCAL-00156" />
-      <option name="project" value="LOCAL" />
-      <updated>1708053168314</updated>
+      <workItem from="1715975220163" duration="30459000" />
+      <workItem from="1716235232252" duration="34210000" />
+      <workItem from="1716322622495" duration="1876000" />
+      <workItem from="1716352630667" duration="33137000" />
     </task>
     <task id="LOCAL-00157" summary="enable uploading crm log files from excel">
       <option name="closed" value="true" />
@@ -889,7 +840,47 @@
       <option name="project" value="LOCAL" />
       <updated>1715851884739</updated>
     </task>
-    <option name="localTasksCounter" value="201" />
+    <task id="LOCAL-00201" summary="enhanced software message after applied">
+      <option name="closed" value="true" />
+      <created>1716035968879</created>
+      <option name="number" value="00201" />
+      <option name="presentableId" value="LOCAL-00201" />
+      <option name="project" value="LOCAL" />
+      <updated>1716035968880</updated>
+    </task>
+    <task id="LOCAL-00202" summary="enhanced software message after applied">
+      <option name="closed" value="true" />
+      <created>1716203209440</created>
+      <option name="number" value="00202" />
+      <option name="presentableId" value="LOCAL-00202" />
+      <option name="project" value="LOCAL" />
+      <updated>1716203209440</updated>
+    </task>
+    <task id="LOCAL-00203" summary="enhanced software message after applied">
+      <option name="closed" value="true" />
+      <created>1716205156424</created>
+      <option name="number" value="00203" />
+      <option name="presentableId" value="LOCAL-00203" />
+      <option name="project" value="LOCAL" />
+      <updated>1716205156424</updated>
+    </task>
+    <task id="LOCAL-00204" summary="enhanced software message after applied">
+      <option name="closed" value="true" />
+      <created>1716207524166</created>
+      <option name="number" value="00204" />
+      <option name="presentableId" value="LOCAL-00204" />
+      <option name="project" value="LOCAL" />
+      <updated>1716207524166</updated>
+    </task>
+    <task id="LOCAL-00205" summary="enhanced software message after applied">
+      <option name="closed" value="true" />
+      <created>1716207677906</created>
+      <option name="number" value="00205" />
+      <option name="presentableId" value="LOCAL-00205" />
+      <option name="project" value="LOCAL" />
+      <updated>1716207677906</updated>
+    </task>
+    <option name="localTasksCounter" value="206" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

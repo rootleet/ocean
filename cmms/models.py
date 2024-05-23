@@ -311,33 +311,38 @@ class SalesAssetsGroup(models.Model):
 # car sales models
 
 class CarOrigin(models.Model):
-    country = models.CharField(max_length=100,unique=True)
+    country = models.CharField(max_length=100, unique=True)
 
-    created_by = models.ForeignKey(User,on_delete=models.CASCADE)
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE)
     created_on = models.DateField(auto_now_add=True)
     is_active = models.BooleanField(default=True)
+
     def __str__(self):
         return f"{self.country}"
 
 
-
 class CarManufacturer(models.Model):
-    name = models.CharField(max_length=100,unique=True)
+    name = models.CharField(max_length=100, unique=True)
     origin = models.ForeignKey(CarOrigin, on_delete=models.CASCADE)
 
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
     created_on = models.DateField(auto_now_add=True)
     is_active = models.BooleanField(default=True)
+
     def __str__(self):
         return self.name
 
 
 class CarSupplier(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, unique=True)
     origin = models.ForeignKey(CarOrigin, on_delete=models.CASCADE)
     email = models.CharField(null=False, max_length=200, unique=True)
     phone = models.CharField(null=False, max_length=200, unique=True)
     website = models.TextField()
+
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_on = models.DateField(auto_now_add=True)
+    is_active = models.BooleanField(default=True)
 
     def __str__(self):
         return self.name
@@ -346,29 +351,146 @@ class CarSupplier(models.Model):
 class Car(models.Model):
     name = models.CharField(max_length=100)
     manufacturer = models.ForeignKey(CarManufacturer, on_delete=models.CASCADE)
-    origin = models.ForeignKey(CarOrigin, on_delete=models.CASCADE)
-    year = models.PositiveIntegerField()
+    supplier = models.ForeignKey(CarSupplier, on_delete=models.CASCADE)
+
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_on = models.DateField(auto_now_add=True)
+    is_active = models.BooleanField(default=True)
 
     def __str__(self):
         return self.name
 
+    def myself(self):
+        next_car = 0
+        if Car.objects.filter(pk__gt=self.pk).exists():
+            next_car = Car.objects.filter(pk__gt=self.pk).first().pk
+
+        previous_car = 0
+        if Car.objects.filter(pk__lt=self.pk).exists():
+            previous_car = Car.objects.filter(pk__lt=self.pk).last().pk
+        return {
+            'name': self.name,
+            'created_date': self.created_on,
+            'is_active': self.is_active,
+            'created_by': self.created_by.get_full_name(),
+            'supplier': self.supplier.name,
+            'manufacturer': self.manufacturer.name,
+            'next_car': next_car,
+            'previous': previous_car,
+            'pk': self.pk,
+            'sup_origin': self.supplier.origin.country,
+            'man_origin': self.manufacturer.origin.country
+        }
+
 
 class CarModel(models.Model):
-    car = models.ForeignKey(Car, on_delete=models.CASCADE)
+    car = models.ForeignKey(Car, on_delete=models.CASCADE, null=True, blank=True)
     model_name = models.CharField(max_length=100)
     year = models.PositiveIntegerField()
-    body_type = models.CharField(max_length=50)
-    engine_type = models.CharField(max_length=50)
     price = models.DecimalField(max_digits=10, decimal_places=3, default=0.0)
+
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_on = models.DateField(auto_now_add=True)
+    is_active = models.BooleanField(default=True)
 
     def __str__(self):
         return f"{self.model_name} ({self.year})"
+
+    def myself(self):
+        return {
+            'car': self.car.myself(),
+            'model_name': self.model_name,
+            'year': self.year,
+            'created_date': self.created_on,
+            'is_active': self.is_active,
+            'created_by': self.created_by.get_full_name(),
+            'price': self.price,
+            'pk': self.pk,
+            'docs': self.docount()
+        }
+
+    def docount(self):
+        ct = 0
+        ct += ProformaInvoice.objects.filter(car_model=self).count()
+        return ct
+
 
 class CarSpecification(models.Model):
     car_model = models.ForeignKey(CarModel, on_delete=models.CASCADE)
     specification_name = models.CharField(max_length=100)
     specification_value = models.CharField(max_length=100)
+    part = models.CharField(max_length=5, null=True, blank=True)
+
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_on = models.DateField(auto_now_add=True)
+    is_active = models.BooleanField(default=True)
+
+    def obj(self):
+        return {
+            'pk': self.pk,
+            "key": self.specification_name,
+            "value": self.specification_value,
+            'created_date': self.created_on,
+            'is_active': self.is_active,
+            'created_by': self.created_by.get_full_name(),
+            'part': self.part
+
+        }
 
     def __str__(self):
         return f"{self.specification_name}: {self.specification_value}"
+
+
 # end of car sales models
+
+
+# proforma
+class ProformaInvoice(models.Model):
+    uni = models.CharField(max_length=100, unique=True, null=False, blank=False)
+    car_model = models.ForeignKey(CarModel, on_delete=models.CASCADE, null=False, blank=False)
+    customer = models.ForeignKey(SalesCustomers, on_delete=models.SET_NULL, null=True)
+
+    currency = models.CharField(max_length=3)
+    chassis = models.TextField(default='none')
+
+    price = models.DecimalField(max_digits=10, decimal_places=3, default=0.0)
+    exchange_rate = models.DecimalField(max_digits=10, decimal_places=3, default=0.0)
+    quantity = models.DecimalField(max_digits=10, decimal_places=3, default=0.0)
+    taxable = models.BooleanField(default=True)
+    taxable_amount = models.DecimalField(max_digits=10, decimal_places=3, default=0.0)
+    tax_amount = models.DecimalField(max_digits=10, decimal_places=3, default=0.0)
+    net_amount = models.DecimalField(max_digits=10, decimal_places=3, default=0.0)
+
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_on = models.DateField(auto_now_add=True)
+    is_active = models.BooleanField(default=True)
+    is_sent = models.BooleanField(default=False)
+    is_approved = models.BooleanField(default=False)
+    approval_request = models.BooleanField(default=False)
+
+    approved_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='approved_by')
+    sent_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='sent_by')
+
+    def approver(self):
+        if self.is_approved:
+            return self.approved_by.get_full_name() or 'Unknown'
+        else:
+            return "Not Approved"
+
+
+class ProformaTransactions(models.Model):
+    proforma = models.ForeignKey(ProformaInvoice, on_delete=models.CASCADE)
+    task = models.CharField(max_length=200)
+
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_on = models.DateField(auto_now_add=True)
+
+class ProformaInvoiceSpec(models.Model):
+    proforma = models.ForeignKey(ProformaInvoice, on_delete=models.CASCADE)
+    part = models.CharField(max_length=5, null=True, blank=True)
+    specification_name = models.CharField(max_length=100)
+    specification_value = models.CharField(max_length=100)
+
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_on = models.DateField(auto_now_add=True)
+    is_active = models.BooleanField(default=True)

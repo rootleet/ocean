@@ -1,0 +1,101 @@
+{% extends 'cmms/base.html' %}
+{% load static %}
+
+{% block cmms %}
+    <div class="card-header">
+        <div class="w-100 d-flex">
+            <div class="w-50 d-flex flex-wrap align-content-center">
+
+                <label for="section" class="mr-2">Aspect</label>
+                <select name="section" id="section" class="form-control ml-2 rounded-0" style="width: fit-content">
+                    <option value="*">All</option>
+                    <option value="int">interior</option>
+                    <option value="ext">Exterior</option>
+                    <option value="tech">Technical</option>
+                </select>
+            </div>
+            <div class="w-50 d-flex flex-wrap justify-content-end">
+                <button id="new_spec" class="btn btn-info">NEW SPEC</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-body" style="overflow: hidden !important">
+        <div class="w-100 table-responsive h-100 overflow-auto">
+            <table class="table-sm table-bordered">
+                <thead>
+                    <tr>
+                        <th>SN</th>
+                        <th>SPEC</th>
+                        <th>VALUE</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="specs_body"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        let model_key = `{{ model.pk }}`
+        function loadModelSpecs(model_key,part='*'){
+            let specs_response = sales.getModelSpecifications(model_key,part);
+            if(anton.IsRequest(specs_response)){
+                let specs = specs_response['message'];
+                console.table(specs)
+                let row = ``;
+                for(let s= 0; s< specs.length; s++){
+
+                    let spec = specs[s]
+                    let line = s + 1;
+                    row += `<tr><td>${line}</td>
+                                <td><strong>${spec.key}</td><td>${spec.value}</td>
+                                <td><div class="dropdown">
+                                  <button class="btn-secondary" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fas fa-angle-down"></i>
+                                  </button>
+                                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <a class="dropdown-item text-danger" onclick="deleteSpec('${spec.pk}')" href="javascript:void(0)">Delete</a>
+                                    <a class="dropdown-item text-info" onclick="sales.editSpecs('${spec.pk}','${spec.key}','${spec.value}')" href="javascript:void(0)">Edit</a>
+                                  </div>
+                                </div></td>
+
+                            </tr>`
+                }
+
+                $('#specs_body').html(row)
+            } else {
+                kasa.error(specs_response)
+            }
+        }
+
+        function deleteSpec(pk){
+            if(confirm("Are You Sure?")){
+                kasa.response(api.call('DELETE',{
+                    module:"CarSpecifications",
+                    data:{
+                        pk:pk
+                    }
+                },'/cmms/api/'));
+
+                loadModelSpecs(model_key,$('#section').val())
+            } else {
+                kasa.info("Operation Canceled")
+            }
+        }
+        $(document).ready(function(){
+            loadModelSpecs(model_key,'*')
+            // new_spec
+            $('#new_spec').click(function(){
+                sales.newModuleSpec(model_key);
+                let part = $('#section').val();
+                loadModelSpecs(model_key,part)
+            });
+
+            $('#section').change(function(){
+                let part = $('#section').val();
+                loadModelSpecs(model_key,part)
+            });
+        });
+    </script>
+{% endblock %}

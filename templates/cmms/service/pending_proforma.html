@@ -37,14 +37,10 @@
                                         <i class="fas fa-angle-left"></i>
                                       </button>
                                       <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                            {% if doc.is_approved %}
-                                                <a class="dropdown-item text-success" onclick="sales.sendProforma()" href="javascript:void(0)">Send To Customer</a>
-                                            {% else %}
-                                                <a class="dropdown-item text-info" onclick="sales.requestProformaApproval('{{ doc.pk }}')" href="javascript:void(0)">Request Approval</a>
-                                            {% endif %}
+
 
                                             <a class="dropdown-item text-info" onclick="sales.viewProforma('{{ doc.pk }}')" href="javascript:void(0)">View Proforma</a>
-                                            <a class="dropdown-item text-warning" onclick="sales.updateProformaSpecs('{{ doc.pk }}')" href="javascript:void(0)">Update Specs</a>
+                                            <a class="dropdown-item text-warning" onclick="sales.approveProforma('{{ doc.pk }}')" href="javascript:void(0)">Approve</a>
 
                                       </div>
                                     </div>
@@ -58,7 +54,7 @@
             <div class="w-100 h-100 d-flex flex-wrap justify-content-center align-content-center">
                 <div class="alert alert-info text-center">
                     <strong>NO DOCUMENT</strong>
-                    <p>Create new proforma document from Asset > Asset Model</p>
+                    <p>There is no document for approval</p>
                 </div>
             </div>
             {% endif %}
