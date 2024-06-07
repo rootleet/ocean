@@ -1,3 +1,5 @@
+from datetime import datetime, timedelta
+
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import models
@@ -211,6 +213,11 @@ class SalesCustomers(models.Model):
 
     status = models.IntegerField(default=0)
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    
+    def obj(self):
+        return {
+            'type':self.type_of_client
+        }
 
     def trans(self):
         return SalesCustomerTransactions.objects.filter(customer=self.pk).order_by('-pk')
@@ -463,13 +470,63 @@ class ProformaInvoice(models.Model):
 
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
     created_on = models.DateField(auto_now_add=True)
+
     is_active = models.BooleanField(default=True)
     is_sent = models.BooleanField(default=False)
     is_approved = models.BooleanField(default=False)
     approval_request = models.BooleanField(default=False)
+    is_sold = models.BooleanField(default=False)
 
     approved_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='approved_by')
     sent_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='sent_by')
+    closed_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='closed_by')
+
+    def my_ass(self):
+        return f"{self.car_model.model_name}"
+    def days_2_expire(self):
+        # date_str = datetime(self.created_on)
+        # current_date =datetime(datetime.now())
+        # print("Date", date_str)
+        # print("Curr Date", current_date)
+        # difference = current_date - date_str
+        # print("Diff", difference)
+        # return difference
+        # Convert the date fields to datetime
+        date_created = datetime.combine(self.created_on, datetime.min.time())
+        current_date = datetime.now()
+
+        print("Date Created:", date_created)
+        print("Current Date:", current_date)
+
+        # Calculate the difference
+        difference = current_date - date_created
+        print("Difference:", difference)
+
+        # Return the difference in days
+        return difference.days
+
+
+    def status(self):
+        st = 1
+        # 1 = created
+        # 2 requested approval
+        # 3 = approval granted
+        # 4 = approval rejected
+        # 5 = Sent to customer
+        # 6 = Sold
+        # 7 = Ended
+
+        if self.approval_request:
+            st = 2
+        if self.is_approved:
+            st = 3
+        if self.is_sent:
+            st = 5
+        if not self.is_active:
+            st = 7
+        if self.is_sold:
+            st = 6
+        return st
 
     def approver(self):
         if self.is_approved:
@@ -478,12 +535,46 @@ class ProformaInvoice(models.Model):
             return "Not Approved"
 
 
+    def obj(self):
+        st = [
+            'created','pending approval','approval rejected','sent to customer','sold','ended'
+        ]
+        return {
+            "uni":self.uni,
+            "car_model":self.car_model.myself(),
+            "customer":self.customer.obj(),
+            "currency":self.currency,
+            "chassis":self.chassis,
+            "price":self.price,
+            "exchange_rate":self.exchange_rate,
+            "quantity":self.quantity,
+            "taxable":self.taxable,
+            "taxable_amount":self.taxable_amount,
+            "tax_amount":self.tax_amount,
+            "net_amount":self.net_amount,
+            "meta":{
+                "created_by":self.created_by.get_full_name() if self.created_by is not None else 'Unknown',
+                "created_on":self.created_on,
+                "is_active":self.is_active,
+                "is_sent":self.is_sent,
+                "is_approved":self.is_approved,
+                "approval_request":self.approval_request,
+                "is_sold":self.is_sold,
+                "approved_by":self.approved_by.get_full_name() if self.approved_by is not None else 'Unknown',
+                "sent_by":self.sent_by.get_full_name() if self.sent_by is not None else 'Unknown',
+                "closed_by": 'Unknown' if self.closed_by is None else self.closed_by.get_full_name() ,
+                "days_2_expire":self.days_2_expire(),
+                # "status":st[self.status()]
+            }
+        }
+
 class ProformaTransactions(models.Model):
     proforma = models.ForeignKey(ProformaInvoice, on_delete=models.CASCADE)
     task = models.CharField(max_length=200)
 
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
     created_on = models.DateField(auto_now_add=True)
+
 
 class ProformaInvoiceSpec(models.Model):
     proforma = models.ForeignKey(ProformaInvoice, on_delete=models.CASCADE)

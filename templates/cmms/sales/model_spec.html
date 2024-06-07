@@ -2,6 +2,19 @@
 {% load static %}
 
 {% block cmms %}
+
+    <div class="modal fade" id="uploadSpec">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <label for="specs_file" class="w-100">Specs File</label>
+                    <input type="file" accept="text/csv" id="specs_file">
+
+                    <button id="process_specs_csv" class="w-100 btn btn-success mt-5">PROCESS</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="card-header">
         <div class="w-100 d-flex">
             <div class="w-50 d-flex flex-wrap align-content-center">
@@ -15,7 +28,12 @@
                 </select>
             </div>
             <div class="w-50 d-flex flex-wrap justify-content-end">
-                <button id="new_spec" class="btn btn-info">NEW SPEC</button>
+                <button id="new_spec" class="btn btn-outline-info">
+                    <i class="bi bi-plus"></i>
+                </button>
+                <button style="margin-left: 5px" id="upspec" class="btn btn-outline-dark">
+                    <i class="bi bi-upload"></i>
+                </button>
             </div>
         </div>
     </div>
@@ -42,7 +60,7 @@
             let specs_response = sales.getModelSpecifications(model_key,part);
             if(anton.IsRequest(specs_response)){
                 let specs = specs_response['message'];
-                console.table(specs)
+
                 let row = ``;
                 for(let s= 0; s< specs.length; s++){
 
@@ -95,6 +113,60 @@
             $('#section').change(function(){
                 let part = $('#section').val();
                 loadModelSpecs(model_key,part)
+            });
+
+            $('#upspec').click(function(){
+                $('#uploadSpec').modal('show')
+            });
+
+            $('#process_specs_csv').click(function(){
+                const input = $('#specs_file')[0];
+                const file = input.files[0];
+
+                let suc = 0, fai = 0;
+
+                if(file){
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        let file_content = e.target.result
+                        let file_lines = file_content.split("\n")
+
+                        for (let line = 1; line < file_lines.length; line++){
+                            let row = file_lines[line].replace("\r",'').split(",");
+                            let part = row[0]
+                            let name = row[1]
+                            let value = row[1]
+                            let mypk = $('#mypk').val()
+
+                            let payload = {
+                                module:"CarSpecification",
+                                data:{
+                                    name:name,
+                                    value:value,
+                                    part:part,
+                                    mypk:mypk,
+                                    model:model_key
+                                }
+                            }
+                            let save = api.call('PUT',payload,'/cmms/api/')
+
+                            if(anton.IsRequest(save)){
+                                suc += 1
+                            } else {
+                                fai += 1
+                            }
+
+                        }
+                    }
+
+                    reader.readAsText(file)
+                    kasa.info(`SUCCESS:${suc}, FAILED:${fai}`)
+                } else {
+                    kasa.error("Cannot Locate File")
+                }
+
+                loadModelSpecs(model_key,"*")
+                $('#uploadSpec').modal('hide')
             });
         });
     </script>

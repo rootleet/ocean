@@ -1263,10 +1263,12 @@ def api(request):
                     pdf.cell(130, 10, '', 0, 0)
                     pdf.cell(30, 10, 'CONFIRMED BY', 0, 1, 'C')
                     # Output the PDF to 10 file
-                    file_name = f"static/uploads/attachments/{proforma.customer.name}_{proforma.car_model.model_name}.pdf"
+                    file_name = f'static/attachments/{proforma.customer.name}_{proforma.car_model.model_name}.pdf'
                     pdf.output(file_name)
                     response['message'] = file_name
                     response['status_code'] = 200
+
+
 
             except Exception as e:
                 response['status'] = 'error'
@@ -1632,6 +1634,9 @@ def api(request):
                     car_model = CarModel.objects.get(pk=mod)
                     name = data.get('name')
                     value = data.get('value')
+                    obj = CarSpecification.objects.filter(car_model=car_model, specification_name=name)
+                    if obj.exists():
+                        obj.delete()
                     CarSpecification(car_model=car_model, specification_name=name, specification_value=value,
                                      created_by=created_by, part=part).save()
 
@@ -1668,7 +1673,7 @@ def api(request):
                         tax_amount = 0
                     net_amount = taxable_amount - tax_amount
 
-                    if ProformaInvoice.objects.filter(car_model=car_model, customer=customer).count() == 0:
+                    if ProformaInvoice.objects.filter(car_model=car_model, customer=customer,is_active=True).count() == 0:
 
                         p_uni = make_md5_hash(f"{customer_pk}{car_model.model_name}")
                         # save proforma
@@ -1954,29 +1959,80 @@ def api(request):
                     prof_key = data.get('key')
                     mypk = data.get('mypk')
                     proforma = ProformaInvoice.objects.get(pk=prof_key)
+                    p_keep = proforma
                     sent_by = User.objects.get(pk=mypk)
 
                     # create email
                     mail_sender = MailSenders.objects.get(purpose='sales_proforma')
-                    msg = ""
-                    if proforma.is_sent == False:
-                        mob = MailQueues.objects.get_or_create(
+                    msg = (f"Dear {proforma.customer.name}, attached to this email is a proforma for "
+                           f"{proforma.car_model.model_name} as requested.\n"
+                           f"We hope to hear from you soon\n"
+                           f"Thanks\nSneda Motors Limited")
+                    if not proforma.is_sent:
+                        MailQueues(
                             sender=mail_sender,
                             recipient=proforma.customer.email,
                             subject=f'Proforma Invoice for {proforma.car_model.model_name}',
                             body=msg
-                        )
+                        ).save()
+
+                        mob = MailQueues.objects.filter(
+                            sender=mail_sender,
+                            recipient=proforma.customer.email,
+                            subject=f'Proforma Invoice for {proforma.car_model.model_name}',
+                            body=msg
+                        ).last()
 
                         ## add attachment
                         MailAttachments(
                             mail=mob,
-                            attachment=f'static/uploads/attachments/{proforma.customer.name}_{proforma.car_model.model_name}.pdf'
+                            attachment=f'static/attachments/{proforma.customer.name}_{proforma.car_model.model_name}.pdf'
                         ).save()
 
                         proforma.is_sent = True
                         proforma.sent_by = sent_by
                         proforma.save()
 
+                        # save proforma transactions
+                        ProformaTransactions(
+                            proforma=p_keep,
+                            task='sent_to_customer',
+                            created_by=sent_by
+                        ).save()
+
+                        response['status_code'] = 200
+                        response['message'] = "Proforma email has been scheduled.."
+                elif module == 'proformaEOD':
+                    status = data.get('status')
+                    remarks = data.get('remarks')
+                    mypk = data.get('mypk')
+                    prof_pk = data.get('proforma')
+                    proforma = ProformaInvoice.objects.get(pk=prof_pk)
+                    closed_by = User.objects.get(pk=mypk)
+                    p_kep = proforma
+
+                    # update status
+                    if status == "YES":
+                        proforma.is_sold = True
+                        task = 'sold'
+                    else:
+                        task = 'ended'
+                    
+                    proforma.is_active = False
+
+                    proforma.closed_by = closed_by
+
+                    proforma.save()
+
+                    # put transactions
+                    ProformaTransactions(
+                        task=task,
+                        proforma=p_kep,
+                        created_by=closed_by
+                    ).save()
+
+                    response['status_code'] = 200
+                    response['message'] = f'Proforma {task}'
             except Exception as e:
                 response['status_code'] = 500
                 response['message'] = str(e)

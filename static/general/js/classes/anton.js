@@ -19,7 +19,8 @@ class Anton {
 
                 $(`#${ids[i]}`).addClass('border-danger')
                 $(`#${ids[i]}`).removeClass('border-success')
-                kasa.error("Fill Fields")
+
+                kasa.error(`Invalid Field ${id_string}`)
                 return false;
             } else {
                 $(`#${ids[i]}`).addClass('border-success')

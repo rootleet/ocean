@@ -8,6 +8,7 @@ from fpdf import FPDF
 
 from admin_panel.anton import format_currency
 from admin_panel.models import Emails, MailQueues, MailAttachments
+from cmms.models import ProformaInvoice
 from inventory.models import GrnHd
 from meeting.models import MeetingHD
 from reports.models import ReportForms, ReportLegend, LegendSubs, DepartmentReportMailQue
@@ -394,6 +395,67 @@ def interface(request):
                     raise Exception(f"Cannot find document {entry_key}")
             else:
                 raise Exception("Unknown Printing Document Type")
+
+        elif doc == 'sales_proforma':
+            start_date = data.get('start_date')
+            end_date = data.get('end_date')
+            status = data.get('status')
+            export_type = data.get('export_type','json')
+            if export_type == 'excel':
+                import openpyxl
+                book = openpyxl.Workbook()
+                sheet = book.active
+                sheet.title = "Proforma Report"
+
+                sheet['A1'] = "Proforma Report"
+                sheet.merge_cells("A1:J1")
+                sheet['A2'] = "Industry"
+                sheet['B2'] = "Organization"
+                sheet['C2'] = "Personnel"
+                sheet['D2'] = "Asset"
+                sheet['E2'] = 'QTY'
+                sheet['F2'] = "Currency"
+                sheet['D2'] = "Unit Price"
+                sheet['E2'] = "Total Amount"
+                sheet['F2'] = "Created By"
+                sheet['G2'] = "Created Date"
+                sheet['H2'] = "Approved By"
+                sheet['I2'] = "approved Date"
+                sheet["J2"] = "Status"
+                sheet_next = 3
+            arr = []
+            proformas = ProformaInvoice.objects.all()
+            for proforma in proformas:
+                # print(proforma.customer.name)
+                if export_type == 'json':
+                    arr.append(proforma.obj())
+
+                if export_type == 'excel':
+                    sheet[f'A{sheet_next}'] = proforma.customer.sector_of_company
+                    sheet[f'B{sheet_next}'] = proforma.customer.company
+                    sheet[f'C{sheet_next}'] = proforma.customer.name
+                    sheet[f'D{sheet_next}'] = proforma.my_ass()
+                    sheet[f'E{sheet_next}'] = proforma.quantity
+                    sheet[f'F{sheet_next}'] = proforma.currency
+                    sheet[f'D{sheet_next}'] = "Unit Price"
+                    sheet[f'E{sheet_next}'] = "Total Amount"
+                    sheet[f'F{sheet_next}'] = "Created By"
+                    sheet[f'G{sheet_next}'] = "Created Date"
+                    sheet[f'H{sheet_next}'] = "Approved By"
+                    sheet[f'I{sheet_next}'] = "approved Date"
+                    sheet[f"J{sheet_next}"] = "Status"
+
+                    sheet_next += 1
+
+            if export_type == 'json':
+                success_response['message'] = arr
+
+            if export_type == 'excel':
+                file_name = 'static/general/tmp/proforma.xlsx'
+                book.save(file_name)
+                success_response['message'] = file_name
+
+            response = success_response
 
     except Exception as e:
         error_type, error_instance, traceback = sys.exc_info()

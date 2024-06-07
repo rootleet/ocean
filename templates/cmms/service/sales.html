@@ -25,11 +25,19 @@
                                 <td>{{ doc.created_on }}</td>
                                 <td>{{ doc.created_by.get_full_name }}</td>
                                 <td>
-                                    {% if doc.is_approved %}
-                                        <span class="badge bg-success">approved</span>
-                                    {% else %}
-                                        <span class="badge bg-danger">pending</span>
+                                    {% if doc.status == 2 %}
+                                        <span class="badge bg-warning">approval request</span>
+                                    {% elif doc.status == 3 %}
+                                        <span class="badge bg-info">approved</span>
+                                    {% elif doc.status == 5 %}
+                                        <span class="badge bg-success-light text-dark">sent</span>
+                                    {% elif doc.status == 6 %}
+                                        <span class="badge bg-success">sold</span>
+                                    {% elif doc.status == 7 %}
+                                        <span class="badge bg-danger-light text-dark">expired</span>
                                     {% endif %}
+
+                                {{ doc.days_2_expire }}
                                 </td>
                                 <td>
                                     <div class="dropdown dropleft">
@@ -37,14 +45,23 @@
                                         <i class="fas fa-angle-left"></i>
                                       </button>
                                       <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                            {% if doc.is_approved %}
-                                                <a class="dropdown-item text-success" onclick="sales.sendProforma()" href="javascript:void(0)">Send To Customer</a>
-                                            {% else %}
+                                            {% if doc.status == 1 %}
+                                                <!-- REquest for approval -->
                                                 <a class="dropdown-item text-info" onclick="sales.requestProformaApproval('{{ doc.pk }}')" href="javascript:void(0)">Request Approval</a>
+                                            {% elif doc.status == 3 %}
+                                                <!--Approval Pending-->
+                                                <!-- Send to customers-->
+                                                <a class="dropdown-item text-success" onclick="sales.sendProforma('{{ doc.pk }}')" href="javascript:void(0)">Send To Customer</a>
+                                            {% elif doc.status == 5 %}
+                                                <!--mark as sale-->
+                                                <a class="dropdown-item text-warning" onclick="sales.ProformaEOD('{{ doc.pk }}')" href="javascript:void(0)">End Of Life</a>
+                                                <!-- ENd of life -->
+
+                                                
                                             {% endif %}
 
                                             <a class="dropdown-item text-info" onclick="sales.viewProforma('{{ doc.pk }}')" href="javascript:void(0)">View Proforma</a>
-                                            <a class="dropdown-item text-warning" onclick="sales.updateProformaSpecs('{{ doc.pk }}')" href="javascript:void(0)">Update Specs</a>
+                                            <a class="dropdown-item text-primary" onclick="sales.updateProformaSpecs('{{ doc.pk }}')" href="javascript:void(0)">Update Specs</a>
 
                                       </div>
                                     </div>

@@ -1,105 +1,85 @@
-{% extends 'cmms/base.html' %}
+{% extends 'cmms/sales/sales_base.html' %}
 {% load static %}
 
 {% block cmms %}
     <div class="card-header">
         <div class="w-100 d-flex flex-wrap">
             <div class="w-50 d-flex flex-wrap">
-                <button id="new" class="btn nav-btn btn-sm btn-primary mr-1">
-                    <i class="fa fa-plus"></i>
+                <button id="cancel" class="btn nav-btn btn-sm btn-info mr-1">
+                    <i class="fa fa-backspace"></i>
                 </button>
-                <button id="edit" class="btn nav-btn btn-sm btn-warning mr-1">
-                    <i class="fa fa-edit"></i>
+                <button id="save" class="btn nav-btn btn-sm btn-success mr-1">
+                    <i class="fa fa-save"></i>
                 </button>
-                <button id="previous" class="btn nav-btn btn-sm btn-info mr-1">
-                    <i class="fa fa-backward"></i>
-                </button>
-                <button id="next" class="btn nav-btn btn-sm btn-info mr-1">
-                    <i class="fa fa-forward"></i>
-                </button>
+
             </div>
 
             <div class="w-50 d-flex flex-wrap p-2 justify-content-end">
-                <button id="asset_groups" class="btn p-1 btn-info btn-sm nav-btn">
-                    Asset Group
-                </button>
-                <button class="btn p-1 btn-info btn-sm nav-btn">
-                    Asset List
-                </button>
+
             </div>
         </div>
     </div>
     <div class="card-body p-2">
         <div class="container-fluid h-100">
-            <div class="row h-25 overflow-auto">
+            <div class="row h-25 bg-info-light py-2 overflow-auto">
                 <div class="col-sm-4">
                     <!-- Manufacturer -->
                     <div class="row mb-2">
-                        <label for="asset_manufacturer" class="col-sm-4">Manufacturer</label>
+                        <label for="name" class="col-sm-4">Name</label>
                         <div class="col-sm-8">
-                            <select class="form-control rounded-0" id="asset_manufacturer">
-                                <option value="">Toyota</option>
+                            <input type="text" placeholder="Name" class="form-control rounded-0" id="name">
+                        </div>
+                    </div>
+                    <!-- Manufacturer -->
+                    <div class="row mb-2">
+                        <label for="manufacturer" class="col-sm-4">Manufacturer</label>
+                        <div class="col-sm-8">
+                            <select class="form-control rounded-0" id="manufacturer">
+                                <option value="">Select Manufacturer</option>
+                                {% for man in mans %}
+                                    <option value="{{ man.pk }}">{{ man.name }}</option>
+                                {% endfor %}
                             </select>
                         </div>
                     </div>
 
                     <!-- Origin -->
                     <div class="row mb-2">
-                        <label for="origin" class="col-sm-4">Origin</label>
+                        <label for="origin" class="col-sm-4">Car Origin</label>
                         <div class="col-sm-8">
-                            <input type="text" disabled class="form-control rounded-0" id="origin">
+                            <select class="form-control rounded-0" id="origin">
+                                <option value="">Select Origin</option>
+                                {% for org in origins %}
+                                    <option value="{{ org.pk }}">{{ org.country }}</option>
+                                {% endfor %}
+                            </select>
                         </div>
                     </div>
-
-                    <!-- SUPPLYEr -->
-                    <div class="row">
-                        <label for="supplier" class="col-sm-4">Supplier</label>
-                        <div class="col-sm-8">
-                            <input type="text" disabled class="form-control rounded-0" id="supplier">
-                        </div>
-                    </div>
-
 
                 </div>
 
                 <div class="col-sm-4">
-                    <!-- NAME-->
-                    <div class="row">
-                        <label for="supplier" class="col-sm-4">Name</label>
+                    <!-- SUPPLYEr -->
+                    <div class="row mb-2">
+                        <label for="supplier" class="col-sm-4">Supplier</label>
                         <div class="col-sm-8">
-                            <input type="text" class="form-control rounded-0" id="name">
+                            <select class="form-control rounded-0" id="supplier">
+                                <option value="">Select Origin</option>
+                                {% for sup in suppliers %}
+                                    <option value="{{ sup.pk }}">{{ sup.name }}</option>
+                                {% endfor %}
+                            </select>
                         </div>
                     </div>
+
+                </div>
+
+                <div class="col-sm-4">
+
                 </div>
             </div>
 
-            <!-- MODELS -->
-            <div class="row h-75 overflow-auto table-responsive">
-                <table class="datatable">
-                    <thead>
-                        <tr>
-                            <th>Brand</th>
-                            <th>Model</th>
-                            <th>Year</th>
-                            <th>Stock</th>
-                            <th>Doc.</th>
-                            <th>Price</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><a href="#">Camry</a></td>
-                            <td>Spider</td>
-                            <td>2025</td>
-                            <td>10</td>
-                            <td>0</td>
-                            <td>$1,000.00</td>
-                            <td>Actions</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+
         </div>
     </div>
 
@@ -122,28 +102,22 @@
         }
         $(document).ready(function(){
 
-            // load asset groups
-            loadAssetGroups();
-
-            $('#asset_groups').click(function(){
-                sales.viewAssetGroups()
+            // cancel
+            $('#cancel').click(function(){
+                location.href = '/cmms/sales/assets/'
             });
 
-            // set asset details
-            $('#asset_manufacturer').change(function(){
-                let ids = ['asset_manufacturer'];
-                if(anton.validateInputs(ids)){
-                    let manufact = sales.getAssetGroup($('#asset_manufacturer').val());
-                    if(anton.IsRequest(manufact)){
-                        let manf = manufact['message'][0];
-                        $('#supplier').val(manf['supplier'])
-                        $('#origin').val(manf['origin'])
-                    } else {
-                        kasa.response(manufact)
+            $('#save').click(function(){
+                let fields = ['name','manufacturer','supplier','mypk']
+                if(anton.validateInputs(fields)){
+                    let payload = {
+                        module:"Car",
+                        data:anton.Inputs(fields)
                     }
 
-                } else {
-                    kasa.error("Select Valid Manufacture")
+                    kasa.confirm(
+                        api.call('PUT',payload,'/cmms/api/').message,1,'/cmms/sales/assets/'
+                    )
                 }
             });
         })

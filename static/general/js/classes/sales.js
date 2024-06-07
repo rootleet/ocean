@@ -398,21 +398,20 @@ class Sales {
                     tr += `<tr>
                                 <td><a href="#">${model['model_name']}</a></td>
                                 <td>${model['year']}</td>
-                                <td>10</td>
                                 <td>0</td>
                                 <td>${model['docs']}</td>
                                 <td>${model['price']}</td>
                                 <td>
-                                <div class="dropdown">
-                                  <button class="btn btn-secondary" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="fas fa-angle-down"></i>
-                                  </button>
-                                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                    <a class="dropdown-item" onclick="sales.changeModelPrice(${model['pk']})" href="javascript:void(0)">Change Price</a>
-                                    <a class="dropdown-item" onclick="windowPopUp('/cmms/sales/spec/${model.pk}/','SPEC',500,678)" href="javascript:void(0)">Specs</a>
-                                    <a class="dropdown-item" onclick="sales.generateProfoma(${model['pk']})" href="javascript:void(0)">Generate Profoma</a>
-                                  </div>
-                                </div>
+                                    <div class="dropdown">
+                                      <button class="btn btn-secondary" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fas fa-angle-down"></i>
+                                      </button>
+                                      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        <a class="dropdown-item" onclick="sales.changeModelPrice(${model['pk']})" href="javascript:void(0)">Change Price</a>
+                                        <a class="dropdown-item" onclick="windowPopUp('/cmms/sales/spec/${model.pk}/','SPEC',500,678)" href="javascript:void(0)">Specs</a>
+                                        <a class="dropdown-item" onclick="sales.generateProfoma(${model['pk']})" href="javascript:void(0)">Generate Profoma</a>
+                                      </div>
+                                    </div>
                                 
                                 </td>
                             </tr>`
@@ -635,6 +634,7 @@ class Sales {
             let doc = pf.message
             anton.viewFile(`/${doc}`)
         } else {
+            console.error(pf)
             kasa.response(pf)
         }
     }
@@ -693,8 +693,52 @@ class Sales {
 
     }
 
-    sendProforma() {
+    sendProforma(pk) {
+        let payload = {
+            module:"send_proforma",
+            data:{
+                key:pk,
+                mypk:$('#mypk').val()
+            }
+        }
 
+        if(confirm("Are you sure you want to send document?")){
+            let send = api.call('PATCH',payload,'/cmms/api/')
+            kasa.confirm(send.message,1,'here')
+        } else {
+            kasa.info("Operation Canceled")
+        }
+    }
+
+    // end proforma life
+    ProformaEOD(pk){
+        // create from
+        let form  = ``;
+        form += fom.select('status',"<option value='YES'>Successful</option><option value='NO'>Failed</option>",true)
+        form += fom.textarea('remarks',3,true)
+
+        amodal.setBodyHtml(form)
+        amodal.setTitleText("End Of Proforma Life")
+        amodal.setFooterHtml(`<button onclick='sales.commitProformaEod(${pk})' class='btn btn-success w-100'>COMMIT</button>`)
+        amodal.show()
+    }
+
+    commitProformaEod(pk){
+        let fields = ['status','remarks','mypk']
+
+        if(anton.validateInputs(fields)){
+            let payload = {
+                module:'proformaEOD',
+                data:anton.Inputs(fields)
+            }
+            payload.data['proforma'] = pk
+
+            kasa.confirm(
+                api.call('PATCH',payload,'/cmms/api/')['message'],1,'here'
+            )
+        } else {
+            kasa.error("Invalid Form")
+        }
     }
 }
 

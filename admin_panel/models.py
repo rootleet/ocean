@@ -180,7 +180,7 @@ class MailQueues(models.Model):
 
 class MailAttachments(models.Model):
     mail = models.ForeignKey(MailQueues, on_delete=models.CASCADE)
-    attachment = models.FileField(upload_to='static/uploads/attachments/')
+    attachment = models.FileField(upload_to='static/attachments/')
 
 
 class Sales(models.Model):

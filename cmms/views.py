@@ -336,7 +336,10 @@ def new_sales_asset(request):
         'page': {
 
             'title': "Sales / Assets/ New"
-        }
+        },
+        'suppliers':CarSupplier.objects.all().order_by('name'),
+        'origins':CarOrigin.objects.all().order_by('country'),
+        'mans':CarManufacturer.objects.all().order_by('name')
     }
     return render(request, 'cmms/sales/new_asset.html', context=context)
 
