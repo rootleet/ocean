@@ -4,7 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ffcbf13e-d396-4071-9a24-4014a690f966" name="Changes" comment="fight" />
+    <list default="true" id="ffcbf13e-d396-4071-9a24-4014a690f966" name="Changes" comment="fight">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/retail/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/retail/models.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -471,15 +474,7 @@
       <workItem from="1716786720643" duration="3594000" />
       <workItem from="1717045962179" duration="4320000" />
       <workItem from="1717774018267" duration="3599000" />
-      <workItem from="1718100052321" duration="4610000" />
-    </task>
-    <task id="LOCAL-00162" summary="mark price by a mile">
-      <option name="closed" value="true" />
-      <created>1709030653810</created>
-      <option name="number" value="00162" />
-      <option name="presentableId" value="LOCAL-00162" />
-      <option name="project" value="LOCAL" />
-      <updated>1709030653811</updated>
+      <workItem from="1718100052321" duration="5082000" />
     </task>
     <task id="LOCAL-00163" summary="add 404, and run app with insecure">
       <option name="closed" value="true" />
@@ -865,7 +860,15 @@
       <option name="project" value="LOCAL" />
       <updated>1718120077968</updated>
     </task>
-    <option name="localTasksCounter" value="211" />
+    <task id="LOCAL-00211" summary="fight">
+      <option name="closed" value="true" />
+      <created>1718120267620</created>
+      <option name="number" value="00211" />
+      <option name="presentableId" value="LOCAL-00211" />
+      <option name="project" value="LOCAL" />
+      <updated>1718120267620</updated>
+    </task>
+    <option name="localTasksCounter" value="212" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

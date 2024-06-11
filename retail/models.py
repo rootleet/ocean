@@ -92,7 +92,7 @@ class Products(models.Model):
     subgroup = models.ForeignKey(ProductSubGroup, on_delete=models.CASCADE)
     code = models.CharField(unique=True, max_length=60)
     barcode = models.CharField(unique=True, max_length=100, null=False, blank=False)
-    name = models.TextField(null=False)
+    name = models.CharField(unique=True, max_length=100)
     price = models.DecimalField(decimal_places=2, max_digits=60)
     stock_monitor = models.BooleanField(default=False)
 
@@ -205,7 +205,7 @@ class RecipeProduct(models.Model):
 
 class Recipe(models.Model):
     product = models.ForeignKey(RecipeProduct, on_delete=models.CASCADE)
-    name = models.TextField(null=False, blank=False)
+    name = models.CharField(max_length=100)
     quantity = models.TextField(default=0.00)
     si_unit = models.TextField(null=False, blank=False)
 
