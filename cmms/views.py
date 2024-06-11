@@ -372,3 +372,20 @@ def model_spec(request, model_pk):
         return render(request, 'cmms/sales/model_spec.html', context=context)
     else:
         return HttpResponse("Invalid Model")
+
+def approve_po(request,po_pk):
+    if ProformaInvoice.objects.filter(pk=po_pk).count()==1:
+        entry = ProformaInvoice.objects.get(pk=po_pk)
+        context = {
+            'nav': True,
+            'page': {
+
+                    'title': f"Sales / PO / Approve",
+                },
+            'document':po_pk,
+            'entry':entry
+        }
+
+        return render(request,'cmms/sales/approve-po.html',context=context)
+    else:
+        return redirect('prod_appr_req')

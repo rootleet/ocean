@@ -80,6 +80,9 @@ def make_md5_hash(text):
     new_text = f"{text}{formatted_datetime}"
     return hashlib.md5(new_text.encode('utf-8')).hexdigest()
 
+def md5only(text):
+    return hashlib.md5(str(text).encode('utf-8')).hexdigest()
+
 
 def generate_random_password():
     import secrets

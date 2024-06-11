@@ -5,18 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ffcbf13e-d396-4071-9a24-4014a690f966" name="Changes" comment="enhanced software message after applied">
-      <change afterPath="$PROJECT_DIR$/static/uploads/dolphine/2024/05/21/EXPIRY_AS_JUNE.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rq.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/admin_panel/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/admin_panel/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmms/cmms_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/cmms/cmms_api.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmms/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/cmms/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmms/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/cmms/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/general/js/classes/anton.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/general/js/classes/anton.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/general/js/classes/sales.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/general/js/classes/sales.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/cmms/sales/assets.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/cmms/sales/assets.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/cmms/sales/model_spec.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/cmms/sales/model_spec.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/cmms/sales/new_asset.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/cmms/sales/new_asset.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/cmms/service/sales.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/cmms/service/sales.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -483,14 +473,7 @@
       <workItem from="1716498314993" duration="6480000" />
       <workItem from="1716786720643" duration="3594000" />
       <workItem from="1717045962179" duration="4320000" />
-    </task>
-    <task id="LOCAL-00158" summary="added template file">
-      <option name="closed" value="true" />
-      <created>1708487356500</created>
-      <option name="number" value="00158" />
-      <option name="presentableId" value="LOCAL-00158" />
-      <option name="project" value="LOCAL" />
-      <updated>1708487356500</updated>
+      <workItem from="1717774018267" duration="3599000" />
     </task>
     <task id="LOCAL-00159" summary="Change upload dires for docker">
       <option name="closed" value="true" />
@@ -876,7 +859,15 @@
       <option name="project" value="LOCAL" />
       <updated>1716484405166</updated>
     </task>
-    <option name="localTasksCounter" value="207" />
+    <task id="LOCAL-00207" summary="enhanced software message after applied">
+      <option name="closed" value="true" />
+      <created>1717775329512</created>
+      <option name="number" value="00207" />
+      <option name="presentableId" value="LOCAL-00207" />
+      <option name="project" value="LOCAL" />
+      <updated>1717775329512</updated>
+    </task>
+    <option name="localTasksCounter" value="208" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

@@ -32,6 +32,14 @@ class Modal {
     }
 
     setTitleText(title){
+        let close = `<button data-bs-dismiss='modal' class='close'>&times;</button>`;
+        let title_html = `
+        <div class='w-100 d-flex flex-wrap'>
+            <div class='w-75'>${title}</div>
+            <div class='w-25 d-flex flex-wrap justify-content-end'>${close}</div>
+        </div>
+         
+        `
         $('#g_modal_title').html(title)
     }
 

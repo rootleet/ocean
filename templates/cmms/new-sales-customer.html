@@ -1,14 +1,14 @@
-{% extends 'cmms/base.html' %}
+{% extends 'cmms/sales/sales_base.html' %}
 
 {% load static %}
 
 {% block cmms %}
-   <div class="w-100 h-100 card">
+   
         <div class="card-header">
             <button type="button" onclick="cmms_sales.saveCustomer()" class="btn btn-info">SAVE</button>
         </div>
 
-        <div class="card-body overflow-auto p-2">
+        <div class="card-body bg-light overflow-auto p-2">
 
 
             <div class="container">
@@ -143,7 +143,7 @@
 
         </div>
 
-   </div>
+   
 
 
     <script>

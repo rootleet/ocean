@@ -1,0 +1,43 @@
+{% extends 'cmms/sales/sales_base.html' %}
+
+{% load static %}
+
+{% block cmms %}
+
+    <div class="card-header">
+        <strong class="card-title">PO Approval {{ document }}</strong>
+    </div>
+
+    <div class="card-body">
+        <div class="container h-100 ">
+            <div class='row h-100 d-flex flex-wrap justify-content-center align-content-center'>
+                <div class='col-sm-3 p-2'>
+                    <button id="view" class="btn btn-info w-100">
+                        View Document
+                    </button>
+                </div>
+
+                <div class='col-sm-3 p-2'>
+                    <button id="approve" class="btn btn-warning w-100">
+                        APPROVE
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-footer">
+        
+    </div>
+
+    <script>
+        $('#view').click(function(){
+            sales.viewProforma('{{ document }}')
+        });
+
+        $('#approve').click(function(){
+            sales.approveProforma('{{ document }}')
+        });
+    </script>
+
+{% endblock %}

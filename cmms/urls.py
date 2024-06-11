@@ -43,6 +43,7 @@ urlpatterns = [
     path('sales/deals/<customer>/', views.sales_deal, name='sales-deal'),
     path('sales/adons/', views.sales_tools, name='sales_tools'),
     path('sales/approval_request/',views.proforma_approval_requests,name='prod_appr_req'),
+    path('sales/approve/sales-po/<po_pk>/',views.approve_po,name='approve_cmms_po'),
 
     path('servicing/', views.service_customers, name='service_customers'),
     path('servicing/customer/<customer_code>/', views.service_customer, name='service_customer')

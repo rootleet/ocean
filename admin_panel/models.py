@@ -520,6 +520,7 @@ class UserAddOns(models.Model):
     profile_pic = models.FileField(upload_to=f'static/uploads/users/')
     pword_reset = models.IntegerField(default=1)
     api_token = models.TextField(null=True)
+    auth_pin = models.CharField(max_length=200)
 
     department = models.ForeignKey(Departments, on_delete=models.SET_NULL, null=True, blank=True)
 
@@ -796,3 +797,11 @@ class Log500(models.Model):
     what = models.TextField()
     created_date = models.DateField(auto_now_add=True)
     created_time = models.TimeField(auto_now_add=True)
+
+
+class DocApprovals(models.Model):
+    user = models.ForeignKey(User,on_delete=models.CASCADE)
+    doc_type = models.CharField(max_length=200)
+
+    class Meta:
+        unique_together = (('user', 'doc_type'),)

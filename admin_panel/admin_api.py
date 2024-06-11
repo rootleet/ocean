@@ -8,9 +8,9 @@ from django.contrib.auth.models import User, Permission
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
-from admin_panel.anton import remove_html_tags, generate_random_password
+from admin_panel.anton import md5only, remove_html_tags, generate_random_password
 from admin_panel.cron_exe import execute_script
-from admin_panel.models import GeoCity, GeoCitySub, Reminder, SmsApi, UserAddOns, EvatCredentials, Locations, \
+from admin_panel.models import DocApprovals, GeoCity, GeoCitySub, Reminder, SmsApi, UserAddOns, EvatCredentials, Locations, \
     Departments, TicketTrans, Sms, TicketHd, MailSenders, MailQueues
 from reports.models import DepartmentReportMailQue
 from servicing.models import ServiceCard
@@ -118,6 +118,15 @@ def index(request):
                         }
 
                         response = success_response
+            
+            elif module == 'doc_app_auth':
+                user_pk = data.get('user_pk')
+                user = User.objects.get(pk=user_pk)
+                doc_type = data.get('doc_type')
+                DocApprovals(user=user,doc_type=doc_type).save()
+
+                success_response['message'] = "Approver Added"
+                response = success_response
 
             elif module == 'reminder':
                 owner_pk = data.get('owner')
@@ -275,6 +284,26 @@ def index(request):
 
                     success_response['message'] = cts
                     response = success_response
+            
+            elif module == 'doc_app_auth':
+                pin = data.get('pin')
+                doc_type = data.get('doc_type')
+                if UserAddOns.objects.filter(auth_pin=md5only(pin)).count() == 1:
+                    # get user
+                    us = UserAddOns.objects.get(auth_pin=md5only(pin))
+                    # validate if user can auth
+                    auth_user = us.user
+                    if DocApprovals.objects.filter(user=auth_user,doc_type='sales_proforma').count() == 1:
+                        success_response['status_code'] = 200
+                        success_response['message'] = us.user.pk
+                    else:
+                        success_response['status_code'] = 505
+                        success_response['message'] = "Permission Denied"
+                else:
+                    success_response['status_code'] = 404
+                    success_response['message'] = f"Invalid User {md5only(1234)}"
+                
+                response = success_response
 
             elif module == 'reminder':
                 key = data.get('key')

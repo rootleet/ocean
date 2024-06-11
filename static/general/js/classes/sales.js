@@ -676,17 +676,39 @@ class Sales {
 
     approveProforma(pk) {
         if(confirm("Are you sure?")){
-            let payload = {
-                data:{
-                    mypk:$('#mypk').val(),
-                    key:pk
-                },
-                module:"approve_proforma"
-            }
+            let user_pin = prompt("Please auth pin:")
+            
+            if (user_pin) {
+                // authenticat first
+                let auth_payload = {
+                    module:'doc_app_auth',
+                    data:{
+                        pin:user_pin,
+                        doc_type:'sales_proforms'
+                    }
+                }
 
-            kasa.confirm(
-                api.call('PATCH',payload,'/cmms/api/')['message'],1,'here'
-            )
+                let auth = api.call('VIEW',auth_payload,'/adapi/');
+                if(anton.IsRequest(auth)){
+                    let mypk = auth.message
+                    let payload = {
+                        data:{
+                            mypk:$('#mypk').val(),
+                            key:pk
+                        },
+                        module:"approve_proforma"
+                    }
+        
+                    kasa.confirm(
+                        api.call('PATCH',payload,'/cmms/api/')['message'],1,'here'
+                    )
+                } else {
+                    kasa.response(auth)
+                }
+            } else {
+                alert("You didn't a pin.");
+            }
+            
         } else {
             kasa.info("Operation Canceled")
         }

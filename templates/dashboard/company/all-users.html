@@ -131,6 +131,7 @@
                                                         <a class="dropdown-item text-warning" onclick="user.resetPassword('{{ this_user.pk }}')" href="javascript:void(0)">Reset Password</a>
                                                         <a class="dropdown-item text-secondary" data-bs-target="#chgDept{{ this_user.pk }}" data-bs-toggle="modal" href="javascript:void(0)">Department Set</a>
                                                         <a class="dropdown-item text-primary" onclick="location.href='{% url 'user_permissions' this_user.username %}'"  href="javascript:void(0)">UAL</a>
+                                                        <a class="dropdown-item text-info" onclick="user.makeApprovalScreen('{{ this_user.pk }}')"  href="javascript:void(0)">Make Approver</a>
                                                     </div>
                                                 </div>
                                             </td>
