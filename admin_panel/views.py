@@ -58,7 +58,7 @@ def today(what='none'):  # get time
 
 day = f"{today('year')}-{today('month')}-{today('day')}"
 
-if Sales.objects.filter(day=day).exists():
+if 1 > 10:
 
     n_sales = Sales.objects.filter(day=day).aggregate(Sum('net_sales'))['net_sales__sum']
 
