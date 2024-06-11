@@ -751,7 +751,7 @@ class Reminder(models.Model):
 class Contacts(models.Model):
     full_name = models.TextField()
     email = models.CharField(max_length=100, unique=False, null=False)
-    phone = models.TextField(max_length=100, unique=False, null=False)
+    phone = models.CharField(max_length=100, unique=False, null=False)
 
     created_date = models.DateField(auto_now_add=True)
     created_time = models.TimeField(auto_now_add=True)

@@ -4,10 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ffcbf13e-d396-4071-9a24-4014a690f966" name="Changes" comment="po done">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/admin_panel/sms_hold.py" beforeDir="false" afterPath="$PROJECT_DIR$/admin_panel/sms_hold.py" afterDir="false" />
-    </list>
+    <list default="true" id="ffcbf13e-d396-4071-9a24-4014a690f966" name="Changes" comment="fight" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -474,23 +471,7 @@
       <workItem from="1716786720643" duration="3594000" />
       <workItem from="1717045962179" duration="4320000" />
       <workItem from="1717774018267" duration="3599000" />
-      <workItem from="1718100052321" duration="4437000" />
-    </task>
-    <task id="LOCAL-00160" summary="alter bolt api to include rates">
-      <option name="closed" value="true" />
-      <created>1709029426322</created>
-      <option name="number" value="00160" />
-      <option name="presentableId" value="LOCAL-00160" />
-      <option name="project" value="LOCAL" />
-      <updated>1709029426323</updated>
-    </task>
-    <task id="LOCAL-00161" summary="make rate dynamic to be asked">
-      <option name="closed" value="true" />
-      <created>1709029480332</created>
-      <option name="number" value="00161" />
-      <option name="presentableId" value="LOCAL-00161" />
-      <option name="project" value="LOCAL" />
-      <updated>1709029480332</updated>
+      <workItem from="1718100052321" duration="4610000" />
     </task>
     <task id="LOCAL-00162" summary="mark price by a mile">
       <option name="closed" value="true" />
@@ -868,7 +849,23 @@
       <option name="project" value="LOCAL" />
       <updated>1718100316980</updated>
     </task>
-    <option name="localTasksCounter" value="209" />
+    <task id="LOCAL-00209" summary="fight">
+      <option name="closed" value="true" />
+      <created>1718119927755</created>
+      <option name="number" value="00209" />
+      <option name="presentableId" value="LOCAL-00209" />
+      <option name="project" value="LOCAL" />
+      <updated>1718119927755</updated>
+    </task>
+    <task id="LOCAL-00210" summary="fight">
+      <option name="closed" value="true" />
+      <created>1718120077968</created>
+      <option name="number" value="00210" />
+      <option name="presentableId" value="LOCAL-00210" />
+      <option name="project" value="LOCAL" />
+      <updated>1718120077968</updated>
+    </task>
+    <option name="localTasksCounter" value="211" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -891,7 +888,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="recipe card search" />
     <MESSAGE value="adding retail stock screen" />
     <MESSAGE value="enable uploading crm log files from excel" />
     <MESSAGE value="added template file" />
@@ -916,7 +912,8 @@
     <MESSAGE value="create crom logs with live data" />
     <MESSAGE value="enhanced software message after applied" />
     <MESSAGE value="po done" />
-    <option name="LAST_COMMIT_MESSAGE" value="po done" />
+    <MESSAGE value="fight" />
+    <option name="LAST_COMMIT_MESSAGE" value="fight" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
