@@ -650,12 +650,13 @@ class Sales {
 
         if(confirm('Are you sure you want to reset specifications?')){
             let update = api.call('PATCH',payload,'/cmms/api/')
-            if(anton.IsRequest(update)){
-                // view file
-                this.viewProforma(pk)
-            } else {
-                kasa.response(update)
-            }
+            kasa.response(update)
+            // if(anton.IsRequest(update)){
+            //     // view file
+            //     // this.viewProforma(pk)
+            // } else {
+            //     kasa.response(update)
+            // }
         } else {
             kasa.info("Operation Canceled")
         }

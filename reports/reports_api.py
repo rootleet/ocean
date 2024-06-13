@@ -289,6 +289,7 @@ def interface(request):
                 for attachment in attachments:
                     attachment_filename = attachment.attachment.path
                     file_name = os.path.basename(attachment_filename)
+                    print(attachment_filename)
                     try:
                         with open(attachment_filename, 'rb') as attached:
                             part = MIMEApplication(attached.read())  # Read the content of the file
