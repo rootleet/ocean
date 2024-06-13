@@ -21,3 +21,4 @@ tuto1.pdf
 /static/general/rmbg/
 /retail/__pycache__/
 appconfig/migrations/__pycache__/0001_initial.cpython-310.pyc
+./.idea/
