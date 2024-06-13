@@ -550,6 +550,11 @@ class ProformaInvoice(models.Model):
             "uni":self.uni,
             "car_model":self.car_model.myself(),
             "customer":self.customer.obj(),
+            "prospectives":{
+              "name":self.prospective_name if self.prospective_name != 'same' else self.customer.name,
+                "email": self.prospective_email if self.prospective_email != 'same' else self.customer.email,
+                "phone": self.prospective_phone if self.prospective_phone != 'same' else self.customer.mobile
+            },
             "currency":self.currency,
             "chassis":self.chassis,
             "price":self.price,
