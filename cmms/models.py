@@ -213,6 +213,9 @@ class SalesCustomers(models.Model):
 
     status = models.IntegerField(default=0)
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
+    def proformas(self):
+        return ProformaInvoice.objects.filter(sales_customer=self)
     
     def obj(self):
         return {
