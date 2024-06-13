@@ -5,8 +5,120 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ffcbf13e-d396-4071-9a24-4014a690f966" name="Changes" comment="fight">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/59b51993-8727-4f79-b918-a1f1762c73bf.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/59b51993-8727-4f79-b918-a1f1762c73bf.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/retail/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/retail/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/appconfig/migrations/0001_initial.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0001_initial.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0002_app_icon_app_root.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0003_app_version_alter_app_icon.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0004_alter_app_icon_versioncontrol.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0005_alter_app_icon_appassign.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0006_remove_appassign_status_appassign_updated_date_and_more.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0007_alter_app_icon_alter_versioncontrol_files.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0008_alter_app_icon.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0009_alter_app_icon.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0010_alter_app_icon_appcontainer.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0011_app_computers_alter_app_icon.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0012_remove_app_computers_app_containers_alter_app_icon.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0013_alter_app_icon.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0014_alter_app_icon.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0015_alter_app_icon.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0016_remove_app_icon_app_file.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0017_alter_app_file.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0018_alter_app_file.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0019_alter_app_file.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0020_alter_app_file.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0021_alter_app_file.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0022_alter_app_file.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0023_alter_app_file.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0024_alter_app_file.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0025_alter_app_file.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0026_appassign_message_alter_app_file.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0027_appassign_last_breath_alter_app_file.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0028_alter_app_file.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0029_alter_app_file.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0030_alter_app_file.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0031_alter_app_file.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0032_alter_app_file.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0033_alter_app_file.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0034_alter_app_file.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0035_alter_app_file.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0036_alter_app_file.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0037_alter_app_file.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0038_alter_app_file.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0039_alter_app_file.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0040_alter_app_file.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0041_alter_app_file.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0042_alter_app_file.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0043_alter_app_file.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0044_alter_app_file.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0045_alter_app_file.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0046_alter_app_file.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0047_alter_app_file.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0048_alter_app_file.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0049_alter_app_file.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0050_alter_app_file.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0051_alter_app_file.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0052_alter_app_file.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0053_alter_app_file.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0054_alter_app_file.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0055_alter_app_file.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0056_alter_app_file.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0057_alter_app_file.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0058_alter_app_file.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0059_alter_app_file.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0060_alter_app_file.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0061_alter_app_file.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0062_alter_app_file.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0063_alter_app_file.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0064_alter_app_file.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0065_alter_app_file.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0066_alter_app_file.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0067_alter_app_file.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0068_alter_app_file.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0069_alter_app_file.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0070_alter_app_file.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0071_alter_app_file.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0072_alter_app_file.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0073_alter_app_file.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0074_alter_app_file.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0075_alter_app_file.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0076_alter_app_file.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0077_alter_app_file.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0078_alter_app_file.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0079_alter_app_file.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0080_alter_app_file.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0081_alter_app_file.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0082_alter_app_file.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0083_alter_app_file.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0084_alter_app_file.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0085_alter_app_file.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0086_alter_app_file.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0087_alter_app_file.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0088_alter_app_file.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0089_alter_app_file.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0090_alter_app_file.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0091_alter_app_file.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0092_alter_app_file.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0093_alter_app_file.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0094_alter_app_file.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0095_alter_app_file.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0096_alter_app_file.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0104_alter_app_file.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/appscenter/migrations/0105_alter_app_file.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/migrations/0001_initial.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reports/migrations/0003_alter_departmentreportmailque_status.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/req.txt" beforeDir="false" afterPath="$PROJECT_DIR$/req.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/retail/migrations/0001_initial.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/retail/migrations/0002_alter_clerk_img.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/retail/migrations/0003_alter_clerk_location.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/taskmanager/migrations/0001_initial.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/taskmanager/migrations/0002_tasktransactions.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/taskmanager/migrations/0003_delete_tasktransactions.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/taskmanager/migrations/0004_tasktransactions.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/taskmanager/migrations/0005_delete_tasktransactions.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/taskmanager/migrations/0006_tasktransactions.py" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -166,7 +278,6 @@
         <env name="DJANGO_SETTINGS_MODULE" value="ocean.settings" />
       </envs>
       <option name="SDK_HOME" value="C:\Users\reza\Documents\GitHub\ocean\venv\Scripts\python.exe" />
-      <option name="SDK_NAME" value="Python 3.11 (ocean)" />
       <option name="WORKING_DIRECTORY" value="" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
@@ -475,6 +586,7 @@
       <workItem from="1717045962179" duration="4320000" />
       <workItem from="1717774018267" duration="3599000" />
       <workItem from="1718100052321" duration="5082000" />
+      <workItem from="1718256928997" duration="1506000" />
     </task>
     <task id="LOCAL-00163" summary="add 404, and run app with insecure">
       <option name="closed" value="true" />
