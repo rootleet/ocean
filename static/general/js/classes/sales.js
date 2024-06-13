@@ -772,7 +772,7 @@ class Sales {
     }
 
     setProformaPerspective() {
-        // todo :: save customer
+        // todo :: save customer sure
         let id = ['customer']
     }
 }
