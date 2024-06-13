@@ -1673,6 +1673,10 @@ def api(request):
                         tax_amount = 0
                     net_amount = taxable_amount - tax_amount
 
+                    prospective_name = data.get('prospective_name')
+                    prospective_email = data.get('prospective_email')
+                    prospective_phone = data.get('prospective_phone')
+
                     if ProformaInvoice.objects.filter(car_model=car_model, customer=customer,is_active=True).count() == 0:
 
                         p_uni = make_md5_hash(f"{customer_pk}{car_model.model_name}")
@@ -1688,7 +1692,10 @@ def api(request):
                             quantity=quantity,
                             taxable_amount=taxable_amount,
                             tax_amount=tax_amount,
-                            net_amount=net_amount
+                            net_amount=net_amount,
+                            prospective_name=prospective_name,
+                            prospective_email=prospective_email,
+                            prospective_phone=prospective_phone
                         ).save()
 
                         # get proforma

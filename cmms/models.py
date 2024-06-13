@@ -484,6 +484,10 @@ class ProformaInvoice(models.Model):
     sent_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='sent_by')
     closed_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='closed_by')
 
+    prospective_name = models.TextField(default='same')
+    prospective_email = models.TextField(default='same')
+    prospective_phone = models.TextField(default='same')
+
     def my_ass(self):
         return f"{self.car_model.model_name}"
     def days_2_expire(self):

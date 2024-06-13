@@ -549,6 +549,10 @@ class Sales {
 
             let form = `<input id="model" type="hidden" value="${model_pk}">`;
             form += fom.select('customer',cust_opt,'',true)
+            form += fom.text('prospective_name','',true)
+            form += fom.text('prospective_email','',true)
+            form += fom.text('prospective_phone','',true)
+            form +=  `<hr>`
             form += fom.text('chassis','',true)
             form += fom.text('quantity','',true)
             form += fom.text('currency','Symbol',true)
@@ -606,7 +610,7 @@ class Sales {
     }
 
     saveProforma() {
-        let fields = ['mypk','model','currency','taxable','chassis','customer','quantity']
+        let fields = ['mypk','model','currency','taxable','chassis','customer','quantity','prospective_name','prospective_email','prospective_phone']
         if(anton.validateInputs(fields)){
             let payload = {
                 module:"ProformaInvoice",
