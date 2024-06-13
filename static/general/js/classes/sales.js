@@ -547,8 +547,11 @@ class Sales {
                 cust_opt += `<option value="${customer.pk}">${customer.company} - ${customer.name}</option>`
             }
 
-            let form = `<input id="model" type="hidden" value="${model_pk}">`;
-            form += fom.select('customer',cust_opt,'',true)
+            let form = `<input onchange="sales.setProformaPerspective()" id="model" type="hidden" value="${model_pk}">`;
+            form += `<select id="customer" name="customer" class="form-control rounded-0">
+                        ${cust_opt}
+                    </select>`
+            // form += fom.select('customer',cust_opt,'',true)
             form += fom.text('prospective_name','',true)
             form += fom.text('prospective_email','',true)
             form += fom.text('prospective_phone','',true)
@@ -766,6 +769,11 @@ class Sales {
         } else {
             kasa.error("Invalid Form")
         }
+    }
+
+    setProformaPerspective() {
+        // todo :: save customer
+        let id = ['customer']
     }
 }
 
