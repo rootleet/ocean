@@ -5,8 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ffcbf13e-d396-4071-9a24-4014a690f966" name="Changes" comment="fight">
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/3a6a5de2-5c16-4c61-8911-ff2a73819934.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/3a6a5de2-5c16-4c61-8911-ff2a73819934.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/59b51993-8727-4f79-b918-a1f1762c73bf.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/59b51993-8727-4f79-b918-a1f1762c73bf.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/retail/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/retail/models.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -166,7 +168,6 @@
         <env name="DJANGO_SETTINGS_MODULE" value="ocean.settings" />
       </envs>
       <option name="SDK_HOME" value="C:\Users\reza\Documents\GitHub\ocean\venv\Scripts\python.exe" />
-      <option name="SDK_NAME" value="Python 3.11 (ocean)" />
       <option name="WORKING_DIRECTORY" value="" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
