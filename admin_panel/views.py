@@ -2113,6 +2113,8 @@ def profile(request):
     if UserAddOns.objects.filter(user=user.pk).exists():
         pass
     else:
+        if VersionHistory.objects.filter(version=settings.APP_VERSION).count() == 0:
+            VersionHistory(version=settings.APP_VERSION,descr='AUTOMATED').save()
         use_ad_on = UserAddOns(user=User.objects.get(pk=user.pk),
                                company='',
                                app_version=VersionHistory.objects.get(version=settings.APP_VERSION),
