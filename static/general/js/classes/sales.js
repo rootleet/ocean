@@ -773,7 +773,12 @@ class Sales {
 
     setProformaPerspective() {
         // todo :: save customer sure
-        let id = ['customer']
+        let id = ['customer'];
+        if(anton.validateInputs(id)){
+
+        } else {
+            kasa.error("Invalid Customer Field")
+        }
     }
 }
 
