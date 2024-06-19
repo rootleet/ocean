@@ -4,11 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ffcbf13e-d396-4071-9a24-4014a690f966" name="Changes" comment="fight">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/ocean_ori.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/ocean_ori.iml" afterDir="false" />
+    <list default="true" id="ffcbf13e-d396-4071-9a24-4014a690f966" name="Changes" comment="Make prospective data in json reply">
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/retail/retail_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/retail/retail_api.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/general/js/classes/retail.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/general/js/classes/retail.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/reports/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/reports/base.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -82,7 +83,7 @@
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;advanced.settings&quot;,
     &quot;ts.external.directory.path&quot;: &quot;C:\\Program Files\\JetBrains\\PyCharm 2024.1\\plugins\\javascript-impl\\jsLanguageServicesImpl\\external&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
@@ -290,8 +291,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-1d06a55b98c1-cb551a44b0f8-JavaScript-PY-242.10180.30" />
-        <option value="bundled-python-sdk-7efad6460ed6-db4a76ca2eac-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-242.10180.30" />
+        <option value="bundled-js-predefined-d6986cc7102b-19b454f630c8-JavaScript-PY-242.16677.12" />
+        <option value="bundled-python-sdk-62b32d9fc822-64e3ce31d466-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-242.16677.12" />
       </set>
     </attachedChunks>
   </component>
@@ -476,79 +477,8 @@
       <workItem from="1717045962179" duration="4320000" />
       <workItem from="1717774018267" duration="3599000" />
       <workItem from="1718100052321" duration="5082000" />
-      <workItem from="1718289414490" duration="2043000" />
-    </task>
-    <task id="LOCAL-00163" summary="add 404, and run app with insecure">
-      <option name="closed" value="true" />
-      <created>1709106688890</created>
-      <option name="number" value="00163" />
-      <option name="presentableId" value="LOCAL-00163" />
-      <option name="project" value="LOCAL" />
-      <updated>1709106688891</updated>
-    </task>
-    <task id="LOCAL-00164" summary="add 404, and run app with insecure">
-      <option name="closed" value="true" />
-      <created>1709127626974</created>
-      <option name="number" value="00164" />
-      <option name="presentableId" value="LOCAL-00164" />
-      <option name="project" value="LOCAL" />
-      <updated>1709127626974</updated>
-    </task>
-    <task id="LOCAL-00165" summary="add 404, and run app with insecure">
-      <option name="closed" value="true" />
-      <created>1710247204245</created>
-      <option name="number" value="00165" />
-      <option name="presentableId" value="LOCAL-00165" />
-      <option name="project" value="LOCAL" />
-      <updated>1710247204247</updated>
-    </task>
-    <task id="LOCAL-00166" summary="add 404, and run app with insecure">
-      <option name="closed" value="true" />
-      <created>1710247577170</created>
-      <option name="number" value="00166" />
-      <option name="presentableId" value="LOCAL-00166" />
-      <option name="project" value="LOCAL" />
-      <updated>1710247577170</updated>
-    </task>
-    <task id="LOCAL-00167" summary="update retail perissions">
-      <option name="closed" value="true" />
-      <created>1710319170805</created>
-      <option name="number" value="00167" />
-      <option name="presentableId" value="LOCAL-00167" />
-      <option name="project" value="LOCAL" />
-      <updated>1710319170806</updated>
-    </task>
-    <task id="LOCAL-00168" summary="CRM Logs are done successfuly, logs are generated for previeing">
-      <option name="closed" value="true" />
-      <created>1710508612362</created>
-      <option name="number" value="00168" />
-      <option name="presentableId" value="LOCAL-00168" />
-      <option name="project" value="LOCAL" />
-      <updated>1710508612363</updated>
-    </task>
-    <task id="LOCAL-00169" summary="CRM Logs are done successfuly, logs are generated for previeing">
-      <option name="closed" value="true" />
-      <created>1710522702502</created>
-      <option name="number" value="00169" />
-      <option name="presentableId" value="LOCAL-00169" />
-      <option name="project" value="LOCAL" />
-      <updated>1710522702502</updated>
-    </task>
-    <task id="LOCAL-00170" summary="CMMS logs patched with reminders">
-      <option name="closed" value="true" />
-      <created>1710590837291</created>
-      <option name="number" value="00170" />
-      <option name="presentableId" value="LOCAL-00170" />
-      <option name="project" value="LOCAL" />
-      <updated>1710590837291</updated>
-    </task>
-    <task id="LOCAL-00171" summary="error 500 adjusted proper.&#10;Follow ups configured proper">
-      <option name="closed" value="true" />
-      <created>1710610195845</created>
-      <option name="number" value="00171" />
-      <option name="presentableId" value="LOCAL-00171" />
-      <option name="project" value="LOCAL" />
-      <updated>1710610195845</updated>
+      <workItem from="1718289414490" duration="12753000" />
+      <workItem from="1718797064485" duration="14879000" />
     </task>
     <task id="LOCAL-00172" summary="Export crm reports to excel enabled">
       <option name="closed" value="true" />
@@ -870,7 +800,79 @@
       <option name="project" value="LOCAL" />
       <updated>1718120267620</updated>
     </task>
-    <option name="localTasksCounter" value="212" />
+    <task id="LOCAL-00212" summary="fight">
+      <option name="closed" value="true" />
+      <created>1718292348704</created>
+      <option name="number" value="00212" />
+      <option name="presentableId" value="LOCAL-00212" />
+      <option name="project" value="LOCAL" />
+      <updated>1718292348705</updated>
+    </task>
+    <task id="LOCAL-00213" summary="fight">
+      <option name="closed" value="true" />
+      <created>1718292352626</created>
+      <option name="number" value="00213" />
+      <option name="presentableId" value="LOCAL-00213" />
+      <option name="project" value="LOCAL" />
+      <updated>1718292352626</updated>
+    </task>
+    <task id="LOCAL-00214" summary="Restricting proforma view to marketting admin only">
+      <option name="closed" value="true" />
+      <created>1718295979994</created>
+      <option name="number" value="00214" />
+      <option name="presentableId" value="LOCAL-00214" />
+      <option name="project" value="LOCAL" />
+      <updated>1718295979994</updated>
+    </task>
+    <task id="LOCAL-00215" summary="add proforma for customer">
+      <option name="closed" value="true" />
+      <created>1718297544313</created>
+      <option name="number" value="00215" />
+      <option name="presentableId" value="LOCAL-00215" />
+      <option name="project" value="LOCAL" />
+      <updated>1718297544313</updated>
+    </task>
+    <task id="LOCAL-00216" summary="add prospective buyer details">
+      <option name="closed" value="true" />
+      <created>1718298779155</created>
+      <option name="number" value="00216" />
+      <option name="presentableId" value="LOCAL-00216" />
+      <option name="project" value="LOCAL" />
+      <updated>1718298779156</updated>
+    </task>
+    <task id="LOCAL-00217" summary="Make prospective data in json reply">
+      <option name="closed" value="true" />
+      <created>1718298956083</created>
+      <option name="number" value="00217" />
+      <option name="presentableId" value="LOCAL-00217" />
+      <option name="project" value="LOCAL" />
+      <updated>1718298956083</updated>
+    </task>
+    <task id="LOCAL-00218" summary="Make prospective data in json reply">
+      <option name="closed" value="true" />
+      <created>1718299201532</created>
+      <option name="number" value="00218" />
+      <option name="presentableId" value="LOCAL-00218" />
+      <option name="project" value="LOCAL" />
+      <updated>1718299201532</updated>
+    </task>
+    <task id="LOCAL-00219" summary="Make prospective data in json reply">
+      <option name="closed" value="true" />
+      <created>1718299346619</created>
+      <option name="number" value="00219" />
+      <option name="presentableId" value="LOCAL-00219" />
+      <option name="project" value="LOCAL" />
+      <updated>1718299346619</updated>
+    </task>
+    <task id="LOCAL-00220" summary="Make prospective data in json reply">
+      <option name="closed" value="true" />
+      <created>1718386986892</created>
+      <option name="number" value="00220" />
+      <option name="presentableId" value="LOCAL-00220" />
+      <option name="project" value="LOCAL" />
+      <updated>1718386986892</updated>
+    </task>
+    <option name="localTasksCounter" value="221" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -893,10 +895,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="adding retail stock screen" />
-    <MESSAGE value="enable uploading crm log files from excel" />
-    <MESSAGE value="added template file" />
-    <MESSAGE value="Change upload dires for docker" />
     <MESSAGE value="alter bolt api to include rates" />
     <MESSAGE value="make rate dynamic to be asked" />
     <MESSAGE value="mark price by a mile" />
@@ -918,7 +916,11 @@
     <MESSAGE value="enhanced software message after applied" />
     <MESSAGE value="po done" />
     <MESSAGE value="fight" />
-    <option name="LAST_COMMIT_MESSAGE" value="fight" />
+    <MESSAGE value="Restricting proforma view to marketting admin only" />
+    <MESSAGE value="add proforma for customer" />
+    <MESSAGE value="add prospective buyer details" />
+    <MESSAGE value="Make prospective data in json reply" />
+    <option name="LAST_COMMIT_MESSAGE" value="Make prospective data in json reply" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

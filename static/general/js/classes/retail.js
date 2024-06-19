@@ -333,6 +333,84 @@ class Retail {
             kasa.response(resp)
         }
     }
+
+    materialRequestCompareScreen(){
+        let form = '';
+        form += fom.text('mr_no',"",true)
+        form += fom.select('doc',`
+            <option value="" selected disabled>Select Document</option>
+            <option value="JSON">VIEW</option>
+            <option value="excel">Excel</option>
+        `,"",true)
+        amodal.setTitleText("Material Request Check")
+        amodal.setBodyHtml(form)
+        amodal.setFooterHtml(`<button onclick="retail.materialRequestCompare()" class="btn btn-success w-100">CHECK</button>`)
+        amodal.show()
+    }
+
+    materialRequestCompare() {
+        let fields = ['doc','mr_no'];
+        if(anton.validateInputs(fields)){
+            let payload = {
+                module:'mr_check',
+                data:anton.Inputs(fields)
+            };
+
+            let view = api.call('VIEW',payload,'/retail/api/');
+            if(anton.IsRequest(view)){
+                let message = view['message'];
+                let doc_type = $('#doc').val();
+                let mr = $('#mr_no').val()
+                if(doc_type === 'excel'){
+                    kasa.html(`<a href="/${message}">DOWNLOAD FILE</a>`)
+                }
+                else if (doc_type === 'JSON'){
+                    let header,transactions;
+                    header = message['header'];
+                    transactions = message['transactions'];
+
+                    console.table(message)
+
+                    let rep_header = [
+                        "ITEM CODE",
+                        "NAME",
+                        "REQ. QTY",
+                        "LATEST TRANSFER",
+                        "TRAN QTY",
+                        "SOLD AFTER",
+                        "SOLD PERCENTAGE",
+                        "STOCK HEALTH"
+                    ]
+                    // set report table
+                    let rows = ""
+                    for(let r = 0; r < transactions.length; r++){
+                        let row = transactions[r]
+                        rows += `
+                            <tr>
+                                <td>${row['item_code']}</td>
+                                <td>${row['name']}</td>
+                                <td>${row['request_qty']}</td>
+                                <td><p>${row['last_tran_entry']}</p><p>${row['last_tran_entry']}</p></td>
+                                <td>${row['last_tran_qty']}</td>
+                                <td>${row['sold_qty']}</td>
+                                <td>${row['percentage_sold']}</td>
+                                <td>${row['health']}</td>
+                            </tr>
+                        `
+                    }
+                    amodal.hide()
+                    reports.render(rep_header,rows,`MATERIAL REQUEST CHECK FOR ${mr}`)
+                }
+                else {
+                    kasa.info("Invalid Render Configuration")
+                }
+            } else {
+                kasa.response(view)
+            }
+        } else {
+            kasa.error("Invalid Field")
+        }
+    }
 }
 
 const retail = new Retail();

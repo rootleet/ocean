@@ -8,6 +8,7 @@ from django.db.models import Q
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from fpdf import FPDF
+from openpyxl.chart import PieChart, Reference
 from sympy import Product
 
 from admin_panel.models import Emails, Locations
@@ -994,10 +995,159 @@ def interface(request):
                 success_response['message'] = arr
                 response = success_response
 
+            if module == 'mr_check':
+                mr_no = data.get('mr_no')
+                doc_type = data.get('doc',"JSON")
+                healthy = 0
+                not_healthy = 0
+
+                cursor = ret_cursor()
+                cursor.execute(f"SELECT entry_no, entry_date, remark, (SELECT RTRIM(user_name) FROM user_file WHERE user_id = "
+                               f"request_hd.user_id) AS 'requested_by', (SELECT RTRIM(br_name) FROM branch WHERE br_code = request_hd.loc_id) "
+                               f"AS 'loc_requested', (SELECT RTRIM(br_name) FROM branch WHERE br_code = request_hd.loc_from) "
+                               f"AS 'loc_to_send',loc_id FROM request_hd where entry_no = '{mr_no}';")
+                mr_hd = cursor.fetchone()
+                if mr_hd is not None:
+                    if doc_type == 'excel':
+                        import openpyxl
+                        book = openpyxl.Workbook()
+                        sheet = book.active
+                        sheet.title = "RECORDS"
+                        sheet[f'A1'] = "ITEM CODE"
+                        sheet[f"B1"] = "NAME"
+                        sheet[f"C1"] = "REQ. QTY"
+                        sheet[f'D1'] = "LAST TRAN. ENTRY"
+                        sheet[f"E1"] = "LAST TRAN. DATE"
+                        sheet[f'F1'] = "LAST TRAN. QTY"
+                        sheet[f"G1"] = "SOLD BETWEEN"
+                        sheet[f"H1"] = "SOLD PERENTAGE"
+                        sheet[f'I1'] = "HEALTH"
+
+
+
+                        sheet_row =2
+
+                    arr = []
+                    entry_no,entry_date,remark,requested_by,loc_requested,loc_to_send,loc_id = mr_hd
+                    header = {
+                        "entry_no":entry_no.strip(),
+                        "entry_date":entry_date,
+                        'remark':remark.strip(),
+                        'requested_by':requested_by,
+                        'loc_requested':loc_requested,
+                        'loc_to_send':loc_to_send,
+                        'loc_id':loc_id
+                    }
+
+                    # connect to branch and get sold
+                    loc = Locations.objects.get(code=loc_id)
+                    pos_cursor = ret_cursor(loc.ip_address,'',loc.db,loc.db_user,loc.db_password)
+
+
+                    # get transactions
+                    trans_query = cursor.execute(f"select item_code,RTRIM(item_des) as 'name',total_units from request_tran where entry_no = '{mr_no}'")
+                    tr_arr = []
+                    for tran in trans_query.fetchall():
+                        item_code,item_name,request_qty = tran
+                        cursor.execute(f"select top(1) th.entry_no,th.entry_date,tr.total_units from tran_tr tr  right join tran_hd th on th.entry_no = tr.entry_no where tr.item_code = '{item_code}' order by th.entry_date desc")
+                        last_tran_row = cursor.fetchone()
+
+                        last_tr_entry,last_tran_date,last_tran_qty,sold_qty =['none','none',0,0]
+
+                        if last_tran_row is not None:
+                            last_tr_entry,last_tran_date,last_tran_qty = last_tran_row
+
+                            pos_cursor.execute(f"SELECT sum(tran_qty) as 'sold_qty' FROM history_tran where bill_date between '{last_tran_date}' and '{entry_date}' and prod_id = '{item_code}'")
+                            sold_resp = pos_cursor.fetchone()
+                            if sold_resp is not None:
+                                if sold_resp[0] is not None:
+                                    sold_qty = sold_resp[0]
+
+                        health = False
+                        if sold_qty > Decimal(0.5) * last_tran_qty:
+                            health = True
+                            healthy += 1
+                        else:
+                            not_healthy += 1
+
+                        percentage_sold = 0
+                        if last_tran_qty != 0 and sold_qty !=0:  # Ensure we don't divide by zero
+                            percentage_sold = (Decimal(sold_qty) / Decimal(last_tran_qty)) * 100
+                        if doc_type == 'JSON':
+                            tr_arr.append({
+                                'item_code':tran[0],
+                                'name':tran[1],
+                                'request_qty':tran[2],
+                                'last_tran_entry':last_tr_entry,
+                                'last_tran_date':last_tran_date,
+                                "last_tran_qty":last_tran_qty,
+                                'sold_qty':sold_qty,
+                                "percentage_sold":percentage_sold,
+                                'health':health
+                            })
+                        elif doc_type == 'excel':
+                            sheet[f'A{sheet_row}'] = tran[0]
+                            sheet[f"B{sheet_row}"] = item_name
+                            sheet[f"C{sheet_row}"] = tran[2]
+                            sheet[f'D{sheet_row}'] = last_tr_entry
+                            sheet[f"E{sheet_row}"] = last_tran_date
+                            sheet[f'F{sheet_row}'] = last_tran_qty
+                            sheet[f"G{sheet_row}"] = sold_qty
+                            sheet[f"H{sheet_row}"] = percentage_sold
+                            sheet[f'I{sheet_row}'] = health
+
+                            sheet_row += 1
+
+
+                    if doc_type == "JSON":
+                        resp = {
+                            'header':header,
+                            'transactions':tr_arr
+                        }
+
+                        arr.append(resp)
+                    elif doc_type == 'excel':
+                        # Write "yes" and "no" to cells
+                        sheet['K1'] = "HEALTHY"
+                        sheet['L1'] = "UNHEALTHY"
+                        sheet['K2'] = healthy  # Example value for "yes"
+                        sheet['L2'] = not_healthy  # Example value for "no"
+
+                        # Create a pie chart
+                        chart = PieChart()
+                        data = Reference(sheet, min_col=11, min_row=2, max_col=12,
+                                         max_row=2)  # Range of data values (yes and no counts)
+                        labels = Reference(sheet, min_col=11, min_row=1, max_col=12,
+                                           max_row=1)  # Range of category labels (yes and no)
+                        chart.add_data(data, titles_from_data=True)
+                        # chart.title = "STOCK HEALTH"
+                        chart.set_categories(labels)
+
+                        # Set the title of the chart
+                        chart.title = "Yes vs No"
+
+                        # Add the chart to the worksheet
+                        sheet.add_chart(chart, "K5")
+
+                        # Set the dimensions of the chart
+                        chart.width = 15  # Adjust width
+                        chart.height = 10  # Adjust height
+
+                        file_name = f"static/general/tmp/mr_check{mr_no}.xlsx"
+                        book.save(file_name)
+                        resp = file_name
+                    else:
+                        resp = f"Unknown Document To Render {doc_type}"
+                    success_response['message'] = resp
+                    response = success_response
+                else:
+                    success_response['message'] = f"no request with entry {mr_no}"
+                    success_response['status_code'] = 404
+                    response = success_response
 
             else:
-                success_response['status_code'] = 404
-                success_response['message'] = f"no {method} method with module called {module}"
+                raise Exception("No View Module")
+
 
         elif method == 'PATCH':
             if module == 'price_update':
@@ -1048,6 +1198,6 @@ def interface(request):
         line_number = traceback.tb_lineno
         response["status_code"] = 500
         response[
-            "message"] = f"An error of type {error_type} occurred on line {line_number} in file {tb_path}. Details: {e}"
+            "message"] = f"An error occurred on line {line_number} in file {tb_path}. Details: {e}"
 
     return JsonResponse(response, safe=False)
