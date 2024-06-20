@@ -4,12 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ffcbf13e-d396-4071-9a24-4014a690f966" name="Changes" comment="Make prospective data in json reply">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+    <list default="true" id="ffcbf13e-d396-4071-9a24-4014a690f966" name="Changes" comment="add retail mr_check">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/retail/retail_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/retail/retail_api.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/general/js/classes/retail.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/general/js/classes/retail.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/reports/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/reports/base.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ocean/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/ocean/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/req.txt" beforeDir="false" afterPath="$PROJECT_DIR$/req.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -478,15 +477,7 @@
       <workItem from="1717774018267" duration="3599000" />
       <workItem from="1718100052321" duration="5082000" />
       <workItem from="1718289414490" duration="12753000" />
-      <workItem from="1718797064485" duration="14879000" />
-    </task>
-    <task id="LOCAL-00172" summary="Export crm reports to excel enabled">
-      <option name="closed" value="true" />
-      <created>1710611682431</created>
-      <option name="number" value="00172" />
-      <option name="presentableId" value="LOCAL-00172" />
-      <option name="project" value="LOCAL" />
-      <updated>1710611682431</updated>
+      <workItem from="1718797064485" duration="19678000" />
     </task>
     <task id="LOCAL-00173" summary="Export crm reports to excel enabled">
       <option name="closed" value="true" />
@@ -872,7 +863,15 @@
       <option name="project" value="LOCAL" />
       <updated>1718386986892</updated>
     </task>
-    <option name="localTasksCounter" value="221" />
+    <task id="LOCAL-00221" summary="add retail mr_check">
+      <option name="closed" value="true" />
+      <created>1718816384319</created>
+      <option name="number" value="00221" />
+      <option name="presentableId" value="LOCAL-00221" />
+      <option name="project" value="LOCAL" />
+      <updated>1718816384321</updated>
+    </task>
+    <option name="localTasksCounter" value="222" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -895,7 +894,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="alter bolt api to include rates" />
     <MESSAGE value="make rate dynamic to be asked" />
     <MESSAGE value="mark price by a mile" />
     <MESSAGE value="add 404, and run app with insecure" />
@@ -920,7 +918,8 @@
     <MESSAGE value="add proforma for customer" />
     <MESSAGE value="add prospective buyer details" />
     <MESSAGE value="Make prospective data in json reply" />
-    <option name="LAST_COMMIT_MESSAGE" value="Make prospective data in json reply" />
+    <MESSAGE value="add retail mr_check" />
+    <option name="LAST_COMMIT_MESSAGE" value="add retail mr_check" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

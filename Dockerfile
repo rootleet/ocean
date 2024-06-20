@@ -31,5 +31,5 @@ COPY . /app/
 EXPOSE 80
 
 # Run the Django development server
-CMD /bin/sh -c "python3 manage.py runserver 0.0.0.0:80 --insecure"
+CMD /bin/sh -c "python3 manage.py runserver 0.0.0.0:80"
 

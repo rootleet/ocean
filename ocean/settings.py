@@ -12,9 +12,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 
 from pathlib import Path
 import os
-from dotenv import load_dotenv
 
-load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -100,7 +98,7 @@ DATABASE_ENGINE = os.environ.get('DB_ENGINE', 'django.db.backends.mysql')
 DATABASE_NAME = os.environ.get('DB_NAME', 'ocean')
 DATABASE_USER = os.environ.get('DB_USER', 'root')
 DATABASE_PASSWORD = os.environ.get('DB_PASSWORD', 'Sunderland@411')
-DATABASE_HOST = os.environ.get('DB_HOST', 'localhost')
+DATABASE_HOST = os.environ.get('DB_HOST', '192.168.2.60')
 DATABASE_PORT = os.environ.get('DB_PORT', '3306')
 
 DATABASES = {
