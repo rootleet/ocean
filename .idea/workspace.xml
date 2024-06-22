@@ -5,13 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ffcbf13e-d396-4071-9a24-4014a690f966" name="Changes" comment="add retail mr_check">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ocean/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/ocean/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/retail/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/retail/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/retail/retail_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/retail/retail_api.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/retail/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/retail/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/general/js/classes/retail.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/general/js/classes/retail.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/retail/products.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/retail/products.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/retail/stock/minotoring.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/retail/stock/minotoring.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -484,15 +477,7 @@
       <workItem from="1718289414490" duration="12753000" />
       <workItem from="1718797064485" duration="19678000" />
       <workItem from="1718984872691" duration="1217000" />
-      <workItem from="1719057744088" duration="7555000" />
-    </task>
-    <task id="LOCAL-00173" summary="Export crm reports to excel enabled">
-      <option name="closed" value="true" />
-      <created>1711040259878</created>
-      <option name="number" value="00173" />
-      <option name="presentableId" value="LOCAL-00173" />
-      <option name="project" value="LOCAL" />
-      <updated>1711040259879</updated>
+      <workItem from="1719057744088" duration="7630000" />
     </task>
     <task id="LOCAL-00174" summary="Added campaign creation in CRM">
       <option name="closed" value="true" />
@@ -878,7 +863,15 @@
       <option name="project" value="LOCAL" />
       <updated>1718816384321</updated>
     </task>
-    <option name="localTasksCounter" value="222" />
+    <task id="LOCAL-00222" summary="add retail mr_check">
+      <option name="closed" value="true" />
+      <created>1719065585472</created>
+      <option name="number" value="00222" />
+      <option name="presentableId" value="LOCAL-00222" />
+      <option name="project" value="LOCAL" />
+      <updated>1719065585473</updated>
+    </task>
+    <option name="localTasksCounter" value="223" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
