@@ -2,7 +2,7 @@ import os
 
 from django.contrib.auth.models import User
 from django.db import models
-from django.db.models import ForeignKey
+from django.db.models import ForeignKey, Sum
 from admin_panel.models import Locations
 
 from ocean import settings
@@ -103,6 +103,15 @@ class Products(models.Model):
         else:
             return False
 
+    def stock(self):
+        arr = []
+        for location in Locations.objects.all():
+            code = location.code
+            loc_stock = Stock.objects.filter(product=self, location=location.code).aggregate(sum=Sum('quantity'))['sum'] if Stock.objects.filter(product=self, location=location.code).exists() else 0
+            arr.append({'loc_code': code, 'loc_name': location.descr, 'barcode': self.barcode, 'item_name': self.name,
+                        'stock': loc_stock})
+        return arr
+
 
 class Stock(models.Model):
     product = models.ForeignKey(Products, on_delete=models.CASCADE)
@@ -128,11 +137,11 @@ class StockMonitor(models.Model):
 
     def obj(self):
         return {
-            'name':self.product.name.strip(),
-            'barcode':self.product.barcode.strip(),
-            'location':self.location,
-            'stock':self.stock_qty,
-            'valid':self.valid
+            'name': self.product.name.strip(),
+            'barcode': self.product.barcode.strip(),
+            'location': self.location,
+            'stock': self.product.stock(),
+            'valid': self.valid
         }
 
 
@@ -218,9 +227,9 @@ class Recipe(models.Model):
 
 
 class StockHd(models.Model):
-    loc = models.ForeignKey(Locations,on_delete=models.CASCADE)
+    loc = models.ForeignKey(Locations, on_delete=models.CASCADE)
     ref_no = models.CharField(max_length=10, unique=True, null=False, blank=False)
-    date_kept = models.CharField(max_length=100,null=False, blank=False)
+    date_kept = models.CharField(max_length=100, null=False, blank=False)
     remarks = models.TextField()
     is_group = models.BooleanField(default=False)
     st_grp = models.IntegerField()

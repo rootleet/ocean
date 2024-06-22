@@ -182,26 +182,31 @@ def has_next_page(current_page, paginator):
 
 @login_required()
 def products(request,page=1):
-    page_size = 500
-    ct = page * page_size
-    lt = abs(page_size - ct)
-    
+    if Products.objects.all().count() > 500:
 
-    all_products = Products.objects.all()[:ct]
-    last_500_products = list(all_products)[lt:]
+        page_size = 500
+        ct = page * page_size
+        lt = abs(page_size - ct)
 
-    last_pk = last_500_products[-1].pk
-    first_pk = last_500_products[0].pk
-    
-    print(first_pk,last_pk)
-   
-    next_page = False
-    if Products.objects.filter(pk__gt=last_pk):
-        next_page = True
-    previous_page = False
-    if Products.objects.filter(pk__lt=first_pk):
-        previous_page = True
-    
+
+        all_products = Products.objects.all()[:ct]
+        last_500_products = list(all_products)[lt:]
+
+        last_pk = last_500_products[-1].pk
+        first_pk = last_500_products[0].pk
+
+        print(first_pk,last_pk)
+
+        next_page = False
+        if Products.objects.filter(pk__gt=last_pk):
+            next_page = True
+        previous_page = False
+        if Products.objects.filter(pk__lt=first_pk):
+            previous_page = True
+    else:
+        last_500_products = Products.objects.all()
+        next_page = False
+        previous_page = False
         
 
     context = {

@@ -4,7 +4,7 @@ from decimal import Decimal
 
 import pyodbc
 from django.contrib.auth.models import User
-from django.db.models import Q
+from django.db.models import Q, Sum
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from fpdf import FPDF
@@ -317,6 +317,15 @@ def interface(request):
                     success_response['status_code'] = 404
                     success_response['message'] = f"No stock keep for entry number {entry}"
 
+            elif module == 'sync_locations':
+                cursor = ret_cursor()
+                cursor.execute("SELECT br_code,RTRIM(br_name) from branch")
+
+                for br in cursor.fetchall():
+                    code, name = br
+                    if Locations.objects.filter(code=code).count() == 0:
+                        # create location
+                        Locations(code=code, descr=name, owner_id=1).save()
 
 
             else:
@@ -572,7 +581,7 @@ def interface(request):
                     sheet['D2'] = "SOLD QUANTITY"
                     sh_row = 3
 
-                query = f"exec dbo.Sp_slow_moving_rept N'%',N'%',N'%',N'',N'Zade',N'AA001',N'SOO216',N'',N'YWS195','2023-11-13 00:00:00',N'{days}',N'%',N'%',N'%','2023-08-15 00:00:00','2023-11-13 00:00:00',N'ALL'"
+                query = f"exec dbo.Sp_slow_moving_rept N'%',N'%',N'%',N'',N'Zade',N'AA001',N'SOO216',N'',N'YWS195','2023-11-13 00:00:00',N'30',N'%',N'%',N'%','2023-08-15 00:00:00','2023-11-13 00:00:00',N'ALL'"
                 print(query)
                 server = f"{RET_DB_HOST}"
                 database = RET_DB_NAME
@@ -582,11 +591,17 @@ def interface(request):
                 connection_string = f"DRIVER={driver};SERVER={server};DATABASE={database};UID={username};PWD={password}"
                 connection = pyodbc.connect(connection_string)
 
-                cursor = connection.cursor()
-
-                cursor.execute(query)
+                cursor = ret_cursor()
+                cursor.execute("""
+                EXEC dbo.Sp_slow_moving_rept ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
+                """,
+                               '001', '%', '%', '', 'ZWAN', 'AA001', 'SOO216', '', 'YWS195', '2024-06-22 00:00:00',
+                               '30', '%', '%', '%', '2024-05-23 00:00:00', '2024-06-22 00:00:00', 'ALL')
+                # Fetch all rows from the executed stored procedure
+                rows = cursor.fetchall()
+                print(rows)
                 arr = []
-                for row in cursor.fetchall():
+                for row in rows:
                     print(row)
                     barcode = row[2]
                     item_code = row[0]
@@ -926,7 +941,7 @@ def interface(request):
                         stp.valid = sp
                         stp.save()
                     else:
-                        StockMonitor(location='001', product=product, stock_qty=spintex,valid=sp).save()
+                        StockMonitor(location='001', product=product, stock_qty=spintex, valid=sp).save()
 
                     ## NIA
                     ni = False
@@ -939,7 +954,7 @@ def interface(request):
                         stp.valid = ni
                         stp.save()
                     else:
-                        StockMonitor(location='202', product=product, stock_qty=nia,valid=ni).save()
+                        StockMonitor(location='202', product=product, stock_qty=nia, valid=ni).save()
 
                     os = False
                     if osu >= 0:
@@ -951,7 +966,7 @@ def interface(request):
                         stp.valid = sp
                         stp.save()
                     else:
-                        StockMonitor(location='205', product=product, stock_qty=osu,valid=os).save()
+                        StockMonitor(location='205', product=product, stock_qty=osu, valid=os).save()
 
                     # kitchen
                     kt = False
@@ -964,7 +979,7 @@ def interface(request):
                         stp.valid = kt
                         stp.save()
                     else:
-                        StockMonitor(location='201', product=product, stock_qty=kitchen,valid=kt).save()
+                        StockMonitor(location='201', product=product, stock_qty=kitchen, valid=kt).save()
 
                     # warehouse
                     wh = False
@@ -981,31 +996,84 @@ def interface(request):
 
             elif module == 'see_stock_monitor':
                 arr = []
-                filter =  data.get('filter','*')
-                if filter == 'not_accurate':
-                    all_m = StockMonitor.objects.filter(valid=False)
-                elif filter == 'accurate':
-                    all_m = StockMonitor.objects.filter(valid=True)
-                else:
-                    all_m = StockMonitor.objects.all()
+                filter = data.get('filter')
+                print(filter)
+                doc = data.get('doc', 'json')
+                if doc == 'excel':
+                    import openpyxl
+                    book = openpyxl.Workbook()
+                    sheet = book.active
+                    sheet.title = "Stock Check"
+                    sheet.append(['LOCATION', 'BARCODE', 'NAME', 'STOCK'])
+                # if filter == 'not_accurate':
+                #     all_m = StockMonitor.objects.filter(valid=False)
+                # elif filter == 'accurate':
+                #     all_m = StockMonitor.objects.filter(valid=True)
+                # else:
+                #     all_m = StockMonitor.objects.all()
+                all_m = Products.objects.filter(stock_monitor=True)
 
                 for m in all_m:
-                    arr.append(m.obj())
+                    for location in Locations.objects.all():
+                        code = location.code
+                        loc_stock = \
+                        Stock.objects.filter(product=m, location=location.code).aggregate(sum=Sum('quantity'))[
+                            'sum'] or Decimal('0.00')
+                        row = [location.descr, m.name, m.name, loc_stock]
+                        mark = 0
+                        if loc_stock >= mark:
+                            print(f"{loc_stock} is positive for ",filter)
+                        elif loc_stock < mark:
+                            print(mark, "is negative for",filter)
+                        else:
+                            print(mark, "Is neither negative or positive")
 
+                        if filter == 'negative' and loc_stock < mark:
+                            print("YES NEGATIVE")
+
+                            if doc == 'excel':
+                                sheet.append(row)
+                            arr.append({'loc_code': code, 'loc_name': location.descr, 'barcode': m.barcode,
+                                        'item_name': m.name,
+                                        'stock': loc_stock})
+
+                        elif filter == 'positive' and loc_stock > mark:
+                            arr.append({'loc_code': code, 'loc_name': location.descr, 'barcode': m.barcode,
+                                        'item_name': m.name,
+                                        'stock': loc_stock})
+                            if doc == 'excel':
+                                sheet.append(row)
+                                print("YES POSITIVE")
+
+                        elif filter == 'neutral' and loc_stock == mark:
+                            arr.append({'loc_code': code, 'loc_name': location.descr, 'barcode': m.barcode,
+                                        'item_name': m.name,
+                                        'stock': loc_stock})
+                            if doc == 'excel':
+                                sheet.append(row)
+
+
+                    # arr.append(m.stock())
+
+                if doc == 'excel':
+                    filename = 'static/general/tmp/stock.xlsx'
+                    book.save(filename)
+                    arr = filename
                 success_response['message'] = arr
                 response = success_response
 
-            if module == 'mr_check':
+            elif module == 'mr_check':
                 mr_no = data.get('mr_no')
-                doc_type = data.get('doc',"JSON")
+                doc_type = data.get('doc', "JSON")
                 healthy = 0
                 not_healthy = 0
 
                 cursor = ret_cursor()
-                cursor.execute(f"SELECT entry_no, entry_date, remark, (SELECT RTRIM(user_name) FROM user_file WHERE user_id = "
-                               f"request_hd.user_id) AS 'requested_by', (SELECT RTRIM(br_name) FROM branch WHERE br_code = request_hd.loc_id) "
-                               f"AS 'loc_requested', (SELECT RTRIM(br_name) FROM branch WHERE br_code = request_hd.loc_from) "
-                               f"AS 'loc_to_send',loc_id FROM request_hd where entry_no = '{mr_no}';")
+                cursor.execute(
+                    f"SELECT entry_no, entry_date, remark, (SELECT RTRIM(user_name) FROM user_file WHERE user_id = "
+                    f"request_hd.user_id) AS 'requested_by', (SELECT RTRIM(br_name) FROM branch WHERE br_code = request_hd.loc_id) "
+                    f"AS 'loc_requested', (SELECT RTRIM(br_name) FROM branch WHERE br_code = request_hd.loc_from) "
+                    f"AS 'loc_to_send',loc_id FROM request_hd where entry_no = '{mr_no}';")
                 mr_hd = cursor.fetchone()
                 if mr_hd is not None:
                     if doc_type == 'excel':
@@ -1023,41 +1091,41 @@ def interface(request):
                         sheet[f"H1"] = "SOLD PERENTAGE"
                         sheet[f'I1'] = "HEALTH"
 
-
-
-                        sheet_row =2
+                        sheet_row = 2
 
                     arr = []
-                    entry_no,entry_date,remark,requested_by,loc_requested,loc_to_send,loc_id = mr_hd
+                    entry_no, entry_date, remark, requested_by, loc_requested, loc_to_send, loc_id = mr_hd
                     header = {
-                        "entry_no":entry_no.strip(),
-                        "entry_date":entry_date,
-                        'remark':remark.strip(),
-                        'requested_by':requested_by,
-                        'loc_requested':loc_requested,
-                        'loc_to_send':loc_to_send,
-                        'loc_id':loc_id
+                        "entry_no": entry_no.strip(),
+                        "entry_date": entry_date,
+                        'remark': remark.strip() if remark is not None else None,
+                        'requested_by': requested_by,
+                        'loc_requested': loc_requested,
+                        'loc_to_send': loc_to_send,
+                        'loc_id': loc_id
                     }
 
                     # connect to branch and get sold
                     loc = Locations.objects.get(code=loc_id)
-                    pos_cursor = ret_cursor(loc.ip_address,'',loc.db,loc.db_user,loc.db_password)
-
+                    pos_cursor = ret_cursor(loc.ip_address, '', loc.db, loc.db_user, loc.db_password)
 
                     # get transactions
-                    trans_query = cursor.execute(f"select item_code,RTRIM(item_des) as 'name',total_units from request_tran where entry_no = '{mr_no}'")
+                    trans_query = cursor.execute(
+                        f"select item_code,RTRIM(item_des) as 'name',total_units from request_tran where entry_no = '{mr_no}'")
                     tr_arr = []
                     for tran in trans_query.fetchall():
-                        item_code,item_name,request_qty = tran
-                        cursor.execute(f"select top(1) th.entry_no,th.entry_date,tr.total_units from tran_tr tr  right join tran_hd th on th.entry_no = tr.entry_no where tr.item_code = '{item_code}' order by th.entry_date desc")
+                        item_code, item_name, request_qty = tran
+                        cursor.execute(
+                            f"select top(1) th.entry_no,th.entry_date,tr.total_units from tran_tr tr  right join tran_hd th on th.entry_no = tr.entry_no where tr.item_code = '{item_code}' order by th.entry_date desc")
                         last_tran_row = cursor.fetchone()
 
-                        last_tr_entry,last_tran_date,last_tran_qty,sold_qty =['none','none',0,0]
+                        last_tr_entry, last_tran_date, last_tran_qty, sold_qty = ['none', 'none', 0, 0]
 
                         if last_tran_row is not None:
-                            last_tr_entry,last_tran_date,last_tran_qty = last_tran_row
+                            last_tr_entry, last_tran_date, last_tran_qty = last_tran_row
 
-                            pos_cursor.execute(f"SELECT sum(tran_qty) as 'sold_qty' FROM history_tran where bill_date between '{last_tran_date}' and '{entry_date}' and prod_id = '{item_code}'")
+                            pos_cursor.execute(
+                                f"SELECT sum(tran_qty) as 'sold_qty' FROM history_tran where bill_date between '{last_tran_date}' and '{entry_date}' and prod_id = '{item_code}'")
                             sold_resp = pos_cursor.fetchone()
                             if sold_resp is not None:
                                 if sold_resp[0] is not None:
@@ -1071,19 +1139,19 @@ def interface(request):
                             not_healthy += 1
 
                         percentage_sold = 0
-                        if last_tran_qty != 0 and sold_qty !=0:  # Ensure we don't divide by zero
+                        if last_tran_qty != 0 and sold_qty != 0:  # Ensure we don't divide by zero
                             percentage_sold = (Decimal(sold_qty) / Decimal(last_tran_qty)) * 100
                         if doc_type == 'JSON':
                             tr_arr.append({
-                                'item_code':tran[0],
-                                'name':tran[1],
-                                'request_qty':tran[2],
-                                'last_tran_entry':last_tr_entry,
-                                'last_tran_date':last_tran_date,
-                                "last_tran_qty":last_tran_qty,
-                                'sold_qty':sold_qty,
-                                "percentage_sold":percentage_sold,
-                                'health':health
+                                'item_code': tran[0],
+                                'name': tran[1],
+                                'request_qty': tran[2],
+                                'last_tran_entry': last_tr_entry,
+                                'last_tran_date': last_tran_date,
+                                "last_tran_qty": last_tran_qty,
+                                'sold_qty': sold_qty,
+                                "percentage_sold": percentage_sold,
+                                'health': health
                             })
                         elif doc_type == 'excel':
                             sheet[f'A{sheet_row}'] = tran[0]
@@ -1098,11 +1166,10 @@ def interface(request):
 
                             sheet_row += 1
 
-
                     if doc_type == "JSON":
                         resp = {
-                            'header':header,
-                            'transactions':tr_arr
+                            'header': header,
+                            'transactions': tr_arr
                         }
 
                         arr.append(resp)
@@ -1190,6 +1257,7 @@ def interface(request):
                 product.save()
 
                 success_response['message'] = f"Minitory flag changed for product {name} from {current} to {flag} "
+
         response = success_response
 
     except Exception as e:

@@ -411,6 +411,61 @@ class Retail {
             kasa.error("Invalid Field")
         }
     }
+
+    stockReportScreen(){
+        let form = '';
+        form += fom.select('filter',`
+            <option value="" selected disabled>Select Filter</option>
+            <option value="positive">POSITIVE</option>
+            <option value="negative">NEGATIVE</option>
+            <option value="neutral">NEUTRAL</option>
+        `,"",true)
+
+        form += fom.select('doc',`
+            <option value="" selected disabled>Select Document</option>
+            <option value="json">VIEW</option>
+            <option value="excel">Excel</option>
+        `,"",true)
+        amodal.setTitleText("Material Request Check")
+        amodal.setBodyHtml(form)
+        amodal.setFooterHtml(`<button onclick="retail.stockReport()" class="btn btn-success w-100">CHECK</button>`)
+        amodal.show()
+    }
+
+    stockReport() {
+        let fields = ['doc','filter']
+        if(anton.validateInputs(fields)){
+            let data = anton.Inputs(fields)
+            let payload = {
+                module:'see_stock_monitor',
+                data:data
+            }
+            let generate = api.call('VIEW',payload,'/retail/api/')
+            if(anton.IsRequest(generate)){
+                let response = generate['message'];
+                if (data['doc'] === 'excel'){
+                    kasa.html(`<a href="/${response}">DOWNLOAD REPORT</a>`)
+                } else if (data['doc']){
+                    let rows = ''
+                    for(let r = 0; r < response.length; r++){
+                        let row = response[r]
+                        rows += `
+                            <tr><td>${row['loc_code']}</td><td>${row['loc_name']}</td><td>${row['barcode']}</td><td>${row['item_name']}</td><td>${row['stock']}</td></tr>
+                        `
+                    }
+
+                    reports.render(['LOC_CODE',"LOC_NAME","BARCODE","NAME","STOCK"],rows,`STOCK REPORT FOR ${data['filter']} ITEMS`)
+                } else {
+                    kasa.error("Unknown Document Rendering Format")
+                }
+            } else {
+                kasa.response(generate)
+            }
+            amodal.hide()
+        } else {
+            kasa.error("Invalid Form")
+        }
+    }
 }
 
 const retail = new Retail();
