@@ -430,6 +430,7 @@ def index(request):
                     response['status_code'] = 200
                     DepartmentReportMailQue(department=department, files=files).save()
 
+                response = success_response
             elif module == 'auth':
                 username = data.get('username')
                 password = data.get('key')

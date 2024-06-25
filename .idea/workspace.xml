@@ -5,7 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ffcbf13e-d396-4071-9a24-4014a690f966" name="Changes" comment="add retail mr_check">
-      <change beforePath="$PROJECT_DIR$/templates/retail/stock/minotoring.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/retail/stock/minotoring.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/admin_panel/admin_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/admin_panel/admin_api.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -477,15 +478,7 @@
       <workItem from="1718289414490" duration="12753000" />
       <workItem from="1718797064485" duration="19678000" />
       <workItem from="1718984872691" duration="1217000" />
-      <workItem from="1719057744088" duration="7630000" />
-    </task>
-    <task id="LOCAL-00174" summary="Added campaign creation in CRM">
-      <option name="closed" value="true" />
-      <created>1712558405915</created>
-      <option name="number" value="00174" />
-      <option name="presentableId" value="LOCAL-00174" />
-      <option name="project" value="LOCAL" />
-      <updated>1712558405916</updated>
+      <workItem from="1719057744088" duration="11920000" />
     </task>
     <task id="LOCAL-00175" summary="Added campaign creation in CRM">
       <option name="closed" value="true" />
@@ -871,7 +864,15 @@
       <option name="project" value="LOCAL" />
       <updated>1719065585473</updated>
     </task>
-    <option name="localTasksCounter" value="223" />
+    <task id="LOCAL-00223" summary="add retail mr_check">
+      <option name="closed" value="true" />
+      <created>1719065617258</created>
+      <option name="number" value="00223" />
+      <option name="presentableId" value="LOCAL-00223" />
+      <option name="project" value="LOCAL" />
+      <updated>1719065617258</updated>
+    </task>
+    <option name="localTasksCounter" value="224" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
