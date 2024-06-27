@@ -4,10 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ffcbf13e-d396-4071-9a24-4014a690f966" name="Changes" comment="add retail mr_check">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/admin_panel/admin_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/admin_panel/admin_api.py" afterDir="false" />
-    </list>
+    <list default="true" id="ffcbf13e-d396-4071-9a24-4014a690f966" name="Changes" comment="final poach" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -479,14 +476,7 @@
       <workItem from="1718797064485" duration="19678000" />
       <workItem from="1718984872691" duration="1217000" />
       <workItem from="1719057744088" duration="11920000" />
-    </task>
-    <task id="LOCAL-00175" summary="Added campaign creation in CRM">
-      <option name="closed" value="true" />
-      <created>1712584342697</created>
-      <option name="number" value="00175" />
-      <option name="presentableId" value="LOCAL-00175" />
-      <option name="project" value="LOCAL" />
-      <updated>1712584342697</updated>
+      <workItem from="1719334169910" duration="415000" />
     </task>
     <task id="LOCAL-00176" summary="CHECK CMMS EXTENDED">
       <option name="closed" value="true" />
@@ -872,7 +862,15 @@
       <option name="project" value="LOCAL" />
       <updated>1719065617258</updated>
     </task>
-    <option name="localTasksCounter" value="224" />
+    <task id="LOCAL-00224" summary="final poach">
+      <option name="closed" value="true" />
+      <created>1719334392630</created>
+      <option name="number" value="00224" />
+      <option name="presentableId" value="LOCAL-00224" />
+      <option name="project" value="LOCAL" />
+      <updated>1719334392630</updated>
+    </task>
+    <option name="localTasksCounter" value="225" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -895,7 +893,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="make rate dynamic to be asked" />
     <MESSAGE value="mark price by a mile" />
     <MESSAGE value="add 404, and run app with insecure" />
     <MESSAGE value="update retail perissions" />
@@ -920,7 +917,8 @@
     <MESSAGE value="add prospective buyer details" />
     <MESSAGE value="Make prospective data in json reply" />
     <MESSAGE value="add retail mr_check" />
-    <option name="LAST_COMMIT_MESSAGE" value="add retail mr_check" />
+    <MESSAGE value="final poach" />
+    <option name="LAST_COMMIT_MESSAGE" value="final poach" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
