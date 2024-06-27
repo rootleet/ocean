@@ -5,8 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ffcbf13e-d396-4071-9a24-4014a690f966" name="Changes" comment="add retail mr_check">
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/admin_panel/admin_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/admin_panel/admin_api.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ocean/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/ocean/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/retail/retail_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/retail/retail_api.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/general/js/classes/retail.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/general/js/classes/retail.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/general/js/cust.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/general/js/cust.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/retail/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/retail/index.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -289,8 +294,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-d6986cc7102b-19b454f630c8-JavaScript-PY-242.16677.12" />
-        <option value="bundled-python-sdk-62b32d9fc822-64e3ce31d466-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-242.16677.12" />
+        <option value="bundled-js-predefined-d6986cc7102b-cec29f6fc0a3-JavaScript-PY-242.18071.12" />
+        <option value="bundled-python-sdk-3190c7a0ba6e-7562627508f0-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-242.18071.12" />
       </set>
     </attachedChunks>
   </component>
@@ -479,6 +484,8 @@
       <workItem from="1718797064485" duration="19678000" />
       <workItem from="1718984872691" duration="1217000" />
       <workItem from="1719057744088" duration="11920000" />
+      <workItem from="1719428494113" duration="5291000" />
+      <workItem from="1719466222311" duration="16970000" />
     </task>
     <task id="LOCAL-00175" summary="Added campaign creation in CRM">
       <option name="closed" value="true" />

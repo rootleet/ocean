@@ -11,6 +11,7 @@ from fpdf import FPDF
 from openpyxl.chart import PieChart, Reference
 from sympy import Product
 
+from admin_panel.anton import format_currency
 from admin_panel.models import Emails, Locations
 from ocean.settings import RET_DB_HOST, RET_DB_USER, RET_DB_PASS, RET_DB_NAME
 from retail.db import ret_cursor, get_stock
@@ -1211,6 +1212,152 @@ def interface(request):
                     success_response['message'] = f"no request with entry {mr_no}"
                     success_response['status_code'] = 404
                     response = success_response
+
+            elif module == 'documents':
+                start_date = data.get('start_date')
+                end_date = data.get('end_date')
+                print(start_date,end_date)
+                query = f"""
+                    DECLARE @start_date varchar(20) = '{start_date}'
+                    DECLARE @end_date varchar(20) = '{end_date}'
+                    
+                    SELECT 'GRN' AS document, (
+                        SELECT 
+                            (SELECT COUNT(*) FROM grn_hd where grn_date between @start_date and @end_date) AS total_entries,
+                            (SELECT COUNT(*) FROM grn_hd WHERE grn_date between @start_date and @end_date and valid = 1 AND posted = 1) AS posted,
+                            (SELECT COUNT(*) FROM grn_hd WHERE grn_date between @start_date and @end_date and valid = 1 AND posted = 0) AS not_posted,
+                            (SELECT COUNT(*) FROM grn_hd WHERE grn_date between @start_date and @end_date and valid = 0) AS deleted,
+                            (SELECT SUM(inv_amt) FROM grn_hd where grn_date between @start_date and @end_date) AS total_value,
+                            (SELECT SUM(inv_amt) FROM grn_hd where grn_date between @start_date and @end_date and valid = 1 and posted = 1) AS posted_value,
+                            (SELECT SUM(inv_amt) FROM grn_hd where grn_date between @start_date and @end_date and valid = 1 and posted = 0) AS pending_value,
+                            (SELECT SUM(inv_amt) FROM grn_hd where grn_date between @start_date and @end_date and valid = 0) AS deleted_value
+                        FOR JSON PATH, WITHOUT_ARRAY_WRAPPER
+                    ) AS Data
+                    
+                    
+                    
+                    -- INVOICE
+                    UNION ALL
+                    SELECT 'BACK OFFICE SALES' AS document, (
+                        SELECT 
+                            (SELECT COUNT(*) FROM inv_hd where entry_date between @start_date and @end_date) AS total_entries,
+                            (SELECT COUNT(*) FROM inv_hd where entry_date between @start_date and @end_date and valid = 1 AND posted = 1) AS posted,
+                            (SELECT COUNT(*) FROM inv_hd where entry_date between @start_date and @end_date and valid = 1 AND posted = 0) AS not_posted,
+                            (SELECT COUNT(*) FROM inv_hd where entry_date between @start_date and @end_date and valid = 0) AS deleted,
+                            (SELECT SUM(inv_amt) FROM inv_hd where entry_date between @start_date and @end_date) AS total_value,
+                            (SELECT SUM(inv_amt) FROM inv_hd where entry_date between @start_date and @end_date and valid = 1 and posted = 1) AS posted_value,
+                            (SELECT SUM(inv_amt) FROM inv_hd where entry_date between @start_date and @end_date and valid = 1 and posted = 0) AS pending_value,
+                            (SELECT SUM(inv_amt) FROM inv_hd where entry_date between @start_date and @end_date and valid = 0) AS deleted_value
+                        FOR JSON PATH, WITHOUT_ARRAY_WRAPPER
+                    ) AS Data
+                    
+                    -- pos sales
+                    UNION ALL
+                    SELECT 'POS SALES' AS document, (
+                        SELECT 
+                            (SELECT COUNT(*) FROM pos_tran_hd where entry_date between @start_date and @end_date) AS total_entries,
+                            (SELECT COUNT(*) FROM pos_tran_hd where entry_date between @start_date and @end_date and inv_valid = 1 AND inv_upd = 1) AS posted,
+                            (SELECT COUNT(*) FROM pos_tran_hd where entry_date between @start_date and @end_date and inv_valid = 1 AND inv_upd = 0) AS not_posted,
+                            (SELECT COUNT(*) FROM pos_tran_hd where entry_date between @start_date and @end_date and inv_valid = 0) AS deleted,
+                            (SELECT SUM(inv_amt) FROM pos_tran_hd where entry_date between @start_date and @end_date) AS total_value,
+                            (SELECT SUM(inv_amt) FROM pos_tran_hd where entry_date between @start_date and @end_date and inv_valid = 1 and inv_upd = 1) AS posted_value,
+                            (SELECT SUM(inv_amt) FROM pos_tran_hd where entry_date between @start_date and @end_date and inv_valid = 1 and inv_upd = 0) AS pending_value,
+                            (SELECT SUM(inv_amt) FROM pos_tran_hd where entry_date between @start_date and @end_date and inv_valid = 0) AS deleted_value
+                        FOR JSON PATH, WITHOUT_ARRAY_WRAPPER
+                    ) AS Data
+                    
+                    -- ADJUSTMENT
+                    UNION ALL
+                    SELECT 'ADJUSTMENT' AS document, (
+                        SELECT 
+                            (SELECT COUNT(*) FROM adj_hd where entry_date between @start_date and @end_date) AS total_entries,
+                            (SELECT COUNT(*) FROM adj_hd where entry_date between @start_date and @end_date and valid = 1 AND posted = 1) AS posted,
+                            (SELECT COUNT(*) FROM adj_hd where entry_date between @start_date and @end_date and valid = 1 AND posted = 0) AS not_posted,
+                            (SELECT COUNT(*) FROM adj_hd where entry_date between @start_date and @end_date and valid = 0) AS deleted,
+                            (SELECT SUM(tot_retail) FROM adj_hd where entry_date between @start_date and @end_date) AS total_value,
+                            (SELECT SUM(tot_retail) FROM adj_hd where entry_date between @start_date and @end_date and valid = 1 and posted = 1) AS posted_value,
+                            (SELECT SUM(tot_retail) FROM adj_hd where entry_date between @start_date and @end_date and valid = 1 and posted = 0) AS pending_value,
+                            (SELECT SUM(tot_retail) FROM adj_hd where entry_date between @start_date and @end_date and valid = 0) AS deleted_value
+                        FOR JSON PATH, WITHOUT_ARRAY_WRAPPER
+                    ) AS Data
+
+                    
+
+                """
+                arr = []
+                cursor = ret_cursor()
+                cursor.execute(query)
+                for document in cursor.fetchall():
+                    #print(document)
+                    doc,daita = document
+                    #print(daita)
+                    obj = {}
+                    json_data = json.loads(daita)
+                    obj['document'] = doc
+                    obj['total_entries'] = json_data["total_entries"]
+                    obj['posted'] = json_data["posted"]
+                    obj['not_posted'] = json_data["not_posted"]
+                    obj['deleted'] = json_data["deleted"]
+                    obj['total_value'] = format_currency(json_data.get('total_value'))
+                    obj['posted_value'] = format_currency(json_data.get('posted_value'))
+                    obj['pending_value'] = format_currency(json_data.get("pending_value"))
+
+
+                    arr.append(obj)
+                    # print(doc)
+                    # print(json_data)
+                    #print()
+
+                success_response['message'] = arr
+                response = success_response
+
+            elif module == 'sales_graph_week':
+                from django.utils.timezone import now
+                loc_q = "SELECT br_code,RTRIM(br_name) from branch"
+                cursor = ret_cursor()
+                cursor.execute(loc_q)
+                from datetime import timedelta
+                # Calculate the start date (7 days ago)
+                start_date = now().date() - timedelta(days=7)
+                end_date = now().date()
+
+                date_range = [start_date + timedelta(days=x) for x in range(0, (end_date - start_date).days + 1)]
+                labels = []
+                sales_data = {}
+                for dr in date_range:
+                    labels.append(dr)
+
+                for location in cursor.fetchall():
+                    name = location[1]
+                    code = location[0]
+                    # locations data set
+
+                    # get sales
+                    sales_arr = []
+                    for d in labels:
+                        s_q = f"SELECT inv_amt FROM pos_tran_hd where location_id = '{code}' and entry_date = '{d}'"
+                        print(s_q)
+                        cursor.execute(s_q)
+                        row = cursor.fetchone()
+                        if row is None:
+                            sales = 0.00
+                        else:
+                            sales = row[0]
+                        sales_arr.append(sales)
+
+                    obj = {
+                        "branch": name,
+                        "sales": sales_arr
+                    }
+
+                    sales_data.update({name: sales_arr})
+                arr = {
+                    "labels": labels,
+                    "dataset": sales_data
+                }
+
+                success_response['message'] = arr
+                response = success_response
 
             else:
                 raise Exception("No View Module")
