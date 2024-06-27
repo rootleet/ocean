@@ -1,3 +1,151 @@
 {% extends 'retail/base.html' %}
 {% load static %}
 
+
+
+{% block body %}
+
+    <div class="card-body overflow-auto p-2">
+        <div class="card mb-2 h-50 overflow- border border-info">
+            <div class="card-header">
+                <strong class="card-title">
+                    <div class="w-100 d-flex flex-wrap">
+                        <div class="w-50">
+                            <strong class="card-title">Euphoria</strong>
+                        </div>
+                        <div class="w-50 d-flex flex-wrap justify-content-end">
+                            <div class="mx-2">
+                                <label for="from">Date From</label>
+                                <input type="date" id="from" class="form-control form-control-sm rounded-0">
+                            </div>
+                            <div class="mx-2">
+                                <label for="to">Date To</label>
+                                <input type="date" id="to" class="form-control form-control-sm rounded-0">
+                            </div>
+                            <div class="d-flex flex-wrap justify-content-center align-content-end">
+                                <button id="filter_1" class="btn btn-info btn-sm">FILTER</button>
+                            </div>
+                        </div>
+                    </div>
+                </strong>
+            </div>
+
+            <div class="card-body p-2 overflow-auto">
+                <div class="table-responsive ">
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                            <tr><th>DOCUMENT</th><th>ENTRIES</th><th>TOTAL VALUE</th></tr>
+                        </thead>
+                        <tbody id="doc_table">
+                            <tr>
+                                <td>GRN</td>
+                                <td>
+                                    <span title="Total Documents" class="badge bg-info">100</span>
+                                    <span title="Posted Documents" class="badge bg-success">50</span>
+                                    <span title="Pending Documents" class="badge bg-warning">54</span>
+                                    <span title="Deleted Documents" class="badge bg-danger">6</span>
+                                </td>
+                                <td>100</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="row">
+
+                <div class="col-lg-12">
+                  <div class="card">
+                    <div class="card-body">
+                      <h5 class="card-title">Line Chart</h5>
+
+                      <!-- Line Chart -->
+                      <canvas id="lineChart" style="max-height: 400px;"></canvas>
+
+                      <!-- End Line CHart -->
+
+                    </div>
+                  </div>
+                </div>
+        </div>
+    </div>
+    </div>
+
+    <script>
+        $(document).ready(function(){
+            // set date for filters
+            $('#from').val(first_of_month);
+            $('#to').val(today);
+
+            // load today
+            retail.loadRetailDocuments(first_of_month,today)
+
+
+            // filter retail documents
+            $('#filter_1').click(function(){
+                let start_date = $('#from').val();
+                let end_date = $('#to').val();
+
+                retail.loadRetailDocuments(start_date,end_date);
+            });
+        });
+    </script>
+
+    <script>
+
+    // Function to generate a random RGB color
+function getRandomRGBColor() {
+    const r = Math.floor(Math.random() * 256); // Random value between 0 and 255
+    const g = Math.floor(Math.random() * 256); // Random value between 0 and 255
+    const b = Math.floor(Math.random() * 256); // Random value between 0 and 255
+    return `rgb(${r}, ${g}, ${b})`;
+}
+        // line labels
+        let sales_graph_week = retail.sales_graph_week();
+        let lables = []
+        let dataset = []
+        if(anton.IsRequest(sales_graph_week)){
+            let data = sales_graph_week.message;
+            labels = data['labels']
+            let obj = data['dataset'];
+
+            for (let key in obj) {
+                if (obj.hasOwnProperty(key)) {
+                    let st = obj[key]
+                    let set_data = [];
+                    for(let s = 0; s < st.length; s++){
+                        set_data.push(st[s])
+                    }
+                    dataset.push({
+                    label: `${key}`,
+                                    data: st,
+                                    fill: false,
+                                    borderColor: getRandomRGBColor(),
+                                    tension: 0.1
+                })
+                }
+            }
+        }
+                        document.addEventListener("DOMContentLoaded", () => {
+                          new Chart(document.querySelector('#lineChart'), {
+                            type: 'line',
+                            data: {
+                              labels: labels,
+                              datasets: dataset
+                            },
+                            options: {
+                              scales: {
+                                y: {
+                                  beginAtZero: true
+                                }
+                              }
+                            }
+                          });
+                        });
+                      </script>
+{% endblock %}
+

@@ -2,7 +2,19 @@ var currentDate = new Date()
 var day = currentDate.getDate()
 var month = currentDate.getMonth() + 1
 var year = currentDate.getFullYear()
-const today = `${year}-${month}-${day}`
+
+// Function to get today's date in yyyy-mm-dd format
+function getTodayDate() {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+}
+
+// Example usage
+const todayDate = getTodayDate();
+const today = todayDate
 
 
 $(function() {

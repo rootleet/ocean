@@ -1,4 +1,5 @@
 class Retail {
+    interface = '/retail/api/'
     boldUploadScreen(){
 
         // get groups
@@ -465,6 +466,53 @@ class Retail {
         } else {
             kasa.error("Invalid Form")
         }
+    }
+
+    getRetailDocuments(start_date,end_date){
+        let payload = {
+            module:'documents',
+            data:{
+                start_date:start_date,
+                end_date:end_date
+            }
+        }
+
+        return api.call('VIEW',payload,this.interface)
+    }
+
+    loadRetailDocuments(start_date,end_date){
+        let documents_response = this.getRetailDocuments(start_date,end_date);
+        if(anton.IsRequest(documents_response)){
+            let documents = documents_response.message;
+            let tr = "";
+            for(let m = 0; m < documents.length; m++){
+                let row = documents[m]
+                tr += `
+                <tr>
+                                <td>${row['document']}</td>
+                                <td>
+                                    <span title="Total Documents" class="badge bg-info">${row['total_entries']}</span>
+                                    <span title="Posted Documents" class="badge bg-success">${row['posted']}</span>
+                                    <span title="Pending Documents" class="badge bg-warning">${row['not_posted']}</span>
+                                    <span title="Deleted Documents" class="badge bg-danger">${row['deleted']}</span>
+                                </td>
+                                <td>${row['total_value']}</td>
+                            </tr>
+                `
+            }
+
+            $('#doc_table').html(tr)
+        } else {
+            kasa.response(documents_response)
+        }
+    }
+
+    sales_graph_week() {
+        let payload = {
+            module:'sales_graph_week',
+            data:{}
+        }
+        return api.call('VIEW',payload,this.interface);
     }
 }
 
