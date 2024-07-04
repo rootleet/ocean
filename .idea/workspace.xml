@@ -4,7 +4,21 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ffcbf13e-d396-4071-9a24-4014a690f966" name="Changes" comment="final poach" />
+    <list default="true" id="ffcbf13e-d396-4071-9a24-4014a690f966" name="Changes" comment="final poach">
+      <change afterPath="$PROJECT_DIR$/admin_panel/migrations/0003_alter_bulksms_file.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/admin_panel/migrations/0004_locations_type_alter_bulksms_file.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/appscenter/migrations/0002_alter_app_file.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/appscenter/migrations/0003_alter_app_file.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/retail/migrations/0002_alter_products_name.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/admin_panel/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/admin_panel/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ocean/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/ocean/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/retail/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/retail/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/retail/retail_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/retail/retail_api.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/retail/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/retail/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/general/js/classes/retail.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/general/js/classes/retail.js" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -477,6 +491,8 @@
       <workItem from="1718984872691" duration="1217000" />
       <workItem from="1719057744088" duration="11920000" />
       <workItem from="1719334169910" duration="415000" />
+      <workItem from="1719504348401" duration="1404000" />
+      <workItem from="1719582337144" duration="8607000" />
     </task>
     <task id="LOCAL-00176" summary="CHECK CMMS EXTENDED">
       <option name="closed" value="true" />

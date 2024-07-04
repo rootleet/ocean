@@ -207,6 +207,9 @@ def products(request,page=1):
         last_500_products = Products.objects.all()
         next_page = False
         previous_page = False
+
+    # reset all products
+    last_500_products = Products.objects.all()
         
 
     context = {

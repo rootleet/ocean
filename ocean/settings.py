@@ -98,7 +98,7 @@ DATABASE_ENGINE = os.environ.get('DB_ENGINE', 'django.db.backends.mysql')
 DATABASE_NAME = os.environ.get('DB_NAME', 'ocean')
 DATABASE_USER = os.environ.get('DB_USER', 'root')
 DATABASE_PASSWORD = os.environ.get('DB_PASSWORD', 'Sunderland@411')
-DATABASE_HOST = os.environ.get('DB_HOST', '127.0.0.1')
+DATABASE_HOST = os.environ.get('DB_HOST', '192.168.2.60')
 DATABASE_PORT = os.environ.get('DB_PORT', '3306')
 
 DATABASES = {
@@ -230,7 +230,7 @@ OLD_DB_NAME = 'PROC_CMMS_V1'
 # DB_NAME = 'PROC_CMMS_V1'
 
 RET_DB_HOST = '192.168.2.4'
-RET_DB_HOST = '26.80.117.10'
+# RET_DB_HOST = '26.80.117.10'
 RET_DB_NAME = 'SMSEXPV17'
 RET_DB_USER = 'sa'
 RET_DB_PASS = 'sa@123456'

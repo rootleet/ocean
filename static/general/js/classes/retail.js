@@ -295,11 +295,11 @@ class Retail {
 
     // enable stock
     enableMonitoring(pk){
-        kasa.confirm(this.stockMonitoringFlag(pk,true)['message'],1,'here')
+        kasa.confirm(this.stockMonitoringFlag(pk,true)['message'],0,'here')
     }
     // disable
     disableMonitoring(pk){
-        kasa.confirm(this.stockMonitoringFlag(pk,false)['message'],1,'here')
+        kasa.confirm(this.stockMonitoringFlag(pk,false)['message'],0,'here')
     }
 
     stockMonitoring(accuracy = '*'){
@@ -427,7 +427,7 @@ class Retail {
             <option value="json">VIEW</option>
             <option value="excel">Excel</option>
         `,"",true)
-        amodal.setTitleText("Material Request Check")
+        amodal.setTitleText("Stock Check")
         amodal.setBodyHtml(form)
         amodal.setFooterHtml(`<button onclick="retail.stockReport()" class="btn btn-success w-100">CHECK</button>`)
         amodal.show()

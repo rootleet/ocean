@@ -328,6 +328,25 @@ def interface(request):
                         # create location
                         Locations(code=code, descr=name, owner_id=1).save()
 
+            elif module == 'bulk_monitor':
+                barcodes = data.get('barcodes')
+                enable = data.get('enable')
+                yes = 0
+                no = 0
+                print(enable)
+                for barcode in barcodes:
+
+                    # get product
+                    if Products.objects.filter(barcode=barcode).count() == 1:
+                        product = Products.objects.get(barcode=barcode)
+                        product.stock_monitor = enable
+                        product.save()
+                        yes += 1
+                    else:
+                        no += 1
+
+                success_response['message'] = f"Bulk Monitor Flag set to {enable}  for ({yes}/{yes+no}) products"
+
 
             else:
                 success_response['status_code'] = 404
@@ -1015,7 +1034,7 @@ def interface(request):
                 all_m = Products.objects.filter(stock_monitor=True)
 
                 for m in all_m:
-                    for location in Locations.objects.all():
+                    for location in Locations.objects.filter(type='retail'):
                         code = location.code
                         loc_stock = \
                         Stock.objects.filter(product=m, location=location.code).aggregate(sum=Sum('quantity'))[

@@ -379,7 +379,7 @@ class AdjTran(models.Model):
 class Locations(models.Model):
     code = models.CharField(max_length=3, unique=True)
     descr = models.TextField()
-
+    type = models.CharField(max_length=10,unique=False,null=False,default="retail")
     server_location = models.TextField(null=True)
     ip_address = models.TextField(null=True)
     db = models.TextField(null=True)

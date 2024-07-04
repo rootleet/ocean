@@ -92,7 +92,7 @@ class Products(models.Model):
     subgroup = models.ForeignKey(ProductSubGroup, on_delete=models.CASCADE)
     code = models.CharField(unique=True, max_length=60)
     barcode = models.CharField(unique=True, max_length=100, null=False, blank=False)
-    name = models.CharField(unique=True, max_length=100)
+    name = models.CharField(unique=False, max_length=100)
     price = models.DecimalField(decimal_places=2, max_digits=60)
     stock_monitor = models.BooleanField(default=False)
 
