@@ -414,7 +414,23 @@ class Retail {
     }
 
     stockReportScreen(){
+        let loc_payload = {
+            module:'location_master',
+            data:{}
+        }
+        let locations = api.call('VIEW',loc_payload,'/retail/api/')
+        let locs = locations.message
+        let l_optons = ""
+        for(let l = 0; l < locs.length; l++){
+            let lc = locs[l]
+            l_optons += `<option value="${lc['code']}">${lc['code']} - ${lc['name']}</option>`
+        }
         let form = '';
+        form += fom.select('loc_code',`
+            <option value="" selected disabled>Select Location</option>
+            <option value="*" selected>All</option>
+            ${l_optons}
+        `,"",true)
         form += fom.select('filter',`
             <option value="" selected disabled>Select Filter</option>
             <option value="positive">POSITIVE</option>

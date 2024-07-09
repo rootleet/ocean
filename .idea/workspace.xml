@@ -4,20 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ffcbf13e-d396-4071-9a24-4014a690f966" name="Changes" comment="final poach">
-      <change afterPath="$PROJECT_DIR$/admin_panel/migrations/0003_alter_bulksms_file.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/admin_panel/migrations/0004_locations_type_alter_bulksms_file.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/appscenter/migrations/0002_alter_app_file.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/appscenter/migrations/0003_alter_app_file.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/retail/migrations/0002_alter_products_name.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+    <list default="true" id="ffcbf13e-d396-4071-9a24-4014a690f966" name="Changes" comment="stock poach">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/admin_panel/admin_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/admin_panel/admin_api.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/admin_panel/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/admin_panel/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ocean/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/ocean/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/retail/db.py" beforeDir="false" afterPath="$PROJECT_DIR$/retail/db.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/retail/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/retail/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/retail/retail_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/retail/retail_api.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/retail/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/retail/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/static/general/js/classes/retail.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/general/js/classes/retail.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/taskmanager/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/taskmanager/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -492,15 +487,9 @@
       <workItem from="1719057744088" duration="11920000" />
       <workItem from="1719334169910" duration="415000" />
       <workItem from="1719504348401" duration="1404000" />
-      <workItem from="1719582337144" duration="8607000" />
-    </task>
-    <task id="LOCAL-00176" summary="CHECK CMMS EXTENDED">
-      <option name="closed" value="true" />
-      <created>1713874153244</created>
-      <option name="number" value="00176" />
-      <option name="presentableId" value="LOCAL-00176" />
-      <option name="project" value="LOCAL" />
-      <updated>1713874153244</updated>
+      <workItem from="1719582337144" duration="19883000" />
+      <workItem from="1720517581226" duration="704000" />
+      <workItem from="1720537641248" duration="5139000" />
     </task>
     <task id="LOCAL-00177" summary="track query">
       <option name="closed" value="true" />
@@ -886,7 +875,15 @@
       <option name="project" value="LOCAL" />
       <updated>1719334392630</updated>
     </task>
-    <option name="localTasksCounter" value="225" />
+    <task id="LOCAL-00225" summary="stock poach">
+      <option name="closed" value="true" />
+      <created>1720114032015</created>
+      <option name="number" value="00225" />
+      <option name="presentableId" value="LOCAL-00225" />
+      <option name="project" value="LOCAL" />
+      <updated>1720114032015</updated>
+    </task>
+    <option name="localTasksCounter" value="226" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -909,7 +906,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="mark price by a mile" />
     <MESSAGE value="add 404, and run app with insecure" />
     <MESSAGE value="update retail perissions" />
     <MESSAGE value="CRM Logs are done successfuly, logs are generated for previeing" />
@@ -934,7 +930,8 @@
     <MESSAGE value="Make prospective data in json reply" />
     <MESSAGE value="add retail mr_check" />
     <MESSAGE value="final poach" />
-    <option name="LAST_COMMIT_MESSAGE" value="final poach" />
+    <MESSAGE value="stock poach" />
+    <option name="LAST_COMMIT_MESSAGE" value="stock poach" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

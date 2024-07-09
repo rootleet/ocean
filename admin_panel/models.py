@@ -394,6 +394,13 @@ class Locations(models.Model):
 
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, blank=True, null=True)
 
+    def obj(self):
+        return {
+            'code':self.code,
+            'name':self.descr,
+            'type':self.type,
+            'pk':self.pk
+        }
     def evat(self):
         credentials = EvatCredentials.objects.filter(pk=self.evat_key)
 

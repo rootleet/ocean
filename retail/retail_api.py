@@ -16,7 +16,7 @@ from admin_panel.models import Emails, Locations
 from ocean.settings import RET_DB_HOST, RET_DB_USER, RET_DB_PASS, RET_DB_NAME
 from retail.db import ret_cursor, get_stock
 from retail.models import BoltItems, BoltGroups, ProductSupplier, ProductGroup, ProductSubGroup, Products, Stock, \
-    RecipeGroup, RecipeProduct, Recipe, StockHd, StockMonitor
+    RecipeGroup, RecipeProduct, Recipe, StockHd, StockMonitor, RawStock
 from retail.prodMast import ProdMaster
 from retail.retail_tools import create_recipe_card
 
@@ -206,6 +206,7 @@ def interface(request):
                     osu = stock.get('osu')
                     warehouse = stock.get('warehouse')
                     kitchen = stock.get('kitchen')
+
                     if Stock.objects.filter(product=product, location='001').exists():
                         sp_stock = Stock.objects.get(product=product, location='001')
                         sp_stock.quantity = spintex
@@ -354,7 +355,14 @@ def interface(request):
 
         elif method == 'VIEW':
             arr = []
-            if module == 'bolt_products':
+            if module == 'location_master':
+                locations = Locations.objects.all()
+                for location in locations:
+                    arr.append(location.obj())
+
+                success_response['message'] = arr
+                response = success_response
+            elif module == 'bolt_products':
                 pk = data.get('key') or '*'
 
                 if pk == '*':
@@ -1017,6 +1025,7 @@ def interface(request):
             elif module == 'see_stock_monitor':
                 arr = []
                 filter = data.get('filter')
+                loc_code = data.get('loc_code','*')
                 print(filter)
                 doc = data.get('doc', 'json')
                 if doc == 'excel':
@@ -1031,22 +1040,24 @@ def interface(request):
                 #     all_m = StockMonitor.objects.filter(valid=True)
                 # else:
                 #     all_m = StockMonitor.objects.all()
-                all_m = Products.objects.filter(stock_monitor=True)
-
+                all_m = Products.objects.all()
+                locations = Locations.objects.filter(type='retail')
+                if loc_code != '*':
+                    locations = locations.filter(code=loc_code)
                 for m in all_m:
-                    for location in Locations.objects.filter(type='retail'):
+                    for location in locations:
                         code = location.code
                         loc_stock = \
-                        Stock.objects.filter(product=m, location=location.code).aggregate(sum=Sum('quantity'))[
+                        RawStock.objects.filter(prod_id=m.code, loc_id=location.code).aggregate(sum=Sum('qty'))[
                             'sum'] or Decimal('0.00')
                         row = [location.descr, m.name, m.name, loc_stock]
                         mark = 0
                         if loc_stock >= mark:
-                            print(f"{loc_stock} is positive for ",filter)
+                            print(f"{loc_stock} is positive for ",filter,location.code,m.code)
                         elif loc_stock < mark:
-                            print(mark, "is negative for",filter)
+                            print(mark, "is negative for",filter,location.code,m.code)
                         else:
-                            print(mark, "Is neither negative or positive")
+                            print(mark, "Is neither negative or positive",location.code,m.code)
 
                         if filter == 'negative' and loc_stock < mark:
                             print("YES NEGATIVE")

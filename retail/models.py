@@ -107,10 +107,22 @@ class Products(models.Model):
         arr = []
         for location in Locations.objects.all():
             code = location.code
-            loc_stock = Stock.objects.filter(product=self, location=location.code).aggregate(sum=Sum('quantity'))['sum'] if Stock.objects.filter(product=self, location=location.code).exists() else 0
+            loc_stock = Stock.objects.filter(product=self, location=location.code).aggregate(sum=Sum('quantity'))[
+                'sum'] if Stock.objects.filter(product=self, location=location.code).exists() else 0
             arr.append({'loc_code': code, 'loc_name': location.descr, 'barcode': self.barcode, 'item_name': self.name,
                         'stock': loc_stock})
         return arr
+
+
+class RawStock(models.Model):
+    loc_id = models.CharField(max_length=3, unique=False, null=False, blank=False)
+    prod_id = models.CharField(max_length=20)
+    qty = models.DecimalField(decimal_places=3, max_digits=60)
+
+    created_on = models.DateTimeField(auto_now_add=True)
+
+    # class Meta:
+    #     unique_together = (('loc_id', 'prod_id'),)
 
 
 class Stock(models.Model):

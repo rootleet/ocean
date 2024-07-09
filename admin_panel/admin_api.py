@@ -10,8 +10,10 @@ from django.views.decorators.csrf import csrf_exempt
 
 from admin_panel.anton import md5only, remove_html_tags, generate_random_password
 from admin_panel.cron_exe import execute_script
-from admin_panel.models import DocApprovals, GeoCity, GeoCitySub, Reminder, SmsApi, UserAddOns, EvatCredentials, Locations, \
-    Departments, TicketTrans, Sms, TicketHd, MailSenders, MailQueues
+from admin_panel.models import DocApprovals, GeoCity, GeoCitySub, Reminder, SmsApi, UserAddOns, EvatCredentials, \
+    Locations, \
+    Departments, TicketTrans, Sms, TicketHd, MailSenders, MailQueues, MailAttachments
+from blog.anton import make_md5
 from reports.models import DepartmentReportMailQue
 from servicing.models import ServiceCard
 from taskmanager.models import Tasks, TaskTransactions
@@ -118,12 +120,12 @@ def index(request):
                         }
 
                         response = success_response
-            
+
             elif module == 'doc_app_auth':
                 user_pk = data.get('user_pk')
                 user = User.objects.get(pk=user_pk)
                 doc_type = data.get('doc_type')
-                DocApprovals(user=user,doc_type=doc_type).save()
+                DocApprovals(user=user, doc_type=doc_type).save()
 
                 success_response['message'] = "Approver Added"
                 response = success_response
@@ -242,7 +244,7 @@ def index(request):
                     us = user.user
                     email = us.email
                     body = message.replace('%name%', f"{us.get_full_name()}")
-                    MailQueues(sender=sender, recipient=email,subject=subject, body=body,cc='').save()
+                    MailQueues(sender=sender, recipient=email, subject=subject, body=body, cc='').save()
 
                 success_response['message'] = "Mail Added To Broadcast"
                 response = success_response
@@ -284,7 +286,7 @@ def index(request):
 
                     success_response['message'] = cts
                     response = success_response
-            
+
             elif module == 'doc_app_auth':
                 pin = data.get('pin')
                 doc_type = data.get('doc_type')
@@ -293,7 +295,7 @@ def index(request):
                     us = UserAddOns.objects.get(auth_pin=md5only(pin))
                     # validate if user can auth
                     auth_user = us.user
-                    if DocApprovals.objects.filter(user=auth_user,doc_type='sales_proforma').count() == 1:
+                    if DocApprovals.objects.filter(user=auth_user, doc_type='sales_proforma').count() == 1:
                         success_response['status_code'] = 200
                         success_response['message'] = us.user.pk
                     else:
@@ -302,7 +304,7 @@ def index(request):
                 else:
                     success_response['status_code'] = 404
                     success_response['message'] = f"Invalid User {md5only(1234)}"
-                
+
                 response = success_response
 
             elif module == 'reminder':
@@ -366,69 +368,93 @@ def index(request):
                 workbook = openpyxl.Workbook()
 
                 departments = Departments.objects.all()
+                from datetime import datetime
+                current_datetime = datetime.now()
+                formatted_datetime = current_datetime.strftime("%Y_%m_%d_%H_%M_%S")
+                day_only = current_datetime.strftime('%Y-%m-%d')
+
                 for department in departments:
                     members = department.members()
                     head_email = department.email_of_head
-                    files = ''
+                    files = []
                     for member in members:
                         sheet = workbook.active
                         sheet['A1'] = "TITLE"
-                        sheet['B1'] = "DESCRIPTION"
-                        sheet['C1'] = "LAST TRANSACTION"
-                        sheet['D1'] = "Transaction Time"
-                        sheet['E1'] = "Status"
+                        #sheet['B1'] = "DESCRIPTION"
+                        sheet['B1'] = "LAST TRANSACTION"
+                        sheet['C1'] = "Transaction Time"
+                        sheet['D1'] = "Status"
                         user = member.user
-                        from datetime import datetime
-                        current_datetime = datetime.now()
-                        formatted_datetime = current_datetime.strftime("%Y_%m_%d_%H_%M_%S")
+
                         file_name1 = f"{user.first_name}_{user.last_name}_report_as_of_{formatted_datetime}.xlsx"
 
                         file_name = f"static/general/task-reports/{file_name1}"
                         # get tasks
-                        user_tasks = Tasks.objects.filter(owner=user)
+                        user_tasks = Tasks.objects.filter(owner=member.user)
+                        print(member.user.username, f"has {user_tasks.count()} tasks")
                         sheet_count = 2
                         updt = False
-                        for task in user_tasks:
-                            title = task.title
-                            descr = remove_html_tags(task.description)
-                            last_transaction_time = "NO TRANSACTION"
-                            last_transaction = "NO TRANSACTION"
+                        if user_tasks.count() > 0:
+                            for task in user_tasks:
+                                title = task.title
+                                descr = remove_html_tags(task.description)
+                                last_transaction_time = "NO TRANSACTION"
+                                last_transaction = "NO TRANSACTION"
 
-                            if task.transaction().count() > 0:
-                                transactions = task.transaction().last()
-                                if not transactions.reported:
-                                    last_transaction = remove_html_tags(transactions.description)
-                                    last_transaction_time = transactions.created_date
-                                    transactions.reported = True
-                                    updt = True
+                                if task.transaction().count() > 0:
+                                    transactions = task.transaction().last()
+                                    if not transactions.reported:
+                                        last_transaction = remove_html_tags(transactions.description)
+                                        last_transaction_time = transactions.created_date
+                                        transactions.reported = False
+                                        updt = True
 
-                            sheet[f"A{sheet_count}"] = title
-                            sheet[f'B{sheet_count}'] = descr
-                            sheet[f'C{sheet_count}'] = last_transaction
-                            sheet[f'D{sheet_count}'] = last_transaction_time
-                            sheet[f"E{sheet_count}"] = task.text_status()
+                                sheet[f"A{sheet_count}"] = title
+                                # sheet[f'B{sheet_count}'] = descr
+                                sheet[f'B{sheet_count}'] = last_transaction
+                                sheet[f'C{sheet_count}'] = last_transaction_time
+                                sheet[f"D{sheet_count}"] = task.text_status()
 
-                            sheet_count += 1
-                            # for transaction in transactions:
-                            #     tran_title = transaction.title
-                            #     tran_descr = transaction.description
-                            #     date_time = f"{transaction.created_date} {transaction.created_time}"
-                            #
-                            #     sheet[f"A{sheet_count}"] = title
-                            #     sheet[f"B{sheet_count}"] = tran_title
-                            #     sheet[f"C{sheet_count}"] = tran_descr
-                            #     sheet[f"D{sheet_count}"] = date_time
-                            #     sheet[f"E{sheet_count}"] = "NOT KNOWN"
-                            #
-                            #     sheet_count += 1
+                                sheet_count += 1
+                                # for transaction in transactions:
+                                #     tran_title = transaction.title
+                                #     tran_descr = transaction.description
+                                #     date_time = f"{transaction.created_date} {transaction.created_time}"
+                                #
+                                #     sheet[f"A{sheet_count}"] = title
+                                #     sheet[f"B{sheet_count}"] = tran_title
+                                #     sheet[f"C{sheet_count}"] = tran_descr
+                                #     sheet[f"D{sheet_count}"] = date_time
+                                #     sheet[f"E{sheet_count}"] = "NOT KNOWN"
+                                #
+                                #     sheet_count += 1
 
-                        workbook.save(file_name)
-                        files += f"{file_name1},"
-                        if updt:
-                            transactions.save()
-                    response['message'] = files
-                    response['status_code'] = 200
-                    DepartmentReportMailQue(department=department, files=files).save()
+                            workbook.save(file_name)
+                            files.append(file_name)
+                            if updt:
+                                transactions.save()
+
+                    if len(files) > 0:
+                        print(department.name,"SENT")
+                        MailQueues(
+                            sender=MailSenders.objects.get(is_default=True),
+                            recipient=department.email_of_head,
+                            subject=f"{department.name} task report as of {day_only}",
+                            body=f"Attached to this email is the departmental report for {department.name}"
+                        ).save()
+
+                        save_mail = MailQueues.objects.filter(
+                            sender=MailSenders.objects.get(is_default=True),
+                            recipient=department.email_of_head,
+                            subject=f"{department.name} task report as of {day_only}",
+                            body=f"Attached to this email is the departmental report for {department.name}",
+                            is_sent=False
+                        ).last()
+
+                        for file in files:
+                            print(file)
+                            MailAttachments(mail=save_mail,attachment=file).save()
+                        ##DepartmentReportMailQue(department=department, files=files).save()
 
                 response = success_response
             elif module == 'auth':
@@ -660,7 +686,7 @@ def index(request):
                 user.save()
                 MailQueues(sender=mail_api, recipient=user.email, cc='solomon@snedaghana.com',
                            subject="PASSWORD RESET FOR OCEAN", body=email_template).save()
-                Sms(api=SmsApi.objects.get(is_default=1),to=addon.phone,message=sms_message).save()
+                Sms(api=SmsApi.objects.get(is_default=1), to=addon.phone, message=sms_message).save()
 
             elif module == 'all_password_reset':
                 users = UserAddOns.objects.all()

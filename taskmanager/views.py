@@ -49,7 +49,7 @@ def my_tasks(request):
     me = User.objects.get(pk=request.user.pk)
     context = {
         'nav': True,
-        'my_tasks': Tasks.objects.filter(owner=me,status=1).order_by('-pk')
+        'my_tasks': Tasks.objects.filter(owner=me, status=1).order_by('-pk')
     }
     return render(request, 'taskmanager/mytasks.html', context=context)
 
@@ -71,6 +71,7 @@ def update_task(request, url):
         'task': Tasks.objects.get(uni=url).pk
     }
     return render(request, 'taskmanager/update.html', context=context)
+
 
 @login_required()
 def new_task_tran(request):
