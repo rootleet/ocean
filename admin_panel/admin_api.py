@@ -393,7 +393,7 @@ def index(request):
                         user_tasks = Tasks.objects.filter(owner=member.user)
                         print(member.user.username, f"has {user_tasks.count()} tasks")
                         sheet_count = 2
-                        updt = False
+                        updt = True
                         if user_tasks.count() > 0:
                             for task in user_tasks:
                                 title = task.title
