@@ -230,7 +230,9 @@ class Products {
 
     loadProdMastScreen(barcode){
         let fetch = api.view({'module':'product','data':{'barcode':barcode}})
+        console.table(fetch)
         if(fetch['status_code'] === 200){
+
             let response = fetch['message']
             let count = response['count']
             if(count === 1){
@@ -310,7 +312,9 @@ class Products {
 
             ctable(response)
         }
-
+        else {
+            kasa.response(fetch)
+        }
     }
 
     // delete

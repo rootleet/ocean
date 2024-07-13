@@ -32,6 +32,8 @@ urlpatterns = [
 
     path('products/new/', views.new_products, name='new-product'),
 
+    path('transfer/',views.transfer,name='transfer')
+
 ]
 
 # handler404 = 'blog.views.handler404'

@@ -1,0 +1,138 @@
+{% extends 'dashboard/products/prod_base.html' %}
+{% load static %}
+
+{% block body %}
+    <input type="hidden" id="owner" value="{{ request.user.pk }}">
+   
+
+        <div class="modal" id="addItem" data-backdrop="false">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+
+                        <input id="adj_item_search" autocomplete="off" placeholder="query" class="form-control" type="text">
+
+                    </div>
+
+                    <div class="modal-body" style="height: 50vh">
+                        <div id="searchRes" class="h-100 w-100">
+
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button data-dismiss="modal" class="btn btn-sm btn-warning">CLOSE</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        
+            <div class="card-header">
+
+                <button id="save" title="Save Transfer" class="btn btn-success btn-sm">SAVE</button>
+                <button type="button" onclick="productMaster.productSearcScreen('PO')" class="btn btn-info btn-sm">INSERT</button>
+            </div>
+            <div class="panel-sub-heading">
+                <div class="w-100 container-fluid">
+                    <div class="w-100 row">
+                        <div class="col-sm-3">
+                            <label class="w-100">Entry NO <br>
+                                <input type="text" id="ent_num" value="AUTO" disabled class="anton-form-tool">
+                            </label>
+                            <label class="w-100">From <br>
+                                <select name="loc_from" id="loc_from" class="anton-select-tool w-100">
+                                    <option  value="" selected>From Location</option>
+                                    {% for loc in locs %}
+                                        <option value="{{ loc.pk }}">{{ loc.code }} - {{ loc.descr }}</option>
+                                    {% endfor %}
+                                </select>
+                            </label>
+                            <label class="w-100">To <br>
+                                <select name="loc_to" id="loc_to" class="anton-select-tool w-100">
+                                    <option value=""  selected>To Location</option>
+                                    {% for loc in locs %}
+                                        <option value="{{ loc.pk }}">{{ loc.code }} - {{ loc.descr }}</option>
+                                    {% endfor %}
+                                </select>
+                            </label>
+                        </div>
+
+                        <div class="col-sm-3">
+{#                            <label for="taxable" class="w-100">Taxable ?</label><select name="taxable" id="taxable" class="anton-select-tool">#}
+{#                                <option value="1">YES</option>#}
+{#                                <option value="0">NO</option>#}
+{#                            </select>#}
+                        </div>
+
+                        <div class="col-sm-3">
+                            <label class="w-100">Remark
+                                <textarea id="remarks" class="anton-form-tool w-100" cols="30" rows="5"></textarea>
+                            </label>
+                        </div>
+
+                        <input type="hidden" id="owner" value="{{ user.pk }}">
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-body p-2" style="overflow: hidden;">
+                <div class="w-100 h-100" style="overflow: auto">
+                    <table class="table table-bordered table-hover table-striped table-sm">
+                        <thead>
+                            <tr>
+                                <th>LINE</th>
+                                <th>BARCODE</th>
+                                <th>DESCRIPTION</th>
+                                <th>PACK</th>
+                                <th>PACK QTY</th>
+                                <th>TRAN QTY</th>
+                                <th>UNIT COST</th>
+                                <th>TOTAL COST</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tBody">
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+    <script>
+        $(document).ready(function(){
+            $('#save').click(function(){
+                try {
+                    let hd_fields = ['loc_from','loc_to','remarks'];
+                    if(anton.validateInputs(hd_fields)){
+                        let header = anton.Inputs(hd_fields);
+                        if(header['loc_to'] !== header['loc_from']){
+                            // get transactions
+                            let transactions = $('#tBody tr');
+                            let row_count = transactions.length
+                            if(row_count > 0 ){
+                                // todo make transactions rows
+                                kasa.success("Okay")
+                            } else {
+                                throw("Cannot Save Empty Transactions")
+                            }
+                        } else
+                        {
+                            throw("Cannot Transfer To Same Location")
+                        }
+
+                    } else {
+                        throw("Invalid Header")
+                    }
+                } catch (e){
+                    kasa.error(e)
+                }
+
+            });
+        });
+    </script>
+
+
+{% endblock %}
+

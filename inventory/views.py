@@ -201,3 +201,16 @@ def new_products(request):
     return render(request, 'dashboard/products/newV2.html', context=context)
     return render(request,'dashboard/products/new.html',context=context)
     return render(request,'inventory/product/new.html',context=context)
+
+@login_required()
+def transfer(request):
+    page['title'] = 'Transfers'
+
+    context = {
+        'page': page,
+        'nav': True,
+        'locs':Locations.objects.all()
+
+    }
+
+    return render(request, 'inventory/transfer/view.html', context=context)
