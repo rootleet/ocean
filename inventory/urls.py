@@ -15,10 +15,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from . import views
+from . import views, invento
 
 urlpatterns = [
     path('', views.inventory, name='inventory'),
+    path('api/', invento.interface, name='interface'),
     path('assets/', views.assets, name='assets'),
     path('assets/newgroup/', views.newgroup, name='newgroup'),
     path('assets/save-new', views.assets_new, name='assets_new'),
@@ -32,7 +33,8 @@ urlpatterns = [
 
     path('products/new/', views.new_products, name='new-product'),
 
-    path('transfer/',views.transfer,name='transfer')
+    path('transfer/',views.transfer,name='transfer'),
+    path('transfer/new/',views.transfer_new,name='new_transfer')
 
 ]
 

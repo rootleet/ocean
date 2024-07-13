@@ -490,9 +490,9 @@ class Products {
                                     <td>
                                             <select onchange="productMaster.tranCalculate(${line})" name="" id="packing_${line}" class="form-control form-control-sm">${p_option}</select>
                                     </td>
-                                    <td><input onkeyup="productMaster.tranCalculate(${line})" id="pack_qty_${line}" value="${pur['qty']}" style="width: 100px" type="text" min="1" class="form-control form-control-sm rounded-0"></td>
-                                    <td><input onkeyup="productMaster.tranCalculate(${line})"  id="tran_qty_${line}" value="0" style="width: 100px"  type="text" min="1" class="form-control form-control-sm rounded-0"></td>
-                                    <td><input onkeyup="productMaster.tranCalculate(${line})"  id="unit_cost_${line}" value="${unit_cost}" style="width: 100px" type="text" class="form-control form-control-sm rounded-0"></td>
+                                    <td><input onkeyup="productMaster.tranCalculate(${line})" id="pack_qty_${line}" value="${pur['qty']}" style="width: 100px" type="number" min="1" class="form-control form-control-sm rounded-0"></td>
+                                    <td><input onkeyup="productMaster.tranCalculate(${line})"  id="tran_qty_${line}" value="0" style="width: 100px"  type="number" min="1" class="form-control form-control-sm rounded-0"></td>
+                                    <td><input onkeyup="productMaster.tranCalculate(${line})"  id="unit_cost_${line}" value="${unit_cost}" style="width: 100px" type="number" class="form-control form-control-sm rounded-0"></td>
                                     <td><input readonly id="total_cost_${line}" style="width: 100px" type="text" min="1" class="form-control form-control-sm rounded-0"></td>
                                 </tr>
             `

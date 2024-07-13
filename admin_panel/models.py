@@ -412,13 +412,14 @@ class Locations(models.Model):
 
 
 class TransferHD(models.Model):
-    loc_fr = models.ForeignKey('Locations', on_delete=models.CASCADE)
+    entry_no = models.CharField(max_length=10, unique=True,null=False)
+    loc_fr = models.ForeignKey('Locations', on_delete=models.CASCADE,related_name="transfer_location_from")
 
-    loc_to = models.CharField(max_length=3)
+    loc_to =  models.ForeignKey('Locations', on_delete=models.CASCADE,related_name="transfer_location_to")
 
-    remark = models.TextField()
+    remarks = models.TextField()
 
-    created_by = models.IntegerField(default=0)
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name="transfer_hd_created_by")
     created_on = models.DateTimeField(auto_now_add=True)
     edited_on = models.DateTimeField(auto_now=True)
     status = models.IntegerField(default=0)
@@ -432,17 +433,35 @@ class TransferHD(models.Model):
     def tran_count(self):
         return TransferTran.objects.filter(parent=self.pk).count()
 
+    def obj(self):
+        return {
+            "pk":self.pk,
+            "from":self.loc_fr.descr,
+            "to":self.loc_to.descr,
+            "owner":self.created_by.pk
+
+        }
+
+
 
 class TransferTran(models.Model):
     parent = models.ForeignKey('TransferHD', on_delete=models.CASCADE)
     line = models.IntegerField()
     product = models.ForeignKey('ProductMaster', on_delete=models.CASCADE)
     packing = models.TextField()
-    quantity = models.DecimalField(max_digits=65, decimal_places=2)
-    total = models.IntegerField()
+    pack_qty = models.DecimalField(max_digits=65, decimal_places=2,default=0.00)
+    tran_qty = models.DecimalField(max_digits=65, decimal_places=2)
+    unit_cost = models.DecimalField(max_digits=65, decimal_places=2,default=0.00)
+    cost = models.DecimalField(max_digits=65, decimal_places=2,default=0.00)
 
     def product_name(self):
         return ProductMaster.objects.get(pk=self.product).descr
+
+    def obj(self):
+        return {
+            "pk":self.pk,
+            "product":self.product.obj(),
+        }
 
 
 class Notifications(models.Model):

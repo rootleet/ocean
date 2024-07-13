@@ -31,7 +31,7 @@
         
             <div class="card-header">
 
-                <button onclick="docs.save('PO')" type="button" data-toggle="modal"  class="btn btn-success btn-sm">SAVE</button>
+                <button id="save" title="Save Transfer" class="btn btn-success btn-sm">SAVE</button>
                 <button type="button" onclick="productMaster.productSearcScreen('PO')" class="btn btn-info btn-sm">INSERT</button>
             </div>
             <div class="panel-sub-heading">
@@ -41,17 +41,17 @@
                             <label class="w-100">Entry NO <br>
                                 <input type="text" id="ent_num" value="AUTO" disabled class="anton-form-tool">
                             </label>
-                            <label class="w-100">Supplier <br>
-                                <select name="supplier" id="supplier" class="anton-select-tool">
-                                    <option  value="none" selected>Select Supplier</option>
-                                    {% for sup in suppliers %}
-                                        <option value="{{ sup.pk }}">{{ sup.company }}</option>
+                            <label class="w-100">From <br>
+                                <select name="loc_from" id="loc_from" class="anton-select-tool w-100">
+                                    <option  value="" selected>From Location</option>
+                                    {% for loc in locs %}
+                                        <option value="{{ loc.pk }}">{{ loc.code }} - {{ loc.descr }}</option>
                                     {% endfor %}
                                 </select>
                             </label>
-                            <label class="w-100">Location <br>
-                                <select name="loc" id="loc" class="anton-select-tool">
-                                    <option value="none"  selected>Select Location</option>
+                            <label class="w-100">To <br>
+                                <select name="loc_to" id="loc_to" class="anton-select-tool w-100">
+                                    <option value=""  selected>To Location</option>
                                     {% for loc in locs %}
                                         <option value="{{ loc.pk }}">{{ loc.code }} - {{ loc.descr }}</option>
                                     {% endfor %}
@@ -60,10 +60,10 @@
                         </div>
 
                         <div class="col-sm-3">
-                            <label for="taxable" class="w-100">Taxable ?</label><select name="taxable" id="taxable" class="anton-select-tool">
-                                <option value="1">YES</option>
-                                <option value="0">NO</option>
-                            </select>
+{#                            <label for="taxable" class="w-100">Taxable ?</label><select name="taxable" id="taxable" class="anton-select-tool">#}
+{#                                <option value="1">YES</option>#}
+{#                                <option value="0">NO</option>#}
+{#                            </select>#}
                         </div>
 
                         <div class="col-sm-3">
@@ -100,7 +100,84 @@
                 </div>
             </div>
 
-        
+    <script>
+        $(document).ready(function(){
+            $('#save').click(function(){
+                try {
+                    let hd_fields = ['loc_from','loc_to','remarks','mypk'];
+                    if(anton.validateInputs(hd_fields)){
+                        let header = anton.Inputs(hd_fields);
+                        header['mypk'] = $('#mypk').val()
+                        if(header['loc_to'] !== header['loc_from']){
+                            // get transactions
+                            let trans = []
+                            let transactions = $('#tBody tr');
+                            let row_count = transactions.length
+                            if(row_count > 0 ){
+                                // todo make transactions rows
+                                for (let i = 0; i < row_count; i++) {
+                                    let line = i + 1;
+                                    let barcode = $(`#barcode_${line}`).text()
+                                    let packing = $(`#packing_${line} option:selected`).text()
+                                    let pack_qty = $(`#pack_qty_${line}`).val()
+                                    let tran_qty = $(`#tran_qty_${line}`).val()
+                                    let unit_cost = $(`#unit_cost_${line}`).val()
+                                    let total_cost = $(`#total_cost_${line}`).val()
+
+
+                                    let ids = [`packing_${line}`,`pack_qty_${line}`,`tran_qty_${line}`,`unit_cost_${line}`,`total_cost_${line}`]
+                                    if(anton.validateInputs(ids)){
+                                        let row = {
+                                            barcode:barcode,
+                                            packing:packing,
+                                            pack_qty:pack_qty,
+                                            tran_qty:tran_qty,
+                                            unit_cost:unit_cost,
+                                            total_cost:total_cost
+                                        }
+
+                                        trans.push(row)
+                                    } else {
+                                    throw(`Invalid Line ${line}`)
+
+                                    }
+
+
+                                }
+                                let payload = {
+                                    module:'transfer',
+                                    data:{
+                                        header:header,
+                                        transactions:trans
+
+                                    }
+                                }
+
+                                console.table(payload)
+
+                                let save_tr = api.call('PUT',payload,'/inventory/api/')
+                                kasa.response(save_tr)
+                                if(anton.IsRequest(save_tr)){
+                                    location.href = "/inventory/transfer/"
+                                }
+                            } else {
+                                throw("Cannot Save Empty Transactions")
+                            }
+                        } else
+                        {
+                            throw("Cannot Transfer To Same Location")
+                        }
+
+                    } else {
+                        throw("Invalid Header")
+                    }
+                } catch (e){
+                    kasa.error(e)
+                }
+
+            });
+        });
+    </script>
 
 
 {% endblock %}

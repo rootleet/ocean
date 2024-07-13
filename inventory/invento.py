@@ -1,11 +1,14 @@
 import json
 import sys
+from http.client import responses
 
 from django.contrib.auth.models import User
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
-
+from admin_panel.models import Locations, TransferHD, TransferTran, ProductMaster
+from admin_panel.views import bank_posts
+from retail.models import Products
 
 
 @csrf_exempt
@@ -18,6 +21,11 @@ def interface(request):
     success_response = {
         'status_code': 200,
         'message': "Procedure Completed Successfully"
+    }
+
+    error_response = {
+        'status_code': 505,
+        'message': "Procedure Failed"
     }
 
     # get method
@@ -33,6 +41,67 @@ def interface(request):
             if module == 'product':
                 pass
 
+            elif module == 'transfer':
+                header = data.get("header")
+                transactions = data.get("transactions")
+                mypk = header.get('mypk')
+                owner = User.objects.get(pk=mypk)
+
+                l_from = header.get('loc_from')
+                l_to = header.get('loc_to')
+
+                loc_from = Locations.objects.get(pk=l_from)
+                loc_to = Locations.objects.get(pk=l_to)
+                remarks = header.get("remarks")
+
+                entry_no = f"TR{loc_from.code}{TransferHD.objects.filter(loc_fr=loc_from).count() + 1}"
+
+                try:
+                    TransferHD(
+                        entry_no=entry_no,loc_fr=loc_from,remarks=remarks,loc_to=loc_to,created_by=owner
+                    ).save()
+                    thd = TransferHD.objects.get(entry_no=entry_no)
+                    line = 1
+                    for tr in transactions:
+                        print(tr)
+                        TransferTran(
+                            parent=thd,
+                            line = line,
+                            product = ProductMaster.objects.get(barcode=tr['barcode']),
+                            packing = tr['packing'],
+                            pack_qty = tr['pack_qty'],
+                            tran_qty = tr['tran_qty'],
+                            unit_cost = tr['unit_cost'],
+                            cost = tr['total_cost'],
+                        ).save()
+                        line += 1
+                    success_response['message'] = f"Transfer Saved {entry_no}"
+                    response = success_response
+                except Exception as e:
+                    TransferHD.objects.filter(entry_no=entry_no).delete()
+                    error_response['message'] = f"Transfer Failed: {e}"
+                    response = error_response
+
+        elif method == 'VIEW':
+            # todo view transfer in window
+            arr = []
+            if module == 'transfer':
+                doc = data.get("doc")
+                pk = data.get("pk")
+                hds = TransferHD.objects.filter(pk=pk)
+                for hd in hds:
+                    obj = {
+                        "header":hd.obj()
+                    }
+                    arr.append(obj)
+
+                success_response['message'] = arr
+                response = success_response
+                print(responses)
+
+        else:
+            error_response['message'] = f"Method Not Allowed: {method}"
+            response = error_response
 
     except Exception as e:
         error_type, error_instance, traceback = sys.exc_info()

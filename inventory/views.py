@@ -2,7 +2,8 @@ from django.contrib import messages
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
-from admin_panel.models import PackingMaster, ProductGroup, ProductGroupSub, ProductMaster, SuppMaster, Locations, TaxMaster, UnitMembers, UserAddOns
+from admin_panel.models import PackingMaster, ProductGroup, ProductGroupSub, ProductMaster, SuppMaster, Locations, \
+    TaxMaster, UnitMembers, UserAddOns, TransferHD
 from django.contrib.auth import authenticate, login as auth_login, logout
 from django.contrib.auth.decorators import login_required
 
@@ -204,13 +205,31 @@ def new_products(request):
 
 @login_required()
 def transfer(request):
-    page['title'] = 'Transfers'
+    if TransferHD.objects.all().count() > 0:
+        last_transfer = TransferHD.objects.all().last()
+        page['title'] = 'Transfers'
+
+        context = {
+            'page': page,
+            'nav': True,
+            'locs':Locations.objects.all(),
+            'last_transfer': last_transfer,
+
+        }
+
+        return render(request, 'inventory/transfer/view.html', context=context)
+    else:
+        return redirect('new_transfer')
+
+
+def transfer_new(request):
+    page['title'] = 'New Transfers'
 
     context = {
         'page': page,
         'nav': True,
-        'locs':Locations.objects.all()
+        'locs': Locations.objects.all()
 
     }
 
-    return render(request, 'inventory/transfer/view.html', context=context)
+    return render(request, 'inventory/transfer/new.html', context=context)

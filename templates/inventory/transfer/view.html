@@ -31,31 +31,20 @@
         
             <div class="card-header">
 
-                <button id="save" title="Save Transfer" class="btn btn-success btn-sm">SAVE</button>
-                <button type="button" onclick="productMaster.productSearcScreen('PO')" class="btn btn-info btn-sm">INSERT</button>
+
             </div>
             <div class="panel-sub-heading">
                 <div class="w-100 container-fluid">
                     <div class="w-100 row">
                         <div class="col-sm-3">
                             <label class="w-100">Entry NO <br>
-                                <input type="text" id="ent_num" value="AUTO" disabled class="anton-form-tool">
+                                <input type="text" id="ent_num" disabled class="anton-form-tool">
                             </label>
-                            <label class="w-100">From <br>
-                                <select name="loc_from" id="loc_from" class="anton-select-tool w-100">
-                                    <option  value="" selected>From Location</option>
-                                    {% for loc in locs %}
-                                        <option value="{{ loc.pk }}">{{ loc.code }} - {{ loc.descr }}</option>
-                                    {% endfor %}
-                                </select>
+                            <label class="w-100">From  <br>
+                                <input type="text" id="fr_loc" disabled class="anton-form-tool">
                             </label>
-                            <label class="w-100">To <br>
-                                <select name="loc_to" id="loc_to" class="anton-select-tool w-100">
-                                    <option value=""  selected>To Location</option>
-                                    {% for loc in locs %}
-                                        <option value="{{ loc.pk }}">{{ loc.code }} - {{ loc.descr }}</option>
-                                    {% endfor %}
-                                </select>
+                            <label class="w-100">TO  <br>
+                                <input type="text" id="to_loc" disabled class="anton-form-tool">
                             </label>
                         </div>
 
@@ -68,7 +57,7 @@
 
                         <div class="col-sm-3">
                             <label class="w-100">Remark
-                                <textarea id="remarks" class="anton-form-tool w-100" cols="30" rows="5"></textarea>
+                                <textarea disabled id="remarks" class="anton-form-tool w-100" cols="30" rows="5"></textarea>
                             </label>
                         </div>
 
@@ -101,35 +90,24 @@
             </div>
 
     <script>
-        $(document).ready(function(){
-            $('#save').click(function(){
-                try {
-                    let hd_fields = ['loc_from','loc_to','remarks'];
-                    if(anton.validateInputs(hd_fields)){
-                        let header = anton.Inputs(hd_fields);
-                        if(header['loc_to'] !== header['loc_from']){
-                            // get transactions
-                            let transactions = $('#tBody tr');
-                            let row_count = transactions.length
-                            if(row_count > 0 ){
-                                // todo make transactions rows
-                                kasa.success("Okay")
-                            } else {
-                                throw("Cannot Save Empty Transactions")
-                            }
-                        } else
-                        {
-                            throw("Cannot Transfer To Same Location")
-                        }
-
-                    } else {
-                        throw("Invalid Header")
-                    }
-                } catch (e){
-                    kasa.error(e)
+        function viewTransfer(pk){
+            // get transfer
+            let payload = {
+                module:'transfer',
+                data:{
+                    'pk':pk
                 }
+            }
 
-            });
+            let transfer = api.call('VIEW',payload,'/inventory/api/')
+            if(anton.IsRequest(transfer)){
+                kasa.success("Lets Go")
+            } else {
+                kasa.response(transfer)
+            }
+        }
+        $(document).ready(function(){
+            viewTransfer(`{{ last_transfer }}`)
         });
     </script>
 
