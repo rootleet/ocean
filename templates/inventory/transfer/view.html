@@ -31,6 +31,14 @@
         
             <div class="card-header">
 
+                <div class="w-100 d-flex flex-wrap">
+                    <div class="w-50"></div>
+                    <div class="w-50 d-flex flex-wrap justify-content-end">
+                        <button class="btn btn-success rounded_c"><i class="fa fa-plus"></i></button>
+                        <button class="btn btn-info rounded_c"><i class="fa fa-fast-backward"></i></button>
+                        <button class="btn btn-info rounded_c"><i class="fa fa-fast-forward"></i></button>
+                    </div>
+                </div>
 
             </div>
             <div class="panel-sub-heading">
@@ -38,21 +46,20 @@
                     <div class="w-100 row">
                         <div class="col-sm-3">
                             <label class="w-100">Entry NO <br>
-                                <input type="text" id="ent_num" disabled class="anton-form-tool">
+                                <input type="text" id="entry_no" disabled class="anton-form-tool">
                             </label>
                             <label class="w-100">From  <br>
-                                <input type="text" id="fr_loc" disabled class="anton-form-tool">
+                                <input type="text" id="from" disabled class="anton-form-tool">
                             </label>
                             <label class="w-100">TO  <br>
-                                <input type="text" id="to_loc" disabled class="anton-form-tool">
+                                <input type="text" id="to" disabled class="anton-form-tool">
                             </label>
                         </div>
 
                         <div class="col-sm-3">
-{#                            <label for="taxable" class="w-100">Taxable ?</label><select name="taxable" id="taxable" class="anton-select-tool">#}
-{#                                <option value="1">YES</option>#}
-{#                                <option value="0">NO</option>#}
-{#                            </select>#}
+                            <label class="w-100">Created By
+                                <input type="text" id="created_by" disabled class="anton-form-tool">
+                            </label>
                         </div>
 
                         <div class="col-sm-3">
@@ -61,7 +68,7 @@
                             </label>
                         </div>
 
-                        <input type="hidden" id="owner" value="{{ user.pk }}">
+
 
                     </div>
                 </div>
@@ -101,7 +108,33 @@
 
             let transfer = api.call('VIEW',payload,'/inventory/api/')
             if(anton.IsRequest(transfer)){
-                kasa.success("Lets Go")
+
+                let data = transfer['message'][0]
+                let header = data['header'];
+                anton.setValues(header)
+                let trans = data['transactions']
+                let rows = ""
+                for(let t = 0; t < trans.length; t++){
+                    let row = trans[t]
+                    let prod = row['product'];
+                    console.table(row)
+                    rows += `
+                        <tr>
+                            <td>${row['line']}</td>
+                            <td>${prod['barcode']}</td>
+                            <td>${prod['name']}</td>
+                            <td>${row['packing']}</td>
+                            <td>${row['pack_qty']}</td>
+                            <td>${row['tran_qty']}</td>
+                            <td>${row['un_cost']}</td>
+                            <td>${row['cost']}</td>
+                        </tr>
+                    `
+                }
+                console.log(rows)
+
+                $('#tBody').html(rows)
+                {#console.table(trans)#}
             } else {
                 kasa.response(transfer)
             }

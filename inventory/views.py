@@ -213,7 +213,7 @@ def transfer(request):
             'page': page,
             'nav': True,
             'locs':Locations.objects.all(),
-            'last_transfer': last_transfer,
+            'last_transfer': last_transfer.pk,
 
         }
 

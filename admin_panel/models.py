@@ -293,6 +293,14 @@ class ProductMaster(models.Model):
 
     # price_center = models.ForeignKey('inventory.PriceCenter', on_delete=models.CASCADE)
 
+    def obj(self):
+        return {
+            "barcode":self.barcode,
+            "name":self.descr,
+            "group":self.group.descr,
+            "supplier":self.supplier.company,
+            "sub_group":self.sub_group.descr
+        }
     def stock(self):
         if ProductTrans.objects.filter(product=self).aggregate(Sum('tran_qty'))['tran_qty__sum'] is None:
             return 0
@@ -438,7 +446,11 @@ class TransferHD(models.Model):
             "pk":self.pk,
             "from":self.loc_fr.descr,
             "to":self.loc_to.descr,
-            "owner":self.created_by.pk
+            "created_by":self.created_by.get_full_name(),
+            "entry_no":self.entry_no,
+            "next": TransferHD.objects.filter(pk__gt=self.pk).last().pk if TransferHD.objects.filter(pk__gt=self.pk).count() > 0 else 0,
+            "previous":TransferHD.objects.filter(pk__lt=self.pk).order_by('-pk').last().pk if TransferHD.objects.filter(pk__lt=self.pk).count() > 0 else 0,
+            "remarks":self.remarks
 
         }
 
@@ -461,6 +473,12 @@ class TransferTran(models.Model):
         return {
             "pk":self.pk,
             "product":self.product.obj(),
+            "line":self.line,
+            "packing":self.packing,
+            "pack_qty":self.pack_qty,
+            "tran_qty":self.tran_qty,
+            "un_cost":self.unit_cost,
+            "cost":self.cost
         }
 
 

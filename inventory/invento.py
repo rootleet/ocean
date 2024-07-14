@@ -83,16 +83,25 @@ def interface(request):
                     response = error_response
 
         elif method == 'VIEW':
-            # todo view transfer in window
+            # view transfer in window
             arr = []
             if module == 'transfer':
                 doc = data.get("doc")
                 pk = data.get("pk")
+
                 hds = TransferHD.objects.filter(pk=pk)
                 for hd in hds:
                     obj = {
                         "header":hd.obj()
                     }
+
+                    # get transactions
+                    trans = []
+                    transactions = TransferTran.objects.filter(parent=hd)
+                    for tran in transactions:
+                        trans.append(tran.obj())
+
+                    obj['transactions'] = trans
                     arr.append(obj)
 
                 success_response['message'] = arr

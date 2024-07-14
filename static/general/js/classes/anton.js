@@ -143,8 +143,12 @@ class Anton {
     }
 
 
+    setValues(header = {}) {
+        for (const headerKey in header) {
+            $(`#${headerKey}`).val(header[headerKey])
+        }
 
-
+    }
 }
 
 class LineCalculate {
