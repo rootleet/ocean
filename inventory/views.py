@@ -233,3 +233,20 @@ def transfer_new(request):
     }
 
     return render(request, 'inventory/transfer/new.html', context=context)
+
+
+def transfer_edit(request,entry_no):
+    if(TransferHD.objects.filter(entry_no=entry_no)).count() == 1:
+        page['title'] = 'Edit Transfers'
+
+        context = {
+            'page': page,
+            'nav': True,
+            'locs': Locations.objects.all(),
+            "transfer":TransferHD.objects.get(entry_no=entry_no)
+
+        }
+
+        return render(request, 'inventory/transfer/edit.html', context=context)
+    else:
+        return  redirect('transfer')

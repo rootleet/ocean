@@ -1,0 +1,195 @@
+{% extends 'dashboard/products/prod_base.html' %}
+{% load static %}
+
+{% block body %}
+    <input type="hidden" id="owner" value="{{ request.user.pk }}">
+   
+
+        <div class="modal" id="addItem" data-backdrop="false">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+
+                        <input id="adj_item_search" autocomplete="off" placeholder="query" class="form-control" type="text">
+
+                    </div>
+
+                    <div class="modal-body" style="height: 50vh">
+                        <div id="searchRes" class="h-100 w-100">
+
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button data-dismiss="modal" class="btn btn-sm btn-warning">CLOSE</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        
+            <div class="card-header">
+
+                <button id="save" title="Save Transfer" class="btn btn-success btn-sm">SAVE</button>
+                <button type="button" onclick="productMaster.productSearcScreen('PO')" class="btn btn-info btn-sm">INSERT</button>
+            </div>
+            <div class="panel-sub-heading">
+                <div class="w-100 container-fluid">
+                    <div class="w-100 row">
+                        <div class="col-sm-3">
+                            <label class="w-100">Entry NO <br>
+                                <input type="text" id="entry_no" value="{{ transfer.entry_no }}" disabled class="anton-form-tool">
+                            </label>
+                            <label class="w-100">From <br>
+                                <select name="loc_from" id="loc_from" class="anton-select-tool w-100">
+                                    <option  value="{{ transfer.loc_fr.pk }}" selected>{{ transfer.loc_fr.code }} - {{ transfer.loc_fr.descr }}</option>
+                                    {% for loc in locs %}
+                                        <option value="{{ loc.pk }}">{{ loc.code }} - {{ loc.descr }}</option>
+                                    {% endfor %}
+                                </select>
+                            </label>
+                            <label class="w-100">To <br>
+                                <select name="loc_to" id="loc_to" class="anton-select-tool w-100">
+                                    <option  value="{{ transfer.loc_to.pk }}" selected>{{ transfer.loc_to.code }} - {{ transfer.loc_to.descr }}</option>
+                                    {% for loc in locs %}
+                                        <option value="{{ loc.pk }}">{{ loc.code }} - {{ loc.descr }}</option>
+                                    {% endfor %}
+                                </select>
+                            </label>
+                        </div>
+
+                        <div class="col-sm-3">
+{#                            <label for="taxable" class="w-100">Taxable ?</label><select name="taxable" id="taxable" class="anton-select-tool">#}
+{#                                <option value="1">YES</option>#}
+{#                                <option value="0">NO</option>#}
+{#                            </select>#}
+                        </div>
+
+                        <div class="col-sm-3">
+                            <label class="w-100">Remark
+                                <textarea id="remarks" class="anton-form-tool w-100" cols="30" rows="5">{{ transfer.remarks }}</textarea>
+                            </label>
+                        </div>
+
+                        <input type="hidden" id="owner" value="{{ user.pk }}">
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-body p-2" style="overflow: hidden;">
+                <div class="w-100 h-100" style="overflow: auto">
+                    <table class="table table-bordered table-hover table-striped table-sm">
+                        <thead>
+                            <tr>
+                                <th>LINE</th>
+                                <th>BARCODE</th>
+                                <th>DESCRIPTION</th>
+                                <th>PACK</th>
+                                <th>PACK QTY</th>
+                                <th>TRAN QTY</th>
+                                <th>UNIT COST</th>
+                                <th>TOTAL COST</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tBody">
+                            {% for tran in transfer.trans %}
+                                <tr>
+                                    <td>{{ tran.line }}</td>
+                                    <td>{{ tran.product.barcode }}</td>
+                                    <td>{{ tran.product.descr }}</td>
+                                    <td>{{ tran.packing }}</td>
+                                    <td>{{ tran.pack_qty }}</td>
+                                    <td><input style="width: 100px" type="number" value="{{ tran.tran_qty }}"></td>
+                                    <td><input style="width: 100px" type="number" value="{{ tran.unit_cost }}"></td>
+                                    <td><input readonly style="width: 100px" type="number" value="{{ tran.cost }}"></td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+    <script>
+        $(document).ready(function(){
+            $('#savex').click(function(){
+                try {
+                    let hd_fields = ['loc_from','loc_to','remarks','mypk'];
+                    if(anton.validateInputs(hd_fields)){
+                        let header = anton.Inputs(hd_fields);
+                        header['mypk'] = $('#mypk').val()
+                        if(header['loc_to'] !== header['loc_from']){
+                            // get transactions
+                            let trans = []
+                            let transactions = $('#tBody tr');
+                            let row_count = transactions.length
+                            if(row_count > 0 ){
+                                // todo make transactions rows
+                                for (let i = 0; i < row_count; i++) {
+                                    let line = i + 1;
+                                    let barcode = $(`#barcode_${line}`).text()
+                                    let packing = $(`#packing_${line} option:selected`).text()
+                                    let pack_qty = $(`#pack_qty_${line}`).val()
+                                    let tran_qty = $(`#tran_qty_${line}`).val()
+                                    let unit_cost = $(`#unit_cost_${line}`).val()
+                                    let total_cost = $(`#total_cost_${line}`).val()
+
+
+                                    let ids = [`packing_${line}`,`pack_qty_${line}`,`tran_qty_${line}`,`unit_cost_${line}`,`total_cost_${line}`]
+                                    if(anton.validateInputs(ids)){
+                                        let row = {
+                                            barcode:barcode,
+                                            packing:packing,
+                                            pack_qty:pack_qty,
+                                            tran_qty:tran_qty,
+                                            unit_cost:unit_cost,
+                                            total_cost:total_cost
+                                        }
+
+                                        trans.push(row)
+                                    } else {
+                                    throw(`Invalid Line ${line}`)
+
+                                    }
+
+
+                                }
+                                let payload = {
+                                    module:'transfer',
+                                    data:{
+                                        header:header,
+                                        transactions:trans
+
+                                    }
+                                }
+
+                                console.table(payload)
+
+                                let save_tr = api.call('PUT',payload,'/inventory/api/')
+                                kasa.response(save_tr)
+                                if(anton.IsRequest(save_tr)){
+                                    location.href = "/inventory/transfer/"
+                                }
+                            } else {
+                                throw("Cannot Save Empty Transactions")
+                            }
+                        } else
+                        {
+                            throw("Cannot Transfer To Same Location")
+                        }
+
+                    } else {
+                        throw("Invalid Header")
+                    }
+                } catch (e){
+                    kasa.error(e)
+                }
+
+            });
+        });
+    </script>
+
+
+{% endblock %}
+

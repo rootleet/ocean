@@ -34,7 +34,8 @@ urlpatterns = [
     path('products/new/', views.new_products, name='new-product'),
 
     path('transfer/',views.transfer,name='transfer'),
-    path('transfer/new/',views.transfer_new,name='new_transfer')
+    path('transfer/new/',views.transfer_new,name='new_transfer'),
+    path('transfer/edit/<entry_no>/',views.transfer_edit,name='edit_transfer')
 
 ]
 

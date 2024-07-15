@@ -432,11 +432,12 @@ class TransferHD(models.Model):
     edited_on = models.DateTimeField(auto_now=True)
     status = models.IntegerField(default=0)
 
+
     def to(self):
         return Locations.objects.get(pk=self.loc_to)
 
     def trans(self):
-        return TransferTran.objects.get(parent=self.pk)
+        return TransferTran.objects.filter(parent=self.pk)
 
     def tran_count(self):
         return TransferTran.objects.filter(parent=self.pk).count()

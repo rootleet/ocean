@@ -34,10 +34,13 @@
                 <div class="w-100 d-flex flex-wrap">
                     <div class="w-50"></div>
                     <div class="w-50 d-flex flex-wrap justify-content-end">
-                        <button class="btn btn-success rounded-0 mx-1"><i class="fa fa-plus"></i></button>
-                        <button class="btn btn-warning rounded-0 mx-1"><i class="fa fa-edit"></i></button>
-                        <button class="btn btn-info rounded-0 mx-1"><i class="fa fa-fast-backward"></i></button>
-                        <button class="btn btn-info rounded-0 mx-1"><i class="fa fa-fast-forward"></i></button>
+                        <button id="new" title="New Transfer" class="btn btn-success rounded-0 mx-1"><i class="fa fa-plus"></i></button>
+                        <button id="edit" title="Edit Transfer" class="btn btn-warning rounded-0 mx-1"><i class="fa fa-edit"></i></button>
+                        <button id="delete" title="Delete Transfer" class="btn btn-danger rounded-0 mx-1"><i class="fa fa-trash"></i></button>
+                        <button id="previous" title="Previous" class="btn btn-info rounded-0 mx-1"><i class="fa fa-fast-backward"></i></button>
+                        <button id="next" title="Next Document" class="btn btn-info rounded-0 mx-1"><i class="fa fa-fast-forward"></i></button>
+                        <button id="print" title="Print" class="btn btn-dark rounded-0 mx-1"><i class="fa fa-print"></i></button>
+                        <button id="approve" title="Approve" class="btn btn-success rounded-0 mx-1"><i class="fa fa-check-square"></i></button>
                     </div>
                 </div>
 
@@ -142,6 +145,46 @@
         }
         $(document).ready(function(){
             viewTransfer(`{{ last_transfer }}`)
+
+            //new
+            $('#new').click(function(){
+                location.href='/inventory/transfer/new/'
+            })
+
+            // edit
+            $('#edit').click(function(){
+                location.href = `/inventory/transfer/edit/${$('#entry_no').val()}/`
+            })
+
+            // delete
+            $('#delete').click(function(){
+                let payload = {}
+                kasa.success("Deleted")
+            })
+
+            // previous
+            $('#previous').click(function(){
+                let payload = {}
+                kasa.success("previous")
+            })
+
+            // next
+            $('#next').click(function(){
+                let payload = {}
+                kasa.success("next")
+            })
+
+            // print
+            $('#print').click(function(){
+                let payload = {}
+                kasa.success("print")
+            })
+
+            // approve
+            $('#approve').click(function(){
+                let payload = {}
+                kasa.success("approve")
+            })
         });
     </script>
 
