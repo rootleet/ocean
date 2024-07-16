@@ -40,6 +40,7 @@
                         <button id="previous" title="Previous" class="btn btn-info rounded-0 mx-1"><i class="fa fa-fast-backward"></i></button>
                         <button id="next" title="Next Document" class="btn btn-info rounded-0 mx-1"><i class="fa fa-fast-forward"></i></button>
                         <button id="print" title="Print" class="btn btn-dark rounded-0 mx-1"><i class="fa fa-print"></i></button>
+                        <button id="send" title="Send" class="btn btn-primary rounded-0 mx-1"><i class="fa fa-upload"></i></button>
                         <button id="approve" title="Approve" class="btn btn-success rounded-0 mx-1"><i class="fa fa-check-square"></i></button>
                     </div>
                 </div>
@@ -64,7 +65,14 @@
                             <label class="w-100">Created By
                                 <input type="text" id="created_by" disabled class="anton-form-tool">
                             </label>
+                            <label class="w-100">Total Quantity
+                                <input type="text" id="tran_pieces" disabled class="anton-form-tool">
+                            </label>
+                            <label class="w-100">Total Cost
+                                <input type="text" id="total_cost" disabled class="anton-form-tool">
+                            </label>
                         </div>
+
 
                         <div class="col-sm-3">
                             <label class="w-100">Remark
@@ -102,6 +110,7 @@
 
     <script>
         function viewTransfer(pk){
+            loader.show()
             // get transfer
             let payload = {
                 module:'transfer',
@@ -115,13 +124,15 @@
 
                 let data = transfer['message'][0]
                 let header = data['header'];
+
+                anton.docNav(header)
                 anton.setValues(header)
                 let trans = data['transactions']
                 let rows = ""
                 for(let t = 0; t < trans.length; t++){
                     let row = trans[t]
                     let prod = row['product'];
-                    console.table(row)
+
                     rows += `
                         <tr>
                             <td>${row['line']}</td>
@@ -135,14 +146,19 @@
                         </tr>
                     `
                 }
-                console.log(rows)
+
 
                 $('#tBody').html(rows)
                 {#console.table(trans)#}
             } else {
                 kasa.response(transfer)
             }
+
+            loader.hide()
         }
+
+
+
         $(document).ready(function(){
             viewTransfer(`{{ last_transfer }}`)
 
@@ -164,20 +180,23 @@
 
             // previous
             $('#previous').click(function(){
-                let payload = {}
-                kasa.success("previous")
+
+                let key = $('#previous').val();
+                viewTransfer(key)
+
             })
 
             // next
             $('#next').click(function(){
-                let payload = {}
-                kasa.success("next")
+                let key = $('#next').val();
+                viewTransfer(key)
+
             })
 
             // print
             $('#print').click(function(){
                 let payload = {}
-                kasa.success("print")
+                reports.printTransfer($('#entry_no').val())
             })
 
             // approve

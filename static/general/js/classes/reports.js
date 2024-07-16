@@ -450,6 +450,30 @@ class Reports {
     }
 
 
+    printTransfer(entry_no) {
+        let sender = prompt("Deliver Name")
+        let payload = {
+            module:"none",
+            data:{
+                document:'TR',
+                doc:"print",
+                key:entry_no,
+                output:null,
+                sender:sender
+            }
+        };
+
+        console.table(payload)
+
+        let pr = api.call("VIEW",payload,'/reports/api/');
+        if(anton.IsRequest(pr)){
+            anton.printPDF(`/${pr['message']}`)
+        } else {
+            kasa.response(pr)
+        }
+
+
+    }
 }
 
 const reports = new Reports()

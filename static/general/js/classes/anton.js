@@ -149,6 +149,33 @@ class Anton {
         }
 
     }
+
+    docNav(header = {}) {
+        let next = header['next'];
+        let previous = header['previous'];
+
+
+        if(next === 0 || next === undefined){
+
+            $('#next').prop('disabled',true)
+            $('#next').val(undefined)
+        } else {
+
+            $('#next').prop('disabled',false)
+            $('#next').val(next)
+        }
+
+
+        if(previous === 0 || previous === undefined){
+
+            $('#previous').prop('disabled',true)
+            $('#previous').val(undefined)
+        } else {
+
+            $('#previous').prop('disabled',false)
+            $('#previous').val(next)
+        }
+    }
 }
 
 class LineCalculate {

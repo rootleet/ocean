@@ -15,6 +15,17 @@ from datetime import datetime
 
 # Create your models here.
 
+def format_currency(amount):
+    import locale
+
+    # Set locale to the user's default setting (for example, 'en_US' for US)
+    locale.setlocale(locale.LC_ALL, '')
+    # Strip the currency symbol and return the formatted string
+    try:
+        return locale.currency(amount, grouping=True).strip(locale.localeconv()['currency_symbol']).strip()
+    except Exception as e:
+        return amount
+
 class LoggedIssue(models.Model):
     issue = models.CharField(unique=True, max_length=100)
     created_on = models.DateTimeField(auto_now_add=True)
@@ -306,6 +317,8 @@ class ProductMaster(models.Model):
             return 0
         else:
             return ProductTrans.objects.filter(product=self).aggregate(Sum('tran_qty'))['tran_qty__sum']
+    def packing(self):
+        return ProductPacking.objects.filter(product=self)
 
 
 class PackingMaster(models.Model):
@@ -328,6 +341,8 @@ class ProductPacking(models.Model):
     created_on = models.DateTimeField(auto_now_add=True)
     edited_on = models.DateTimeField(auto_now=True)
     status = models.IntegerField(default=1)
+
+
 
     def desc(self):
         return F"{self.pack_qty} IN 1{self.packing_un.descr}"
@@ -432,6 +447,12 @@ class TransferHD(models.Model):
     edited_on = models.DateTimeField(auto_now=True)
     status = models.IntegerField(default=0)
 
+    def total_cost(self):
+        return TransferTran.objects.filter(parent=self.pk).aggregate(Sum('cost'))['cost__sum']
+
+    def tran_pieces(self):
+        return TransferTran.objects.filter(parent=self.pk).aggregate(Sum('tran_qty'))['tran_qty__sum']
+
 
     def to(self):
         return Locations.objects.get(pk=self.loc_to)
@@ -451,7 +472,9 @@ class TransferHD(models.Model):
             "entry_no":self.entry_no,
             "next": TransferHD.objects.filter(pk__gt=self.pk).last().pk if TransferHD.objects.filter(pk__gt=self.pk).count() > 0 else 0,
             "previous":TransferHD.objects.filter(pk__lt=self.pk).order_by('-pk').last().pk if TransferHD.objects.filter(pk__lt=self.pk).count() > 0 else 0,
-            "remarks":self.remarks
+            "remarks":self.remarks,
+            "total_cost":format_currency(self.total_cost()),
+            "tran_pieces":format_currency(self.tran_pieces()),
 
         }
 

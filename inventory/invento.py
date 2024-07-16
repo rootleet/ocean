@@ -108,6 +108,54 @@ def interface(request):
                 response = success_response
                 print(responses)
 
+        elif method == 'PATCH':
+            if module == 'transfer':
+                header = data.get("header")
+
+                transactions = data.get("transactions")
+                mypk = header.get('mypk')
+                owner = User.objects.get(pk=mypk)
+
+                l_from = header.get('loc_from')
+                l_to = header.get('loc_to')
+
+                loc_from = Locations.objects.get(pk=l_from)
+                loc_to = Locations.objects.get(pk=l_to)
+                remarks = header.get("remarks")
+
+                entry_no = header.get('entry_no')
+
+                try:
+
+                    thd = TransferHD.objects.get(entry_no=entry_no)
+                    thd.remarks = remarks
+                    thd.loc_fr = loc_from
+                    thd.loc_to = loc_to
+                    line = 1
+                    # delete transactions
+                    TransferTran.objects.filter(parent=thd).delete()
+                    for tr in transactions:
+                        print(tr)
+                        TransferTran(
+                            parent=thd,
+                            line = line,
+                            product = ProductMaster.objects.get(barcode=tr['barcode']),
+                            packing = tr['packing'],
+                            pack_qty = tr['pack_qty'],
+                            tran_qty = tr['tran_qty'],
+                            unit_cost = tr['unit_cost'],
+                            cost = tr['total_cost'],
+                        ).save()
+                        line += 1
+                    thd.save()
+                    success_response['message'] = f"Transfer Saved {entry_no}"
+                    response = success_response
+                except Exception as e:
+                    # TransferHD.objects.filter(entry_no=entry_no).delete()
+                    error_response['message'] = f"Transfer Failed: {e}"
+                    response = error_response
+
+
         else:
             error_response['message'] = f"Method Not Allowed: {method}"
             response = error_response

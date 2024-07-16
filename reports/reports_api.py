@@ -7,7 +7,7 @@ from django.views.decorators.csrf import csrf_exempt
 from fpdf import FPDF
 
 from admin_panel.anton import format_currency
-from admin_panel.models import Emails, MailQueues, MailAttachments
+from admin_panel.models import Emails, MailQueues, MailAttachments, TransferHD, TransferTran
 from cmms.models import ProformaInvoice
 from inventory.models import GrnHd
 from meeting.models import MeetingHD
@@ -392,8 +392,100 @@ def interface(request):
                     pdf.output(file_name)
                     success_response['message'] = file_name
                     response = success_response
+
                 else:
                     raise Exception(f"Cannot find document {entry_key}")
+
+            elif document == 'TR':
+
+                entry_key = data.get('key')
+                sender = data.get("sender")
+                hd = TransferHD.objects.get(entry_no=entry_key)
+                trans = TransferTran.objects.filter(parent=hd)
+
+                pdf = FPDF()
+                pdf.add_page('P')
+                pdf.set_margins(4,4,4)
+                # Header
+                pdf.set_font('Arial', 'B', 10)
+                pdf.cell(190, 10, 'TRANSFER NOTE', 0, 1, 'C')
+                pdf.set_font('Arial', 'B', 8)
+                pdf.cell(20, 5, "Entry No:  ", 0, 0)
+                pdf.set_font('Arial', '', 8)
+                pdf.cell(100, 5, f"{hd.entry_no}", 0, 1)
+
+                # Tax Amount
+                pdf.set_font('Arial', 'B', 8)
+                pdf.cell(20, 5, "Entry Date :  ", 0, 0)
+                pdf.set_font('Arial', '', 8)
+                pdf.cell(100, 5, f"{hd.created_on}", 0, 1)
+
+                # Tax Amount
+                pdf.set_font('Arial', 'B', 8)
+                pdf.cell(20, 5, "From :  ", 0, 0)
+                pdf.set_font('Arial', '', 8)
+                pdf.cell(100, 5, f"{hd.loc_fr.descr}", 0, 1)
+
+                # location
+                pdf.set_font('Arial', 'B', 8)
+                pdf.cell(20, 5, "To :  ", 0, 0)
+                pdf.set_font('Arial', '', 8)
+                pdf.cell(100, 5, f"{hd.loc_to.descr}", 0, 1)
+
+                pdf.set_font('Arial', 'B', 8)
+                pdf.cell(20, 5, "Cost :  ", 0, 0)
+                pdf.set_font('Arial', '', 8)
+                pdf.cell(100, 5, f"{hd.total_cost()}", 0, 1)
+
+                # remarks
+                pdf.set_font('Arial', 'B', 8)
+                pdf.cell(20, 5, "REMARKS :  ", 0, 1)
+                pdf.set_font('Arial', '', 8)
+                pdf.multi_cell(0,5,f"{hd.remarks}",0,"L")
+                pdf.ln(10)
+
+
+                # make transactions
+                pdf.set_font('Arial', 'B', 8)
+                pdf.cell(15, 5, "LINE", 1, 0)
+                pdf.cell(25, 5, "BARCODE", 1, 0)
+                pdf.cell(45, 5, "NAME", 1, 0)
+                pdf.cell(15, 5, "PACK", 1, 0)
+                pdf.cell(25, 5, "PACK QTY", 1, 0)
+                pdf.cell(25, 5, "TRAN QTY", 1, 0)
+                pdf.cell(25, 5, "UNIT COST", 1, 0)
+                pdf.cell(25, 5, "TOTAL COST", 1, 1)
+                pdf.set_font('Arial', '', 8)
+
+                for tr in trans:
+                    pdf.cell(15, 5, f"{tr.line}", 1, 0)
+                    pdf.cell(25, 5, f"{tr.product.barcode}", 1, 0)
+                    pdf.cell(45, 5, f"{tr.product.descr[:30]}", 1, 0)
+                    pdf.cell(15, 5, f"{tr.packing}", 1, 0)
+                    pdf.cell(25, 5, f"{format_currency(tr.pack_qty)}", 1, 0)
+                    pdf.cell(25, 5, f"{format_currency(tr.tran_qty)}", 1, 0)
+                    pdf.cell(25, 5, f"{format_currency(tr.unit_cost)}", 1, 0)
+                    pdf.cell(25, 5, f"{format_currency(tr.cost)}", 1, 1)
+
+                pdf.ln(10)
+                pdf.cell(50, 10, f"{hd.created_by.username}", 1, 0, 'C')
+                pdf.cell(18, 10, "")
+                pdf.cell(50, 10, f"{sender}", 1, 0, 'C')
+                pdf.cell(18, 10, "")
+                pdf.cell(50, 10, f"", 1, 1, 'C')
+
+                pdf.cell(50, 10, f"Created By", 0, 0, 'C')
+                pdf.cell(18, 10, "")
+                pdf.cell(50, 10, f"Delivered By", 0, 0, 'C')
+                pdf.cell(18, 10, "")
+                pdf.cell(50, 10, f"Received By", 0, 1, 'C')
+
+
+                file_name = f"static/general/tmp/transfer_{hd.entry_no}.pdf"
+                pdf.output(file_name)
+                success_response['message'] = file_name
+                response = success_response
+
             else:
                 raise Exception("Unknown Printing Document Type")
 

@@ -95,15 +95,24 @@
                         </thead>
                         <tbody id="tBody">
                             {% for tran in transfer.trans %}
-                                <tr>
-                                    <td>{{ tran.line }}</td>
-                                    <td>{{ tran.product.barcode }}</td>
-                                    <td>{{ tran.product.descr }}</td>
-                                    <td>{{ tran.packing }}</td>
-                                    <td>{{ tran.pack_qty }}</td>
-                                    <td><input style="width: 100px" type="number" value="{{ tran.tran_qty }}"></td>
-                                    <td><input style="width: 100px" type="number" value="{{ tran.unit_cost }}"></td>
-                                    <td><input readonly style="width: 100px" type="number" value="{{ tran.cost }}"></td>
+                                <tr id="row_{{ tran.line }}">
+                                    <td id="line_{{ tran.line }}">{{ tran.line }}</td>
+                                    <td id="barcode_{{ tran.line }}">{{ tran.product.barcode }}</td>
+                                    <td id="description_{{ tran.line }}">{{ tran.product.descr }}</td>
+                                    <td >
+                                        <select onchange="productMaster.tranCalculate({{ tran.line }})" id="packing_{{ tran.line }}">
+                                            <option value="a">{{ tran.packing }}</option>
+                                            {% for pack in tran.product.packing %}
+                                                {% if pack.packing_un.code != tran.packing  %}
+                                                <option value="{{ pack.pack_qty }}">{{ pack.packing_un.code }}</option>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </select>
+                                    </td>
+                                    <td><input onchange="productMaster.tranCalculate({{ tran.line }})" id="pack_qty_{{ tran.line }}" style="width: 100px" disabled type="number" value="{{ tran.pack_qty }}"></td>
+                                    <td><input onchange="productMaster.tranCalculate({{ tran.line }})" style="width: 100px" id="tran_qty_{{ tran.line }}" type="number" value="{{ tran.tran_qty }}"></td>
+                                    <td><input onchange="productMaster.tranCalculate({{ tran.line }})" style="width: 100px" type="number" id="unit_cost_{{ tran.line }}" value="{{ tran.unit_cost }}"></td>
+                                    <td><input onchange="productMaster.tranCalculate({{ tran.line }})" disabled style="width: 100px" id="total_cost_{{ tran.line }}" type="number" value="{{ tran.cost }}"></td>
                                 </tr>
                             {% endfor %}
                         </tbody>
@@ -113,9 +122,9 @@
 
     <script>
         $(document).ready(function(){
-            $('#savex').click(function(){
+            $('#save').click(function(){
                 try {
-                    let hd_fields = ['loc_from','loc_to','remarks','mypk'];
+                    let hd_fields = ['loc_from','loc_to','remarks','mypk','entry_no'];
                     if(anton.validateInputs(hd_fields)){
                         let header = anton.Inputs(hd_fields);
                         header['mypk'] = $('#mypk').val()
@@ -166,7 +175,7 @@
 
                                 console.table(payload)
 
-                                let save_tr = api.call('PUT',payload,'/inventory/api/')
+                                let save_tr = api.call('PATCH',payload,'/inventory/api/')
                                 kasa.response(save_tr)
                                 if(anton.IsRequest(save_tr)){
                                     location.href = "/inventory/transfer/"
