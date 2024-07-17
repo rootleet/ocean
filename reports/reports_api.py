@@ -414,6 +414,11 @@ def interface(request):
                 pdf.set_font('Arial', '', 8)
                 pdf.cell(100, 5, f"{hd.entry_no}", 0, 1)
 
+                pdf.set_font('Arial', 'B', 8)
+                pdf.cell(20, 5, "Created By :  ", 0, 0)
+                pdf.set_font('Arial', '', 8)
+                pdf.cell(100, 5, f"{hd.created_by.username}", 0, 1)
+
                 # Tax Amount
                 pdf.set_font('Arial', 'B', 8)
                 pdf.cell(20, 5, "Entry Date :  ", 0, 0)
@@ -468,17 +473,17 @@ def interface(request):
                     pdf.cell(25, 5, f"{format_currency(tr.cost)}", 1, 1)
 
                 pdf.ln(10)
-                pdf.cell(50, 10, f"{hd.created_by.username}", 1, 0, 'C')
+                pdf.cell(55, 10, f"{hd.sent_by.username if hd.is_sent else 'NOT SENT'}", 1, 0, 'C')
                 pdf.cell(18, 10, "")
-                pdf.cell(50, 10, f"{sender}", 1, 0, 'C')
+                pdf.cell(55, 10, f"{hd.delivery_by if hd.is_sent else 'NOT SENT'}", 1, 0, 'C')
                 pdf.cell(18, 10, "")
-                pdf.cell(50, 10, f"", 1, 1, 'C')
+                pdf.cell(55, 10, f"{hd.reccieved_by.username if hd.is_posted else 'NOT SENT'}", 1, 1, 'C')
 
-                pdf.cell(50, 10, f"Created By", 0, 0, 'C')
+                pdf.cell(55, 10, f"Sent By", 0, 0, 'C')
                 pdf.cell(18, 10, "")
-                pdf.cell(50, 10, f"Delivered By", 0, 0, 'C')
+                pdf.cell(55, 10, f"Delivered By", 0, 0, 'C')
                 pdf.cell(18, 10, "")
-                pdf.cell(50, 10, f"Received By", 0, 1, 'C')
+                pdf.cell(55, 10, f"Received By", 0, 1, 'C')
 
 
                 file_name = f"static/general/tmp/transfer_{hd.entry_no}.pdf"

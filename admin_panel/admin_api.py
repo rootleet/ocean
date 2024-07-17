@@ -58,6 +58,20 @@ def index(request):
                     GeoCitySub(name=name, owner=User.objects.get(pk=us_pk), city=GeoCity.objects.get(pk=city)).save()
                     response = success_response
 
+            elif module == 'set_loc_manager':
+                mana_pk = data.get('manager')
+                set_by_pk = data.get('mypk')
+                loc_pk = data.get('loc_pk')
+
+                manager = UserAddOns.objects.get(pk=mana_pk)
+                set_by_pk = User.objects.get(pk=set_by_pk)
+                location = Locations.objects.get(pk=loc_pk)
+
+                location.manager = manager
+                location.save()
+
+                response= success_response
+
             elif module == 'tools':
                 task = data.get('task')
                 if task == 'set_message':
@@ -498,6 +512,23 @@ def index(request):
                         'pk': user.pk,
                         'username': user.username,
                         'fullname': f"{user.first_name} {user.last_name}"
+                    }
+                    us.append(obj)
+
+                success_response['message'] = us
+                response = success_response
+
+            elif module == 'users_with_adon':
+                all_users = UserAddOns.objects.all()
+                us = []
+                for usx in all_users:
+                    obj = {
+                        'pk': usx.pk,
+                        'username': usx.user.username,
+                        'fullname': f"{usx.user.first_name} {usx.user.last_name}",
+                        'phone':usx.phone,
+                        'email':usx.user.email,
+                        'department':usx.dept()
                     }
                     us.append(obj)
 

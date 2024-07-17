@@ -155,6 +155,20 @@ def interface(request):
                     error_response['message'] = f"Transfer Failed: {e}"
                     response = error_response
 
+            elif module == 'send_transfer':
+                entry_no = data.get('entry_no')
+                my_pk = data.get('mypk')
+                delivery_by = data.get('delivery_by')
+
+                print(data)
+
+                transfer = TransferHD.objects.get(entry_no = entry_no)
+                transfer.is_sent = True
+                transfer.sent_by = User.objects.get(pk=my_pk)
+                transfer.delivery_by = delivery_by
+                transfer.save()
+
+                response = success_response
 
         else:
             error_response['message'] = f"Method Not Allowed: {method}"

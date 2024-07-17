@@ -451,7 +451,7 @@ class Reports {
 
 
     printTransfer(entry_no) {
-        let sender = prompt("Deliver Name")
+
         let payload = {
             module:"none",
             data:{
@@ -459,7 +459,7 @@ class Reports {
                 doc:"print",
                 key:entry_no,
                 output:null,
-                sender:sender
+
             }
         };
 

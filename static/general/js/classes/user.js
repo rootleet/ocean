@@ -17,9 +17,42 @@ class User {
 
     }
 
-    allUsers(){
+    changeLocationManager(loc_pk) {
+
+        try {
+             // get users
+            let users = this.allUsers(true);
+
+            if(anton.IsRequest(users)){
+                let ops = `<option value="">SELECT MANAGER</option>`
+                let msg = users.message
+                for (let i = 0; i < msg.length; i++) {
+                    let us = msg[i]
+                    ops += `<option value="${us['pk']}">${us['fullname']}</option>`
+                }
+                let form = ``
+                form += fom.select('manager',ops,'',true)
+                form += `<input id="loc_pk" type="hidden" value="${loc_pk}">`
+                amodal.setTitleText(`Set Location Manager`)
+                amodal.setBodyHtml(form)
+                amodal.setFooterHtml(`<button onclick="user.setLocationManager()" class="btn btn-success w-100">SET</button>`)
+                amodal.show()
+            } else {
+                throw(`Error getting users ${users.message}`)
+            }
+        } catch (e) {
+            kasa.error(e)
+        }
+
+    }
+
+    allUsers(users_with_adon=false){
+        let m = 'users';
+        if(users_with_adon){
+            m = 'users_with_adon'
+        }
         let payload = {
-            module:'users'
+            module:m
         };
 
         return api.call('VIEW', payload, '/adapi/');
@@ -98,7 +131,7 @@ class User {
     }
 
     saveApproval(){
-        let fields = ['doc_type','user_pk'];
+        let fields = ['doc_type','user_pk','loc_pk'];
         if(anton.validateInputs(fields)){
             let payload = {
                 module:'doc_app_auth',
@@ -110,6 +143,35 @@ class User {
             kasa.error("Invalid Form Field")
         }
     }
+
+    setLocationManager() {
+        let fields = ['manager','mypk','loc_pk'];
+        try {
+            if(anton.validateInputs(fields)){
+
+                let payload = {
+                    module:'set_loc_manager',
+                    data:anton.Inputs(fields)
+                }
+
+                let swi = api.call('PUT',payload,'/adapi/')
+                console.table(swi)
+                if(anton.IsRequest(swi)){
+                    kasa.confirm(swi.message,1,'here')
+                } else {
+                    throw (`${swi.message}`)
+                }
+
+                console.table(payload)
+                amodal.hide()
+            } else {
+                throw ("Invalid Forms")
+            }
+        } catch (e){
+            kasa.error(e)
+        }
+    }
 }
 
 const user = new User()
+

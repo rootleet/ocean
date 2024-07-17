@@ -530,6 +530,8 @@ class Retail {
         }
         return api.call('VIEW',payload,this.interface);
     }
+
+
 }
 
 const retail = new Retail();

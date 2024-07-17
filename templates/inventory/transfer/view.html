@@ -156,7 +156,27 @@
 
             loader.hide()
         }
+        function postTransfer() {
+            let verif_field = ['recieved_by','rec_remark','entry_no','mypk']
+            if(anton.validateInputs(verif_field)){
+                // make payload
+                let payload = {
+                    module:'post_transfer',
+                    data:anton.Inputs(verif_field)
+                };
 
+                let post = api.call('PATCH',payload,'/inventory/api/')
+
+                if(anton.IsRequest(post)){
+                    // send evidence
+                    $('#transfer_evidence').submit()
+                } else {
+                    kasa.response(post)
+                }
+            } else {
+                kasa.error("Invalid Form Fields")
+            }
+        }
 
 
         $(document).ready(function(){
@@ -202,8 +222,88 @@
             // approve
             $('#approve').click(function(){
                 let payload = {}
-                kasa.success("approve")
+                let form = "";
+                let uss = user.allUsers(true)
+                if(anton.IsRequest(uss)){
+                    let ussr = uss.message
+                    let reopts = `<option value="">Select Recipient</option>`
+                    for (let i = 0; i < ussr.length; i++) {
+                        let re = ussr[i]
+                        reopts += `<option value="${re['pk']}">${re['fullname']}</option>`
+                    }
+
+                    form += fom.select('recieved_by',reopts,'',true)
+                    form += fom.textarea('rec_remark',3,true)
+                    form += fom.text('entry','',true)
+
+                    let x_form = `
+                        <form id='transfer_evidence' method='post' enctype="multipart/form-data" action='/inventory/transfer/save-evidence/'>
+                            <input type="file" accept="image/*" name="evidence" id="evidence" class="form-control rounded-0 w-100 mb-2">
+
+                            ${form}
+
+                            </form>
+                    `
+
+                    amodal.setTitleText("POST ENTRY")
+                    amodal.setBodyHtml(x_form)
+                    amodal.setFooterHtml(`<button type="button" onclick="postTransfer()" class="btn btn-success">COMFIRM</button>`)
+                    amodal.show()
+
+                    $('#entry').val($('#entry_no').val())
+                    $('#entry').prop('disabled',true)
+
+                }
+
             })
+
+            //send
+            $('#send').click(function(){
+
+
+                try {
+                    if(confirm(`Are you sure?`)){
+                        let delivery_by = prompt("Delivered By")
+                        let ids = ['entry_no','mypk'];
+
+                        if(anton.validateInputs(ids)){
+
+                            let payload = {
+                                module:'send_transfer',
+                                data:{
+                                    entry_no:$('#entry_no').val(),
+                                    mypk:$('#mypk').val(),
+                                    delivery_by:delivery_by
+                                }
+                            }
+                            console.table("FUNCTION")
+
+
+                            let send = api.call('PATCH',payload,'/inventory/api/');
+                            console.table(send)
+                            if(anton.IsRequest(send)){
+                                // print
+
+                                reports.printTransfer($('#entry_no').val())
+
+                            } else {
+                                console.error("here")
+                                throw (`Document Not Sent ${send.message}`)
+                        }
+
+                        } else {
+                            console.error("here2")
+                            throw ("Invalid Form")
+                        }
+                    } else {
+                        console.error("here2")
+                        throw (`Sending Canceled`)
+                    }
+
+                } catch (e) {
+                    kasa.error(e)
+                }
+            });
         });
     </script>
 

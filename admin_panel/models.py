@@ -417,6 +417,23 @@ class Locations(models.Model):
 
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, blank=True, null=True)
 
+    manager = models.OneToOneField('UserAddOns',on_delete=models.SET_NULL,null=True,blank=True)
+
+    def mana(self):
+        man = UserAddOns.objects.filter(pk=self.manager_id)
+        obj = {
+            "name":None,
+            "phone":None,
+            'email':None
+        }
+        if man.count() == 1:
+            m = UserAddOns.objects.get(pk=self.manager_id)
+            obj['name'] = m.user.username
+            obj['phone'] = m.phone
+            obj['email'] = m.user.email
+
+        return obj
+
     def obj(self):
         return {
             'code':self.code,
@@ -446,6 +463,12 @@ class TransferHD(models.Model):
     created_on = models.DateTimeField(auto_now_add=True)
     edited_on = models.DateTimeField(auto_now=True)
     status = models.IntegerField(default=0)
+    is_posted = models.BooleanField(default=False)
+
+    is_sent = models.BooleanField(default=False)
+    sent_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL,null=True,related_name="transfer_sent_by")
+    delivery_by = models.CharField(max_length=50,null=True)
+    reccieved_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL,null=True,related_name="transfer_recieved_by")
 
     def total_cost(self):
         return TransferTran.objects.filter(parent=self.pk).aggregate(Sum('cost'))['cost__sum']
