@@ -13,6 +13,8 @@ from appconfig.models import *
 from datetime import datetime
 
 
+
+
 # Create your models here.
 
 def format_currency(amount):
@@ -313,6 +315,16 @@ class ProductMaster(models.Model):
             "sub_group":self.sub_group.descr
         }
     def stock(self):
+        arr = []
+        for loc in Locations.objects.all():
+            loc_code = loc.code
+            name = loc.descr
+            stk = ProductTrans.objects.filter(loc=loc,product=self).aggregate(Sum('tran_qty'))['tran_qty__sum'] or 0
+            arr.append({
+                'loc_code':loc_code,
+                'loc_name':name,
+                'stock':stk
+            })
         if ProductTrans.objects.filter(product=self).aggregate(Sum('tran_qty'))['tran_qty__sum'] is None:
             return 0
         else:
@@ -356,6 +368,7 @@ class ProductTrans(models.Model):
     tran_qty = models.DecimalField(max_digits=65, decimal_places=2)
 
     def stock(self):
+
         if self.objects.filter(product=self.product.pk).aggregate(Sum('tran_qty'))['tran_qty__sum'] is None:
             return 0
         else:
@@ -476,6 +489,16 @@ class TransferHD(models.Model):
     def total_cost(self):
         return TransferTran.objects.filter(parent=self.pk).aggregate(Sum('cost'))['cost__sum']
 
+    def evidence(self):
+        from inventory.models import Evidence
+        if Evidence.objects.filter(doc_type='TR',entry=self.entry_no).exists():
+            evidence = Evidence.objects.filter(doc_type='TR',entry=self.entry_no).last()
+            file = evidence.file.url
+        else:
+            file = 'UNKNOW'
+
+        return file
+
     def tran_pieces(self):
         return TransferTran.objects.filter(parent=self.pk).aggregate(Sum('tran_qty'))['tran_qty__sum']
 
@@ -511,7 +534,9 @@ class TransferHD(models.Model):
             "tran_pieces":format_currency(self.tran_pieces()),
             "is_sent":self.is_sent,
             "is_posted":self.is_posted,
-            "status":status
+            "status":status,
+            'evidence':self.evidence(),
+            "rec_remark":self.rec_remark
 
         }
 

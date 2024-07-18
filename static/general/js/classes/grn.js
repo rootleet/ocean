@@ -128,7 +128,7 @@ class Grn {
                                 "packing":packing.val(),
                                 'pack_qty':pack_qty.val(),
                                 "qty":tran_qty.val(),
-                                "total_qty":packing.val() *  tran_qty.val() ,
+                                "total_qty":pack_qty.val() *  tran_qty.val() ,
                                 "un_cost":un_cost.val(),
                                 "tot_cost":tot_cost.val()
                             }
@@ -421,7 +421,7 @@ class Grn {
                 for (let i = 0; i < transactions.length; i++) {
                     let tran = transactions[i]
                     let packing = tran['packing']
-                    console.table(packing)
+                    console.table(tran)
 
                     row += `<tr>
                                 <td>${tran['line']}</td>
@@ -430,6 +430,7 @@ class Grn {
                                 <td>${packing['code']}</td>
                                 <td>${packing['pack_qty']}</td>
                                 <td>${tran['qty']}</td>
+                                <td>${tran['total_qty']}</td>
                                 <td>${tran['un_cost']}</td>
                                 <td>${tran['tot_cost']}</td>
                             </tr>`

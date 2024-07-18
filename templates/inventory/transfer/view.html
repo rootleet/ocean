@@ -88,7 +88,7 @@
                             <label class="w-100 mb-2">Status
                                 <input type="text" id="status" disabled class="anton-form-tool">
                             </label>
-                            <button class="btn btn-info">EVIDENCE</button>
+                            <button id="evidence" class="btn btn-info">EVIDENCE</button>
                         </div>
 
 
@@ -202,8 +202,16 @@
         }
 
 
+
         $(document).ready(function(){
             viewTransfer(`{{ last_transfer }}`)
+
+            //evidence
+            $('#evidence').click(function(){
+                let evidence = $('#evidence').val();
+                console.log(evidence)
+                anton.viewFile(evidence,"TRANSFER EVIDENCE","REMARKS")
+            });
 
             //new
             $('#new').click(function(){

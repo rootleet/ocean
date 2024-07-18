@@ -93,7 +93,7 @@ class Anton {
         }
     }
 
-    viewFile(url = '', type = null, title = null, description = null) {
+    viewFile(url = '', title = null, description = null) {
 
         amodal.setTitleText("Error!!");
         amodal.setBodyHtml("Cannot Load Resource")
@@ -126,7 +126,7 @@ class Anton {
                 amodal.setBodyHtml(`Cannot render resource type : ${ft} <br>Download file with link below <br> <a target='_blank' href='${url}'>>_Link_<</a>`)
             }
         }
-
+        $('#g_modal_body').prepend(`<p>${description}</p>`)
         amodal.show()
 
     }

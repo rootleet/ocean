@@ -1,7 +1,7 @@
 import pyodbc
 from django.db.models import Sum
 
-from admin_panel.models import Locations, ProductTrans
+from admin_panel.models import Locations, ProductTrans, ProductMaster
 from inventory.models import GrnTran
 from ocean.settings import DB_SERVER, DB_PORT, DB_NAME, DB_USER, DB_PASSWORD
 
@@ -19,6 +19,7 @@ def cmm_connect():
 
 # get stick
 def get_stock(prod_pk, legend=None):
+    product = ProductMaster.objects.get(pk=prod_pk)
     if legend is None:
         legend = {}
     locations = Locations.objects.filter()
@@ -28,10 +29,10 @@ def get_stock(prod_pk, legend=None):
         pk = location.pk
 
         # get stock sum
-        if ProductTrans.objects.filter(pk=prod_pk,loc=location).aggregate(Sum('tran_qty'))['tran_qty__sum'] is None:
+        if ProductTrans.objects.filter(product=product,loc=location).aggregate(Sum('tran_qty'))['tran_qty__sum'] is None:
             qty = 0
         else:
-            qty = ProductTrans.objects.filter(pk=prod_pk,loc=location).aggregate(Sum('tran_qty'))['tran_qty__sum']
+            qty = ProductTrans.objects.filter(product=product,loc=location).aggregate(Sum('tran_qty'))['tran_qty__sum']
 
         arr.append({'loc_id': location.code, 'loc_desc': location.descr, 'stock': qty})
 
@@ -57,6 +58,7 @@ def suppler_details(prod_id, legend=None):
 
 
 def cardex(prod_id, legend=None):
+
     if legend is None:
         legend = []
 

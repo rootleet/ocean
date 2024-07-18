@@ -191,7 +191,9 @@ def interface(request):
                     Evidence.objects.filter(doc_type='TR',entry=entry_no).delete()
                     for tr in transactions:
                         qty_to = tr.tran_qty * tr.pack_qty
-                        qty_fr = abs(qty_to)
+
+                        q_2 = qty_to * 2
+                        qty_fr = qty_to - q_2
 
                         ProductTrans(loc=from_loc,doc='TR',doc_ref=entry_no,product=tr.product,
                                      tran_qty=qty_fr,created_on=transfer.created_on).save()
