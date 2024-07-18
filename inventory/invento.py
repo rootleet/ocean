@@ -6,8 +6,9 @@ from django.contrib.auth.models import User
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
-from admin_panel.models import Locations, TransferHD, TransferTran, ProductMaster
+from admin_panel.models import Locations, TransferHD, TransferTran, ProductMaster, UserAddOns, ProductTrans
 from admin_panel.views import bank_posts
+from inventory.models import Evidence
 from retail.models import Products
 
 
@@ -160,7 +161,7 @@ def interface(request):
                 my_pk = data.get('mypk')
                 delivery_by = data.get('delivery_by')
 
-                print(data)
+
 
                 transfer = TransferHD.objects.get(entry_no = entry_no)
                 transfer.is_sent = True
@@ -169,6 +170,46 @@ def interface(request):
                 transfer.save()
 
                 response = success_response
+
+            elif module == 'post_transfer':
+                try:
+                    recieved_by = data.get('recieved_by')
+                    rec_remark = data.get('rec_remark')
+                    entry_no = data.get('entry_no')
+                    mypk = data.get('mypk')
+
+                    transfer = TransferHD.objects.get(entry_no=entry_no)
+                    rec_by = UserAddOns.objects.get(pk=recieved_by).user
+                    approved_by = User.objects.get(pk=mypk)
+
+                    # post transfer into stock
+                    from_loc = transfer.loc_fr
+                    sent_to = transfer.loc_to
+
+                    transactions = TransferTran.objects.filter(parent=transfer)
+                    ProductTrans.objects.filter(doc='TR',doc_ref=entry_no).delete()
+                    Evidence.objects.filter(doc_type='TR',entry=entry_no).delete()
+                    for tr in transactions:
+                        qty_to = tr.tran_qty * tr.pack_qty
+                        qty_fr = abs(qty_to)
+
+                        ProductTrans(loc=from_loc,doc='TR',doc_ref=entry_no,product=tr.product,
+                                     tran_qty=qty_fr,created_on=transfer.created_on).save()
+
+                        ProductTrans(loc=sent_to, doc='TR', doc_ref=entry_no, product=tr.product,
+                                     tran_qty=qty_to, created_on=transfer.created_on).save()
+
+
+
+                    transfer.reccieved_by = rec_by
+                    transfer.approved_by = approved_by
+                    transfer.rec_remark = rec_remark
+                    transfer.is_posted = True
+                    transfer.save()
+
+                    response = success_response
+                except Exception as e:
+                    raise Exception(e)
 
         else:
             error_response['message'] = f"Method Not Allowed: {method}"

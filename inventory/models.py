@@ -384,3 +384,16 @@ class DeviceLogs(models.Model):
 
     loged_on = models.DateTimeField(auto_now=True)
 
+class Evidence(models.Model):
+    doc_type = models.CharField(max_length=2,null=False,blank=False)
+    entry = models.CharField(max_length=10,null=False,blank=False)
+    file = models.FileField(upload_to='static/genera/evidence/')
+
+    created_date = models.DateField(auto_now_add=True)
+    created_time = models.TimeField(auto_now_add=True)
+
+    updated_date = models.DateField(auto_now=True)
+    updated_time = models.TimeField(auto_now=True)
+
+
+

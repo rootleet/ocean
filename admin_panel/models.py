@@ -469,6 +469,9 @@ class TransferHD(models.Model):
     sent_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL,null=True,related_name="transfer_sent_by")
     delivery_by = models.CharField(max_length=50,null=True)
     reccieved_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL,null=True,related_name="transfer_recieved_by")
+    approved_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True,
+                                     related_name="transfer_approved_by")
+    rec_remark = models.TextField(null=True)
 
     def total_cost(self):
         return TransferTran.objects.filter(parent=self.pk).aggregate(Sum('cost'))['cost__sum']
@@ -487,6 +490,14 @@ class TransferHD(models.Model):
         return TransferTran.objects.filter(parent=self.pk).count()
 
     def obj(self):
+
+        if self.is_posted:
+            status = "POSTED"
+        elif self.is_sent:
+            status = "SENT"
+        else:
+            status = "UNKNOWN"
+
         return {
             "pk":self.pk,
             "from":self.loc_fr.descr,
@@ -498,6 +509,9 @@ class TransferHD(models.Model):
             "remarks":self.remarks,
             "total_cost":format_currency(self.total_cost()),
             "tran_pieces":format_currency(self.tran_pieces()),
+            "is_sent":self.is_sent,
+            "is_posted":self.is_posted,
+            "status":status
 
         }
 

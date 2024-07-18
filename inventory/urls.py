@@ -35,7 +35,8 @@ urlpatterns = [
 
     path('transfer/',views.transfer,name='transfer'),
     path('transfer/new/',views.transfer_new,name='new_transfer'),
-    path('transfer/edit/<entry_no>/',views.transfer_edit,name='edit_transfer')
+    path('transfer/edit/<entry_no>/',views.transfer_edit,name='edit_transfer'),
+    path('transfer/save-evidence/',views.save_evidence,name='save_inv_evidence')
 
 ]
 

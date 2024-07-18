@@ -32,9 +32,9 @@
             <div class="card-header">
 
                 <div class="w-100 d-flex flex-wrap">
-                    <div class="w-50"></div>
-                    <div class="w-50 d-flex flex-wrap justify-content-end">
-                        <button id="new" title="New Transfer" class="btn btn-success rounded-0 mx-1"><i class="fa fa-plus"></i></button>
+                    <div class="w-25"></div>
+                    <div class="w-75 d-flex flex-wrap justify-content-end">
+                        <button id="new" title="New Transfer" class="btn btn-sm btn-sm btn-success rounded-0 mx-1"><i class="fa fa-plus"></i></button>
                         <button id="edit" title="Edit Transfer" class="btn btn-warning rounded-0 mx-1"><i class="fa fa-edit"></i></button>
                         <button id="delete" title="Delete Transfer" class="btn btn-danger rounded-0 mx-1"><i class="fa fa-trash"></i></button>
                         <button id="previous" title="Previous" class="btn btn-info rounded-0 mx-1"><i class="fa fa-fast-backward"></i></button>
@@ -50,9 +50,13 @@
                 <div class="w-100 container-fluid">
                     <div class="w-100 row">
                         <div class="col-sm-3">
-                            <label class="w-100">Entry NO <br>
-                                <input type="text" id="entry_no" disabled class="anton-form-tool">
-                            </label>
+                            <div class="input-group">
+                                <label for="entry_no">Entry No</label>
+                                <div class="row">
+                                    <input type="text" id="entry_no" disabled class="anton-form-tool col-sm-8">
+                                    <input type="text" id="pk" disabled class="anton-form-tool col-sm-4">
+                                </div>
+                            </div>
                             <label class="w-100">From  <br>
                                 <input type="text" id="from" disabled class="anton-form-tool">
                             </label>
@@ -78,6 +82,13 @@
                             <label class="w-100">Remark
                                 <textarea disabled id="remarks" class="anton-form-tool w-100" cols="30" rows="5"></textarea>
                             </label>
+                        </div>
+
+                        <div class="col-sm-3">
+                            <label class="w-100 mb-2">Status
+                                <input type="text" id="status" disabled class="anton-form-tool">
+                            </label>
+                            <button class="btn btn-info">EVIDENCE</button>
                         </div>
 
 
@@ -124,8 +135,20 @@
 
                 let data = transfer['message'][0]
                 let header = data['header'];
+                console.table(header)
 
                 anton.docNav(header)
+                if(header['is_sent']){
+                    $('#send').prop('disabled',true)
+                    $('#approve').prop('disabled',false)
+                } else {
+                    $('#send').prop('disabled',false)
+                    $('#approve').prop('disabled',true)
+                }
+
+                if(header['is_posted']){
+                    $('#approve').prop('disabled',true)
+                }
                 anton.setValues(header)
                 let trans = data['transactions']
                 let rows = ""
@@ -217,6 +240,7 @@
             $('#print').click(function(){
                 let payload = {}
                 reports.printTransfer($('#entry_no').val())
+
             })
 
             // approve
@@ -234,11 +258,13 @@
 
                     form += fom.select('recieved_by',reopts,'',true)
                     form += fom.textarea('rec_remark',3,true)
-                    form += fom.text('entry','',true)
+
 
                     let x_form = `
                         <form id='transfer_evidence' method='post' enctype="multipart/form-data" action='/inventory/transfer/save-evidence/'>
-                            <input type="file" accept="image/*" name="evidence" id="evidence" class="form-control rounded-0 w-100 mb-2">
+                            <input type="hidden" name="doc_type" value="TR">
+                            <input type="text" name="entry" id="entry" value="TR">
+                            <input type="file" accept="image/*" name="file" id="file" class="form-control rounded-0 w-100 mb-2">
 
                             ${form}
 
@@ -251,7 +277,7 @@
                     amodal.show()
 
                     $('#entry').val($('#entry_no').val())
-                    $('#entry').prop('disabled',true)
+                    $('#entry').prop('readonly',true)
 
                 }
 
@@ -285,6 +311,7 @@
                                 // print
 
                                 reports.printTransfer($('#entry_no').val())
+                                viewTransfer($('#pk').val())
 
                             } else {
                                 console.error("here")

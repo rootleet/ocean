@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
+from django.views.decorators.csrf import csrf_exempt
 
 from admin_panel.models import PackingMaster, ProductGroup, ProductGroupSub, ProductMaster, SuppMaster, Locations, \
     TaxMaster, UnitMembers, UserAddOns, TransferHD
@@ -9,7 +10,7 @@ from django.contrib.auth.decorators import login_required
 
 from admin_panel.views import page
 from appscenter.models import App
-from inventory.form import NewAssetGroup, NewAsset, NewWorkstation
+from inventory.form import NewAssetGroup, NewAsset, NewWorkstation, EvidenceForm
 from inventory.models import PoHd, GrnHd, AssetGroup, Assets, WorkStation, Computer
 
 
@@ -250,3 +251,14 @@ def transfer_edit(request,entry_no):
         return render(request, 'inventory/transfer/edit.html', context=context)
     else:
         return  redirect('transfer')
+@csrf_exempt
+def save_evidence(request):
+    if request.method == 'POST':
+        form = EvidenceForm(request.POST,request.FILES)
+        if form.is_valid():
+            form.save()
+            return HttpResponse("SAVED")
+        else:
+            return HttpResponse(f"Invalid Form <br>{form}")
+    else:
+        return HttpResponse("Invalid Form")
