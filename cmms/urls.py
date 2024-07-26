@@ -45,8 +45,11 @@ urlpatterns = [
     path('sales/approval_request/',views.proforma_approval_requests,name='prod_appr_req'),
     path('sales/approve/sales-po/<po_pk>/',views.approve_po,name='approve_cmms_po'),
 
-    path('servicing/', views.service_customers, name='service_customers'),
-    path('servicing/customer/<customer_code>/', views.service_customer, name='service_customer')
+    path('servicing/', views.servicing, name='cmms_servicing'),
+    path('servicing/customers/', views.service_customers, name='service_customers'),
+    path('servicing/customer/<customer_code>/', views.service_customer, name='service_customer'),
+    path('servicing/cars/', views.cars, name='cmms_cars'),
+    path('servicing/invoices/', views.invoices, name='cmms_servicing_invoices'),
 
 ]
 

@@ -254,6 +254,17 @@ def service_customers(request):
     }
     return render(request, 'cmms/service/customers.html', context=context)
 
+@login_required()
+def servicing(request):
+    context = {
+        'nav': True,
+        'page': {
+
+            'title': "CMMS SERVICING"
+        }
+    }
+    return render(request, 'cmms/service/index.html', context=context)
+
 
 @login_required()
 def sales_deal(request, customer):
@@ -389,3 +400,25 @@ def approve_po(request,po_pk):
         return render(request,'cmms/sales/approve-po.html',context=context)
     else:
         return redirect('prod_appr_req')
+
+
+def cars(request):
+    context = {
+        'nav': True,
+        'page': {
+
+            'title': "CMMS SERVICE CARS"
+        }
+    }
+    return render(request, 'cmms/service/cars.html', context=context)
+
+
+def invoices(request):
+    context = {
+        'nav': True,
+        'page': {
+
+            'title': "CMMS SERVICE INVOICES"
+        }
+    }
+    return render(request, 'cmms/service/invoices.html', context=context)
