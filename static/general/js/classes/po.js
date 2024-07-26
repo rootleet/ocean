@@ -255,6 +255,7 @@ class Po {
 
     // print
     Print(entry_no){
+        console.log(entry_no)
         if(entry_no.length > 0)
         {
             let data = {
@@ -264,10 +265,13 @@ class Po {
 
             let req = apiv2('general','print',data)
             let res = JSON.parse(req)
+            console.table(res)
 
-            if(res['status'] === 200)
+            if(anton.IsRequest(res))
             {
                 windowPopUp(res['file'],'PO PRINT OUT',1024,976)
+            } else {
+                kasa.response(res)
             }
         } else
         {

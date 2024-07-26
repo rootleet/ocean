@@ -56,7 +56,7 @@ class Anton {
     }
 
     IsRequest(request) {
-        if (request['status_code'] === 200) {
+        if (request['status_code'] === 200 || request['status'] === 200) {
             return true
         }
         return false;

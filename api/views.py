@@ -20,7 +20,7 @@ from ocean.settings import DB_SERVER, DB_NAME, DB_USER, DB_PORT, DB_PASSWORD, OL
 from .ApiClass import *
 
 from admin_panel.models import Notifications, AuthToken, Locations, SuppMaster, ProductMaster, ProductTrans, \
-    ProductPacking, Sales, SmsApi, Sms, SmsResponse, BulkSms
+    ProductPacking, Sales, SmsApi, Sms, SmsResponse, BulkSms, format_currency
 import json
 
 from inventory.models import PoHd, PoTran, PriceCenter, GrnHd, DocAppr, GrnTran
@@ -616,7 +616,7 @@ def api_call(request, module, crud):
 
                     if status == 200:
 
-                        trans = message['trans']['transactions']
+                        # trans = message['trans']['transactions']
                         header = message['header']
                         prices = message['cost']
                         p_status = message['p_status']
@@ -625,106 +625,113 @@ def api_call(request, module, crud):
                         if prices['taxable'] == 1:
                             tax = "YES"
 
-                        pdf = FPDF('L', 'mm', 'A4')
+                        pdf = FPDF('P', 'mm', 'A4')
                         pdf.add_page()
-                        pdf.set_margin(10)
+                        pdf.set_margins(5,5,5)
                         # header
 
                         pdf.set_font('Arial', 'BU', 25)
-                        pdf.cell(280, 5, "PURCHASE ORDER", 0, 1, 'C')
+                        pdf.cell(200, 5, "PURCHASE ORDER", 0, 1, 'C')
                         pdf.ln(10)
                         pdf.set_font('Arial', 'B', 10)
                         pdf.cell(30, 5, "Entry : ", 0, 0, 'L')
                         pdf.set_font('Arial', '', 8)
-                        pdf.cell(150, 5, header['entry_no'], 0, 0, 'L')
+                        pdf.cell(70, 5, header['entry_no'], 0, 0, 'L')
 
                         pdf.set_font('Arial', 'B', 10)
-                        pdf.cell(35, 5, "Date : ", 0, 0, 'L')
+                        pdf.cell(60, 5, "Date : ", 0, 0, 'R')
                         pdf.set_font('Arial', '', 8)
-                        pdf.cell(30, 5, str(header['entry_date']), 0, 1, 'L')
+                        pdf.cell(40, 5, str(header['entry_date']), 0, 1, 'L')
 
                         pdf.set_font('Arial', 'B', 10)
                         pdf.cell(30, 5, "Created By : ", 0, 0, 'L')
                         pdf.set_font('Arial', '', 8)
-                        pdf.cell(150, 5, header['owner'], 0, 0, 'L')
+                        pdf.cell(70, 5, header['owner'], 0, 0, 'L')
 
                         pdf.set_font('Arial', 'B', 10)
-                        pdf.cell(35, 5, "Location : ", 0, 0, 'L')
+                        pdf.cell(60, 5, "Location : ", 0, 0, 'R')
                         pdf.set_font('Arial', '', 8)
-                        pdf.cell(30, 5, header['loc_descr'], 0, 1, 'L')
+                        pdf.cell(40, 5, header['loc_descr'], 0, 1, 'L')
 
                         pdf.set_font('Arial', 'B', 10)
                         pdf.cell(30, 5, "Supplier : ", 0, 0, 'L')
                         pdf.set_font('Arial', '', 8)
-                        pdf.cell(150, 5, header['supp_descr'], 0, 0, 'L')
+                        pdf.cell(70, 5, header['supp_descr'], 0, 0, 'L')
 
                         pdf.set_font('Arial', 'B', 10)
-                        pdf.cell(35, 5, "Taxable : ", 0, 0, 'L')
+                        pdf.cell(60, 5, "Taxable : ", 0, 0, 'R')
                         pdf.set_font('Arial', '', 8)
-                        pdf.cell(30, 5, tax, 0, 1, 'L')
+                        pdf.cell(40, 5, tax, 0, 1, 'L')
 
                         pdf.set_font('Arial', 'B', 10)
                         pdf.cell(30, 5, "Remarks : ", 0, 0, 'L')
                         pdf.set_font('Arial', '', 8)
-                        pdf.cell(30, 5, header['remark'], 0, 0, 'L')
+                        pdf.cell(70, 5, header['remark'], 0, 0, 'L')
 
-                        pdf.cell(120, 5, '', 0, 0, 'L')
-                        pdf.set_font('Arial', 'B', 10)
-                        pdf.cell(35, 5, "Inv Amount : ", 0, 0, 'L')
-                        pdf.set_font('Arial', '', 8)
-                        pdf.cell(30, 5, str(prices['taxable_amt']), 0, 1, 'L')
 
-                        pdf.cell(180, 5, '', 0, 0, 'L')
                         pdf.set_font('Arial', 'B', 10)
-                        pdf.cell(35, 5, "Tax Amount : ", 0, 0, 'L')
+                        pdf.cell(60, 5, "Inv Amount : ", 0, 0, 'R')
                         pdf.set_font('Arial', '', 8)
-                        pdf.cell(30, 5, str(prices['tax_amt']), 0, 1, 'L')
+                        pdf.cell(40, 5, str(prices['taxable_amt']), 0, 1, 'L')
 
-                        pdf.cell(180, 5, '', 0, 0, 'L')
+                        pdf.cell(100, 5, '', 0, 0, 'L')
                         pdf.set_font('Arial', 'B', 10)
-                        pdf.cell(35, 5, "Total Amount : ", 0, 0, 'L')
+                        pdf.cell(60, 5, "Tax Amount : ", 0, 0, 'R')
                         pdf.set_font('Arial', '', 8)
-                        pdf.cell(30, 5, str(Decimal(prices['tax_amt']) + Decimal(prices['taxable_amt'])), 0, 1, 'L')
+                        pdf.cell(40, 5, str(prices['tax_amt']), 0, 1, 'L')
+
+                        pdf.cell(100, 5, '', 0, 0, 'L')
+                        pdf.set_font('Arial', 'B', 10)
+                        pdf.cell(60, 5, "Total Amount : ", 0, 0, 'R')
+                        pdf.set_font('Arial', '', 8)
+                        pdf.cell(40, 5, format_currency(str(Decimal(prices['tax_amt']) + Decimal(prices['taxable_amt']))), 0, 1, 'L')
 
                         pdf.ln(10)
 
                         pdf.set_font('Arial', 'B', 8)
                         # table head
                         pdf.cell(10, 5, "Line", 1, 0, 'L')
-                        pdf.cell(60, 5, "Barcode", 1, 0, 'L')
-                        pdf.cell(70, 5, "Description", 1, 0, 'L')
-                        pdf.cell(25, 5, "Packing", 1, 0, 'L')
-                        pdf.cell(25, 5, "Pack Quantity", 1, 0, 'L')
-                        pdf.cell(20, 5, "Quantity", 1, 0, 'L')
-                        pdf.cell(30, 5, "Cost", 1, 0, 'L')
-                        pdf.cell(40, 5, "Total Cost", 1, 1, 'L')
+                        pdf.cell(40, 5, "Barcode", 1, 0, 'L')
+                        pdf.cell(50, 5, "Description", 1, 0, 'L')
+                        pdf.cell(20, 5, "Packing", 1, 0, 'L')
+                        pdf.cell(20, 5, "Pack QTY", 1, 0, 'L')
+                        pdf.cell(20, 5, "QTY", 1, 0, 'L')
+                        pdf.cell(20, 5, "Cost", 1, 0, 'L')
+                        pdf.cell(20, 5, "Total", 1, 1, 'L')
 
-                        pdf.set_font('Arial', '', 6)
-                        for transaction in trans:
-                            pdf.cell(10, 5, f"{transaction['line']}", 1, 0, 'L')
-                            pdf.cell(60, 5, f"{transaction['product_barcode']}", 1, 0, 'L')
-                            pdf.cell(70, 5, f"{transaction['product_descr']}", 1, 0, 'L')
-                            pdf.cell(25, 5, f"{transaction['packing']['code']}", 1, 0, 'L')
-                            pdf.cell(25, 5, f"{transaction['packing']['tran_pack_qty']}", 1, 0, 'L')
-                            pdf.cell(20, 5, f"{transaction['qty']}", 1, 0, 'L')
-                            pdf.cell(30, 5, f"{transaction['un_cost']}", 1, 0, 'L')
-                            pdf.cell(40, 5, f"{transaction['tot_cost']}", 1, 1, 'L')
+                        pdf.set_font('Arial', '', 8)
+                        transactions = PoTran.objects.filter(entry_no_id=entry_no)
+                        for transaction in transactions:
+                            pdf.cell(10, 5, f"{transaction.line}", 1, 0, 'L')
+                            pdf.cell(40, 5, f"{transaction.product.barcode}", 1, 0, 'L')
+                            pdf.cell(50, 5, f"{transaction.product.descr}", 1, 0, 'L')
+                            pdf.cell(20, 5, f"{transaction.packing}", 1, 0, 'L')
+                            pdf.cell(20, 5, f"{transaction.pack_qty}", 1, 0, 'L')
+                            pdf.cell(20, 5, f"{transaction.qty}", 1, 0, 'L')
+                            pdf.cell(20, 5, f"{transaction.un_cost}", 1, 0, 'L')
+                            pdf.cell(20, 5, f"{transaction.tot_cost}", 1, 1, 'L')
 
                         # auth
                         pdf.ln(20)
-                        pdf.set_left_margin(55)
-                        pdf.set_font('Arial', 'I', 10)
-                        pdf.cell(40, 10, f"{header['owner']}", 1, 0, 'C')
 
-                        pdf.set_left_margin(205)
-                        pdf.cell(40, 10, f"{p_status['approved_by']}", 1, 1, 'C')
+                        pdf.set_font('Arial', 'I', 10)
+                        pdf.cell(25,10,"")
+                        pdf.cell(50, 10, f"{header['owner']}", 1, 0, 'C')
+                        pdf.cell(25, 10, "")
+
+                        pdf.cell(25, 10, "")
+                        pdf.cell(50, 10, f"{p_status['approved_by']}", 1, 0, 'C')
+                        pdf.cell(25, 10, "",0,1)
+
 
                         pdf.set_font('Arial', 'B', 12)
-                        pdf.set_left_margin(55)
-                        pdf.cell(40, 10, f"Prepared By", 0, 0, 'C')
+                        pdf.cell(25, 10, "")
+                        pdf.cell(50, 10, f"PREPARED BY", 0, 0, 'C')
+                        pdf.cell(25, 10, "", 0, 0)
 
-                        pdf.set_left_margin(205)
-                        pdf.cell(40, 10, f"Approved By", 0, 1, 'C')
+                        pdf.cell(25, 10, "")
+                        pdf.cell(50, 10, f"APPROVE BY", 0, 0, 'C')
+                        pdf.cell(25, 10, "", 0, 1)
 
                         md_mix = f"{status}{message['header']['entry_no']}"
                         hash_object = hashlib.md5(md_mix.encode())

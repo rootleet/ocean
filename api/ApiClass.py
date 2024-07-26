@@ -47,23 +47,14 @@ def GetPo(entry):
             trans['trans']['count'] = transactions.count()
 
             for transaction in transactions:
-                tran_pac = transaction.packing
-                packing = {
-                    'code': tran_pac.packing_un.code,
-                    'descr': tran_pac.packing_un.descr,
-                    'pack_un_qty': tran_pac.pack_qty,
-                    'tran_pack_qty': transaction.pack_qty
-                }
-                this_trans = {
-                    'line': transaction.line,
-                    'product_descr': transaction.product.descr,
-                    'product_barcode': transaction.product.barcode,
-                    'packing': packing,
-                    'qty': transaction.qty,
-                    'total_qty': transaction.total_qty,
-                    'un_cost': transaction.un_cost,
-                    'tot_cost': transaction.tot_cost
-                }
+
+                # packing = {
+                #     'code': transaction.packing,
+                #     'descr': transaction.packing,
+                #     'pack_un_qty': transaction.pack_qty,
+                #     'tran_pack_qty': transaction.pack_qty
+                # }
+                this_trans = ""
                 trans['trans']['transactions'].append(this_trans)
 
         else:
