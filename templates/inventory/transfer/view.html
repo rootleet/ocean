@@ -254,6 +254,7 @@
             // approve
             $('#approve').click(function(){
                 let payload = {}
+                console.log("APPROVE")
                 let form = "";
                 let uss = user.allUsers(true)
                 if(anton.IsRequest(uss)){
@@ -287,6 +288,8 @@
                     $('#entry').val($('#entry_no').val())
                     $('#entry').prop('readonly',true)
 
+                } else {
+                    kasa.response(uss)
                 }
 
             })

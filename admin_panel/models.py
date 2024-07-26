@@ -658,7 +658,7 @@ class UserAddOns(models.Model):
         return UserSettings.objects.get(user=self.user)
 
     def dept(self):
-        return self.department.name if Departments.objects.exists() == 1 else "NOT ASSIGNED"
+        return self.department.name if self.department.name else "NOT ASSIGNED"
 
 
 class PasswordResetToken(models.Model):

@@ -215,7 +215,7 @@ def index(request):
                     tickethd = TicketHd.objects.get(pk=ticket)
                     tick_owner = tickethd.owner
                     user_details = UserAddOns.objects.get(user=tick_owner)
-                    Sms(to=user_details.phone, message=f"TICKET UPDATE\nTitle: {title}\Description: {description}",
+                    Sms(to=user_details.phone, message=f"TICKET UPDATE\nTitle: {title}\nDescription: {description}",
                         api=SmsApi.objects.get(is_default=1)).save()
 
                 success_response['message'] = "TIcket Updated"
@@ -528,7 +528,7 @@ def index(request):
                         'fullname': f"{usx.user.first_name} {usx.user.last_name}",
                         'phone':usx.phone,
                         'email':usx.user.email,
-                        'department':usx.dept()
+                        'department':""
                     }
                     us.append(obj)
 
