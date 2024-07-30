@@ -366,7 +366,7 @@ def sales_tools(request):
     }
     return render(request, 'cmms/sales/tools.html', context=context)
 
-
+@login_required()
 def model_spec(request, model_pk):
     if CarModel.objects.filter(pk=model_pk).count() == 1:
         mod = CarModel.objects.get(pk=model_pk)
@@ -383,7 +383,7 @@ def model_spec(request, model_pk):
         return render(request, 'cmms/sales/model_spec.html', context=context)
     else:
         return HttpResponse("Invalid Model")
-
+@login_required()
 def approve_po(request,po_pk):
     if ProformaInvoice.objects.filter(pk=po_pk).count()==1:
         entry = ProformaInvoice.objects.get(pk=po_pk)
@@ -401,7 +401,7 @@ def approve_po(request,po_pk):
     else:
         return redirect('prod_appr_req')
 
-
+@login_required()
 def cars(request):
     context = {
         'nav': True,
@@ -412,7 +412,7 @@ def cars(request):
     }
     return render(request, 'cmms/service/cars.html', context=context)
 
-
+@login_required()
 def invoices(request):
     context = {
         'nav': True,

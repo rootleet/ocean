@@ -827,6 +827,7 @@ def api_function(request):
                     response['message'] = ret
 
                 elif module == 'document':
+                    print(body)
                     doc = data.get('doc')
                     entry = data.get('entry')
                     arr = []

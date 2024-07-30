@@ -393,6 +393,7 @@ class Grn {
     loadGrn(entry_no){
         let hd_req = apiv2('grn','get',{"entry":entry_no})
         let hd_res = JSON.parse(hd_req)
+        console.table(hd_res)
 
         if(hd_res['status'] === 200)
         {
@@ -402,7 +403,7 @@ class Grn {
             let header,trans
             header = message['header']
             trans = message['trans']
-            console.table(message)
+
 
             $('#loc').val(`${header['loc_code']} - ${header['loc_descr']}`)
             $('#supplier').val(header['supp_descr'])
@@ -421,7 +422,7 @@ class Grn {
                 for (let i = 0; i < transactions.length; i++) {
                     let tran = transactions[i]
                     let packing = tran['packing']
-                    console.table(tran)
+                    // console.table(tran)
 
                     row += `<tr>
                                 <td>${tran['line']}</td>
@@ -443,18 +444,19 @@ class Grn {
             // navs
             let nav = message['nav']
             let appr = message['appr']
-            if(appr['status'] === 0)
+            console.table(nav['status'])
+            if(nav['status'] == '0')
             {
                 // not approved
                 $('#approve').prop('disabled',false)
-            } else if(nav['status'] === 1)
+                console.log("NOT APPROVED")
+            }
+            if(nav['status'] == '1')
             {
                 // approved
                 $('#approve').prop('disabled',true)
+                console.log("Approved")
 
-            } else {
-                // unknown status
-                $('#approve').prop('disabled',true)
             }
 
             if(nav['next_count'] > 0)

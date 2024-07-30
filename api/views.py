@@ -88,6 +88,7 @@ def get_notification(user):
 
 @csrf_exempt
 def api_call(request, module, crud):
+    print(module)
     global f_name, api_body
     response = {
         'status': 505,
@@ -406,7 +407,8 @@ def api_call(request, module, crud):
                             'remark': hd.remark,
                             'entry_date': hd.created_on,
                             'owner': hd.created_by.first_name,
-                            'pk': hd.pk
+                            'pk': hd.pk,
+                            'status':hd.status
                         }
                     }
 
@@ -808,7 +810,7 @@ def api_call(request, module, crud):
             entry = api_body['entry']
             user = api_body['user']
 
-            print(api_body)
+
             doc_found = 0
             doc_setup = {
                 'grn': GrnHd.objects.filter(pk=entry),
@@ -819,13 +821,15 @@ def api_call(request, module, crud):
 
                 doc = doc_setup[document]
                 if doc.count() == 1:
+
                     response['status'] = 200
                     for docx in doc:
                         doc_key = docx.pk
                         if DocAppr.objects.filter(doc_type=document, entry_no=doc_key).exists():
                             response['message'] = "Document already approved"
+                            print("Lets go X")
                         else:
-
+                            print("Lets go")
                             DocAppr(entry_no=doc_key, doc_type=document,
                                     approved_by=User.objects.get(pk=user)).save()  # approval
                             # transaction
@@ -835,6 +839,8 @@ def api_call(request, module, crud):
                                 trans = GrnTran.objects.filter(entry_no=entry)
                                 for tran in trans:
                                     product = tran.product
+
+                                    print(product.descr)
 
                                     stock_save = ProductTrans(loc=loc, doc='GR', doc_ref=entry, product=product,
                                                               tran_qty=tran.total_qty)
@@ -850,6 +856,7 @@ def api_call(request, module, crud):
                 else:
                     response['status'] = 404
                     response['message'] = f"{document} entry {entry} not found: COUNT {doc.count()}"
+
 
 
 

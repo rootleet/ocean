@@ -125,16 +125,20 @@ class Docs {
                 
             }
 
-            if(header['status']){
-                let status = header['status'];
-                if(status === 0){
+            console.table(header)
+
+            let status = header['status'];
+
+                if(status === 1){
                     // not approved
-                    $('#approve').prop('disabled',false)
-                } else {
-                    // approved
+                    console.log("APPROVED")
                     $('#approve').prop('disabled',true)
                 }
-            }
+                if(status === 0){
+                    // not approved
+                    console.log("NOT APPROVED")
+                    $('#approve').prop('disabled',false)
+                }
             trans = response['trans']
             let tr = ''
             for (let t = 0; t < trans.length; t++) {

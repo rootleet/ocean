@@ -89,6 +89,8 @@
 
         <script>
             let po_id = `{{ po }}`;
+            let next = 0;
+            let previous = 0;
             docs.view('PO',{{ po }})
 
 
@@ -105,7 +107,7 @@
                 $('#next').click(function(){
                     let id = $('#next').val();
                     if(id > 0){
-                        docs.view('PO',{{ id }})
+                        docs.view('PO',id)
                     } else {
                         kasa.error(`Cannot pass ${id} to load transactions`)
                     }
@@ -114,7 +116,7 @@
                 $('#previous').click(function(){
                     let id = $('#previous').val();
                     if(id > 0){
-                        docs.view('PO',{{ id }})
+                        docs.view('PO',id)
                     } else {
                         kasa.error(`Cannot pass ${id} to load transactions`)
                     }
