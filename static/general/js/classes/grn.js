@@ -514,6 +514,7 @@ class Grn {
             let message = view['message']
             let count = message['count']
             let files = message['files']
+            console.table(files)
 
             let imgss = ''
 
@@ -524,16 +525,41 @@ class Grn {
                 $('#g_modal_size').addClass('modal-lg')
                 let imgs = ''
                 for (let im = 0; im < files.length ; im++) {
-                    let file = files[im]['url']
-                    imgss += `<div class="col-sm-3 m-2"><div class="card w-100">
+
+                    // get file type
+
+                    let file = files[im]
+                    console.table(file)
+                    let url = file['url']
+                    let title = file['title']
+                    let description = file['description']
+                    let ft = anton.fileType(url)
+                    let this_ht = ``
+                    if(ft === 'image'){
+                        this_ht = `<div class="col-sm-3 m-2"><div class="card w-100">
+                            <div class="card-header"><strong class="card-title">${title}</strong></div>
                             <div class="card-body text-center p-2">
-                            <img src="${file}" alt="" class="img-fluid img-thumbnail"><br>
-                            <button onclick="windowPopUp('${file}','GRN DOCUMENT',900,1000)" class="w-100 btn btn-info rounded-0 mt-1">VIEW</button></div></div></div>`
+                            <img src="${url}" alt="" class="img-fluid img-thumbnail card-img"><br>
+                            
+                            <button onclick="windowPopUp('${url}','GRN DOCUMENT',900,1000)" class="w-100 btn btn-info rounded-0 mt-1">VIEW</button></div></div></div>`
+                    } else {
+                        this_ht = `<div class="col-sm-3 m-2"><div class="card w-100">
+                            <div class="card-header"><strong class="card-title">${title}</strong></div>
+                            <div class="card-body text-center p-2">
+                            <p>NO PREVIEW (${ft})</p>
+                            <!-- <img src="${file}" alt="" class="img-fluid img-thumbnail"><br> -->
+                            <button onclick="windowPopUp('${url}','GRN DOCUMENT',900,1000)" class="w-100 btn btn-info rounded-0 mt-1">VIEW</button></div></div></div>`
+                    }
+
+                    imgss += this_ht
+
+
 
                 }
             }
 
             let container = `
+            <button class="btn btn-info" onclick="grn.uploadDocument('${entry_no}')">ADD DOCUMENT</button>
             <div class="container"><div class="row d-flex flex-wrap justify-content-center">${imgss}</div></div>
             `
             $('#g_modal_title').text("GRN DOCUMENTS")
@@ -544,6 +570,18 @@ class Grn {
 
     }
 
+    uploadDocument(entry_no,doc_type='GR') {
+        // create form
+        let htm = `
+            <input type="text" id="up_title" class="form-control w-100 mb-2">
+            <input type="file" class="form-control w-100 mb-2" id="image-input">
+            <textarea name="" id="up_desc" cols="30" rows="5" class="form-control w-100"></textarea>
+            
+            `
+        amodal.setTitleText('UPLOAD GRN IMAGE')
+        amodal.setBodyHtml(htm)
+        amodal.setFooterHtml(`<button onclick="docs.docUpload('${doc_type}','${entry_no}')" class="btn btn-success w-100">UPLOAD</button>`)
+    }
 }
 
 const grn = new Grn()

@@ -166,6 +166,40 @@ class Docs {
         }
     }
 
+    docUpload(doc_type,entry_no){
+        var fileInput = $('#image-input')[0];
+        var file = fileInput.files[0];
+        console.table(file)
+        var formData = new FormData();
+        formData.append('file', file);
+        formData.append('entry_no',entry_no)
+        formData.append('doc',doc_type)
+        formData.append('title',$('#up_title').val())
+        formData.append('description',$('#up_desc').val())
+
+        console.table(formData);
+
+        // Send the file data to the server using AJAX
+                        $.ajax({
+                          url: '/doc_upload/',  // Replace with the actual server endpoint for uploading
+                          type: 'POST',
+                          data: formData,
+                          processData: false,
+                          contentType: false,
+                          success: function(response) {
+                              console.log(response)
+                            // Handle the server response after successful upload
+                            console.log('Upload successful');
+                            // Additional code here
+                          },
+                          error: function(xhr, status, error) {
+                            // Handle the error response
+                            console.error('Upload error: ' + error);
+                            // Additional code here
+                          }
+                        });
+    }
+
 }
 
 const docs = new Docs()

@@ -618,8 +618,11 @@ def api_function(request):
                     docs = Documents.objects.filter(doc=doc, entry_no=entry_no)
                     arr = []
                     for d in docs:
+                        print(d.file.name)
                         arr.append({
-                            'url': d.file.url
+                            'url': d.file.url,
+                            'title':d.title,
+                            'description':d.description,
                         })
 
                     response['message'] = {

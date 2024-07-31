@@ -37,6 +37,8 @@ class Files(models.Model):
 
 class Documents(models.Model):
     doc = models.CharField(max_length=3)
+    title = models.TextField(blank=True)
+    description = models.TextField(blank=True)
     entry_no = models.TextField()
     file = models.FileField(upload_to='static/uploads/dolphine/%Y/%m/%d/')
 
