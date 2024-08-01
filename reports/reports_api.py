@@ -388,7 +388,7 @@ def interface(request):
                         pdf.cell(20, 5, f"{tran.qty}", 1, 0)
                         pdf.cell(20, 5, f"{format_currency(tran.tot_cost)}", 1, 1)
 
-                    file_name = f"static/general/servicing/grn.pdf"
+                    file_name = f"static/general/docs/grn.pdf"
                     pdf.output(file_name)
                     success_response['message'] = file_name
                     response = success_response
