@@ -1381,6 +1381,19 @@ class Cmms {
           }
         });
     }
+
+    getServiceAsset(cust_code='all') {
+        let payload = {
+            module:'servicing_assets',
+            data:{
+                cust_code:cust_code
+            }
+        }
+
+        return api.call('VIEW',payload,'/cmms/api/')
+
+
+    }
 }
 
 const cmms = new Cmms()

@@ -2,6 +2,9 @@ import csv
 import json
 import traceback
 from datetime import date
+from http.client import responses
+
+from django.contrib.messages import success
 from django.db import IntegrityError
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -248,7 +251,7 @@ def api(request):
 
                                     f_hd = StockFreezeHd.objects.get(pk=key)
                                     trans = f_hd.trans_only()
-
+                                    from fpdf import FPDF
                                     pdf = FPDF('P', 'mm', 'A4')
                                     pdf.add_page()
                                     pdf.set_font('Arial', 'BU', 10)
@@ -267,7 +270,6 @@ def api(request):
                                     pdf.ln(10)
                                     # header
                                     pdf.set_font('Arial', 'B', 10)
-                                    pdf.cell(10, 5, f"LN", 1, 0, 'L')
                                     pdf.cell(10, 5, f"LN", 1, 0, 'L')
                                     pdf.cell(25, 5, f"ITEM REF", 1, 0, 'L')
                                     pdf.cell(30, 5, f"BARCODE", 1, 0, 'L')
@@ -676,6 +678,38 @@ def api(request):
                     else:
                         response['status_code'] = 404
                         response['message'] = f"NO CUSTOMER WITH CODE {customer}"
+
+                elif module == 'servicing_assets':
+                    arr = []
+                    cust_code = data.get('cust_code')
+                    assets_q = f"select RTRIM(LTRIM(ASSET_CODE)),RTRIM(LTRIM(asset_desc)),RTRIM(LTRIM(asset_no)),RTRIM(LTRIM(asset_ref_no)),TRIM(model_no),(SELECT TRIM(cust_name) from customer_master cm where cm.cust_code = am.cust_code ),CASE WHEN (SELECT count(*) from invoice_hd ihd where ihd.asset_code = am.ASSET_CODE) > 0 then  (SELECT top(1) Invoice_date from invoice_hd ihdx where ihdx.asset_code = am.ASSET_CODE) ELSE '9999-01-01' END from asset_mast am"
+                    if cust_code != 'all':
+                        assets_q = f"select RTRIM(LTRIM(ASSET_CODE)),RTRIM(LTRIM(asset_desc)),RTRIM(LTRIM(asset_no)),RTRIM(LTRIM(asset_ref_no)),TRIM(model_no),(SELECT TRIM(cust_name) from customer_master cm where cm.cust_code = am.cust_code ),CASE WHEN (SELECT count(*) from invoice_hd ihd where ihd.asset_code = am.ASSET_CODE) > 0 then  (SELECT top(1) Invoice_date from invoice_hd ihdx where ihdx.asset_code = am.ASSET_CODE) ELSE '9999-01-01' END from asset_mast am where cust_code = '{cust_code}'"
+
+                    print(assets_q)
+
+                    asset_cursor = db()
+                    asset_cursor.execute(assets_q)
+
+                    for asst in asset_cursor.fetchall():
+                        asset_code,asset_desc,asset_no,asset_ref_no,model_no,cust_name,entry_date = asst
+                        if entry_date == '9999-01-01':
+                            entry_date = 'NOT SERVICED'
+                        else:
+                            entry_date = str(entry_date).split('T')[0]
+                        arr.append({
+
+                            'cust_name':cust_name,
+                            'asset_code':asset_code,
+                            'asset_desc':asset_desc,
+                            'asset_no':asset_no,
+                            'chassis':asset_ref_no,
+                            'model':model_no,
+                            'last_serviced':entry_date
+                        })
+
+                    response['status_code'] = 200
+                    response['message'] = arr
 
                 elif module == 'service_history':
                     conn = db()

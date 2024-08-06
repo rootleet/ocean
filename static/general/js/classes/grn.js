@@ -155,6 +155,8 @@ class Grn {
                         formData.append('file', file);
                         formData.append('entry_no',entry_no)
                         formData.append('doc','GR')
+                        formData.append('title',"Invoice")
+                        formData.append('description','Purchase Invoice from supplier')
 
                         // Send the file data to the server using AJAX
                         $.ajax({
