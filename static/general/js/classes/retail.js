@@ -531,7 +531,60 @@ class Retail {
         return api.call('VIEW',payload,this.interface);
     }
 
+    checkExpiryScreen(){
+        let form = ``;
+        form += fom.text('days','Days before expiry',true)
+        form += fom.select('remove_flagged',`<option value="YES">YES</option><option value="NO">NO</option>`,'',true)
+        form += fom.select('document',`<option value="json">VIEW</option><option value="excel">Excel</option>`,'',true)
+        amodal.setTitleText("Expiry Report")
+        amodal.setBodyHtml(form);
+        amodal.setFooterHtml(`<button onclick="retail.RetrieveExpiry()" class="btn btn-success w-100 rounded_c">RETRIEVE</button>`);
+        amodal.show();
+    }
 
+
+    RetrieveExpiry() {
+        let ids = ['days','remove_flagged','document'];
+        if(anton.validateInputs(ids)) {
+            let payload = {
+                module:"expiry",
+                data:anton.Inputs(ids)
+            }
+
+            let result = api.call('VIEW',payload,this.interface);
+            if(anton.IsRequest(result)){
+                let doc = $('#document').val();
+                if(doc === 'json'){
+                    let header = ['EXPIRY DATE','GRN','BARCODE','ITEM CODE','ITEM NAME','STOCK']
+                    let tr = '';
+                    let res = result.message;
+                    for(let m = 0; m < res.length; m++){
+                        let row = res[m];
+                        tr += `
+                            <tr>
+                                <td>${row['expiry_date']}</td>
+                                <td>${row['grn']}</td>
+                                <td>${row['barcode']}</td>
+                                <td>${row['item_code']}</td>
+                                <td>${row['item_des']}</td>
+                                <td>${row['stock']}</td>
+</tr>
+                        `
+                    }
+                    reports.render(header,tr,'EXPIRY REPORT')
+                    amodal.hide()
+                }
+
+                if(doc === 'excel'){
+                    kasa.html(`<a href="/${result.message}">DOWNLOAD FILE</a>`)
+                }
+            } else {
+                kasa.response(result);
+            }
+        } else {
+            kasa.error("Invalid Form")
+        }
+    }
 }
 
 const retail = new Retail();

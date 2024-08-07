@@ -306,7 +306,7 @@ def api(request):
                                     f_hd = hd.frozen
                                     trans = hd.trans()
                                     trans_only = trans['trans']
-
+                                    from fpdf import FPDF
                                     pdf = FPDF('P', 'mm', 'A4')
                                     pdf.add_page()
                                     pdf.set_font('Arial', 'BU', 10)

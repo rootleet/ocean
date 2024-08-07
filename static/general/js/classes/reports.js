@@ -474,6 +474,8 @@ class Reports {
 
 
     }
+
+    //
 }
 
 const reports = new Reports()

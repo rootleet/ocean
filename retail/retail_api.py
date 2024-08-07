@@ -169,78 +169,59 @@ def interface(request):
                     retail1 = product[6]
 
                     # add to products
-
+                    subgroup = ProductSubGroup.objects.get(code='999')
                     if ProductSubGroup.objects.filter(name=sub_group).count() == 1:
                         subgroup = ProductSubGroup.objects.get(name=sub_group)
                         # delete product
-                        if Products.objects.filter(code=code).exists():
+                    if Products.objects.filter(code=code).exists():
                             # update
-                            prod = Products.objects.get(code=code)
-                            prod.barcode = barcode
-                            prod.name = item_des
-                            prod.price = retail1
-                            prod.subgroup = subgroup
-                            prod.save()
-                        else:
-                            # save new
-                            Products.objects.get_or_create(subgroup=subgroup, name=item_des, barcode=barcode,
+                        prod = Products.objects.get(code=code)
+                        prod.barcode = barcode
+                        prod.name = item_des
+                        prod.price = retail1
+                        prod.subgroup = subgroup
+                        prod.save()
+                    else:
+                        # save new
+                        Products.objects.get_or_create(subgroup=subgroup, name=item_des, barcode=barcode,
                                                            code=code, price=retail1)
                         saved = saved + 1
-                    else:
-                        not_synced = not_synced + 1
-                        error.append(f"{barcode} - {item_des} # sub group {sub_group} / does not exist")
+                    # else:
+                    #     not_synced = not_synced + 1
+                    #     error.append(f"{barcode} - {item_des} # sub group {sub_group} / does not exist")
 
-                success_response['message'] = f"{saved} / {saved + not_synced} products synced"
+                success_response['message'] = {
+                    "message":f"{saved} / {saved + not_synced} products synced",
+                    "errors":error
+                }
                 response = success_response
 
             elif module == 'update_stock':
                 products = Products.objects.all()
+                count = products.count()
                 for product in products:
                     barcode = product.barcode.strip()
                     item_code = product.code
 
                     stock = get_stock(item_code)
-                    print(product.name, stock)
+                    # print(product.name, stock)
                     spintex = stock.get('spintex')
                     nia = stock.get('nia')
                     osu = stock.get('osu')
                     warehouse = stock.get('warehouse')
                     kitchen = stock.get('kitchen')
 
-                    if Stock.objects.filter(product=product, location='001').exists():
-                        sp_stock = Stock.objects.get(product=product, location='001')
-                        sp_stock.quantity = spintex
-                        sp_stock.save()
-                    else:
-                        Stock.objects.create(product=product, quantity=spintex, location='001')
+                    Stock.objects.filter(product=product).delete()
 
-                    if Stock.objects.filter(product=product, location='202').exists():
-                        stock202 = Stock.objects.get(product=product, location='202')
-                        stock202.quantity = spintex
-                        stock202.save()
-                    else:
-                        Stock.objects.create(product=product, quantity=nia, location='202')
+                    Stock(product=product, quantity=spintex, location='001').save()
+                    Stock(product=product, quantity=nia, location='202').save()
+                    Stock(product=product, quantity=osu, location='205').save()
+                    Stock(product=product, quantity=warehouse, location='999').save()
+                    Stock(product=product, quantity=kitchen, location='201').save()
 
-                    if Stock.objects.filter(product=product, location='205').exists():
-                        stock205 = Stock.objects.get(product=product, location='205')
-                        stock205.quantity = spintex
-                        stock205.save()
-                    else:
-                        Stock.objects.create(product=product, quantity=osu, location='205')
 
-                    if Stock.objects.filter(product=product, location='999').exists():
-                        stock999 = Stock.objects.get(product=product, location='999')
-                        stock999.quantity = spintex
-                        stock999.save()
-                    else:
-                        Stock.objects.create(product=product, quantity=warehouse, location='999')
-
-                    if Stock.objects.filter(product=product, location='201').exists():
-                        stock201 = Stock.objects.get(product=product, location='201')
-                        stock201.quantity = spintex
-                        stock201.save()
-                    else:
-                        Stock.objects.create(product=product, quantity=kitchen, location='201')
+                    count -= 1
+                    print(f"Ramaining {count}")
                 success_response['message'] = "Stock Updated"
 
             elif module == 'recipe_group':
@@ -362,6 +343,73 @@ def interface(request):
 
                 success_response['message'] = arr
                 response = success_response
+
+            elif module == 'expiry':
+                days = data.get('days')
+                doc = data.get('document','json')
+                if doc == 'excel':
+                    import openpyxl
+                    book = openpyxl.Workbook()
+                    sheet = book.active
+
+                    header = ['EXPIRY DATE','GRN','BARCODE','ITEM CODE','ITEM NAME','STOCK']
+                    sheet.append(header)
+                arr = []
+                query = f"""
+                    WITH DistinctBarcodes AS (
+                        SELECT
+                            item_ref AS barcode,
+                            MIN(exp_date) AS exp_date
+                        FROM grn_tran
+                        WHERE exp_date BETWEEN GETDATE() AND DATEADD(DAY, {days}, GETDATE())
+                        GROUP BY item_ref
+                    )
+                    SELECT
+                        t.exp_date,
+                        t.entry_no,
+                        t.item_ref AS barcode,
+                        t.item_code,
+                        t.item_des AS name
+                    FROM grn_tran t
+                    INNER JOIN DistinctBarcodes d
+                    ON t.item_ref = d.barcode
+                    AND t.exp_date = d.exp_date
+                    WHERE t.exp_date BETWEEN GETDATE() AND DATEADD(DAY, 90, GETDATE())
+                    ORDER BY t.item_des;
+
+                """
+
+                cursor = ret_cursor()
+                cursor.execute(query)
+                for row in cursor.fetchall():
+                    exp_date,entry_no,barcode,item_code,item_des = row
+                    stock = 0
+                    if Products.objects.filter(code=item_code).count() == 1:
+                        product = Products.objects.get(code=item_code)
+                        stock = Stock.objects.filter(product=product).aggregate(Sum('quantity'))['quantity__sum']
+                    li = [exp_date,entry_no,barcode,item_code,item_des,stock]
+                    if doc == 'json':
+                        arr.append({
+                            'expiry_date': exp_date,
+                            'grn':entry_no,
+                            'barcode':barcode,
+                            'item_code':item_code,
+                            'item_des':item_des,
+                            'stock':stock
+                        })
+
+                    if doc == 'excel':
+                        sheet.append(li)
+
+                if doc == 'excel':
+                    file = f'static/general/tmp/{days}_days_expiry.xlsx'
+                    book.save(file)
+                    arr = file
+
+                success_response['message'] = arr
+                response = success_response
+
+
             elif module == 'bolt_products':
                 pk = data.get('key') or '*'
 
@@ -1112,7 +1160,7 @@ def interface(request):
                         book = openpyxl.Workbook()
                         sheet = book.active
                         sheet.title = "RECORDS"
-                        sheet[f'A1'] = "ITEM CODE"
+                        sheet[f'A1'] = "BARCODE"
                         sheet[f"B1"] = "NAME"
                         sheet[f"C1"] = "REQ. QTY"
                         sheet[f'D1'] = "LAST TRAN. ENTRY"
@@ -1142,10 +1190,10 @@ def interface(request):
 
                     # get transactions
                     trans_query = cursor.execute(
-                        f"select item_code,RTRIM(item_des) as 'name',total_units from request_tran where entry_no = '{mr_no}'")
+                        f"select item_code,RTRIM(item_des) as 'name',total_units,barcode from request_tran where entry_no = '{mr_no}'")
                     tr_arr = []
                     for tran in trans_query.fetchall():
-                        item_code, item_name, request_qty = tran
+                        item_code, item_name, request_qty,barcode = tran
                         cursor.execute(
                             f"select top(1) th.entry_no,th.entry_date,tr.total_units from tran_tr tr  right join tran_hd th on th.entry_no = tr.entry_no where tr.item_code = '{item_code}' order by th.entry_date desc")
                         last_tran_row = cursor.fetchone()
@@ -1185,7 +1233,7 @@ def interface(request):
                                 'health': health
                             })
                         elif doc_type == 'excel':
-                            sheet[f'A{sheet_row}'] = tran[0]
+                            sheet[f'A{sheet_row}'] = barcode
                             sheet[f"B{sheet_row}"] = item_name
                             sheet[f"C{sheet_row}"] = tran[2]
                             sheet[f'D{sheet_row}'] = last_tr_entry
